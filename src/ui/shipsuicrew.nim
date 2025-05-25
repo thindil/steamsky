@@ -666,7 +666,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   if member.skills.len == 0 or member.contractLength == 0:
     addLabel(name = frame & ".passenger", text = "Passenger")
     if member.contractLength > 0:
-      var memberInfo = ""
+      var memberInfo: string = ""
       minutesToDate(minutes = member.contractLength, infoText = memberInfo)
       addLabel(name = frame & ".timelimit", text = "Time limit: ",
           text2 = memberInfo)
@@ -687,9 +687,9 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ttk::frame " & frame)
     tclEval(script = "SetScrollbarBindings " & frame & " " & yScroll)
     for index, attrib in member.attributes:
-      var progressFrame = frame & ".statinfo" & $index
+      var progressFrame: string = frame & ".statinfo" & $index
       tclEval(script = "ttk::frame " & progressFrame)
-      var memberLabel = progressFrame & ".label"
+      var memberLabel: string = progressFrame & ".label"
       tclEval(script = "ttk::label " & memberLabel & " -text {" &
           attributesList[index].name & ":}")
       tclEval(script = "grid " & memberLabel & " -sticky w")
@@ -720,7 +720,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "grid " & progressFrame & " -sticky we -padx 5")
       tclEval(script = "SetScrollbarBindings " & progressFrame & " " & yScroll)
       tclEval(script = "update")
-      var progressBar = frame & ".level" & $index
+      var progressBar: string = frame & ".level" & $index
       tclEval(script = "ttk::progressbar " & progressBar & " -value " & $(
           if attrib.level > 2: attrib.level * 2 else: 6))
       tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the attribute.\"")
@@ -737,9 +737,9 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "place " & progressBar & " -in " & progressFrame & " -relheight 1.0 -relwidth 1.0")
       tclEval(script = "SetScrollbarBindings " & progressBar & " " & yScroll)
     for index, attrib in member.attributes:
-      var progressBar = frame & ".level" & $index
+      var progressBar: string = frame & ".level" & $index
       tclEval(script = progressBar & " configure -length 360")
-      let progressFrame = frame & ".experienceframe" & $index
+      let progressFrame: string = frame & ".experienceframe" & $index
       tclEval(script = progressFrame & " configure -width 360")
       progressBar = progressFrame & ".experience" & $index
       tclEval(script = progressBar & " configure -length 360")
@@ -748,9 +748,9 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ttk::frame " & frame)
     tclEval(script = "SetScrollbarBindings " & frame & " " & yScroll)
     for index, skill in member.skills:
-      var progressFrame = frame & ".skillinfo" & $index
+      var progressFrame: string = frame & ".skillinfo" & $index
       tclEval(script = "ttk::frame " & progressFrame)
-      var memberLabel = progressFrame & ".label" & $index
+      var memberLabel: string = progressFrame & ".label" & $index
       try:
         tclEval(script = "ttk::label " & memberLabel & " -text {" & skillsList[
             skill.index].name & ":}")
@@ -784,7 +784,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "grid " & progressFrame & " -sticky we -padx 5")
       tclEval(script = "SetScrollbarBindings " & progressFrame & " " & yScroll)
       tclEval(script = "update")
-      var progressBar = frame & ".level" & $index
+      var progressBar: string = frame & ".level" & $index
       tclEval(script = "ttk::progressbar " & progressBar & " -value " & $skill.level)
       tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the skill.\"")
       tclEval(script = "grid " & progressBar & " -sticky w -padx 5")
@@ -801,9 +801,9 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "SetScrollbarBindings " & progressBar & " " & yScroll)
       tclEval(script = "update")
     for index, skill in member.skills:
-      var progressBar = frame & ".level" & $index
+      var progressBar: string = frame & ".level" & $index
       tclEval(script = progressBar & " configure -length 360")
-      let progressFrame = frame & ".experienceframe" & $index
+      let progressFrame: string = frame & ".experienceframe" & $index
       tclEval(script = progressFrame & " configure -width 360")
       progressBar = progressFrame & ".experience" & $index
       tclEval(script = progressBar & " configure -length 360")
@@ -811,7 +811,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     frame = memberCanvas & ".priorities"
     tclEval(script = "ttk::frame " & frame)
     tclEval(script = "SetScrollbarBindings " & frame & " " & yScroll)
-    var memberLabel = frame & ".label1"
+    var memberLabel: string = frame & ".label1"
     tclEval(script = "ttk::label " & memberLabel & " -text {Priority}")
     tclEval(script = "grid " & memberLabel)
     tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
@@ -823,9 +823,9 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         "Operating guns:", "Repair ship:", "Manufacturing:", "Upgrading ship:",
         "Talking in bases:", "Healing wounded:", "Cleaning ship:",
         "Defend ship:", "Board enemy ship", "Train skill:"]
-    var comboBox = ""
+    var comboBox: string = ""
     for index, order in member.orders:
-      var memberLabel = frame & ".name" & $index
+      var memberLabel: string = frame & ".name" & $index
       tclEval(script = "ttk::label " & memberLabel & " -text {" &
           prioritesNames[index] & "} -takefocus 0")
       tclEval(script = "grid " & memberLabel & " -sticky w -padx {5 0}")
@@ -863,7 +863,7 @@ proc showCrewStatsInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowCrewStatsInfo statindex
   ## Statindex is the index of statistic which info will be show
-  let attribute = try:
+  let attribute: AttributeRecord = try:
       attributesList[($argv[1]).parseInt - 1]
     except:
       return showError(message = "Can't get the attribute data.")
@@ -888,23 +888,23 @@ proc showCrewSkillInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Skillindex is the index of skill which info will be show.
   ## Memberindex is the index of the crew member which skill will be show.
   let
-    skillIndex = try:
+    skillIndex: int = try:
         ($argv[1]).parseInt
       except:
         return showError(message = "Can't get the skill index.")
-    skill = try:
+    skill: SkillRecord = try:
         skillsList[skillIndex]
       except:
         return showError(message = "Can't get the skill.")
-  var messageText = try:
+  var messageText: string = try:
         "Related attribute: " & attributesList[skill.attribute].name
       except:
         return showError(message = "Can't set messageText.")
   if skill.tool.len > 0:
     messageText.add(y = ".\nTraining tool: ")
     var
-      quality = 0
-      itemIndex = -1
+      quality: int = 0
+      itemIndex: int = -1
     if argv[3] == ".memberdialog":
       for index, item in itemsList:
         try:
@@ -952,7 +952,7 @@ proc setPriorityCommand(clientData: cint; interp: PInterp; argc: cint;
   ## priority is the new level of the priority of the selected order,
   ## memberindex is the index of the crew member which priority order will
   ## be set
-  let memberIndex = try:
+  let memberIndex: int = try:
       ($argv[3]).parseInt - 1
     except:
       return showError(message = "Can't get the crew member's index.")
@@ -977,7 +977,7 @@ proc setPriorityCommand(clientData: cint; interp: PInterp; argc: cint;
   updateMessages()
   updateCrewInfo()
   for index, order in playerShip.crew[memberIndex].orders:
-    let comboBox = ".memberdialog.canvas.priorities.level" & $index
+    let comboBox: string = ".memberdialog.canvas.priorities.level" & $index
     tclEval(script = comboBox & " current " & $order)
   return tclOk
 
@@ -1010,7 +1010,7 @@ type CrewSortOrders = enum
 
 const defaultCrewSortOrder: CrewSortOrders = none
 
-var crewSortOrder = defaultCrewSortOrder
+var crewSortOrder: CrewSortOrders = defaultCrewSortOrder
 
 proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
@@ -1027,7 +1027,7 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortShipCrew x
   ## X is X axis coordinate where the player clicked the mouse button
-  let column = try:
+  let column: int = try:
         (if argv[1] == "-1": Positive.high else: getColumnNumber(
             table = crewTable, xPosition = ($argv[1]).parseInt))
       except:
@@ -1081,8 +1081,8 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     discard
   let
-    skillBox = mainPaned & ".shipinfoframe.crew.canvas.frame.selectskill.combox"
-    skillIndex = findSkillIndex(skillName = tclEval2(script = skillBox & " get"))
+    skillBox: string = mainPaned & ".shipinfoframe.crew.canvas.frame.selectskill.combox"
+    skillIndex: int = findSkillIndex(skillName = tclEval2(script = skillBox & " get"))
   if crewSortOrder == none:
     if column == Positive.high:
       updateCrewInfo(skill = skillIndex)
@@ -1098,7 +1098,7 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     hunger: SkillRange
     morale: SkillRange
     id: Natural
-  var localCrew: seq[LocalMemberData]
+  var localCrew: seq[LocalMemberData] = @[]
   for index, member in playerShip.crew:
     try:
       localCrew.add(y = LocalMemberData(selected: tclGetVar(
@@ -1241,7 +1241,7 @@ proc selectCrewSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## SelectCrewSkill
-  let skillBox = mainPaned & ".shipinfoframe.crew.canvas.frame.selectskill.combox"
+  let skillBox: string = mainPaned & ".shipinfoframe.crew.canvas.frame.selectskill.combox"
   try:
     updateCrewInfo(skill = tclEval2(script = skillBox & " current").parseInt)
   except:
@@ -1256,7 +1256,7 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox,
   ## * memberIndex - the index of the crew member for which the list will be set
   ## * orderBox    - the Ttk_ComboBox in which the orders will be set
   ## * button      - the Ttk_Button which will set the order
-  var needRepair, needClean = false
+  var needRepair, needClean: bool = false
   for module in playerShip.modules:
     if module.durability < module.maxDurability:
       needRepair = true
@@ -1265,7 +1265,7 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox,
       needClean = true
     if needRepair and needClean:
       break
-  let member = playerShip.crew[memberIndex]
+  let member: MemberData = playerShip.crew[memberIndex]
   var availableOrders, tclCommands = ""
   if ((member.tired == 100 or member.hunger == 100 or member.thirst == 100) and
       member.order != rest) or member.skills.len == 0 or
