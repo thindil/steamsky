@@ -114,62 +114,64 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
-  # Show information about money owned by the player
-  setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
-  for index, text in moneyText:
-    if index mod 2 == 0:
-      label(str = text)
-    else:
-      colorLabel(str = text, color = theme.colors[goldenColor])
-  setLayoutRowStatic(height = 30, cols = 4, ratio = [200.cfloat, 200, 50, 250])
-  labelButton(title = "Train"):
-    try:
-      trainSkill(memberIndex = crewIndex, skillIndex = skillsIndexes[
-          skillIndex], amount = amount, isAmount = tType == times)
-    except NoMoneyError:
-      dialog = setMessage(message = "You don't have any " & moneyName &
-          " to pay for learning.", title = "Can't train")
-    except NotEnoughMoneyError:
-      dialog = setMessage(message = "You don't have enough " & moneyName &
-          " to pay for learning this skill.", title = "Can't train")
-    except:
-      dialog = setError(message = "Can't train the skill.")
-    setSchool(dialog = dialog)
-  let newMember = comboList(items = crewList,
-      selected = crewIndex, itemHeight = 25, x = 200, y = 150)
-  if newMember != crewIndex:
-    crewIndex = newMember
-    setSchoolSkills()
-    setTrainingCost(dialog = dialog)
-  label(str = "in", alignment = centered)
-  let newSkill = comboList(items = schoolSkillsList,
-      selected = skillIndex, itemHeight = 25, x = 300, y = 150)
-  if newSkill != skillIndex:
-    skillIndex = newSkill
-    setTrainingCost(dialog = dialog)
-  setLayoutRowDynamic(height = 30, cols = 1)
-  if option(label = "Selected amount of times", selected = tType == times):
-    tType = times
-  setLayoutRowDynamic(height = 30, cols = 2)
-  label(str = "Amount:")
-  let newAmount: int = property2(name = "#", min = 1, val = amount, max = 100,
-      step = 1, incPerPixel = 1)
-  if newAmount != amount:
-    amount = newAmount
-    timesCost = oneTrainCost * amount
-  label(str = "Minimal cost:")
-  colorLabel(str = $timesCost & " " & moneyName, color = theme.colors[goldenColor])
-  setLayoutRowDynamic(height = 30, cols = 1)
-  if option(label = "Selected maximum cost of training", selected = tType == cost):
-    tType = cost
-  setLayoutRowDynamic(height = 30, cols = 2)
-  label(str = "Cost:")
-  let newCost: int = property2(name = "#", min = oneTrainCost, val = minCost,
-      max = oneTrainCost * 10_000, step = oneTrainCost, incPerPixel = 1)
-  if newCost != minCost:
-    minCost = newCost
+  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
+  setLayoutRowDynamic(height = tableHeight, cols = 1)
+  group(title = "SchoolGroup", flags = {windowNoFlags}):
+    # Show information about money owned by the player
+    setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+    for index, text in moneyText:
+      if index mod 2 == 0:
+        label(str = text)
+      else:
+        colorLabel(str = text, color = theme.colors[goldenColor])
+    setLayoutRowStatic(height = 30, cols = 4, ratio = [200.cfloat, 200, 50, 250])
+    labelButton(title = "Train"):
+      try:
+        trainSkill(memberIndex = crewIndex, skillIndex = skillsIndexes[
+            skillIndex], amount = amount, isAmount = tType == times)
+      except NoMoneyError:
+        dialog = setMessage(message = "You don't have any " & moneyName &
+            " to pay for learning.", title = "Can't train")
+      except NotEnoughMoneyError:
+        dialog = setMessage(message = "You don't have enough " & moneyName &
+            " to pay for learning this skill.", title = "Can't train")
+      except:
+        dialog = setError(message = "Can't train the skill.")
+      setSchool(dialog = dialog)
+    let newMember = comboList(items = crewList,
+        selected = crewIndex, itemHeight = 25, x = 200, y = 150)
+    if newMember != crewIndex:
+      crewIndex = newMember
+      setSchoolSkills()
+      setTrainingCost(dialog = dialog)
+    label(str = "in", alignment = centered)
+    let newSkill = comboList(items = schoolSkillsList,
+        selected = skillIndex, itemHeight = 25, x = 300, y = 150)
+    if newSkill != skillIndex:
+      skillIndex = newSkill
+      setTrainingCost(dialog = dialog)
+    setLayoutRowDynamic(height = 30, cols = 1)
+    if option(label = "Selected amount of times", selected = tType == times):
+      tType = times
+    setLayoutRowDynamic(height = 30, cols = 2)
+    label(str = "Amount:")
+    let newAmount: int = property2(name = "#", min = 1, val = amount, max = 100,
+        step = 1, incPerPixel = 1)
+    if newAmount != amount:
+      amount = newAmount
+      timesCost = oneTrainCost * amount
+    label(str = "Minimal cost:")
+    colorLabel(str = $timesCost & " " & moneyName, color = theme.colors[goldenColor])
+    setLayoutRowDynamic(height = 30, cols = 1)
+    if option(label = "Selected maximum cost of training", selected = tType == cost):
+      tType = cost
+    setLayoutRowDynamic(height = 30, cols = 2)
+    label(str = "Cost:")
+    let newCost: int = property2(name = "#", min = oneTrainCost, val = minCost,
+        max = oneTrainCost * 10_000, step = oneTrainCost, incPerPixel = 1)
+    if newCost != minCost:
+      minCost = newCost
   showMessagesButtons()
-  setLayoutRowDynamic(height = windowHeight -
-      gameSettings.messagesPosition.float - 20, cols = 1)
+  setLayoutRowDynamic(height = windowHeight - tableHeight, cols = 1)
   showLastMessages(theme = theme, dialog = dialog)
   showGameMenu(dialog = dialog)
