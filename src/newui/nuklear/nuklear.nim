@@ -1316,6 +1316,17 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
       if `type` == circleOutline:
         nkFillCircle(b = `out`, rect = NimRect(x: drawRect.x, y: drawRect.y,
           w: drawRect.w, h: drawRect.h), c = background)
+  of triangleUp, triangleDown, triangleLeft, triangleRight:
+    var heading: Heading = right
+    case `type`
+      of triangleRight:
+        heading = right
+      of triangleLeft:
+        heading = left
+      of triangleUp:
+        heading = up
+      else:
+        heading = down
     # TODO: continue here
   else:
     discard

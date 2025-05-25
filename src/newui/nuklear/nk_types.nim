@@ -149,6 +149,9 @@ type
         widgetStateModified.int
     widgetStateActive = widgetStateActived.int or
         widgetStateModified.int
+  Heading* = enum
+    ## Heading diretions
+    up, right, down, left
 
 # -------
 # Objects
