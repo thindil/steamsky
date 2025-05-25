@@ -20,8 +20,8 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestrade, crew, crewinventory, game]
-import coreui, dialogs, errordialog, header, themes
+import ../[basestrade, crew, crewinventory, game, types]
+import coreui, dialogs, errordialog, header, messagesui, themes
 
 type
   TrainingType = enum
@@ -123,7 +123,18 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
       colorLabel(str = text, color = theme.colors[goldenColor])
   setLayoutRowStatic(height = 30, cols = 4, ratio = [200.cfloat, 200, 50, 250])
   labelButton(title = "Train"):
-    discard
+    try:
+      trainSkill(memberIndex = crewIndex, skillIndex = skillsIndexes[
+          skillIndex], amount = amount, isAmount = tType == times)
+    except NoMoneyError:
+      dialog = setMessage(message = "You don't have any " & moneyName &
+          " to pay for learning.", title = "Can't train")
+    except NotEnoughMoneyError:
+      dialog = setMessage(message = "You don't have enough " & moneyName &
+          " to pay for learning this skill.", title = "Can't train")
+    except:
+      dialog = setError(message = "Can't train the skill.")
+    setSchool(dialog = dialog)
   let newMember = comboList(items = crewList,
       selected = crewIndex, itemHeight = 25, x = 200, y = 150)
   if newMember != crewIndex:
@@ -157,3 +168,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
       max = oneTrainCost * 10_000, step = oneTrainCost, incPerPixel = 1)
   if newCost != minCost:
     minCost = newCost
+  showMessagesButtons()
+  setLayoutRowDynamic(height = windowHeight - 20, cols = 1)
+  showLastMessages(theme = theme, dialog = dialog)
+  showGameMenu(dialog = dialog)
