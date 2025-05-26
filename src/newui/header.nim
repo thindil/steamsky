@@ -203,7 +203,8 @@ type
     none, combat, map
 
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
-    state: var GameState; options: bool = false) {.raises: [], tags: [RootEffect], contractual.} =
+    state: var GameState; options: bool = false): bool {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Show the game's header
   ##
   ## * dialog  - the current in-game dialog displayed on the screen
@@ -212,23 +213,25 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
   ## * options - if true, show the button for more options. Default is false
   ##
   ## Returns the modified parameter dialog. It is modified if any error
-  ## happened or the game's menu is to show.
+  ## happened or the game's menu is to show. Additionally, it returns true if
+  ## the game's state changed, otherwise false.
   let
+    oldState: GameState = state
     fuelAmount: Natural = try:
         getItemAmount(itemType = fuelType)
       except KeyError:
         dialog = setError(message = "Can't get fuel amount.")
-        return
+        return true
     foodAmount: Natural = try:
         getItemsAmount(iType = "Food")
       except KeyError:
         dialog = setError(message = "Can't get food amount.")
-        return
+        return true
     drinksAmount: Natural = try:
         getItemsAmount(iType = "Drinks")
       except KeyError:
         dialog = setError(message = "Can't get drinks amount.")
-        return
+        return true
   var havePilot, haveEngineer, haveTrader, haveUpgrader, haveCleaner,
     haveRepairman: bool = false
   for member in playerShip.crew:
@@ -258,7 +261,7 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
         factionsList[playerShip.crew[0].faction]
       except KeyError:
         dialog = setError(message = "Can't get faction.")
-        return
+        return true
   if (havePilot and haveEngineer) or "sentientships" in faction.flags:
     speed = try:
         (if playerShip.speed == docked: realSpeed(ship = playerShip,
@@ -266,7 +269,7 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
             ship = playerShip).float / 1_000.0)
       except ValueError:
         dialog = setError(message = "Can't count speed.")
-        return
+        return true
   var
     haveGunner, haveWorker: bool = true
     needWorker, needCleaning, needRepairs: bool = false
@@ -295,7 +298,7 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
         discard
     except KeyError:
       dialog = setError(message = "Can't check modules.")
-      return
+      return true
     if module.durability != module.maxDurability:
       needRepairs = true
   setRowTemplate(height = 35):
@@ -310,19 +313,19 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       rowTemplateStatic(width = getTextWidth(text = $fuelAmount))
     except:
       dialog = setError(message = "Can't set fuel text width")
-      return
+      return true
     rowTemplateStatic(width = 35)
     try:
       rowTemplateStatic(width = getTextWidth(text = $foodAmount))
     except:
       dialog = setError(message = "Can't set food text width")
-      return
+      return true
     rowTemplateStatic(width = 35)
     try:
       rowTemplateStatic(width = getTextWidth(text = $drinksAmount))
     except:
       dialog = setError(message = "Can't set drinks text width")
-      return
+      return true
     if speed < 0.5:
       rowTemplateStatic(width = 35)
     if not havePilot:
@@ -373,7 +376,7 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
           ship = playerShip) * 60) / 1_000) & " km/h", alignment = centered)
     except:
       dialog = setError(message = "Can't get the ship's speed")
-      return
+      return true
   else:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Game time.")
@@ -389,6 +392,13 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
   if playerShip.crew[0].health == 0 and dialog == none:
     dialog = setQuestion(question = "You are dead. Would you like to see your game statistics?",
         qType = showDeadStats)
+  # Draw dialogs
+  showQuestion(dialog = dialog, state = state)
+  if state != oldState:
+    return true
+  showMessage(dialog = dialog)
+  showInfo(dialog = dialog)
+  return false
 
 proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -446,4 +456,3 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         dialog = none
   except:
     dialog = setError(message = "Can't show the game's menu")
-
