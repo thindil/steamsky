@@ -398,7 +398,7 @@ proc showMemberTabCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ShowMemberTab
-  let memberCanvas: string = ".memberdialog.canvas"
+  const memberCanvas: string = ".memberdialog.canvas"
   tclEval(script = memberCanvas & " delete info")
   let
     tabName: string = tclGetVar(varName = "newtab")
@@ -1266,7 +1266,7 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox,
     if needRepair and needClean:
       break
   let member: MemberData = playerShip.crew[memberIndex]
-  var availableOrders, tclCommands = ""
+  var availableOrders, tclCommands: string = ""
   if ((member.tired == 100 or member.hunger == 100 or member.thirst == 100) and
       member.order != rest) or member.skills.len == 0 or
       member.contractLength == 0:
@@ -1364,34 +1364,34 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowCrewOrder memberindex
   ## MemberIndex is the index of the crew member which order will be changed
   let
-    memberIndex = try:
+    memberIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the crew member index.")
-    member = playerShip.crew[memberIndex]
-    memberDialog = createDialog(name = ".memberdialog",
+    member: MemberData = playerShip.crew[memberIndex]
+    memberDialog: string = createDialog(name = ".memberdialog",
         title = "Change order for " & member.name, columns = 2)
-    orderInfo = memberDialog & ".orderinfo"
+    orderInfo: string = memberDialog & ".orderinfo"
   tclEval(script = "ttk::label " & orderInfo & " -text {Current order:}")
   tclEval(script = "grid " & orderInfo & " -padx 5")
-  let orderLabel = memberDialog & ".current"
+  let orderLabel: string = memberDialog & ".current"
   try:
     tclEval(script = "ttk::label " & orderLabel & " -text {" & getCurrentOrder(
         memberIndex = memberIndex) & "} -wraplength 275 -style Golden.TLabel")
   except:
     return showError(message = "Can't get the current order.")
   tclEval(script = "grid " & orderLabel & " -padx 5 -column 1 -row 1 -sticky w")
-  let ordersInfo = memberDialog & ".ordersinfo"
+  let ordersInfo: string = memberDialog & ".ordersinfo"
   tclEval(script = "ttk::label " & ordersInfo & " -text {New order:}")
   tclEval(script = "grid " & ordersInfo & " -padx 5 -sticky w")
-  let ordersBox = memberDialog & ".list"
+  let ordersBox: string = memberDialog & ".list"
   tclEval(script = "ttk::combobox " & ordersBox & " -state readonly")
-  let buttonsBox = memberDialog & ".buttons"
+  let buttonsBox: string = memberDialog & ".buttons"
   tclEval(script = "ttk::frame " & buttonsBox)
-  let closeDialogButton = buttonsBox & ".button"
+  let closeDialogButton: string = buttonsBox & ".button"
   tclEval(script = "ttk::button " & closeDialogButton &
       " -text Cancel -command {CloseDialog " & memberDialog & "} -image cancelicon -style Dialogred.TButton")
-  let acceptButton = buttonsBox & ".button2"
+  let acceptButton: string = buttonsBox & ".button2"
   tclEval(script = "ttk::button " & acceptButton & " -text Assign -image giveorder2icon -style Dialoggreen.TButton")
   tclEval(script = "bind " & ordersBox & " <Escape> {" & closeDialogButton & " invoke;break}")
   tclEval(script = "bind " & ordersBox & " <Tab> {focus " & acceptButton & ";break}")
@@ -1428,24 +1428,24 @@ proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   ## SelectCrewOrder orderslist memberindex
   ## Orderslist is the list of the available orders with their parameters,
   ## memberindex is the crew index of the selected crew member
+  const ordersBox: string = ".memberdialog.list"
   let
-    ordersBox = ".memberdialog.list"
-    orderIndex = try:
+    orderIndex: int = try:
         tclEval2(script = ordersBox & " current").parseInt
       except:
         return showError(message = "Can't get the index of the order.")
-  var arguments = tclEval2(script = "lindex {" & $argv[1] & "} " &
+  var arguments: seq[string] = tclEval2(script = "lindex {" & $argv[1] & "} " &
         $orderIndex).split(sep = " ")
   arguments.insert(item = "SetCrewOrder", i = 0)
   discard setCrewOrderCommand(clientData = clientData, interp = interp,
       argc = arguments.len.cint, argv = arguments.allocCStringArray)
-  let
-    orderLabel = ".memberdialog.current"
-    memberIndex = try:
+  const
+    orderLabel: string = ".memberdialog.current"
+    button: string = ".memberdialog.buttons.button2"
+  let memberIndex: int = try:
         ($argv[2]).parseInt - 1
       except:
         return showError(message = "Can't get the member's index.")
-    button = ".memberdialog.buttons.button2"
   try:
     tclEval(script = orderLabel & " configure -text {" & getCurrentOrder(
         memberIndex = memberIndex) & "}")
