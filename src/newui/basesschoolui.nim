@@ -31,8 +31,8 @@ var
   moneyIndex2: int = -1
   moneyText, crewList, schoolSkillsList: seq[string] = @[]
   moneyWidth: seq[cfloat] = @[]
-  crewIndex, skillIndex: Natural = 0
-  amount, timesCost, minCost, oneTrainCost: Positive = 1
+  crewIndex, skillIndex, minCost, maxCost: Natural = 0
+  amount, timesCost, oneTrainCost: Positive = 1
   tType: TrainingType = times
   skillsIndexes: seq[Natural] = @[]
 
@@ -67,6 +67,12 @@ proc setTrainingCost(dialog: var GameDialog){.raises: [], tags: [RootEffect],
       return
   timesCost = oneTrainCost * amount
   minCost = oneTrainCost
+  let moneyIndex2: int = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+  if moneyIndex2 < 0:
+    minCost = 0
+    maxCost = 0
+  else:
+    maxCost = playerShip.cargo[moneyIndex2].amount
 
 proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -191,7 +197,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addTooltip(bounds = getWidgetBounds(),
           text = "Enter amount of money which you want to spend")
     let newCost: int = property2(name = "#", min = oneTrainCost, val = minCost,
-        max = oneTrainCost * 10_000, step = oneTrainCost, incPerPixel = 1)
+        max = maxCost, step = oneTrainCost, incPerPixel = 1)
     if newCost != minCost:
       minCost = newCost
   showMessagesButtons()
