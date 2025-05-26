@@ -1318,6 +1318,7 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
           w: drawRect.w, h: drawRect.h), c = background)
   of triangleUp, triangleDown, triangleLeft, triangleRight:
     var heading: Heading = right
+    var points: array[3, nk_vec2]
     case `type`
       of triangleRight:
         heading = right
@@ -1327,7 +1328,9 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
         heading = up
       else:
         heading = down
-    # TODO: continue here
+    nkTriangleFromDirection(`result` = points, r = content, padX = 0,
+      padY = 0, direction = heading)
+    # TODO: continue here after nkTriangleFromDirection
   else:
     discard
 

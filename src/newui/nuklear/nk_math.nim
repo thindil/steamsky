@@ -53,3 +53,15 @@ proc nkIntersect*(x0, y0, w0, h0, x1, y1, w1, h1: cfloat): bool {.raises: [],
   ## false.
   return ((x1 < (x0 + w0)) and (x0 < (x1 + w1)) and (y1 < (y0 + h0)) and (y0 < (
       y1 + h1)))
+
+proc nkTriangleFromDirection*(`result`: var array[3, nk_vec2]; r: NimRect;
+    padX: cfloat; padY: cfloat; direction: Heading) {.raises: [], tags: [],
+    contractual.} =
+  ## Get the coordinates of a triangle based on its direction
+  ##
+  ## * result
+  ## * r
+  ## * padX
+  ## * padY
+  ## * direction
+  discard
