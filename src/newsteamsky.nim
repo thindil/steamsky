@@ -21,7 +21,7 @@
 import std/[os, parseopt, strutils, tables, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
-import newui/[basesschoolui, combatui, coreui, errordialog, goalsui, mainmenu, mapsui, themes, tradesui, waitmenu]
+import newui/[basesschoolui, basesrecruitui, combatui, coreui, errordialog, goalsui, mainmenu, mapsui, themes, tradesui, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -126,14 +126,14 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = 200)
-  const showGame: array[GameState.mainMenu..GameState.school, proc (
+  const showGame: array[GameState.mainMenu..GameState.recruits, proc (
       state: var GameState; dialog: var GameDialog){.nimcall, raises: [].}] = [
     GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
       about: showAbout, showFile: mainMenu.showFile, hallOfFame: showHallOfFame,
       loadGame: showLoadGame, loadingGame: mainMenu.loadGame,
       newGame: mainMenu.newGame, map: showMap, endGame: backToMainMenu,
       combat: showCombat, boarding: showBoarding, trade: showTrade,
-      school: showSchool]
+      school: showSchool, recruits: showRecruits]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
