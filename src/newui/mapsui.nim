@@ -655,13 +655,10 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  showHeader(dialog = dialog, state = state)
+  discard showHeader(dialog = dialog, state = state)
   # draw dialogs
-  showQuestion(dialog = dialog, state = state)
   showShipOrders(dialog = dialog, state = state)
   showDestinationMenu(dialog = dialog)
-  showMessage(dialog = dialog)
-  showInfo(dialog = dialog)
   # draw map
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)

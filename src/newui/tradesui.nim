@@ -495,16 +495,9 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  showHeader(dialog = dialog, close = CloseDestination.map, state = state,
-      options = true)
-  if state != GameState.trade:
+  if showHeader(dialog = dialog, close = CloseDestination.map, state = state,
+    options = true):
     return
-  # Draw dialogs
-  showQuestion(dialog = dialog, state = state)
-  if state != GameState.trade:
-    return
-  showMessage(dialog = dialog)
-  showInfo(dialog = dialog)
   if showManipulateItem(dialog = dialog):
     refreshItemsList(dialog = dialog)
   # Show advanced options if needed

@@ -199,16 +199,9 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  showHeader(dialog = dialog, close = (if endCombat: CloseDestination.map else:
-      CloseDestination.none), state = state)
-  if state != GameState.combat:
+  if showHeader(dialog = dialog, close = (if endCombat: CloseDestination.map
+    else: CloseDestination.none), state = state):
     return
-  # Draw dialogs
-  showQuestion(dialog = dialog, state = state)
-  if state != GameState.combat:
-    return
-  showMessage(dialog = dialog)
-  showInfo(dialog = dialog)
   showPartyMenu(dialog = dialog)
   # Draw UI
   if pilotList.len != playerShip.crew.len + 1:
@@ -626,16 +619,9 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  showHeader(dialog = dialog, close = (if endCombat: CloseDestination.map else:
-      CloseDestination.none), state = state)
-  if state != boarding:
+  if showHeader(dialog = dialog, close = (if endCombat: CloseDestination.map else:
+    CloseDestination.none), state = state):
     return
-  # Draw dialogs
-  showQuestion(dialog = dialog, state = state)
-  if state != boarding:
-    return
-  showMessage(dialog = dialog)
-  showInfo(dialog = dialog)
   let
     height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
   setLayoutRowDynamic(height = height, cols = (if expandedSection == 0: 2 else: 1))

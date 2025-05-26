@@ -20,7 +20,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
-import coreui, dialogs, header, messagesui
+import coreui, header, messagesui
 
 proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -31,15 +31,8 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  showHeader(dialog = dialog, close = CloseDestination.map, state = state)
-  if state != recruits:
+  if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
-  # Draw dialogs
-  showQuestion(dialog = dialog, state = state)
-  if state != recruits:
-    return
-  showMessage(dialog = dialog)
-  showInfo(dialog = dialog)
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "RecruitsGroup", flags = {windowNoFlags}):

@@ -105,15 +105,8 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  showHeader(dialog = dialog, close = CloseDestination.map, state = state)
-  if state != GameState.school:
+  if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
-  # Draw dialogs
-  showQuestion(dialog = dialog, state = state)
-  if state != school:
-    return
-  showMessage(dialog = dialog)
-  showInfo(dialog = dialog)
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "SchoolGroup", flags = {windowNoFlags}):
