@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash when starting a combat
+
 ## [11.0.1] - 2025-05-11
 
 ### Changed
