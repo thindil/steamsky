@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,7 +20,7 @@
 
 import std/[strutils, tables]
 import contracts
-import factions, game, maps, messages, ships2, types, utils
+import factions, game, maps, messages, reputation, types, utils
 
 var
   friendlyShips*: seq[Positive] = @[]
@@ -58,13 +58,13 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
   require:
     owner.len > 0
   body:
-    var playerValue: Natural = countCombatValue()
-    if getRandom(min = 1, max = 100) > 98:
-      playerValue *= 2
     var playerShips: seq[Positive] = @[]
     getPlayerShips(playerShips = playerShips)
     for index, ship in protoShipsList:
-      if ship.combatValue <= playerValue and (owner == "Any" or ship.owner ==
+      var reputation: int = getReputation(factionIndex = ship.owner)
+      if getRandom(min = 1, max = 100) > 98:
+        reputation *= 2
+      if reputation <= -(ship.reputation) and (owner == "Any" or ship.owner ==
           owner) and not isFriendly(sourceFaction = playerShip.crew[0].faction,
           targetFaction = ship.owner) and index notin playerShips and (
           withTraders or tradersName notin ship.name):
