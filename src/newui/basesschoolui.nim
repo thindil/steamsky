@@ -200,7 +200,6 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
         max = maxCost, step = oneTrainCost, incPerPixel = 1)
     if newCost != minCost:
       minCost = newCost
-  showMessagesButtons()
   setLayoutRowDynamic(height = windowHeight - tableHeight, cols = 1)
   showLastMessages(theme = theme, dialog = dialog)
   showGameMenu(dialog = dialog)

@@ -721,7 +721,6 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       row.inc
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
-  showMessagesButtons()
   setLayoutRowDynamic(height = windowHeight - tableHeight - 20, cols = 1)
   showLastMessages(theme = theme, dialog = dialog)
   showGameMenu(dialog = dialog)

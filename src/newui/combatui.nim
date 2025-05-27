@@ -583,7 +583,6 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if playerShip.crew[0].order == boarding:
         state = boarding
   let heightDiff: float = (if endCombat: 55 else: 90)
-  showMessagesButtons()
   setLayoutRowDynamic(height = windowHeight - heightDiff - height - 20, cols = 1)
   showLastMessages(theme = theme, dialog = dialog, inCombat = true)
   showGameMenu(dialog = dialog)
