@@ -22,29 +22,30 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, messages, types]
 import coreui, errordialog, themes
 
-proc showMessagesButtons*() {.raises: [], tags: [], contractual.} =
-  ## Show the buttons to resize the last messages window
-  setLayoutRowDynamic(height = 20, cols = 2)
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Make the list of messages bigger.")
-  imageButtonCentered(image = images[contract2Icon]):
-    gameSettings.messagesPosition += gameSettings.interfaceFontSize + 10
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Make the list of messages smaller.")
-  imageButtonCentered(image = images[expand2Icon]):
-    gameSettings.messagesPosition -= gameSettings.interfaceFontSize + 10
-
 proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
-    inCombat: bool = false) {.raises: [], tags: [RootEffect], contractual.} =
+    inCombat: bool = false; withButtons: bool = true) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Show the last in-game messages to the player
   ##
-  ## * theme    - the current game's theme
-  ## * dialog   - the current in-game dialog displayed on the screen
-  ## * inCombat - if true, show messages in combat
+  ## * theme       - the current game's theme
+  ## * dialog      - the current in-game dialog displayed on the screen
+  ## * inCombat    - if true, show messages in combat
+  ## * withButtons - if true, show the buttons to resize the last messages
+  ##                 window
   ##
   ## Returns parameter dialog, modified if any error happened.
+  if withButtons:
+    setLayoutRowDynamic(height = 20, cols = 2)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Make the list of messages bigger.")
+    imageButtonCentered(image = images[contract2Icon]):
+      gameSettings.messagesPosition += gameSettings.interfaceFontSize + 10
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Make the list of messages smaller.")
+    imageButtonCentered(image = images[expand2Icon]):
+      gameSettings.messagesPosition -= gameSettings.interfaceFontSize + 10
   var loopStart = 0 - messagesAmount()
   if loopStart == 0:
     return
