@@ -689,20 +689,20 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     for index, attrib in member.attributes:
       var progressFrame: string = frame & ".statinfo" & $index
       tclEval(script = "ttk::frame " & progressFrame)
-      var memberLabel: string = progressFrame & ".label"
-      tclEval(script = "ttk::label " & memberLabel & " -text {" &
+      var memberLabel2: string = progressFrame & ".label"
+      tclEval(script = "ttk::label " & memberLabel2 & " -text {" &
           attributesList[index].name & ":}")
-      tclEval(script = "grid " & memberLabel & " -sticky w")
-      tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
-      memberLabel = progressFrame & ".label2"
-      tclEval(script = "ttk::label " & memberLabel & " -text {" &
+      tclEval(script = "grid " & memberLabel2 & " -sticky w")
+      tclEval(script = "SetScrollbarBindings " & memberLabel2 & " " & yScroll)
+      memberLabel2 = progressFrame & ".label2"
+      tclEval(script = "ttk::label " & memberLabel2 & " -text {" &
           getAttributeLevelName(attributeLevel = attrib.level) & "} -style Golden.TLabel")
-      tclEval(script = "grid " & memberLabel & " -sticky we -column 1 -row 0 -padx {5 0}")
-      tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
+      tclEval(script = "grid " & memberLabel2 & " -sticky we -column 1 -row 0 -padx {5 0}")
+      tclEval(script = "SetScrollbarBindings " & memberLabel2 & " " & yScroll)
       tclEval(script = "grid columnconfigure " & progressFrame & " " &
-          memberLabel & " -weight 1")
+          memberLabel2 & " -weight 1")
       tclEval(script = "grid rowconfigure " & progressFrame & " " &
-          memberLabel & " -weight 1")
+          memberLabel2 & " -weight 1")
       infoButton = progressFrame & ".button"
       tclEval(script = "ttk::button " & infoButton &
           " -image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo " &
@@ -750,23 +750,23 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     for index, skill in member.skills:
       var progressFrame: string = frame & ".skillinfo" & $index
       tclEval(script = "ttk::frame " & progressFrame)
-      var memberLabel: string = progressFrame & ".label" & $index
+      var memberLabel2: string = progressFrame & ".label" & $index
       try:
-        tclEval(script = "ttk::label " & memberLabel & " -text {" & skillsList[
+        tclEval(script = "ttk::label " & memberLabel2 & " -text {" & skillsList[
             skill.index].name & ":}")
       except:
         return showError(message = "Can't show the crew member skill name.")
-      tclEval(script = "grid " & memberLabel & " -sticky w")
+      tclEval(script = "grid " & memberLabel2 & " -sticky w")
       tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
-      memberLabel = progressFrame & ".label2" & $index
-      tclEval(script = "ttk::label " & memberLabel & " -text {" &
+      memberLabel2 = progressFrame & ".label2" & $index
+      tclEval(script = "ttk::label " & memberLabel2 & " -text {" &
           getSkillLevelName(skillLevel = skill.level) & "} -style Golden.TLabel")
-      tclEval(script = "grid " & memberLabel & " -sticky we -column 1 -row 0 -padx {5 0}")
-      tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
+      tclEval(script = "grid " & memberLabel2 & " -sticky we -column 1 -row 0 -padx {5 0}")
+      tclEval(script = "SetScrollbarBindings " & memberLabel2 & " " & yScroll)
       tclEval(script = "grid columnconfigure " & progressFrame & " " &
-          memberLabel & " -weight 1")
+          memberLabel2 & " -weight 1")
       tclEval(script = "grid rowconfigure " & progressFrame & " " &
-          memberLabel & " -weight 1")
+          memberLabel2 & " -weight 1")
       infoButton = progressFrame & ".button"
       tclEval(script = "ttk::button " & infoButton &
           " -image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo " &
@@ -811,7 +811,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     frame = memberCanvas & ".priorities"
     tclEval(script = "ttk::frame " & frame)
     tclEval(script = "SetScrollbarBindings " & frame & " " & yScroll)
-    var memberLabel: string = frame & ".label1"
+    memberLabel = frame & ".label1"
     tclEval(script = "ttk::label " & memberLabel & " -text {Priority}")
     tclEval(script = "grid " & memberLabel)
     tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
@@ -825,11 +825,11 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         "Defend ship:", "Board enemy ship", "Train skill:"]
     var comboBox: string = ""
     for index, order in member.orders:
-      var memberLabel: string = frame & ".name" & $index
-      tclEval(script = "ttk::label " & memberLabel & " -text {" &
+      var memberLabel2: string = frame & ".name" & $index
+      tclEval(script = "ttk::label " & memberLabel2 & " -text {" &
           prioritesNames[index] & "} -takefocus 0")
-      tclEval(script = "grid " & memberLabel & " -sticky w -padx {5 0}")
-      tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
+      tclEval(script = "grid " & memberLabel2 & " -sticky w -padx {5 0}")
+      tclEval(script = "SetScrollbarBindings " & memberLabel2 & " " & yScroll)
       comboBox = frame & ".level" & $index
       tclEval(script = "ttk::combobox " & comboBox & " -values [list None Normal Highest] -state readonly -width 8")
       tclEval(script = comboBox & " current " & $(order.ord))
