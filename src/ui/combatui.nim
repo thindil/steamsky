@@ -151,7 +151,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     tclEval(script = "grid remove " & comboBox)
   var
     tclResult: seq[string] = tclEval2(script = "grid size " & frame).split(sep = " ")
-    rows: Positive = try:
+    rows: Natural = try:
         tclResult[1].parseInt()
       except:
         1
@@ -526,7 +526,7 @@ proc updateBoardingUi() {.raises: [], tags: [], contractual.} =
   tclEval(script = "bind . <" & generalAccelerators[1] & "> {InvokeButton .left.canvas.frame.maxmin}")
   var
     tclResult: seq[string] = tclEval2(script = "grid size " & frame).split(sep = " ")
-    rows: Positive = try:
+    rows: Natural = try:
         tclResult[1].parseInt()
       except:
         1
