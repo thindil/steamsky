@@ -34,6 +34,7 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
   ##                 window
   ##
   ## Returns parameter dialog, modified if any error happened.
+  # Show buttons to resize the last messages window
   if withButtons:
     setLayoutRowDynamic(height = 20, cols = 2)
     if gameSettings.showTooltips:
@@ -85,7 +86,8 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
         wrapLabel(str = message.message)
       else:
         colorWrapLabel(str = message.message, color = colors[message.color.ord])
-
+  
+  # Show the last messages
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "The last game messages. You can see more of them in Menu->Last messages screen")
