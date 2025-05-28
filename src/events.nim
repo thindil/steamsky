@@ -23,8 +23,6 @@ import contracts
 import factions, game, maps, messages, reputation, types, utils
 
 var
-  friendlyShips*: seq[Positive] = @[]
-    ## The list of all ships which are friendlytowards the player
   traders*: seq[Positive] = @[]
     ## The list of all traders' ships
 
@@ -139,15 +137,22 @@ proc recoverBase*(baseIndex: BasesRange) {.raises: [KeyError],
   addMessage(message = "Base " & skyBases[baseIndex].name & " has a new owner.",
       mType = otherMessage, color = cyan)
 
-proc generateTraders*() {.raises: [KeyError], tags: [],
-    contractual.} =
-  ## Create the list of traders' ships needed for events
-  for index, ship in protoShipsList:
-    if ship.name.contains(sub = tradersName):
-      traders.add(y = index)
+proc generateFriendlyShips*(ships: var seq[Positive]) {.raises: [KeyError], tags: [], contractual.} =
+  ## Create the list of ships which are frienly towards the player
+  ##
+  ## * ships - the list of friendly ships which will be created
+  ##
+  ## Returns the updated paramater ships
   var playerShips: seq[Positive] = @[]
   getPlayerShips(playerShips = playerShips)
   for index, ship in protoShipsList:
     if isFriendly(sourceFaction = playerShip.crew[0].faction,
         targetFaction = ship.owner) and index notin playerShips:
-      friendlyShips.add(y = index)
+      ships.add(y = index)
+
+proc generateTraders*() {.raises: [], tags: [],
+    contractual.} =
+  ## Create the list of traders' ships needed for events
+  for index, ship in protoShipsList:
+    if ship.name.contains(sub = tradersName):
+      traders.add(y = index)
