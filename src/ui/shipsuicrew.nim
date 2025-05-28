@@ -1127,93 +1127,75 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     of selectedAsc:
       if x.selected < y.selected:
         return 1
-      else:
-        return -1
+      return -1
     of selectedDesc:
       if x.selected > y.selected:
         return 1
-      else:
-        return -1
+      return -1
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of orderAsc:
       if x.order < y.order:
         return 1
-      else:
-        return -1
+      return -1
     of orderDesc:
       if x.order > y.order:
         return 1
-      else:
-        return -1
+      return -1
     of skillAsc:
       if x.skill < y.skill:
         return 1
-      else:
-        return -1
+      return -1
     of skillDesc:
       if x.skill > y.skill:
         return 1
-      else:
-        return -1
+      return -1
     of healthAsc:
       if x.health < y.health:
         return 1
-      else:
-        return -1
+      return -1
     of healthDesc:
       if x.health > y.health:
         return 1
-      else:
-        return -1
+      return -1
     of fatigueAsc:
       if x.fatigue < y.fatigue:
         return 1
-      else:
-        return -1
+      return -1
     of fatigueDesc:
       if x.fatigue > y.fatigue:
         return 1
-      else:
-        return -1
+      return -1
     of thirstAsc:
       if x.thirst < y.thirst:
         return 1
-      else:
-        return -1
+      return -1
     of thirstDesc:
       if x.thirst > y.thirst:
         return 1
-      else:
-        return -1
+      return -1
     of hungerAsc:
       if x.hunger < y.hunger:
         return 1
-      else:
-        return -1
+      return -1
     of hungerDesc:
       if x.hunger > y.hunger:
         return 1
-      else:
-        return -1
+      return -1
     of moraleAsc:
       if x.morale < y.morale:
         return 1
-      else:
-        return -1
+      return -1
     of moraleDesc:
       if x.morale > y.morale:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
 
