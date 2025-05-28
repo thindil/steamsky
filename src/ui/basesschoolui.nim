@@ -113,7 +113,7 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
       grid [ttk::combobox $schoolframe.setting.skill -state readonly -width 27] -row 0 \
          -column 3
       tooltip::tooltip $schoolframe.setting.skill \
-         {Select the skill whichVy will be trained}
+         {Select the skill which will be trained}
       bind $schoolframe.setting.skill <<ComboboxSelected>> {
          $schoolframe.amountbox.amount set 1
          UpdateSchoolCost $schoolframe.amountbox.amount 1
