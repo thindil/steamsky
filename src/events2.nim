@@ -101,6 +101,8 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
       updateOrders(ship = playerShip)
     # Friendly ship
     of 24..30:
+      var friendlyShips: seq[Positive] = @[]
+      generateFriendlyShips(ships = friendlyShips)
       eventsList.add(y = EventData(eType: friendlyShip, skyX: playerShip.skyX,
           skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
           shipIndex: friendlyShips[getRandom(min = friendlyShips.low,

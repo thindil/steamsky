@@ -692,6 +692,11 @@ proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval2(script = shipBox & " get").parseInt
     except:
       return showError(message = "Can't get duration.")
+  var friendlyShips: seq[Positive] = @[]
+  try:
+    generateFriendlyShips(ships = friendlyShips)
+  except:
+    return showError(message = "Can't generate friendly ships.")
   for index, ship in protoShipsList:
     if ship.name == shipName:
       if index in traders:
