@@ -1301,7 +1301,7 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
         entryName: ".movement.upleft", configName: ""), AccelData(
         shortcut: if DirSep == '\\': "Up" else: "KP_Up",
         entryName: ".movement.up", configName: ""), AccelData(
-        shortcut: if Dir_Sep == '\\': "Prior" else: "KP_Prior",
+        shortcut: if DirSep == '\\': "Prior" else: "KP_Prior",
         entryName: ".movement.upright", configName: ""), AccelData(
         shortcut: if DirSep == '\\': "Left" else: "KP_Left",
         entryName: ".movement.left", configName: ""), AccelData(

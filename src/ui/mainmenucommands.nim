@@ -41,7 +41,7 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
   ## OpenLink url
   ## Url is link which will be opened
   let command: string = try:
-        findExe(exe = (if hostOs == "windows": "start" elif hostOs ==
+        findExe(exe = (if hostOS == "windows": "start" elif hostOS ==
           "macosx": "open" else: "xdg-open"))
       except:
         return showError(message = "Can't find the program to open the link")
