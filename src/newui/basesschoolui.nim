@@ -67,7 +67,8 @@ proc setTrainingCost(dialog: var GameDialog){.raises: [], tags: [RootEffect],
       return
   timesCost = oneTrainCost * amount
   minCost = oneTrainCost
-  let moneyIndex2: int = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
+      protoIndex = moneyIndex)
   if moneyIndex2 < 0:
     minCost = 0
     maxCost = 0
@@ -200,6 +201,5 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
         max = maxCost, step = oneTrainCost, incPerPixel = 1)
     if newCost != minCost:
       minCost = newCost
-  setLayoutRowDynamic(height = windowHeight - tableHeight, cols = 1)
-  showLastMessages(theme = theme, dialog = dialog)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
   showGameMenu(dialog = dialog)

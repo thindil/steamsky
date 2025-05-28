@@ -37,6 +37,5 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "RecruitsGroup", flags = {windowNoFlags}):
     discard
-  setLayoutRowDynamic(height = windowHeight - tableHeight, cols = 1)
-  showLastMessages(theme = theme, dialog = dialog)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
   showGameMenu(dialog = dialog)

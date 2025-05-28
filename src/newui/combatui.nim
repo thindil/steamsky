@@ -583,8 +583,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if playerShip.crew[0].order == boarding:
         state = boarding
   let heightDiff: float = (if endCombat: 55 else: 90)
-  setLayoutRowDynamic(height = windowHeight - heightDiff - height - 20, cols = 1)
-  showLastMessages(theme = theme, dialog = dialog, inCombat = true)
+  showLastMessages(theme = theme, dialog = dialog, inCombat = true,
+    height = windowHeight - heightDiff - height - 20)
   showGameMenu(dialog = dialog)
 
 proc showBoardingInfo(index: Natural; inCrew: bool = true; dialog: var GameDialog)
@@ -720,6 +720,5 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = combat
         updateParties()
   let heightDiff: float = (if endCombat: 55 else: 90)
-  setLayoutRowDynamic(height = windowHeight - heightDiff - height, cols = 1)
-  showLastMessages(theme = theme, dialog = dialog, inCombat = true)
+  showLastMessages(theme = theme, dialog = dialog, inCombat = true, height = windowHeight - heightDiff - height)
   showGameMenu(dialog = dialog)

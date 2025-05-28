@@ -47,7 +47,8 @@ var
   cargoWidth: array[2, cfloat] = [0.cfloat, 0]
   itemIndex: int = -1
 
-proc refreshItemsList(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc refreshItemsList(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the list of items for trade
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -721,6 +722,6 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       row.inc
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
-  setLayoutRowDynamic(height = windowHeight - tableHeight - 20, cols = 1)
-  showLastMessages(theme = theme, dialog = dialog)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+      tableHeight - 20)
   showGameMenu(dialog = dialog)
