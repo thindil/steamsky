@@ -77,7 +77,20 @@ proc nkTriangleFromDirection*(`result`: var array[3, nk_vec2]; r: NimRect;
     wHalf: float = rect.w / 2.0
     hHalf: float = rect.h / 2.0
 
-  if direction == up:
+  case direction
+  of up:
     `result`[0] = nk_vec2(x: rect.x + wHalf, y: rect.y)
     `result`[1] = nk_vec2(x: rect.x + rect.w, y: rect.y + rect.h)
     `result`[2] = nk_vec2(x: rect.x, y: rect.y + rect.h)
+  of right:
+    `result`[0] = nk_vec2(x: rect.x, y: rect.y)
+    `result`[1] = nk_vec2(x: rect.x + rect.w, y: rect.y + hHalf)
+    `result`[2] = nk_vec2(x: rect.x, y: rect.y + rect.h)
+  of down:
+    `result`[0] = nk_vec2(x: rect.x, y: rect.y)
+    `result`[1] = nk_vec2(x: rect.x + rect.w, y: rect.y)
+    `result`[2] = nk_vec2(x: rect.x + wHalf, y: rect.y + rect.h)
+  of left:
+    `result`[0] = nk_vec2(x: rect.x, y: rect.y + hHalf)
+    `result`[1] = nk_vec2(x: rect.x + rect.w, y: rect.y)
+    `result`[2] = nk_vec2(x: rect.x + rect.w, y: rect.y + rect.h)
