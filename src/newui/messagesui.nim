@@ -23,8 +23,8 @@ import ../[config, messages, types]
 import coreui, errordialog, themes
 
 proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
-    inCombat: bool = false; withButtons: bool = true) {.raises: [], tags: [
-    RootEffect], contractual.} =
+    inCombat: bool = false; withButtons: bool = true;
+    height: float) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the last in-game messages to the player
   ##
   ## * theme       - the current game's theme
@@ -32,6 +32,8 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
   ## * inCombat    - if true, show messages in combat
   ## * withButtons - if true, show the buttons to resize the last messages
   ##                 window
+  ## * height      - the height of the last messages window. If set to 0,
+  ##                 it wil be handled outside the procedure.
   ##
   ## Returns parameter dialog, modified if any error happened.
   # Show buttons to resize the last messages window
@@ -86,11 +88,13 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
         wrapLabel(str = message.message)
       else:
         colorWrapLabel(str = message.message, color = colors[message.color.ord])
-  
+
   # Show the last messages
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "The last game messages. You can see more of them in Menu->Last messages screen")
+  if height > 0:
+    setLayoutRowDynamic(height = height, cols = 1)
   group(title = "LastMessagesGroup", flags = {windowBorder}):
     if gameSettings.messagesOrder == olderFirst:
       for i in loopStart .. -1:
