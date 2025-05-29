@@ -1110,12 +1110,12 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
       else:
         return -1
     of orderAsc:
-      if x.order < y.order:
+      if $x.order < $y.order:
         return 1
       else:
         return -1
     of orderDesc:
-      if x.order > y.order:
+      if $x.order > $y.order:
         return 1
       else:
         return -1
