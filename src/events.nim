@@ -96,8 +96,8 @@ proc updateEvents*(minutes: Positive) {.raises: [], tags: [],
     if newTime < 1:
       if eventsList[key].eType in {disease, attackOnBase} and getRandom(min = 1,
           max = 100) < 10:
-        let baseIndex: ExtendedBasesRange = skyMap[eventsList[key].skyX][eventsList[
-            key].skyY].baseIndex
+        let baseIndex: ExtendedBasesRange = skyMap[eventsList[key].skyX][
+            eventsList[key].skyY].baseIndex
         var populationLost: Positive = getRandom(min = 1, max = 10)
         if populationLost > skyBases[baseIndex].population:
           populationLost = skyBases[baseIndex].population
@@ -137,7 +137,8 @@ proc recoverBase*(baseIndex: BasesRange) {.raises: [KeyError],
   addMessage(message = "Base " & skyBases[baseIndex].name & " has a new owner.",
       mType = otherMessage, color = cyan)
 
-proc generateFriendlyShips*(ships: var seq[Positive]) {.raises: [KeyError], tags: [], contractual.} =
+proc generateFriendlyShips*(ships: var seq[Positive]) {.raises: [KeyError],
+    tags: [], contractual.} =
   ## Create the list of ships which are frienly towards the player
   ##
   ## * ships - the list of friendly ships which will be created
@@ -146,7 +147,11 @@ proc generateFriendlyShips*(ships: var seq[Positive]) {.raises: [KeyError], tags
   var playerShips: seq[Positive] = @[]
   getPlayerShips(playerShips = playerShips)
   for index, ship in protoShipsList:
-    if isFriendly(sourceFaction = playerShip.crew[0].faction,
+    var reputation: int = getReputation(factionIndex = ship.owner)
+    if getRandom(min = 1, max = 100) > 98:
+      reputation *= 2
+    if reputation >= ship.reputation and isFriendly(
+        sourceFaction = playerShip.crew[0].faction,
         targetFaction = ship.owner) and index notin playerShips:
       ships.add(y = index)
 
