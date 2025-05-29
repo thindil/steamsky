@@ -1302,20 +1302,17 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
     nkWidgetText(o = `out`, b = content, str = $ch, len = length, t = text.addr,
       a = centered, f = font)
   of circleSolid, circleOutline, rectSolid, rectOutline:
-    var drawRect: nk_rect = new_nk_rect(x = content.x, y = content.y,
-      w = content.w, h = content.h)
+    var drawRect: NimRect = content
     drawRect = nkShrinkRect(r = drawRect, amount = borderWidth)
     # simple empty/filled shapes
     if `type` in [rectSolid, rectOutline]:
       nkFillRect(b = `out`, rect = content, rounding = 0, c = foreground)
       if `type` == rectOutline:
-        nkFillRect(b = `out`, rect = NimRect(x: drawRect.x, y: drawRect.y,
-          w: drawRect.w, h: drawRect.h), rounding = 0, c = background)
+        nkFillRect(b = `out`, rect = drawRect, rounding = 0, c = background)
     else:
       nkFillCircle(b = `out`, rect = content, c = foreground)
       if `type` == circleOutline:
-        nkFillCircle(b = `out`, rect = NimRect(x: drawRect.x, y: drawRect.y,
-          w: drawRect.w, h: drawRect.h), c = background)
+        nkFillCircle(b = `out`, rect = drawRect, c = background)
   of triangleUp, triangleDown, triangleLeft, triangleRight:
     var heading: Heading = right
     var points: array[3, nk_vec2]
@@ -1543,7 +1540,11 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.bounds.w -= (2 * panelPadding.x)
     if (win.flags and windowBorder.cint).nk_bool:
       layout.border = nkPanelGetBorder(style = style, flags = win.flags, `type` = panelType)
-      layout.bounds = nkShrinkRect(r = layout.bounds, amount = layout.border)
+      var shrinked: NimRect = NimRect(x: layout.bounds.x, y: layout.bounds.y,
+        w: layout.bounds.w, h: layout.bounds.h)
+      shrinked = nkShrinkRect(r = shrinked, amount = layout.border)
+      layout.bounds = new_nk_rect(x = shrinked.x, y = shrinked.y,
+        w = shrinked.w, h = shrinked.h)
     else:
       layout.border = 0
     layout.at_y = layout.bounds.y

@@ -26,7 +26,7 @@
 import contracts
 import nk_types
 
-proc nkShrinkRect*(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [],
+proc nkShrinkRect*(r: NimRect; amount: cfloat): NimRect {.raises: [], tags: [],
     contractual.} =
   ## Shrink the selected rectangle. Internal use only
   ##
