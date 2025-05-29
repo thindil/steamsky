@@ -20,7 +20,27 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
-import coreui, header, messagesui
+import coreui, header, messagesui, table
+
+type RecruitsSortOrders = enum
+  none, nameAsc, nameDesc, genderAsc, genderDesc, factionAsc, factionDesc,
+    priceAsc, priceDesc, attributeAsc, attributeDesc, skillAsc, skillDesc
+
+const
+  defaultRecruitsSortOrder: RecruitsSortOrders = none
+  headers: array[6, HeaderData[RecruitsSortOrders]] = [
+    HeaderData[RecruitsSortOrders](label: "Name", sortAsc: nameAsc,
+        sortDesc: nameDesc),
+    HeaderData[RecruitsSortOrders](label: "Gender", sortAsc: genderAsc,
+        sortDesc: genderDesc),
+    HeaderData[RecruitsSortOrders](label: "Faction", sortAsc: factionAsc,
+        sortDesc: factionDesc),
+    HeaderData[RecruitsSortOrders](label: "Base cost", sortAsc: priceAsc,
+        sortDesc: priceDesc),
+    HeaderData[RecruitsSortOrders](label: "Highest stat", sortAsc: attributeAsc,
+        sortDesc: attributeDesc),
+    HeaderData[RecruitsSortOrders](label: "Highest skill", sortAsc: skillAsc,
+        sortDesc: skillDesc)]
 
 proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
