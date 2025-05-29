@@ -96,7 +96,8 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [],
   ## * skill - the currently selected skill on the list of skills to show
   let
     crewInfoFrame: string = mainPaned & ".shipinfoframe.crew.canvas.frame"
-    gridSize: seq[string] = tclEval2(script = "grid size " & crewInfoFrame).split(sep = ' ')
+    gridSize: seq[string] = tclEval2(script = "grid size " &
+        crewInfoFrame).split(sep = ' ')
     rows: Natural = try:
         gridSize[1].parseInt
       except ValueError:
@@ -412,14 +413,17 @@ proc showMemberTabCommand(clientData: cint; interp: PInterp; argc: cint;
   if tclEval2(script = "winfo ismapped " & tabButton) == "0":
     tabButton = ".memberdialog.buttonbox.general"
   tclEval(script = "bind " & tabButton & " <Tab> {}")
-  if tabName == "general":
+  case tabName
+  of "general":
     tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.general.nameinfo.button;break}")
-  elif tabName == "stats":
+  of "stats":
     tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.stats.statinfo0.button;break}")
-  elif tabName == "skills":
+  of "skills":
     tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.skills.skillinfo0.button;break}")
-  elif tabName == "priorities":
+  of "priorities":
     tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.priorities.level1;break}")
+  else:
+    discard
   return tclOk
 
 proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -443,8 +447,8 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get the member index.")
     member: MemberData = playerShip.crew[memberIndex]
-    memberDialog: string = createDialog(name = ".memberdialog", title = member.name &
-        "'s details", columns = 2)
+    memberDialog: string = createDialog(name = ".memberdialog",
+        title = member.name & "'s details", columns = 2)
     yScroll: string = memberDialog & ".yscroll"
   tclEval(script = "ttk::scrollbar " & yScroll & " -orient vertical -command [list .memberdialog.canvas yview]")
   tclEval(script = "SetScrollbarBindings " & memberDialog & " " & yScroll)
