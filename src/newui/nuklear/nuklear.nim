@@ -779,6 +779,20 @@ proc nkFillCircle(b: ptr nk_command_buffer; rect: NimRect; c: nk_color)
   cmd.h = max(0, rect.h).cushort
   cmd.color = c
 
+proc nkFillTriangle(b: ptr nk_command_buffer, x0, y0, x1, y1, x2, y2: cfloat,
+  c: nk_color) {.raises: [], tags: [], contractual.} =
+  ## Fill the circle with the selected color
+  ##
+  ## * b  - the command buffer in which the triangle will be drawn
+  ## * x0 - the X coordinate of the first the triangle's vertex
+  ## * y0 - the Y coordinate of the first the triangle's vertex
+  ## * x1 - the X coordinate of the second the triangle's vertex
+  ## * y1 - the Y coordinate of the second the triangle's vertex
+  ## * x2 - the X coordinate of the third the triangle's vertex
+  ## * y2 - the Y coordinate of the third the triangle's vertex
+  ## * c  - the color to fill the triangle
+  discard
+
 proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected image
@@ -1327,7 +1341,8 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
         heading = down
     nkTriangleFromDirection(`result` = points, r = content, padX = 0,
       padY = 0, direction = heading)
-    # TODO: continue here after nkTriangleFromDirection
+    nkFillTriangle(b = `out`, x0 = points[0].x, y0 = points[0].y, x1 = points[1].x, y1 = points[1].y, x2 = points[2].x, y2 = points[2].y, c = foreground)
+    # TODO: continue here after nkFillTriangle
   else:
     discard
 
