@@ -36,7 +36,7 @@ proc hasSelection(): bool {.raises: [], tags: [], contractual.} =
   ##
   ## Returns true if there is any crew member selected on the list, otherwise
   ## false
-  for i in playerShip.crew.low .. playerShip.crew.high:
+  for i in playerShip.crew.low..playerShip.crew.high:
     if tclGetVar(varName = "crewindex" & $(i + 1)) == "1":
       return true
   return false
@@ -1287,11 +1287,11 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox,
             try:
               availableOrders.add(y = " {" & (if module.craftingIndex.len >
                   6 and module.craftingIndex[0 .. 4] == "Study": "Study " &
-                  itemsList[module.craftingIndex[6 ..
+                  itemsList[module.craftingIndex[6..
                   ^1].strip.parseInt].name elif module.craftingIndex.len >
                   12 and module.craftingIndex[0 .. 10] ==
                   "Deconstruct": "Deconstruct " & itemsList[
-                  module.craftingIndex[12 ..
+                  module.craftingIndex[12..
                   ^1].strip.parseInt].name else: "Manufacture " &
                   $module.craftingAmount & "x " & itemsList[recipesList[
                   module.craftingIndex].resultIndex].name) & "}")
