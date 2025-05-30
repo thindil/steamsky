@@ -18,8 +18,9 @@
 ## Provides code related to recruit new crew members in bases, like show the
 ## UI, start negotiating, show information about a recruit, etc.
 
+import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
+import ../[config, game, maps, types]
 import coreui, header, messagesui, table
 
 type
@@ -35,32 +36,17 @@ type
     skill: string
     id: Natural = 0
 
-const
-  defaultRecruitsSortOrder: RecruitsSortOrders = none
-  headers: array[6, HeaderData[RecruitsSortOrders]] = [
-    HeaderData[RecruitsSortOrders](label: "Name", sortAsc: nameAsc,
-        sortDesc: nameDesc),
-    HeaderData[RecruitsSortOrders](label: "Gender", sortAsc: genderAsc,
-        sortDesc: genderDesc),
-    HeaderData[RecruitsSortOrders](label: "Faction", sortAsc: factionAsc,
-        sortDesc: factionDesc),
-    HeaderData[RecruitsSortOrders](label: "Base cost", sortAsc: priceAsc,
-        sortDesc: priceDesc),
-    HeaderData[RecruitsSortOrders](label: "Highest stat", sortAsc: attributeAsc,
-        sortDesc: attributeDesc),
-    HeaderData[RecruitsSortOrders](label: "Highest skill", sortAsc: skillAsc,
-        sortDesc: skillDesc)]
-  ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
+const defaultRecruitsSortOrder: RecruitsSortOrders = none
 
 var recruitsSortOrder: RecruitsSortOrders = defaultRecruitsSortOrder
 
 proc sortRecruits(x, y: LocalRecruitData): int =
-  ## Check how to sort the selected items on the list
+  ## Check how to sort the selected recruits on the list
   ##
-  ## * x - the first item to sort
-  ## * y - the second item to sort
+  ## * x - the first recruit to sort
+  ## * y - the second recruit to sort
   ##
-  ## Returns 1 if the x item should go first, otherwise -1
+  ## Returns 1 if the x recruit should go first, otherwise -1
   case recruitsSortOrder
   of nameAsc:
     if x.name < y.name:
@@ -125,9 +111,50 @@ proc sortRecruits(x, y: LocalRecruitData): int =
   of none:
     return -1
 
+proc getHighestAttribute(baseIndex: BasesRange;
+    memberIndex: Natural): string {.raises: [], tags: [], contractual.} =
+  ## Get the highest attribute's name of the selected recruit
+  ##
+  ## * baseIndex   - The index of the base in which the recruit's attributes
+  ##                 will be check
+  ## * memberIndex - The index of the recruit which attributes will be check
+  ##
+  ## Returns the name of the attribute with the highest level of the selected
+  ## recruit
+  var
+    highestLevel: Positive = 1
+    highestIndex: Natural = 0
+  for index, attrib in skyBases[baseIndex].recruits[memberIndex].attributes:
+    if attrib.level > highestLevel:
+      highestLevel = attrib.level
+      highestIndex = index
+  return attributesList[highestIndex].name
+
+proc getHighestSkill(baseIndex: BasesRange;
+    memberIndex: Natural): string {.raises: [], tags: [], contractual.} =
+  ## Get the highest skill's name of the selected recruit
+  ##
+  ## * baseIndex   - The index of the base in which the recruit's skill will
+  ##                 be check
+  ## * memberIndex - The index of the recruit which skills will be check
+  ##
+  ## Returns the name of the skill with the highest level of the selected
+  ## recruit
+  var
+    highestLevel: Positive = 1
+    highestIndex: Natural = 0
+  for skill in skyBases[baseIndex].recruits[memberIndex].skills:
+    if skill.level > highestLevel:
+      highestLevel = skill.level
+      highestIndex = skill.index
+  try:
+    return skillsList[highestIndex].name
+  except:
+    return ""
+
 proc sortRecruits(sortAsc, sortDesc: RecruitsSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
-  ## Sort items on the trades list
+  ## Sort recruits on the list
   ##
   ## * sortAsc  - the sorting value for ascending sort
   ## * sortDesc - the sorting value for descending sort
@@ -135,11 +162,41 @@ proc sortRecruits(sortAsc, sortDesc: RecruitsSortOrders;
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  if recruitsSortOrder == sortAsc:
+    recruitsSortOrder = sortDesc
+  else:
+    recruitsSortOrder = sortAsc
+  var localRecruits: seq[LocalRecruitData]
+  var indexesList: seq[Natural]
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
+  for index, recruit in skyBases[baseIndex].recruits:
+    localRecruits.add(y = LocalRecruitData(name: recruit.name,
+        gender: recruit.gender, faction: recruit.faction, price: recruit.price,
+        attribute: getHighestAttribute(baseIndex = baseIndex,
+        memberIndex = index), skill: getHighestSkill(baseIndex = baseIndex,
+        memberIndex = index), id: index))
+  localRecruits.sort(cmp = sortRecruits)
+
+const
+  headers: array[6, HeaderData[RecruitsSortOrders]] = [
+    HeaderData[RecruitsSortOrders](label: "Name", sortAsc: nameAsc,
+        sortDesc: nameDesc),
+    HeaderData[RecruitsSortOrders](label: "Gender", sortAsc: genderAsc,
+        sortDesc: genderDesc),
+    HeaderData[RecruitsSortOrders](label: "Faction", sortAsc: factionAsc,
+        sortDesc: factionDesc),
+    HeaderData[RecruitsSortOrders](label: "Base cost", sortAsc: priceAsc,
+        sortDesc: priceDesc),
+    HeaderData[RecruitsSortOrders](label: "Highest stat", sortAsc: attributeAsc,
+        sortDesc: attributeDesc),
+    HeaderData[RecruitsSortOrders](label: "Highest skill", sortAsc: skillAsc,
+        sortDesc: skillDesc)]
+  ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
 proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
-  ## Show the school UI
+  ## Show the recruits UI
   ##
   ## * state - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
