@@ -91,6 +91,7 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
         updateGame(minutes = timePassed)
     # Friendly trader
     of 21..23:
+      var traders: seq[Positive] = generateTraders()
       eventsList.add(y = EventData(eType: trader, skyX: playerShip.skyX,
           skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
           shipIndex: traders[getRandom(min = traders.low, max = traders.high)]))

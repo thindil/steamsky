@@ -20,7 +20,7 @@
 
 import std/[algorithm, os, osproc, strutils, tables, times]
 import contracts, nimalyzer
-import ../[basestypes, config, events, game, game2, gamesaveload, goals,
+import ../[basestypes, config, game, game2, gamesaveload, goals,
     halloffame, ships2, shipscrew, tk, utils]
 import coreui, dialogs, errordialog, mapsui, showmainmenu, table, utilsui2
 
@@ -389,10 +389,6 @@ proc startGame*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     y = 0
   tclEval(script = "wm geometry . " & $gameSettings.windowWidth & "x" &
       $gameSettings.windowHeight & "+" & $x & "+" & $y)
-  try:
-    generateTraders()
-  except:
-    showError(message = "Can't generate traders")
   createGameUi()
 
 proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
