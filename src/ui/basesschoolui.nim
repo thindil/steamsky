@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[basestrade, crew, crewinventory, game, tk, types]
-import coreui, dialogs, errordialog, mapsui, utilsui2
+import coreui, dialogs, errordialog, mapsui, updateheader, utilsui2
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
@@ -268,6 +268,7 @@ proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   except:
     return showError(message = "Can't train the skill.")
+  updateHeader()
   updateMessages()
   return showSchoolCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["TrainSkill", $getMemberIndex()].allocCStringArray)
