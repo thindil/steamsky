@@ -23,7 +23,7 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
     game, game2, maps, messages, missions, missions2, shipscargo, shipscrew,
     shipsmovement, statistics, stories, stories2, trades, types, utils]
-import basesschoolui, combatui, coreui, dialogs, errordialog, tradesui
+import basesschoolui, basesrecruitui, combatui, coreui, dialogs, errordialog, tradesui
 
 proc countHeight(baseIndex: ExtendedBasesRange;
     haveTrader: bool; dialog: var GameDialog): Positive {.raises: [], tags: [
@@ -286,6 +286,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
           state = recruits
           dialog = none
           closePopup()
+          setRecruits(dialog = dialog)
     if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
       labelButton(title = "Ask for events"):
         askForEvents(dialog = dialog)
