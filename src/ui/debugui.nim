@@ -697,7 +697,8 @@ proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
     generateFriendlyShips(ships = friendlyShips)
   except:
     return showError(message = "Can't generate friendly ships.")
-  var traders: seq[Positive] = generateTraders()
+  var traders: seq[Positive] = @[]
+  generateTraders(ships = traders)
   for index, ship in protoShipsList:
     if ship.name == shipName:
       if index in traders:
