@@ -152,6 +152,8 @@ proc getHighestSkill(baseIndex: BasesRange;
   except:
     return ""
 
+var recruitsIndexes: seq[Natural] = @[]
+
 proc sortRecruits(sortAsc, sortDesc: RecruitsSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Sort recruits on the list
@@ -167,7 +169,6 @@ proc sortRecruits(sortAsc, sortDesc: RecruitsSortOrders;
   else:
     recruitsSortOrder = sortAsc
   var localRecruits: seq[LocalRecruitData]
-  var indexesList: seq[Natural]
   let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
       playerShip.skyY].baseIndex
   for index, recruit in skyBases[baseIndex].recruits:
@@ -177,6 +178,9 @@ proc sortRecruits(sortAsc, sortDesc: RecruitsSortOrders;
         memberIndex = index), skill: getHighestSkill(baseIndex = baseIndex,
         memberIndex = index), id: index))
   localRecruits.sort(cmp = sortRecruits)
+  recruitsIndexes = @[]
+  for recruit in localRecruits:
+    recruitsIndexes.add(y = recruit.id)
 
 const
   headers: array[6, HeaderData[RecruitsSortOrders]] = [
@@ -193,6 +197,21 @@ const
     HeaderData[RecruitsSortOrders](label: "Highest skill", sortAsc: skillAsc,
         sortDesc: skillDesc)]
   ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
+
+proc setRecruits*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for recruits UI
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
+  if recruitsIndexes.len != skyBases[baseIndex].recruits.len:
+    recruitsIndexes = @[]
+    for index, _ in skyBases[baseIndex].recruits:
+      recruitsIndexes.add(y = index)
 
 proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
