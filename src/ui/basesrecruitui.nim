@@ -22,7 +22,7 @@ import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[bases, basestrade, config, crew, crewinventory, game, maps,
     shipscrew, tk, types]
-import coreui, dialogs, errordialog, mapsui, table, utilsui2
+import coreui, dialogs, errordialog, mapsui, table, updateheader, utilsui2
 
 proc getHighestAttribute(baseIndex: BasesRange;
     memberIndex: Natural): string {.raises: [], tags: [], contractual.} =
@@ -494,6 +494,7 @@ proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
   except:
     return showError(message = "Can't hire the recruit.")
   updateMessages()
+  updateHeader()
   tclEval(script = "CloseDialog " & dialogName)
   return showRecruitCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowRecruit", "1"].allocCStringArray)
