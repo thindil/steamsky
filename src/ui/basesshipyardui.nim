@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
+import contracts
 import ../[bases, basesship2, config, crewinventory, game, maps, shipscrew,
     shipmodules, tk, types]
 import coreui, dialogs, errordialog, mapsui, table, utilsui2
@@ -26,7 +27,7 @@ var
 
 proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show the selected base shipyard
   ##
   ## * clientData - the additional data for the Tcl command
@@ -358,7 +359,7 @@ var moduleIndex: Natural = 0
 
 proc setModuleInfo(installing: bool; row: var Positive;
     newInfo: bool = true) {.raises: [], tags: [WriteIOEffect, TimeEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## Show information about selected module
   ##
   ## installing - If true, player looking at installing modules list
@@ -1009,7 +1010,7 @@ proc setModuleInfo(installing: bool; row: var Positive;
 
 proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect], cdecl.} =
+    TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show information about the selected module to install
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1091,7 +1092,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       moduleDialog & ";ManipulateModule install}")
 
   proc setInstallButton(eLabel: string; mIndex2, cost2: Natural) {.raises: [
-      KeyError], tags: [].} =
+      KeyError], tags: [], contractual.} =
     var
       maxSize, usedSpace, allSpace = 0
       freeTurretIndex = -1
@@ -1157,7 +1158,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Install or remove the selected module
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1204,7 +1205,7 @@ proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect], cdecl.} =
+    TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show information about the selected module to remove
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1312,7 +1313,7 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showShipyardTabCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show the install or remove modules options in shipyard
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1358,7 +1359,7 @@ var modulesSortOrder = defaultModulesSortOrder
 
 proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Sort the ship modules lists
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1523,7 +1524,7 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc compareModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect], cdecl.} =
+    TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show the comparison between the selected modules in install info
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1540,7 +1541,7 @@ proc compareModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc shipyardMoreCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
   ## Maximize or minimize the options for the list of ships's modules.
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1566,7 +1567,7 @@ proc shipyardMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowShipyard", showShipyardCommand)
