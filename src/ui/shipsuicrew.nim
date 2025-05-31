@@ -1065,7 +1065,7 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   type LocalMemberData = object
     selected: bool
     name: string
-    order: CrewOrders
+    order: string
     skill: string
     health: SkillRange
     fatigue: int
@@ -1078,7 +1078,7 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       localCrew.add(y = LocalMemberData(selected: tclGetVar(
           varName = "crewindex" & $(index + 1)) == "1", name: member.name,
-          order: member.order, skill: (if skillIndex == 0: getHighestSkill(
+          order: $member.order, skill: (if skillIndex == 0: getHighestSkill(
           memberIndex = index) else: getSkillLevelName(
           skillLevel = getSkillLevel(
           member = member, skillIndex = skillIndex))), health: member.health,
@@ -1110,12 +1110,12 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
       else:
         return -1
     of orderAsc:
-      if $x.order < $y.order:
+      if x.order < y.order:
         return 1
       else:
         return -1
     of orderDesc:
-      if $x.order > $y.order:
+      if x.order > y.order:
         return 1
       else:
         return -1
