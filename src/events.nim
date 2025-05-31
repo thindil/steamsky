@@ -151,15 +151,16 @@ proc generateFriendlyShips*(ships: var seq[Positive]) {.raises: [KeyError],
         targetFaction = ship.owner) and index notin playerShips:
       ships.add(y = index)
 
-proc generateTraders*(): seq[Positive] {.raises: [], tags: [],
+proc generateTraders*(ships: var seq[Positive]) {.raises: [], tags: [],
     contractual.} =
   ## Create the list of traders' ships needed for events
   ##
-  ## Returns the list of traders' ships
-  result = @[]
+  ## * ships - the list of traders which will be created
+  ##
+  ## Returns the updated paramater ships
   for index, ship in protoShipsList:
     var reputation: int = getReputation(factionIndex = ship.owner)
     if getRandom(min = 1, max = 100) > 98:
       reputation *= 2
     if reputation >= ship.reputation and ship.name.contains(sub = tradersName):
-      result.add(y = index)
+      ships.add(y = index)
