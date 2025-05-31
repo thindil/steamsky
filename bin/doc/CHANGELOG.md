@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - Crash when starting a combat
 - Typo in tooltip when training a crew member in bases
 - Sorting the player's ship's crew members by orders
-- Updating the game's header after training a skill in a base
+- Updating the game's header after training a skill in a base and hiring a
+  recruit
 
 ## [11.1] - 2025-05-18
 
