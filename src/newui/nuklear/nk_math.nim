@@ -94,3 +94,16 @@ proc nkTriangleFromDirection*(`result`: var array[3, nk_vec2]; r: NimRect;
     `result`[0] = nk_vec2(x: rect.x, y: rect.y + hHalf)
     `result`[1] = nk_vec2(x: rect.x + rect.w, y: rect.y)
     `result`[2] = nk_vec2(x: rect.x + rect.w, y: rect.y + rect.h)
+
+proc nkInbox*(px, py, x, y, w, h: cfloat): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the selected point is in the box
+  ##
+  ## * px - the X coordinate of the point
+  ## * py - the Y coordinate of the point
+  ## * x - the X coordinate of the top left corner of the box
+  ## * y - the Y coordinate of the top left corner of the box
+  ## * w - the width of the box
+  ## * h - the height of the box
+  ##
+  ## Returns true if the point is in the box, otherwise false
+  discard

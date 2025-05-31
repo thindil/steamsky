@@ -791,7 +791,11 @@ proc nkFillTriangle(b: ptr nk_command_buffer, x0, y0, x1, y1, x2, y2: cfloat,
   ## * x2 - the X coordinate of the third the triangle's vertex
   ## * y2 - the Y coordinate of the third the triangle's vertex
   ## * c  - the color to fill the triangle
-  discard
+  if b == nil or c.a == 0:
+    return
+  if b.use_clipping != 0:
+    let clip: nk_rect = b.clip
+  # TODO: continue here after nkInbox
 
 proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
