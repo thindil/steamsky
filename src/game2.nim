@@ -402,6 +402,7 @@ proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
     playerShip.crew.len > 0
   body:
     saveConfig()
+    getPlayerShips()
     # Set the game statistics
     let playerFaction: FactionData = setGameStats()
     # Set the game time
