@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Sorting the player's ship's crew members by orders
 - Updating the game's header after training a skill in a base and hiring a
   recruit
+- Crash when dropping items from the player's ship's cargo
 
 ## [11.1] - 2025-05-18
 
