@@ -106,4 +106,4 @@ proc nkInbox*(px, py, x, y, w, h: cfloat): bool {.raises: [], tags: [], contract
   ## * h - the height of the box
   ##
   ## Returns true if the point is in the box, otherwise false
-  discard
+  return ((px >= x and px < x + w) and (py >= y and py < y + h))
