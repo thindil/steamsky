@@ -21,7 +21,7 @@
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, types]
-import coreui, header, messagesui, table
+import coreui, errordialog, header, messagesui, table, themes
 
 type
   RecruitsSortOrders = enum
@@ -152,7 +152,10 @@ proc getHighestSkill(baseIndex: BasesRange;
   except:
     return ""
 
-var recruitsIndexes: seq[Natural] = @[]
+var
+  recruitsIndexes: seq[Natural] = @[]
+  currentPage: Positive = 1
+  baseIndex: ExtendedBasesRange = 0
 
 proc sortRecruits(sortAsc, sortDesc: RecruitsSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -206,12 +209,23 @@ proc setRecruits*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
-      playerShip.skyY].baseIndex
+  baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if recruitsIndexes.len != skyBases[baseIndex].recruits.len:
     recruitsIndexes = @[]
     for index, _ in skyBases[baseIndex].recruits:
       recruitsIndexes.add(y = index)
+  currentPage = 1
+
+proc showRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected recruit information
+  ##
+  ## * data   - the index of the selected recruit
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
 
 proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -224,10 +238,34 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
+  # Show the list of recruits to hire
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "RecruitsGroup", flags = {windowNoFlags}):
     addHeader(headers = headers, ratio = ratio, tooltip = "recruits",
       code = sortRecruits, dialog = dialog)
+    var currentRow = 1
+    let startRow = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    var row: Positive = 1
+    for index in recruitsIndexes:
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      addButton(label = skyBases[baseIndex].recruits[index].name,
+          tooltip = "Show the recruit's details.", data = index,
+          code = showRecruitInfo, dialog = dialog)
+    restoreButtonStyle()
+    addPagination(page = currentPage, row = row)
+    # Show the list of items in the player's ship's cargo
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
   showGameMenu(dialog = dialog)
