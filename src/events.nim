@@ -22,17 +22,15 @@ import std/[strutils, tables]
 import contracts
 import factions, game, maps, messages, reputation, types, utils
 
-proc getPlayerShips(playerShips: var seq[Positive]) {.raises: [],
-    tags: [], contractual.} =
+var playerShips: seq[Positive]
+
+proc getPlayerShips*() {.raises: [], tags: [], contractual.} =
   ## Get the list of all prototype's ships which are available only for the
   ## player
-  ##
-  ## * playerShips - the list of ships' prototypes available for the player
-  ##
-  ## Returns the updated parameter playerShips.
   ensure:
     playerShips.len > 0
   body:
+    playerShips = @[]
     for index, faction in factionsList:
       for career in faction.careers.values:
         playerShips.add(y = career.shipIndex)
@@ -52,8 +50,6 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
   require:
     owner.len > 0
   body:
-    var playerShips: seq[Positive] = @[]
-    getPlayerShips(playerShips = playerShips)
     for index, ship in protoShipsList:
       var reputation: int = getReputation(factionIndex = ship.owner)
       if getRandom(min = 1, max = 100) > 98:
@@ -140,8 +136,6 @@ proc generateFriendlyShips*(ships: var seq[Positive]) {.raises: [KeyError],
   ## * ships - the list of friendly ships which will be created
   ##
   ## Returns the updated paramater ships
-  var playerShips: seq[Positive] = @[]
-  getPlayerShips(playerShips = playerShips)
   for index, ship in protoShipsList:
     var reputation: int = getReputation(factionIndex = ship.owner)
     if getRandom(min = 1, max = 100) > 98:
