@@ -1456,7 +1456,9 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
             module.protoIndex].repairMaterial, price: cost, id: index))
       except:
         return showError(message = "Can't add module to remove.")
-  proc sortModules(x, y: LocalModuleData): int =
+
+  proc sortModules(x, y: LocalModuleData): int {.raises: [], tags: [],
+      contractual.} =
     case modulesSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -1510,6 +1512,7 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of none:
       return -1
+
   localModules.sort(cmp = sortModules)
   if argv[1] == "install":
     installIndexes = @[]
@@ -1541,7 +1544,8 @@ proc compareModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc shipyardMoreCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Maximize or minimize the options for the list of ships's modules.
   ##
   ## * clientData - the additional data for the Tcl command
