@@ -22,7 +22,7 @@ import std/[strutils, tables]
 import contracts
 import factions, game, maps, messages, reputation, types, utils
 
-var playerShips: seq[Positive]
+var playerShips: seq[Positive] = @[]
 
 proc getPlayerShips*() {.raises: [], tags: [], contractual.} =
   ## Get the list of all prototype's ships which are available only for the
