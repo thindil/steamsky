@@ -795,7 +795,14 @@ proc nkFillTriangle(b: ptr nk_command_buffer, x0, y0, x1, y1, x2, y2: cfloat,
     return
   if b.use_clipping != 0:
     let clip: nk_rect = b.clip
-  # TODO: continue here after nkInbox
+    if not nkInbox(px = x0, py = y0, x = clip.x, y = clip.y, w = clip.w,
+      h = clip.h) and not nkInbox(px = x1, py = y1, x = clip.x, y = clip.y,
+      w = clip.w, h = clip.h) and not nkInbox(px = x2, py = y2, x = clip.x,
+      y = clip.y, w = clip.w, h = clip.h):
+      return
+
+  var cmd: ptr nk_command_triangle_filled
+  # TODO: continue here
 
 proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =

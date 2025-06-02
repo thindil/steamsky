@@ -167,6 +167,9 @@ type
   nk_vec2* {.importc: "struct nk_vec2", nodecl, completeStruct.} = object
     ## Internal Nuklear type
     x*, y*: cfloat
+  nk_vec2i* {.importc: "struct nk_vec2i", nodecl, completeStruct.} = object
+    ## Internal Nuklear type
+    x*, y*: cshort
   nk_nine_slice* {.importc: "struct nk_nine_slice", nodecl.} = object
     ## Internal Nuklear type
     image*: nk_image
@@ -308,6 +311,11 @@ type
     header*: nk_command
     rounding*, w*, h*: cushort
     x*, y*: cshort
+    color*: nk_color
+  nk_command_triangle_filled* {.importc: "struct nk_command_triangle_filled".} = object
+    ## Internal Nuklear type
+    header*: nk_command
+    a*, b*, c*: nk_vec2i
     color*: nk_color
   nk_command_circle_filled* {.importc: "struct nk_command_circle_filled".} = object
     ## Internal Nuklear type
