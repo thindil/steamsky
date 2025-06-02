@@ -225,7 +225,20 @@ proc showRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  if dialog != recruitDialog:
+    return
+  try:
+    const
+      width: float = 400
+      height: float = 400
+
+    let recruit: RecruitData = skyBases[baseIndex].recruits[data]
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = recruit.name, x = dialogX, y = dialogY,
+        w = width, h = height, flags = {windowBorder, windowTitle}):
+      discard
+  except:
+    dialog = setError(message = "Can't show the party dialog")
 
 proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
