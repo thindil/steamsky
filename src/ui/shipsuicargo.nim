@@ -397,9 +397,8 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't update the member's inventory.")
   updateCargo(ship = playerShip, amount = -amount, cargoIndex = itemIndex,
       price = item.price)
-  tclEval(script = "destroy " & itemDialog)
-  tclEval(script = "busy forget " & mainPaned)
-  tclEval(script = "busy forget " & gameHeader)
+  discard closeDialogCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["CloseDialog", ".itemdialog"].allocCStringArray)
   updateHeader()
   updateMessages()
   return sortCargoCommand(clientData = clientData, interp = interp, argc = 2,
