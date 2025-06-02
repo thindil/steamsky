@@ -264,6 +264,24 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = skyBases[baseIndex].recruits[index].name,
           tooltip = "Show the recruit's details.", data = index,
           code = showRecruitInfo, dialog = dialog)
+      addButton(label = (if skyBases[baseIndex].recruits[index].gender ==
+          'F': "Female" else: "Male"), tooltip = "Show recruit's details",
+          data = index, code = showRecruitInfo, dialog = dialog)
+      try:
+        addButton(label = factionsList[skyBases[baseIndex].recruits[
+            index].faction].name, tooltip = "Show recruit's details",
+            data = index, code = showRecruitInfo, dialog = dialog)
+      except:
+        dialog = setError(message = "Can't get the recruit faction.")
+      addButton(label = $skyBases[baseIndex].recruits[index].price,
+          tooltip = "Show recruit's details", data = index,
+          code = showRecruitInfo, dialog = dialog)
+      addButton(label = getHighestAttribute(baseIndex = baseIndex,
+          memberIndex = index), tooltip = "Show recruit's details",
+          data = index, code = showRecruitInfo, dialog = dialog)
+      addButton(label = getHighestSkill(baseIndex = baseIndex,
+          memberIndex = index), tooltip = "Show recruit's details",
+          data = index, code = showRecruitInfo, dialog = dialog)
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
     # Show the list of items in the player's ship's cargo
