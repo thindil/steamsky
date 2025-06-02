@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 - Updating the game's header after training a skill in a base and hiring a
   recruit
 - Crash when dropping items from the player's ship's cargo
+- Screen is blocked after giving an item from the player's ship's cargo to a
+  crew member
 
 ## [11.0.1] - 2025-05-11
 
