@@ -674,10 +674,9 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
   try:
     dataError = loadGameData()
   except:
-    showError(message = "Can't load the game's data.")
-    return
-  if dataError.len > 0:
     showMainMenu()
+    showError(message = "Can't load the game's data.")
+  if dataError.len > 0:
     return
   const playerFrameName: string = ".newgamemenu.canvas.player"
   var textEntry: string = playerFrameName & ".playername"
