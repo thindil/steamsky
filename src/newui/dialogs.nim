@@ -229,7 +229,7 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     answered = true
     dialog = setError(message = "Can't show the question")
 
-proc addCloseButton(dialog: var GameDialog; icon: IconsNames = exitIcon;
+proc addCloseButton*(dialog: var GameDialog; icon: IconsNames = exitIcon;
     color: ColorsNames = buttonTextColor) {.raises: [], tags: [],
     contractual.} =
   ## Add the close button to the dialog
