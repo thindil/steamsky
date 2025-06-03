@@ -1574,13 +1574,14 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
-    addCommand("ShowShipyard", showShipyardCommand)
-    addCommand("ShowInstallInfo", showInstallInfoCommand)
-    addCommand("ManipulateModule", manipulateModuleCommand)
-    addCommand("ShowRemoveInfo", showRemoveInfoCommand)
-    addCommand("ShowShipyardTab", showShipyardTabCommand)
-    addCommand("SortShipyardModules", sortShipyardModulesCommand)
-    addCommand("CompareModules", compareModulesCommand)
-    addCommand("ShipyardMore", shipyardMoreCommand)
+    addCommand(name = "ShowShipyard", nimProc = showShipyardCommand)
+    addCommand(name = "ShowInstallInfo", nimProc = showInstallInfoCommand)
+    addCommand(name = "ManipulateModule", nimProc = manipulateModuleCommand)
+    addCommand(name = "ShowRemoveInfo", nimProc = showRemoveInfoCommand)
+    addCommand(name = "ShowShipyardTab", nimProc = showShipyardTabCommand)
+    addCommand(name = "SortShipyardModules",
+        nimProc = sortShipyardModulesCommand)
+    addCommand(name = "CompareModules", nimProc = compareModulesCommand)
+    addCommand(name = "ShipyardMore", nimProc = shipyardMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
