@@ -216,6 +216,8 @@ proc setRecruits*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       recruitsIndexes.add(y = index)
   currentPage = 1
 
+var currentTab: cint = 0
+
 proc showRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected recruit information
@@ -236,7 +238,30 @@ proc showRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = recruit.name, x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle}):
-      discard
+      changeStyle(field = spacing, x = 0, y = 0):
+        changeStyle(field = buttonRounding, value = 0):
+          layoutSpaceStatic(height = 30, widgetsCount = 4):
+            var x: float = 200
+            const tabs: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
+            for index, tab in tabs:
+              try:
+                let
+                  textWidth: float = getTextWidth(text = tab)
+                  widgetWidth: float = textWidth + 15 * getButtonStyle(
+                      field = padding).x;
+                row(x = x, y = 0, w = widgetWidth, h = 30):
+                  if currentTab == index:
+                    saveButtonStyle()
+                    setButtonStyle2(source = active, destination = normal)
+                    labelButton(title = tab):
+                      discard
+                    restoreButtonStyle()
+                  else:
+                    labelButton(title = tab):
+                      currentTab = index.cint
+                x += widgetWidth
+              except:
+                dialog = setError(message = "Can't set the tabs buttons.")
   except:
     dialog = setError(message = "Can't show the party dialog")
 
