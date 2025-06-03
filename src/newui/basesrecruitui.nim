@@ -216,13 +216,14 @@ proc setRecruits*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       recruitsIndexes.add(y = index)
   currentPage = 1
 
-var currentTab: cint = 0
+var
+  currentTab: cint = 0
+  recruitIndex: int = -1
 
-proc showRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+proc showRecruitInfo(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected recruit information
   ##
-  ## * data   - the index of the selected recruit
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog. It is modified if any error
@@ -234,36 +235,37 @@ proc showRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
       width: float = 400
       height: float = 400
 
-    let recruit: RecruitData = skyBases[baseIndex].recruits[data]
+    let recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = recruit.name, x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle}):
       changeStyle(field = spacing, x = 0, y = 0):
         changeStyle(field = buttonRounding, value = 0):
-          layoutSpaceStatic(height = 30, widgetsCount = 4):
-            var x: float = 200
+          layoutSpaceDynamic(height = 30, widgetsCount = 4):
             const tabs: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
             for index, tab in tabs:
               try:
-                let
-                  textWidth: float = getTextWidth(text = tab)
-                  widgetWidth: float = textWidth + 15 * getButtonStyle(
-                      field = padding).x;
-                row(x = x, y = 0, w = widgetWidth, h = 30):
-                  if currentTab == index:
-                    saveButtonStyle()
-                    setButtonStyle2(source = active, destination = normal)
-                    labelButton(title = tab):
-                      discard
-                    restoreButtonStyle()
-                  else:
-                    labelButton(title = tab):
-                      currentTab = index.cint
-                x += widgetWidth
+                if currentTab == index:
+                  saveButtonStyle()
+                  setButtonStyle2(source = active, destination = normal)
+                  labelButton(title = tab):
+                    discard
+                  restoreButtonStyle()
+                else:
+                  labelButton(title = tab):
+                    currentTab = index.cint
               except:
                 dialog = setError(message = "Can't set the tabs buttons.")
   except:
     dialog = setError(message = "Can't show the party dialog")
+
+proc setRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+  ## Set the data needed for show information about the selected recruit
+  ##
+  ## * data
+  ## * dialog
+  recruitIndex = data
+  dialog = recruitDialog
 
 proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -276,6 +278,8 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
+  # Show the information about the selected recruit if needed
+  showRecruitInfo(dialog = dialog)
   # Show the list of recruits to hire
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
   setLayoutRowDynamic(height = tableHeight, cols = 1)
@@ -301,25 +305,25 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
         continue
       addButton(label = skyBases[baseIndex].recruits[index].name,
           tooltip = "Show the recruit's details.", data = index,
-          code = showRecruitInfo, dialog = dialog)
+          code = setRecruitInfo, dialog = dialog)
       addButton(label = (if skyBases[baseIndex].recruits[index].gender ==
           'F': "Female" else: "Male"), tooltip = "Show recruit's details",
-          data = index, code = showRecruitInfo, dialog = dialog)
+          data = index, code = setRecruitInfo, dialog = dialog)
       try:
         addButton(label = factionsList[skyBases[baseIndex].recruits[
             index].faction].name, tooltip = "Show recruit's details",
-            data = index, code = showRecruitInfo, dialog = dialog)
+            data = index, code = setRecruitInfo, dialog = dialog)
       except:
         dialog = setError(message = "Can't get the recruit faction.")
       addButton(label = $skyBases[baseIndex].recruits[index].price,
           tooltip = "Show recruit's details", data = index,
-          code = showRecruitInfo, dialog = dialog)
+          code = setRecruitInfo, dialog = dialog)
       addButton(label = getHighestAttribute(baseIndex = baseIndex,
           memberIndex = index), tooltip = "Show recruit's details",
-          data = index, code = showRecruitInfo, dialog = dialog)
+          data = index, code = setRecruitInfo, dialog = dialog)
       addButton(label = getHighestSkill(baseIndex = baseIndex,
           memberIndex = index), tooltip = "Show recruit's details",
-          data = index, code = showRecruitInfo, dialog = dialog)
+          data = index, code = setRecruitInfo, dialog = dialog)
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
     # Show the list of items in the player's ship's cargo
