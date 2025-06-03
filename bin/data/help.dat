@@ -63,7 +63,8 @@
 {b}10.{/b} Missions: Starting and finishing missions, some detailed information about each type of mission and specific mission tips.
 {b}11.{/b} Hiring crew members: Detailed information about hiring new crew members in sky bases.
 {b}12.{/b} Knowledge screen: General information about the knowledge screen.
-{b}13.{/b} Tips: General tips for playing the game.
+{b}13.{/b} Factions: General information about how factions works.
+{b}14.{/b} Tips: General tips for playing the game.
 
     Some game modifications can show help topics as well. If it is your first time here, it is recommended to look at {b}First steps{/b}, {b}Ship movement{/b}, {b}Trading{/b}, {b}Combat{/b} and {b}Tips{/b} topics for basic information about the game.</entry>
  <entry index="firststeps" title=" 2. First steps">    {i}These steps are only suggestions on how to start a new game. After some time, you will probably find a better way which will suit your needs.{/i}
@@ -393,7 +394,9 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
  {u}Known stories{/u}
 
     The list presents all information about stories known to your character. The stories are series of randomly generated missions, connected to themselves. You can see the details of each step in a story by selecting the story and then selecting the step on the list. Finding stories is the hardest part of the game. One tip: during combat with an undead ships, it is good to send the boarding party on the enemy ship. After combat, they may find an interesting thing which will start something interesting.</entry>
- <entry index="tips" title="13. Tips">{b}*{/b} All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 19} key on sky map (no need to press {GameKey 22} first to show menu).
+ <entry index="factions" title="13. Factions">{u}General info{/u}
+ </entry>
+ <entry index="tips" title="14. Tips">{b}*{/b} All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 19} key on sky map (no need to press {GameKey 22} first to show menu).
 {b}*{/b} If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to ship information screen, select desired item and select proper option from item options' menu.
 {b}*{/b} Each crew member need proper module for work. If that module is destroyed, member cannot start selected work, for example, can't start piloting when cockpit was destroyed.
 {b}*{/b} You can assign crew members to selected module (cabins, guns, workplaces) on ship info screen. All workplaces first must have set crafting order, before you can assign someone.
