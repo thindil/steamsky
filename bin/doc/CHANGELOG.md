@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Crash when dropping items from the player's ship's cargo
 - Screen is blocked after giving an item from the player's ship's cargo to a
   crew member
+- Showing information about the game's data error when starting the game
 
 ## [11.0.1] - 2025-05-11
 
