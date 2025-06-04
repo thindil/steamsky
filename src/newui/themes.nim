@@ -112,7 +112,7 @@ let
       "vertical-flip.svg", defaultThemeIconPath & "contract.svg",
       defaultThemeIconPath & "buy2.svg", defaultThemeIconPath & "sell2.svg",
       defaultThemeIconPath & "buy.svg", defaultThemeIconPath & "sell.svg",
-      defaultThemeFontPath & "negotiate.svg"],
+      defaultThemeIconPath & "negotiate.svg"],
       colors: ["#1a130c".parseColor, "#eee8aa".parseColor,
       "#4e9a06".parseColor, "#372412".parseColor, "#291913".parseColor,
       "#500000".parseColor, "#120d0d".parseColor, "#ffdf00".parseColor,
