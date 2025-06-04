@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to installing or removing modules from the player's
+## ship, like showing the lists of modules, buying or selling them, etc.
+
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[bases, basesship2, config, crewinventory, game, maps, shipscrew,
@@ -1093,6 +1096,11 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc setInstallButton(eLabel: string; mIndex2, cost2: Natural) {.raises: [
       KeyError], tags: [], contractual.} =
+    ## Set text on the button for install the module
+    ##
+    ## * eLabel  - the text to show on the button
+    ## * mIndex2 - the index of the money in the player's ship's cargo
+    ## * cost2   - the cost of installing the module
     var
       maxSize, usedSpace, allSpace = 0
       freeTurretIndex = -1
@@ -1459,6 +1467,14 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc sortModules(x, y: LocalModuleData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two modules and return which should go first, based on the sort
+    ## order of the modules
+    ##
+    ## * x - the first module to compare
+    ## * y - the second module to compare
+    ##
+    ## Returns 1 if the first module should go first, -1 if the second module
+    ## should go first.
     case modulesSortOrder
     of nameAsc:
       if x.name < y.name:
