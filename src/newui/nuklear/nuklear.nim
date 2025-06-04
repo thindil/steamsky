@@ -1365,6 +1365,19 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
     nkFillTriangle(b = `out`, x0 = points[0].x, y0 = points[0].y,
       x1 = points[1].x, y1 = points[1].y, x2 = points[2].x, y2 = points[2].y,
       c = foreground)
+  of triangleUpOutline, triangleDownOutline, triangleLeftOutline,
+    triangleRightOutline:
+    var heading: Heading = right
+    var points: array[3, nk_vec2]
+    case `type`
+      of triangleRightOutline:
+        heading = right
+      of triangleLeftOutline:
+        heading = left
+      of triangleUpOutline:
+        heading = up
+      else:
+        heading = down
     # TODO: continue here
   else:
     discard

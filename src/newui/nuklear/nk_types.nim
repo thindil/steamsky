@@ -81,7 +81,9 @@ type
   SymbolType* = enum
     ## The types of symbolic icons
     none, x, underscore, circleSolid, circleOutline, rectSolid, rectOutline,
-      triangleUp, triangleDown, triangleLeft, triangleRight, plus, minus, max
+      triangleUp, triangleDown, triangleLeft, triangleRight, plus, minus,
+      triangleUpOutline, triangleDownOutline, triangleLeftOutline,
+      triangleRightOutline, max
   StyleItemType* = enum
     ## Style's item's types
     itemColor, itemImage, itemNineSlice
