@@ -21,7 +21,7 @@
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, types]
-import coreui, errordialog, header, messagesui, table, themes
+import coreui, dialogs, errordialog, header, messagesui, table, themes
 
 type
   RecruitsSortOrders = enum
@@ -241,21 +241,24 @@ proc showRecruitInfo(dialog: var GameDialog) {.raises: [], tags: [
         w = width, h = height, flags = {windowBorder, windowTitle}):
       changeStyle(field = spacing, x = 0, y = 0):
         changeStyle(field = buttonRounding, value = 0):
-          layoutSpaceDynamic(height = 30, widgetsCount = 4):
-            const tabs: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
-            for index, tab in tabs:
-              try:
-                if currentTab == index:
-                  saveButtonStyle()
-                  setButtonStyle2(source = active, destination = normal)
-                  labelButton(title = tab):
-                    discard
-                  restoreButtonStyle()
-                else:
-                  labelButton(title = tab):
-                    currentTab = index.cint
-              except:
-                dialog = setError(message = "Can't set the tabs buttons.")
+          setLayoutRowDynamic(height = 30, cols = 4)
+          const tabs: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
+          for index, tab in tabs:
+            try:
+              if currentTab == index:
+                saveButtonStyle()
+                setButtonStyle2(source = active, destination = normal)
+                labelButton(title = tab):
+                  discard
+                restoreButtonStyle()
+              else:
+                labelButton(title = tab):
+                  currentTab = index.cint
+            except:
+              dialog = setError(message = "Can't set the tabs buttons.")
+      # Buttons
+      setLayoutRowDynamic(height = 30, cols = 2)
+      addCloseButton(dialog = dialog)
   except:
     dialog = setError(message = "Can't show the party dialog")
 
