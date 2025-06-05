@@ -20,7 +20,7 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, maps, types]
+import ../[config, crew, game, maps, types]
 import coreui, dialogs, errordialog, header, messagesui, table, themes
 
 type
@@ -256,24 +256,34 @@ proc showRecruitInfo(dialog: var GameDialog) {.raises: [], tags: [
                   currentTab = index.cint
             except:
               dialog = setError(message = "Can't set the tabs buttons.")
-      # General info
-      case currentTab
-      of 0:
-        setLayoutRowDynamic(height = 35, cols = 2)
-        label(str = "Gender:")
-        colorLabel(str = if recruit.gender == 'M': "Male" else: "Female",
-            color = theme.colors[goldenColor])
-        let faction: FactionData = try:
-            factionsList[recruit.faction]
-          except:
-            dialog = setError(message = "Can't get the recruit's faction.")
-            return
-        label(str = "Faction:")
-        colorLabel(str = faction.name, color = theme.colors[goldenColor])
-        label(str = "Home base:")
-        colorLabel(str = skyBases[recruit.homeBase].name, color = theme.colors[goldenColor])
-      else:
-        discard
+      setLayoutRowDynamic(height = height - 125, cols = 1)
+      group(title = "InfoGroup", flags = {windowNoFlags}):
+        case currentTab
+        # General info about the selected recruit
+        of 0:
+          setLayoutRowDynamic(height = 35, cols = 2)
+          label(str = "Gender:")
+          colorLabel(str = if recruit.gender == 'M': "Male" else: "Female",
+              color = theme.colors[goldenColor])
+          let faction: FactionData = try:
+              factionsList[recruit.faction]
+            except:
+              dialog = setError(message = "Can't get the recruit's faction.")
+              return
+          label(str = "Faction:")
+          colorLabel(str = faction.name, color = theme.colors[goldenColor])
+          label(str = "Home base:")
+          colorLabel(str = skyBases[recruit.homeBase].name,
+              color = theme.colors[goldenColor])
+        # Statistics of the selected recruit
+        of 1:
+          for index, attrib in recruit.attributes:
+            setLayoutRowStatic(height = 35, cols = 2, ratio = [120.cfloat, 120.cfloat])
+            label(str = attributesList[index].name & ":")
+            colorLabel(str = getAttributeLevelName(
+                attributeLevel = attrib.level), color = theme.colors[goldenColor])
+        else:
+          discard
       # Buttons
       setLayoutRowDynamic(height = 30, cols = 2)
       imageLabelButton(image = images[negotiateIcon], text = "Negotiate",
