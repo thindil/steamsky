@@ -256,13 +256,27 @@ proc showRecruitInfo(dialog: var GameDialog) {.raises: [], tags: [
                   currentTab = index.cint
             except:
               dialog = setError(message = "Can't set the tabs buttons.")
+      # General info
+      case currentTab
+      of 0:
+        setLayoutRowDynamic(height = 35, cols = 2)
+        label(str = "Gender:")
+        colorLabel(str = if recruit.gender == 'M': "Male" else: "Female",
+            color = theme.colors[goldenColor])
+      else:
+        discard
       # Buttons
       setLayoutRowDynamic(height = 30, cols = 2)
+      imageLabelButton(image = images[negotiateIcon], text = "Negotiate",
+          alignment = right):
+        closePopup()
+        dialog = negotiateDialog
       addCloseButton(dialog = dialog)
   except:
     dialog = setError(message = "Can't show the party dialog")
 
-proc setRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc setRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [],
+    contractual.} =
   ## Set the data needed for show information about the selected recruit
   ##
   ## * data
