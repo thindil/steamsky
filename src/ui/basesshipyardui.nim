@@ -24,9 +24,11 @@ import ../[bases, basesship2, config, crewinventory, game, maps, shipscrew,
     shipmodules, tk, types]
 import coreui, dialogs, errordialog, mapsui, table, utilsui2
 
+{.push ruleOff:"varDeclared".}
 var
   installTable, removeTable: TableWidget
-  installIndexes, removeIndexes: seq[Natural]
+  installIndexes, removeIndexes: seq[Natural] = @[]
+{.pop ruleOn:"varDeclared".}
 
 proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -45,10 +47,10 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Show the base shipyard and load all available and installed modules
   ## lists. Moduletype is the type of modules to show in available modules,
   ## modulename is the name of the module to search in available modules.
-  var shipyardFrame = mainPaned & ".shipyardframe"
+  var shipyardFrame: string = mainPaned & ".shipyardframe"
   let
-    shipyardCanvas = shipyardFrame & ".canvas"
-    moduleTypeBox = shipyardCanvas & ".shipyard.install.options.modules"
+    shipyardCanvas: string = shipyardFrame & ".canvas"
+    moduleTypeBox: string = shipyardCanvas & ".shipyard.install.options.modules"
   if tclEval2(script = "winfo exists " & shipyardCanvas) == "0":
     tclEval(script = """
       ttk::frame .gameframe.paned.shipyardframe
@@ -140,8 +142,8 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetVar(varName = "gamestate", newValue = "repair")
   tclEval(script = gameHeader & ".morebutton configure -command {ShipyardMore}")
   var
-    maxSize, allSpace = 1
-    usedSpace = 0
+    maxSize, allSpace: Positive = 1
+    usedSpace: Natural = 0
   for module in playerShip.modules:
     if module.mType == ModuleType2.hull:
       maxSize = try:
@@ -152,9 +154,9 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
       allSpace = module.maxModules
       break
   shipyardFrame = shipyardCanvas & ".shipyard"
-  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
-  var moneyLabel = shipyardCanvas & ".shipyard.moneyinfo.lblmoney"
+  var moneyLabel: string = shipyardCanvas & ".shipyard.moneyinfo.lblmoney"
   tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
   if moneyIndex2 > -1:
     tclEval(script = moneyLabel & " configure -text {You have } -style TLabel")
@@ -176,8 +178,8 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = moneyLabel & " configure -text {" & $allSpace & "}")
   tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
   let
-    moduleName = (if argc == 3: $argv[2] else: "")
-    searchEntry = shipyardCanvas & ".shipyard.install.options.search"
+    moduleName: string = (if argc == 3: $argv[2] else: "")
+    searchEntry: string = shipyardCanvas & ".shipyard.install.options.search"
   if moduleName.len == 0:
     tclEval(script = searchEntry & " configure -validatecommand {}")
     tclEval(script = searchEntry & " delete 0 end")
@@ -186,19 +188,19 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   if installIndexes.len == 0:
     for index in modulesList.keys:
       installIndexes.add(y = index)
-  let arguments = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
+  let arguments: string = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
       "}" elif argc == 2: "{" & $argv[1] & "} {}" else: "0 {}")
   updateHeadersCommand(table = installTable,
       command = "SortShipyardModules install " & arguments)
   clearTable(table = installTable)
   let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    page = try:
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    page: Positive = try:
         (if argc == 4: ($argv[3]).parseInt else: 1)
       except:
         return showError(message = "Can't get page.")
-    startRow = ((page - 1) * gameSettings.listsLimit) + 1
-  var currentRow = 1
+    startRow: Positive = ((page - 1) * gameSettings.listsLimit) + 1
+  var currentRow: Positive = 1
   for index in installIndexes:
     try:
       if modulesList[index].price == 0 or skyBases[baseIndex].reputation.level <
@@ -207,7 +209,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't get proto module price.")
     if argc > 1:
-      let moduleType = try:
+      let moduleType: int = try:
           ($argv[1]).parseInt
         except:
           return showError(message = "Can't get module type.")
@@ -225,7 +227,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
     if currentRow < startRow:
       currentRow.inc
       continue
-    let moduleSize = try:
+    let moduleSize: int = try:
         (if modulesList[index].mType ==
           ModuleType.hull: modulesList[index].maxValue else: modulesList[index].size)
       except:
@@ -258,7 +260,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
           $index & "}", column = 4)
     except:
       return showError(message = "Can't add button with repair material.")
-    var cost = try:
+    var cost: Natural = try:
         modulesList[index].price
       except:
         return showError(message = "Can't get cost.")
@@ -318,7 +320,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
           $(index + 1) & "}", column = 4)
     except:
       return showError(message = "Can't add button with player's ship repair material.")
-    let damage = 1.0 - (playerShip.modules[index].durability.float /
+    let damage: float = 1.0 - (playerShip.modules[index].durability.float /
         playerShip.modules[index].maxDurability.float)
     var cost: Natural = try:
         modulesList[playerShip.modules[
@@ -371,11 +373,11 @@ proc setModuleInfo(installing: bool; row: var Positive;
   ##              one. Default value is True.
   row.inc
   var
-    mType: ModuleType
+    mType: ModuleType = ModuleType.any
     maxValue, value, weight, maxOwners, cost: Natural = 0
     size: Positive = 1
     speed, moneyIndex2, shipModuleIndex: int = -1
-    moduleLabel = ""
+    moduleLabel: string = ""
   if installing:
     mType = try:
         modulesList[moduleIndex].mType
@@ -413,8 +415,8 @@ proc setModuleInfo(installing: bool; row: var Positive;
         showError(message = "Can't get protomodule speed")
         return
     moduleLabel = ".moduledialog.cost"
-    let compareBox = ".moduledialog.compare.combo"
-    var moduleIterator = 1
+    let compareBox: string = ".moduledialog.compare.combo"
+    var moduleIterator: Natural = 1
     if tclEval2(script = "winfo ismapped " & compareBox) == "1":
       moduleIterator = try:
           tclEval2(script = compareBox & " current").parseInt + 1
@@ -890,7 +892,7 @@ proc setModuleInfo(installing: bool; row: var Positive;
       tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
     else:
       moduleLabel = ".moduledialog.size"
-    var added = false
+    var added: bool = false
     if installing:
       for module in playerShip.modules:
         try:
@@ -957,8 +959,8 @@ proc setModuleInfo(installing: bool; row: var Positive;
     else:
       moduleLabel = ".moduledialog.repair"
     var
-      mAmount = 0
-      infoText = ""
+      mAmount: Natural = 0
+      infoText: string = ""
     for item in itemsList.values:
       try:
         if item.itemType == modulesList[moduleIndex].repairMaterial:
@@ -1030,8 +1032,8 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't set the module index.")
   var
-    moduleIterator = 0
-    compareModules = ""
+    moduleIterator: Natural = 0
+    compareModules: string = ""
   try:
     for module in playerShip.modules:
       if modulesList[module.protoIndex].mType == modulesList[moduleIndex].mType:
@@ -1039,20 +1041,20 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         compareModules.add(y = "{" & module.name & "} ")
   except:
     return showError(message = "Can't set module iterator.")
-  let moduleDialog = try:
+  let moduleDialog: string = try:
       createDialog(name = ".moduledialog", title = modulesList[
           moduleIndex].name, columns = 2)
     except:
       return showError(message = "Can't create the dialog.")
   var row: Positive = 1
   if moduleIterator > 1:
-    let compareFrame = moduleDialog & ".compare"
+    let compareFrame: string = moduleDialog & ".compare"
     tclEval(script = "ttk::frame " & compareFrame)
-    let compareBox = compareFrame & ".combo"
+    let compareBox: string = compareFrame & ".combo"
     tclEval(script = "ttk::combobox " & compareBox &
         " -state readonly -values {" & compareModules & "}")
     tclEval(script = compareBox & " current 0")
-    let compareLabel = compareFrame & ".label"
+    let compareLabel: string = compareFrame & ".label"
     tclEval(script = "ttk::label " & compareLabel & " -text {Compare with:}")
     tclEval(script = "grid " & compareLabel & " -padx {0 5}")
     tclEval(script = "grid " & compareBox & " -row 0 -column 1 -padx {5 0}")
