@@ -725,6 +725,22 @@ proc nkStrokeRect(b: ptr nk_command_buffer, rect: NimRect, rounding,
   cmd.h = max(x = 0.cushort, y = rect.h.cushort)
   cmd.color = c
 
+proc nkStrokeTriangle(b: ptr nk_command_buffer; x0, y0, x1, y1, x2, y2,
+  lineThickness: cfloat; c: nk_color) {.raises: [], tags: [], contractual.} =
+  ## Draw a triangle. Internal use only
+  ##
+  ## * b             - the command buffer in which the triangle will be drawn
+  ## * x0            - the X coordinate of the first the triangle's vertex
+  ## * y0            - the Y coordinate of the first the triangle's vertex
+  ## * x1            - the X coordinate of the second the triangle's vertex
+  ## * y1            - the Y coordinate of the second the triangle's vertex
+  ## * x2            - the X coordinate of the third the triangle's vertex
+  ## * y2            - the Y coordinate of the third the triangle's vertex
+  ## * lineThickness - the thinckness of the triangle's border
+  ## * c             - the color used to draw the triangle
+  discard
+  # TODO: continue here
+
 proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float;
   c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the rectangle with the selected color
@@ -1378,7 +1394,12 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
         heading = up
       else:
         heading = down
-    # TODO: continue here
+    nkTriangleFromDirection(`result` = points, r = content, padX = 0,
+      padY = 0, direction = heading)
+    nkStrokeTriangle(b = `out`, x0 = points[0].x, y0 = points[0].y,
+      x1 = points[1].x, y1 = points[1].y, x2 = points[2].x, y2 = points[2].y,
+      lineThickness = borderWidth, c = foreground)
+    # TODO: continue here after nkStrokeTriangle
   else:
     discard
 
