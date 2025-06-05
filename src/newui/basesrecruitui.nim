@@ -263,6 +263,15 @@ proc showRecruitInfo(dialog: var GameDialog) {.raises: [], tags: [
         label(str = "Gender:")
         colorLabel(str = if recruit.gender == 'M': "Male" else: "Female",
             color = theme.colors[goldenColor])
+        let faction: FactionData = try:
+            factionsList[recruit.faction]
+          except:
+            dialog = setError(message = "Can't get the recruit's faction.")
+            return
+        label(str = "Faction:")
+        colorLabel(str = faction.name, color = theme.colors[goldenColor])
+        label(str = "Home base:")
+        colorLabel(str = skyBases[recruit.homeBase].name, color = theme.colors[goldenColor])
       else:
         discard
       # Buttons
