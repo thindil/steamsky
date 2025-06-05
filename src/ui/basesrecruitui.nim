@@ -222,7 +222,7 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::button " & dialogCloseButton &
       " -text Close -command {CloseDialog " & recruitDialog & "} -image exiticon -style Dialog.TButton")
   tclEval(script = "grid " & dialogCloseButton & " -row 0 -column 1")
-  tclEval(script = "tooltip::tooltip " & button & " \"Close dialog \\[Escape key\\]\"")
+  tclEval(script = "tooltip::tooltip " & dialogCloseButton & " \"Close dialog \\[Escape key\\]\"")
   tclEval(script = "grid " & frame & "  -pady {0 5}")
   tclEval(script = "focus " & dialogCloseButton)
   tclEval(script = "::autoscroll::autoscroll " & yScroll)
