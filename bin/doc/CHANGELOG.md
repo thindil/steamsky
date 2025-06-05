@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file.
 - Screen is blocked after giving an item from the player's ship's cargo to a
   crew member
 - Showing information about the game's data error when starting the game
+- Tooltips for buttons in the dialog with information about a recruit in a
+  base
 
 ## [11.1] - 2025-05-18
 
