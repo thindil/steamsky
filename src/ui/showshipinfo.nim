@@ -149,6 +149,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
          -sticky w -padx 5 -row 7 -column 1
       tooltip::tooltip $shipcanvas.frame.weight2 \
          "The ship weight. The more heavy is ship, the slower it fly\nand need stronger engines"
+      SetScrollbarBindings $shipcanvas.frame.weight2 $shipinfoframe.general.scrolly
       # Player's factions' reputation
       grid [ttk::label $shipcanvas.frame.replabel -text {Reputation:}] -sticky we -padx 5 \
         -columnspan 2
