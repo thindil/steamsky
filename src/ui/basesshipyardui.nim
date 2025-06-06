@@ -415,7 +415,7 @@ proc setModuleInfo(installing: bool; row: var Positive;
         showError(message = "Can't get protomodule speed")
         return
     moduleLabel = ".moduledialog.cost"
-    let compareBox: string = ".moduledialog.compare.combo"
+    const compareBox: string = ".moduledialog.compare.combo"
     var moduleIterator: Natural = 1
     if tclEval2(script = "winfo ismapped " & compareBox) == "1":
       moduleIterator = try:
@@ -1061,7 +1061,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid " & compareFrame & " -pady {0 5} -columnspan 2")
     tclEval(script = "bind " & compareBox & " <<ComboboxSelected>> {CompareModules}")
     row = 2
-  var cost = try:
+  var cost: Natural = try:
       modulesList[moduleIndex].price
     except:
       return showError(message = "Can't set the cost.")
@@ -1069,7 +1069,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     countPrice(price = cost, traderIndex = findMember(order = talk))
   except:
     return showError(message = "Can't count the cost.")
-  var moduleLabel = moduleDialog & ".costlbl"
+  var moduleLabel: string = moduleDialog & ".costlbl"
   tclEval(script = "ttk::label " & moduleLabel & " -text {Install cost:}")
   tclEval(script = "grid " & moduleLabel & " -sticky w -padx 5 -pady {5 0}")
   moduleLabel = moduleDialog & ".cost"
@@ -1086,12 +1086,12 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       " -sticky w -padx {0 5} -pady {5 0} -row " & $row & " -column 1")
   setModuleInfo(installing = true, row = row)
   let
-    moneyIndex2 = findItem(inventory = playerShip.cargo,
+    moneyIndex2: int = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
-    errorLabel = moduleDialog & ".errorLabel"
-    frame = moduleDialog & ".buttonbox"
+    errorLabel: string = moduleDialog & ".errorLabel"
+    frame: string = moduleDialog & ".buttonbox"
   tclEval(script = "ttk::frame " & frame)
-  let installButton = moduleDialog & ".buttonbox.install"
+  let installButton: string = moduleDialog & ".buttonbox.install"
   tclEval(script = "ttk::button " & installButton &
       " -text Install -image buyicon -style Dialoggreen.TButton -command {CloseDialog " &
       moduleDialog & ";ManipulateModule install}")
@@ -1104,8 +1104,8 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     ## * mIndex2 - the index of the money in the player's ship's cargo
     ## * cost2   - the cost of installing the module
     var
-      maxSize, usedSpace, allSpace = 0
-      freeTurretIndex = -1
+      maxSize, usedSpace, allSpace: Natural = 0
+      freeTurretIndex: int = -1
     for index, module in playerShip.modules:
       case module.mType
       of hull:
@@ -1118,7 +1118,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           freeTurretIndex = index
       else:
         discard
-    var hasUnique = false
+    var hasUnique: bool = false
     for module in playerShip.modules:
       if modulesList[module.protoIndex].mType == modulesList[
           moduleIndex].mType and modulesList[moduleIndex].unique:
@@ -1158,7 +1158,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     addCloseButton(name = moduleDialog & ".buttonbox.button", text = "Close",
         command = "CloseDialog " & moduleDialog, column = 1, icon = "exiticon")
   tclEval(script = "grid " & frame & " -pady {0 5} -columnspan 2")
-  let closeButton = moduleDialog & ".buttonbox.button"
+  let closeButton: string = moduleDialog & ".buttonbox.button"
   tclEval(script = "focus " & closeButton)
   tclEval(script = "bind " & closeButton & " <Tab> {focus " & installButton & ";break}")
   tclEval(script = "bind " & moduleDialog & " <Escape> {" & closeButton & " invoke;break}")
@@ -1234,8 +1234,8 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "tk busy " & gameHeader)
   tclEval(script = "tk busy " & mainPaned)
   let
-    shipModuleIndex = moduleIndex - 1
-    damagePercent = (playerShip.modules[shipModuleIndex].durability.float /
+    shipModuleIndex: int = moduleIndex - 1
+    damagePercent: float = (playerShip.modules[shipModuleIndex].durability.float /
         playerShip.modules[shipModuleIndex].maxDurability.float)
   var cost: Natural = try:
         modulesList[playerShip.modules[
@@ -1251,9 +1251,9 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         reduce = false)
   except:
     return showError(message = "Can't count the cost.")
-  let moduleDialog = createDialog(name = ".moduledialog",
+  let moduleDialog: string = createDialog(name = ".moduledialog",
       title = playerShip.modules[shipModuleIndex].name, columns = 2)
-  var label = moduleDialog & ".gainlbl"
+  var label: string = moduleDialog & ".gainlbl"
   tclEval(script = "ttk::label " & label & " -text {Remove gain: }")
   tclEval(script = "grid " & label & " -sticky w -padx 5")
   label = moduleDialog & ".gain"
@@ -1273,7 +1273,7 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   var row: Positive = 3
   setModuleInfo(installing = false, row = row)
   if damagePercent < 1.0:
-    var progressBarStyle, statusTooltip = ""
+    var progressBarStyle, statusTooltip: string = ""
     if damagePercent < 1.0 and damagePercent > 0.79:
       progressBarStyle = " -style green.Horizontal.TProgressbar"
       statusTooltip = "Slightly damaged"
@@ -1289,7 +1289,7 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       statusTooltip = "Destroyed"
     label = moduleDialog & ".damagelbl"
     tclEval(script = "ttk::label " & label & " -text {Status:}")
-    let damageBar = moduleDialog & ".damage"
+    let damageBar: string = moduleDialog & ".damage"
     tclEval(script = "ttk::progressbar " & damageBar &
         " -orient horizontal -maximum 1.0 -value " & $damagePercent & progressBarStyle)
     tclEval(script = "tooltip::tooltip " & damageBar & " \"" & statusTooltip & "\"")
@@ -1303,9 +1303,9 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "grid " & label & " -sticky w -padx 5 -columnspan 2")
   except:
     return showError(message = "Can't show description.")
-  let frame = moduleDialog & ".buttonbox"
+  let frame: string = moduleDialog & ".buttonbox"
   tclEval(script = "ttk::frame " & frame)
-  let removeButton = moduleDialog & ".buttonbox.install"
+  let removeButton: string = moduleDialog & ".buttonbox.install"
   tclEval(script = "ttk::button " & removeButton &
       " -text Remove -image sellicon -style Dialoggreen.TButton -command {CloseDialog " &
       moduleDialog & ";ManipulateModule remove}")
@@ -1313,7 +1313,7 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   addCloseButton(name = moduleDialog & ".buttonbox.button", text = "Close",
       command = "CloseDialog " & moduleDialog, column = 1, icon = "cancelicon", color = "red")
   tclEval(script = "grid " & frame & " -pady {0 5} -columnspan 2")
-  let closeButton = moduleDialog & ".buttonbox.button"
+  let closeButton: string = moduleDialog & ".buttonbox.button"
   tclEval(script = "focus " & closeButton)
   tclEval(script = "bind " & closeButton & " <Tab> {focus " & removeButton & ";break}")
   tclEval(script = "bind " & moduleDialog & " <Escape> {" & closeButton & " invoke;break}")
@@ -1336,15 +1336,15 @@ proc showShipyardTabCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowShipyardTab
   let
-    shipyardCanvas = mainPaned & ".shipyardframe.canvas"
-    shipyardFrame = shipyardCanvas & ".shipyard"
+    shipyardCanvas: string = mainPaned & ".shipyardframe.canvas"
+    shipyardFrame: string = shipyardCanvas & ".shipyard"
   if tclGetVar(varName = "newtab") == "install":
-    var frame = shipyardFrame & ".remove"
+    var frame: string = shipyardFrame & ".remove"
     tclEval(script = "grid remove " & frame)
     frame = shipyardFrame & ".install"
     tclEval(script = "grid " & frame)
   else:
-    var frame = shipyardFrame & ".install"
+    var frame: string = shipyardFrame & ".install"
     tclEval(script = "grid remove " & frame)
     frame = shipyardFrame & ".remove"
     tclEval(script = "grid " & frame)
@@ -1363,9 +1363,9 @@ type ModulesSortOrders = enum
   none, nameAsc, nameDesc, typeAsc, typeDesc, sizeAsc, sizeDesc, materialAsc,
     materialDesc, priceAsc, priceDesc
 
-const defaultModulesSortOrder = none
+const defaultModulesSortOrder: ModulesSortOrders = none
 
-var modulesSortOrder = defaultModulesSortOrder
+var modulesSortOrder: ModulesSortOrders = defaultModulesSortOrder
 
 proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -1385,7 +1385,7 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## type of modules to show, page is the number of currently showed page
   ## of list and x is X axis coordinate where the player clicked the mouse
   ## button
-  let column = try:
+  let column: int = try:
         getColumnNumber(table = (if argv[1] ==
             "install": installTable else: removeTable), xPosition = ($argv[4]).parseInt)
       except:
@@ -1446,7 +1446,7 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't add module to install.")
   else:
     for index, module in playerShip.modules:
-      let damage = 1.0 - (module.durability.float / module.maxDurability.float)
+      let damage: float = 1.0 - (module.durability.float / module.maxDurability.float)
       var cost: Natural = try:
           modulesList[module.protoIndex].price - (modulesList[
               module.protoIndex].price.float * damage).Natural
@@ -1577,8 +1577,8 @@ proc shipyardMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShipyardMore
   ## If th argument is set to show, show the options, otherwise hide them.
   let
-    shipyardFrame = mainPaned & ".shipyardframe"
-    button = gameHeader & ".morebutton"
+    shipyardFrame: string = mainPaned & ".shipyardframe"
+    button: string = gameHeader & ".morebutton"
   if tclEval2(script = "winfo ismapped " & shipyardFrame &
       ".canvas.shipyard.install.options") == "1":
     tclEval(script = "grid remove " & shipyardFrame & ".canvas.shipyard.install.options")
