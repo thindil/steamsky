@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated help
+
 ### Fixed
 - Crash when starting a combat
 - Typo in tooltip when training a crew member in bases
