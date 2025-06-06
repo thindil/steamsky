@@ -2022,6 +2022,8 @@ NK_API void nk_window_show_if(struct nk_context*, const char *name, enum nk_show
 /// __rounding__    | Whether or not to make the line round
 */
 NK_API void nk_rule_horizontal(struct nk_context *ctx, struct nk_color color, nk_bool rounding);
+/// Disable the current window
+NK_API void nk_window_disable(struct nk_context *ctx);
 /* =============================================================================
  *
  *                                  LAYOUT
@@ -21048,6 +21050,21 @@ nk_rule_horizontal(struct nk_context *ctx, struct nk_color color, nk_bool roundi
     struct nk_command_buffer *canvas = nk_window_get_canvas(ctx);
     if (!state) return;
     nk_fill_rect(canvas, space, rounding && space.h > 1.5f ? space.h / 2.0f : 0, color);
+}
+NK_API void
+nk_window_disable(struct nk_context *ctx)
+{
+    NK_ASSERT(ctx);
+    if (!ctx || !ctx->current || !ctx->current->layout)
+        return 0;
+
+    struct nk_panel *root;
+    root = ctx->current->layout;
+    while (root) {
+        root->flags |= NK_WINDOW_ROM;
+        root->flags &= ~(nk_flags)NK_WINDOW_REMOVE_ROM;
+        root = root->parent;
+    }
 }
 
 
