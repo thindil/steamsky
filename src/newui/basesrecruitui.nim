@@ -278,10 +278,12 @@ proc showRecruitInfo(dialog: var GameDialog) {.raises: [], tags: [
         # Statistics of the selected recruit
         of 1:
           for index, attrib in recruit.attributes:
-            setLayoutRowStatic(height = 35, cols = 2, ratio = [120.cfloat, 120.cfloat])
+            setLayoutRowStatic(height = 35, cols = 3, ratio = [120.cfloat, 120, 35])
             label(str = attributesList[index].name & ":")
             colorLabel(str = getAttributeLevelName(
                 attributeLevel = attrib.level), color = theme.colors[goldenColor])
+            imageButton(image = images[helpIcon]):
+              discard
         else:
           discard
       # Buttons
