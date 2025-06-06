@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Showing information about the game's data error when starting the game
 - Tooltips for buttons in the dialog with information about a recruit in a
   base
+- Scrolling the general ship information section with mouse wheel
 
 ## [11.1] - 2025-05-18
 
