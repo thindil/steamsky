@@ -738,7 +738,15 @@ proc nkStrokeTriangle(b: ptr nk_command_buffer; x0, y0, x1, y1, x2, y2,
   ## * y2            - the Y coordinate of the third the triangle's vertex
   ## * lineThickness - the thinckness of the triangle's border
   ## * c             - the color used to draw the triangle
-  discard
+  if b == nil or c.a == 0:
+    return
+  if b.use_clipping != 0:
+    let clip: nk_rect = b.clip
+    if not nkInbox(px = x0, py = y0, x = clip.x, y = clip.y, w = clip.w,
+      h = clip.h) and not nkInbox(px = x1, py = y1, x = clip.x, y = clip.y,
+      w = clip.w, h = clip.h) and not nkInbox(px = x2, py = y2, x = clip.x,
+      y = clip.y, w = clip.w, h = clip.h):
+      return
   # TODO: continue here
 
 proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float;
