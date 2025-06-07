@@ -816,6 +816,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               except:
                 dialog = setError(message = "Can't show the map info")
                 return
+            if dialog != none:
+              windowDisable()
             labelButton(title = mapChar):
               if x == playerShip.skyX and y == playerShip.skyY:
                 setDialog(y = windowHeight / 7)
