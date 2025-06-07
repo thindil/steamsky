@@ -322,6 +322,8 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "RecruitsGroup", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
     addHeader(headers = headers, ratio = ratio, tooltip = "recruits",
       code = sortRecruits, dialog = dialog)
     var currentRow = 1
