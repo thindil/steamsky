@@ -117,6 +117,8 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "SchoolGroup", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
     # Show information about money owned by the player
     setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
     for index, text in moneyText:
