@@ -152,6 +152,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       # The main window
       window(name = "Main", x = 0, y = 0, w = windowWidth,
           h = windowHeight, flags = {windowNoScrollbar}):
+        # Disable the window if there is any dialog to show
+        if dialog != none:
+          windowDisable()
         let
           oldState: GameState = state
           oldDialog: GameDialog = dialog
