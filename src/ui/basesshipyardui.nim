@@ -1481,53 +1481,43 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of typeAsc:
       if x.mType < y.mType:
         return 1
-      else:
-        return -1
+      return -1
     of typeDesc:
       if x.mType > y.mType:
         return 1
-      else:
-        return -1
+      return -1
     of sizeAsc:
       if x.size < y.size:
         return 1
-      else:
-        return -1
+      return -1
     of sizeDesc:
       if x.size > y.size:
         return 1
-      else:
-        return -1
+      return -1
     of materialAsc:
       if x.material < y.material:
         return 1
-      else:
-        return -1
+      return -1
     of materialDesc:
       if x.material > y.material:
         return 1
-      else:
-        return -1
+      return -1
     of priceAsc:
       if x.price < y.price:
         return 1
-      else:
-        return -1
+      return -1
     of priceDesc:
       if x.price > y.price:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
 
