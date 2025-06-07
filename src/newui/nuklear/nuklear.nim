@@ -484,6 +484,13 @@ proc windowInput*(name: string; disable: bool = true) {.raises: [], tags: [], co
       root.flags = root.flags or windowRemoveRom.ord.cint
       root = root.parent
 
+proc windowDisable*() {.raises: [], tags: [], contractual.} =
+  ## Disable the current window
+  proc nk_window_disable(ctx) {.importc, nodecl, raises: [], tags: [],
+    contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  nk_window_disable(ctx = ctx)
+
 # ------
 # Buffer
 # ------
