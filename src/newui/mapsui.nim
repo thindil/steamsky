@@ -440,6 +440,8 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameters dialog.
   group(title = "ButtonsGroup", flags = {windowNoScrollbar}):
+    if dialog != none:
+      windowDisable()
     if playerShip.speed == docked or playerShip.destinationX == 0:
       setLayoutRowDynamic(height = 30, cols = 1)
     else:
