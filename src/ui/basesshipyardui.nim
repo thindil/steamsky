@@ -668,21 +668,22 @@ proc setModuleInfo(installing: bool; row: var Positive;
     else:
       moduleLabel = ".moduledialog.quality"
     if installing and shipModuleIndex > -1:
-      if maxValue < 30:
+      case maxValue
+      of 0..29:
         if playerShip.modules[shipModuleIndex].quality > maxValue:
           tclEval(script = moduleLabel & " configure -text {minimal (worse)} -style Headerred.TLabel")
         elif playerShip.modules[shipModuleIndex].quality < maxValue:
           tclEval(script = moduleLabel & " configure -text {minimal (better)} -style Headergreen.TLabel")
         else:
           tclEval(script = moduleLabel & " configure -text {minimal} -style Golden.TLabel")
-      elif maxValue < 60:
+      of 30..59:
         if playerShip.modules[shipModuleIndex].quality > maxValue:
           tclEval(script = moduleLabel & " configure -text {basic (worse)} -style Headerred.TLabel")
         elif playerShip.modules[shipModuleIndex].quality < maxValue:
           tclEval(script = moduleLabel & " configure -text {basic (better)} -style Headergreen.TLabel")
         else:
           tclEval(script = moduleLabel & " configure -text {basic} -style Golden.TLabel")
-      elif maxValue < 80:
+      of 60..79:
         if playerShip.modules[shipModuleIndex].quality > maxValue:
           tclEval(script = moduleLabel & " configure -text {extended (worse)} -style Headerred.TLabel")
         elif playerShip.modules[shipModuleIndex].quality < maxValue:
@@ -698,11 +699,12 @@ proc setModuleInfo(installing: bool; row: var Positive;
           tclEval(script = moduleLabel & " configure -text {luxury} -style Golden.TLabel")
     else:
       row.dec
-      if maxValue < 30:
+      case maxValue
+      of 0..29:
         tclEval(script = moduleLabel & " configure -text {minimal} -style Golden.TLabel")
-      elif maxValue < 60:
+      of 30..59:
         tclEval(script = moduleLabel & " configure -text {basic} -style Golden.TLabel")
-      elif maxValue < 80:
+      of 60..79:
         tclEval(script = moduleLabel & " configure -text {extended} -style Golden.TLabel")
       else:
         tclEval(script = moduleLabel & " configure -text {luxury} -style Golden.TLabel")
