@@ -85,3 +85,5 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     setLayoutRowDynamic(30, 1)
     labelButton(title = "Close"):
       dialog = none
+
+  windowSetFocus(name = "Wait in place")
