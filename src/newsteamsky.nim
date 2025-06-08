@@ -21,7 +21,8 @@
 import std/[os, parseopt, strutils, tables, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
-import newui/[basesschoolui, basesrecruitui, combatui, coreui, errordialog, goalsui, mainmenu, mapsui, themes, tradesui, waitmenu]
+import newui/[basesschoolui, basesrecruitui, combatui, coreui, errordialog,
+    goalsui, mainmenu, mapsui, themes, tradesui, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -126,14 +127,19 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = 200)
-  const showGame: array[GameState.mainMenu..GameState.recruits, proc (
-      state: var GameState; dialog: var GameDialog){.nimcall, raises: [].}] = [
-    GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
-      about: showAbout, showFile: mainMenu.showFile, hallOfFame: showHallOfFame,
-      loadGame: showLoadGame, loadingGame: mainMenu.loadGame,
-      newGame: mainMenu.newGame, map: showMap, endGame: backToMainMenu,
-      combat: showCombat, boarding: showBoarding, trade: showTrade,
-      school: showSchool, recruits: showRecruits]
+  const
+    showGame: array[GameState.mainMenu..GameState.recruits, proc (
+        state: var GameState; dialog: var GameDialog){.nimcall, raises: [
+            ].}] = [
+      GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
+        about: showAbout, showFile: mainMenu.showFile,
+        hallOfFame: showHallOfFame, loadGame: showLoadGame,
+        loadingGame: mainMenu.loadGame, newGame: mainMenu.newGame, map: showMap,
+        endGame: backToMainMenu, combat: showCombat, boarding: showBoarding,
+        trade: showTrade, school: showSchool, recruits: showRecruits]
+    showDialog: array[GameDialog.errorDialog..GameDialog.waitDialog, proc(
+        dialog: var GameDialog){.nimcall, raises: [].}] = [
+      GameDialog.errorDialog: showError, waitDialog: showWaitMenu]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
@@ -145,9 +151,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       if gameSettings.showTooltips:
         resetTooltips()
 
-      # Secondary windows if needed
-      showWaitMenu(dialog = dialog)
-      showError(dialog = dialog)
+      # Show dialogs if needed
+      if dialog in GameDialog.errorDialog..GameDialog.waitDialog:
+        showDialog[dialog](dialog = dialog)
 
       # The main window
       window(name = "Main", x = 0, y = 0, w = windowWidth,
