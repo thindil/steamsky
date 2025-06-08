@@ -31,10 +31,9 @@ type
 
   GameDialog* = enum
     ## Used to show any in-game dialog window
-    none, loading, errorDialog, gameMenuDialog, questionDialog, newGoalDialog,
-      ordersDialog, destinationDialog, messageDialog, waitDialog, infoDialog,
-      boardingDialog, defendingDialog, buyDialog, sellDialog, recruitDialog,
-      negotiateDialog
+    none, loading, errorDialog, waitDialog, gameMenuDialog, questionDialog,
+      newGoalDialog, ordersDialog, destinationDialog, messageDialog, infoDialog,
+      boardingDialog, defendingDialog, buyDialog, sellDialog, recruitDialog, negotiateDialog
 
 const
   dtime*: float = 20.0        ## The length in miliseconds of one game's frame
@@ -43,15 +42,15 @@ const
 
 var
   fonts*: array[FontsNames, ptr nk_font] = [nil, nil] ## The list of fonts used by the game
-  windowWidth*: float = 800.0  ## The width of the main game window
-  windowHeight*: float = 600.0 ## The height of the main game window
-  dialogX*: float = 0          ## The X position of a dialog
-  dialogY*: float = 0          ## The Y position of a dialog
-  redraw*: bool = true         ## If true, redraw the game
-  inCombat*: bool = false      ## If true, the player is in combat
+  windowWidth*: float = 800.0      ## The width of the main game window
+  windowHeight*: float = 600.0     ## The height of the main game window
+  dialogX*: float = 0              ## The X position of a dialog
+  dialogY*: float = 0              ## The Y position of a dialog
+  redraw*: bool = true             ## If true, redraw the game
+  inCombat*: bool = false          ## If true, the player is in combat
   images*: array[menuIcon..IconsNames.high, PImage] ## The images used in the game
   theme*: ThemeData = defaultTheme ## The current game's theme
-  showOptions*: bool = false   ## If true, show more options in the selected screen
+  showOptions*: bool = false       ## If true, show more options in the selected screen
 
 proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
         4) {.raises: [], tags: [], contractual.} =
