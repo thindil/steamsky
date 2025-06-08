@@ -532,6 +532,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       gameSettings.messagesPosition.float
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "TradeGroup", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
     addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortTrades, dialog = dialog)
     var
