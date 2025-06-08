@@ -126,5 +126,7 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
       labelButton(title = "Close"):
         dialog = none
       showLinkError()
+
+    windowSetFocus(name = "Error!Error!Error!")
   except:
     discard
