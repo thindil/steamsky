@@ -220,6 +220,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # The player's ship's crew orders
   if expandedSection in {0, 1}:
     group(title = "Your ship crew orders:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -428,6 +430,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # The enemy's ship's info
   if expandedSection in {0, 2}:
     group(title = "Enemy info:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -518,6 +522,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # The player's ship's status
   if expandedSection in {0, 3}:
     group(title = "Your ship status:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -542,6 +548,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # The enemy's ship's status
   if expandedSection in {0, 4}:
     group(title = "Enemy ship status:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -631,6 +639,8 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # The player's ship's crew info
   if expandedSection in {0, 1}:
     group(title = "Your crew:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -676,6 +686,8 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # The enemy's ship's crew info
   if expandedSection in {0, 2}:
     group(title = "Your crew:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
