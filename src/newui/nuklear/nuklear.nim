@@ -491,6 +491,16 @@ proc windowDisable*() {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_window_disable(ctx = ctx)
 
+proc windowShow*(name: string; state: ShowStates) {.raises: [], tags: [], contractual.} =
+  ## Show or hide the window depending on the state
+  ##
+  ## * name  - the name of the window to show or hide
+  ## * state - the state in which the window will be
+  proc nk_window_show(ctx; name: cstring; state: ShowStates) {.importc,
+    nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  nk_window_show(ctx = ctx, name = name.cstring, state = state)
+
 # ------
 # Buffer
 # ------
