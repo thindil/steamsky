@@ -21056,7 +21056,7 @@ nk_window_disable(struct nk_context *ctx)
 {
     NK_ASSERT(ctx);
     if (!ctx || !ctx->current || !ctx->current->layout)
-        return 0;
+        return;
 
     struct nk_panel *root;
     root = ctx->current->layout;
