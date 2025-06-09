@@ -96,8 +96,6 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   ##
   ## Returns parameter dialog
   ##
-  if dialog != GameDialog.errorDialog:
-    return
   try:
     const
       width: float = 540
