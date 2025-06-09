@@ -362,15 +362,73 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
 
 var moduleIndex: Natural = 0
 
+proc setHullInfo(installing: bool; row: var Positive; newInfo: bool;
+  shipModuleIndex: int; value, maxValue: Natural) {.raises: [],
+  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show information about the selected hull module
+  ##
+  ## * installing      - If true, player looking at installing modules list
+  ## * row             - The current row in the dialog
+  ## * newInfo         - If true, create the new UI for the info, otherwise reuse
+  ##                     old one. Default value is true.
+  ## * shipModuleIndex - The index of the module in the player's ship to show
+  ## * value           - The max size of the modules which can be installed
+  ## * maxValue        - The amount of modules which can be installed
+  var moduleLabel: string = ""
+  if installing:
+    if newInfo:
+      moduleLabel = ".moduledialog.hullinfo"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Ship hull can be only replaced.} -style Golden.TLabel")
+      row.inc
+      tclEval(script = "grid " & moduleLabel & " -sticky w -columnspan 2 -padx {5 0}")
+      moduleLabel = ".moduledialog.moduleslbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Modules space: }")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      moduleLabel = ".moduledialog.modules"
+      tclEval(script = "ttk::label " & moduleLabel)
+    else:
+      moduleLabel = ".moduledialog.modules"
+    if maxValue < playerShip.modules[shipModuleIndex].maxModules:
+      tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (smaller)} -style Headerred.TLabel")
+    elif maxValue > playerShip.modules[shipModuleIndex].maxModules:
+      tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (bigger)} -style Headergreen.TLabel")
+    else:
+      tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+    if newInfo:
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+      row.inc
+      moduleLabel = ".moduledialog.maxsizelbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Max module size: }")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      moduleLabel = ".moduledialog.maxsize"
+      tclEval(script = "ttk::label " & moduleLabel)
+    else:
+      moduleLabel = ".moduledialog.maxsize"
+    try:
+      if value < modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].value:
+        tclEval(script = moduleLabel & " configure -text {" & $value & " (smaller)} -style Headerred.TLabel")
+      elif value > modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].value:
+        tclEval(script = moduleLabel & " configure -text {" & $value & " (bigger)} -style Headergreen.TLabel")
+      else:
+        discard tclEval(script = moduleLabel & " configure -text {" & $value & "} -style Golden.TLabel")
+    except:
+      showError(message = "Can't show module size")
+      return
+    if newInfo:
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+      row.inc
+
 proc setModuleInfo(installing: bool; row: var Positive;
     newInfo: bool = true) {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Show information about selected module
   ##
-  ## installing - If true, player looking at installing modules list
-  ## row        - The current row in the dialog
-  ## newInfo    - If true, create the new UI for the info, otherwise reuse old
-  ##              one. Default value is True.
+  ## * installing - If true, player looking at installing modules list
+  ## * row        - The current row in the dialog
+  ## * newInfo    - If true, create the new UI for the info, otherwise reuse old
+  ##                one. Default value is True.
   row.inc
   var
     mType: ModuleType = ModuleType.any
@@ -530,50 +588,8 @@ proc setModuleInfo(installing: bool; row: var Positive;
         return
   case mType
   of hull:
-    if installing:
-      if newInfo:
-        moduleLabel = ".moduledialog.hullinfo"
-        tclEval(script = "ttk::label " & moduleLabel & " -text {Ship hull can be only replaced.} -style Golden.TLabel")
-        row.inc
-        tclEval(script = "grid " & moduleLabel & " -sticky w -columnspan 2 -padx {5 0}")
-        moduleLabel = ".moduledialog.moduleslbl"
-        tclEval(script = "ttk::label " & moduleLabel & " -text {Modules space: }")
-        tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
-        moduleLabel = ".moduledialog.modules"
-        tclEval(script = "ttk::label " & moduleLabel)
-      else:
-        moduleLabel = ".moduledialog.modules"
-      if maxValue < playerShip.modules[shipModuleIndex].maxModules:
-        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (smaller)} -style Headerred.TLabel")
-      elif maxValue > playerShip.modules[shipModuleIndex].maxModules:
-        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (bigger)} -style Headergreen.TLabel")
-      else:
-        tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
-      if newInfo:
-        tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
-        row.inc
-        moduleLabel = ".moduledialog.maxsizelbl"
-        tclEval(script = "ttk::label " & moduleLabel & " -text {Max module size: }")
-        tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
-        moduleLabel = ".moduledialog.maxsize"
-        tclEval(script = "ttk::label " & moduleLabel)
-      else:
-        moduleLabel = ".moduledialog.maxsize"
-      try:
-        if value < modulesList[playerShip.modules[
-            shipModuleIndex].protoIndex].value:
-          tclEval(script = moduleLabel & " configure -text {" & $value & " (smaller)} -style Headerred.TLabel")
-        elif value > modulesList[playerShip.modules[
-            shipModuleIndex].protoIndex].value:
-          tclEval(script = moduleLabel & " configure -text {" & $value & " (bigger)} -style Headergreen.TLabel")
-        else:
-          discard tclEval(script = moduleLabel & " configure -text {" & $value & "} -style Golden.TLabel")
-      except:
-        showError(message = "Can't show module size")
-        return
-      if newInfo:
-        tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
-        row.inc
+    setHullInfo(installing = installing, row = row, newInfo = newInfo,
+      shipModuleIndex = shipModuleIndex, value = value, maxValue = maxValue)
   of engine:
     if newInfo:
       moduleLabel = ".moduledialog.powerlbl"
