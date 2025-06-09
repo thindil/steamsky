@@ -764,6 +764,10 @@ proc nkStrokeTriangle(b: ptr nk_command_buffer; x0, y0, x1, y1, x2, y2,
       w = clip.w, h = clip.h) and not nkInbox(px = x2, py = y2, x = clip.x,
       y = clip.y, w = clip.w, h = clip.h):
       return
+
+  var cmd: ptr nk_command_triangle
+  if cmd == nil:
+    return
   # TODO: continue here
 
 proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float;
