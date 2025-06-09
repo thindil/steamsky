@@ -33,8 +33,6 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog if error happened or menu has closed.
-  if dialog != waitDialog:
-    return
 
   proc wait(minutes: Positive): GameDialog {.raises: [], tags: [RootEffect], contractual.} =
     ## Wait in place by selected in-game minutes
