@@ -368,4 +368,3 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
     addPagination(page = currentPage, row = row)
     # Show the list of items in the player's ship's cargo
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
-  showGameMenu(dialog = dialog)

@@ -726,4 +726,3 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     addPagination(page = currentPage, row = row)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - 20)
-  showGameMenu(dialog = dialog)

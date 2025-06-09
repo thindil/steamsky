@@ -593,7 +593,6 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   let heightDiff: float = (if endCombat: 55 else: 90)
   showLastMessages(theme = theme, dialog = dialog, inCombat = true,
     height = windowHeight - heightDiff - height - 20)
-  showGameMenu(dialog = dialog)
 
 proc showBoardingInfo(index: Natural; inCrew: bool = true; dialog: var GameDialog)
   {.raises: [], tags: [RootEffect], contractual.} =
@@ -733,4 +732,3 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
         updateParties()
   let heightDiff: float = (if endCombat: 55 else: 90)
   showLastMessages(theme = theme, dialog = dialog, inCombat = true, height = windowHeight - heightDiff - height)
-  showGameMenu(dialog = dialog)
