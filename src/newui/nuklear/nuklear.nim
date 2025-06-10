@@ -768,7 +768,14 @@ proc nkStrokeTriangle(b: ptr nk_command_buffer; x0, y0, x1, y1, x2, y2,
   var cmd: ptr nk_command_triangle
   if cmd == nil:
     return
-  # TODO: continue here
+  cmd.lineThickness = lineThickness.cshort
+  cmd.a.x = x0.cshort
+  cmd.a.y = y0.cshort
+  cmd.b.x = x1.cshort
+  cmd.b.y = y1.cshort
+  cmd.c.x = x2.cshort
+  cmd.c.y = y2.cshort
+  cmd.color = c
 
 proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float;
   c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
