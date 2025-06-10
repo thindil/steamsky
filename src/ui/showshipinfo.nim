@@ -156,12 +156,12 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
       tooltip::tooltip $shipcanvas.frame.replabel {Your reputation among factions}
       SetScrollbarBindings $shipcanvas.frame.replabel $shipinfoframe.general.scrolly
       for {set i 0} {$i < $famount} {incr i} {
-        grid [ttk::label $shipcanvas.frame.replbl$i] -sticky w -padx {50 5}
-        tooltip::tooltip $shipcanvas.frame.replbl$i {Your reputation among factions}
+        grid [ttk::button $shipcanvas.frame.replbl$i] -sticky w -padx {50 5}
+        tooltip::tooltip $shipcanvas.frame.replbl$i {Show information about the faction}
         SetScrollbarBindings $shipcanvas.frame.replbl$i $shipinfoframe.general.scrolly
         grid [ttk::label $shipcanvas.frame.rep$i] -sticky w -padx 5 \
           -row [expr 9 + $i] -column 1
-        tooltip::tooltip $shipcanvas.frame.rep$i {Your reputation among factions}
+        tooltip::tooltip $shipcanvas.frame.rep$i {Your reputation with the faction}
         SetScrollbarBindings $shipcanvas.frame.rep$i $shipinfoframe.general.scrolly
       }
       $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
@@ -435,7 +435,8 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   var repIndex: Natural = 0
   for index, faction in factionsList:
     label = shipInfoFrame & ".replbl" & $repIndex
-    tclEval(script = label & " configure -text {" & faction.name & "}")
+    tclEval(script = label & " configure -text {" & faction.name &
+        "} -command {ShowFactionInfo " & index & "}")
     label = shipInfoFrame & ".rep" & $repIndex
     let repLevel: int = getReputation(factionIndex = index)
     tclEval(script = label & " configure -text {" & getReputationText(
