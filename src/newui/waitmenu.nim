@@ -19,7 +19,7 @@
 ## executing a wait command, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[game2, shipsmovement]
+import ../[config, game2, shipsmovement]
 import coreui, errordialog
 
 var
@@ -45,23 +45,45 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       return setError(message = "Can't wait in place.")
     return none
 
-  window(name = "Wait in place", x = windowWidth / 4, y = windowHeight / 4,
+  const windowName: string = "Wait in place"
+  window(name = windowName, x = windowWidth / 4, y = windowHeight / 4,
       w = 320, h = 320, flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(30, 1)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for 1 minute")
     labelButton(title = "Wait 1 minute"):
       dialog = wait(minutes = 1)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for 5 minutes")
     labelButton(title = "Wait 5 minutes"):
       dialog = wait(minutes = 5)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for 10 minutes")
     labelButton(title = "Wait 10 minutes"):
       dialog = wait(minutes = 10)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for 15 minutes")
     labelButton(title = "Wait 15 minutes"):
       dialog = wait(minutes = 15)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for 30 minutes")
     labelButton(title = "Wait 30 minutes"):
       dialog = wait(minutes = 30)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for 1 hour")
     labelButton(title = "Wait 1 hour"):
       dialog = wait(minutes = 60)
     setLayoutRowDynamic(30, 3)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for the selected amount of minutes: from 1 to 1440 (the whole day)")
     labelButton(title = "Wait"):
       case waitInterval
       of 0:
@@ -81,7 +103,10 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if newInterval != waitInterval:
       waitInterval = newInterval
     setLayoutRowDynamic(30, 1)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Close dialog")
     labelButton(title = "Close"):
       dialog = none
 
-  windowSetFocus(name = "Wait in place")
+  windowSetFocus(name = windowName)
