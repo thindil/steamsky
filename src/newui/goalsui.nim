@@ -59,16 +59,14 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  if dialog != newGoalDialog:
-    return
   try:
     const
       width: float = 540
       height: float = 360
+      windowName: string = "Select a new goal"
     updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = "Select a new goal", x = dialogX,
-        y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
-        windowNoScrollbar}):
+    window(name = windowName, x = dialogX, y = dialogY, w = width,
+        h = height, flags = {windowBorder, windowTitle, windowNoScrollbar}):
       setLayoutRowDynamic(height = 230, cols = 1)
       group(title = "GoalsGroup", flags = {windowNoFlags}):
         setLayoutRowDynamic(height = 25, cols = 1)
@@ -117,7 +115,6 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       else:
         labelButton(title = "Select goal"):
           dialog = none
-          closePopup()
           clearCurrentGoal()
           if selected > 0:
             try:
@@ -138,7 +135,9 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             text = "Close the goals list without any changes")
       labelButton(title = "Close"):
         dialog = none
-        closePopup()
         selectedGoal = oldSelected
+
+    windowSetFocus(name = windowName)
   except:
     dialog = setError(message = "Can't show the goals' dialog")
+
