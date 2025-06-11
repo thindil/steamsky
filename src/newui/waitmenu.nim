@@ -94,12 +94,15 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         dialog = wait(minutes = waitAmount * 1440)
       else:
         discard
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for the selected amount of time: from 1 to 1440")
     let newValue: int = property2(name = "#", min = 1, val = waitAmount,
         max = 1440, step = 1, incPerPixel = 1)
     if newValue != waitAmount:
       waitAmount = newValue
     var newInterval: Natural = comboList(items = ["minutes", "hours", "days"],
-        selected = waitInterval, itemHeight = 25, x = 200, y = 180)
+        selected = waitInterval, itemHeight = 25, x = 100, y = 180)
     if newInterval != waitInterval:
       waitInterval = newInterval
     setLayoutRowDynamic(30, 1)
