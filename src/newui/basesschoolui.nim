@@ -67,8 +67,6 @@ proc setTrainingCost(dialog: var GameDialog){.raises: [], tags: [RootEffect],
       return
   timesCost = oneTrainCost * amount
   minCost = oneTrainCost
-  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex)
   if moneyIndex2 < 0:
     minCost = 0
     maxCost = 0
