@@ -488,6 +488,47 @@ proc setEngineInfo(installing: bool; row: var Positive; newInfo: bool;
       moduleLabel = ".moduledialog.fuel"
     tclEval(script = moduleLabel & " configure -text {" & $value & "} -style Golden.TLabel")
 
+proc setCargoInfo(installing: bool; row: var Positive; newInfo: bool;
+  shipModuleIndex: int; maxValue: Natural) {.raises: [],
+  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show information about the selected cargo module
+  ##
+  ## * installing      - If true, player looking at installing modules list
+  ## * row             - The current row in the dialog
+  ## * newInfo         - If true, create the new UI for the info, otherwise reuse
+  ##                     old one. Default value is true.
+  ## * shipModuleIndex - The index of the module in the player's ship to show
+  ## * maxValue        - The max capacity of the cargo
+  var moduleLabel: string = ""
+  if newInfo:
+    moduleLabel = ".moduledialog.cargolbl"
+    tclEval(script = "ttk::label " & moduleLabel & " -text {Max cargo: }")
+    tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+    moduleLabel = ".moduledialog.cargo"
+    tclEval(script = "ttk::label " & moduleLabel)
+  else:
+    moduleLabel = ".moduledialog.cargo"
+  if installing and shipModuleIndex > -1:
+    try:
+      if maxValue > modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxValue:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg (bigger)} -style Headergreen.TLabel")
+      elif maxValue < modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxValue:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg (smaller)} -style Headerred.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg} -style Golden.TLabel")
+    except:
+      showError(message = "Can't show module weight")
+      return
+  else:
+    if newInfo:
+      row.dec
+    tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg} -style Golden.TLabel")
+  if newInfo:
+    tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+    row.inc
+
 proc setModuleInfo(installing: bool; row: var Positive;
     newInfo: bool = true) {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
@@ -662,34 +703,8 @@ proc setModuleInfo(installing: bool; row: var Positive;
     setEngineInfo(installing = installing, row = row, newInfo = newInfo,
       shipModuleIndex = shipModuleIndex, value = value, maxValue = maxValue)
   of cargo:
-    if newInfo:
-      moduleLabel = ".moduledialog.cargolbl"
-      tclEval(script = "ttk::label " & moduleLabel & " -text {Max cargo: }")
-      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
-      moduleLabel = ".moduledialog.cargo"
-      tclEval(script = "ttk::label " & moduleLabel)
-    else:
-      moduleLabel = ".moduledialog.cargo"
-    if installing and shipModuleIndex > -1:
-      try:
-        if maxValue > modulesList[playerShip.modules[
-            shipModuleIndex].protoIndex].maxValue:
-          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg (bigger)} -style Headergreen.TLabel")
-        elif maxValue < modulesList[playerShip.modules[
-            shipModuleIndex].protoIndex].maxValue:
-          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg (smaller)} -style Headerred.TLabel")
-        else:
-          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg} -style Golden.TLabel")
-      except:
-        showError(message = "Can't show module weight")
-        return
-    else:
-      if newInfo:
-        row.dec
-      tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg} -style Golden.TLabel")
-    if newInfo:
-      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
-      row.inc
+    setCargoInfo(installing = installing, row = row, newInfo = newInfo,
+      shipModuleIndex = shipModuleIndex, maxValue = maxValue)
   of cabin:
     if newInfo:
       moduleLabel = ".moduledialog.qualitylbl"
