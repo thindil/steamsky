@@ -1435,7 +1435,6 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
     nkStrokeTriangle(b = `out`, x0 = points[0].x, y0 = points[0].y,
       x1 = points[1].x, y1 = points[1].y, x2 = points[2].x, y2 = points[2].y,
       lineThickness = borderWidth, c = foreground)
-    # TODO: continue here after nkStrokeTriangle
   else:
     discard
 
@@ -1464,7 +1463,6 @@ proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: var NimRe
   sym = nk_rgb_factor(col = sym, factor = style.color_factor_text)
   nkDrawSymbol(`out` = `out`, `type` = `type`, content = content,
     background = bg, foreground = sym, borderWidth = 1, font = font)
-  # TODO: continue here after nkDrawSymbol
 
 proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds: var NimRect,
   symbol: SymbolType; behavior: ButtonBehavior; style: ptr nk_style_button;
@@ -1493,7 +1491,6 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds:
     #   style.draw_begin(b = `out`, style.userdata)
     nkDrawButtonSymbol(`out` = `out`, bounds = bounds, content = content,
       state = state, style = style, `type` = symbol, font = font)
-    # TODO: continue here after nkDrawButtonSymbol
     # TODO
     # if style.draw_end != nil:
     #   style.draw_end(b = `out`, style.userdata)
@@ -1749,7 +1746,11 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
           font = style.font) and not(win.flags and windowRom.cint).nk_bool:
           layout.flags = layout.flags or windowHidden.cint
           layout.flags = layout.flags and not windowMinimized.cint
-    # TODO: continue here after nkDoButtonSymbol
+
+      # window minimize button
+      if (win.flags and windowMinimizable.cint).nk_bool:
+        var ws: nk_flags = 0
+    # TODO: continue here
     return true
 
 # ------
