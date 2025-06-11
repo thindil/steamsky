@@ -87,7 +87,7 @@ proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   moneyText = @[]
   moneyWidth = @[]
   if moneyIndex == -1:
-    moneyText.add(y = "You don't have " & moneyName & " to buy anything")
+    moneyText.add(y = "You don't have any " & moneyName & " to pay for learning")
   else:
     moneyText.add(y = "You have ")
     moneyText.add(y = $playerShip.cargo[moneyIndex2].amount & " " & moneyName)
