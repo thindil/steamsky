@@ -18,9 +18,10 @@
 ## Provides code related to the information about the player's ship, like
 ## minimizing/maximizin its sections, setting the ship's name, etc.
 
-import ../[game, tk]
+import std/tables
 import contracts, nimalyzer
-import coreui, errordialog, shipsuicargo, shipsuicrew, shipsuimodules, showshipinfo
+import ../[game, tk]
+import coreui, dialogs, errordialog, shipsuicargo, shipsuicrew, shipsuimodules, showshipinfo
 
 proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
@@ -132,6 +133,28 @@ proc shipMoreCommand(clientData: cint; interp: PInterp; argc: cint;
         $argv[1] & " show}")
   return tclOk
 
+proc showFactionInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect], cdecl, contractual.} =
+  ## Show information about the selected faction
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowFactionInfo factionIndex
+  ## FactionIndex is the index of the faction to show
+  try:
+    showInfo(text = factionsList[$argv[1]].description, parentName = $argv[2],
+        title = factionsList[$argv[1]].name)
+  except:
+    return showError(message = "Can't show information about the faction.")
+  return tclOk
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect,
     TimeEffect, RootEffect], contractual.} =
   ## Adds Tcl commands related to the wait menu
@@ -143,5 +166,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect,
     addCommand(name = "SetShipName", nimProc = setShipNameCommand)
     addCommand(name = "ShipMaxMin", nimProc = shipMaxMinCommand)
     addCommand(name = "ShipMore", nimProc = shipMoreCommand)
+    addCommand(name = "ShowFactionInfo", nimProc = showFactionInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
