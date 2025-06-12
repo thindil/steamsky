@@ -19,12 +19,49 @@
 ## executing a wait command, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game2, shipsmovement]
+import ../[config, game, game2, shipsmovement, types]
 import coreui, errordialog
+
+type
+  WaitReason = enum
+    rest, heal
 
 var
   waitAmount: Positive = 1
   waitInterval: Natural = 0
+  needRest, needHealing: bool = false
+
+proc setWaitMenu*() {.raises: [], tags: [], contractual.} =
+  ## Set the buttons to wait until crew is rested or healed
+  for index, member in playerShip.crew:
+    if member.tired > 0 and member.order == rest:
+      needRest = true
+    if member.health in 1 .. 99 and member.order == rest:
+      for module in playerShip.modules:
+        if module.mType == ModuleType2.cabin:
+          for owner in module.owner:
+            if owner == index:
+              needHealing = true
+              break
+
+proc wait(minutes: Positive): GameDialog {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Wait in place by selected in-game minutes
+  ##
+  ## * minutes - the amount of minutes to wait
+  try:
+    updateGame(minutes = minutes)
+    waitInPlace(minutes = minutes)
+  except:
+    return setError(message = "Can't wait in place.")
+  return none
+
+proc waitReason(reason: WaitReason): GameDialog {.raises: [], tags: [],
+    contractual.} =
+  ## Wait in place for some time, depends on the reason
+  ##
+  ## * reason - the reason to wait, resting or wounded crew members
+  return none
 
 proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -33,17 +70,6 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog if error happened or menu has closed.
-
-  proc wait(minutes: Positive): GameDialog {.raises: [], tags: [RootEffect], contractual.} =
-    ## Wait in place by selected in-game minutes
-    ##
-    ## * minutes - the amount of minutes to wait
-    try:
-      updateGame(minutes = minutes)
-      waitInPlace(minutes = minutes)
-    except:
-      return setError(message = "Can't wait in place.")
-    return none
 
   const windowName: string = "Wait in place"
   window(name = windowName, x = windowWidth / 4, y = windowHeight / 4,
@@ -106,6 +132,18 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if newInterval != waitInterval:
       waitInterval = newInterval
     setLayoutRowDynamic(30, 1)
+    if needRest:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Wait in place until the whole ship's crew is rested")
+      labelButton(title = "Wait until crew is rested"):
+        dialog = waitReason(reason = rest)
+    if needHealing:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Wait in place until the whole ship's crew is healed. Can take a large amount of time")
+      labelButton(title = "Wait until crew is healed"):
+        dialog = waitReason(reason = heal)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Close dialog")
