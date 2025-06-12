@@ -64,7 +64,9 @@ enemy ships.
 <!--
 - Tag "description": In game description of item. Can have any value.
 -->
-  <description>Federation of independent sky bases. This is biggest faction of all, almost all bases belongs to this faction. Their favorite melee weapons are one handed swords. Their unique base is Agora - a place which sells random items, where you can recruit new crew members cheaper and upgrade ships. Easiest to play, recommended especially for new players.</description>
+  <description>Federation of independent sky bases. This is biggest faction of all, almost all bases belongs to this faction. Their favorite melee weapons are one handed swords. Their unique base is Agora - a place which sells random items, where you can recruit new crew members cheaper and upgrade ships.
+
+Easiest to play, recommended especially for new players.</description>
 <!--
 - Tags "foodtype": Types of items used as food by this faction members. If
 no "foodtype" tags inside faction, that faction members can't be hungry.
@@ -132,7 +134,9 @@ between 51 and 70 it will be second base type.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" minreputation="-40" maxreputation="-25" friendly="N" />
-  <description>Group of sky bases independent from each other, not connected in any way with each other. Their favorite melee weapons are spears. Their unique base is Market - a place which sells random items and allows you to upgrade your ship. Bases of this faction are much less common than Poleis, and are rarely near other Independent bases. Gameplay is harder than Poleis due to fewer sky bases, but generally very similar.</description>
+  <description>Group of sky bases independent from each other, not connected in any way with each other. Their favorite melee weapons are spears. Their unique base is Market - a place which sells random items and allows you to upgrade your ship. Bases of this faction are much less common than Poleis, and are rarely near other Independent bases.
+
+Gameplay is harder than Poleis due to fewer sky bases, but generally very similar.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
@@ -169,7 +173,9 @@ bases of that faction are not grouped near self.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
-  <description>Group of independent bases, whose inhabitants live from attacking other ships and stealing their cargo. Their favorite melee weapons are rapiers. Their unique base is Black Market - a place which sells random items. Bases of this faction are much less common than Poleis and rarely near other Pirate bases. Gameplay is much harder than Poleis due to fewer sky bases, and the negative reputation of Pirates with other factions.</description>
+  <description>Group of independent bases, whose inhabitants live from attacking other ships and stealing their cargo. Their favorite melee weapons are rapiers. Their unique base is Black Market - a place which sells random items. Bases of this faction are much less common than Poleis and rarely near other Pirate bases.
+
+Gameplay is much harder than Poleis due to fewer sky bases, and the negative reputation of Pirates with other factions.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
@@ -191,7 +197,9 @@ bases of that faction are not grouped near self.
   <relation faction="UNDEAD" reputation="0" friendly="Y" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
-  <description>Small group of connected together bases which are settled by undead beings. Members of this faction attack anything which does not belongs to it. Their main advantages are that they don't need food or drinks to survive, they are immune to diseases, and they don't need rest but they can't self regenerate health and they take less damage in melee combat but when they attack without weapon then, they can do a much more damage to not immune to diseases factions members. Their morale is always the same. Their unique base is Barracks - a place where you can more cheaply recruit new crew members. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to fewer sky bases and the negative reputation of Undead with other factions.</description>
+  <description>Small group of connected together bases which are settled by undead beings. Members of this faction attack anything which does not belongs to it. Their main advantages are that they don't need food or drinks to survive, they are immune to diseases, and they don't need rest but they can't self regenerate health and they take less damage in melee combat but when they attack without weapon then, they can do a much more damage to not immune to diseases factions members. Their morale is always the same. Their unique base is Barracks - a place where you can more cheaply recruit new crew members. Bases of this faction are much less common than Poleis.
+
+Gameplay is harder than Poleis due to fewer sky bases and the negative reputation of Undead with other factions.</description>
   <flag name="diseaseimmune" />
   <flag name="nofatigue" />
   <flag name="nomorale" />
@@ -213,7 +221,9 @@ bases of that faction are not grouped near self.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="0" friendly="Y" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
-  <description>Small group of connected together bases which are settled by sentient, mechanical drones. Members of this faction attacks everything except their confreres. They favorite melee weapons are two handed hammers. They use ships fuel as food but don't need to drink to survive and they don't need rest but they can't self regenerate health. Additionally, they are immune to diseases and they take less damage in melee combat. They ships can fly without pilots and engineers (both are optional, experienced can made travel faster). They use bronze plates and engineering skill for healing self. They morale is always that same. They have different names than other factions for everything too. They don't have access to Industrial and Shipyard types of bases, but have unique base type Factory - place which merge both types of bases. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Drones with other factions.</description>
+  <description>Small group of connected together bases which are settled by sentient, mechanical drones. Members of this faction attacks everything except their confreres. They favorite melee weapons are two handed hammers. They use ships fuel as food but don't need to drink to survive and they don't need rest but they can't self regenerate health. Additionally, they are immune to diseases and they take less damage in melee combat. They ships can fly without pilots and engineers (both are optional, experienced can made travel faster). They use bronze plates and engineering skill for healing self. They morale is always that same. They have different names than other factions for everything too. They don't have access to Industrial and Shipyard types of bases, but have unique base type Factory - place which merge both types of bases. Bases of this faction are much less common than Poleis.
+
+Gameplay is harder than Poleis due to less sky bases and negative reputation of Drones with other factions.</description>
   <foodtype name="Fuel" />
   <flag name="nogender" />
   <flag name="diseaseimmune" />
@@ -237,7 +247,9 @@ bases of that faction are not grouped near self.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="0" friendly="Y" />
-  <description>Group of connected together sky bases whose inhabitants are devoted to destroy all infidels around the world. Bases of this faction are much less common than Poleis. Their favorite melee weapons are two handed swords. They are know for their very high morale, they easily go into euphoria and almost never into despair. Their unique base type is Temple - a place where you can raise the morale of your crew by praying. Gameplay is much harder than Poleis due to fewer sky bases and the negative reputation of Inquisition with other factions.</description>
+  <description>Group of connected together sky bases whose inhabitants are devoted to destroy all infidels around the world. Bases of this faction are much less common than Poleis. Their favorite melee weapons are two handed swords. They are know for their very high morale, they easily go into euphoria and almost never into despair. Their unique base type is Temple - a place where you can raise the morale of your crew by praying.
+
+Gameplay is much harder than Poleis due to fewer sky bases and the negative reputation of Inquisition with other factions.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
