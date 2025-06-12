@@ -21,7 +21,7 @@
 import std/[colors, math, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, messages, shipscargo, shipsmovement, types]
-import coreui, dialogs, errordialog, themes
+import coreui, dialogs, errordialog, themes, waitmenu
 
 proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -431,6 +431,7 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       if playerShip.crew[0].health > 0 and not inCombat:
         labelButton(title = "Wait orders"):
           setDialog()
+          setWaitMenu()
           dialog = waitDialog
       labelButton(title = "Game statistics"):
         discard
