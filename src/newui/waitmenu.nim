@@ -19,7 +19,7 @@
 ## executing a wait command, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, game2, shipsmovement, types]
+import ../[config, crew2, game, game2, shipsmovement, types]
 import coreui, errordialog
 
 type
@@ -56,12 +56,32 @@ proc wait(minutes: Positive): GameDialog {.raises: [], tags: [RootEffect],
     return setError(message = "Can't wait in place.")
   return none
 
-proc waitReason(reason: WaitReason): GameDialog {.raises: [], tags: [],
-    contractual.} =
+proc waitReason(reason: WaitReason): GameDialog {.raises: [], tags: [
+    WriteIOEffect, RootEffect], contractual.} =
   ## Wait in place for some time, depends on the reason
   ##
   ## * reason - the reason to wait, resting or wounded crew members
-  return none
+  if reason == rest:
+    try:
+      waitForRest()
+      return none
+    except:
+      return setError(message = "Can't wait until crew is rested.")
+  else:
+    var timeNeeded: Natural = 0
+    for index, member in playerShip.crew:
+      if member.health in 1..99 and member.order == rest:
+        block checkModules:
+          for module in playerShip.modules:
+            if module.mType == ModuleType2.cabin:
+              for owner in module.owner:
+                if owner == index:
+                  if timeNeeded < (100 - member.health) * 15:
+                    timeNeeded = (100 - member.health) * 15
+                    break checkModules
+    if timeNeeded == 0:
+      return none
+    return wait(minutes = timeNeeded)
 
 proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
