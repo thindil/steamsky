@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -112,7 +112,7 @@ proc loadHelp*(fileName: string) {.raises: [DataLoadingError,
     for faction in factionsList.values:
       if faction.careers.len > 0:
         helpEntry.text.add(y = "{b}" & faction.name & "{/b}\n    " &
-            faction.description & "\n    {i}Relations{/i}\n")
+            faction.description[0..faction.description.rfind(sub = '\n') - 1] & "\n    {i}Relations{/i}\n")
         for index, relation in faction.relations:
           helpEntry.text.add(y = "        " & factionsList[index].name & ": " &
               (if relation.friendly: "Friendly" else: "Enemies") & "\n")
