@@ -191,8 +191,8 @@ type
     padding*, label_padding*, spacing*: nk_vec2
     active*, hover*, normal*: nk_style_item
     label_active*, label_hover*, label_normal*: nk_color
-    close_symbol*: SymbolType
-    close_button*: nk_style_button
+    close_symbol*, minimize_symbol*, maximize_symbol*: SymbolType
+    close_button*, minimize_button*, maximize_button*: nk_style_button
   nk_style_window* {.importc, nodecl.} = object
     ## Internal Nuklear type
     header*: nk_style_window_header

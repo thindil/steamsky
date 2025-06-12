@@ -1750,6 +1750,23 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       # window minimize button
       if (win.flags and windowMinimizable.cint).nk_bool:
         var ws: nk_flags = 0
+        if style.window.header.align == headerRight:
+          button.x = (header.w + header.x) - button.w
+          if not (win.flags and windowClosable.cint).nk_bool:
+            button.x -= style.window.header.padding.x
+            header.w -= style.window.header.padding.x
+          header.w -= button.w + style.window.header.spacing.x
+        else:
+          button.x = header.x
+          header.x += button.w + style.window.header.spacing.x +
+            style.window.header.padding.x
+        if nkDoButtonSymbol(state = ws, `out` = win.buffer.addr, bounds = button,
+          symbol = if (layout.flags and windowMinimized.cint).nk_bool:
+          style.window.header.maximizeSymbol else:
+          style.window.header.minimizeSymbol, behavior = default,
+          style = style.window.header.minimize_button.addr, `in` = `in`.addr,
+          font = style.font) and not(win.flags and windowRom.cint).nk_bool:
+            discard
     # TODO: continue here
     return true
 
