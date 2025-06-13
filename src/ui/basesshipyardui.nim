@@ -620,6 +620,49 @@ proc setCabinInfo(installing: bool; row: var Positive; newInfo: bool;
     tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
   row.inc
 
+proc setWorkshopInfo(installing: bool; row: var Positive; newInfo: bool;
+  shipModuleIndex: int; maxOwners: Natural) {.raises: [],
+  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show information about the selected workshop module
+  ##
+  ## * installing      - If true, player looking at installing modules list
+  ## * row             - The current row in the dialog
+  ## * newInfo         - If true, create the new UI for the info, otherwise reuse
+  ##                     old one. Default value is true.
+  ## * shipModuleIndex - The index of the module in the player's ship to show
+  ## * maxOwners       - The maximum amount of workers in the workshop
+  var moduleLabel: string = ""
+  if newInfo:
+    moduleLabel = ".moduledialog.workerslbl"
+    tclEval(script = "ttk::label " & moduleLabel & " -text {Max workers:}")
+    tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+    if installing and shipModuleIndex == -1:
+      row.inc
+    moduleLabel = ".moduledialog.workers"
+    tclEval(script = "ttk::label " & moduleLabel)
+  else:
+    moduleLabel = ".moduledialog.workers"
+  if installing and shipModuleIndex > -1:
+    try:
+      if modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxOwners > maxOwners:
+        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (less)} -style Headerred.TLabel")
+      elif modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxOwners < maxOwners:
+        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (more)} -style Headergreen.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
+    except:
+      showError(message = "Can't show module workers")
+      return
+  else:
+    if newInfo:
+      row.dec
+    tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
+  if newInfo:
+    tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+    row.inc
+
 proc setModuleInfo(installing: bool; row: var Positive;
     newInfo: bool = true) {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
@@ -801,36 +844,8 @@ proc setModuleInfo(installing: bool; row: var Positive;
       shipModuleIndex = shipModuleIndex, maxValue = maxValue,
       maxOwners = maxOwners)
   of alchemyLab..greenhouse:
-    if newInfo:
-      moduleLabel = ".moduledialog.workerslbl"
-      tclEval(script = "ttk::label " & moduleLabel & " -text {Max workers:}")
-      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
-      if installing and shipModuleIndex == -1:
-        row.inc
-      moduleLabel = ".moduledialog.workers"
-      tclEval(script = "ttk::label " & moduleLabel)
-    else:
-      moduleLabel = ".moduledialog.workers"
-    if installing and shipModuleIndex > -1:
-      try:
-        if modulesList[playerShip.modules[
-            shipModuleIndex].protoIndex].maxOwners > maxOwners:
-          tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (less)} -style Headerred.TLabel")
-        elif modulesList[playerShip.modules[
-            shipModuleIndex].protoIndex].maxOwners < maxOwners:
-          tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (more)} -style Headergreen.TLabel")
-        else:
-          tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
-      except:
-        showError(message = "Can't show module workers")
-        return
-    else:
-      if newInfo:
-        row.dec
-      tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
-    if newInfo:
-      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
-      row.inc
+    setWorkshopInfo(installing = installing, row = row, newInfo = newInfo,
+      shipModuleIndex = shipModuleIndex, maxOwners = maxOwners)
   of gun, harpoonGun:
     if newInfo:
       moduleLabel = ".moduledialog.strengthlbl"
