@@ -33,6 +33,8 @@ var
 
 proc setWaitMenu*() {.raises: [], tags: [], contractual.} =
   ## Set the buttons to wait until crew is rested or healed
+  needRest = false
+  needHealing = false
   for index, member in playerShip.crew:
     if member.tired > 0 and member.order == rest:
       needRest = true
@@ -52,6 +54,7 @@ proc wait(minutes: Positive): GameDialog {.raises: [], tags: [RootEffect],
   try:
     updateGame(minutes = minutes)
     waitInPlace(minutes = minutes)
+    setWaitMenu()
   except:
     return setError(message = "Can't wait in place.")
   return none
@@ -64,6 +67,7 @@ proc waitReason(reason: WaitReason): GameDialog {.raises: [], tags: [
   if reason == rest:
     try:
       waitForRest()
+      setWaitMenu()
       return none
     except:
       return setError(message = "Can't wait until crew is rested.")
@@ -92,8 +96,13 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameters dialog if error happened or menu has closed.
 
   const windowName: string = "Wait in place"
+  var height: float = 320
+  if needRest:
+    height += 34
+  if needHealing:
+    height += 34
   window(name = windowName, x = windowWidth / 4, y = windowHeight / 4,
-      w = 320, h = 320, flags = {windowBorder, windowTitle,
+      w = 320, h = height, flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(30, 1)
     if gameSettings.showTooltips:
