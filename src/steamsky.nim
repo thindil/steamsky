@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -18,7 +18,7 @@
 ## The main game module. Read the game configuration, command line arguments,
 ## initialize graphic and start the game.
 
-import std/[os, parseopt, strutils]
+import std/[os, parseopt, segfaults, strutils]
 import contracts
 import config, halloffame, game, log, tk
 import ui/[mainmenu, themes]

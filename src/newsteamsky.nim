@@ -18,7 +18,7 @@
 ## The main game module. Read the game configuration, command line arguments,
 ## initialize graphic and start the game.
 
-import std/[os, parseopt, strutils, tables, times]
+import std/[os, parseopt, segfaults, strutils, tables, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
 import newui/[basesschoolui, basesrecruitui, combatui, coreui, errordialog,
