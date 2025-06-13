@@ -18,9 +18,9 @@
 ## Provides code related to the information about the player's ship, like
 ## minimizing/maximizin its sections, setting the ship's name, etc.
 
-import std/tables
+import std/[strutils, tables]
 import contracts, nimalyzer
-import ../[game, tk]
+import ../[game, tk, types]
 import coreui, dialogs, errordialog, shipsuicargo, shipsuicrew, shipsuimodules, showshipinfo
 
 proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -149,8 +149,9 @@ proc showFactionInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowFactionInfo factionIndex
   ## FactionIndex is the index of the faction to show
   try:
-    showInfo(text = factionsList[$argv[1]].description, parentName = $argv[2],
-        title = factionsList[$argv[1]].name)
+    let faction: FactionData = factionsList[$argv[1]]
+    showInfo(text = faction.description[0..faction.description.rfind(
+        sub = '\n') - 1], parentName = $argv[2], title = faction.name)
   except:
     return showError(message = "Can't show information about the faction.")
   return tclOk
