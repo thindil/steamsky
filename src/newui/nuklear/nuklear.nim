@@ -1766,7 +1766,16 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
           style.window.header.minimizeSymbol, behavior = default,
           style = style.window.header.minimize_button.addr, `in` = `in`.addr,
           font = style.font) and not(win.flags and windowRom.cint).nk_bool:
-            discard
+            layout.flags = if (layout.flags and windowMinimized.cint).nk_bool:
+              layout.flags and not windowMinimized.cint else:
+              layout.flags or windowMinimized.cint
+
+      # window header title
+      let t: float = try:
+          font.width(arg1 = font.userdata, h = font.height,
+            arg3 = title.cstring, len = title.len.cint)
+        except:
+          return false
     # TODO: continue here
     return true
 
