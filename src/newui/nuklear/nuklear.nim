@@ -1776,6 +1776,15 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
             arg3 = title.cstring, len = title.len.cint)
         except:
           return false
+      text.padding = new_nk_vec2(x = 0, y = 0)
+      var label: nk_rect = new_nk_rect(x = 0, y = 0, w = 0, h = 0)
+
+      label.x = header.x + style.window.header.padding.x
+      label.x += style.window.header.label_padding.x
+      label.y = header.y + style.window.header.label_padding.y
+      label.h = font.height + 2 * style.window.header.label_padding.y
+      label.w = t + 2 * style.window.header.spacing.x
+      label.w = (0.float).clamp(a = label.w, b = header.x + header.w - label.x)
     # TODO: continue here
     return true
 
