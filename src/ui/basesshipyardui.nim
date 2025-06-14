@@ -663,6 +663,110 @@ proc setWorkshopInfo(installing: bool; row: var Positive; newInfo: bool;
     tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
     row.inc
 
+proc setGunInfo(installing: bool; row: var Positive; newInfo: bool;
+  shipModuleIndex: int; speed: int; value, maxValue: Natural;
+  mType: ModuleType) {.raises: [],
+  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show information about the selected gun or harpoon gun module
+  ##
+  ## * installing      - If true, player looking at installing modules list
+  ## * row             - The current row in the dialog
+  ## * newInfo         - If true, create the new UI for the info, otherwise reuse
+  ##                     old one. Default value is true.
+  ## * shipModuleIndex - The index of the module in the player's ship to show
+  ## * speed           - The shooting speed of the gun
+  ## * value           - The type of ammunition used
+  ## * maxValue        - The damage done by the gun
+  var moduleLabel: string = ""
+  if newInfo:
+    moduleLabel = ".moduledialog.strengthlbl"
+    tclEval(script = "ttk::label " & moduleLabel & " -text {Strength: }")
+    tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+    if installing and shipModuleIndex == -1:
+      row.inc
+    moduleLabel = ".moduledialog.strength"
+    tclEval(script = "ttk::label " & moduleLabel)
+  else:
+    moduleLabel = ".moduledialog.strength"
+  if installing and shipModuleIndex > -1:
+    if mType == ModuleType.gun:
+      if playerShip.modules[shipModuleIndex].damage > maxValue:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (weaker)} -style Headerred.TLabel")
+      elif playerShip.modules[shipModuleIndex].damage < maxValue:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (stronger)} -style Headergreen.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+    else:
+      if playerShip.modules[shipModuleIndex].duration > maxValue:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (weaker)} -style Headerred.TLabel")
+      elif playerShip.modules[shipModuleIndex].duration < maxValue:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (stronger)} -style Headergreen.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+  else:
+    row.dec
+    tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+  if newInfo:
+    tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+    row.inc
+    moduleLabel = ".moduledialog.ammolbl"
+    tclEval(script = "ttk::label " & moduleLabel & " -text {Ammunition: }")
+    tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+    moduleLabel = ".moduledialog.ammo"
+    tclEval(script = "ttk::label " & moduleLabel)
+  else:
+    moduleLabel = ".moduledialog.ammo"
+  for item in itemsList.values:
+    if item.itemType == itemsTypesList[value - 1]:
+      tclEval(script = moduleLabel & " configure -text {Any" & item.name[
+          item.name.find(sub = ' ')..^1] & "} -style Golden.TLabel")
+      if newInfo:
+        tclEval(script = "grid " & moduleLabel &
+            " -sticky w -column 1 -row " & $row)
+        row.inc
+      break
+  if mType == ModuleType.gun:
+    if newInfo:
+      moduleLabel = ".moduledialog.ratelbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Max fire rate: }")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      moduleLabel = ".moduledialog.rate"
+      tclEval(script = "ttk::label " & moduleLabel)
+    else:
+      moduleLabel = ".moduledialog.rate"
+    if installing and shipModuleIndex > -1:
+      try:
+        if modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed > speed:
+          if speed > 0:
+            tclEval(script = moduleLabel & " configure -text {" & $speed & "/round (slower)} -style Headerred.TLabel")
+          else:
+            tclEval(script = moduleLabel & " configure -text {" & $(
+                speed.abs) & " rounds (slower)} -style Headerred.TLabel")
+        elif modulesList[playerShip.modules[
+            shipModuleIndex].protoIndex].speed < speed:
+          if speed > 0:
+            tclEval(script = moduleLabel & " configure -text {" & $speed & "/round (faster)} -style Headergreen.TLabel")
+          else:
+            tclEval(script = moduleLabel & " configure -text {" & $(
+                speed.abs) & " rounds (faster)} -style Headergreen.TLabel")
+        else:
+          if speed > 0:
+            tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
+          else:
+            tclEval(script = moduleLabel & " configure -text {" & $(
+                speed.abs) & " rounds} -style Golden.TLabel")
+      except:
+        showError(message = "Can't show fire rate")
+        return
+    else:
+      if speed > 0:
+        tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $(speed.abs) & " rounds} -style Golden.TLabel")
+    if newInfo:
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+      row.inc
+
 proc setModuleInfo(installing: bool; row: var Positive;
     newInfo: bool = true) {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
@@ -847,94 +951,9 @@ proc setModuleInfo(installing: bool; row: var Positive;
     setWorkshopInfo(installing = installing, row = row, newInfo = newInfo,
       shipModuleIndex = shipModuleIndex, maxOwners = maxOwners)
   of gun, harpoonGun:
-    if newInfo:
-      moduleLabel = ".moduledialog.strengthlbl"
-      tclEval(script = "ttk::label " & moduleLabel & " -text {Strength: }")
-      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
-      if installing and shipModuleIndex == -1:
-        row.inc
-      moduleLabel = ".moduledialog.strength"
-      tclEval(script = "ttk::label " & moduleLabel)
-    else:
-      moduleLabel = ".moduledialog.strength"
-    if installing and shipModuleIndex > -1:
-      if mType == ModuleType.gun:
-        if playerShip.modules[shipModuleIndex].damage > maxValue:
-          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (weaker)} -style Headerred.TLabel")
-        elif playerShip.modules[shipModuleIndex].damage < maxValue:
-          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (stronger)} -style Headergreen.TLabel")
-        else:
-          tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
-      else:
-        if playerShip.modules[shipModuleIndex].duration > maxValue:
-          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (weaker)} -style Headerred.TLabel")
-        elif playerShip.modules[shipModuleIndex].duration < maxValue:
-          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (stronger)} -style Headergreen.TLabel")
-        else:
-          tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
-    else:
-      row.dec
-      tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
-    if newInfo:
-      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
-      row.inc
-      moduleLabel = ".moduledialog.ammolbl"
-      tclEval(script = "ttk::label " & moduleLabel & " -text {Ammunition: }")
-      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
-      moduleLabel = ".moduledialog.ammo"
-      tclEval(script = "ttk::label " & moduleLabel)
-    else:
-      moduleLabel = ".moduledialog.ammo"
-    for item in itemsList.values:
-      if item.itemType == itemsTypesList[value - 1]:
-        tclEval(script = moduleLabel & " configure -text {Any" & item.name[
-            item.name.find(sub = ' ')..^1] & "} -style Golden.TLabel")
-        if newInfo:
-          tclEval(script = "grid " & moduleLabel &
-              " -sticky w -column 1 -row " & $row)
-          row.inc
-        break
-    if mType == ModuleType.gun:
-      if newInfo:
-        moduleLabel = ".moduledialog.ratelbl"
-        tclEval(script = "ttk::label " & moduleLabel & " -text {Max fire rate: }")
-        tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
-        moduleLabel = ".moduledialog.rate"
-        tclEval(script = "ttk::label " & moduleLabel)
-      else:
-        moduleLabel = ".moduledialog.rate"
-      if installing and shipModuleIndex > -1:
-        try:
-          if modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed > speed:
-            if speed > 0:
-              tclEval(script = moduleLabel & " configure -text {" & $speed & "/round (slower)} -style Headerred.TLabel")
-            else:
-              tclEval(script = moduleLabel & " configure -text {" & $(
-                  speed.abs) & " rounds (slower)} -style Headerred.TLabel")
-          elif modulesList[playerShip.modules[
-              shipModuleIndex].protoIndex].speed < speed:
-            if speed > 0:
-              tclEval(script = moduleLabel & " configure -text {" & $speed & "/round (faster)} -style Headergreen.TLabel")
-            else:
-              tclEval(script = moduleLabel & " configure -text {" & $(
-                  speed.abs) & " rounds (faster)} -style Headergreen.TLabel")
-          else:
-            if speed > 0:
-              tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
-            else:
-              tclEval(script = moduleLabel & " configure -text {" & $(
-                  speed.abs) & " rounds} -style Golden.TLabel")
-        except:
-          showError(message = "Can't show fire rate")
-          return
-      else:
-        if speed > 0:
-          tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
-        else:
-          tclEval(script = moduleLabel & " configure -text {" & $(speed.abs) & " rounds} -style Golden.TLabel")
-      if newInfo:
-        tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
-        row.inc
+    setGunInfo(installing = installing, row = row, newInfo = newInfo,
+      shipModuleIndex = shipModuleIndex, speed = speed, value = value,
+      maxValue = maxValue, mType = mType)
   of batteringRam:
     if newInfo:
       if installing and shipModuleIndex == -1:
