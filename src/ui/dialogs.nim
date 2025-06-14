@@ -18,7 +18,7 @@
 ## Provides code related to creating, showing and destroying various in game
 ## dialogs, like messages, items information, etc
 
-import std/strutils
+import std/[strutils, wordwrap]
 import contracts
 import ../[config, game, tk]
 import coreui, errordialog
@@ -198,8 +198,9 @@ proc showQuestion*(question, res: string; inGame: bool = true) {.raises: [],
 
 proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     button1: ButtonSettings = emptyButtonSettings;
-    button2: ButtonSettings = emptyButtonSettings) {.raises: [],
-        tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+    button2: ButtonSettings = emptyButtonSettings; wrap: bool = false;
+    relativeX: float = 0.3; relativeY: float = 0.3) {.raises: [], tags: [
+    WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the dialog with the selected text to the player
   ##
   ## * text       - the text to show in the dialog. Can use special tags for colors,
@@ -230,8 +231,12 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
   while true:
     if tagIndex == -1:
       tagIndex = text.len
-    tclEval(script = infoLabel & " insert end {" & text[startIndex..tagIndex -
-        1] & "}")
+    if wrap:
+      tclEval(script = infoLabel & " insert end {" & text[startIndex..tagIndex -
+          1].wrapWords(maxLineWidth = 35) & "}")
+    else:
+      tclEval(script = infoLabel & " insert end {" & text[startIndex..tagIndex -
+          1] & "}")
     if tagIndex == text.len:
       break
     startIndex = tagIndex
@@ -288,7 +293,7 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
   elif button1.text.len > 0 and button1.command.len > 0:
     tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button1;break}")
   tclEval(script = "grid " & buttonsFrame & " -padx 5 -pady 5")
-  showDialog(dialog = infoDialog)
+  showDialog(dialog = infoDialog, relativeX = relativeX, relativeY = relativeY)
 
 proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
     maxAmount: Natural = 0; cost: Natural = 0) {.raises: [], tags: [],
