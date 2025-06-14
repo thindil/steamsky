@@ -211,6 +211,12 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
   ##                the button will not shown
   ## * button2    - the settings for the second optional button. If empty,
   ##                the button will not shown
+  ## * wrap       - if true, use Nim word wrapping instead of Tcl. Needed for
+  ##                very long texts. Default disabled
+  ## * relativeX  - the relative X coordinate of the dialog inside its parent
+  ##                frame. 0.0 is the left border
+  ## * relativeY  - the relative Y coordinate of the dialog inside its parent
+  ##                frame. 0.0 is the top border
   let
     infoDialog: string = createDialog(name = ".info", title = title,
         titleWidth = 275, columns = 3, parentName = parentName)
