@@ -586,64 +586,67 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 
 var mapX, mapY: Natural = 0
 
-proc showDestinationMenu*(dialog: var GameDialog) {.raises: [], tags: [
+proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the menu for setting a destination for the player's ship
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  const width: float = 250
-  var height: float = 0
-  if playerShip.speed == docked:
-    height = 115
-  else:
-    if playerShip.destinationX > 0 and playerShip.destinationY > 0:
-      height = 185
+  if dialog != destinationDialog:
+    return
+  try:
+    const width: float = 250
+    var height: float = 0
+    if playerShip.speed == docked:
+      height = 115
     else:
-      height = 150
-
-  proc closeDialog(dialog: var GameDialog) {.raises: [], tags: [],
-      contractual.} =
-    ## Close the destination menu dialog
-    ## * dialog - the current in-game dialog displayed on the screen
-    ##
-    ## Returns the reseted parameter dialog.
-    dialog = none
-    mapX = 0
-    mapY = 0
-
-  proc setDestination(dialog: var GameDialog) {.raises: [], tags: [],
-      contractual.} =
-    ## Set the new destination point for the player's ship
-    ##
-    ## * dialog - the current in-game dialog displayed on the screen
-    ##
-    ## Returns the reseted parameter dialog.
-    playerShip.destinationX = mapX
-    playerShip.destinationY = mapY
-    dialog = none
-
-  const windowName: string = "Set destination"
-  updateDialog(width = width, height = height)
-  window(name = "Set destination", x = dialogX,
-      y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
-      windowNoScrollbar}):
-    setLayoutRowDynamic(30, 1)
-    labelButton(title = "Set destination"):
-      setDestination(dialog = dialog)
-    if playerShip.speed != docked:
-      labelButton(title = "Set destination and move"):
-        setDestination(dialog = dialog)
-        discard moveShipOnMap(dialog = dialog)
       if playerShip.destinationX > 0 and playerShip.destinationY > 0:
-        labelButton(title = "Move to"):
-          closeDialog(dialog = dialog)
-          discard moveShipOnMap(dialog = dialog)
-    labelButton(title = "Close"):
+        height = 185
+      else:
+        height = 150
+
+    proc closeDialog(dialog: var GameDialog) {.raises: [], tags: [],
+        contractual.} =
+      ## Close the destination menu dialog
+      ## * dialog - the current in-game dialog displayed on the screen
+      ##
+      ## Returns the reseted parameter dialog.
+      closePopup()
+      dialog = none
+      mapX = 0
+      mapY = 0
+
+    proc setDestination(dialog: var GameDialog) {.raises: [], tags: [],
+        contractual.} =
+      ## Set the new destination point for the player's ship
+      ##
+      ## * dialog - the current in-game dialog displayed on the screen
+      ##
+      ## Returns the reseted parameter dialog.
+      playerShip.destinationX = mapX
+      playerShip.destinationY = mapY
       closeDialog(dialog = dialog)
 
-  windowSetFocus(name = windowName)
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = "Set destination", x = dialogX,
+        y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
+        windowNoScrollbar}):
+      setLayoutRowDynamic(30, 1)
+      labelButton(title = "Set destination"):
+        setDestination(dialog = dialog)
+      if playerShip.speed != docked:
+        labelButton(title = "Set destination and move"):
+          setDestination(dialog = dialog)
+          discard moveShipOnMap(dialog = dialog)
+        if playerShip.destinationX > 0 and playerShip.destinationY > 0:
+          labelButton(title = "Move to"):
+            closeDialog(dialog = dialog)
+            discard moveShipOnMap(dialog = dialog)
+      labelButton(title = "Close"):
+        closeDialog(dialog = dialog)
+  except:
+    dialog = setError(message = "Can't show the destination's menu")
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -657,6 +660,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   discard showHeader(dialog = dialog, state = state)
   # draw dialogs
   showShipOrders(dialog = dialog, state = state)
+  showDestinationMenu(dialog = dialog)
   # draw map
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
