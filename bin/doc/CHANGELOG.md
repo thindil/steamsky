@@ -3,11 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Faction's descriptions to the list of reputations in the ship's info screen
+
 ### Changed
 - Updated help
 - Updated descriptions of factions
 - Generating enemies and friendly ships now depends on the player's reputation
-  in factions instead of the player's ship's modules and ammunition.
+  in factions instead of the player's ship's modules and ammunition
 
 ### Fixed
 - Crash when starting a combat
