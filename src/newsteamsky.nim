@@ -137,10 +137,11 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         loadingGame: mainMenu.loadGame, newGame: mainMenu.newGame, map: showMap,
         endGame: backToMainMenu, combat: showCombat, boarding: showBoarding,
         trade: showTrade, school: showSchool, recruits: showRecruits]
-    showDialog: array[GameDialog.errorDialog..GameDialog.newGoalDialog, proc(
+    showDialog: array[GameDialog.errorDialog..GameDialog.defendingDialog, proc(
         dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
-        gameMenuDialog: showGameMenu, newGoalDialog: showGoals]
+        gameMenuDialog: showGameMenu, newGoalDialog: showGoals,
+        boardingDialog: showPartyMenu, defendingDialog: showPartyMenu]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
@@ -153,7 +154,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         resetTooltips()
 
       # Show dialogs if needed
-      if dialog in GameDialog.errorDialog..GameDialog.newGoalDialog:
+      if dialog in GameDialog.errorDialog..GameDialog.defendingDialog:
         showDialog[dialog](dialog = dialog)
 
       # The main window
