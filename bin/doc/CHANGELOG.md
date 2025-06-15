@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [11.2] - 2025-06-15
 
 ### Added
 - Faction's descriptions to the list of reputations in the ship's info screen
