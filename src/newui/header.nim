@@ -407,47 +407,46 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog.
-  try:
-    const
-      width: float = 200
-      height: float = 455
-    updateDialog(width = width, height = height)
-    window(name = "Game Menu", x = dialogX, y = dialogY,
-        w = width, h = height, flags = {windowBorder, windowTitle,
-        windowNoScrollbar}):
-      setLayoutRowDynamic(30, 1)
-      labelButton(title = "Ship information"):
+  const
+    width: float = 200
+    height: float = 455
+    windowName: string = "Game Menu"
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY,
+      w = width, h = height, flags = {windowBorder, windowTitle,
+      windowNoScrollbar}):
+    setLayoutRowDynamic(30, 1)
+    labelButton(title = "Ship information"):
+      discard
+    if playerShip.crew[0].health > 0 and not inCombat:
+      labelButton(title = "Ship orders"):
+        setDialog()
+        dialog = ordersDialog
+      labelButton(title = "Crafting"):
         discard
-      if playerShip.crew[0].health > 0 and not inCombat:
-        labelButton(title = "Ship orders"):
-          setDialog()
-          dialog = ordersDialog
-        labelButton(title = "Crafting"):
-          discard
-      labelButton(title = "Last messages"):
+    labelButton(title = "Last messages"):
+      discard
+    labelButton(title = "Knowledge lists"):
+      discard
+    if playerShip.crew[0].health > 0 and not inCombat:
+      labelButton(title = "Wait orders"):
+        setDialog()
+        setWaitMenu()
+        dialog = waitDialog
+    labelButton(title = "Game statistics"):
+      discard
+    if playerShip.crew[0].health > 0:
+      labelButton(title = "Help"):
         discard
-      labelButton(title = "Knowledge lists"):
+      labelButton(title = "Game options"):
         discard
-      if playerShip.crew[0].health > 0 and not inCombat:
-        labelButton(title = "Wait orders"):
-          setDialog()
-          setWaitMenu()
-          dialog = waitDialog
-      labelButton(title = "Game statistics"):
-        discard
-      if playerShip.crew[0].health > 0:
-        labelButton(title = "Help"):
-          discard
-        labelButton(title = "Game options"):
-          discard
-        labelButton(title = "Quit from game"):
-          dialog = setQuestion(question = "Are you sure want to quit?",
-              qType = quitGame)
-        labelButton(title = "Resign from game"):
-          dialog = setQuestion(question = "Are you sure want to resign from game?",
-              qType = resignGame)
-      labelButton(title = "Close"):
-        dialog = none
-    windowSetFocus(name = "Game Menu")
-  except:
-    dialog = setError(message = "Can't show the game's menu")
+      labelButton(title = "Quit from game"):
+        dialog = setQuestion(question = "Are you sure want to quit?",
+            qType = quitGame)
+      labelButton(title = "Resign from game"):
+        dialog = setQuestion(question = "Are you sure want to resign from game?",
+            qType = resignGame)
+    labelButton(title = "Close"):
+      dialog = none
+
+  windowSetFocus(name = windowName)
