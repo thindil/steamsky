@@ -152,7 +152,7 @@ proc showFactionInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     let faction: FactionData = factionsList[$argv[1]]
     showInfo(text = faction.description[0..faction.description.rfind(
         sub = '\n') - 1], parentName = $argv[2], title = faction.name,
-        wrap = true)
+        wrap = true, relativeX = 0.1, relativeY = 0.1, width = 55)
   except:
     return showError(message = "Can't show information about the faction.")
   return tclOk
