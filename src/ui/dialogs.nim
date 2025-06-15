@@ -199,8 +199,8 @@ proc showQuestion*(question, res: string; inGame: bool = true) {.raises: [],
 proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     button1: ButtonSettings = emptyButtonSettings;
     button2: ButtonSettings = emptyButtonSettings; wrap: bool = false;
-    relativeX: float = 0.3; relativeY: float = 0.3) {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+    relativeX: float = 0.3; relativeY: float = 0.3; width = 30) {.raises: [],
+    tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the dialog with the selected text to the player
   ##
   ## * text       - the text to show in the dialog. Can use special tags for colors,
@@ -217,11 +217,12 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
   ##                frame. 0.0 is the left border
   ## * relativeY  - the relative Y coordinate of the dialog inside its parent
   ##                frame. 0.0 is the top border
+  ## * width      - the width of text in characters
   let
     infoDialog: string = createDialog(name = ".info", title = title,
         titleWidth = 275, columns = 3, parentName = parentName)
     infoLabel: string = infoDialog & ".text"
-  tclEval(script = "text " & infoLabel & " -width 30 -height 25 -wrap word")
+  tclEval(script = "text " & infoLabel & " -width " & $width & " -height 25 -wrap word")
   tclEval(script = infoLabel & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-goldenyellow)"))
@@ -239,7 +240,7 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
       tagIndex = text.len
     if wrap:
       tclEval(script = infoLabel & " insert end {" & text[startIndex..tagIndex -
-          1].wrapWords(maxLineWidth = 35) & "}")
+          1].wrapWords(maxLineWidth = width + (width / 5).int + 1) & "}")
     else:
       tclEval(script = infoLabel & " insert end {" & text[startIndex..tagIndex -
           1] & "}")
