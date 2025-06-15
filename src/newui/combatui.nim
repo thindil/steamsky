@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# C opyright 2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -113,82 +113,77 @@ proc getGunSpeed(position: Natural; index: Positive): string {.raises: [
   elif gunSpeed < 0:
     return "(1/" & $gunSpeed & " rounds)"
 
-proc showPartyMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Assign the player's ship's crew members to a boarding party or defenders
   ##
   ## * dialog   - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog
-  if dialog notin {boardingDialog, defendingDialog}:
-    return
-  try:
-    const
-      width: float = 400
-      height: float = 400
+  const
+    width: float = 400
+    height: float = 400
 
-    updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = "Assign crew members to " &
-      (if dialog == boardingDialog: "boarding party" else: "defenders"),
-      x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle}):
-      setLayoutRowStatic(height = 35, cols = 2, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Select all crew members")
-      imageButton(image = images[selectAllIcon]):
-        if dialog == boardingDialog:
-          for checked in boardingParty.mitems:
-            checked = true
-        else:
-          for checked in defenders.mitems:
-            checked = true
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Unselect all crew members")
-      imageButton(image = images[unselectAllIcon]):
-        if dialog == boardingDialog:
-          for checked in boardingParty.mitems:
-            checked = false
-        else:
-          for checked in defenders.mitems:
-            checked = false
-      setLayoutRowDynamic(height = 30, cols = 1)
+  let windowName: string = "Assign crew members to " &
+    (if dialog == boardingDialog: "boarding party" else: "defenders")
+
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle}):
+    setLayoutRowStatic(height = 35, cols = 2, width = 35)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Select all crew members")
+    imageButton(image = images[selectAllIcon]):
+      if dialog == boardingDialog:
+        for checked in boardingParty.mitems:
+          checked = true
+      else:
+        for checked in defenders.mitems:
+          checked = true
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Unselect all crew members")
+    imageButton(image = images[unselectAllIcon]):
+      if dialog == boardingDialog:
+        for checked in boardingParty.mitems:
+          checked = false
+      else:
+        for checked in defenders.mitems:
+          checked = false
+    setLayoutRowDynamic(height = 30, cols = 1)
+    for index, member in playerShip.crew:
+      if dialog == boardingDialog:
+        checkbox(label = member.name, checked = boardingParty[index])
+      else:
+        checkbox(label = member.name, checked = defenders[index])
+    setLayoutRowDynamic(height = 30, cols = 2)
+    imageLabelButton(image = images[assignCrewIcon], text = "Assign",
+      alignment = right):
       for index, member in playerShip.crew:
-        if dialog == boardingDialog:
-          checkbox(label = member.name, checked = boardingParty[index])
-        else:
-          checkbox(label = member.name, checked = defenders[index])
-      setLayoutRowDynamic(height = 30, cols = 2)
-      imageLabelButton(image = images[assignCrewIcon], text = "Assign",
-        alignment = right):
-        for index, member in playerShip.crew:
-          let
-            order: CrewOrders = (if dialog == boardingDialog: boarding else: defend)
-            selected: bool = (if dialog == boardingDialog: boardingParty[index] else: defenders[index])
-          if member.order == order and not selected:
-            try:
-              giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
-            except:
-              dialog = setError(message = "Can't give order to not selected crew member.")
-              return
-          elif selected and member.order != order:
-            try:
-              giveOrders(ship = playerShip, memberIndex = index, givenOrder = order,
-                  moduleIndex = -1, checkPriorities = false)
-            except:
-              dialog = setError(message = "Can't give order to selected crew member.")
-              return
-            if order == boarding:
-              boardingOrders.add(y = 0)
-        updateParties()
-        dialog = none
-        closePopup()
-      imageLabelButton(image = images[cancelIcon], text = "Close",
-        alignment = right):
-        closePopup()
-        dialog = none
-  except:
-    dialog = setError(message = "Can't show the party dialog")
+        let
+          order: CrewOrders = (if dialog == boardingDialog: boarding else: defend)
+          selected: bool = (if dialog == boardingDialog: boardingParty[index] else: defenders[index])
+        if member.order == order and not selected:
+          try:
+            giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
+          except:
+            dialog = setError(message = "Can't give order to not selected crew member.")
+            return
+        elif selected and member.order != order:
+          try:
+            giveOrders(ship = playerShip, memberIndex = index, givenOrder = order,
+                moduleIndex = -1, checkPriorities = false)
+          except:
+            dialog = setError(message = "Can't give order to selected crew member.")
+            return
+          if order == boarding:
+            boardingOrders.add(y = 0)
+      updateParties()
+      dialog = none
+    imageLabelButton(image = images[cancelIcon], text = "Close",
+      alignment = right):
+      dialog = none
+
+  windowSetFocus(name = windowName)
 
 proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -202,7 +197,6 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showHeader(dialog = dialog, close = (if endCombat: CloseDestination.map
     else: CloseDestination.none), state = state):
     return
-  showPartyMenu(dialog = dialog)
   # Draw UI
   if pilotList.len != playerShip.crew.len + 1:
     updateCrewLists()
