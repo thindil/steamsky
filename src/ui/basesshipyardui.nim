@@ -767,6 +767,42 @@ proc setGunInfo(installing: bool; row: var Positive; newInfo: bool;
       tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
       row.inc
 
+proc setBatteringRamInfo(installing: bool; row: var Positive; newInfo: bool;
+  shipModuleIndex: int; maxValue: Natural) {.raises: [],
+  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show information about the selected battering ram module
+  ##
+  ## * installing      - If true, player looking at installing modules list
+  ## * row             - The current row in the dialog
+  ## * newInfo         - If true, create the new UI for the info, otherwise reuse
+  ##                     old one. Default value is true.
+  ## * shipModuleIndex - The index of the module in the player's ship to show
+  ## * maxValue        - The damage done by the battering ram
+  var moduleLabel: string = ""
+  if newInfo:
+    if installing and shipModuleIndex == -1:
+      row.inc
+    moduleLabel = ".moduledialog.strengthlbl"
+    tclEval(script = "ttk::label " & moduleLabel & " -text {Strength: }")
+    tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+    moduleLabel = ".moduledialog.strength"
+    tclEval(script = "ttk::label " & moduleLabel)
+  else:
+    moduleLabel = ".moduledialog.strength"
+  if installing and shipModuleIndex > -1:
+    if playerShip.modules[shipModuleIndex].damage2 > maxValue:
+      tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (weaker)} -style Headerred.TLabel")
+    elif playerShip.modules[shipModuleIndex].damage2 < maxValue:
+      tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (stronger)} -style Headergreen.TLabel")
+    else:
+      tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+  else:
+    row.dec
+    tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+  if newInfo:
+    tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+    row.inc
+
 proc setModuleInfo(installing: bool; row: var Positive;
     newInfo: bool = true) {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
@@ -955,29 +991,8 @@ proc setModuleInfo(installing: bool; row: var Positive;
       shipModuleIndex = shipModuleIndex, speed = speed, value = value,
       maxValue = maxValue, mType = mType)
   of batteringRam:
-    if newInfo:
-      if installing and shipModuleIndex == -1:
-        row.inc
-      moduleLabel = ".moduledialog.strengthlbl"
-      tclEval(script = "ttk::label " & moduleLabel & " -text {Strength: }")
-      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
-      moduleLabel = ".moduledialog.strength"
-      tclEval(script = "ttk::label " & moduleLabel)
-    else:
-      moduleLabel = ".moduledialog.strength"
-    if installing and shipModuleIndex > -1:
-      if playerShip.modules[shipModuleIndex].damage2 > maxValue:
-        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (weaker)} -style Headerred.TLabel")
-      elif playerShip.modules[shipModuleIndex].damage2 < maxValue:
-        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (stronger)} -style Headergreen.TLabel")
-      else:
-        tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
-    else:
-      row.dec
-      tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
-    if newInfo:
-      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
-      row.inc
+    setBatteringRamInfo(installing = installing, row = row, newInfo = newInfo,
+      shipModuleIndex = shipModuleIndex, maxValue = maxValue)
   else:
     discard
   if mType in {ModuleType.armor, turret, cockpit} and not installing:
