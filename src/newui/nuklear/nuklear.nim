@@ -1771,13 +1771,14 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
               layout.flags or windowMinimized.cint
 
       # window header title
+      var textLen: int = title.len
       let t: float = try:
           font.width(arg1 = font.userdata, h = font.height,
-            arg3 = title.cstring, len = title.len.cint)
+            arg3 = title.cstring, len = textLen.cint)
         except:
           return false
       text.padding = new_nk_vec2(x = 0, y = 0)
-      var label: nk_rect = new_nk_rect(x = 0, y = 0, w = 0, h = 0)
+      var label: NimRect = NimRect(x: 0, y: 0, w: 0, h: 0)
 
       label.x = header.x + style.window.header.padding.x
       label.x += style.window.header.label_padding.x
@@ -1785,6 +1786,13 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       label.h = font.height + 2 * style.window.header.label_padding.y
       label.w = t + 2 * style.window.header.spacing.x
       label.w = (0.float).clamp(a = label.w, b = header.x + header.w - label.x)
+      nkWidgetText(o = `out`.addr, b = label, str = title, len = textLen,
+        t = text.addr, a = TextAlignment.left, f = font)
+
+    # draw window background
+    if not (layout.flags and windowMinimized.cint).nk_bool and not
+      (layout.flags and windowDynamic.cint).nk_bool:
+      discard
     # TODO: continue here
     return true
 
