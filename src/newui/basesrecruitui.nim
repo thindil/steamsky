@@ -289,7 +289,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
     imageLabelButton(image = images[negotiateIcon], text = "Negotiate",
         alignment = right):
       dialog = negotiateDialog
-    addCloseButton(dialog = dialog)
+    addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
 
