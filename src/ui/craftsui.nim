@@ -16,10 +16,11 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, math, strutils, tables]
+import contracts
 import ../[config, crafts, crewinventory, game, items, shipmodules, shipscrew, tk, types]
 import coreui, dialogs, errordialog, table, updateheader, utilsui2
 
-proc checkTool(toolNeeded: string): bool {.raises: [], tags: [].} =
+proc checkTool(toolNeeded: string): bool {.raises: [], tags: [], contractual.} =
   ##  Check if the player has needed tool for the crafting recipe
   ##
   ##  * toolNeeded - The type of tool needed for the recipe
@@ -38,7 +39,7 @@ proc checkTool(toolNeeded: string): bool {.raises: [], tags: [].} =
 
 proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
     hasMaterials: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect,
-        RootEffect].} =
+        RootEffect], contractual.} =
   ## Check if the selected recipe can be crafted (has all requirements meet)
   ##
   ## * recipe       - The crafting recipe to check
@@ -80,7 +81,7 @@ proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
 
 proc checkStudyPrerequisities(canCraft, hasTool,
     hasWorkplace: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect,
-        RootEffect].} =
+        RootEffect], contractual.} =
   ## Check if the study and decontruct recipes can be crafted
   ##
   ## * canCraft      - If recipe can be crafter then it will be True, otherwise
@@ -114,7 +115,7 @@ var
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.} =
+        RootEffect], cdecl, contractual.} =
   ## Show information about available crafting recipes
   ##
   ## * clientData - the additional data for the Tcl command
@@ -438,7 +439,7 @@ var recipesSortOrder = defaultRecipesSortOrder
 
 proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Sort the list of crafting recipes
   ##
   ## * clientData - the additional data for the Tcl command
@@ -574,7 +575,7 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl.} =
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show dialog to set the selected recipe as crafting order
   ##
   ## * clientData - the additional data for the Tcl command
@@ -746,7 +747,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Set the selected recipe as a crafting order in the selected workshop
   ##
   ## * clientData - the additional data for the Tcl command
@@ -816,7 +817,7 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl.} =
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show information about the selected recipe
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1021,7 +1022,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showCraftingTabCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show the list of known recipes or information about workshops
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1058,7 +1059,7 @@ proc showCraftingTabCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc changeCraftOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl, contractual.} =
   ## Change the crafting order of the selected workshop
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1097,7 +1098,7 @@ proc changeCraftOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCraftWorkshopCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl, contractual.} =
   ## Set the current workshop index, based on the list of workshops
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1132,7 +1133,7 @@ proc setCraftWorkshopCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc craftsMoreCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
   ## Maximize or minimize the options for the list of recipes.
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1157,7 +1158,7 @@ proc craftsMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("ShowCrafting", showCraftingCommand)
