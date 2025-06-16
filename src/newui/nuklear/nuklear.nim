@@ -1792,7 +1792,21 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     # draw window background
     if not (layout.flags and windowMinimized.cint).nk_bool and not
       (layout.flags and windowDynamic.cint).nk_bool:
-      discard
+      var body: NimRect
+      body.x = win.bounds.x
+      body.w = win.bounds.w
+      body.y = (win.bounds.y + layout.header_height)
+      body.h = (win.bounds.h - layout.header_height)
+
+      let bg: nk_style_item_data = cast[nk_style_item_data](style.window.fixed_background.data)
+      case style.window.fixed_background.`type`
+      of itemImage:
+        nkDrawImage(b = `out`.addr, r = body, img = bg.image.addr,
+          col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+      of itemNineSlice:
+        discard
+      of itemColor:
+        discard
     # TODO: continue here
     return true
 

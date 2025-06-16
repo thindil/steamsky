@@ -196,6 +196,7 @@ type
   nk_style_window* {.importc, nodecl.} = object
     ## Internal Nuklear type
     header*: nk_style_window_header
+    fixed_background*: nk_style_item
     spacing*, scrollbar_size*, padding*, group_padding*, popup_padding*,
       contextual_padding*, combo_padding*, menu_padding*,
       tooltip_padding*: nk_vec2
