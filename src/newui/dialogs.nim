@@ -230,13 +230,14 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     dialog = setError(message = "Can't show the question")
 
 proc addCloseButton*(dialog: var GameDialog; icon: IconsNames = exitIcon;
-    color: ColorsNames = buttonTextColor) {.raises: [], tags: [],
+    color: ColorsNames = buttonTextColor; isPopup: bool = true) {.raises: [], tags: [],
     contractual.} =
   ## Add the close button to the dialog
   ##
-  ## * dialog - the current in-game dialog displayed on the screen
-  ## * icon   - the icon used on the button. Default is exitIcon
-  ## * color  - the color of the text on the button
+  ## * dialog  - the current in-game dialog displayed on the screen
+  ## * icon    - the icon used on the button. Default is exitIcon
+  ## * color   - the color of the text on the button
+  ## * isPopup - if true, the dialog is a popup, otherwise it is a window
   ##
   ## Returns the parameter dialog. It is modified only when the player closed
   ## the dialog.
@@ -245,7 +246,8 @@ proc addCloseButton*(dialog: var GameDialog; icon: IconsNames = exitIcon;
         text = "Close the dialog [Escape key]")
   setButtonStyle(field = textNormal, color = theme.colors[color])
   imageLabelButton(image = images[icon], text = "Close", alignment = right):
-    closePopup()
+    if isPopup:
+      closePopup()
     dialog = none
   restoreButtonStyle()
 
