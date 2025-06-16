@@ -220,7 +220,7 @@ var
   currentTab: cint = 0
   recruitIndex: int = -1
 
-proc showRecruitInfo(dialog: var GameDialog) {.raises: [], tags: [
+proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected recruit information
   ##
@@ -228,73 +228,70 @@ proc showRecruitInfo(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  if dialog != recruitDialog:
-    return
-  try:
-    const
-      width: float = 400
-      height: float = 400
+  const
+    width: float = 400
+    height: float = 400
 
-    let recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
-    updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = recruit.name, x = dialogX, y = dialogY,
-        w = width, h = height, flags = {windowBorder, windowTitle}):
-      changeStyle(field = spacing, x = 0, y = 0):
-        changeStyle(field = buttonRounding, value = 0):
-          setLayoutRowDynamic(height = 30, cols = 4)
-          const tabs: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
-          for index, tab in tabs:
-            try:
-              if currentTab == index:
-                saveButtonStyle()
-                setButtonStyle2(source = active, destination = normal)
-                labelButton(title = tab):
-                  discard
-                restoreButtonStyle()
-              else:
-                labelButton(title = tab):
-                  currentTab = index.cint
-            except:
-              dialog = setError(message = "Can't set the tabs buttons.")
-      setLayoutRowDynamic(height = height - 125, cols = 1)
-      group(title = "InfoGroup", flags = {windowNoFlags}):
-        case currentTab
-        # General info about the selected recruit
-        of 0:
-          setLayoutRowDynamic(height = 35, cols = 2)
-          label(str = "Gender:")
-          colorLabel(str = if recruit.gender == 'M': "Male" else: "Female",
-              color = theme.colors[goldenColor])
-          let faction: FactionData = try:
-              factionsList[recruit.faction]
-            except:
-              dialog = setError(message = "Can't get the recruit's faction.")
-              return
-          label(str = "Faction:")
-          colorLabel(str = faction.name, color = theme.colors[goldenColor])
-          label(str = "Home base:")
-          colorLabel(str = skyBases[recruit.homeBase].name,
-              color = theme.colors[goldenColor])
-        # Statistics of the selected recruit
-        of 1:
-          for index, attrib in recruit.attributes:
-            setLayoutRowStatic(height = 35, cols = 3, ratio = [120.cfloat, 120, 35])
-            label(str = attributesList[index].name & ":")
-            colorLabel(str = getAttributeLevelName(
-                attributeLevel = attrib.level), color = theme.colors[goldenColor])
-            imageButton(image = images[helpIcon]):
-              discard
-        else:
-          discard
-      # Buttons
-      setLayoutRowDynamic(height = 30, cols = 2)
-      imageLabelButton(image = images[negotiateIcon], text = "Negotiate",
-          alignment = right):
-        closePopup()
-        dialog = negotiateDialog
-      addCloseButton(dialog = dialog)
-  except:
-    dialog = setError(message = "Can't show the party dialog")
+  let
+    recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
+    windowName: string = recruit.name
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle}):
+    changeStyle(field = spacing, x = 0, y = 0):
+      changeStyle(field = buttonRounding, value = 0):
+        setLayoutRowDynamic(height = 30, cols = 4)
+        const tabs: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
+        for index, tab in tabs:
+          try:
+            if currentTab == index:
+              saveButtonStyle()
+              setButtonStyle2(source = active, destination = normal)
+              labelButton(title = tab):
+                discard
+              restoreButtonStyle()
+            else:
+              labelButton(title = tab):
+                currentTab = index.cint
+          except:
+            dialog = setError(message = "Can't set the tabs buttons.")
+    setLayoutRowDynamic(height = height - 125, cols = 1)
+    group(title = "InfoGroup", flags = {windowNoFlags}):
+      case currentTab
+      # General info about the selected recruit
+      of 0:
+        setLayoutRowDynamic(height = 35, cols = 2)
+        label(str = "Gender:")
+        colorLabel(str = if recruit.gender == 'M': "Male" else: "Female",
+            color = theme.colors[goldenColor])
+        let faction: FactionData = try:
+            factionsList[recruit.faction]
+          except:
+            dialog = setError(message = "Can't get the recruit's faction.")
+            return
+        label(str = "Faction:")
+        colorLabel(str = faction.name, color = theme.colors[goldenColor])
+        label(str = "Home base:")
+        colorLabel(str = skyBases[recruit.homeBase].name,
+            color = theme.colors[goldenColor])
+      # Statistics of the selected recruit
+      of 1:
+        for index, attrib in recruit.attributes:
+          setLayoutRowStatic(height = 35, cols = 3, ratio = [120.cfloat, 120, 35])
+          label(str = attributesList[index].name & ":")
+          colorLabel(str = getAttributeLevelName(
+              attributeLevel = attrib.level), color = theme.colors[goldenColor])
+          imageButton(image = images[helpIcon]):
+            discard
+      else:
+        discard
+    # Buttons
+    setLayoutRowDynamic(height = 30, cols = 2)
+    imageLabelButton(image = images[negotiateIcon], text = "Negotiate",
+        alignment = right):
+      dialog = negotiateDialog
+    addCloseButton(dialog = dialog)
+
+  windowSetFocus(name = windowName)
 
 proc setRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [],
     contractual.} =
@@ -316,8 +313,6 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
-  # Show the information about the selected recruit if needed
-  showRecruitInfo(dialog = dialog)
   # Show the list of recruits to hire
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
   setLayoutRowDynamic(height = tableHeight, cols = 1)
