@@ -20,7 +20,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basestrade, config, game, types]
-import coreui, dialogs, errordialog, header, messagesui, setschoolui, themes
+import coreui, dialogs, errordialog, header, messagesui, setui, themes
 
 type
   TrainingType = enum
