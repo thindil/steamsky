@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Undocking or escaping from a base doesn't show the map
+
 ## [11.2] - 2025-06-15
 
 ### Added
