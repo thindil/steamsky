@@ -639,7 +639,7 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
     if message.len > 0:
       showMessage(text = message, title = "Can't dock to base")
       return tclOk
-  showSkyMap()
+  showSkyMap(clear = true)
   if playerShip.speed == docked:
     return showOrdersCommand(clientData = clientData, interp = interp,
         argc = argc, argv = argv)
