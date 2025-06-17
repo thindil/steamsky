@@ -1719,10 +1719,12 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       case background.`type`
       of itemImage:
         text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
-        nkDrawImage(b = win.buffer.addr, r = header, img = bg.image.addr, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+        nkDrawImage(b = win.buffer.addr, r = header, img = bg.image.addr,
+          col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
       of itemNineSlice:
         text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
-        nkDrawNineSlice(b = win.buffer.addr, r = header, slc = bg.slice.addr, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+        nkDrawNineSlice(b = win.buffer.addr, r = header, slc = bg.slice.addr,
+          col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
       of itemColor:
         text.background = bg.color
         nkFillRect(b = `out`.addr, rect = header, rounding = 0, c = bg.color)
@@ -1804,9 +1806,13 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
         nkDrawImage(b = `out`.addr, r = body, img = bg.image.addr,
           col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
       of itemNineSlice:
-        discard
+        nkDrawNineSlice(b = `out`.addr, r = body, slc = bg.slice.addr,
+          col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
       of itemColor:
-        discard
+        nkFillRect(b = `out`.addr, rect = body,
+          rounding = style.window.rounding, c = bg.color)
+
+    # set clipping rectangle
     # TODO: continue here
     return true
 

@@ -202,7 +202,7 @@ type
       tooltip_padding*: nk_vec2
     background*, group_text_color*: nk_color
     border*, combo_border*, contextual_border*, menu_border*, group_border*,
-      tooltip_border*, popup_border*: cfloat
+      tooltip_border*, popup_border*, rounding*: cfloat
   nk_draw_command* {.importc: "struct nk_draw_command", nodecl.} = object
     ## Internal Nuklear type
     elem_count*: cuint
