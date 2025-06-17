@@ -500,7 +500,9 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
           materials: hasMaterials, id: recipe))
     except:
       return showError(message = "Can't sort known recipes.")
-  proc sortRecipes(x, y: LocalModuleData): int =
+
+  proc sortRecipes(x, y: LocalModuleData): int {.raises: [], tags: [],
+      contractual.} =
     case recipesSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -544,6 +546,7 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of none:
       return -1
+
   localRecipes.sort(cmp = sortRecipes)
   recipesIndexes = @[]
   for recipe in localRecipes:
@@ -1059,7 +1062,8 @@ proc showCraftingTabCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc changeCraftOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+        contractual.} =
   ## Change the crafting order of the selected workshop
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1098,7 +1102,8 @@ proc changeCraftOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCraftWorkshopCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+        contractual.} =
   ## Set the current workshop index, based on the list of workshops
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1133,7 +1138,8 @@ proc setCraftWorkshopCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc craftsMoreCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Maximize or minimize the options for the list of recipes.
   ##
   ## * clientData - the additional data for the Tcl command
