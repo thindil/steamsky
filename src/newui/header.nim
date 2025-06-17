@@ -396,6 +396,9 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
   showQuestion(dialog = dialog, state = state)
   if state != oldState:
     return true
+#  showShipOrders(dialog = dialog, state = state)
+#  if state != oldState:
+#    return true
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
   return false
