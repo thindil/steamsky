@@ -22,7 +22,7 @@ import std/[colors, math, tables, unicode]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basestypes, config, crew2, events2, game, game2, maps, messages,
   missions, missions2, shipscrew, shipscargo, shipsmovement, stories, types]
-import coreui, dialogs, errordialog, header, messagesui, ordersmenu, themes, utilsui2
+import coreui, dialogs, errordialog, header, messagesui, themes, utilsui2
 
 var
   centerX: MapXRange = 1
@@ -659,7 +659,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   discard showHeader(dialog = dialog, state = state)
   # draw dialogs
-  showShipOrders(dialog = dialog, state = state)
   showDestinationMenu(dialog = dialog)
   # draw map
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
