@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -562,6 +562,8 @@ proc updatePosition(ship: var ShipRecord; order: CrewOrders;
         break
     if moduleIndex == -1:
       return false
+  if ship.crew[memberIndex].order == boarding and order == defend:
+    return false
   if ship.crew[memberIndex].order != rest:
     giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = rest,
         moduleIndex = -1, checkPriorities = false)
