@@ -23,8 +23,7 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
     game, game2, maps, messages, missions, missions2, shipscargo, shipscrew,
     shipsmovement, statistics, stories, stories2, trades, types, utils]
-import basesrecruitui, combatui, coreui, dialogs, errordialog, setui,
-    tradesui, waitmenu
+import combatui, coreui, dialogs, errordialog, setui, tradesui, waitmenu
 
 proc countHeight(baseIndex: ExtendedBasesRange;
     haveTrader: bool; dialog: var GameDialog): Positive {.raises: [], tags: [
