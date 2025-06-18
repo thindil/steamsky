@@ -1813,7 +1813,12 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
           rounding = style.window.rounding, c = bg.color)
 
     # set clipping rectangle
-    # TODO: continue here
+    var clip: NimRect = NimRect(x: 0, y: 0, w: 0, h: 0)
+    layout.clip = layout.bounds
+    nkUnify(clip = clip, a = win.buffer.clip, x0 = layout.clip.x,
+      y0 = layout.clip.y, x1 = layout.clip.x + layout.clip.w,
+      y1 = layout.clip.y + layout.clip.h)
+    # TODO: continue here after nkUnify
     return true
 
 # ------
