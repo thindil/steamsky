@@ -20,8 +20,8 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestrade, crew, crewinventory, game, maps, types]
-import coreui, errordialog
+import ../[basestrade, combat, crew, crewinventory, game, maps, shipscrew, types]
+import coreui, errordialog, utilsui2
 
 var
   moneyIndex2*: int = -1
@@ -115,3 +115,63 @@ proc setRecruits*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     for index, _ in skyBases[baseIndex].recruits:
       recruitsIndexes.add(y = index)
   currentPage = 1
+
+var
+  pilotList*, engineerList*, gunnerList*: seq[string] = @["Nobody"]
+  pilotIndex*, engineerIndex*: Natural = 0
+  gunnersIndex*: seq[Natural] = @[]
+  boardingParty*, defenders*: seq[bool] = @[]
+
+proc updateCrewLists*() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Update the list of available crew members for all positions in combat
+  pilotList = @["Nobody"]
+  engineerList = @["Nobody"]
+  for index, member in playerShip.crew:
+    if member.skills.len > 0:
+      pilotList.add(y = member.name & getSkillMarks(skillIndex = pilotingSkill,
+          memberIndex = index))
+      engineerList.add(y = member.name & getSkillMarks(
+          skillIndex = engineeringSkill, memberIndex = index))
+      gunnerList.add(y = member.name & getSkillMarks(skillIndex = gunnerySkill,
+          memberIndex = index))
+
+proc updateParties*() {.raises: [], tags: [], contractual.} =
+  ## Update boarding party and defenders lists
+  boardingParty = @[]
+  defenders = @[]
+  for member in playerShip.crew:
+    boardingParty.add(y = member.order == boarding)
+    defenders.add(y = member.order == defend)
+
+proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Set the combat UI and combat itself
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters state and dialog. The latter is modified if
+  ## any error happened.
+  try:
+    if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and
+        enemyName != protoShipsList[eventsList[skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex].shipIndex].name:
+      let combatStarted = startCombat(enemyIndex = eventsList[skyMap[
+          playerShip.skyX][playerShip.skyY].eventIndex].shipIndex,
+          newCombat = false)
+      if not combatStarted:
+        return
+  except:
+    dialog = setError(message = "Can't start the combat.")
+    return
+  state = combat
+  dialog = none
+  engineerOrder = 3
+  pilotIndex = findMember(order = pilot) + 1
+  engineerIndex = findMember(order = engineer) + 1
+  gunnersIndex = @[]
+  updateParties()
+  for gun in guns:
+    gunnersIndex.add(y = playerShip.modules[gun[1]].owner[0] + 1)
+  updateCrewLists()
+
