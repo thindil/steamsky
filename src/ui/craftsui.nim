@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, math, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[config, crafts, crewinventory, game, items, shipmodules, shipscrew, tk, types]
 import coreui, dialogs, errordialog, table, updateheader, utilsui2
 
@@ -115,7 +115,7 @@ var
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl, contractual.} =
+        RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Show information about available crafting recipes
   ##
   ## * clientData - the additional data for the Tcl command
