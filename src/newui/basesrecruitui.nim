@@ -21,7 +21,7 @@
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, crew, game, maps, types]
-import coreui, dialogs, errordialog, header, messagesui, table, themes
+import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 type
   RecruitsSortOrders = enum
@@ -152,11 +152,6 @@ proc getHighestSkill(baseIndex: BasesRange;
   except:
     return ""
 
-var
-  recruitsIndexes: seq[Natural] = @[]
-  currentPage: Positive = 1
-  baseIndex: ExtendedBasesRange = 0
-
 proc sortRecruits(sortAsc, sortDesc: RecruitsSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Sort recruits on the list
@@ -200,21 +195,6 @@ const
     HeaderData[RecruitsSortOrders](label: "Highest skill", sortAsc: skillAsc,
         sortDesc: skillDesc)]
   ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
-
-proc setRecruits*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
-  ## Set the data for recruits UI
-  ##
-  ## * dialog - the current in-game dialog displayed on the screen
-  ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
-  baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  if recruitsIndexes.len != skyBases[baseIndex].recruits.len:
-    recruitsIndexes = @[]
-    for index, _ in skyBases[baseIndex].recruits:
-      recruitsIndexes.add(y = index)
-  currentPage = 1
 
 var
   currentTab: cint = 0

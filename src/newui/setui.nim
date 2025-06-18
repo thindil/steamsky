@@ -20,7 +20,7 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestrade, crew, crewinventory, game, types]
+import ../[basestrade, crew, crewinventory, game, maps, types]
 import coreui, errordialog
 
 var
@@ -95,3 +95,23 @@ proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     crewList.add(y = member.name)
   setSchoolSkills()
   setTrainingCost(dialog = dialog)
+
+var
+  currentPage*: Positive = 1
+  recruitsIndexes*: seq[Natural] = @[]
+  baseIndex*: ExtendedBasesRange = 0
+
+proc setRecruits*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for recruits UI
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if recruitsIndexes.len != skyBases[baseIndex].recruits.len:
+    recruitsIndexes = @[]
+    for index, _ in skyBases[baseIndex].recruits:
+      recruitsIndexes.add(y = index)
+  currentPage = 1
