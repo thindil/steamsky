@@ -120,6 +120,8 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
           if order == boarding:
             boardingOrders.add(y = 0)
       updateParties()
+      pilotIndex = findMember(order = pilot) + 1
+      engineerIndex = findMember(order = engineer) + 1
       dialog = none
     imageLabelButton(image = images[cancelIcon], text = "Close",
       alignment = right):
