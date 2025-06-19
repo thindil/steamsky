@@ -1818,7 +1818,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     nkUnify(clip = clip, a = win.buffer.clip, x0 = layout.clip.x,
       y0 = layout.clip.y, x1 = layout.clip.x + layout.clip.w,
       y1 = layout.clip.y + layout.clip.h)
-    # TODO: continue here after nkUnify
+    # TODO: continue here
     return true
 
 # ------
