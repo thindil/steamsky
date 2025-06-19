@@ -403,9 +403,9 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     for worker in module.owner:
       if worker > -1:
         if haveWorkers:
-          workers.add(", ")
+          workers.add(y = ", ")
         haveWorkers = true
-        workers.add(playerShip.crew[worker].name)
+        workers.add(y = playerShip.crew[worker].name)
     if not haveWorkers:
       workers = "none"
     addButton(table = ordersTable, text = workers, tooltip = tooltipText,
@@ -1167,14 +1167,14 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Adds Tcl commands related to the crew UI
   try:
-    addCommand("ShowCrafting", showCraftingCommand)
-    addCommand("SortCrafting", sortCraftingCommand)
-    addCommand("ShowSetRecipe", showSetRecipeCommand)
-    addCommand("SetCrafting", setCraftingCommand)
-    addCommand("ShowRecipeInfo", showRecipeInfoCommand)
-    addCommand("ShowCraftingTab", showCraftingTabCommand)
-    addCommand("ChangeCraftOrder", changeCraftOrderCommand)
-    addCommand("SetCraftWorkshop", setCraftWorkshopCommand)
-    addCommand("CraftsMore", craftsMoreCommand)
+    addCommand(name = "ShowCrafting", nimProc = showCraftingCommand)
+    addCommand(name = "SortCrafting", nimProc = sortCraftingCommand)
+    addCommand(name = "ShowSetRecipe", nimProc = showSetRecipeCommand)
+    addCommand(name = "SetCrafting", nimProc = setCraftingCommand)
+    addCommand(name = "ShowRecipeInfo", nimProc = showRecipeInfoCommand)
+    addCommand(name = "ShowCraftingTab", nimProc = showCraftingTabCommand)
+    addCommand(name = "ChangeCraftOrder", nimProc = changeCraftOrderCommand)
+    addCommand(name = "SetCraftWorkshop", nimProc = setCraftWorkshopCommand)
+    addCommand(name = "CraftsMore", nimProc = craftsMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
