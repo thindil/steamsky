@@ -950,7 +950,7 @@ proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
 
   addButton(name = ".shipinfo", label = "Ship information",
       command = "ShowShipInfo", shortcut = menuAccelerators[1])
-  let state = tclGetVar(varName = "gameState")
+  let state = tclGetVar(varName = "gamestate")
   if state notin ["combat", "dead"]:
     addButton(name = ".shiporders", label = "Ship orders",
         command = "ShowOrders", shortcut = menuAccelerators[2])
