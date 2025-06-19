@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Scrolling the general ship information section with mouse wheel
 - Undocking or escaping from a base doesn't show the map
 - The player's ship's crew members escape from boarding party
+- Don't show the player's ship's orders' menu in combat
 
 ## [11.0.1] - 2025-05-11
 
