@@ -165,6 +165,7 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     dialog = setError(message = "Can't start the combat.")
     return
   state = combat
+  inCombat = true
   dialog = none
   engineerOrder = 3
   pilotIndex = findMember(order = pilot) + 1

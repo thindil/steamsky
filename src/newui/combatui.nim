@@ -519,7 +519,9 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
             elif damagePercent > 24: theme.colors[yellowColor]
             else: theme.colors[redColor])):
           progressBar(value = damagePercent, maxValue = 100, modifyable = false)
-  if not endCombat:
+  if endCombat:
+    inCombat = false
+  else:
     setLayoutRowDynamic(height = 35, cols = 1)
     labelButton(title = "Next turn"):
       try:
@@ -658,7 +660,9 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
           addTooltip(bounds = getWidgetBounds(),
               text = "The enemy's ship's crew member current order.")
         label(str = ($member.order).capitalizeAscii)
-  if not endCombat:
+  if endCombat:
+    inCombat = false
+  else:
     setLayoutRowDynamic(height = 35, cols = 1)
     labelButton(title = "Next turn"):
       try:
