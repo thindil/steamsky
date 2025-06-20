@@ -112,6 +112,10 @@ type
     ## Possible types of NPC's ships combat behaviour
     none, berserker, attacker, coward, disarmer
 
+  BasePopulation* = enum
+    ## The size of a base's population
+    empty, small, medium, large
+
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ItemsDurability* = range[0..101] ## The range of the items durability
