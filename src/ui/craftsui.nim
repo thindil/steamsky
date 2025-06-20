@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to crafting items, like showing the list of available
+## recipes, starting crafting, etc.
+
 import std/[algorithm, math, strutils, tables]
 import contracts, nimalyzer
 import ../[config, crafts, crewinventory, game, items, shipmodules, shipscrew, tk, types]
@@ -503,6 +506,14 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc sortRecipes(x, y: LocalModuleData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two recipes and return which should go first, based on the sort
+    ## order of the recipes
+    ##
+    ## * x - the first recipe to compare
+    ## * y - the second recipe to compare
+    ##
+    ## Returns 1 if the first recipe should go first, -1 if the second recipe
+    ## should go first.
     case recipesSortOrder
     of nameAsc:
       if x.name < y.name:
