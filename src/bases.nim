@@ -69,7 +69,7 @@ proc countPrice*(price: var Natural; traderIndex: int;
   if skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
     case skyBases[skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex].reputation.level
-    of -24.. -1:
+    of -24 .. -1:
       bonus -= (price.float * 0.05).int
     of 26..50:
       bonus += (price.float * 0.05).int
@@ -296,3 +296,20 @@ proc updatePrices*() {.raises: [], tags: [], contractual.} =
       item.price.dec
     elif roll < 60 and item.price > 0:
       item.price.inc
+
+proc getBasePopulation*(baseIndex: BasesRange): BasePopulation {.raises: [],
+    tags: [], contractual.} =
+  ## Get the size of the selected base's population
+  ##
+  ## * baseIndex - the index of the base
+  ##
+  ## Returns the size of the base's population
+  case skyBases[baseIndex].population
+  of 0:
+    return empty
+  of 1..149:
+    return small
+  of 150..299:
+    return medium
+  else:
+    return large
