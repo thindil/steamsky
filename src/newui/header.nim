@@ -413,7 +413,11 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   const
     width: float = 200
     windowName: string = "Game Menu"
-  let height: float = (if inCombat: 355 else: 455)
+  var height: float = 455
+  if inCombat:
+    height = 355
+  elif playerShip.crew[0].health == 0:
+    height = 220
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY,
       w = width, h = height, flags = {windowBorder, windowTitle,
