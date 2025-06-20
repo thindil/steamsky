@@ -20,7 +20,8 @@
 
 import std/[colors, os, parsecfg, streams, strutils, tables, unicode]
 import contracts
-import ../[basestypes, config, game, log, maps, missions, statistics, stories, tk, types]
+import ../[bases, basestypes, config, game, log, maps, missions, statistics,
+    stories, tk, types]
 import coreui, dialogs, errordialog, themes, updateheader, utilsui2
 
 var
@@ -371,13 +372,8 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
         return
       if skyBases[baseIndex].population > 0:
         insertText(newText = "\nPopulation: ")
-      if skyBases[baseIndex].population > 0 and skyBases[baseIndex].population < 150:
-        insertText(newText = "small", tagName = "yellow2")
-      elif skyBases[baseIndex].population > 149 and skyBases[
-          baseIndex].population < 300:
-        insertText(newText = "medium", tagName = "yellow2")
-      elif skyBases[baseIndex].population > 299:
-        insertText(newText = "large", tagName = "yellow2")
+        insertText(newText = $getBasePopulation(baseIndex = baseIndex),
+            tagName = "yellow2")
       insertText(newText = "\nSize: ")
       insertText(newText = $skyBases[baseIndex].size & "\n",
           tagName = "yellow2")
@@ -396,16 +392,16 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
           baseInfoText: string = "\n"
           color: string = ""
         case skyBases[baseIndex].reputation.level
-        of -100.. -75:
+        of -100 .. -75:
           baseInfoText &= "You are hated here"
           color = "red"
-        of -74.. -50:
+        of -74 .. -50:
           baseInfoText &= "You are outlawed here"
           color = "red"
-        of -49.. -25:
+        of -49 .. -25:
           baseInfoText &= "You are disliked here"
           color = "red"
-        of -24.. -1:
+        of -24 .. -1:
           baseInfoText &= "They are unfriendly to you"
           color = "red"
         of 0:

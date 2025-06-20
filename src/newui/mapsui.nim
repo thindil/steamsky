@@ -20,8 +20,9 @@
 
 import std/[colors, math, tables, unicode]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestypes, config, crew2, events2, game, game2, maps, messages,
-  missions, missions2, shipscrew, shipscargo, shipsmovement, stories, types]
+import ../[bases, basestypes, config, crew2, events2, game, game2, maps,
+    messages, missions, missions2, shipscrew, shipscargo, shipsmovement,
+    stories, types]
 import coreui, dialogs, errordialog, header, messagesui, themes, utilsui2
 
 var
@@ -109,13 +110,8 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
               row(width = 100):
                 label(str = "Population:")
               row(width = 130):
-                case skyBases[baseIndex].population
-                of 1..149:
-                  colorLabel(str = "small", color = theme.mapColors[mapGoldenYellow])
-                of 150..299:
-                  colorLabel(str = "medium", color = theme.mapColors[mapGoldenYellow])
-                else:
-                  colorLabel(str = "large", color = theme.mapColors[mapGoldenYellow])
+                colorLabel(str = $getBasePopulation(baseIndex = baseIndex),
+                    color = theme.mapColors[mapGoldenYellow])
             row(width = 60):
               label(str = "Size:")
             row(width = 170):
