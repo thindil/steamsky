@@ -412,8 +412,8 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameters dialog.
   const
     width: float = 200
-    height: float = 455
     windowName: string = "Game Menu"
+  let height: float = (if inCombat: 355 else: 455)
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY,
       w = width, h = height, flags = {windowBorder, windowTitle,
