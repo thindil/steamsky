@@ -110,6 +110,23 @@ proc updatePopulation*() {.raises: [], tags: [], contractual.} =
     skyBases[baseIndex].population = getRandom(min = 5, max = 10)
     skyBases[baseIndex].owner = getRandomFaction()
 
+proc getBasePopulation*(baseIndex: BasesRange): BasePopulation {.raises: [],
+    tags: [], contractual.} =
+  ## Get the size of the selected base's population
+  ##
+  ## * baseIndex - the index of the base
+  ##
+  ## Returns the size of the base's population
+  case skyBases[baseIndex].population
+  of 0:
+    return empty
+  of 1..149:
+    return small
+  of 150..299:
+    return medium
+  else:
+    return large
+
 proc generateRecruits*() {.raises: [KeyError], tags: [],
     contractual.} =
   ## Generate available recruits in the base if needed
@@ -149,8 +166,15 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
   if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30 or
       skyBases[baseIndex].population == 0:
     return
-  var maxRecruits: Positive = (if skyBases[baseIndex].population <
-      150: 5 elif skyBases[baseIndex].population < 300: 10 else: 15)
+  var maxRecruits: Positive = case getBasePopulation(baseIndex = baseIndex)
+      of empty:
+        1
+      of small:
+        5
+      of medium:
+        10
+      of large:
+        15
   if "barracks" in basesTypesList[skyBases[baseIndex].baseType].flags:
     maxRecruits *= 2
   if maxRecruits > (skyBases[baseIndex].population / 10).int:
@@ -284,8 +308,15 @@ proc updatePrices*() {.raises: [], tags: [], contractual.} =
   let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if skyBases[baseIndex].population == 0:
     return
-  var chance: Natural = (if skyBases[baseIndex].population <
-      150: 1 elif skyBases[baseIndex].population < 300: 2 else: 5)
+  var chance: Natural = case getBasePopulation(baseIndex = baseIndex)
+      of empty:
+        0
+      of small:
+        1
+      of medium:
+        2
+      of large:
+        5
   chance += (daysDifference(dateToCompare = skyBases[
       baseIndex].visited) / 10).int
   if getRandom(min = 1, max = 100) > chance:
@@ -296,20 +327,3 @@ proc updatePrices*() {.raises: [], tags: [], contractual.} =
       item.price.dec
     elif roll < 60 and item.price > 0:
       item.price.inc
-
-proc getBasePopulation*(baseIndex: BasesRange): BasePopulation {.raises: [],
-    tags: [], contractual.} =
-  ## Get the size of the selected base's population
-  ##
-  ## * baseIndex - the index of the base
-  ##
-  ## Returns the size of the base's population
-  case skyBases[baseIndex].population
-  of 0:
-    return empty
-  of 1..149:
-    return small
-  of 150..299:
-    return medium
-  else:
-    return large
