@@ -23,13 +23,37 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[basestrade, basestypes, combat, crew, crewinventory, game, maps, shipscargo, shipscrew, types]
 import coreui, errordialog, utilsui2
 
+#######################
+# Setting the school UI
+#######################
+
 var
   moneyIndex2*: int = -1
-  moneyText*, crewList*, schoolSkillsList*: seq[string] = @[]
+    ## Index of money in the player's ship's cargo
+  moneyText*: seq[string] = @[]
+    ## The text with information about money in player's ship's cargo and trader
+  crewList*: seq[string] = @[]
+    ## The list of names of the player's ship's crew members
+  schoolSkillsList*: seq[string] = @[]
+    ## The list of skills which the crew member can learn, with prices
   moneyWidth*: seq[cfloat] = @[]
-  crewIndex*, skillIndex*, minCost*, maxCost*: Natural = 0
-  amount*, timesCost*, oneTrainCost*: Positive = 1
+    ## The width in pixels of the text with information about money
+  crewIndex*: Natural = 0
+    ## The index of currently selected crew member
+  skillIndex*: Natural = 0
+    ## The index of currently selected skill
+  minCost*: Natural = 0
+    ## The minimum cost of training
+  maxCost*: Natural = 0
+    ## The maximum cost of training
+  amount*: Positive = 1
+    ## The amount of training sessions
+  timesCost*: Positive = 1
+    ## The cost of all training
+  oneTrainCost*: Positive = 1
+    ## The cost of one training session
   skillsIndexes*: seq[Natural] = @[]
+    ## The list of indexes of skills of the selected crew member
 
 proc setSchoolSkills*(){.raises: [], tags: [], contractual.} =
   ## Set the skills list for the selected crew member
@@ -95,6 +119,10 @@ proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     crewList.add(y = member.name)
   setSchoolSkills()
   setTrainingCost(dialog = dialog)
+
+#########################
+# Setting the recruits UI
+#########################
 
 var
   currentPage*: Positive = 1
