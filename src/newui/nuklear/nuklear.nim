@@ -1910,6 +1910,16 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[PanelFlags];
     nkStartPopup(ctx = ctx, win = win)
     var allocated: nk_size = ctx.memory.allocated
     nkPushScissor(b = popup.buffer.addr, r = nkNullRect)
+
+    if nkPanelBegin(ctx = ctx, title = title, panelType = panelPopup):
+      # popup is running therefore invalidate parent panels
+      var root: PNkPanel = win.layout
+      while root != nil:
+        root.flags = root.flags or windowRom.cint
+        root.flags = root.flags and not windowRemoveRom.cint
+        root = root.parent
+      win.popup.active = nkTrue
+      popup.layout.offset_x = popup.scrollbar.x
     # TODO: continue here
     return true
 

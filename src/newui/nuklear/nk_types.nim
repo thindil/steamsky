@@ -354,7 +354,7 @@ type
     border*, at_y*, at_x*, max_x*, header_height*, footer_height*: cfloat
     row*: nk_row_layout
     parent*: PNkPanel
-    has_scrolling*: cuint
+    has_scrolling*, offset_x*, offset_y: cuint
   nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
     ## Internal Nuklear type
     win*: ptr nk_window
@@ -368,6 +368,9 @@ type
   nk_property_state* {.importc: "struct nk_property_state", nodecl.} = object
     ## Internal Nuklear type
     active*: cint
+  nk_scroll* {.importc: "struct nk_scroll", nodecl.} = object
+    ## Internal Nuklear type
+    x*, y*: cuint
   nk_window* {.importc: "struct nk_window", nodecl.} = object
     ## Internal Nuklear type
     layout*: PNkPanel
@@ -379,6 +382,7 @@ type
     buffer*: nk_command_buffer
     edit*: nk_edit_state
     property*: nk_property_state
+    scrollbar*: nk_scroll
   nk_memory* {.importc: "struct nk_memory", nodecl.} = object
     ## Internal Nuklear type
     `ptr`*: ptr nk_size
