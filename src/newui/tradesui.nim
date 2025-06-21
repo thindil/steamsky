@@ -23,10 +23,7 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[basescargo, basestypes, config, game, items, types, trades]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
-var
-  currentPage: Positive = 1
-  baseIndex: BasesRange = 1
-  itemIndex: int = -1
+var itemIndex: int = -1
 
 type LocalItemData = object
   name: string
