@@ -157,14 +157,16 @@ proc countHeight(baseIndex: ExtendedBasesRange;
         result += 35
       result += 35
 
-proc dockingOrder(escape: bool = false; dialog: var GameDialog) {.raises: [],
-    tags: [RootEffect], contractual.} =
+proc dockingOrder(escape: bool = false; dialog: var GameDialog;
+    state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
   ## Docking, undocking and escaping from bases
   ##
   ## * escape  - if true, escape from a base
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current state of the game
   ##
-  ## Returns the modified parameters dialog if error happened.
+  ## Returns the modified parameters dialog if error happened. Additionally,
+  ## modified parameter state when the player undock from a base.
   var message: string = ""
   if playerShip.speed == docked:
     try:
@@ -175,6 +177,7 @@ proc dockingOrder(escape: bool = false; dialog: var GameDialog) {.raises: [],
     if message.len > 0:
       dialog = setMessage(message = message, title = "Can't undock from base")
       return
+    state = map
   else:
     if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
       if eventsList[skyMap[playerShip.skyX][
@@ -266,10 +269,10 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
   ##
   ## Returns the modified parameters dialog if error happened.
   labelButton(title = "Undock"):
-    dockingOrder(dialog = dialog)
+    dockingOrder(dialog = dialog, state = state)
   if skyBases[baseIndex].population > 0:
     labelButton(title = "Escape"):
-      dockingOrder(escape = true, dialog = dialog)
+      dockingOrder(escape = true, dialog = dialog, state = state)
     if haveTrader and skyBases[baseIndex].population > 0:
       labelButton(title = "Trade"):
         state = trade
@@ -719,10 +722,10 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
                   break
               if skyBases[baseIndex].population > 0:
                 labelButton(title = "Dock (" & $dockingCost & " " & moneyName & ")"):
-                  dockingOrder(dialog = dialog)
+                  dockingOrder(dialog = dialog, state = state)
               else:
                 labelButton(title = "Dock"):
-                  dockingOrder(dialog = dialog)
+                  dockingOrder(dialog = dialog, state = state)
             for mission in acceptedMissions:
               if haveTrader and mission.targetX == playerShip.skyX and
                   mission.targetY == playerShip.skyY and mission.finished:
