@@ -34,7 +34,7 @@ proc checkTool(toolNeeded: string): bool {.raises: [], tags: [], contractual.} =
     result = false
     for index, item in itemsList:
       if item.itemType == toolNeeded:
-        let cargoIndex = findItem(inventory = playerShip.cargo,
+        let cargoIndex: int = findItem(inventory = playerShip.cargo,
             protoIndex = index)
         if cargoIndex > -1:
           result = true
@@ -74,7 +74,7 @@ proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
     hasMaterials = false
     for itemIndex, item in itemsList:
       if item.itemType == material:
-        var cargoIndex = findItem(inventory = playerShip.cargo,
+        var cargoIndex: int = findItem(inventory = playerShip.cargo,
             protoIndex = itemIndex)
         if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
             recipe.materialAmounts[materialIndex]:
@@ -111,9 +111,9 @@ proc checkStudyPrerequisities(canCraft, hasTool,
     canCraft = true
 
 var
-  studies: seq[Positive]
-  deconstructs: seq[Positive]
-  recipesIndexes: seq[string]
+  studies: seq[Positive] = @[]
+  deconstructs: seq[Positive] = @[]
+  recipesIndexes: seq[string] = @[]
   recipesTable, ordersTable: TableWidget
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
