@@ -69,7 +69,7 @@ proc countPrice*(price: var Natural; traderIndex: int;
   if skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
     case skyBases[skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex].reputation.level
-    of -24 .. -1:
+    of -24.. -1:
       bonus -= (price.float * 0.05).int
     of 26..50:
       bonus += (price.float * 0.05).int
