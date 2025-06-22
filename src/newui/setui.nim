@@ -126,8 +126,11 @@ proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 
 var
   currentPage*: Positive = 1
+    ## The current page in the table
   recruitsIndexes*: seq[Natural] = @[]
+    ## The indexex of the recruits in the base
   baseIndex*: ExtendedBasesRange = 0
+    ## The index of the base
 
 proc setRecruits*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -144,11 +147,34 @@ proc setRecruits*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       recruitsIndexes.add(y = index)
   currentPage = 1
 
+#######################
+# Setting the combat UI
+#######################
+
 var
-  pilotList*, engineerList*, gunnerList*: seq[string] = @["Nobody"]
-  pilotIndex*, engineerIndex*: Natural = 0
+  pilotList*: seq[string] = @["Nobody"]
+    ## The list of crew members who can take pilot position with information
+    ## their piloting skill's level
+  engineerList*: seq[string] = @["Nobody"]
+    ## The list of crew members who can take engineer position with information
+    ## their engineering skill's level
+  gunnerList*: seq[string] = @["Nobody"]
+    ## The list of crew members who can take gunner position with information
+    ## their gunnery skill's level
+  pilotIndex*: Natural = 0
+    ## The index in the player's ship's crew of the member who is set as pilot
+  engineerIndex*: Natural = 0
+    ## The index in the player's ship's crew of the member who is set as
+    ## engineer
   gunnersIndex*: seq[Natural] = @[]
-  boardingParty*, defenders*: seq[bool] = @[]
+    ## The list of indexes in the player's ship's crew of members who are set
+    ## as gunners
+  boardingParty*: seq[bool] = @[]
+    ## The list of boarding party members. If true, the selected player's
+    ## ship's crew member is in the boarding party
+  defenders*: seq[bool] = @[]
+    ## The list of the player's ship's defenders. If true, the selected
+    ## player's ship's crew member defeding the ship.
 
 proc updateCrewLists*() {.raises: [], tags: [RootEffect], contractual.} =
   ## Update the list of available crew members for all positions in combat
