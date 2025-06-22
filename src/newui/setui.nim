@@ -230,24 +230,45 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     gunnersIndex.add(y = playerShip.modules[gun[1]].owner[0] + 1)
   updateCrewLists()
 
+#######################
+# Setting the trades UI
+#######################
+
 type
   ItemsSortOrders* = enum
+    ## Sorting order of the list of items to trade
     nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, priceAsc,
       priceDesc, profitAsc, profitDesc, weightAsc, weightDesc, ownedAsc,
       ownedDesc, availableAsc, availableDesc, none
 
 const defaultItemsSortOrder*: ItemsSortOrders = none
+  ## Default sorting order for list of items to trade
+
 
 var
   itemsSortOrder*: ItemsSortOrders = defaultItemsSortOrder
+    ## The current sorting order of the list of items for trade
   itemsIndexes*: seq[int] = @[]
+    ## The list of indexes of items for trade
   baseCargo*: seq[BaseCargo] = @[]
+    ## The list of item to trade in the base's cargo
   typesList*: seq[string] = @["All"]
-  nameSearch*, location*, baseType*: string = ""
+    ## The list of items' types
+  nameSearch*: string = ""
+    ## The string to search in the names of items
+  location*: string = ""
+    ## The base or trader word for info about money
+  baseType*: string = ""
+    ## The type of the current base
   cargoWidth*: array[2, cfloat] = [0.cfloat, 0]
+    ## The width of the text with info about the player's ship's free cargo
+    ## space
   cargoText*: array[2, string] = ["Free cargo space is ", ""]
+    ## The text with info about the player's ship's free cargo space
   typeIndex*: Natural = 0
+    ## The index of the currently selected type of items
   eventIndex*: int = -1
+    ## The index of the current event
 
 proc refreshItemsList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
