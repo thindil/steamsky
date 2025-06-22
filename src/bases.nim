@@ -88,28 +88,6 @@ proc countPrice*(price: var Natural; traderIndex: int;
   else:
     price += bonus
 
-proc updatePopulation*() {.raises: [], tags: [], contractual.} =
-  ## Update the base population if needed
-  let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30:
-    return
-  if skyBases[baseIndex].population > 0:
-    if getRandom(min = 1, max = 100) > 30:
-      return
-    let populationDiff: int = (if getRandom(min = 1, max = 100) < 20: getRandom(
-        min = -10, max = -1) else: getRandom(min = 1, max = 10))
-    var newPopulation: int = skyBases[baseIndex].population + populationDiff
-    if newPopulation < 0:
-      newPopulation = 0
-    skyBases[baseIndex].population = newPopulation
-    if skyBases[baseIndex].population == 0:
-      skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
-  else:
-    if getRandom(min = 1, max = 100) > 5:
-      return
-    skyBases[baseIndex].population = getRandom(min = 5, max = 10)
-    skyBases[baseIndex].owner = getRandomFaction()
-
 proc getBasePopulation*(baseIndex: BasesRange): BasePopulation {.raises: [],
     tags: [], contractual.} =
   ## Get the size of the selected base's population
@@ -126,6 +104,28 @@ proc getBasePopulation*(baseIndex: BasesRange): BasePopulation {.raises: [],
     return medium
   else:
     return large
+
+proc updatePopulation*() {.raises: [], tags: [], contractual.} =
+  ## Update the base population if needed
+  let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30:
+    return
+  if getBasePopulation(baseIndex = baseIndex) == empty:
+    if getRandom(min = 1, max = 100) > 5:
+      return
+    skyBases[baseIndex].population = getRandom(min = 5, max = 10)
+    skyBases[baseIndex].owner = getRandomFaction()
+  else:
+    if getRandom(min = 1, max = 100) > 30:
+      return
+    let populationDiff: int = (if getRandom(min = 1, max = 100) < 20: getRandom(
+        min = -10, max = -1) else: getRandom(min = 1, max = 10))
+    var newPopulation: int = skyBases[baseIndex].population + populationDiff
+    if newPopulation < 0:
+      newPopulation = 0
+    skyBases[baseIndex].population = newPopulation
+    if skyBases[baseIndex].population == 0:
+      skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
 
 proc generateRecruits*() {.raises: [KeyError], tags: [],
     contractual.} =
@@ -163,12 +163,11 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
     payment += (getPrice(baseType = skyBases[baseIndex].baseType,
         itemIndex = itemIndex) / 10).int
 
-  if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30 or
-      skyBases[baseIndex].population == 0:
+  if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30:
     return
   var maxRecruits: Positive = case getBasePopulation(baseIndex = baseIndex)
       of empty:
-        1
+        return
       of small:
         5
       of medium:
@@ -306,11 +305,9 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.raises: [ReputationError],
 proc updatePrices*() {.raises: [], tags: [], contractual.} =
   ## Random changes to the items' prices in the selected base
   let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  if skyBases[baseIndex].population == 0:
-    return
   var chance: Natural = case getBasePopulation(baseIndex = baseIndex)
       of empty:
-        0
+        return
       of small:
         1
       of medium:
