@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,8 +20,8 @@
 
 import std/tables
 import contracts
-import basestypes, combat, events, factions, game, game2, items, maps, messages,
-    shipscargo, shipscrew, shipscrew2, shipsmovement, types, utils
+import bases, basestypes, combat, events, factions, game, game2, items, maps,
+    messages, shipscargo, shipscrew, shipscrew2, shipsmovement, types, utils
 
 proc gainPerception() {.raises: [], tags: [], contractual.} =
   ## Gain experience in perception skill for pilot and gunners of the player's
@@ -43,7 +43,8 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
   if getRandom(min = 1, max = 100) > 6:
     return false
   var roll: Positive = getRandom(min = 1, max = 100)
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   # Event outside a sky base
   if baseIndex == 0:
     case roll
@@ -67,7 +68,8 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
           for index, module in playerShip.modules:
             if module.mType == ModuleType2.engine and not module.disabled:
               engines.add(y = index)
-          let engineIndex: Natural = engines[getRandom(min = 0, max = engines.high)]
+          let engineIndex: Natural = engines[getRandom(min = 0,
+              max = engines.high)]
           playerShip.modules[engineIndex].durability.dec
           updateOrders(ship = playerShip)
         else:
@@ -126,7 +128,7 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
   # Events at a sky base
   else:
     # Change owner of an abandoned base
-    if skyBases[baseIndex].population == 0:
+    if getBasePopulation(baseIndex = baseIndex) == empty:
       if roll < 6 and playerShip.speed != docked:
         recoverBase(baseIndex = baseIndex)
       return false
@@ -139,7 +141,8 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
           if member.order == rest:
             restingCrew.add(y = index)
         if restingCrew.len > 0:
-          let roll2: Natural = getRandom(min = restingCrew.low, max = restingCrew.high)
+          let roll2: Natural = getRandom(min = restingCrew.low,
+              max = restingCrew.high)
           var injuries: Positive = getRandom(min = 1, max = 10)
           if injuries > playerShip.crew[restingCrew[roll2]].health:
             injuries = playerShip.crew[restingCrew[roll2]].health
@@ -211,8 +214,9 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
           var enemies: seq[Positive] = @[]
           generateEnemies(enemies = enemies, owner = skyBases[baseIndex].owner,
               withTraders = false)
-          eventsList.add(y = EventData(eType: enemyPatrol, skyX: playerShip.skyX,
-              skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
+          eventsList.add(y = EventData(eType: enemyPatrol,
+              skyX: playerShip.skyX, skyY: playerShip.skyY, time: getRandom(
+                  min = 30, max = 45),
               shipIndex: enemies[getRandom(min = enemies.low,
               max = enemies.high)]))
           skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
