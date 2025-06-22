@@ -110,11 +110,13 @@ proc checkStudyPrerequisities(canCraft, hasTool,
   if hasWorkplace:
     canCraft = true
 
+{.push ruleOff:"varDeclared".}
 var
   studies: seq[Positive] = @[]
   deconstructs: seq[Positive] = @[]
   recipesIndexes: seq[string] = @[]
   recipesTable, ordersTable: TableWidget
+{.pop ruleOn:"varDeclared".}
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
