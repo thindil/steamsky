@@ -354,7 +354,7 @@ type
     border*, at_y*, at_x*, max_x*, header_height*, footer_height*: cfloat
     row*: nk_row_layout
     parent*: PNkPanel
-    has_scrolling*, offset_x*, offset_y: cuint
+    has_scrolling*, offset_x*, offset_y*: cuint
   nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
     ## Internal Nuklear type
     win*: ptr nk_window

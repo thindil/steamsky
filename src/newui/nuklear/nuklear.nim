@@ -1824,6 +1824,14 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     return not (layout.flags and windowHidden.cint).nk_bool and not
       (layout.flags and windowMinimized.cint).nk_bool
 
+proc nkFreePanel(ctx; pan: PNkPanel) {.raises: [], tags: [], contractual.} =
+  ## Free memory used by the panel
+  ##
+  ## * ctx - the Nuklear context
+  ## * pan - the panel which memory will be freed
+  discard
+  # TODO: continue here
+
 # ------
 # Popups
 # ------
@@ -1920,8 +1928,22 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[PanelFlags];
         root = root.parent
       win.popup.active = nkTrue
       popup.layout.offset_x = popup.scrollbar.x
-    # TODO: continue here
-    return true
+      popup.layout.offset_y = popup.scrollbar.y
+      popup.layout.parent = win.layout
+      return true
+    else:
+      # popup was closed/is invalid so cleanup
+      var root: PNkPanel = win.layout
+      while root != nil:
+        root.flags = root.flags or windowRemoveRom.cint
+        root = root.parent
+      win.popup.buf.active = nkFalse
+      win.popup.active = nkFalse
+      ctx.memory.allocated = allocated
+      ctx.current = win
+      nkFreePanel(ctx = ctx, pan = popup.layout)
+      popup.layout = nil
+      return false
 
 proc createPopup(pType2: PopupType; title2: cstring;
     flags2: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises: [], tags: [],
