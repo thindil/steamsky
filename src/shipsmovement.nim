@@ -152,7 +152,10 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
   if result.len > 0:
     return
   if docking:
-    if skyBases[baseIndex].population > 0:
+    if getBasePopulation(baseIndex = baseIndex) == empty:
+      addMessage(message = "Ship docked to base " & skyBases[baseIndex].name &
+          ".", mType = orderMessage)
+    else:
       addMessage(message = "Ship docked to base " & skyBases[baseIndex].name,
           mType = orderMessage)
       if $gameSettings.autoSave == $dock:
@@ -177,9 +180,6 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
         askForBases()
       if gameSettings.autoAskForEvents:
         askForEvents()
-    else:
-      addMessage(message = "Ship docked to base " & skyBases[baseIndex].name &
-          ".", mType = orderMessage)
     playerShip.speed = docked
     updateGame(minutes = 10)
   else:
@@ -210,7 +210,14 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
         if $gameSettings.autoSave == $undock:
           saveGame()
     else:
-      if skyBases[baseIndex].population > 0:
+      if getBasePopulation(baseIndex = baseIndex) == empty:
+        let fuelIndex: int = findItem(inventory = playerShip.cargo,
+            itemType = fuelType)
+        if fuelIndex == -1:
+          return "You can't undock from base because you don't have any fuel."
+        addMessage(message = "Ship undocked from base " & skyBases[
+            baseIndex].name & ".", mType = orderMessage)
+      else:
         let moneyIndex2: int = findItem(inventory = playerShip.cargo,
             protoIndex = moneyIndex)
         if moneyIndex2 == -1:
@@ -240,13 +247,6 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
         addMessage(message = "Ship undocked from base " & skyBases[
             baseIndex].name & ". You also paid " & $dockingCost & " " &
             moneyName & " of docking fee.", mType = orderMessage)
-      else:
-        let fuelIndex: int = findItem(inventory = playerShip.cargo,
-            itemType = fuelType)
-        if fuelIndex == -1:
-          return "You can't undock from base because you don't have any fuel."
-        addMessage(message = "Ship undocked from base " & skyBases[
-            baseIndex].name & ".", mType = orderMessage)
 
 proc countFuelNeeded*(): int {.raises: [], tags: [], contractual.} =
   ## Count the amount of needed fuel to travel by one map cell by the player's
