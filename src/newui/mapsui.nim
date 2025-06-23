@@ -106,7 +106,10 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
               colorLabel(str = basesTypesList[skyBases[
                   baseIndex].baseType].name, color = basesTypesList[skyBases[
                   baseIndex].baseType].color)
-            if skyBases[baseIndex].population > 0:
+            if getBasePopulation(baseIndex = baseIndex) == empty:
+              row(width = 230):
+                label(str = "Base is abandoned")
+            else:
               row(width = 100):
                 label(str = "Population:")
               row(width = 130):
@@ -117,17 +120,14 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
             row(width = 170):
               colorLabel(str = $skyBases[baseIndex].size,
                   color = theme.mapColors[mapGoldenYellow])
-            if skyBases[baseIndex].population > 0:
+            if getBasePopulation(baseIndex = baseIndex) > empty:
               row(width = 70):
                 label(str = "Owner:")
               row(width = 160):
                 colorLabel(str = factionsList[skyBases[baseIndex].owner].name,
                     color = theme.mapColors[mapGoldenYellow])
-            else:
-              row(width = 230):
-                label(str = "Base is abandoned")
         setLayoutRowDynamic(height = 25, cols = 1)
-        if skyBases[baseIndex].population > 0:
+        if getBasePopulation(baseIndex = baseIndex) > empty:
           case skyBases[baseIndex].reputation.level
           of -100 .. -75:
             colorLabel(str = "You are hated here", color = theme.mapColors[mapRedColor])
