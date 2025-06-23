@@ -25,7 +25,8 @@ import bases, config, events, game, maps, messages, shipscrew, shipscargo,
 
 var acceptedMissions*: seq[MissionData] = @[] ## The list of accepted missions by the player
 
-proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [KeyError, ReputationError], tags: [], contractual.} =
+proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [
+    KeyError, ReputationError], tags: [], contractual.} =
   ## Delete the selected accepted mission, update the player's repuration in
   ## connected bases and update the sky map
   ##
@@ -111,17 +112,20 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [KeyEr
 proc generateMissions*() {.raises: [KeyError], tags: [],
     contractual.} =
   ## Generate available missions in the selected base if needed
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+  let
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
       playerShip.skyY].baseIndex
-  if daysDifference(dateToCompare = skyBases[baseIndex].missionsDate) < 7 or
-      skyBases[baseIndex].population == 0:
+    population: BasePopulation = getBasePopulation(baseIndex = baseIndex)
+  if daysDifference(dateToCompare = skyBases[baseIndex].missionsDate) < 7:
     return
-  var missionsAmount: Natural = case skyBases[baseIndex].population
-    of 1..149:
+  var missionsAmount: Natural = case population
+    of empty:
+      return
+    of small:
       getRandom(min = 1, max = 5)
-    of 150..299:
+    of medium:
       getRandom(min = 1, max = 10)
-    else:
+    of large:
       getRandom(min = 1, max = 15)
   missionsAmount = case skyBases[baseIndex].reputation.level
     of 1..25:
@@ -149,11 +153,12 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
   var basesInRange: seq[Positive] = @[]
   for index, base in skyBases:
     if index != baseIndex and skyBases[index].skyX in minX..maxX and skyBases[
-        index].skyY in minY..maxY and skyBases[index].population > 0:
+        index].skyY in minY..maxY and getBasePopulation(baseIndex = index) > empty:
       basesInRange.add(y = index)
   while missionsAmount > basesInRange.len:
     let tmpBaseIndex: Positive = getRandom(min = 1, max = 1024)
-    if tmpBaseIndex notin basesInRange and skyBases[tmpBaseIndex].population > 0:
+    if tmpBaseIndex notin basesInRange and getBasePopulation(
+        baseIndex = tmpBaseIndex) > empty:
       basesInRange.add(y = tmpBaseIndex)
   skyBases[baseIndex].missions = @[]
   var enemies: seq[Positive] = @[]
