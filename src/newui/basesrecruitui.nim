@@ -261,9 +261,13 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
           label(str = attributesList[index].name & ":")
           colorLabel(str = getAttributeLevelName(
               attributeLevel = attrib.level), color = theme.colors[goldenColor])
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Show detailed information about the selected attribute.")
           imageButton(image = images[helpIcon]):
             let attribute: AttributeRecord = attributesList[index]
             dialog = setInfo(text = attribute.description, title = attribute.name)
+          setLayoutRowDynamic(height = 35, cols = 1)
       # Skills of the selected recruit
       else:
         discard
