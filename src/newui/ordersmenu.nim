@@ -38,9 +38,11 @@ proc countHeight(baseIndex: ExtendedBasesRange;
   result = 75
   if playerShip.speed == docked:
     result += 35
-    if skyBases[baseIndex].population > 0:
+    if getBasePopulation(baseIndex = baseIndex) == empty:
       result += 35
-      if haveTrader and skyBases[baseIndex].population > 0:
+    else:
+      result += 35
+      if haveTrader:
         result += 70
         if skyBases[baseIndex].recruits.len > 0:
           result += 35
@@ -102,8 +104,6 @@ proc countHeight(baseIndex: ExtendedBasesRange;
           result += 35
       if playerShip.homeBase != baseIndex:
         result += 35
-    if skyBases[baseIndex].population == 0:
-      result += 35
   else:
     result += 5
     var event: EventsTypes = EventsTypes.none
@@ -270,10 +270,15 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
   ## Returns the modified parameters dialog if error happened.
   labelButton(title = "Undock"):
     dockingOrder(dialog = dialog, state = state)
-  if skyBases[baseIndex].population > 0:
+  if getBasePopulation(baseIndex = baseIndex) == empty:
+    labelButton(title = "Loot"):
+      state = loot
+      dialog = none
+      closePopup()
+  else:
     labelButton(title = "Escape"):
       dockingOrder(escape = true, dialog = dialog, state = state)
-    if haveTrader and skyBases[baseIndex].population > 0:
+    if haveTrader:
       labelButton(title = "Trade"):
         state = trade
         dialog = none
@@ -413,11 +418,6 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
     if playerShip.homeBase != baseIndex:
       labelButton(title = "Set as home"):
         setAsHome(dialog = dialog)
-  if skyBases[baseIndex].population == 0:
-    labelButton(title = "Loot"):
-      state = loot
-      dialog = none
-      closePopup()
 
 proc finishStory(): GameDialog {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
@@ -720,7 +720,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
                 if module.mType == ModuleType2.hull:
                   dockingCost = module.maxModules
                   break
-              if skyBases[baseIndex].population > 0:
+              if getBasePopulation(baseIndex = baseIndex) > empty:
                 labelButton(title = "Dock (" & $dockingCost & " " & moneyName & ")"):
                   dockingOrder(dialog = dialog, state = state)
               else:
