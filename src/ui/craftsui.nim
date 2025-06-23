@@ -135,8 +135,8 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Page is the current page of recipes list to show, recipename is the
   ## text which will be searching in the recipes names. Can be empty, then
   ## show all recipes.
-  var craftsFrame = mainPaned & ".craftframe"
-  let craftsCanvas = craftsFrame & ".canvas"
+  var craftsFrame: string = mainPaned & ".craftframe"
+  let craftsCanvas: string = craftsFrame & ".canvas"
   if tclEval2(script = "winfo exists " & craftsCanvas) == "0":
     tclEval(script = """
       ttk::frame .gameframe.paned.craftframe
@@ -207,8 +207,8 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = craftsCanvas & ".craft.recipes.sframe.workshop configure -values [list " &
       workshops & "]")
   let
-    recipeName = (if argc == 3: $argv[2] else: "")
-    searchEntry = craftsCanvas & ".craft.recipes.sframe.search"
+    recipeName: string = (if argc == 3: $argv[2] else: "")
+    searchEntry: string = craftsCanvas & ".craft.recipes.sframe.search"
   if recipeName.len == 0:
     tclEval(script = searchEntry & " configure -validatecommand {}")
     tclEval(script = searchEntry & " delete 0 end")
@@ -240,19 +240,19 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     recipesTable.clearTable
   let
-    typeBox = craftsCanvas & ".craft.recipes.sframe.show"
-    showType = try:
+    typeBox: string = craftsCanvas & ".craft.recipes.sframe.show"
+    showType: Natural = try:
         tclEval2(script = typeBox & " current").parseInt + 1
       except:
         return showError(message = "Can't get the show type value.")
-    page = try:
+    page: Positive = try:
         (if argc == 2: ($argv[1]).parseInt else: 1)
       except:
         return showError(message = "Can't get the page.")
-    startRow = (page - 1) * gameSettings.listsLimit + 1
+    startRow: Natural = (page - 1) * gameSettings.listsLimit + 1
   var
-    currentRow = 1
-    canCraft, hasWorkplace, hasTool, hasMaterials = false
+    currentRow: Positive = 1
+    canCraft, hasWorkplace, hasTool, hasMaterials: bool = false
   let workshop: int = try:
         tclGetVar(varName = "workshop").parseInt
       except:
@@ -267,7 +267,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
         continue
     except:
       return showError(message = "Can't check recipeName.")
-    let recipe = try:
+    let recipe: CraftData = try:
         recipesList[rec]
       except:
         return showError(message = "Can't get the recipe.")
@@ -404,7 +404,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = ordersTable, text = recipeName, tooltip = tooltipText,
         command = command, column = 2)
     var workers: string = ""
-    var haveWorkers = false
+    var haveWorkers: bool = false
     for worker in module.owner:
       if worker > -1:
         if haveWorkers:
@@ -438,9 +438,9 @@ type RecipesSortOrders = enum
   nameAsc, nameDesc, workplaceAsc, workplaceDesc, toolsAsc, toolsDesc,
     materialsAsc, materialsDesc, none
 
-const defaultRecipesSortOrder = none
+const defaultRecipesSortOrder: RecipesSortOrders = none
 
-var recipesSortOrder = defaultRecipesSortOrder
+var recipesSortOrder: RecipesSortOrders = defaultRecipesSortOrder
 
 proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -457,7 +457,7 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortCrafting x
   ## X is X axis coordinate where the player clicked the mouse button
-  let column = try:
+  let column: int = try:
       getColumnNumber(table = recipesTable, xPosition = ($argv[1]).parseInt)
     except:
       return showError(message = "Can't get the column.")
@@ -493,8 +493,8 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     materials: bool
     id: string
   var
-    localRecipes: seq[LocalModuleData]
-    canCraft, hasWorkplace, hasTool, hasMaterials = false
+    localRecipes: seq[LocalModuleData] = @[]
+    canCraft, hasWorkplace, hasTool, hasMaterials: bool = false
   for recipe in knownRecipes:
     try:
       isCraftable(recipe = recipesList[recipe], canCraft = canCraft,
@@ -605,12 +605,12 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   ## SetRecipe index
   ## Index is the index of the recipe to craft.
   let
-    recipeIndex = $argv[1]
-    recipeLength = recipeIndex.len
-    recipeType = (if recipeLength > 6 and recipeIndex[0 .. 4] ==
+    recipeIndex: string = $argv[1]
+    recipeLength: Natural = recipeIndex.len
+    recipeType: string = (if recipeLength > 6 and recipeIndex[0 .. 4] ==
         "Study": "Study" elif recipeLength > 6 and recipeIndex[0 .. 4] ==
         "Decon": "Deconstruct" else: "Craft")
-    craftDialog = try:
+    craftDialog: string = try:
         createDialog(name = ".craftdialog", title = recipeType & " " &
           (if recipeType == "Study": itemsList[recipeIndex[6 ..
           ^1].parseInt].name elif recipeType == "Deconstruct": itemsList[
@@ -618,7 +618,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
           recipeIndex.parseInt].name), titleWidth = 275, columns = 2)
       except:
         return showError(message = "Can't create a dialog.")
-    maxAmount = try:
+    maxAmount: int = try:
         checkRecipe(recipeIndex = recipeIndex)
       except ValueError:
         return showError(message = "Can't get max amount.")
@@ -638,19 +638,19 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
         showMessage(text = "You can't start crafting because you don't have free cargo.",
             title = "Can't start crafting")
         return tclOk
-    amountBox = craftDialog & ".amount"
+    amountBox: string = craftDialog & ".amount"
   tclEval(script = "ttk::spinbox " & amountBox & " -from 1 -to " & $maxAmount &
       " -validate key -validatecommand {ValidateSpinbox %W %P " & craftDialog & ".craft} -width 20")
   tclEval(script = amountBox & " set 1")
   tclSetVar(varName = "craftworker", newValue = "noone")
-  var label = craftDialog & ".amountlabel"
+  var label: string = craftDialog & ".amountlabel"
   tclEval(script = "ttk::label " & label & " -text {Amount:}")
-  var button = craftDialog & ".maxamount"
+  var button: string = craftDialog & ".maxamount"
   tclEval(script = "ttk::button " & button & " -text {max " & $maxAmount &
       "} -command {" & amountBox & " set " & $maxAmount & ";" & amountBox & " validate}")
   var
-    firstFocus = ""
-    buttonRow = 1
+    firstFocus: string = ""
+    buttonRow: Positive = 1
   if recipeType != "Study":
     if maxAmount > 1:
       tclEval(script = "grid " & label)
@@ -668,7 +668,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     if firstFocus.len == 0:
       firstFocus = ".amount"
     buttonRow = buttonRow + 2
-  var mType: ModuleType
+  var mType: ModuleType = ModuleType.any
   if recipeType in ["Study", "Deconstruct"]:
     mType = alchemyLab
   else:
@@ -677,8 +677,8 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get a module's type.")
   var
-    modulesList2 = ""
-    modulesAmount = 0
+    modulesList2: string = ""
+    modulesAmount: Natural = 0
     selected: Natural = 0
     workshop: int = try:
         tclGetVar(varName = "workshop").parseInt
