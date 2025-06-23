@@ -216,7 +216,8 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
     recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
     windowName: string = recruit.name
   updateDialog(width = width, height = height)
-  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle}):
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle}):
     changeStyle(field = spacing, x = 0, y = 0):
       changeStyle(field = buttonRounding, value = 0):
         setLayoutRowDynamic(height = 30, cols = 4)
@@ -261,7 +262,9 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
           colorLabel(str = getAttributeLevelName(
               attributeLevel = attrib.level), color = theme.colors[goldenColor])
           imageButton(image = images[helpIcon]):
-            discard
+            let attribute: AttributeRecord = attributesList[index]
+            dialog = setInfo(text = attribute.description, title = attribute.name)
+      # Skills of the selected recruit
       else:
         discard
     # Buttons
@@ -341,5 +344,5 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
           data = index, code = setRecruitInfo, dialog = dialog)
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
-    # Show the list of items in the player's ship's cargo
+  # Show the last in-game messages
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
