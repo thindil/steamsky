@@ -406,6 +406,17 @@ type
     pool*: nk_allocator
     grow_factor*: cfloat
     calls*: nk_size
+  nk_table* {.importc: "struct nk_table", nodecl.} = object
+    ## Internal Nuklear type
+  nk_page_data* {.bycopy, union.} = object
+    ## Internal Nuklear type
+    tbl*: nk_table
+    pan*: nk_panel
+    win*: nk_window
+  nk_page_element* {.importc: "struct nk_page_element", nodecl.} = object
+    data*: nk_page_data
+    next*, prev*: pointer
+    ## Internal Nuklear type
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
