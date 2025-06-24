@@ -269,6 +269,24 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
           var value: int = attrib.level
           progressBar(value = value, maxValue = 50, modifyable = false)
       # Skills of the selected recruit
+      of 2:
+        for skill in recruit.skills:
+          try:
+            setLayoutRowStatic(height = 35, cols = 3, ratio = [120.cfloat, 120, 35])
+            label(str = skillsList[skill.index].name & ":")
+            colorLabel(str = getSkillLevelName(skillLevel = skill.level), color = theme.colors[goldenColor])
+            if gameSettings.showTooltips:
+              addTooltip(bounds = getWidgetBounds(),
+                  text = "Show detailed information about the selected skill.")
+            imageButton(image = images[helpIcon]):
+              let skill: SkillRecord = skillsList[skill.index]
+              dialog = setInfo(text = skill.description, title = skill.name)
+            setLayoutRowDynamic(height = 20, cols = 1)
+            var value: int = skill.level
+            progressBar(value = value, maxValue = 100, modifyable = false)
+          except:
+            dialog = setError(message = "Can't show the recruit's skills.")
+            break
       else:
         discard
     # Buttons
