@@ -965,13 +965,11 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
                   field = padding).x;
             row(x = x, y = 0, w = widgetWidth, h = 30):
               if currentTab == index:
-                saveButtonStyle()
-                setButtonStyle2(source = active, destination = normal)
-                if gameSettings.showTooltips:
-                  addTooltip(bounds = getWidgetBounds(), text = tabTooltips[index])
-                labelButton(title = tab):
-                  discard
-                restoreButtonStyle()
+                changeStyle(src = active, dest = normal):
+                  if gameSettings.showTooltips:
+                    addTooltip(bounds = getWidgetBounds(), text = tabTooltips[index])
+                  labelButton(title = tab):
+                    discard
               else:
                 if gameSettings.showTooltips:
                   addTooltip(bounds = getWidgetBounds(), text = tabTooltips[index])
