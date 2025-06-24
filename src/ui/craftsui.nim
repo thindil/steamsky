@@ -693,7 +693,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
         modulesAmount.inc
     except:
       return showError(message = "Can't create the list of modules.")
-  let modulesBox = craftDialog & ".workshop"
+  let modulesBox: string = craftDialog & ".workshop"
   tclEval(script = "ttk::combobox " & modulesBox & " -state readonly")
   tclEval(script = modulesBox & " configure -values [list" & modulesList2 & "]")
   tclEval(script = modulesBox & " current " & $selected)
@@ -706,7 +706,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     buttonRow = buttonRow + 2
     if firstFocus.len == 0:
       firstFocus = ".workshop"
-  var crafterButton = craftDialog & ".noworker"
+  var crafterButton: string = craftDialog & ".noworker"
   tclEval(script = "ttk::radiobutton " & crafterButton & " -text {Don't assing anyone} -variable craftworker -value noone")
   tclEval(script = "grid " & crafterButton & " -columnspan 2 -padx 5 -sticky w")
   tclEval(script = "tooltip::tooltip " & crafterButton & " \"Don't assign anyone to the order. You can\\nmanually do it later, in ship info screen.\"")
@@ -723,12 +723,12 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::radiobutton " & crafterButton & " -text {Assign selected member} -variable craftworker -value fromlist")
   tclEval(script = "grid " & crafterButton & " -columnspan 2 -padx 5 -sticky w")
   tclEval(script = "tooltip::tooltip " & crafterButton & " \"Assign the crew member from the list.\\nThe sign + after name means that this crew member has\\nneeded skill, the sign ++ after name means that his/her\\nneeded skill is the best in the crew.\"")
-  let crewBox = craftDialog & ".members"
+  let crewBox: string = craftDialog & ".members"
   tclEval(script = "ttk::combobox " & crewBox & " -state readonly")
   tclEval(script = "bind " & crafterButton & " <Tab> {focus " & crewBox & ";break}")
   tclEval(script = "bind " & crafterButton & " <Escape> {" & craftDialog & ".cancel invoke;break}")
-  var crewList = ""
-  let recipe = try:
+  var crewList: string = ""
+  let recipe: CraftData = try:
       setRecipeData(recipeIndex = recipeIndex)
     except:
       return showError(message = "Can't get the recipe.")
@@ -776,15 +776,15 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SetCrafting index
   ## Index is the index of the crafting recipe to set
-  var recipeIndex = $argv[1]
+  var recipeIndex: string = $argv[1]
   if recipeIndex[0] == '{':
     recipeIndex = recipeIndex[1 .. ^2]
   let
-    modulesBox = ".craftdialog.workshop"
-    amountBox = ".craftdialog.amount"
-    assignWorker = tclGetVar(varName = "craftworker")
-    memberBox = ".craftdialog.members"
-  var workshopIndex = try:
+    modulesBox: string = ".craftdialog.workshop"
+    amountBox: string = ".craftdialog.amount"
+    assignWorker: string = tclGetVar(varName = "craftworker")
+    memberBox: string = ".craftdialog.members"
+  var workshopIndex: Natural = try:
       tclEval2(script = modulesBox & " current").parseInt + 1
     except:
       return showError(message = "Can't get the workshop index.")
@@ -805,11 +805,11 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
         except:
           return showError(message = "Can't give order from list.")
       elif assignWorker == "best":
-        let recipe = try:
+        let recipe: CraftData = try:
             setRecipeData(recipeIndex = recipeIndex)
           except:
             return showError(message = "Can't set the recipe's data.")
-        var workerAssigned = false
+        var workerAssigned: bool = false
         for mIndex, member in playerShip.crew:
           if getSkillMarks(skillIndex = recipe.skill, memberIndex = mIndex) == " ++":
             try:
@@ -848,12 +848,12 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Index is the index of the crafting recipe to show, cancraft if TRUE
   ## then recipe can be crafted (show craft button)
   let
-    recipeIndex = $argv[1]
-    recipeLength = recipeIndex.len
-    recipeType = (if recipeLength > 6 and recipeIndex[0 .. 4] ==
+    recipeIndex: string = $argv[1]
+    recipeLength: Natural = recipeIndex.len
+    recipeType: string = (if recipeLength > 6 and recipeIndex[0 .. 4] ==
         "Study": "Study" elif recipeLength > 6 and recipeIndex[0 .. 4] ==
         "Decon": "Deconstruct" else: "Craft")
-    recipeDialog = try:
+    recipeDialog: string = try:
         createDialog(name = ".recipedialog", title = (
           if recipeType == "Study": "Study " & itemsList[recipeIndex[6 ..
           ^1].parseInt].name elif recipeType == "Deconstruct": "Deconstruct " &
@@ -862,7 +862,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
               titleWidth = 275)
       except:
         return showError(message = "Can't create the dialog.")
-    recipeText = recipeDialog & ".text"
+    recipeText: string = recipeDialog & ".text"
   tclEval(script = "text " & recipeText & " -wrap char -height 15 -width 40")
   tclEval(script = recipeText & " tag configure red -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
@@ -870,7 +870,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = recipeText & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-goldenyellow)"))
-  var recipe: CraftData
+  var recipe: CraftData = CraftData()
   if recipeType == "Study":
     try:
       recipe.materialTypes.add(y = itemsList[recipeIndex[6 ..
@@ -925,9 +925,9 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = recipeText & " insert end {Materials needed: }")
   for mIndex, material in recipe.materialTypes:
     tclEval(script = recipeText & " insert end {\n- } [list gold]")
-    var mAmount = 0
+    var mAmount: int = 0
     for iIndex, item in itemsList:
-      var isMaterial = false
+      var isMaterial: bool = false
       if recipeIndex.len > 6 and recipeIndex[0 .. 4] == "Study":
         try:
           if item.name == itemsList[recipe.resultIndex].name:
@@ -946,7 +946,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       if isMaterial:
         if mAmount > 0:
           tclEval(script = recipeText & " insert end { or } [list gold]")
-        let cargoIndex = findItem(inventory = playerShip.cargo,
+        let cargoIndex: int = findItem(inventory = playerShip.cargo,
             protoIndex = iIndex)
         if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
             recipe.materialAmounts[mIndex]:
@@ -957,18 +957,18 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           tclEval(script = recipeText & " insert end {" &
               $recipe.materialAmounts[mIndex] & "x" & item.name & "} [list red]")
         mAmount.inc
-  var haveTool = false
+  var haveTool: bool = false
   if recipe.tool == "None":
     haveTool = true
   else:
     tclEval(script = recipeText & " insert end {\nTool: }")
-    var mAmount = 0
+    var mAmount: int = 0
     for iIndex, item in itemsList:
       haveTool = false
       if item.itemType == recipe.tool and item.value[1] <= recipe.toolQuality:
         if mAmount > 0:
           tclEval(script = recipeText & " insert end { or } [list gold]")
-        let cargoIndex = findItem(inventory = playerShip.cargo,
+        let cargoIndex: int = findItem(inventory = playerShip.cargo,
             protoIndex = iIndex, quality = recipe.toolQuality)
         if cargoIndex > -1:
           haveTool = true
@@ -977,7 +977,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         mAmount.inc
   tclEval(script = recipeText & " insert end {\nWorkplace: }")
   var
-    haveWorkplace = false
+    haveWorkplace: bool = false
     workplaceName = ""
   for module in playerShip.modules:
     try:
