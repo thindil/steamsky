@@ -2885,6 +2885,30 @@ template changeStyle*(field: StyleStyleTypes; color: Color; code: untyped) =
     code
     stylePopStyleItem()
 
+var storedButton: nk_style_button = nk_style_button() ## Used to store temporary button's setting
+
+proc storeButton() {.raises: [], tags: [], contractual.} =
+  ## Store the current setting for buttons
+  storedButton = ctx.style.button
+
+proc restoreButtonStyle(destination: ButtonStyleTypes) {.raises: [], tags: [], contractual.} =
+  ## Restore default setting for the selected field in the button's style
+  ##
+  ## * destination - the field in the style which will be restored
+  if destination == normal:
+    ctx.style.button.normal = storedButton.normal
+
+template changeStyle*(src, dest: ButtonStyleTypes; code: untyped) =
+  ## Change temporary the setting of the selected button style
+  ##
+  ## * src      - the field which value will be copied
+  ## * dest     - the field to which the source value will be copied
+  ## * code     - the code executed when the temporary setting is set
+  storeButton()
+  setButtonStyle2(source = src, destination = dest)
+  code
+  restoreButtonStyle(destination = dest)
+
 # ------
 # Combos
 # ------
