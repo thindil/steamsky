@@ -34,8 +34,8 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
   var maxEvents: Natural = 0
   # Asking in base
   if baseIndex > 0:
-    maxEvents = (if skyBases[baseIndex].population < 150: 5 elif skyBases[
-        baseIndex].population < 300: 10 else: 15)
+    let population: BasePopulation = getBasePopulation(baseIndex = baseIndex)
+    maxEvents = (if population == small: 5 elif population == medium: 10 else: 15)
     skyBases[baseIndex].askedForEvents = gameDate
     addMessage(message = playerShip.crew[traderIndex].name &
         " asked for recent events known at base '" & skyBases[baseIndex].name &
@@ -95,8 +95,8 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
         if eventX != playerShip.skyX and eventY != playerShip.skyY and
           skyMap[eventX][eventY].eventIndex == -1 and
           skyBases[skyMap[eventX][eventY].baseIndex].known:
-          if event == attackOnBase and skyBases[skyMap[eventX][
-              eventY].baseIndex].population > 0:
+          let population = getBasePopulation(baseIndex = skyMap[eventX][eventY].baseIndex)
+          if event == attackOnBase and population > empty:
             break
           if event == doublePrice and isFriendly(
               sourceFaction = playerShip.crew[0].faction,
@@ -107,8 +107,7 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
               sourceFaction = playerShip.crew[0].faction,
               targetFaction = skyBases[skyMap[eventX][eventY].baseIndex].owner):
             break
-          if event == baseRecovery and skyBases[skyMap[eventX][
-              eventY].baseIndex].population == 0:
+          if event == baseRecovery and population == empty:
             break
     let
       diffX: Natural = abs(x = playerShip.skyX - eventX)
@@ -161,13 +160,14 @@ proc askForBases*() {.raises: [KeyError, Exception], tags: [
     baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     shipIndex: Natural = (if baseIndex == 0: eventsList[skyMap[playerShip.skyX][
         playerShip.skyY].eventIndex].shipIndex else: 0)
+    population: BasePopulation = getBasePopulation(baseIndex = baseIndex)
   var amount, radius: Natural = 0
   # Asking in base
   if baseIndex > 0:
-    if skyBases[baseIndex].population < 150:
+    if population == small:
       amount = 10
       radius = 10
-    elif skyBases[baseIndex].population < 300:
+    elif population == medium:
       amount = 20
       radius = 20
     else:
@@ -207,9 +207,9 @@ proc askForBases*() {.raises: [KeyError, Exception], tags: [
             break findBases
   if amount > 0:
     if baseIndex > 0:
-      if skyBases[baseIndex].population < 150 and amount > 1:
+      if population == small and amount > 1:
         amount = 1
-      elif skyBases[baseIndex].population < 300 and amount > 2:
+      elif population == medium and amount > 2:
         amount = 2
       elif amount > 4:
         amount = 4
