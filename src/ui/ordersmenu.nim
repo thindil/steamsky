@@ -67,10 +67,10 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
   result = false
   addButton(name = ".undock", label = "Undock", command = "Docking",
       shortcut = "d", underline = 2)
-  if skyBases[baseIndex].population > 0:
+  if getBasePopulation(baseIndex = baseIndex) > empty:
     addButton(name = ".escape", label = "Escape", command = "Docking escape",
         shortcut = "a", underline = 3)
-    if haveTrader and skyBases[baseIndex].population > 0:
+    if haveTrader:
       addButton(name = ".trade", label = "Trade", command = "ShowTrade",
           shortcut = "t", underline = 0)
       addButton(name = ".school", label = "School", command = "ShowSchool",
@@ -177,7 +177,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
     if playerShip.homeBase != baseIndex:
       addButton(name = ".home", label = "Set as home", command = "SetAsHome",
           shortcut = "h", underline = 7)
-  if skyBases[baseIndex].population == 0:
+  else:
     addButton(name = ".loot", label = "Loot", command = "ShowLoot",
         shortcut = "l", underline = 0)
 
@@ -299,7 +299,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
             if module.mType == ModuleType2.hull:
               dockingCost = module.maxModules
               break
-          if skyBases[baseIndex].population > 0:
+          if getBasePopulation(baseIndex = baseIndex) > empty:
             addButton(name = ".dock", label = "Dock (" & $dockingCost & " " &
                 moneyName & ")", command = "Docking", shortcut = "d", underline = 0)
           else:
