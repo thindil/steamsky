@@ -227,10 +227,11 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       for index, _ in playerShip.modules:
         itemsIndexes.add(y = $(index + 1))
       itemsIndexes.add(y = "0")
-      itemsIndexes.add(y = (if skyBases[baseIndex].population >
-          149: "-1" else: "-3"))
-      itemsIndexes.add(y = (if skyBases[baseIndex].population >
-          299: "-2" else: "-3"))
+      let population: BasePopulation = getBasePopulation(baseIndex = baseIndex)
+      itemsIndexes.add(y = (if population >
+          BasePopulation.small: "-1" else: "-3"))
+      itemsIndexes.add(y = (if population >
+          BasePopulation.medium: "-2" else: "-3"))
   tclEval(script = "grid configure " & baseTable.canvas & " -row 2")
   let
     moneyIndex2: int = findItem(inventory = playerShip.cargo,
@@ -598,7 +599,8 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't count repair cost.")
       localItems.add(y = LocalItemData(name: module.name, cost: cost,
           time: time, id: $(index + 1)))
-    if skyBases[baseIndex].population > 299:
+    let population: BasePopulation = getBasePopulation(baseIndex = baseIndex)
+    if population > BasePopulation.medium:
       try:
         countRepairCost(i = -1)
       except:
@@ -617,7 +619,7 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't count repair cost4.")
       localItems.add(y = LocalItemData(name: "Quickly repair the whole ship",
           cost: cost, time: time, id: "-2"))
-    elif skyBases[baseIndex].population > 149:
+    elif population > BasePopulation.small:
       try:
         countRepairCost(i = -1)
       except:
