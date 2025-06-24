@@ -140,9 +140,7 @@ proc getHighestSkill(baseIndex: BasesRange;
   ##
   ## Returns the name of the skill with the highest level of the selected
   ## recruit
-  var
-    highestLevel: Positive = 1
-    highestIndex: Natural = 0
+  var highestLevel, highestIndex: Positive = 1
   for skill in skyBases[baseIndex].recruits[memberIndex].skills:
     if skill.level > highestLevel:
       highestLevel = skill.level
@@ -218,23 +216,23 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar}):
-#    changeStyle(field = spacing, x = 0, y = 0):
-#      changeStyle(field = buttonRounding, value = 0):
-#        setLayoutRowDynamic(height = 30, cols = 4)
-#        const tabs: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
-#        for index, tab in tabs:
-#          try:
-#            if currentTab == index:
-#              saveButtonStyle()
-#              setButtonStyle2(source = active, destination = normal)
-#              labelButton(title = tab):
-#                discard
-#              restoreButtonStyle()
-#            else:
-#              labelButton(title = tab):
-#                currentTab = index.cint
-#          except:
-#            dialog = setError(message = "Can't set the tabs buttons.")
+    changeStyle(field = spacing, x = 0, y = 0):
+      changeStyle(field = buttonRounding, value = 0):
+        setLayoutRowDynamic(height = 30, cols = 4)
+        const tabs: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
+        for index, tab in tabs:
+          try:
+            if currentTab == index:
+              saveButtonStyle()
+              setButtonStyle2(source = active, destination = normal)
+              labelButton(title = tab):
+                discard
+              restoreButtonStyle()
+            else:
+              labelButton(title = tab):
+                currentTab = index.cint
+          except:
+            dialog = setError(message = "Can't set the tabs buttons.")
     setLayoutRowDynamic(height = height - 125, cols = 1)
     group(title = "InfoGroup", flags = {windowNoFlags}):
       case currentTab
