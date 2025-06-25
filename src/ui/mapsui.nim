@@ -370,14 +370,14 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
       except:
         showError(message = "Can't get the name of the base's type.")
         return
-      if skyBases[baseIndex].population > 0:
+      let population: BasePopulation = getBasePopulation(baseIndex = baseIndex)
+      if population > empty:
         insertText(newText = "\nPopulation: ")
-        insertText(newText = $getBasePopulation(baseIndex = baseIndex),
-            tagName = "yellow2")
+        insertText(newText = $population, tagName = "yellow2")
       insertText(newText = "\nSize: ")
       insertText(newText = $skyBases[baseIndex].size & "\n",
           tagName = "yellow2")
-      if skyBases[baseIndex].population > 0:
+      if population > empty:
         insertText(newText = "Owner: ")
         try:
           insertText(newText = factionsList[skyBases[baseIndex].owner].name,
@@ -387,7 +387,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
           return
       else:
         insertText(newText = "Base is abandoned")
-      if skyBases[baseIndex].population > 0:
+      if population > empty:
         var
           baseInfoText: string = "\n"
           color: string = ""
