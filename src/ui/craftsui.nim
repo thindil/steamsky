@@ -779,11 +779,12 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   var recipeIndex: string = $argv[1]
   if recipeIndex[0] == '{':
     recipeIndex = recipeIndex[1 .. ^2]
-  let
+  const
     modulesBox: string = ".craftdialog.workshop"
     amountBox: string = ".craftdialog.amount"
-    assignWorker: string = tclGetVar(varName = "craftworker")
     memberBox: string = ".craftdialog.members"
+  let
+    assignWorker: string = tclGetVar(varName = "craftworker")
   var workshopIndex: Natural = try:
       tclEval2(script = modulesBox & " current").parseInt + 1
     except:
@@ -978,7 +979,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = recipeText & " insert end {\nWorkplace: }")
   var
     haveWorkplace: bool = false
-    workplaceName = ""
+    workplaceName: string = ""
   for module in playerShip.modules:
     try:
       if modulesList[module.protoIndex].mType == recipe.workplace:
@@ -1010,9 +1011,9 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = recipeText & " configure -state disabled")
   tclEval(script = "grid " & recipeText & " -padx 5")
   if argv[2] == "true":
-    let buttonBox = recipeDialog & ".buttons"
+    let buttonBox: string = recipeDialog & ".buttons"
     tclEval(script = "ttk::frame " & buttonBox)
-    var button = buttonBox & ".craft"
+    var button: string = buttonBox & ".craft"
     tclEval(script = "ttk::button " & button & " -image " &
         recipeType.toLowerAscii & "icon -command {ShowSetRecipe {" & $argv[1] &
         "};CloseDialog " & recipeDialog & "} -style Dialog.TButton -text {" &
@@ -1051,15 +1052,15 @@ proc showCraftingTabCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowCraftingTab
   let
-    craftCanvas = mainPaned & ".craftframe.canvas"
-    craftFrame = craftCanvas & ".craft"
+    craftCanvas: string = mainPaned & ".craftframe.canvas"
+    craftFrame: string = craftCanvas & ".craft"
   if tclGetVar(varName = "newtab") == "recipes":
-    var frame = craftFrame & ".orders"
+    var frame: string = craftFrame & ".orders"
     tclEval(script = "grid remove " & frame)
     frame = craftFrame & ".recipes"
     tclEval(script = "grid " & frame)
   else:
-    var frame = craftFrame & ".recipes"
+    var frame: string = craftFrame & ".recipes"
     tclEval(script = "grid remove " & frame)
     frame = craftFrame & ".orders"
     tclEval(script = "grid " & frame)
@@ -1166,8 +1167,8 @@ proc craftsMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   ## CraftMore show/hide
   ## If th argument is set to show, show the options, otherwise hide them.
   let
-    craftFrame = mainPaned & ".craftframe"
-    button = gameHeader & ".morebutton"
+    craftFrame: string = mainPaned & ".craftframe"
+    button: string = gameHeader & ".morebutton"
   if argv[1] == "show":
     tclEval(script = "grid " & craftFrame & ".canvas.craft.recipes.sframe -sticky w -row 0")
     tclEval(script = button & " configure -command {CraftsMore hide}")
