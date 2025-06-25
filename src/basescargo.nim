@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,7 +20,7 @@
 
 import std/tables
 import contracts, nimalyzer
-import basestypes, game, maps, types, utils
+import bases, basestypes, game, maps, types, utils
 
 proc generateCargo*() {.raises: [KeyError], tags: [],
     contractual.} =
@@ -28,8 +28,8 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
   let
     baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex
-    population: Positive = (if skyBases[baseIndex].population > 0: skyBases[
-        baseIndex].population else: 1)
+    population: Positive = (if getBasePopulation(baseIndex = baseIndex) >
+        empty: skyBases[baseIndex].population else: 1)
   var chance: int = (if population < 150: 5 elif population <
       300: 10 else: 15)
   chance += daysDifference(dateToCompare = skyBases[baseIndex].visited)
@@ -83,13 +83,14 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
         if roll < 30 and item.amount > 0:
           item.amount -= getRandom(min = 1, max = getMaxAmount(
               amount = item.amount))
-        elif roll < 60 and skyBases[baseIndex].population > 0:
+        elif roll < 60 and getBasePopulation(baseIndex = baseIndex) > empty:
           item.amount = (if item.amount == 0: getRandom(min = 1, max = 10) *
               population else: item.amount + getRandom(min = 1,
               max = getMaxAmount(amount = item.amount)))
 
 proc findBaseCargo*(protoIndex: Natural;
-    durability: ItemsDurability = ItemsDurability.high): int {.raises: [], tags: [], contractual.} =
+    durability: ItemsDurability = ItemsDurability.high): int {.raises: [],
+    tags: [], contractual.} =
   ## Find the selected item in the currently visited base's cargo
   ##
   ## * protoIndex - the index of the prototype to search
