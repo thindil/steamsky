@@ -18,7 +18,7 @@
 ## Provides code related to recruit new crew members in bases, like show the
 ## UI, start negotiating, show information about a recruit, etc.
 
-import std/[algorithm, tables]
+import std/[algorithm, tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, crew, game, maps, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
@@ -262,7 +262,8 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
                 text = "Show detailed information about the selected attribute.")
           imageButton(image = images[helpIcon]):
             let attribute: AttributeRecord = attributesList[index]
-            dialog = setInfo(text = attribute.description, title = attribute.name)
+            dialog = setInfo(text = attribute.description,
+                title = attribute.name)
           setLayoutRowDynamic(height = 20, cols = 1)
           var value: int = attrib.level
           progressBar(value = value, maxValue = 50, modifyable = false)
@@ -272,7 +273,8 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
           try:
             setLayoutRowStatic(height = 35, cols = 3, ratio = [120.cfloat, 120, 35])
             label(str = skillsList[skill.index].name & ":")
-            colorLabel(str = getSkillLevelName(skillLevel = skill.level), color = theme.colors[goldenColor])
+            colorLabel(str = getSkillLevelName(skillLevel = skill.level),
+                color = theme.colors[goldenColor])
             if gameSettings.showTooltips:
               addTooltip(bounds = getWidgetBounds(),
                   text = "Show detailed information about the selected skill.")
@@ -285,6 +287,18 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
           except:
             dialog = setError(message = "Can't show the recruit's skills.")
             break
+      # Equipment of the selected recruit
+      of 3:
+        for index, item in recruit.equipment:
+          if item > -1:
+            setLayoutRowDynamic(height = 35, cols = 2)
+            label(str = ($index).capitalizeAscii & ":")
+            try:
+              colorLabel(str = itemsList[recruit.inventory[item]].name,
+                  color = theme.colors[goldenColor])
+            except:
+              dialog = setError(message = "Can't show the recruit's equipment")
+              break
       else:
         discard
     # Buttons
