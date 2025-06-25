@@ -1495,6 +1495,31 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds:
     # if style.draw_end != nil:
     #   style.draw_end(b = `out`, style.userdata)
 
+# ---------
+# Aligmnent
+# ---------
+proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T]; member: int): ptr typedesc[T]
+  {.raises: [], tags: [], contractual.} =
+  ## Get the container of the selected element
+  ##
+  ## * ptr    - the pointer which will be converted
+  ## * type   - the type to which the pointer will be converted
+  ## * member - the member of the container to extract
+  ##
+  ## Returns the pointer to the selected member of the container
+  discard
+
+# ------------
+# Page element
+# ------------
+proc nkFreePageElement(ctx; elem: ptr nk_page_element) {.raises: [], tags: [],
+  contractual.} =
+  ## Free memory used by the selected page element
+  ##
+  ## * ctx  - the Nuklear context
+  ## * elem - the page element which will be removed
+  discard
+
 # -----
 # Panel
 # -----
