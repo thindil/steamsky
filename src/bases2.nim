@@ -35,7 +35,8 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
   # Asking in base
   if baseIndex > 0:
     let population: BasePopulation = getBasePopulation(baseIndex = baseIndex)
-    maxEvents = (if population == small: 5 elif population == medium: 10 else: 15)
+    maxEvents = (if population == small: 5 elif population ==
+        medium: 10 else: 15)
     skyBases[baseIndex].askedForEvents = gameDate
     addMessage(message = playerShip.crew[traderIndex].name &
         " asked for recent events known at base '" & skyBases[baseIndex].name &
@@ -95,7 +96,8 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
         if eventX != playerShip.skyX and eventY != playerShip.skyY and
           skyMap[eventX][eventY].eventIndex == -1 and
           skyBases[skyMap[eventX][eventY].baseIndex].known:
-          let population = getBasePopulation(baseIndex = skyMap[eventX][eventY].baseIndex)
+          let population: BasePopulation = getBasePopulation(baseIndex = skyMap[
+              eventX][eventY].baseIndex)
           if event == attackOnBase and population > empty:
             break
           if event == doublePrice and isFriendly(
@@ -112,7 +114,8 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
     let
       diffX: Natural = abs(x = playerShip.skyX - eventX)
       diffY: Natural = abs(x = playerShip.skyY - eventY)
-      eventTime: Natural = (60 * sqrt(x = (diffX ^ 2).float + (diffY ^ 2).float)).Natural
+      eventTime: Natural = (60 * sqrt(x = (diffX ^ 2).float + (diffY ^
+          2).float)).Natural
     case event
     of enemyShip:
       eventsList.add(y = EventData(eType: enemyShip, skyX: eventX,
