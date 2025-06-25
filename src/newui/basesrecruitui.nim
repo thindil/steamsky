@@ -223,11 +223,9 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
         for index, tab in tabs:
           try:
             if currentTab == index:
-              saveButtonStyle()
-              setButtonStyle2(source = active, destination = normal)
-              labelButton(title = tab):
-                discard
-              restoreButtonStyle()
+              changeStyle(src = active, dest = normal):
+                labelButton(title = tab):
+                  discard
             else:
               labelButton(title = tab):
                 currentTab = index.cint
