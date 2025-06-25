@@ -20,7 +20,8 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
-import ../[basestypes, config, game, maps, messages, reputation, tk, types, utils]
+import ../[bases, basestypes, config, game, maps, messages, reputation, tk,
+    types, utils]
 import coreui, dialogs, errordialog, table
 
 {.push ruleOff: "varDeclared".}
@@ -100,16 +101,9 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
         " Y: " & $skyBases[index].skyY, tooltip = "The coordinates of the base",
         command = "ShowBaseInfo " & $index, column = 3, color = color)
     if skyBases[index].visited.year > 0:
-      addButton(table = basesTable, text = case skyBases[index].population
-        of 0:
-          "empty"
-        of 1..150:
-          "small"
-        of 151..299:
-          "medium"
-        else:
-          "large", tooltip = "The population size of the base",
-              command = "ShowBaseInfo " & $index, column = 4, color = color)
+      addButton(table = basesTable, text = $getBasePopulation(
+          baseIndex = index), tooltip = "The population size of the base",
+          command = "ShowBaseInfo " & $index, column = 4, color = color)
       addButton(table = basesTable, text = ($skyBases[index].size).toLowerAscii,
           tooltip = "The size of the base", command = "ShowBaseInfo " & $index,
           column = 5, color = color)
@@ -236,13 +230,13 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = baseLabel & " insert end { Y: }")
   tclEval(script = baseLabel & " insert end {" & $skyBases[baseIndex].skyY & "} [list gold]")
   var linesDiff: int = (if skyBases[baseIndex].visited.year > 0: 1 else: 0)
+  let population: BasePopulation = getBasePopulation(baseIndex = baseIndex)
   if skyBases[baseIndex].visited.year > 0:
     tclEval(script = baseLabel & " insert end {\nLast visited: }")
     tclEval(script = baseLabel & " insert end {" & formattedTime(
         time = skyBases[baseIndex].visited) & "} [list gold]")
     var timeDiff: int = 0
-    if skyBases[baseIndex].population > 0 and skyBases[
-        baseIndex].reputation.level > -25:
+    if population > empty and skyBases[baseIndex].reputation.level > -25:
       timeDiff = 30 - daysDifference(dateToCompare = skyBases[
           baseIndex].recruitDate)
       if timeDiff > 0:
@@ -253,8 +247,7 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = baseLabel & " insert end {\nNew recruits available now.} [list green]")
     else:
       tclEval(script = baseLabel & " insert end {\nYou can't recruit crew members at this base.} [list red]")
-    if skyBases[baseIndex].population > 0 and skyBases[
-        baseIndex].reputation.level > -25:
+    if population > empty and skyBases[baseIndex].reputation.level > -25:
       timeDiff = daysDifference(dateToCompare = skyBases[
           baseIndex].askedForEvents)
       if timeDiff < 7:
@@ -265,8 +258,7 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = baseLabel & " insert end {\nYou can ask for events again.} [list green]")
     else:
       tclEval(script = baseLabel & " insert end {\nYou can't ask for events at this base.} [list red]")
-    if skyBases[baseIndex].population > 0 and skyBases[
-        baseIndex].reputation.level > -1:
+    if population > empty and skyBases[baseIndex].reputation.level > -1:
       timeDiff = 7 - daysDifference(dateToCompare = skyBases[
           baseIndex].missionsDate)
       if timeDiff > 0:
