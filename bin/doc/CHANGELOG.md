@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Possible crash when showing information about recruits in bases
+
 ## [11.0.2] - 2025-06-22
 
 ### Fixed
