@@ -54,8 +54,7 @@ proc getHighestSkill(baseIndex: BasesRange;
   ## Returns the name of the skill with the highest level of the selected
   ## recruit
   var
-    highestLevel: Positive = 1
-    highestIndex: Natural = 0
+    highestLevel, highestIndex: Positive = 1
   for skill in skyBases[baseIndex].recruits[memberIndex].skills:
     if skill.level > highestLevel:
       highestLevel = skill.level
