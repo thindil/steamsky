@@ -1512,13 +1512,23 @@ proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T]; member: int): ptr typ
 # ------------
 # Page element
 # ------------
+proc nkLinkPageElementIntoFreelist(ctx; elem: ptr nk_page_element) {.raises: [], tags: [], contractual.} =
+  ## Link the element into list of items to free
+  ##
+  ## * ctx  - the Nuklear context
+  ## * elem - the page element which will be freed
+  # link table into freelist
+  discard
+
 proc nkFreePageElement(ctx; elem: ptr nk_page_element) {.raises: [], tags: [],
   contractual.} =
   ## Free memory used by the selected page element
   ##
   ## * ctx  - the Nuklear context
   ## * elem - the page element which will be removed
-  discard
+  if ctx.use_pool:
+    nkLinkPageElementIntoFreelist(ctx = ctx, elem = elem)
+    return
 
 # -----
 # Panel

@@ -424,6 +424,7 @@ type
     current*, active*: ptr nk_window
     seq*: uint
     memory*: nk_buffer
+    use_pool*: bool
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle ## Interna Nuklear data
   nk_rect* {.importc: "struct nk_rect", nodecl.} = object
