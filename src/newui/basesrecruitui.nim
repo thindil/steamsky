@@ -310,6 +310,34 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
+proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the negotiate dialog
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  const
+    width: float = 400
+    height: float = 400
+
+  let
+    recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
+    windowName: string = "Negotiate with " & recruit.name
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar}):
+    setLayoutRowDynamic(height = 30, cols = 2)
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    imageLabelButton(image = images[negotiateColoredIcon], text = "Hire",
+        alignment = right):
+      discard
+    restoreButtonStyle()
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = windowName)
+
 proc setRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [],
     contractual.} =
   ## Set the data needed for show information about the selected recruit
