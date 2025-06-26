@@ -27,7 +27,7 @@ proc payForDock*() {.raises: [KeyError, ReputationError], tags: [], contractual.
   ## Pay daily fee for docking, if the player doesn't have enough money for
   ## pay, reduce the player's reputation in the base
   let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  if skyBases[baseIndex].population == 0:
+  if getBasePopulation(baseIndex = baseIndex) == empty:
     return
   let moneyIndex2: int = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
