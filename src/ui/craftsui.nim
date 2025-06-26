@@ -389,19 +389,19 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     if module.mType != ModuleType2.workshop:
       continue
     var
-      recipeName: string = try:
+      recipeName2: string = try:
           getWorkshopRecipeName(workshop = index)
       except:
         return showError(message = "Can't get the recipe name.")
       tooltipText: string = "Cancel the selected order"
       command: string = "ChangeCraftOrder " & $index & " cancel"
-    if recipeName.len == 0:
-      recipeName = "Not set"
+    if recipeName2.len == 0:
+      recipeName2 = "Not set"
       tooltipText = "Set a new order for the workshop"
       command = "ChangeCraftOrder " & $index & " new"
     addButton(table = ordersTable, text = module.name, tooltip = tooltipText,
         command = command, column = 1)
-    addButton(table = ordersTable, text = recipeName, tooltip = tooltipText,
+    addButton(table = ordersTable, text = recipeName2, tooltip = tooltipText,
         command = command, column = 2)
     var workers: string = ""
     var haveWorkers: bool = false
