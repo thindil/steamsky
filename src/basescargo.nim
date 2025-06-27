@@ -37,6 +37,15 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
     chance = 101
   if getRandom(min = 1, max = 100) > chance:
     return
+  var itemsAmount: Natural = case skyBases[baseIndex].size
+    of small:
+      32
+    of medium:
+      64
+    of big:
+      128
+    else:
+      0
   if skyBases[baseIndex].cargo.len == 0:
     skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: moneyIndex,
         amount: getRandom(min = 50, max = 200) * population,
@@ -44,14 +53,20 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
     for i in itemsList.keys:
       if isBuyable(baseType = skyBases[baseIndex].baseType, itemIndex = i,
           checkFlag = false):
+        var amount: Natural = getRandom(min = 0, max = 100) * population
+        if itemsAmount == 0:
+          amount = 0
+        else:
+          itemsAmount.dec
         skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: i,
-            amount: getRandom(min = 0, max = 100) * population,
-            durability: defaultItemDurability, price: getPrice(
+            amount: amount, durability: defaultItemDurability, price: getPrice(
             baseType = skyBases[baseIndex].baseType, itemIndex = i)))
     if "blackmarket" in basesTypesList[skyBases[baseIndex].baseType].flags:
-      let amount: Positive = (if population < 150: getRandom(min = 1,
+      var amount: Positive = (if population < 150: getRandom(min = 1,
           max = 10) elif population < 300: getRandom(min = 1,
           max = 20) else: getRandom(min = 1, max = 30))
+      if amount > itemsAmount:
+        amount = itemsAmount + 1
       for i in 1..amount:
         var itemIndex: Natural = getRandom(min = 1, max = itemsList.len)
         for j in 1..amount:
