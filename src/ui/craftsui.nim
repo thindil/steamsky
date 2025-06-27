@@ -520,43 +520,35 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of workplaceAsc:
       if x.workplace < y.workplace:
         return 1
-      else:
-        return -1
+      return -1
     of workplaceDesc:
       if x.workplace > y.workplace:
         return 1
-      else:
-        return -1
+      return -1
     of toolsAsc:
       if x.tool < y.tool:
         return 1
-      else:
-        return -1
+      return -1
     of toolsDesc:
       if x.tool > y.tool:
         return 1
-      else:
-        return -1
+      return -1
     of materialsAsc:
       if x.materials < y.materials:
         return 1
-      else:
-        return -1
+      return -1
     of materialsDesc:
       if x.materials > y.materials:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
 
