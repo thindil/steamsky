@@ -33,7 +33,7 @@ type
       selectActiveTextColor, propertyTextColor, toggleColor, toggleHoverColor,
       toggleCursorColor, goldenColor, redColor, mapInfoBorderColor,
       mapInfoColor, pinkColor, yellowColor, blueColor, cyanColor, grayColor,
-      tableRowColor, tableTextColor
+      tableRowColor, tableTextColor, sliderEmptyColor, sliderFillColor
   MapColorsNames* = enum
     ## Names of colors used in the game's map
     mapVisitedColor, mapUnvisitedColor, mapDefaultColor, mapGreenColor,
@@ -126,7 +126,8 @@ let
       "#4e9a06".parseColor, "#ffdf00".parseColor, "#fb4934".parseColor,
       "#7f8c8d".parseColor, "#000000".parseColor, "#b16286".parseColor,
       "#d79921".parseColor, "#458588".parseColor, "#00ffff".parseColor,
-      "#7f8c8d".parseColor, "#120d0d".parseColor, "#eee8aa".parseColor],
+      "#7f8c8d".parseColor, "#120d0d".parseColor, "#eee8aa".parseColor,
+      "#120d0d".parseColor, "#4e9a06".parseColor],
       fonts: [defaultThemeFontPath & "Amarante-Regular.ttf",
       defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"],
       mapIcons: ["\uf135", " ", "\uf05b", "\uf059", "\uf53b", "\ufc6a",
@@ -292,8 +293,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   setColor(colorName = toggleCursorColor, index = toggleCursorColor)
   setColor(colorName = popupBorderColor, index = mapInfoBorderColor)
   setColor(colorName = popupColor, index = mapInfoColor)
-  table[sliderColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
-  table[sliderCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 245)
+  setColor(colorName = sliderColor, index = sliderEmptyColor)
+  setColor(colorName = sliderCursorColor, index = sliderFillColor)
   table[sliderCursorHoverColor] = NimColor(r: 53, g: 88, b: 116, a: 255)
   table[sliderCursorActiveColor] = NimColor(r: 58, g: 93, b: 121, a: 255)
   table[chartColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
