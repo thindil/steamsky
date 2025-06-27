@@ -65,8 +65,8 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       height: float = 360
       windowName: string = "Select a new goal"
     updateDialog(width = width, height = height)
-    window(name = windowName, x = dialogX, y = dialogY, w = width,
-        h = height, flags = {windowBorder, windowTitle, windowNoScrollbar}):
+    window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+        flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
       setLayoutRowDynamic(height = 230, cols = 1)
       group(title = "GoalsGroup", flags = {windowNoFlags}):
         setLayoutRowDynamic(height = 25, cols = 1)

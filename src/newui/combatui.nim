@@ -69,7 +69,8 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
     (if dialog == boardingDialog: "boarding party" else: "defenders")
 
   updateDialog(width = width, height = height)
-  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle}):
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+    flags = {windowBorder, windowTitle, windowMovable}):
     setLayoutRowStatic(height = 35, cols = 2, width = 35)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),

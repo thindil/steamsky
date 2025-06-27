@@ -421,7 +421,7 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY,
       w = width, h = height, flags = {windowBorder, windowTitle,
-      windowNoScrollbar}):
+      windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(30, 1)
     labelButton(title = "Ship information"):
       discard
