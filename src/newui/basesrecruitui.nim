@@ -330,13 +330,16 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
     windowName: string = "Negotiate with " & recruit.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowNoScrollbar}):
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 2)
     label(str = "Daily payment:")
-    let newValue: int = property2(name = "#", min = 1, val = currentDaily,
+    var newValue: int = property2(name = "#", min = 1, val = currentDaily,
         max = maxDaily, step = 1, incPerPixel = 1)
     if newValue != currentDaily:
       currentDaily = newValue
+    setLayoutRowDynamic(height = 30, cols = 1)
+    slider(min = 1, val = currentDaily, max = maxDaily, step = 1)
+    setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     disabled:
       imageLabelButton(image = images[negotiateColoredIcon], text = "Hire",
