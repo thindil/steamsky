@@ -103,7 +103,7 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     height += 34
   window(name = windowName, x = windowWidth / 4, y = windowHeight / 4,
       w = 320, h = height, flags = {windowBorder, windowTitle,
-      windowNoScrollbar}):
+      windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(30, 1)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
