@@ -197,6 +197,7 @@ const
 var
   currentTab: cint = 0
   recruitIndex: int = -1
+  currentDaily, maxDaily: Positive = 1
 
 proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -306,6 +307,8 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
     imageLabelButton(image = images[negotiateIcon], text = "Negotiate",
         alignment = right):
       dialog = negotiateDialog
+      currentDaily = recruit.payment
+      maxDaily = recruit.payment * 2
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -329,10 +332,16 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar}):
     setLayoutRowDynamic(height = 30, cols = 2)
+    label(str = "Daily payment:")
+    let newValue: int = property2(name = "#", min = 1, val = currentDaily,
+        max = maxDaily, step = 1, incPerPixel = 1)
+    if newValue != currentDaily:
+      currentDaily = newValue
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    imageLabelButton(image = images[negotiateColoredIcon], text = "Hire",
-        alignment = right):
-      discard
+    disabled:
+      imageLabelButton(image = images[negotiateColoredIcon], text = "Hire",
+          alignment = right):
+        discard
     restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
 
