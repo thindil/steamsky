@@ -50,7 +50,11 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
     skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: moneyIndex,
         amount: getRandom(min = 50, max = 200) * population,
         durability: defaultItemDurability, price: 0))
+    var keys: seq[Positive] = @[]
     for i in itemsList.keys:
+      keys.add(y = i)
+    while keys.len > 0:
+      let i: Positive = keys.pop
       if isBuyable(baseType = skyBases[baseIndex].baseType, itemIndex = i,
           checkFlag = false):
         var amount: Natural = getRandom(min = 0, max = 100) * population
