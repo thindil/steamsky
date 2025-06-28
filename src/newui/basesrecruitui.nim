@@ -20,7 +20,7 @@
 
 import std/[algorithm, tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crew, game, maps, types]
+import ../[config, crew, crewinventory, game, maps, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 type
@@ -193,7 +193,8 @@ const
     HeaderData[RecruitsSortOrders](label: "Highest skill", sortAsc: skillAsc,
         sortDesc: skillDesc)]
   ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
-  contractLength: array[5, string] = ["Pernament", "100 days", "30 days", "20 days", "10 days"]
+  contractLength: array[5, string] = ["Pernament", "100 days", "30 days",
+      "20 days", "10 days"]
 
 var
   currentTab: cint = 0
@@ -357,15 +358,26 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
         selected = currentContract, itemHeight = 25, x = 200, y = 150)
     if newContract != currentContract:
       currentContract = newContract
-    setLayoutRowDynamic(height = 30, cols = 3)
-    label(str = "You have")
-    label(str = moneyName)
+    let moneyIndex2: int = findItem(inventory = playerShip.cargo,
+        protoIndex = moneyIndex)
+    var canHire: bool = false
+    if moneyIndex2 > -1:
+      setLayoutRowDynamic(height = 30, cols = 3)
+      label(str = "You have")
+      colorLabel(str = $playerShip.cargo[moneyIndex2].amount,
+          color = theme.colors[goldenColor])
+      label(str = moneyName)
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    disabled:
+    if canHire:
       imageLabelButton(image = images[negotiateColoredIcon], text = "Hire",
           alignment = right):
         discard
+    else:
+      disabled:
+        imageLabelButton(image = images[negotiateColoredIcon], text = "Hire",
+            alignment = right):
+          discard
     restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
 
