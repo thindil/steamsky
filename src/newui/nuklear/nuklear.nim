@@ -1536,6 +1536,13 @@ proc nkFreePageElement(ctx; elem: ptr nk_page_element) {.raises: [], tags: [],
     nkLinkPageElementIntoFreelist(ctx = ctx, elem = elem)
     return
   # if possible remove last element from back of fixed memory buffer
+  let
+    elemEnd: pointer = elem + 1
+    bufferEnd: pointer = ctx.memory.memory.`ptr` + ctx.memory.size
+  if elemEnd == bufferEnd:
+    ctx.memory.size -= elem.sizeOf
+  else:
+    nkLinkPageElementIntoFreelist(ctx = ctx, elem = elem)
 
 # -----
 # Panel
