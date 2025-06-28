@@ -193,12 +193,13 @@ const
     HeaderData[RecruitsSortOrders](label: "Highest skill", sortAsc: skillAsc,
         sortDesc: skillDesc)]
   ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
+  contractLength: array[5, string] = ["Pernament", "100 days", "30 days", "20 days", "10 days"]
 
 var
   currentTab: cint = 0
   recruitIndex: int = -1
   currentDaily, maxDaily: Positive = 1
-  currentProfit: Natural = 0
+  currentProfit, currentContract: Natural = 0
 
 proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -311,6 +312,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       currentDaily = recruit.payment
       maxDaily = recruit.payment * 2
       currentProfit = 0
+      currentContract = 0
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -349,6 +351,15 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
       currentProfit = newProfit
     setLayoutRowDynamic(height = 30, cols = 1)
     slider(min = 0, val = currentProfit, max = 10, step = 1)
+    label(str = "Contract time:", alignment = centered)
+    setLayoutRowDynamic(height = 35, cols = 1)
+    let newContract = comboList(items = contractLength,
+        selected = currentContract, itemHeight = 25, x = 200, y = 150)
+    if newContract != currentContract:
+      currentContract = newContract
+    setLayoutRowDynamic(height = 30, cols = 3)
+    label(str = "You have")
+    label(str = moneyName)
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     disabled:
