@@ -127,7 +127,7 @@ let
       "#7f8c8d".parseColor, "#000000".parseColor, "#b16286".parseColor,
       "#d79921".parseColor, "#458588".parseColor, "#00ffff".parseColor,
       "#7f8c8d".parseColor, "#120d0d".parseColor, "#eee8aa".parseColor,
-      "#120d0d".parseColor, "#4e9a06".parseColor],
+      "#120d0d".parseColor, "#ffdf00".parseColor],
       fonts: [defaultThemeFontPath & "Amarante-Regular.ttf",
       defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"],
       mapIcons: ["\uf135", " ", "\uf05b", "\uf059", "\uf53b", "\ufc6a",
