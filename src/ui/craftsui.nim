@@ -659,7 +659,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & amountBox & " <Escape> {" & craftDialog & ".cancel invoke;break}")
     if firstFocus.len == 0:
       firstFocus = ".amount"
-    buttonRow = buttonRow + 2
+    buttonRow += 2
   var mType: ModuleType = ModuleType.any
   if recipeType in ["Study", "Deconstruct"]:
     mType = alchemyLab
@@ -695,7 +695,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid " & label & " -columnspan 2 -padx 5")
     tclEval(script = "grid " & modulesBox & " -columnspan 2 -padx 5")
     tclEval(script = "bind " & modulesBox & " <Escape> {" & craftDialog & ".cancel invoke;break}")
-    buttonRow = buttonRow + 2
+    buttonRow += 2
     if firstFocus.len == 0:
       firstFocus = ".workshop"
   var crafterButton: string = craftDialog & ".noworker"
@@ -733,7 +733,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "tooltip::tooltip " & crewBox & " \"Assign the crew member from the list.\\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\\nneeded skill is the best in the crew.\"")
   tclEval(script = "bind " & crewBox & " <Tab> {focus " & craftDialog & ".craft;break}")
   tclEval(script = "bind " & crewBox & " <Escape> {" & craftDialog & ".cancel invoke;break}")
-  buttonRow = buttonRow + 4
+  buttonRow += 4
   button = craftDialog & ".craft"
   tclEval(script = "ttk::button " & button & " -text {" & recipeType &
       "} -command {SetCrafting {" & $argv[1] & "};CloseDialog " & craftDialog &
