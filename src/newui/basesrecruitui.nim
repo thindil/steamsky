@@ -198,6 +198,7 @@ var
   currentTab: cint = 0
   recruitIndex: int = -1
   currentDaily, maxDaily: Positive = 1
+  currentProfit: Natural = 0
 
 proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -309,6 +310,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       dialog = negotiateDialog
       currentDaily = recruit.payment
       maxDaily = recruit.payment * 2
+      currentProfit = 0
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -333,12 +335,20 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 2)
     label(str = "Daily payment:")
-    var newValue: int = property2(name = "#", min = 1, val = currentDaily,
+    let newValue: int = property2(name = "#", min = 1, val = currentDaily,
         max = maxDaily, step = 1, incPerPixel = 1)
     if newValue != currentDaily:
       currentDaily = newValue
     setLayoutRowDynamic(height = 30, cols = 1)
     slider(min = 1, val = currentDaily, max = maxDaily, step = 1)
+    setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.75.cfloat, 0.25])
+    label(str = "Percent of profit from trades:")
+    let newProfit: int = property2(name = "#", min = 0, val = currentProfit,
+        max = 10, step = 1, incPerPixel = 1)
+    if newProfit != currentProfit:
+      currentProfit = newProfit
+    setLayoutRowDynamic(height = 30, cols = 1)
+    slider(min = 0, val = currentProfit, max = 10, step = 1)
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     disabled:
