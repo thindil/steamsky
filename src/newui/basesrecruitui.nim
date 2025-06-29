@@ -200,7 +200,7 @@ var
   currentTab: cint = 0
   recruitIndex, moneyIndex2: int = -1
   currentDaily, maxDaily: Positive = 1
-  currentProfit, currentContract: Natural = 0
+  currentProfit, currentContract, cost: Natural = 0
   moneyText: seq[string] = @[]
   moneyWidth: seq[cfloat] = @[]
   hireText: array[3, string] = ["Hire for ", "0", " " & moneyName]
@@ -333,7 +333,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
         except:
           dialog = setError(message = "Can't get the width of the money text.")
           return
-      var cost: Natural = recruit.price
+      cost = recruit.price
       try:
         countPrice(price = cost, traderIndex = findMember(order = talk))
       except:
@@ -390,6 +390,21 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
         selected = currentContract, itemHeight = 25, x = 200, y = 150)
     if newContract != currentContract:
       currentContract = newContract
+    var newCost: int = recruit.price - ((currentDaily - recruit.payment) * 50) -
+        (currentProfit * 5_000)
+    newCost = case currentContract
+      of 1:
+        newCost - (recruit.price.float * 0.1).int
+      of 2:
+        newCost - (recruit.price.float * 0.5).int
+      of 3:
+        newCost - (recruit.price.float * 0.75).int
+      of 4:
+        newCost - (recruit.price.float * 0.9).int
+      else:
+        newCost
+    if newCost < 1:
+      newCost = 1
     var canHire: bool = false
     setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
     if moneyText.len == 1:
