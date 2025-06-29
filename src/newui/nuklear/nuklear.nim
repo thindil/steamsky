@@ -1498,7 +1498,7 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds:
 # ---------
 # Aligmnent
 # ---------
-proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T]; member: int): ptr typedesc[T]
+proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T]; member: pointer): ptr typedesc[T]
   {.raises: [], tags: [], contractual.} =
   ## Get the container of the selected element
   ##
@@ -1508,6 +1508,7 @@ proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T]; member: int): ptr typ
   ##
   ## Returns the pointer to the selected member of the container
   discard
+  # TODO: continue here
 
 # ------------
 # Page element
@@ -1878,8 +1879,10 @@ proc nkFreePanel(ctx; pan: PNkPanel) {.raises: [], tags: [], contractual.} =
   ##
   ## * ctx - the Nuklear context
   ## * pan - the panel which memory will be freed
-  discard
-  # TODO: continue here
+  let
+    pd: ptr nk_page_data = nkContainerOf(`ptr` = pan, `type` = nk_page_data, member = pan)
+    pe: ptr nk_page_element = nkContainerOf(`ptr` = pd, `type` = nk_page_element, member = pd)
+  nkFreePageElement(ctx = ctx, elem = pe)
 
 # ------
 # Popups
