@@ -20,7 +20,7 @@
 
 import std/[algorithm, tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crew, crewinventory, game, maps, types]
+import ../[bases, config, crew, crewinventory, game, maps, shipscrew, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 type
@@ -203,6 +203,8 @@ var
   currentProfit, currentContract: Natural = 0
   moneyText: seq[string] = @[]
   moneyWidth: seq[cfloat] = @[]
+  hireText: array[3, string] = ["Hire for ", "0", " " & moneyName]
+  hireWidth: array[3, cfloat] = [0, 0, 0]
 
 proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -324,12 +326,25 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       else:
         moneyText.add(y = "You have")
         moneyText.add(y = $playerShip.cargo[moneyIndex2].amount)
-        moneyText.add(y = moneyName)
+        moneyText.add(y = " " & moneyName)
       for text in moneyText:
         try:
           moneyWidth.add(y = text.getTextWidth)
         except:
           dialog = setError(message = "Can't get the width of the money text.")
+          return
+      var cost: Natural = recruit.price
+      try:
+        countPrice(price = cost, traderIndex = findMember(order = talk))
+      except:
+        dialog = setError(message = "Can't count hire cost.")
+        return
+      hireText[1] = $cost
+      for index, text in hireText:
+        try:
+          hireWidth[index] = text.getTextWidth
+        except:
+          dialog = setError(message = "Can't get the width of the hire text.")
           return
     addCloseButton(dialog = dialog, isPopup = false)
 
@@ -383,6 +398,10 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
       label(str = moneyText[0])
       colorLabel(str = moneyText[1], color = theme.colors[goldenColor])
       label(str = moneyText[2])
+    setLayoutRowStatic(height = 30, cols = 3, ratio = hireWidth)
+    label(str = hireText[0])
+    colorLabel(str = hireText[1], color = theme.colors[goldenColor])
+    label(str = hireText[2])
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     if canHire:
