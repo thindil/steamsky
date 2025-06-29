@@ -198,9 +198,11 @@ const
 
 var
   currentTab: cint = 0
-  recruitIndex: int = -1
+  recruitIndex, moneyIndex2: int = -1
   currentDaily, maxDaily: Positive = 1
   currentProfit, currentContract: Natural = 0
+  moneyText: seq[string] = @[]
+  moneyWidth: seq[cfloat] = @[]
 
 proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -314,6 +316,21 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       maxDaily = recruit.payment * 2
       currentProfit = 0
       currentContract = 0
+      moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+      moneyText = @[]
+      moneyWidth = @[]
+      if moneyIndex2 == -1:
+        moneyText.add(y = "You don't have enough money to recruit anyone")
+      else:
+        moneyText.add(y = "You have")
+        moneyText.add(y = $playerShip.cargo[moneyIndex2].amount)
+        moneyText.add(y = moneyName)
+      for text in moneyText:
+        try:
+          moneyWidth.add(y = text.getTextWidth)
+        except:
+          dialog = setError(message = "Can't get the width of the money text.")
+          return
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -358,15 +375,14 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
         selected = currentContract, itemHeight = 25, x = 200, y = 150)
     if newContract != currentContract:
       currentContract = newContract
-    let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex)
     var canHire: bool = false
-    if moneyIndex2 > -1:
-      setLayoutRowDynamic(height = 30, cols = 3)
-      label(str = "You have")
-      colorLabel(str = $playerShip.cargo[moneyIndex2].amount,
-          color = theme.colors[goldenColor])
-      label(str = moneyName)
+    setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+    if moneyText.len == 1:
+      colorLabel(str = moneyText[0], color = theme.colors[redColor])
+    else:
+      label(str = moneyText[0])
+      colorLabel(str = moneyText[1], color = theme.colors[goldenColor])
+      label(str = moneyText[2])
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     if canHire:
