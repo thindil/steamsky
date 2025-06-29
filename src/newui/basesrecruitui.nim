@@ -324,7 +324,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       if moneyIndex2 == -1:
         moneyText.add(y = "You don't have enough money to recruit anyone")
       else:
-        moneyText.add(y = "You have")
+        moneyText.add(y = "You have ")
         moneyText.add(y = $playerShip.cargo[moneyIndex2].amount)
         moneyText.add(y = " " & moneyName)
       for text in moneyText:
@@ -405,6 +405,18 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
         newCost
     if newCost < 1:
       newCost = 1
+    cost = newCost
+    try:
+      countPrice(price = cost, traderIndex = findMember(order = talk))
+    except:
+      dialog = setError(message = "Can't count price.")
+      return
+    hireText[1] = $cost
+    try:
+      hireWidth[1] = hireText[1].getTextWidth
+    except:
+      dialog = setError(message = "Can't get the width of the hire text.")
+      return
     var canHire: bool = false
     setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
     if moneyText.len == 1:
@@ -413,6 +425,8 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
       label(str = moneyText[0])
       colorLabel(str = moneyText[1], color = theme.colors[goldenColor])
       label(str = moneyText[2])
+      if playerShip.cargo[moneyIndex2].amount >= cost:
+        canHire = true
     setLayoutRowStatic(height = 30, cols = 3, ratio = hireWidth)
     label(str = hireText[0])
     colorLabel(str = hireText[1], color = theme.colors[goldenColor])
