@@ -615,7 +615,7 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
       "::colors(-goldenyellow)"))
   let moneyIndex2: int = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
-  if moneyIndex > -1:
+  if moneyIndex2 > -1:
     tclEval(script = moneyInfo & " insert end {You have }")
     tclEval(script = moneyInfo & " insert end {" & $playerShip.cargo[
         moneyIndex2].amount & "} [list gold]")
