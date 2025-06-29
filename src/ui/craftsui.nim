@@ -110,13 +110,62 @@ proc checkStudyPrerequisities(canCraft, hasTool,
   if hasWorkplace:
     canCraft = true
 
-{.push ruleOff:"varDeclared".}
+{.push ruleOff: "varDeclared".}
 var
   studies: seq[Positive] = @[]
   deconstructs: seq[Positive] = @[]
   recipesIndexes: seq[string] = @[]
   recipesTable, ordersTable: TableWidget
-{.pop ruleOn:"varDeclared".}
+{.pop ruleOn: "varDeclared".}
+
+proc showWorkshopsTable(craftsCanvas, craftsFrame: string): bool {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the list of workshops with their crafting orders
+  ##
+  ## * craftsCanvas - the Tcl canvas in which the table will be added
+  ## * craftsFrame  - the Tcl frame in which the table will be added
+  ##
+  ## Return true if there was an error, otherwise false
+  if ordersTable.rowHeight == 0:
+    ordersTable = createTable(parent = craftsCanvas & ".craft.orders",
+        headers = @["Workshop", "Order", "Workers"],
+        scrollbar = craftsFrame & ".scrolly", command = "SortCrafting2",
+        tooltipText = "Press mouse button to sort the workshops.")
+  else:
+    ordersTable.clearTable
+  for index, module in playerShip.modules:
+    if module.mType != ModuleType2.workshop:
+      continue
+    var
+      recipeName2: string = try:
+          getWorkshopRecipeName(workshop = index)
+      except:
+        showError(message = "Can't get the recipe name.")
+        return true
+      tooltipText: string = "Cancel the selected order"
+      command: string = "ChangeCraftOrder " & $index & " cancel"
+    if recipeName2.len == 0:
+      recipeName2 = "Not set"
+      tooltipText = "Set a new order for the workshop"
+      command = "ChangeCraftOrder " & $index & " new"
+    addButton(table = ordersTable, text = module.name, tooltip = tooltipText,
+        command = command, column = 1)
+    addButton(table = ordersTable, text = recipeName2, tooltip = tooltipText,
+        command = command, column = 2)
+    var workers: string = ""
+    var haveWorkers: bool = false
+    for worker in module.owner:
+      if worker > -1:
+        if haveWorkers:
+          workers.add(y = ", ")
+        haveWorkers = true
+        workers.add(y = playerShip.crew[worker].name)
+    if not haveWorkers:
+      workers = "none"
+    addButton(table = ordersTable, text = workers, tooltip = tooltipText,
+        command = command, column = 3, newRow = true)
+  updateTable(table = ordersTable)
+  return false
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -378,44 +427,8 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
         0: " {" & recipeName & "}" else: ""))
   updateTable(table = recipesTable, grabFocus = not (tclEval2(
       script = "focus") == searchEntry))
-  if ordersTable.rowHeight == 0:
-    ordersTable = createTable(parent = craftsCanvas & ".craft.orders",
-        headers = @["Workshop", "Order", "Workers"],
-        scrollbar = craftsFrame & ".scrolly", command = "SortCrafting2",
-        tooltipText = "Press mouse button to sort the workshops.")
-  else:
-    ordersTable.clearTable
-  for index, module in playerShip.modules:
-    if module.mType != ModuleType2.workshop:
-      continue
-    var
-      recipeName2: string = try:
-          getWorkshopRecipeName(workshop = index)
-      except:
-        return showError(message = "Can't get the recipe name.")
-      tooltipText: string = "Cancel the selected order"
-      command: string = "ChangeCraftOrder " & $index & " cancel"
-    if recipeName2.len == 0:
-      recipeName2 = "Not set"
-      tooltipText = "Set a new order for the workshop"
-      command = "ChangeCraftOrder " & $index & " new"
-    addButton(table = ordersTable, text = module.name, tooltip = tooltipText,
-        command = command, column = 1)
-    addButton(table = ordersTable, text = recipeName2, tooltip = tooltipText,
-        command = command, column = 2)
-    var workers: string = ""
-    var haveWorkers: bool = false
-    for worker in module.owner:
-      if worker > -1:
-        if haveWorkers:
-          workers.add(y = ", ")
-        haveWorkers = true
-        workers.add(y = playerShip.crew[worker].name)
-    if not haveWorkers:
-      workers = "none"
-    addButton(table = ordersTable, text = workers, tooltip = tooltipText,
-        command = command, column = 3, newRow = true)
-  updateTable(table = ordersTable)
+  if showWorkshopsTable(craftsCanvas = craftsCanvas, craftsFrame = craftsFrame):
+    return tclOk
   if tclGetVar(varName = "newtab") == "recipes":
     tclEval(script = "grid " & gameHeader & ".morebutton -row 0 -column 2")
   else:
@@ -1064,7 +1077,7 @@ proc showCraftingTabCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   if argc == 1:
     return showCraftingCommand(clientData = clientData, interp = interp,
-        argc = 2, argv = @["ShowCrafting", "0"].allocCStringArray)
+        argc = 2, argv = @["ShowCrafting", "1"].allocCStringArray)
   return tclOk
 
 proc changeCraftOrderCommand(clientData: cint; interp: PInterp; argc: cint;
