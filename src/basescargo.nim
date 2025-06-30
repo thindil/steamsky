@@ -18,7 +18,7 @@
 ## Provides code related to the sky bases' cargo, like generating it, finding
 ## items in them or updating the cargo.
 
-import std/tables
+import std/[random, sequtils, tables]
 import contracts, nimalyzer
 import bases, basestypes, game, maps, types, utils
 
@@ -50,21 +50,20 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
     skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: moneyIndex,
         amount: getRandom(min = 50, max = 200) * population,
         durability: defaultItemDurability, price: 0))
-    var keys: seq[Positive] = @[]
-    for i in itemsList.keys:
-      keys.add(y = i)
-    while keys.len > 0:
-      let i: Positive = keys.pop
-      if isBuyable(baseType = skyBases[baseIndex].baseType, itemIndex = i,
+    var keys: seq[Positive] = itemsList.keys.toSeq
+    randomize()
+    keys.shuffle()
+    for key in keys:
+      if isBuyable(baseType = skyBases[baseIndex].baseType, itemIndex = key,
           checkFlag = false):
         var amount: Natural = getRandom(min = 0, max = 100) * population
         if itemsAmount == 0:
           amount = 0
         else:
           itemsAmount.dec
-        skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: i,
+        skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: key,
             amount: amount, durability: defaultItemDurability, price: getPrice(
-            baseType = skyBases[baseIndex].baseType, itemIndex = i)))
+            baseType = skyBases[baseIndex].baseType, itemIndex = key)))
     if "blackmarket" in basesTypesList[skyBases[baseIndex].baseType].flags:
       var amount: Positive = (if population < 150: getRandom(min = 1,
           max = 10) elif population < 300: getRandom(min = 1,
