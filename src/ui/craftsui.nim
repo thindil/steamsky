@@ -167,6 +167,180 @@ proc showWorkshopsTable(craftsCanvas, craftsFrame: string): bool {.raises: [],
   updateTable(table = ordersTable)
   return false
 
+proc showRecipesTable(craftsCanvas, craftsFrame, recipeName,
+    searchEntry: string; argc: cint; argv: cstringArray): bool {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the list of crafting recipes known by the player
+  ##
+  ## * craftsCanvas - the Tcl canvas in which the table will be added
+  ## * craftsFrame  - the Tcl frame in which the table will be added
+  ## * recipeName   - the text to search in the names of recipes
+  ## * searchEntry  - the Tcl name of search field
+  ## * argc         - the amount of arguments entered for the command
+  ## * argv         - the list of the command's arguments
+  ##
+  ## Return true if there was an error, otherwise false
+  if recipesTable.rowHeight == 0:
+    recipesTable = createTable(parent = craftsCanvas & ".craft.recipes",
+        headers = @["Name", "Workshop", "Tools", "Materials"],
+            scrollbar = craftsFrame &
+        ".scrolly", command = "SortCrafting",
+        tooltipText = "Press mouse button to sort the crafting recipes.")
+    tclEval(script = "grid configure " & recipesTable.canvas & " -row 1")
+  else:
+    recipesTable.clearTable
+  let
+    typeBox: string = craftsCanvas & ".craft.recipes.sframe.show"
+    showType: Natural = try:
+        tclEval2(script = typeBox & " current").parseInt + 1
+      except:
+        showError(message = "Can't get the show type value.")
+        return true
+    page: Positive = try:
+        (if argc == 2: ($argv[1]).parseInt else: 1)
+      except:
+        showError(message = "Can't get the page.")
+        return true
+    startRow: Natural = (page - 1) * gameSettings.listsLimit + 1
+  var
+    currentRow: Positive = 1
+    canCraft, hasWorkplace, hasTool, hasMaterials: bool = false
+  let workshop: int = try:
+        tclGetVar(varName = "workshop").parseInt
+      except:
+        showError(message = "Can't get workshop index")
+        return true
+  for index, rec in recipesIndexes:
+    if index > knownRecipes.high:
+      break
+    try:
+      if recipeName.len > 0 and itemsList[recipesList[
+          rec].resultIndex].name.toLowerAscii.find(
+          sub = recipeName.toLowerAscii) == -1:
+        continue
+    except:
+      showError(message = "Can't check recipeName.")
+      return true
+    let recipe: CraftData = try:
+        recipesList[rec]
+      except:
+        showError(message = "Can't get the recipe.")
+        return true
+    try:
+      if workshop > -1 and modulesList[playerShip.modules[
+          workshop].protoIndex].mType != recipe.workplace:
+        continue
+    except:
+      showError(message = "Can't check the workshop")
+      return true
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    isCraftable(recipe = recipe, canCraft = canCraft,
+        hasWorkplace = hasWorkplace, hasTool = hasTool,
+        hasMaterials = hasMaterials)
+    if (showType == 2 and not canCraft) or (showType == 3 and canCraft):
+      continue
+    try:
+      addButton(table = recipesTable, text = itemsList[recipe.resultIndex].name,
+          tooltip = "Show recipe's details", command = "ShowRecipeInfo {" &
+              rec &
+          "} " & $canCraft, column = 1)
+    except:
+      showError(message = "Can't add the button.")
+      return true
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {" & rec & "} " & $canCraft,
+        checked = hasWorkplace, column = 2)
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {" & rec & "} " & $canCraft,
+        checked = hasTool, column = 3)
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {" & rec & "} " & $canCraft,
+        checked = hasMaterials, column = 4, newRow = true)
+    if recipesTable.row == gameSettings.listsLimit + 1:
+      break
+  checkStudyPrerequisities(canCraft = canCraft, hasTool = hasTool,
+      hasWorkplace = hasWorkplace)
+  for i in knownRecipes.len .. recipesIndexes.high:
+    if recipesTable.row == gameSettings.listsLimit + 1 or i > studies.high:
+      break
+    try:
+      if recipeName.len > 0 and ("Study " & itemsList[recipesIndexes[
+          i].parseInt].name).toLowerAscii.find(sub = recipeName.toLowerAscii,
+          start = 1) == -1:
+        continue
+    except:
+      showError(message = "Can't check the recipeName in study.")
+      return true
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    if (showType == 2 and not canCraft) or (showType == 3 and canCraft):
+      continue
+    try:
+      addButton(table = recipesTable, text = "Study " & itemsList[
+          recipesIndexes[i].parseInt].name, tooltip = "Show recipe's details",
+          command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
+          $canCraft, column = 1)
+    except:
+      showError(message = "Can't add button in study.")
+      return true
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
+        $canCraft, checked = hasWorkplace, column = 2)
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
+        $canCraft, checked = hasTool, column = 3, newRow = true)
+  for i in (knownRecipes.len + studies.len) .. recipesIndexes.high:
+    if recipesTable.row == gameSettings.listsLimit + 1:
+      break
+    try:
+      if recipeName.len > 0 and ("Deconstruct " & itemsList[recipesIndexes[
+          i].parseInt].name).toLowerAscii.find(sub = recipeName.toLowerAscii,
+          start = 1) == -1:
+        continue
+    except:
+      showError(message = "Can't check recipeName in deconstruct.")
+      return true
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    if showType == 3:
+      continue
+    try:
+      addButton(table = recipesTable, text = "Deconstruct " & itemsList[
+          recipesIndexes[i].parseInt].name, tooltip = "Show recipe's details",
+          command = "ShowRecipeInfo {Deconstruct " & $recipesIndexes[i] & "} " &
+          $canCraft, column = 1)
+    except:
+      showError(message = "Can't add button in deconstruct.")
+      return true
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {Deconstruct " & $recipesIndexes[i] & "} " &
+        $canCraft, checked = hasWorkplace, column = 2)
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {Deconstruct " & $recipesIndexes[i] & "} " &
+        $canCraft, checked = hasTool, column = 3, newRow = true)
+  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  if page > 1:
+    if recipesTable.row < gameSettings.listsLimit + 1:
+      addPagination(table = recipesTable, previousCommand = "ShowCrafting " & $(
+          page - 1) & (if recipeName.len > 0: " {" & recipeName & "}" else: ""),
+          nextCommand = "")
+    else:
+      addPagination(table = recipesTable, previousCommand = "ShowCrafting " & $(
+          page - 1) & (if recipeName.len > 0: " {" & recipeName & "}" else: ""),
+          nextCommand = "ShowCrafting " & $(page + 1) & (if recipeName.len >
+          0: " {" & recipeName & "}" else: ""))
+  elif recipesTable.row == gameSettings.listsLimit + 1:
+    addPagination(table = recipesTable, previousCommand = "",
+        nextCommand = "ShowCrafting " & $(page + 1) & (if recipeName.len >
+        0: " {" & recipeName & "}" else: ""))
+  updateTable(table = recipesTable, grabFocus = not (tclEval2(
+      script = "focus") == searchEntry))
+  return false
+
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
         RootEffect], cdecl, contractual, ruleOff: "params".} =
@@ -279,154 +453,9 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       recipesIndexes.add(y = $recipe)
     for recipe in deconstructs:
       recipesIndexes.add(y = $recipe)
-  if recipesTable.rowHeight == 0:
-    recipesTable = createTable(parent = craftsCanvas & ".craft.recipes",
-        headers = @["Name", "Workshop", "Tools", "Materials"],
-            scrollbar = craftsFrame &
-        ".scrolly", command = "SortCrafting",
-        tooltipText = "Press mouse button to sort the crafting recipes.")
-    tclEval(script = "grid configure " & recipesTable.canvas & " -row 1")
-  else:
-    recipesTable.clearTable
-  let
-    typeBox: string = craftsCanvas & ".craft.recipes.sframe.show"
-    showType: Natural = try:
-        tclEval2(script = typeBox & " current").parseInt + 1
-      except:
-        return showError(message = "Can't get the show type value.")
-    page: Positive = try:
-        (if argc == 2: ($argv[1]).parseInt else: 1)
-      except:
-        return showError(message = "Can't get the page.")
-    startRow: Natural = (page - 1) * gameSettings.listsLimit + 1
-  var
-    currentRow: Positive = 1
-    canCraft, hasWorkplace, hasTool, hasMaterials: bool = false
-  let workshop: int = try:
-        tclGetVar(varName = "workshop").parseInt
-      except:
-        return showError(message = "Can't get workshop index")
-  for index, rec in recipesIndexes:
-    if index > knownRecipes.high:
-      break
-    try:
-      if recipeName.len > 0 and itemsList[recipesList[
-          rec].resultIndex].name.toLowerAscii.find(
-          sub = recipeName.toLowerAscii) == -1:
-        continue
-    except:
-      return showError(message = "Can't check recipeName.")
-    let recipe: CraftData = try:
-        recipesList[rec]
-      except:
-        return showError(message = "Can't get the recipe.")
-    try:
-      if workshop > -1 and modulesList[playerShip.modules[
-          workshop].protoIndex].mType != recipe.workplace:
-        continue
-    except:
-      return showError(message = "Can't check the workshop")
-    if currentRow < startRow:
-      currentRow.inc
-      continue
-    isCraftable(recipe = recipe, canCraft = canCraft,
-        hasWorkplace = hasWorkplace, hasTool = hasTool,
-        hasMaterials = hasMaterials)
-    if (showType == 2 and not canCraft) or (showType == 3 and canCraft):
-      continue
-    try:
-      addButton(table = recipesTable, text = itemsList[recipe.resultIndex].name,
-          tooltip = "Show recipe's details", command = "ShowRecipeInfo {" &
-              rec &
-          "} " & $canCraft, column = 1)
-    except:
-      return showError(message = "Can't add the button.")
-    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
-        command = "ShowRecipeInfo {" & rec & "} " & $canCraft,
-        checked = hasWorkplace, column = 2)
-    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
-        command = "ShowRecipeInfo {" & rec & "} " & $canCraft,
-        checked = hasTool, column = 3)
-    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
-        command = "ShowRecipeInfo {" & rec & "} " & $canCraft,
-        checked = hasMaterials, column = 4, newRow = true)
-    if recipesTable.row == gameSettings.listsLimit + 1:
-      break
-  checkStudyPrerequisities(canCraft = canCraft, hasTool = hasTool,
-      hasWorkplace = hasWorkplace)
-  for i in knownRecipes.len .. recipesIndexes.high:
-    if recipesTable.row == gameSettings.listsLimit + 1 or i > studies.high:
-      break
-    try:
-      if recipeName.len > 0 and ("Study " & itemsList[recipesIndexes[
-          i].parseInt].name).toLowerAscii.find(sub = recipeName.toLowerAscii,
-          start = 1) == -1:
-        continue
-    except:
-      return showError(message = "Can't check the recipeName in study.")
-    if currentRow < startRow:
-      currentRow.inc
-      continue
-    if (showType == 2 and not canCraft) or (showType == 3 and canCraft):
-      continue
-    try:
-      addButton(table = recipesTable, text = "Study " & itemsList[
-          recipesIndexes[i].parseInt].name, tooltip = "Show recipe's details",
-          command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
-          $canCraft, column = 1)
-    except:
-      return showError(message = "Can't add button in study.")
-    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
-        command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
-        $canCraft, checked = hasWorkplace, column = 2)
-    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
-        command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
-        $canCraft, checked = hasTool, column = 3, newRow = true)
-  for i in (knownRecipes.len + studies.len) .. recipesIndexes.high:
-    if recipesTable.row == gameSettings.listsLimit + 1:
-      break
-    try:
-      if recipeName.len > 0 and ("Deconstruct " & itemsList[recipesIndexes[
-          i].parseInt].name).toLowerAscii.find(sub = recipeName.toLowerAscii,
-          start = 1) == -1:
-        continue
-    except:
-      return showError(message = "Can't check recipeName in deconstruct.")
-    if currentRow < startRow:
-      currentRow.inc
-      continue
-    if showType == 3:
-      continue
-    try:
-      addButton(table = recipesTable, text = "Deconstruct " & itemsList[
-          recipesIndexes[i].parseInt].name, tooltip = "Show recipe's details",
-          command = "ShowRecipeInfo {Deconstruct " & $recipesIndexes[i] & "} " &
-          $canCraft, column = 1)
-    except:
-      return showError(message = "Can't add button in deconstruct.")
-    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
-        command = "ShowRecipeInfo {Deconstruct " & $recipesIndexes[i] & "} " &
-        $canCraft, checked = hasWorkplace, column = 2)
-    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
-        command = "ShowRecipeInfo {Deconstruct " & $recipesIndexes[i] & "} " &
-        $canCraft, checked = hasTool, column = 3, newRow = true)
-  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
-  if page > 1:
-    if recipesTable.row < gameSettings.listsLimit + 1:
-      addPagination(table = recipesTable, previousCommand = "ShowCrafting " & $(
-          page - 1) & (if recipeName.len > 0: " {" & recipeName & "}" else: ""),
-          nextCommand = "")
-    else:
-      addPagination(table = recipesTable, previousCommand = "ShowCrafting " & $(
-          page - 1) & (if recipeName.len > 0: " {" & recipeName & "}" else: ""),
-          nextCommand = "ShowCrafting " & $(page + 1) & (if recipeName.len >
-          0: " {" & recipeName & "}" else: ""))
-  elif recipesTable.row == gameSettings.listsLimit + 1:
-    addPagination(table = recipesTable, previousCommand = "",
-        nextCommand = "ShowCrafting " & $(page + 1) & (if recipeName.len >
-        0: " {" & recipeName & "}" else: ""))
-  updateTable(table = recipesTable, grabFocus = not (tclEval2(
-      script = "focus") == searchEntry))
+  if showRecipesTable(craftsCanvas = craftsCanvas, craftsFrame = craftsFrame,
+      recipeName = recipeName, searchEntry = searchEntry, argc = argc, argv = argv):
+    return tclOk
   if showWorkshopsTable(craftsCanvas = craftsCanvas, craftsFrame = craftsFrame):
     return tclOk
   if tclGetVar(varName = "newtab") == "recipes":
