@@ -1498,7 +1498,7 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds:
 # ---------
 # Aligmnent
 # ---------
-proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T]; member: pointer): ptr typedesc[T]
+proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T]; member: string): ptr typedesc[T]
   {.raises: [], tags: [], contractual.} =
   ## Get the container of the selected element
   ##
@@ -1507,8 +1507,12 @@ proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T]; member: pointer): ptr
   ## * member - the member of the container to extract
   ##
   ## Returns the pointer to the selected member of the container
-  discard
+  if member.len == 0:
+    discard
   # TODO: continue here
+  # for objField, objVal in fieldPairs(obj):
+  #  if objField == member:
+  #    discard
 
 # ------------
 # Page element
@@ -1880,8 +1884,8 @@ proc nkFreePanel(ctx; pan: PNkPanel) {.raises: [], tags: [], contractual.} =
   ## * ctx - the Nuklear context
   ## * pan - the panel which memory will be freed
   let
-    pd: ptr nk_page_data = nkContainerOf(`ptr` = pan, `type` = nk_page_data, member = pan)
-    pe: ptr nk_page_element = nkContainerOf(`ptr` = pd, `type` = nk_page_element, member = pd)
+    pd: ptr nk_page_data = nkContainerOf(`ptr` = pan, `type` = nk_page_data, member = "")
+    pe: ptr nk_page_element = nkContainerOf(`ptr` = pd, `type` = nk_page_element, member = "data")
   nkFreePageElement(ctx = ctx, elem = pe)
 
 # ------
