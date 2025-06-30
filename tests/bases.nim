@@ -82,3 +82,7 @@ suite "Unit tests for bases module":
 
   test "Updating prices in a game.":
     updatePrices()
+
+  test "Get the size of a base population":
+    check:
+      getBasePopulation(baseIndex = 1) == small
