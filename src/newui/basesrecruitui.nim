@@ -20,7 +20,7 @@
 
 import std/[algorithm, tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, config, crew, crewinventory, game, maps, shipscrew, types]
+import ../[bases, basestrade, config, crew, crewinventory, game, maps, shipscrew, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 type
@@ -436,7 +436,17 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
     if canHire:
       imageLabelButton(image = images[negotiateColoredIcon], text = "Hire",
           alignment = right):
-        discard
+        dialog = none
+        try:
+          hireRecruit(recruitIndex = recruitIndex, cost = cost,
+              dailyPayment = currentDaily, tradePayment = currentProfit,
+              contractLength = -1)
+          setRecruits(dialog = dialog)
+        except NoTraderError:
+          dialog = setMessage(message = "You don't have a trader to hire the recruit.",
+              title = "Can't hire the recruit.")
+        except:
+          dialog = setError(message = "Can't hire the recruit.")
     else:
       disabled:
         imageLabelButton(image = images[negotiateColoredIcon], text = "Hire",
