@@ -167,7 +167,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         let
           oldState: GameState = state
           oldDialog: GameDialog = dialog
-        if state in showGame.low..showGame.high:
+        if state in GameState.mainMenu..GameState.recruits:
           # Show the proper window
           showGame[state](state = state, dialog = dialog)
         # Add the tooltips, if enabled
