@@ -1508,7 +1508,7 @@ proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T]; member: string): ptr 
   ##
   ## Returns the pointer to the selected member of the container
   if member.len == 0:
-    discard
+    return cast[ptr `type`](`ptr`)
   # TODO: continue here
   # for objField, objVal in fieldPairs(obj):
   #  if objField == member:
