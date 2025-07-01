@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -192,6 +192,8 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
               name = "level").parseInt, experience: 0))
         for item in baseRecruit.findAll(tag = "item"):
           recruit.inventory.add(y = item.attr(name = "index").parseInt)
+        for item in recruit.equipment.mitems:
+          item = -1
         for equipment in baseRecruit.findAll(tag = "equipment"):
           var eqIndex: int = (equipment.attr(name = "slot").parseInt - 1)
           recruit.equipment[eqIndex.EquipmentLocations] = equipment.attr(
