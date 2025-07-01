@@ -18,8 +18,9 @@
 ## Provides code related to various interactions in bases, like buying recipes,
 ## repair ship, healing wounded crew memebrs, etc.
 
-import contracts
-import coreui, header
+import contracts, nuklear/nuklear_sdl_renderer
+import ../config
+import coreui, header, messagesui, setui, themes
 
 proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -32,3 +33,16 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
+  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
+  setLayoutRowDynamic(height = tableHeight, cols = 1)
+  group(title = "HealGroup", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
+    # Show information about money owned by the player
+    setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+    for index, text in moneyText:
+      if index mod 2 == 0:
+        label(str = text)
+      else:
+        colorLabel(str = text, color = theme.colors[goldenColor])
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
