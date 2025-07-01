@@ -262,7 +262,7 @@ proc showRecipesTable(craftsCanvas, craftsFrame, recipeName,
       break
   checkStudyPrerequisities(canCraft = canCraft, hasTool = hasTool,
       hasWorkplace = hasWorkplace)
-  for i in knownRecipes.len .. recipesIndexes.high:
+  for i in knownRecipes.len..recipesIndexes.high:
     if recipesTable.row == gameSettings.listsLimit + 1 or i > studies.high:
       break
     try:
@@ -292,7 +292,7 @@ proc showRecipesTable(craftsCanvas, craftsFrame, recipeName,
     addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
         command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
         $canCraft, checked = hasTool, column = 3, newRow = true)
-  for i in (knownRecipes.len + studies.len) .. recipesIndexes.high:
+  for i in (knownRecipes.len + studies.len)..recipesIndexes.high:
     if recipesTable.row == gameSettings.listsLimit + 1:
       break
     try:
@@ -812,7 +812,7 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Index is the index of the crafting recipe to set
   var recipeIndex: string = $argv[1]
   if recipeIndex[0] == '{':
-    recipeIndex = recipeIndex[1 .. ^2]
+    recipeIndex = recipeIndex[1..^2]
   const
     modulesBox: string = ".craftdialog.workshop"
     amountBox: string = ".craftdialog.amount"
@@ -908,8 +908,8 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   var recipe: CraftData = CraftData()
   if recipeType == "Study":
     try:
-      recipe.materialTypes.add(y = itemsList[recipeIndex[6 ..
-          ^1].parseInt].itemType)
+      recipe.materialTypes.add(y = itemsList[recipeIndex[
+          6..^1].parseInt].itemType)
     except:
       return showError(message = "Can't add material.")
     recipe.resultIndex = try:
@@ -929,8 +929,8 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     recipe.toolQuality = 100
   elif recipeType == "Deconstruct":
     try:
-      recipe.materialTypes.add(y = itemsList[recipeIndex[12 ..
-          ^1].parseInt].itemType)
+      recipe.materialTypes.add(y = itemsList[recipeIndex[
+          12..^1].parseInt].itemType)
     except:
       return showError(message = "Can't add deconstruct material.")
     recipe.resultIndex = try:
@@ -963,13 +963,13 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     var mAmount: int = 0
     for iIndex, item in itemsList:
       var isMaterial: bool = false
-      if recipeIndex.len > 6 and recipeIndex[0 .. 4] == "Study":
+      if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
         try:
           if item.name == itemsList[recipe.resultIndex].name:
             isMaterial = true
         except:
           return showError(message = "Can't check study material.")
-      elif recipeIndex.len > 12 and recipeIndex[0 .. 10] == "Deconstruct":
+      elif recipeIndex.len > 12 and recipeIndex[0..10] == "Deconstruct":
         try:
           if iIndex == recipeIndex[12 .. ^1].parseInt:
             isMaterial = true
