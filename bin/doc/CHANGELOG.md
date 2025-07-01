@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Don't show the player's ship's orders' menu in combat
 - Possible crash when showing information about recruits in bases
 - Showing info about owned money in the negotiate hiring dialog
+- Loading recruits equipment from saved games
 
 ## [11.2] - 2025-06-15
 
