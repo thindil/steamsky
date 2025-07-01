@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Possible crash when showing information about recruits in bases
 - Showing info about owned money in the negotiate hiring dialog
+- Loading recruits equipment from saved games
 
 ## [11.0.2] - 2025-06-22
 
