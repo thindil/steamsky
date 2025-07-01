@@ -438,9 +438,20 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
           alignment = right):
         dialog = none
         try:
+          let contractLen: int = case currentContract
+              of 1:
+                100
+              of 2:
+                30
+              of 3:
+                20
+              of 4:
+                10
+              else:
+                -1
           hireRecruit(recruitIndex = recruitIndex, cost = cost,
               dailyPayment = currentDaily, tradePayment = currentProfit,
-              contractLength = -1)
+              contractLength = contractLen)
           setRecruits(dialog = dialog)
         except NoTraderError:
           dialog = setMessage(message = "You don't have a trader to hire the recruit.",
