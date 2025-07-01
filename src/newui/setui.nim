@@ -23,21 +23,45 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[basestrade, basestypes, combat, crew, crewinventory, game, maps, shipscargo, shipscrew, types]
 import coreui, errordialog, utilsui2
 
-#######################
-# Setting the school UI
-#######################
-
 var
   moneyIndex2*: int = -1
     ## Index of money in the player's ship's cargo
   moneyText*: seq[string] = @[]
     ## The text with information about money in player's ship's cargo and trader
+  moneyWidth*: seq[cfloat] = @[]
+    ## The width in pixels of the text with information about money
+
+proc setMoneyText(action: string; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Set the text about money owned by the player and its width
+  ##
+  ## * action - the action for which money are needed
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+  moneyText = @[]
+  moneyWidth = @[]
+  if moneyIndex == -1:
+    moneyText.add(y = "You don't have " & moneyName & action)
+  else:
+    moneyText.add(y = "You have ")
+    moneyText.add(y = $playerShip.cargo[moneyIndex2].amount & " " & moneyName)
+  for text in moneyText:
+    try:
+      moneyWidth.add(y = text.getTextWidth)
+    except:
+      dialog = setError(message = "Can't get the width of the money text.")
+
+#######################
+# Setting the school UI
+#######################
+
+var
   crewList*: seq[string] = @[]
     ## The list of names of the player's ship's crew members
   schoolSkillsList*: seq[string] = @[]
     ## The list of skills which the crew member can learn, with prices
-  moneyWidth*: seq[cfloat] = @[]
-    ## The width in pixels of the text with information about money
   crewIndex*: Natural = 0
     ## The index of currently selected crew member
   skillIndex*: Natural = 0
@@ -100,20 +124,7 @@ proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
-  moneyText = @[]
-  moneyWidth = @[]
-  if moneyIndex == -1:
-    moneyText.add(y = "You don't have any " & moneyName & " to pay for learning")
-  else:
-    moneyText.add(y = "You have ")
-    moneyText.add(y = $playerShip.cargo[moneyIndex2].amount & " " & moneyName)
-  for text in moneyText:
-    try:
-      moneyWidth.add(y = text.getTextWidth)
-    except:
-      dialog = setError(message = "Can't get the width of the money text.")
-      return
+  setMoneyText(action = " to pay for learning", dialog = dialog)
   crewList = @[]
   for member in playerShip.crew:
     crewList.add(y = member.name)
