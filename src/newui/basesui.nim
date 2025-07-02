@@ -25,6 +25,87 @@ import coreui, header, messagesui, setui, table, themes
 type
   BaseSortOrders = enum
     nameAsc, nameDesc, costAsc, costDesc, timeAsc, timeDesc, none
+  LocalItemData = object
+    name: string
+    cost: Positive = 1
+    time: Positive = 1
+    id: string
+
+const defaultBaseSortOrder: BaseSortOrders = none
+
+var
+  baseSortOrder: BaseSortOrders = defaultBaseSortOrder
+  baseState: GameState = healWounded
+
+proc sortItems(x, y: LocalItemData): int {.raises: [], tags: [], contractual.} =
+  ## Check how to sort the selected items on the list
+  ##
+  ## * x - the first item to sort
+  ## * y - the second item to sort
+  ##
+  ## Returns 1 if the x item should go first, otherwise -1
+  case baseSortOrder
+  of nameAsc:
+    if x.name < y.name:
+      return 1
+    return -1
+  of nameDesc:
+    if x.name > y.name:
+      return 1
+    return -1
+  of costAsc:
+    if x.cost < y.cost:
+      return 1
+    return -1
+  of costDesc:
+    if x.cost > y.cost:
+      return 1
+    return -1
+  of timeAsc:
+    if x.time < y.time:
+      return 1
+    return -1
+  of timeDesc:
+    if x.time > y.time:
+      return 1
+    return -1
+  of none:
+    return -1
+
+proc sortItems(sortAsc, sortDesc: ItemsSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort items in the base lists
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if baseSortOrder == sortAsc:
+    baseSortOrder = sortDesc
+  else:
+    baseSortOrder = sortAsc
+  var localItems: seq[LocalItemData] = @[]
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
+  if argv[1] == "heal":
+    var cost, time: Natural = 0
+    for index, member in playerShip.crew:
+      try:
+        healCost(cost = cost, time = time, memberIndex = index)
+      except:
+        return showError(message = "Can't count heal cost.")
+      localItems.add(y = LocalItemData(name: member.name, cost: cost,
+          time: time, id: $(index + 1)))
+    cost = 0
+    time = 0
+    try:
+      healCost(cost = cost, time = time, memberIndex = -1)
+    except:
+      return showError(message = "Can't count heal cost2.")
+    localItems.add(y = LocalItemData(name: "Heal all wounded crew members",
+        cost: cost, time: time, id: "0"))
 
 const
   headers: array[3, HeaderData[BaseSortOrders]] = [
