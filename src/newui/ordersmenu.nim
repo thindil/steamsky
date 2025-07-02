@@ -332,6 +332,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
           state = healWounded
           dialog = none
           closePopup()
+          setWounded(dialog = dialog)
         break
     for module in playerShip.modules:
       if module.durability < module.maxDurability:
