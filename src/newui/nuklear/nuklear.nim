@@ -1509,10 +1509,10 @@ proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T]; member: string): ptr 
   ## Returns the pointer to the selected member of the container
   if member.len == 0:
     return cast[ptr `type`](`ptr`)
-  # TODO: continue here
-  # for objField, objVal in fieldPairs(obj):
-  #  if objField == member:
-  #    discard
+  let obj: `type` = cast[`type`](`ptr`)
+  for objField, objVal in obj.fieldPairs:
+    if objField == member:
+      return cast[ptr `type`](objVal)
 
 # ------------
 # Page element
