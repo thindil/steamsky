@@ -18,9 +18,10 @@
 ## Provides code related to various interactions in bases, like buying recipes,
 ## repair ship, healing wounded crew memebrs, etc.
 
+import std/algorithm
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
-import coreui, header, messagesui, setui, table, themes
+import ../[basestrade, config, game, types]
+import coreui, errordialog, header, messagesui, setui, table, themes
 
 type
   BaseSortOrders = enum
@@ -72,7 +73,7 @@ proc sortItems(x, y: LocalItemData): int {.raises: [], tags: [], contractual.} =
   of none:
     return -1
 
-proc sortItems(sortAsc, sortDesc: ItemsSortOrders;
+proc sortItems(sortAsc, sortDesc: BaseSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Sort items in the base lists
   ##
@@ -87,15 +88,14 @@ proc sortItems(sortAsc, sortDesc: ItemsSortOrders;
   else:
     baseSortOrder = sortAsc
   var localItems: seq[LocalItemData] = @[]
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
-      playerShip.skyY].baseIndex
-  if argv[1] == "heal":
+  if baseState == healWounded:
     var cost, time: Natural = 0
     for index, member in playerShip.crew:
       try:
         healCost(cost = cost, time = time, memberIndex = index)
       except:
-        return showError(message = "Can't count heal cost.")
+        dialog = setError(message = "Can't count heal cost.")
+        return
       localItems.add(y = LocalItemData(name: member.name, cost: cost,
           time: time, id: $(index + 1)))
     cost = 0
@@ -103,9 +103,14 @@ proc sortItems(sortAsc, sortDesc: ItemsSortOrders;
     try:
       healCost(cost = cost, time = time, memberIndex = -1)
     except:
-      return showError(message = "Can't count heal cost2.")
+      dialog = setError(message = "Can't count heal cost2.")
+      return
     localItems.add(y = LocalItemData(name: "Heal all wounded crew members",
         cost: cost, time: time, id: "0"))
+  localItems.sort(cmp = sortItems)
+#  baseItemsIndexes = @[]
+#  for item in localItems:
+#    baseItemsIndexes.add(y = item.id)
 
 const
   headers: array[3, HeaderData[BaseSortOrders]] = [
@@ -128,6 +133,7 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
+  baseState = state
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "HealGroup", flags = {windowNoFlags}):
@@ -140,4 +146,6 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
         label(str = text)
       else:
         colorLabel(str = text, color = theme.colors[goldenColor])
+    addHeader(headers = headers, ratio = ratio, tooltip = "actions",
+      code = sortItems, dialog = dialog)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
