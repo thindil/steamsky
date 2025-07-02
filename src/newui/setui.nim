@@ -20,7 +20,8 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestrade, basestypes, combat, crew, crewinventory, game, maps, shipscargo, shipscrew, types]
+import ../[basestrade, basestypes, combat, crew, crewinventory, game, maps,
+    shipscargo, shipscrew, types]
 import coreui, errordialog, utilsui2
 
 var
@@ -31,7 +32,8 @@ var
   moneyWidth*: seq[cfloat] = @[]
     ## The width in pixels of the text with information about money
 
-proc setMoneyText(action: string; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc setMoneyText(action: string; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Set the text about money owned by the player and its width
   ##
   ## * action - the action for which money are needed
@@ -248,8 +250,9 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
 type
   ItemsSortOrders* = enum
     ## Sorting order of the list of items to trade
-    nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, priceAsc,
-      priceDesc, profitAsc, profitDesc, weightAsc, weightDesc, ownedAsc,
+    nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc,
+      priceAsc, priceDesc, profitAsc, profitDesc, weightAsc, weightDesc,
+        ownedAsc,
       ownedDesc, availableAsc, availableDesc, none
 
 const defaultItemsSortOrder*: ItemsSortOrders = none
@@ -409,13 +412,15 @@ var
   woundedList*: seq[Natural] = @[]
     ## The list of indexes of wounded members of the player's ship's crew
 
-proc setWounded*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc setWounded*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the data for healing wounded crew members UI
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
+  setMoneyText(action = " to pay for healing", dialog = dialog)
   woundedList = @[]
   for index, member in playerShip.crew:
     if member.health < 100:
