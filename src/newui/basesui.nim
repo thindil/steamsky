@@ -20,7 +20,21 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
-import coreui, header, messagesui, setui, themes
+import coreui, header, messagesui, setui, table, themes
+
+type
+  BaseSortOrders = enum
+    nameAsc, nameDesc, costAsc, costDesc, timeAsc, timeDesc, none
+
+const
+  headers: array[3, HeaderData[BaseSortOrders]] = [
+    HeaderData[BaseSortOrders](label: "Action", sortAsc: nameAsc,
+        sortDesc: nameDesc),
+    HeaderData[BaseSortOrders](label: "Cost", sortAsc: costAsc,
+        sortDesc: costDesc),
+    HeaderData[BaseSortOrders](label: "Time", sortAsc: timeAsc,
+        sortDesc: timeDesc)]
+  ratio: array[3, cfloat] = [400.cfloat, 200, 200]
 
 proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
