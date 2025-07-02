@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Generated cargo in bases is now more random
+
 ### Fixed
 - Undocking or escaping from a base doesn't show the map
 - The player's ship's crew members escape from boarding party
