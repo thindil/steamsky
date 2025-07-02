@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,11 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
+import contracts
 import ../tk
 import dialogs, errordialog
 
 proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Close the selected dialog
   ##
   ## * clientData - the additional data for the Tcl command
@@ -58,7 +60,7 @@ proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
   ## Update countdown timer on the selected dialog. If timer reach 0, close
   ## dialog
   ##
@@ -91,7 +93,8 @@ proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Get string value from the player, like new ship or module name
   ##
   ## * clientData - the additional data for the Tcl command
@@ -138,7 +141,8 @@ proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
 var mouseXPosition, mouseYPosition = 0
 
 proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Set the mouse position
   ##
   ## * clientData - the additional data for the Tcl command
@@ -168,7 +172,7 @@ proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+        WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
   ## Move the selected dialog around
   ##
   ## * clientData - the additional data for the Tcl command
@@ -230,7 +234,7 @@ proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
 
   proc getCoordinate(name: string): int {.raises: [], tags: [
-      WriteIOEffect, TimeEffect, RootEffect].} =
+      WriteIOEffect, TimeEffect, RootEffect], contractual.} =
     let value = tclEval2(script = "lindex [place configure " & dialog & " -" &
         name & "] 4")
     if value.len == 0:
@@ -249,7 +253,8 @@ proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
   mouseYPosition = currentYMouse
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Adds Tcl commands related to dialogs
   try:
     addCommand("CloseDialog", closeDialogCommand)
