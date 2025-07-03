@@ -16,13 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import contracts
+import contracts, nimalyzer
 import ../tk
 import dialogs, errordialog
 
 proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
-        contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual,
+    ruleOff: "params".} =
   ## Close the selected dialog
   ##
   ## * clientData - the additional data for the Tcl command
