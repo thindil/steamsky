@@ -30,7 +30,7 @@ type
     name: string
     cost: Positive = 1
     time: Positive = 1
-    id: string
+    id: Natural
 
 const defaultBaseSortOrder: BaseSortOrders = none
 
@@ -97,7 +97,7 @@ proc sortItems(sortAsc, sortDesc: BaseSortOrders;
         dialog = setError(message = "Can't count heal cost.")
         return
       localItems.add(y = LocalItemData(name: member.name, cost: cost,
-          time: time, id: $(index + 1)))
+          time: time, id: index + 1))
     cost = 0
     time = 0
     try:
@@ -106,11 +106,11 @@ proc sortItems(sortAsc, sortDesc: BaseSortOrders;
       dialog = setError(message = "Can't count heal cost2.")
       return
     localItems.add(y = LocalItemData(name: "Heal all wounded crew members",
-        cost: cost, time: time, id: "0"))
+        cost: cost, time: time, id: 0))
   localItems.sort(cmp = sortItems)
-#  baseItemsIndexes = @[]
-#  for item in localItems:
-#    baseItemsIndexes.add(y = item.id)
+  itemsIndexes = @[]
+  for item in localItems:
+    itemsIndexes.add(y = item.id)
 
 const
   headers: array[3, HeaderData[BaseSortOrders]] = [
