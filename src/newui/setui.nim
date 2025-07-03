@@ -408,10 +408,6 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the healing UI
 ########################
 
-var
-  woundedList*: seq[Natural] = @[]
-    ## The list of indexes of wounded members of the player's ship's crew
-
 proc setWounded*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Set the data for healing wounded crew members UI
@@ -421,7 +417,3 @@ proc setWounded*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   setMoneyText(action = " to pay for healing", dialog = dialog)
-  woundedList = @[]
-  for index, member in playerShip.crew:
-    if member.health < 100:
-      woundedList.add(y = index)
