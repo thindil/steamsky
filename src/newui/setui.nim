@@ -420,7 +420,8 @@ type
     id*: Natural
       ## The id of crew member, ship's module etc
 
-proc setWoundedList*(dialog = var GameDialog): seq[BaseItemData] {.raises: [], tags: [], contractual.} =
+proc setWoundedList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Set the list of wounded crew members
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -455,3 +456,7 @@ proc setWounded*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   setMoneyText(action = " to pay for healing", dialog = dialog)
+  let localItems: seq[BaseItemData] = setWoundedList(dialog = dialog)
+  itemsIndexes = @[]
+  for item in localItems:
+    itemsIndexes.add(y = item.id)
