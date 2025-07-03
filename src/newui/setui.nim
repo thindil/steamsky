@@ -420,6 +420,32 @@ type
     id*: Natural
       ## The id of crew member, ship's module etc
 
+proc setWoundedList*(dialog = var GameDialog): seq[BaseItemData] {.raises: [], tags: [], contractual.} =
+  ## Set the list of wounded crew members
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened. Additionally it returns the list of wounded crew members.
+  var cost, time: Natural = 0
+  for index, member in playerShip.crew:
+    try:
+      healCost(cost = cost, time = time, memberIndex = index)
+    except:
+      dialog = setError(message = "Can't count heal cost.")
+      return
+    result.add(y = BaseItemData(name: member.name, cost: cost,
+        time: time, id: index + 1))
+  cost = 0
+  time = 0
+  try:
+    healCost(cost = cost, time = time, memberIndex = -1)
+  except:
+    dialog = setError(message = "Can't count heal cost2.")
+    return
+  result.add(y = BaseItemData(name: "Heal all wounded crew members",
+      cost: cost, time: time, id: 0))
+
 proc setWounded*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Set the data for healing wounded crew members UI
