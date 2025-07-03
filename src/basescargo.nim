@@ -39,11 +39,11 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
     return
   var itemsAmount: Natural = case skyBases[baseIndex].size
     of small:
-      32
+      16
     of medium:
-      64
+      32
     of big:
-      128
+      64
     else:
       0
   if skyBases[baseIndex].cargo.len == 0:
