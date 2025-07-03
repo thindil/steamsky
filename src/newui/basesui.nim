@@ -26,11 +26,6 @@ import coreui, errordialog, header, messagesui, setui, table, themes
 type
   BaseSortOrders = enum
     nameAsc, nameDesc, costAsc, costDesc, timeAsc, timeDesc, none
-  LocalItemData = object
-    name: string
-    cost: Positive = 1
-    time: Positive = 1
-    id: Natural
 
 const defaultBaseSortOrder: BaseSortOrders = none
 
@@ -38,7 +33,7 @@ var
   baseSortOrder: BaseSortOrders = defaultBaseSortOrder
   baseState: GameState = healWounded
 
-proc sortItems(x, y: LocalItemData): int {.raises: [], tags: [], contractual.} =
+proc sortItems(x, y: BaseItemData): int {.raises: [], tags: [], contractual.} =
   ## Check how to sort the selected items on the list
   ##
   ## * x - the first item to sort
@@ -87,7 +82,7 @@ proc sortItems(sortAsc, sortDesc: BaseSortOrders;
     baseSortOrder = sortDesc
   else:
     baseSortOrder = sortAsc
-  var localItems: seq[LocalItemData] = @[]
+  var localItems: seq[BaseItemData] = @[]
   if baseState == healWounded:
     var cost, time: Natural = 0
     for index, member in playerShip.crew:
@@ -96,7 +91,7 @@ proc sortItems(sortAsc, sortDesc: BaseSortOrders;
       except:
         dialog = setError(message = "Can't count heal cost.")
         return
-      localItems.add(y = LocalItemData(name: member.name, cost: cost,
+      localItems.add(y = BaseItemData(name: member.name, cost: cost,
           time: time, id: index + 1))
     cost = 0
     time = 0
@@ -105,7 +100,7 @@ proc sortItems(sortAsc, sortDesc: BaseSortOrders;
     except:
       dialog = setError(message = "Can't count heal cost2.")
       return
-    localItems.add(y = LocalItemData(name: "Heal all wounded crew members",
+    localItems.add(y = BaseItemData(name: "Heal all wounded crew members",
         cost: cost, time: time, id: 0))
   localItems.sort(cmp = sortItems)
   itemsIndexes = @[]

@@ -408,6 +408,18 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the healing UI
 ########################
 
+type
+  BaseItemData* = object
+    ## Used to store data about actions in bases, like healing, repair, recipes
+    name*: string
+      ## The text to display on the list
+    cost*: Positive = 1
+      ## The cost of action
+    time*: Positive = 1
+      ## The amount of time needed for the action
+    id*: Natural
+      ## The id of crew member, ship's module etc
+
 proc setWounded*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Set the data for healing wounded crew members UI
