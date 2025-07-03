@@ -1910,7 +1910,7 @@ proc nkStartPopup(ctx; win: var PNkWindow) {.raises: [], tags: [],
     win.popup.buf = buf
 
 proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[PanelFlags];
-    x, y, w, h: var float): bool {.raises: [NuklearException], tags: [
+    x, y, w, h: float): bool {.raises: [NuklearException], tags: [
         RootEffect], contractual.} =
   ## Try to create a new popup window. Internal use only.
   ##
@@ -1955,12 +1955,13 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[PanelFlags];
       win.popup.type = panelPopup
     # popup position is local to window
     ctx.current = popup
-    x += win.layout.clip.x
-    y += win.layout.clip.y
+    var
+      localX: float = x + win.layout.clip.x
+      localY: float = y + win.layout.clip.y
 
     # setup popup data
     popup.parent = win
-    popup.bounds = new_nk_rect(x = x, y = y, w = w, h = h)
+    popup.bounds = new_nk_rect(x = localX, y = localY, w = w, h = h)
     popup.seq = ctx.seq
     popup.layout = cast[PNkPanel](nk_create_panel(ctx = ctx))
     popup.flags = winSetToInt(nimFlags = flags)
@@ -2013,6 +2014,15 @@ proc createPopup(pType2: PopupType; title2: cstring;
     ## A binding to Nuklear's function. Internal use only
   return nk_popup_begin(ctx = ctx, pType = pType2, title = title2,
       flags = flags2, rect = new_nk_rect(x = x2, y = y2, w = w2, h = h2))
+
+proc createPopup(pType2: PopupType; title2: string; flags2: set[PanelFlags];
+  x2, y2, w2, h2: float): bool {.raises: [NuklearException],
+  tags: [RootEffect], contractual.} =
+  ## Create a new Nuklear popup window, internal use only, temporary code
+  ##
+  ## Returns true if the popup was successfully created, otherwise false.
+  return nkPopupBegin(ctx = ctx, pType = pType2, title = title2,
+    flags = flags2, x = x2, y = y2, w = w2, h = h2)
 
 proc createNonBlocking(flags2: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises: [], tags: [], contractual, discardable.} =
   ## Create a new Nuklear non-blocking popup window, internal use only,
