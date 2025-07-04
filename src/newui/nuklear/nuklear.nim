@@ -1402,7 +1402,7 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
         nkFillCircle(b = `out`, rect = drawRect, c = background)
   of triangleUp, triangleDown, triangleLeft, triangleRight:
     var heading: Heading = right
-    var points: array[3, nk_vec2]
+    var points: array[3, NimRect]
     case `type`
       of triangleRight:
         heading = right
@@ -1420,7 +1420,7 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
   of triangleUpOutline, triangleDownOutline, triangleLeftOutline,
     triangleRightOutline:
     var heading: Heading = right
-    var points: array[3, nk_vec2]
+    var points: array[3, NimRect]
     case `type`
       of triangleRightOutline:
         heading = right

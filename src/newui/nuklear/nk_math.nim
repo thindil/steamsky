@@ -54,7 +54,7 @@ proc nkIntersect*(x0, y0, w0, h0, x1, y1, w1, h1: cfloat): bool {.raises: [],
   return ((x1 < (x0 + w0)) and (x0 < (x1 + w1)) and (y1 < (y0 + h0)) and (y0 < (
       y1 + h1)))
 
-proc nkTriangleFromDirection*(`result`: var array[3, nk_vec2]; r: NimRect;
+proc nkTriangleFromDirection*(`result`: var array[3, NimRect]; r: NimRect;
     padX: cfloat; padY: cfloat; direction: Heading) {.raises: [], tags: [],
     contractual.} =
   ## Get the coordinates of a triangle based on its direction
@@ -79,21 +79,21 @@ proc nkTriangleFromDirection*(`result`: var array[3, nk_vec2]; r: NimRect;
 
   case direction
   of up:
-    `result`[0] = nk_vec2(x: rect.x + wHalf, y: rect.y)
-    `result`[1] = nk_vec2(x: rect.x + rect.w, y: rect.y + rect.h)
-    `result`[2] = nk_vec2(x: rect.x, y: rect.y + rect.h)
+    `result`[0] = NimRect(x: rect.x + wHalf, y: rect.y)
+    `result`[1] = NimRect(x: rect.x + rect.w, y: rect.y + rect.h)
+    `result`[2] = NimRect(x: rect.x, y: rect.y + rect.h)
   of right:
-    `result`[0] = nk_vec2(x: rect.x, y: rect.y)
-    `result`[1] = nk_vec2(x: rect.x + rect.w, y: rect.y + hHalf)
-    `result`[2] = nk_vec2(x: rect.x, y: rect.y + rect.h)
+    `result`[0] = NimRect(x: rect.x, y: rect.y)
+    `result`[1] = NimRect(x: rect.x + rect.w, y: rect.y + hHalf)
+    `result`[2] = NimRect(x: rect.x, y: rect.y + rect.h)
   of down:
-    `result`[0] = nk_vec2(x: rect.x, y: rect.y)
-    `result`[1] = nk_vec2(x: rect.x + rect.w, y: rect.y)
-    `result`[2] = nk_vec2(x: rect.x + wHalf, y: rect.y + rect.h)
+    `result`[0] = NimRect(x: rect.x, y: rect.y)
+    `result`[1] = NimRect(x: rect.x + rect.w, y: rect.y)
+    `result`[2] = NimRect(x: rect.x + wHalf, y: rect.y + rect.h)
   of left:
-    `result`[0] = nk_vec2(x: rect.x, y: rect.y + hHalf)
-    `result`[1] = nk_vec2(x: rect.x + rect.w, y: rect.y)
-    `result`[2] = nk_vec2(x: rect.x + rect.w, y: rect.y + rect.h)
+    `result`[0] = NimRect(x: rect.x, y: rect.y + hHalf)
+    `result`[1] = NimRect(x: rect.x + rect.w, y: rect.y)
+    `result`[2] = NimRect(x: rect.x + rect.w, y: rect.y + rect.h)
 
 proc nkInbox*(px, py, x, y, w, h: cfloat): bool {.raises: [], tags: [], contractual.} =
   ## Check if the selected point is in the box
