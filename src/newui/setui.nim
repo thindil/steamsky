@@ -430,6 +430,8 @@ proc setWoundedList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
   ## happened. Additionally it returns the list of wounded crew members.
   var cost, time: Natural = 0
   for index, member in playerShip.crew:
+    if member.health == 100:
+      continue
     try:
       healCost(cost = cost, time = time, memberIndex = index)
     except:
