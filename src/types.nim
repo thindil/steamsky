@@ -48,6 +48,9 @@ type
   ReputationError* = object of CatchableError
     ## Raised when there is some problems with reputations
 
+  NoFreeSpaceError* = object of CatchableError
+    ## Raised when there is no space in a trader's cargo to sell an item
+
   ShipUpgrade* = enum
     ## Available types of the player's ship's upgrades
     none, durability, maxValue, value
