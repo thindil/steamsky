@@ -20,8 +20,8 @@
 
 import std/algorithm
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, types]
-import coreui, header, messagesui, setui, table, themes
+import ../[config, game, types]
+import coreui, errordialog, header, messagesui, setui, table, themes
 
 type
   BaseSortOrders = enum
@@ -126,4 +126,18 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
         colorLabel(str = text, color = theme.colors[goldenColor])
     addHeader(headers = headers, ratio = ratio, tooltip = "actions",
       code = sortItems, dialog = dialog)
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    for index in itemsIndexes:
+      if index == 0:
+        continue
+    restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
