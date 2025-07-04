@@ -82,13 +82,20 @@ proc sortItems(sortAsc, sortDesc: BaseSortOrders;
     baseSortOrder = sortDesc
   else:
     baseSortOrder = sortAsc
-  var localItems: seq[BaseItemData] = @[]
   if baseState == healWounded:
-    localItems = setWoundedList(dialog = dialog)
-  localItems.sort(cmp = sortItems)
-  itemsIndexes = @[]
-  for item in localItems:
-    itemsIndexes.add(y = item.id)
+    actionsList = setWoundedList(dialog = dialog)
+  actionsList.sort(cmp = sortItems)
+
+proc showWoundedMenu(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the menu with the option to heal the selected wounded crew member
+  ##
+  ## * data   - the index of the selected crew member
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
 
 const
   headers: array[3, HeaderData[BaseSortOrders]] = [
@@ -136,8 +143,13 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
       return
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
-    for index in itemsIndexes:
-      if index == 0:
-        continue
+    for wounded in actionsList:
+      addButton(label = wounded.name, tooltip = "Show available options",
+          data = wounded.id, code = showWoundedMenu, dialog = dialog)
+      addButton(label = $wounded.cost & " " & moneyName,
+          tooltip = "Show available options", data = wounded.id,
+          code = showWoundedMenu, dialog = dialog)
+      addButton(label = $wounded.time, tooltip = "Show available options",
+          data = wounded.id, code = showWoundedMenu, dialog = dialog)
     restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
