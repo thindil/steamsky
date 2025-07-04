@@ -20,8 +20,8 @@
 
 import std/algorithm
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestrade, config, game, types]
-import coreui, errordialog, header, messagesui, setui, table, themes
+import ../[config, types]
+import coreui, header, messagesui, setui, table, themes
 
 type
   BaseSortOrders = enum
@@ -84,24 +84,7 @@ proc sortItems(sortAsc, sortDesc: BaseSortOrders;
     baseSortOrder = sortAsc
   var localItems: seq[BaseItemData] = @[]
   if baseState == healWounded:
-    var cost, time: Natural = 0
-    for index, member in playerShip.crew:
-      try:
-        healCost(cost = cost, time = time, memberIndex = index)
-      except:
-        dialog = setError(message = "Can't count heal cost.")
-        return
-      localItems.add(y = BaseItemData(name: member.name, cost: cost,
-          time: time, id: index + 1))
-    cost = 0
-    time = 0
-    try:
-      healCost(cost = cost, time = time, memberIndex = -1)
-    except:
-      dialog = setError(message = "Can't count heal cost2.")
-      return
-    localItems.add(y = BaseItemData(name: "Heal all wounded crew members",
-        cost: cost, time: time, id: 0))
+    localItems = setWoundedList(dialog = dialog)
   localItems.sort(cmp = sortItems)
   itemsIndexes = @[]
   for item in localItems:
