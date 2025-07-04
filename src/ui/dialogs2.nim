@@ -257,10 +257,10 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Adds Tcl commands related to dialogs
   try:
-    addCommand("CloseDialog", closeDialogCommand)
-    addCommand("UpdateDialog", updateDialogCommand)
-    addCommand("GetString", getStringCommand)
-    addCommand("SetMousePosition", setMousePositionCommand)
-    addCommand("MoveDialog", moveDialogCommand)
+    addCommand(name = "CloseDialog", nimProc = closeDialogCommand)
+    addCommand(name = "UpdateDialog", nimProc = updateDialogCommand)
+    addCommand(name = "GetString", nimProc = getStringCommand)
+    addCommand(name = "SetMousePosition", nimProc = setMousePositionCommand)
+    addCommand(name = "MoveDialog", nimProc = moveDialogCommand)
   except:
     showError(message = "Can't add a Tcl command.")
