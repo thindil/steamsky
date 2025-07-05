@@ -188,6 +188,5 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip = "Show available options", data = wounded.id,
           code = setWoundedMenu, dialog = dialog)
     restoreButtonStyle()
-    let bounds: NimRect = NimRect(x: 0, y: 70, w: 580, h: (actionsList.len * 35).float)
-    showWoundedMenu(bounds = bounds)
+    showWoundedMenu(bounds = NimRect(x: 0, y: 70, w: 580, h: (actionsList.len * 35).float))
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
