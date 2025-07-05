@@ -107,6 +107,26 @@ const
         sortDesc: timeDesc)]
   ratio: array[3, cfloat] = [400.cfloat, 200, 200]
 
+proc formatTime(time: Natural): string {.raises: [], tags: [], contractual.} =
+  ## Format the amount of time needed for the action
+  ##
+  ## * time - the time to format
+  ##
+  ## Returns string with formatted time
+  if time < 60:
+    result = $time & " minute"
+    if time > 1:
+      result.add(y = "s")
+  else:
+    let hours: Positive = (time / 60).Positive
+    result = $hours & " hour"
+    if hours > 1:
+      result.add(y = "s")
+    if time mod 60 > 0:
+      result.add(y = " and " & $(time mod 60) & " minute")
+      if time mod 60 > 1:
+        result.add(y = "s")
+
 proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the UI with the list of wounded the player's ship's crew members
@@ -149,7 +169,8 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = $wounded.cost & " " & moneyName,
           tooltip = "Show available options", data = wounded.id,
           code = showWoundedMenu, dialog = dialog)
-      addButton(label = $wounded.time, tooltip = "Show available options",
-          data = wounded.id, code = showWoundedMenu, dialog = dialog)
+      addButton(label = wounded.time.formatTime,
+          tooltip = "Show available options", data = wounded.id,
+          code = showWoundedMenu, dialog = dialog)
     restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
