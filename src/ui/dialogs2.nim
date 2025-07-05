@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides various procedures related to the in-game dialog's windows like
+## closing a dialog, updating it, etc. Split from the utilsui module to avoid
+## circular dependencies.
+
 import std/strutils
 import contracts, nimalyzer
 import ../tk
@@ -235,6 +239,11 @@ proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc getCoordinate(name: string): int {.raises: [], tags: [
       WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+    ## Get the x or y coordinate of the dialog
+    ##
+    ## * name - the name of axis in which coordinate will be looked for
+    ##
+    ## Returns the selected coordinate (x or y)
     let value = tclEval2(script = "lindex [place configure " & dialog & " -" &
         name & "] 4")
     if value.len == 0:
