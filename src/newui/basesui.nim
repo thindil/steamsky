@@ -86,6 +86,8 @@ proc sortItems(sortAsc, sortDesc: BaseSortOrders;
     actionsList = setWoundedList(dialog = dialog)
   actionsList.sort(cmp = sortItems)
 
+var actionId: int = -1
+
 proc setWoundedMenu(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the menu with the option to heal the selected wounded crew member
@@ -95,7 +97,7 @@ proc setWoundedMenu(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  actionId = data
 
 proc showWoundedMenu(bounds: NimRect) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -107,8 +109,8 @@ proc showWoundedMenu(bounds: NimRect) {.raises: [], tags: [
       triggerBounds = bounds, button = (
       if gameSettings.rightButton: Buttons.right else: Buttons.left)):
     setLayoutRowDynamic(25, 1)
-    contextualItemLabel(label = "Heal", align = centered):
-      discard
+    contextualItemLabel(label = "Buy healing", align = centered):
+      echo actionId
     contextualItemLabel(label = "Close", align = centered):
       discard
 
@@ -188,5 +190,5 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip = "Show available options", data = wounded.id,
           code = setWoundedMenu, dialog = dialog)
     restoreButtonStyle()
-    showWoundedMenu(bounds = NimRect(x: 0, y: 70, w: 580, h: (actionsList.len * 35).float))
+    showWoundedMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (actionsList.len * 35).float))
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
