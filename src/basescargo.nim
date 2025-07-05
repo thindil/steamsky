@@ -143,8 +143,7 @@ proc findBaseCargo*(protoIndex: Natural;
 
 proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability;
-    cargoIndex: int = -1) {.raises: [KeyError], tags: [],
-        contractual.} =
+    cargoIndex: int = -1) {.raises: [KeyError, NoFreeSpaceError], tags: [], contractual.} =
   ## Update the selected item amount in the cargo of the base where the player
   ## is
   ##
@@ -167,6 +166,20 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
   {.ruleOff: "assignments".}
   if amount > 0:
     if itemIndex == -1:
+      var itemsAmount: Natural = case skyBases[baseIndex].size
+        of small:
+          32
+        of medium:
+          64
+        of big:
+          128
+        else:
+          0
+      for item in skyBases[baseIndex].cargo:
+        if item.amount > 0:
+          itemsAmount.dec
+        if itemsAmount == 0:
+          raise newException(exceptn = NoFreeSpaceError, message = $protoIndex)
       skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: protoIndex,
           amount: amount, durability: durability, price: getPrice(
           baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex)))
