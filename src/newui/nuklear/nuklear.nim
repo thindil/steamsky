@@ -693,7 +693,7 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: CommandType;
 # ----
 # Misc
 # ----
-proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
+proc nkPushScissor(b: ptr nk_command_buffer; r: NimRect) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Clear the rectangle. Internal use only
   ##
@@ -702,7 +702,7 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
   ##
   ## Returns the modified parameter b
   body:
-    b.clip = r
+    b.clip = new_nk_rect(x = r.x, y = r.y, w = r.w, h = r.h)
     let cmd: ptr nk_command_scissor = cast[ptr nk_command_scissor](
         nkCommandBufferPush(b = b, t = commandScissor,
             size = nk_command_scissor.sizeof))
@@ -1872,9 +1872,8 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     nkUnify(clip = clip, a = win.buffer.clip, x0 = layout.clip.x,
       y0 = layout.clip.y, x1 = layout.clip.x + layout.clip.w,
       y1 = layout.clip.y + layout.clip.h)
-    let tClip: nk_rect = new_nk_rect(x = clip.x, y = clip.y, w = clip.w, h = clip.h)
-    nkPushScissor(b = `out`.addr, r = tClip)
-    layout.clip = tClip
+    nkPushScissor(b = `out`.addr, r = clip)
+    layout.clip = new_nk_rect(x = clip.x, y = clip.y, w = clip.w, h = clip.h)
     return not (layout.flags and windowHidden.cint).nk_bool and not
       (layout.flags and windowMinimized.cint).nk_bool
 

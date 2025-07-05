@@ -463,8 +463,6 @@ type
 # Constants
 # ---------
 const
-  nkNullRect*: nk_rect = nk_rect(x: -8192.0, y: -8192.0, w: -8192.0, h: -8192.0)
-    ## An empty rectangle
   nkUtfInvalid*: nk_rune = 0xfffd
     ## An invalid UTF-8 rune
   nkUtfSize*: Positive = 4
@@ -614,6 +612,13 @@ type
     ## When to change the state of a window
     hidden, shown
 {.pop ruleOn: "namedParams".}
+
+# ---------
+# Constants
+# ---------
+const
+  nkNullRect*: NimRect = NimRect(x: -8192.0, y: -8192.0, w: -8192.0, h: -8192.0)
+    ## An empty rectangle
 
 # ----------
 # Converters
