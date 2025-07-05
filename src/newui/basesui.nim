@@ -86,7 +86,7 @@ proc sortItems(sortAsc, sortDesc: BaseSortOrders;
     actionsList = setWoundedList(dialog = dialog)
   actionsList.sort(cmp = sortItems)
 
-proc showWoundedMenu(data: int; dialog: var GameDialog) {.raises: [], tags: [
+proc setWoundedMenu(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the menu with the option to heal the selected wounded crew member
   ##
@@ -96,6 +96,21 @@ proc showWoundedMenu(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   discard
+
+proc showWoundedMenu(bounds: NimRect) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the menu for the selected wounded crew membre
+  ##
+  ## * bounds - the rectangle in which the player should click the mouse's
+  ##            button to show the menu
+  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
+      triggerBounds = bounds, button = (
+      if gameSettings.rightButton: Buttons.right else: Buttons.left)):
+    setLayoutRowDynamic(25, 1)
+    contextualItemLabel(label = "Heal", align = centered):
+      discard
+    contextualItemLabel(label = "Close", align = centered):
+      discard
 
 const
   headers: array[3, HeaderData[BaseSortOrders]] = [
@@ -165,12 +180,14 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setButtonStyle(field = border, value = 0)
     for wounded in actionsList:
       addButton(label = wounded.name, tooltip = "Show available options",
-          data = wounded.id, code = showWoundedMenu, dialog = dialog)
+          data = wounded.id, code = setWoundedMenu, dialog = dialog)
       addButton(label = $wounded.cost & " " & moneyName,
           tooltip = "Show available options", data = wounded.id,
-          code = showWoundedMenu, dialog = dialog)
+          code = setWoundedMenu, dialog = dialog)
       addButton(label = wounded.time.formatTime,
           tooltip = "Show available options", data = wounded.id,
-          code = showWoundedMenu, dialog = dialog)
+          code = setWoundedMenu, dialog = dialog)
     restoreButtonStyle()
+    let bounds: NimRect = NimRect(x: 0, y: 70, w: 580, h: (actionsList.len * 35).float)
+    showWoundedMenu(bounds = bounds)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
