@@ -43,8 +43,8 @@ proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "after cancel " & timerId)
     timerId = ""
   var
-    frame = ".gameframe.header"
-    dialog = $argv[1]
+    frame: string = ".gameframe.header"
+    dialog: string = $argv[1]
   if argc == 3:
     frame = $argv[2]
     tclEval(script = "tk busy forget " & frame)
@@ -78,13 +78,13 @@ proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## UpdateDialog dialogname
   ## Dialogname is name of the dialog to update
-  let messageButton = $argv[1] & ".button"
+  let messageButton: string = $argv[1] & ".button"
   if tclEval2(script = "winfo exists " & messageButton) == "0":
     return closeDialogCommand(clientData = clientData, interp = interp,
         argc = argc, argv = argv)
   let
-    text = tclEval2(script = messageButton & " cget -text")
-    seconds = try:
+    text: string = tclEval2(script = messageButton & " cget -text")
+    seconds: int = try:
         text[6..^1].parseInt - 1
       except:
         return showError(message = "Can't get amount of seconds.")
@@ -115,21 +115,21 @@ proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
   ## okbutton is the text which will be displayed on the confirmation
   ## button
   let
-    stringDialog = createDialog(name = ".getstring", title = $argv[3],
+    stringDialog: string = createDialog(name = ".getstring", title = $argv[3],
         titleWidth = 275, columns = 2)
-    stringLabel = stringDialog & ".text"
+    stringLabel: string = stringDialog & ".text"
   tclEval(script = "ttk::label " & stringLabel & " -text {" & $argv[1] & "} -wraplength 300")
   tclEval(script = "grid " & stringLabel & " -padx 5 -pady {5 0} -columnspan 2")
-  let stringEntry = stringDialog & ".entry"
+  let stringEntry: string = stringDialog & ".entry"
   tclEval(script = "ttk::entry " & stringEntry & " -validate key -validatecommand {set value %P;if {$value == {} || [string length $value] > 64} {.getstring.okbutton state disabled; return 1} else {.getstring.okbutton state !disabled; return 1}}")
   tclEval(script = "grid " & stringEntry & " -sticky we -padx 5 -columnspan 2")
-  let okButton = stringDialog & ".okbutton"
+  let okButton: string = stringDialog & ".okbutton"
   tclEval(script = "ttk::button " & okButton & " -text {" & $argv[4] &
       "} -command {SetTextVariable " & $argv[2] & ";CloseDialog " &
       stringDialog & "} -image edit2icon -style Dialoggreen.TButton")
   tclEval(script = "grid " & okButton & " -row 3 -pady 5 -padx 5")
   tclEval(script = okButton & " state disabled")
-  let cancelButton = stringDialog & ".closebutton"
+  let cancelButton: string = stringDialog & ".closebutton"
   tclEval(script = "ttk::button " & cancelButton &
       " -text Cancel -command {CloseDialog " & stringDialog & "} -image cancelicon -style Dialogred.TButton")
   tclEval(script = "grid " & cancelButton & " -row 3 -column 1 -pady 5 -padx 5")
@@ -142,7 +142,7 @@ proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = stringDialog)
   return tclOk
 
-var mouseXPosition, mouseYPosition = 0
+var mouseXPosition, mouseYPosition: int = 0
 
 proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
@@ -167,7 +167,7 @@ proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
       ($argv[3]).parseInt
     except:
       0
-  let dialogHeader = $argv[1]
+  let dialogHeader: string = $argv[1]
   if mouseXPosition > 0 and mouseYPosition > 0:
     tclEval(script = dialogHeader & " configure -cursor fleur")
   else:
@@ -193,20 +193,20 @@ proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
   if mouseXPosition == 0 and mouseYPosition == 0:
     return tclOk
   let
-    currentXMouse = try:
+    currentXMouse: int = try:
         ($argv[2]).parseInt
       except:
         return showError(message = "Can't get current mouse X.")
-    currentYMouse = try:
+    currentYMouse: int = try:
         ($argv[3]).parseInt
       except:
         return showError(message = "Can't get current mouse Y.")
-    dialog = $argv[1]
-    dialogX = try:
+    dialog: string = $argv[1]
+    dialogX: int = try:
         tclEval2(script = "winfo x " & dialog).parseInt
       except:
         return showError(message = "Can't get dialog X.")
-    dialogY = try:
+    dialogY: int = try:
         tclEval2(script = "winfo y " & dialog).parseInt
       except:
         return showError(message = "Can't get dialog X.")
@@ -215,22 +215,22 @@ proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
   if mouseYPosition > currentYMouse and dialogY < 5:
     return tclOk
   let
-    dialogWidth = try:
+    dialogWidth: Natural = try:
         tclEval2(script = "winfo width " & dialog).parseInt
       except:
         return showError(message = "Can't get dialog width.")
-    mainWindowWidth = try:
+    mainWindowWidth: Natural = try:
         tclEval2(script = "winfo width .").parseInt
       except:
         return showError(message = "Can't get main window width.")
   if mouseXPosition < currentXMouse and dialogX + dialogWidth > mainWindowWidth:
     return tclOk
   let
-    dialogHeight = try:
+    dialogHeight: Natural = try:
         tclEval2(script = "winfo height " & dialog).parseInt
       except:
         return showError(message = "Can't get dialog height.")
-    mainWindowHeight = try:
+    mainWindowHeight: Natural = try:
         tclEval2(script = "winfo height .").parseInt
       except:
         return showError(message = "Can't get main window height.")
@@ -244,7 +244,7 @@ proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
     ## * name - the name of axis in which coordinate will be looked for
     ##
     ## Returns the selected coordinate (x or y)
-    let value = tclEval2(script = "lindex [place configure " & dialog & " -" &
+    let value: string = tclEval2(script = "lindex [place configure " & dialog & " -" &
         name & "] 4")
     if value.len == 0:
       return 0
@@ -255,8 +255,8 @@ proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
       return 0
 
   let
-    newX = getCoordinate(name = "x") - (mouseXPosition - currentXMouse)
-    newY = getCoordinate(name = "y") - (mouseYPosition - currentYMouse)
+    newX: int = getCoordinate(name = "x") - (mouseXPosition - currentXMouse)
+    newY: int = getCoordinate(name = "y") - (mouseYPosition - currentYMouse)
   tclEval(script = "place configure " & dialog & " -x " & $newX & " -y " & $newY)
   mouseXPosition = currentXMouse
   mouseYPosition = currentYMouse
