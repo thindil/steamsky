@@ -128,7 +128,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = 200)
   const
-    showGame: array[GameState.mainMenu..GameState.healWounded, proc (
+    showGame: array[GameState.mainMenu..GameState.repairShip, proc (
         state: var GameState; dialog: var GameDialog){.nimcall, raises: [
             ].}] = [
       GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
@@ -137,7 +137,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         loadingGame: mainMenu.loadGame, newGame: mainMenu.newGame, map: showMap,
         endGame: backToMainMenu, combat: showCombat, boarding: showBoarding,
         trade: showTrade, school: showSchool, recruits: showRecruits,
-        healWounded: showWounded]
+        healWounded: showWounded, repairShip: showRepairs]
     showDialog: array[GameDialog.errorDialog..GameDialog.negotiateDialog, proc(
         dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
@@ -168,7 +168,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         let
           oldState: GameState = state
           oldDialog: GameDialog = dialog
-        if state in GameState.mainMenu..GameState.healWounded:
+        if state in GameState.mainMenu..GameState.repairShip:
           # Show the proper window
           showGame[state](state = state, dialog = dialog)
         # Add the tooltips, if enabled
