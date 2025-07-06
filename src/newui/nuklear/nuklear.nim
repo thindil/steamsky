@@ -1869,7 +1869,9 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     # set clipping rectangle
     var clip: NimRect = NimRect(x: 0, y: 0, w: 0, h: 0)
     layout.clip = layout.bounds
-    nkUnify(clip = clip, a = win.buffer.clip, x0 = layout.clip.x,
+    let aClip: NimRect = NimRect(x: win.buffer.clip.x, y: win.buffer.clip.y,
+      w: win.buffer.clip.w, h: win.buffer.clip.h)
+    nkUnify(clip = clip, a = aClip, x0 = layout.clip.x,
       y0 = layout.clip.y, x1 = layout.clip.x + layout.clip.w,
       y1 = layout.clip.y + layout.clip.h)
     nkPushScissor(b = `out`.addr, r = clip)

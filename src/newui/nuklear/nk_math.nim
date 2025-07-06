@@ -95,7 +95,8 @@ proc nkTriangleFromDirection*(`result`: var array[3, NimRect]; r: NimRect;
     `result`[1] = NimRect(x: rect.x + rect.w, y: rect.y)
     `result`[2] = NimRect(x: rect.x + rect.w, y: rect.y + rect.h)
 
-proc nkInbox*(px, py, x, y, w, h: cfloat): bool {.raises: [], tags: [], contractual.} =
+proc nkInbox*(px, py, x, y, w, h: cfloat): bool {.raises: [], tags: [],
+    contractual.} =
   ## Check if the selected point is in the box
   ##
   ## * px - the X coordinate of the point
@@ -108,7 +109,8 @@ proc nkInbox*(px, py, x, y, w, h: cfloat): bool {.raises: [], tags: [], contract
   ## Returns true if the point is in the box, otherwise false
   return ((px >= x and px < x + w) and (py >= y and py < y + h))
 
-proc nkUnify*(clip: var NimRect, a: nk_rect, x0, y0, x1, y1: cfloat) {.raises: [], tags: [], contractual.} =
+proc nkUnify*(clip: var NimRect; a: NimRect; x0, y0, x1, y1: cfloat) {.raises: [],
+    tags: [], contractual.} =
   ## Unify two rectangles
   ##
   ## * clip - the unified rectangle
