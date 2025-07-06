@@ -111,7 +111,7 @@ proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
       if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
       dialogHeader & " %X %Y}")
   tclEval(script = "bind " & dialogHeader & " <Motion> {MoveDialog " &
-      dialogHeader & " %X %Y}")
+      goalsDialog & " %X %Y}")
   tclEval(script = "bind " & dialogHeader & " <ButtonRelease-" & (
       if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
       dialogHeader & " 0 0}")
