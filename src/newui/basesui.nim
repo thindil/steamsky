@@ -205,3 +205,43 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
   showWoundedMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (
       actionsList.len * 35).float), dialog = dialog, state = state)
+
+proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the UI with the list of damaged player's ship's modules
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters state and dialog. The latter is modified if
+  ## any error happened.
+  if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
+    return
+  baseState = state
+  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
+  setLayoutRowDynamic(height = tableHeight, cols = 1)
+  group(title = "RepairGroup", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
+    # Show information about money owned by the player
+    setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+    for index, text in moneyText:
+      if index mod 2 == 0:
+        label(str = text)
+      else:
+        colorLabel(str = text, color = theme.colors[goldenColor])
+    addHeader(headers = headers, ratio = ratio, tooltip = "actions",
+      code = sortItems, dialog = dialog)
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    ## Table here
+    restoreButtonStyle()
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
