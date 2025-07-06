@@ -73,7 +73,7 @@ proc openLink*(link: string) {.raises: [], tags: [ReadIOEffect, RootEffect],
       except:
         message = "Can't open the link"
 
-proc showLinkError*() {.raises: [], tags: [], contractual.} =
+proc showLinkError*() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show an error related to opening a link if any
   if message.len == 0:
     return
