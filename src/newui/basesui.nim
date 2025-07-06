@@ -20,7 +20,7 @@
 
 import std/algorithm
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, types]
+import ../[basestrade, config, game, types]
 import coreui, errordialog, header, messagesui, setui, table, themes
 
 type
@@ -99,18 +99,30 @@ proc setWoundedMenu(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   actionId = data
 
-proc showWoundedMenu(bounds: NimRect) {.raises: [], tags: [
-    RootEffect], contractual.} =
+proc showWoundedMenu(bounds: NimRect; dialog: var GameDialog;
+    state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the menu for the selected wounded crew membre
   ##
   ## * bounds - the rectangle in which the player should click the mouse's
   ##            button to show the menu
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current game's state
+  ##
+  ## Returns the modified parameters dialog and state. Dialog is modified if
+  ## any error happened and state is modified when there is no other crew
+  ## members to heal.
   contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
       triggerBounds = bounds, button = (
       if gameSettings.rightButton: Buttons.right else: Buttons.left)):
     setLayoutRowDynamic(25, 1)
     contextualItemLabel(label = "Buy healing", align = centered):
-      echo actionId
+      try:
+        healWounded(memberIndex = actionId - 1)
+        actionsList = setWoundedList(dialog = dialog)
+        if actionsList.len == 1:
+          state = map
+      except:
+        dialog = setError(message = "Can't heal wounded.")
     contextualItemLabel(label = "Close", align = centered):
       discard
 
@@ -190,5 +202,6 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip = "Show available options", data = wounded.id,
           code = setWoundedMenu, dialog = dialog)
     restoreButtonStyle()
-    showWoundedMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (actionsList.len * 35).float))
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
+  showWoundedMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (
+      actionsList.len * 35).float), dialog = dialog, state = state)
