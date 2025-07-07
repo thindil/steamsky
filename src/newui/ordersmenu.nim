@@ -340,6 +340,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
           state = repairShip
           dialog = none
           closePopup()
+          setRepairs(dialog = dialog)
         break
     try:
       if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
