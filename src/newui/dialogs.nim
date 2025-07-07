@@ -230,7 +230,8 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     dialog = setError(message = "Can't show the question")
 
 proc addCloseButton*(dialog: var GameDialog; icon: IconsNames = exitIcon;
-    color: ColorsNames = buttonTextColor; isPopup: bool = true) {.raises: [], tags: [],
+    color: ColorsNames = buttonTextColor; isPopup: bool = true) {.raises: [],
+        tags: [],
     contractual.} =
   ## Add the close button to the dialog
   ##
@@ -561,14 +562,48 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           buyDialog: buyIcon else: sellIcon)], text = (if dialog ==
           buyDialog: "Buy" else: "Sell"), alignment = right):
         closePopup()
-        if dialog == buyDialog:
-          buyItems(baseItemIndex = manipulateData.itemIndex.abs,
-              amount = $manipulateData.amount)
-        else:
-          sellItems(itemIndex = manipulateData.itemIndex,
-              amount = $manipulateData.amount)
-        dialog = none
-        result = true
+        let
+          baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+          trader = (if baseIndex > 0: "base" else: "ship")
+        try:
+          if dialog == buyDialog:
+            buyItems(baseItemIndex = manipulateData.itemIndex.abs,
+                amount = $manipulateData.amount)
+          else:
+            sellItems(itemIndex = manipulateData.itemIndex,
+                amount = $manipulateData.amount)
+          dialog = none
+          result = true
+        except CantBuyError:
+          dialog = setMessage(message = "You can't buy " &
+              getCurrentExceptionMsg() & " in this " & trader & ".",
+                  title = "Can't buy items")
+        except NoFreeCargoError:
+          dialog = setMessage(message = "You don't have enough free space in your ship's cargo.",
+              title = "Can't buy items")
+        except NoMoneyError:
+          dialog = setMessage(message = "You don't have any " & moneyName &
+              " to buy " & getCurrentExceptionMsg() & ".",
+                  title = "No money to buy items")
+        except NotEnoughMoneyError:
+          dialog = setMessage(message = "You don't have enough " & moneyName &
+              " to buy so many " & getCurrentExceptionMsg() & ".",
+              title = "Not enough money to buy items")
+        except NoMoneyInBaseError:
+          dialog = setMessage(message = "You can't sell so many " &
+              getCurrentExceptionMsg() & " because " & trader &
+                  " don't have that many " & moneyName &
+              " to buy it.", title = "Too much items for sale")
+        except NoTraderError:
+          dialog = setMessage(message = "You don't have assigned anyone in the crew to the trader's duty.",
+              title = "No trader assigned")
+        except NoFreeSpaceError:
+          dialog = setMessage(message = "The " & trader &
+              " doesn't have free space in cargo to buy it.",
+              title = "No space in the " &
+              trader & "'s cargo")
+        except:
+          dialog = setError(message = "Can't trade item.")
       restoreButtonStyle()
       # Close button
       addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor)
