@@ -769,6 +769,12 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     showMessage(text = "You don't have assigned anyone in the crew to the trader's duty.",
         title = "No trader assigned")
     return tclOk
+  except NoFreeSpaceError:
+    showMessage(text = "The " & trader &
+        " doesn't have free space in cargo to buy it.",
+        title = "No space in the " &
+        trader & "'s cargo")
+    return tclOk
   except:
     return showError(message = "Can't trade item.")
   updateHeader()
