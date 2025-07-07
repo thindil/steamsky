@@ -20,8 +20,8 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basesship, basestrade, basestypes, combat, crew, crewinventory, game,
-    maps, shipscargo, shipscrew, types]
+import ../[bases, basesship, basestrade, basestypes, combat, crew,
+    crewinventory, game, maps, shipscargo, shipscrew, types]
 import coreui, errordialog, utilsui2
 
 var
@@ -417,7 +417,7 @@ type
       ## The cost of action
     time*: Positive = 1
       ## The amount of time needed for the action
-    id*: Natural
+    id*: int
       ## The id of crew member, ship's module etc
 
 var
@@ -490,12 +490,36 @@ proc setRepairsList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
   cost = 0
   time = 0
   try:
-    healCost(cost = cost, time = time, memberIndex = 0)
+    repairCost(cost = cost, time = time, moduleIndex = 0)
   except:
-    dialog = setError(message = "Can't count repair cost2.")
+    dialog = setError(message = "Can't count repair cost for slowl repairs.")
     return
   result.add(y = BaseItemData(name: "Slowly repair the whole ship",
       cost: cost, time: time, id: 0))
+  let
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
+    population: BasePopulation = getBasePopulation(baseIndex = baseIndex)
+  if population > BasePopulation.small:
+    cost = 0
+    time = 0
+    try:
+      repairCost(cost = cost, time = time, moduleIndex = -1)
+    except:
+      dialog = setError(message = "Can't count repair cost for whole repair.")
+      return
+    result.add(y = BaseItemData(name: "Repair the whole ship",
+        cost: cost, time: time, id: -1))
+  elif population > BasePopulation.medium:
+    cost = 0
+    time = 0
+    try:
+      repairCost(cost = cost, time = time, moduleIndex = -2)
+    except:
+      dialog = setError(message = "Can't count repair cost for quick repair.")
+      return
+    result.add(y = BaseItemData(name: "Quickly repair the whole ship",
+        cost: cost, time: time, id: -2))
 
 proc setRepairs*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
