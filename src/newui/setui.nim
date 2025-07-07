@@ -20,8 +20,8 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestrade, basestypes, combat, crew, crewinventory, game, maps,
-    shipscargo, shipscrew, types]
+import ../[basesship, basestrade, basestypes, combat, crew, crewinventory, game,
+    maps, shipscargo, shipscrew, types]
 import coreui, errordialog, utilsui2
 
 var
@@ -463,6 +463,39 @@ proc setWounded*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   setMoneyText(action = " to pay for healing", dialog = dialog)
   actionsList = setWoundedList(dialog = dialog)
+
+############################
+# Setting the repair ship UI
+############################
+
+proc setRepairsList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Set the list of repair the player's ship's actions
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened. Additionally it returns the list of repairs actions.
+  var cost, time: Natural = 0
+  for index, module in playerShip.modules:
+    if module.durability == module.maxDurability:
+      continue
+    try:
+      repairCost(cost = cost, time = time, moduleIndex = index)
+    except:
+      dialog = setError(message = "Can't count repair cost.")
+      return
+    result.add(y = BaseItemData(name: module.name, cost: cost,
+        time: time, id: index + 1))
+  cost = 0
+  time = 0
+  try:
+    healCost(cost = cost, time = time, memberIndex = 0)
+  except:
+    dialog = setError(message = "Can't count repair cost2.")
+    return
+  result.add(y = BaseItemData(name: "Slowly repair the whole ship",
+      cost: cost, time: time, id: 0))
 
 proc setRepairs*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
