@@ -463,3 +463,13 @@ proc setWounded*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   setMoneyText(action = " to pay for healing", dialog = dialog)
   actionsList = setWoundedList(dialog = dialog)
+
+proc setRepairs*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for repair the player's ship's modules' UI
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  setMoneyText(action = " to pay for repairs", dialog = dialog)
