@@ -217,7 +217,8 @@ type
     normal*, hover*, active*: nk_style_item
     border_color*, text_background*, text_normal*, text_hover*,
       text_active*: nk_color
-    rounding*, border*, color_factor_background*, color_factor_text*, disabled_factor*: cfloat
+    rounding*, border*, color_factor_background*, color_factor_text*,
+      disabled_factor*: cfloat
     padding*, image_padding*, touch_padding*: nk_vec2
     alignment*: nk_flags
     # TODO: should be nk_handle, nk_draw_f
@@ -244,7 +245,7 @@ type
     padding*: nk_vec2
   nk_cursor* {.importc: "struct nk_cursor", nodecl.} = object
     ## Internal Nuklear type
-  nk_style* {.importc, nodecl.} = object
+  nk_style* {.importc: "struct nk_style", nodecl.} = object
     ## Internal Nuklear type
     window*: nk_style_window
     button*: nk_style_button
@@ -306,7 +307,7 @@ type
   nk_command_rect* {.importc: "struct nk_command_rect".} = object
     ## Internal Nuklear type
     header*: nk_command
-    rounding*, w*, h*, lineThickness*: cushort
+    rounding*, w*, h*, line_thickness*: cushort
     x*, y*: cshort
     color*: nk_color
   nk_command_rect_filled* {.importc: "struct nk_command_rect_filled".} = object
@@ -388,9 +389,9 @@ type
     `ptr`*: ptr nk_size
     size*: nk_size
   nk_plugin_alloc* = proc (handle: nk_handle; old: pointer;
-      size: nk_size): pointer
+      size: nk_size): pointer {.cdecl.}
     ## Internal Nuklear type
-  nk_plugin_free* = proc (handle: nk_handle; old: pointer): pointer
+  nk_plugin_free* = proc (handle: nk_handle; old: pointer): pointer {.cdecl.}
     ## Internal Nuklear type
   nk_allocator* {.importc: "struct nk_allocator", nodecl.} = object
     ## Internal Nuklear type
