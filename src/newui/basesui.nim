@@ -20,7 +20,7 @@
 
 import std/algorithm
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestrade, config, game, types]
+import ../[basestrade, basesship2, config, game, types]
 import coreui, errordialog, header, messagesui, setui, table, themes
 
 type
@@ -88,7 +88,7 @@ proc sortItems(sortAsc, sortDesc: BaseSortOrders;
 
 var actionId: int = -1
 
-proc setWoundedMenu(data: int; dialog: var GameDialog) {.raises: [], tags: [
+proc setActionMenu(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the menu with the option to heal the selected wounded crew member
   ##
@@ -194,17 +194,42 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setButtonStyle(field = border, value = 0)
     for action in actionsList:
       addButton(label = action.name, tooltip = "Show available options",
-          data = action.id, code = setWoundedMenu, dialog = dialog)
+          data = action.id, code = setActionMenu, dialog = dialog)
       addButton(label = $action.cost & " " & moneyName,
           tooltip = "Show available options", data = action.id,
-          code = setWoundedMenu, dialog = dialog)
+          code = setActionMenu, dialog = dialog)
       addButton(label = action.time.formatTime,
           tooltip = "Show available options", data = action.id,
-          code = setWoundedMenu, dialog = dialog)
+          code = setActionMenu, dialog = dialog)
     restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
   showWoundedMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (
       actionsList.len * 35).float), dialog = dialog, state = state)
+
+proc showRepairMenu(bounds: NimRect; dialog: var GameDialog;
+    state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the menu for the selected damaged player's ship's module
+  ##
+  ## * bounds - the rectangle in which the player should click the mouse's
+  ##            button to show the menu
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current game's state
+  ##
+  ## Returns the modified parameters dialog and state. Dialog is modified if
+  ## any error happened and state is modified when there is no other ship's
+  ## module to repair.
+  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
+      triggerBounds = bounds, button = (
+      if gameSettings.rightButton: Buttons.right else: Buttons.left)):
+    setLayoutRowDynamic(25, 1)
+    contextualItemLabel(label = "Buy repair", align = centered):
+      try:
+        repairShip(moduleIndex = actionId - 1)
+        actionsList = setRepairsList(dialog = dialog)
+      except:
+        dialog = setError(message = "Can't repair the ship.")
+    contextualItemLabel(label = "Close", align = centered):
+      discard
 
 proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -244,13 +269,15 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setButtonStyle(field = border, value = 0)
     for action in actionsList:
       addButton(label = action.name, tooltip = "Show available options",
-          data = action.id, code = setWoundedMenu, dialog = dialog)
+          data = action.id, code = setActionMenu, dialog = dialog)
       addButton(label = $action.cost & " " & moneyName,
           tooltip = "Show available options", data = action.id,
-          code = setWoundedMenu, dialog = dialog)
+          code = setActionMenu, dialog = dialog)
       addButton(label = action.time.formatTime,
           tooltip = "Show available options", data = action.id,
-          code = setWoundedMenu, dialog = dialog)
+          code = setActionMenu, dialog = dialog)
     restoreButtonStyle()
     restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
+  showRepairMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (
+      actionsList.len * 35).float), dialog = dialog, state = state)
