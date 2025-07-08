@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about owned money in the negotiate hiring dialog
 - Loading recruits equipment from saved games
 - Moving in-game dialog with setting a new goal
+- Showing information when there is an issue during trading items
 
 ## [11.2] - 2025-06-15
 
