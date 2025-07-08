@@ -18,7 +18,7 @@
 ## Provides code related to various interactions in bases, like buying recipes,
 ## repair ship, healing wounded crew memebrs, etc.
 
-import std/algorithm
+import std/[algorithm, sequtils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basestrade, basesship2, config, game, types]
 import coreui, errordialog, header, messagesui, setui, table, themes
@@ -226,6 +226,8 @@ proc showRepairMenu(bounds: NimRect; dialog: var GameDialog;
       try:
         repairShip(moduleIndex = actionId - 1)
         actionsList = setRepairsList(dialog = dialog)
+        if actionsList.all(pred = proc (x: BaseItemData): bool = x.id < 1):
+          state = map
       except:
         dialog = setError(message = "Can't repair the ship.")
     contextualItemLabel(label = "Close", align = centered):
@@ -280,4 +282,4 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
   showRepairMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (
-      actionsList.len * 35).float), dialog = dialog, state = state)
+      actionsList.len * 40).float), dialog = dialog, state = state)
