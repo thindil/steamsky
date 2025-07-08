@@ -192,14 +192,14 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
       return
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
-    for wounded in actionsList:
-      addButton(label = wounded.name, tooltip = "Show available options",
-          data = wounded.id, code = setWoundedMenu, dialog = dialog)
-      addButton(label = $wounded.cost & " " & moneyName,
-          tooltip = "Show available options", data = wounded.id,
+    for action in actionsList:
+      addButton(label = action.name, tooltip = "Show available options",
+          data = action.id, code = setWoundedMenu, dialog = dialog)
+      addButton(label = $action.cost & " " & moneyName,
+          tooltip = "Show available options", data = action.id,
           code = setWoundedMenu, dialog = dialog)
-      addButton(label = wounded.time.formatTime,
-          tooltip = "Show available options", data = wounded.id,
+      addButton(label = action.time.formatTime,
+          tooltip = "Show available options", data = action.id,
           code = setWoundedMenu, dialog = dialog)
     restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
@@ -242,6 +242,15 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
       return
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
-    ## Table here
+    for action in actionsList:
+      addButton(label = action.name, tooltip = "Show available options",
+          data = action.id, code = setWoundedMenu, dialog = dialog)
+      addButton(label = $action.cost & " " & moneyName,
+          tooltip = "Show available options", data = action.id,
+          code = setWoundedMenu, dialog = dialog)
+      addButton(label = action.time.formatTime,
+          tooltip = "Show available options", data = action.id,
+          code = setWoundedMenu, dialog = dialog)
+    restoreButtonStyle()
     restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
