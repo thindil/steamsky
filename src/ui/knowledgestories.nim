@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -179,7 +179,7 @@ proc setStoryCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateStoriesList*() {.raises: [KeyError], tags: [RootEffect], contractual.} =
   ## Update the information about the list of known stories
-  let knowledgeFrame = mainPaned & ".knowledgeframe.stories.canvas.frame"
+  let knowledgeFrame: string = mainPaned & ".knowledgeframe.stories.canvas.frame"
   var rows: Natural = try:
       tclEval2(script = "grid size " & knowledgeFrame).split(sep = " ")[1].parseInt
     except:
@@ -215,7 +215,7 @@ proc updateStoriesList*() {.raises: [KeyError], tags: [RootEffect], contractual.
     tclEval(script = "grid " & storiesView & " -sticky w")
     tclEval(script = "event generate " & storiesBox & " <<ComboboxSelected>>")
   tclEval(script = "update")
-  let knowledgeCanvas = mainPaned & ".knowledgeframe.stories.canvas"
+  let knowledgeCanvas: string = mainPaned & ".knowledgeframe.stories.canvas"
   tclEval(script = knowledgeCanvas & " configure -scrollregion [list " &
       tclEval2(script = knowledgeCanvas & " bbox all") & "]")
   tclEval(script = knowledgeCanvas & " xview moveto 0.0")
