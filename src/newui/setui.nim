@@ -490,7 +490,7 @@ proc setRepairsList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
   cost = 0
   time = 0
   try:
-    repairCost(cost = cost, time = time, moduleIndex = 0)
+    repairCost(cost = cost, time = time, moduleIndex = -1)
   except:
     dialog = setError(message = "Can't count repair cost for slowl repairs.")
     return
@@ -504,17 +504,17 @@ proc setRepairsList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
     cost = 0
     time = 0
     try:
-      repairCost(cost = cost, time = time, moduleIndex = -1)
+      repairCost(cost = cost, time = time, moduleIndex = -2)
     except:
       dialog = setError(message = "Can't count repair cost for whole repair.")
       return
     result.add(y = BaseItemData(name: "Repair the whole ship",
         cost: cost, time: time, id: -1))
-  elif population > BasePopulation.medium:
+  if population > BasePopulation.medium:
     cost = 0
     time = 0
     try:
-      repairCost(cost = cost, time = time, moduleIndex = -2)
+      repairCost(cost = cost, time = time, moduleIndex = -3)
     except:
       dialog = setError(message = "Can't count repair cost for quick repair.")
       return
@@ -530,3 +530,4 @@ proc setRepairs*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   setMoneyText(action = " to pay for repairs", dialog = dialog)
+  actionsList = setRepairsList(dialog = dialog)
