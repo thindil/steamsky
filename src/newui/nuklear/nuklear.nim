@@ -571,7 +571,7 @@ proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
     if temp != b.memory.`ptr`:
       copyMem(dest = temp, source = b.memory.`ptr`, size = bufferSize)
       try:
-        discard b.pool.free(handle = b.pool.userdata, old = b.memory.`ptr`)
+        b.pool.free(handle = b.pool.userdata, old = b.memory.`ptr`)
       except:
         discard
 

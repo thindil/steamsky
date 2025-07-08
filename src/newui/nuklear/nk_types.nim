@@ -391,7 +391,7 @@ type
   nk_plugin_alloc* = proc (handle: nk_handle; old: pointer;
       size: nk_size): pointer {.cdecl.}
     ## Internal Nuklear type
-  nk_plugin_free* = proc (handle: nk_handle; old: pointer): pointer {.cdecl.}
+  nk_plugin_free* = proc (handle: nk_handle; old: pointer) {.cdecl.}
     ## Internal Nuklear type
   nk_allocator* {.importc: "struct nk_allocator", nodecl.} = object
     ## Internal Nuklear type
