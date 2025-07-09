@@ -360,6 +360,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
             state = buyRecipes
             dialog = none
             closePopup()
+            setRecipes(dialog = dialog)
           break
       except:
         dialog = setError(message = "Can't check if base has recipes for sale.")
