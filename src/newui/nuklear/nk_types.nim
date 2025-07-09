@@ -341,7 +341,7 @@ type
     font*: ptr nk_user_font
     height*: cfloat
     length*: cint
-    str*: cstring
+    `string`*: cstring
   nk_row_layout* {.importc: "struct nk_row_layout".} = object
     ## Internal Nuklear type
     index*, columns*, tree_depth*: cint
