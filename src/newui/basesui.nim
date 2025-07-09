@@ -283,3 +283,16 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
   showRepairMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (
       actionsList.len * 40).float), dialog = dialog, state = state)
+
+proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the UI with the list of crafting recipes to buy
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters state and dialog. The latter is modified if
+  ## any error happened.
+  if showHeader(dialog = dialog, close = CloseDestination.map, state = state,
+      options = true):
+    return
