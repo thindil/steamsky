@@ -296,3 +296,32 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state,
       options = true):
     return
+  baseState = state
+  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
+  setLayoutRowDynamic(height = tableHeight, cols = 1)
+  group(title = "RepairGroup", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
+    # Show information about money owned by the player
+    setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+    for index, text in moneyText:
+      if index mod 2 == 0:
+        label(str = text)
+      else:
+        colorLabel(str = text, color = theme.colors[goldenColor])
+    addHeader(headers = headers, ratio = ratio, tooltip = "actions",
+      code = sortItems, dialog = dialog)
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    # Table here
+    restoreButtonStyle()
+    restoreButtonStyle()
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
