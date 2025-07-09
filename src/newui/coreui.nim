@@ -26,7 +26,7 @@ type
     ## Used to determine the current game's state.
     quitGame, mainMenu, news, allNews, about, showFile, hallOfFame, loadGame,
         loadingGame, newGame, map, endGame, combat, boarding, trade, school,
-        recruits, healWounded, repairShip, shipyard, buyRecipes, baseMissions,
+        recruits, healWounded, repairShip, buyRecipes, shipyard, baseMissions,
         loot
 
   GameDialog* = enum
