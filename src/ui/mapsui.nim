@@ -392,16 +392,16 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
           baseInfoText: string = "\n"
           color: string = ""
         case skyBases[baseIndex].reputation.level
-        of -100 .. -75:
+        of -100.. -75:
           baseInfoText &= "You are hated here"
           color = "red"
-        of -74 .. -50:
+        of -74.. -50:
           baseInfoText &= "You are outlawed here"
           color = "red"
-        of -49 .. -25:
+        of -49.. -25:
           baseInfoText &= "You are disliked here"
           color = "red"
-        of -24 .. -1:
+        of -24.. -1:
           baseInfoText &= "They are unfriendly to you"
           color = "red"
         of 0:
