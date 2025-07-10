@@ -284,6 +284,14 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showRepairMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (
       actionsList.len * 40).float), dialog = dialog, state = state)
 
+const
+  recipesHeaders: array[2, HeaderData[BaseSortOrders]] = [
+    HeaderData[BaseSortOrders](label: "Action", sortAsc: nameAsc,
+        sortDesc: nameDesc),
+    HeaderData[BaseSortOrders](label: "Cost", sortAsc: costAsc,
+        sortDesc: costDesc)]
+  recipesRatio: array[2, cfloat] = [400.cfloat, 200]
+
 proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the UI with the list of crafting recipes to buy
@@ -309,8 +317,8 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
         label(str = text)
       else:
         colorLabel(str = text, color = theme.colors[goldenColor])
-    addHeader(headers = headers, ratio = ratio, tooltip = "actions",
-      code = sortItems, dialog = dialog)
+    addHeader(headers = recipesHeaders, ratio = recipesRatio,
+        tooltip = "actions", code = sortItems, dialog = dialog)
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
     try:
