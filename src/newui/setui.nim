@@ -20,7 +20,7 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, basesship, basestrade, basestypes, combat, crew,
+import ../[bases, basesship, basestrade, basestypes, combat, config, crew,
     crewinventory, game, maps, shipscargo, shipscrew, types]
 import coreui, errordialog, utilsui2
 
@@ -545,15 +545,28 @@ proc setRecipesList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened. Additionally it returns the list of recipes to buy.
   var cost: Natural = 1
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+  let
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
       playerShip.skyY].baseIndex
+    traderIndex: int = findMember(order = talk)
+  baseType = skyBases[baseIndex].baseType
   for index, recipe in recipesList:
     try:
       if index notin knownRecipes and index in basesTypesList[skyBases[
           baseIndex].baseType].recipes and recipe.reputation <= skyBases[
           baseIndex].reputation.level:
-        result.add(y = BaseItemData(name: $recipe.resultIndex, cost: cost,
-            time: 1, id: index.parseInt))
+        cost = if getPrice(baseType = baseType, itemIndex = recipesList[
+            index].resultIndex) > 0: getPrice(baseType = baseType,
+            itemIndex = recipesList[index].resultIndex) * recipesList[
+            index].difficulty * 10
+          else:
+            recipesList[index].difficulty * 10
+        cost = (cost.float * newGameSettings.pricesBonus).int
+        if cost < 1:
+          cost = 1
+        countPrice(price = cost, traderIndex = traderIndex)
+        result.add(y = BaseItemData(name: itemsList[recipesList[
+            index].resultIndex].name, cost: cost, time: 1, id: index.parseInt))
     except:
       dialog = setError(message = "Can't set the list of recipes to buy.")
 
