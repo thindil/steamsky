@@ -735,7 +735,7 @@ proc nkStrokeRect(b: ptr nk_command_buffer, rect: NimRect, rounding,
   if cmd == nil:
     return
   cmd.rounding = rounding.cushort
-  cmd.lineThickness = lineThickness.cushort
+  cmd.line_thickness = lineThickness.cushort
   cmd.x = rect.x.cshort
   cmd.y = rect.y.cshort
   cmd.w = max(x = 0.cushort, y = rect.w.cushort)
