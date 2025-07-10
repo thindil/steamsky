@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,11 +16,12 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
+import contracts
 import ../[config, messages, tk, types]
 import coreui, dialogs, errordialog, utilsui2
 
 proc showMessage(message: MessageData; messageView: string;
-    messagesType: MessageType) {.raises: [], tags: [], cdecl.} =
+    messagesType: MessageType) {.raises: [], tags: [], cdecl, contractual.} =
   ## Show the selected message to a player
   ##
   ## * message      - the message to show
@@ -33,7 +34,8 @@ proc showMessage(message: MessageData; messageView: string;
   tclEval(script = messageView & " insert end {" & message.message & "\n}" & messageTag)
 
 proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show the list of last messages to a player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -144,7 +146,8 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show only messages of the selected type
   ##
   ## * clientData - the additional data for the Tcl command
@@ -162,7 +165,8 @@ proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
       " current")].allocCStringArray)
 
 proc deleteMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Delete all messages
   ##
   ## * clientData - the additional data for the Tcl command
@@ -179,7 +183,8 @@ proc deleteMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show only this messages which contains the selected sequence
   ##
   ## * clientData - the additional data for the Tcl command
@@ -231,7 +236,8 @@ proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("ShowLastMessages", showLastMessagesCommand)
