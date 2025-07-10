@@ -744,29 +744,34 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
       discard closeDialogCommand(clientData = clientData, interp = interp,
           argc = 2, argv = @["CloseDialog", ".itemdialog"].allocCStringArray)
   except CantBuyError:
+    tclEval(script = "destroy .itemdialog")
     showMessage(text = "You can't buy " & getCurrentExceptionMsg() &
         " in this " & trader & ".", title = "Can't buy items")
   except NoFreeCargoError:
+    tclEval(script = "destroy .itemdialog")
     showMessage(text = "You don't have enough free space in your ship's cargo.",
         title = "Can't buy items")
   except NoMoneyError:
+    tclEval(script = "destroy .itemdialog")
     showMessage(text = "You don't have any " & moneyName & " to buy " &
         getCurrentExceptionMsg() & ".", title = "No money to buy items")
   except NotEnoughMoneyError:
+    tclEval(script = "destroy .itemdialog")
     showMessage(text = "You don't have enough " & moneyName &
         " to buy so many " & getCurrentExceptionMsg() & ".",
         title = "Not enough money to buy items")
   except NoMoneyInBaseError:
+    tclEval(script = "destroy .itemdialog")
     showMessage(text = "You can't sell so many " & getCurrentExceptionMsg() &
         " because " & trader & " don't have that many " & moneyName &
         " to buy it.", title = "Too much items for sale")
   except NoTraderError:
+    tclEval(script = "destroy .itemdialog")
     showMessage(text = "You don't have assigned anyone in the crew to the trader's duty.",
         title = "No trader assigned")
   except:
+    tclEval(script = "destroy .itemdialog")
     return showError(message = "Can't trade item.")
-  discard closeDialogCommand(clientData = clientData, interp = interp,
-      argc = 2, argv = @["CloseDialog", ".itemdialog"].allocCStringArray)
   updateHeader()
   updateMessages()
   let typeBox = ".gameframe.paned.tradeframe.canvas.trade.options.type"
