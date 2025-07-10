@@ -15,6 +15,8 @@ All notable changes to this project will be documented in this file.
 - Loading recruits equipment from saved games
 - Moving in-game dialog with setting a new goal
 - Showing information when there is an issue during trading items
+- Timer when closing the message's dialog when there is an issue during trading
+  items
 
 ## [11.2] - 2025-06-15
 
