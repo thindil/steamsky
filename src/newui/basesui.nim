@@ -329,7 +329,12 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
       return
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
-    # Table here
+    for action in actionsList:
+      addButton(label = action.name, tooltip = "Show available options",
+          data = action.id, code = setActionMenu, dialog = dialog)
+      addButton(label = $action.cost & " " & moneyName,
+          tooltip = "Show available options", data = action.id,
+          code = setActionMenu, dialog = dialog)
     restoreButtonStyle()
     restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
