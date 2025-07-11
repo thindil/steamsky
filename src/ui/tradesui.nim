@@ -115,6 +115,16 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
          -style Golden.TLabel] -sticky w -row 0 -column 1
       SetScrollbarBindings $tradeframe.options.baseinfo.baseinfo2 \
          .gameframe.paned.tradeframe.scrolly
+      grid [ttk::frame $tradeframe.options.basecargoinfo] -column 2 -row 2
+      SetScrollbarBindings $tradeframe.options.basecargoinfo \
+         .gameframe.paned.tradeframe.scrolly
+      grid [ttk::label $tradeframe.options.basecargoinfo.baseinfo -wraplength 300 -text {Test}]
+      SetScrollbarBindings $tradeframe.options.basecargoinfo.baseinfo \
+         .gameframe.paned.tradeframe.scrolly
+      grid [ttk::label $tradeframe.options.basecargoinfo.baseinfo2 -wraplength 300 \
+         -style Golden.TLabel] -sticky w -row 0 -column 1
+      SetScrollbarBindings $tradeframe.options.basecargoinfo.baseinfo2 \
+         .gameframe.paned.tradeframe.scrolly
     """)
     tclEval(script = "bind " & tradeFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
     tradeFrame = tradeCanvas & ".trade"
