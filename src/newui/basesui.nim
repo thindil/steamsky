@@ -98,6 +98,7 @@ proc setActionMenu(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   actionId = data
+  dialog = baseActionDialog
 
 proc showWoundedMenu(bounds: NimRect; dialog: var GameDialog;
     state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
@@ -292,32 +293,39 @@ const
         sortDesc: costDesc)]
   recipesRatio: array[2, cfloat] = [400.cfloat, 200]
 
-proc showRecipeMenu(bounds: NimRect; dialog: var GameDialog;
+proc showRecipeMenu(dialog: var GameDialog;
     state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the menu for the selected crafting recipe
   ##
-  ## * bounds - the rectangle in which the player should click the mouse's
-  ##            button to show the menu
   ## * dialog - the current in-game dialog displayed on the screen
   ## * state  - the current game's state
   ##
   ## Returns the modified parameters dialog and state. Dialog is modified if
   ## any error happened and state is modified when there is no other recipe
   ## to buy.
-  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
-      triggerBounds = bounds, button = (
-      if gameSettings.rightButton: Buttons.right else: Buttons.left)):
-    setLayoutRowDynamic(25, 1)
-    contextualItemLabel(label = "Buy recipe", align = centered):
-      try:
-        buyRecipe(recipeIndex = $actionId)
-        actionsList = setRecipesList(dialog = dialog)
-        if actionsList.len == 0:
-          state = map
-      except:
-        dialog = setError(message = "Can't buy the recipe.")
-    contextualItemLabel(label = "Close", align = centered):
-      discard
+  try:
+    const
+      width: float = 150
+      height: float = 150
+      windowName: string = "Actions"
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = windowName, x = dialogX, y = dialogY,
+        w = width, h = height, flags = {windowBorder, windowTitle,
+        windowNoScrollbar, windowMovable}):
+      setLayoutRowDynamic(30, 1)
+      labelButton(title = "Buy recipe"):
+        try:
+          buyRecipe(recipeIndex = $actionId)
+          actionsList = setRecipesList(dialog = dialog)
+          if actionsList.len == 0:
+            state = map
+          dialog = none
+        except:
+          dialog = setError(message = "Can't buy the recipe.")
+      labelButton(title = "Close"):
+        dialog = none
+  except:
+    dialog = setError(message = "Can't show the action's menu.")
 
 proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -365,5 +373,5 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
-  showRecipeMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (
-      actionsList.len * 42).float), dialog = dialog, state = state)
+  if dialog == baseActionDialog:
+    showRecipeMenu(dialog = dialog, state = state)
