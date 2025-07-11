@@ -48,7 +48,7 @@ using ctx: PContext
 # -------
 proc nk_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_zero(`ptr`: pointer; size: nk_size) {.importc, cdecl, raises: [],
+proc nk_zero(`ptr`: pointer; size: culong) {.importc, cdecl, raises: [],
     tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 proc nk_widget_disable_begin(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
@@ -768,7 +768,7 @@ proc nkStrokeTriangle(b: ptr nk_command_buffer; x0, y0, x1, y1, x2, y2,
   var cmd: ptr nk_command_triangle
   if cmd == nil:
     return
-  cmd.lineThickness = lineThickness.cshort
+  cmd.line_thickness = lineThickness.cshort
   cmd.a.x = x0.cshort
   cmd.a.y = y0.cshort
   cmd.b.x = x1.cshort
@@ -1949,7 +1949,7 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[PanelFlags];
       if win.popup.active:
         return false
       {.ruleOff: "namedParams".}
-      nk_zero(`ptr` = popup, size = sizeof(popup))
+      nk_zero(`ptr` = popup, size = sizeof(popup).culong)
       {.ruleOn: "namedParams".}
       win.popup.name = titleHash.nk_hash
       win.popup.active = nkTrue

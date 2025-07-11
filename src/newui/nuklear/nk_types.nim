@@ -319,7 +319,7 @@ type
   nk_command_triangle* {.importc: "struct nk_command_triangle".} = object
     ## Internal Nuklear type
     header*: nk_command
-    lineThickness*: cshort
+    line_thickness*: cshort
     a*, b*, c*: nk_vec2i
     color*: nk_color
   nk_command_triangle_filled* {.importc: "struct nk_command_triangle_filled".} = object
