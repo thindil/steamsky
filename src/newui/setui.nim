@@ -424,6 +424,17 @@ var
   actionsList*: seq[BaseItemData] = @[]
     ## The list of actions for the selected items in a base
 
+proc countCost(cost: var Natural) {.raises: [KeyError], tags: [RootEffect], contractual.} =
+  ## Modify the selected price based on the game settings and a trader's skill
+  ##
+  ## * cost   - the cost which will be modified
+  ##
+  ## Returns modified parameter cost.
+  cost = (cost.float * newGameSettings.pricesBonus).int
+  if cost < 1:
+    cost = 1
+  countPrice(price = cost, traderIndex = findMember(order = talk))
+
 proc setWoundedList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Set the list of wounded crew members
@@ -438,6 +449,7 @@ proc setWoundedList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
       continue
     try:
       healCost(cost = cost, time = time, memberIndex = index)
+      countCost(cost = cost)
     except:
       dialog = setError(message = "Can't count heal cost.")
       return
@@ -447,6 +459,7 @@ proc setWoundedList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
   time = 0
   try:
     healCost(cost = cost, time = time, memberIndex = -1)
+    countCost(cost = cost)
   except:
     dialog = setError(message = "Can't count heal cost2.")
     return
@@ -491,6 +504,7 @@ proc setRepairsList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
   time = 0
   try:
     repairCost(cost = cost, time = time, moduleIndex = -1)
+    countCost(cost = cost)
   except:
     dialog = setError(message = "Can't count repair cost for slowl repairs.")
     return
@@ -505,6 +519,7 @@ proc setRepairsList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
     time = 0
     try:
       repairCost(cost = cost, time = time, moduleIndex = -2)
+      countCost(cost = cost)
     except:
       dialog = setError(message = "Can't count repair cost for whole repair.")
       return
@@ -515,6 +530,7 @@ proc setRepairsList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
     time = 0
     try:
       repairCost(cost = cost, time = time, moduleIndex = -3)
+      countCost(cost = cost)
     except:
       dialog = setError(message = "Can't count repair cost for quick repair.")
       return
@@ -545,10 +561,8 @@ proc setRecipesList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened. Additionally it returns the list of recipes to buy.
   var cost: Natural = 1
-  let
-    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
       playerShip.skyY].baseIndex
-    traderIndex: int = findMember(order = talk)
   baseType = skyBases[baseIndex].baseType
   for index, recipe in recipesList:
     try:
@@ -561,10 +575,7 @@ proc setRecipesList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
             index].difficulty * 10
           else:
             recipesList[index].difficulty * 10
-        cost = (cost.float * newGameSettings.pricesBonus).int
-        if cost < 1:
-          cost = 1
-        countPrice(price = cost, traderIndex = traderIndex)
+        countCost(cost = cost)
         result.add(y = BaseItemData(name: itemsList[recipesList[
             index].resultIndex].name, cost: cost, time: 1, id: index.parseInt))
     except:
