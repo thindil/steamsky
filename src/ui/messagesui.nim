@@ -16,12 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import contracts
+import contracts, nimalyzer
 import ../[config, messages, tk, types]
 import coreui, dialogs, errordialog, utilsui2
 
 proc showMessage(message: MessageData; messageView: string;
-    messagesType: MessageType) {.raises: [], tags: [], cdecl, contractual.} =
+    messagesType: MessageType) {.raises: [], tags: [], cdecl, contractual,
+    ruleOff: "params".} =
   ## Show the selected message to a player
   ##
   ## * message      - the message to show
