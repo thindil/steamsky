@@ -292,6 +292,33 @@ const
         sortDesc: costDesc)]
   recipesRatio: array[2, cfloat] = [400.cfloat, 200]
 
+proc showRecipeMenu(bounds: NimRect; dialog: var GameDialog;
+    state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the menu for the selected crafting recipe
+  ##
+  ## * bounds - the rectangle in which the player should click the mouse's
+  ##            button to show the menu
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current game's state
+  ##
+  ## Returns the modified parameters dialog and state. Dialog is modified if
+  ## any error happened and state is modified when there is no other recipe
+  ## to buy.
+  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
+      triggerBounds = bounds, button = (
+      if gameSettings.rightButton: Buttons.right else: Buttons.left)):
+    setLayoutRowDynamic(25, 1)
+    contextualItemLabel(label = "Buy recipe", align = centered):
+      try:
+        buyRecipe(recipeIndex = $actionId)
+        actionsList = setRecipesList(dialog = dialog)
+        if actionsList.len == 0:
+          state = map
+      except:
+        dialog = setError(message = "Can't buy the recipe.")
+    contextualItemLabel(label = "Close", align = centered):
+      discard
+
 proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the UI with the list of crafting recipes to buy
@@ -307,7 +334,7 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
   baseState = state
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
   setLayoutRowDynamic(height = tableHeight, cols = 1)
-  group(title = "RepairGroup", flags = {windowNoFlags}):
+  group(title = "RecipeGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
     # Show information about money owned by the player
@@ -338,3 +365,5 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
+  showRecipeMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (
+      actionsList.len * 42).float), dialog = dialog, state = state)
