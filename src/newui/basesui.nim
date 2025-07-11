@@ -306,7 +306,7 @@ proc showRecipeMenu(dialog: var GameDialog;
   try:
     const
       width: float = 150
-      height: float = 150
+      height: float = 120
       windowName: string = "Actions"
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = windowName, x = dialogX, y = dialogY,
@@ -314,6 +314,7 @@ proc showRecipeMenu(dialog: var GameDialog;
         windowNoScrollbar, windowMovable}):
       setLayoutRowDynamic(30, 1)
       labelButton(title = "Buy recipe"):
+        closePopup()
         try:
           buyRecipe(recipeIndex = $actionId)
           actionsList = setRecipesList(dialog = dialog)
@@ -324,6 +325,7 @@ proc showRecipeMenu(dialog: var GameDialog;
           dialog = setError(message = "Can't buy the recipe.")
       labelButton(title = "Close"):
         dialog = none
+        closePopup()
   except:
     dialog = setError(message = "Can't show the action's menu.")
 
