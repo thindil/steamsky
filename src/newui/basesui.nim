@@ -118,6 +118,7 @@ template showActionMenu(button: string; action: untyped) =
         windowNoScrollbar, windowMovable}):
       setLayoutRowDynamic(30, 1)
       labelButton(title = button):
+        dialog = none
         closePopup()
         action
       labelButton(title = "Close"):
@@ -136,10 +137,10 @@ proc showWoundedMenu(dialog: var GameDialog; state: var GameState) {.raises: [],
   ## Returns the modified parameters dialog and state. Dialog is modified if
   ## any error happened and state is modified when there is no other crew
   ## members to heal.
-  showActionMenu(button = "Heal wounded"):
+  showActionMenu(button = "Buy healing"):
     try:
       healWounded(memberIndex = actionId - 1)
-      actionsList = setWoundedList(dialog = dialog)
+      setWounded(dialog = dialog)
       if actionsList.len == 1:
         state = map
     except:
@@ -238,7 +239,7 @@ proc showRepairMenu(dialog: var GameDialog; state: var GameState) {.raises: [],
   showActionMenu(button = "Buy repair"):
     try:
       repairShip(moduleIndex = actionId - 1)
-      actionsList = setRepairsList(dialog = dialog)
+      setRepairs(dialog = dialog)
       if actionsList.all(pred = proc (x: BaseItemData): bool = x.id < 1):
         state = map
     except:
