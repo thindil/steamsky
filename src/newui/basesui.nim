@@ -293,16 +293,13 @@ const
         sortDesc: costDesc)]
   recipesRatio: array[2, cfloat] = [400.cfloat, 200]
 
-proc showRecipeMenu(dialog: var GameDialog;
-    state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
-  ## Show the menu for the selected crafting recipe
+template showActionMenu(button: string; action: untyped) =
+  ## Show the menu for the selected action in a base
   ##
-  ## * dialog - the current in-game dialog displayed on the screen
-  ## * state  - the current game's state
-  ##
-  ## Returns the modified parameters dialog and state. Dialog is modified if
-  ## any error happened and state is modified when there is no other recipe
-  ## to buy.
+  ## * button - the text which will be displayed on the action button in the
+  ##            menu
+  ## * action - the code which will be executed when the action button was
+  ##            pressed
   try:
     const
       width: float = 150
@@ -313,21 +310,34 @@ proc showRecipeMenu(dialog: var GameDialog;
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar, windowMovable}):
       setLayoutRowDynamic(30, 1)
-      labelButton(title = "Buy recipe"):
+      labelButton(title = button):
         closePopup()
-        try:
-          buyRecipe(recipeIndex = $actionId)
-          actionsList = setRecipesList(dialog = dialog)
-          if actionsList.len == 0:
-            state = map
-          dialog = none
-        except:
-          dialog = setError(message = "Can't buy the recipe.")
+        action
       labelButton(title = "Close"):
         dialog = none
         closePopup()
   except:
     dialog = setError(message = "Can't show the action's menu.")
+
+proc showRecipeMenu(dialog: var GameDialog;
+    state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the menu for the selected crafting recipe
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current game's state
+  ##
+  ## Returns the modified parameters dialog and state. Dialog is modified if
+  ## any error happened and state is modified when there is no other recipe
+  ## to buy.
+  showActionMenu(button = "Buy recipe"):
+    try:
+      buyRecipe(recipeIndex = $actionId)
+      setRecipes(dialog = dialog)
+      if actionsList.len == 0:
+        state = map
+      dialog = none
+    except:
+      dialog = setError(message = "Can't buy the recipe.")
 
 proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
