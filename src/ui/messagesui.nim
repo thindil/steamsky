@@ -129,7 +129,7 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
         showMessage(message = getMessage(messageIndex = i),
             messageView = messagesView, messagesType = messagesType)
     else:
-      for i in countdown(messagesAmount(), 1):
+      for i in countdown(a = messagesAmount(), b = 1):
         showMessage(message = getMessage(messageIndex = i),
             messageView = messagesView, messagesType = messagesType)
   tclEval(script = messagesView & " configure -state disabled")
@@ -216,7 +216,7 @@ proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
         showMessage(message = getMessage(messageIndex = i),
             messageView = messagesView, messagesType = messagesType)
     else:
-      for i in countdown(1, messagesAmount()):
+      for i in countdown(a = 1, b = messagesAmount()):
         showMessage(message = getMessage(messageIndex = i),
             messageView = messagesView, messagesType = messagesType)
     tclSetResult(value = "1")
@@ -228,7 +228,7 @@ proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
         showMessage(message = message, messageView = messagesView,
             messagesType = messagesType)
   else:
-    for i in countdown(1, messagesAmount()):
+    for i in countdown(a = 1, b = messagesAmount()):
       let message = getMessage(messageIndex = i)
       if message.message.find(sub = searchText) > -1:
         showMessage(message = message, messageView = messagesView,
@@ -241,9 +241,9 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Adds Tcl commands related to the crew UI
   try:
-    addCommand("ShowLastMessages", showLastMessagesCommand)
-    addCommand("SelectMessages", selectMessagesCommand)
-    addCommand("DeleteMessages", deleteMessagesCommand)
-    addCommand("SearchMessages", searchMessagesCommand)
+    addCommand(name = "ShowLastMessages", nimProc = showLastMessagesCommand)
+    addCommand(name = "SelectMessages", nimProc = selectMessagesCommand)
+    addCommand(name = "DeleteMessages", nimProc = deleteMessagesCommand)
+    addCommand(name = "SearchMessages", nimProc = searchMessagesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
