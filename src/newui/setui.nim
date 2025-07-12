@@ -552,14 +552,16 @@ proc setRepairs*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the buy recipes UI
 ############################
 
-proc setRecipesList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
-    tags: [RootEffect], contractual.} =
-  ## Set the list of crafting recipes to buy in a base
+proc setRecipes*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for buying crafting recipes UI
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog. It is modified if any error
-  ## happened. Additionally it returns the list of recipes to buy.
+  ## happened.
+  setMoneyText(action = " to buy anything", dialog = dialog)
+  actionsList = @[]
   var cost: Natural = 1
   let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
       playerShip.skyY].baseIndex
@@ -576,19 +578,7 @@ proc setRecipesList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
           else:
             recipesList[index].difficulty * 10
         countCost(cost = cost)
-        result.add(y = BaseItemData(name: itemsList[recipesList[
+        actionsList.add(y = BaseItemData(name: itemsList[recipesList[
             index].resultIndex].name, cost: cost, time: 1, id: index.parseInt))
     except:
       dialog = setError(message = "Can't set the list of recipes to buy.")
-
-proc setRecipes*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
-  ## Set the data for buying crafting recipes UI
-  ##
-  ## * dialog - the current in-game dialog displayed on the screen
-  ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
-  setMoneyText(action = " to buy anything", dialog = dialog)
-  actionsList = setRecipesList(dialog = dialog)
-
