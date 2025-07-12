@@ -100,32 +100,50 @@ proc setActionMenu(data: int; dialog: var GameDialog) {.raises: [], tags: [
   actionId = data
   dialog = baseActionDialog
 
-proc showWoundedMenu(bounds: NimRect; dialog: var GameDialog;
-    state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
+template showActionMenu(button: string; action: untyped) =
+  ## Show the menu for the selected action in a base
+  ##
+  ## * button - the text which will be displayed on the action button in the
+  ##            menu
+  ## * action - the code which will be executed when the action button was
+  ##            pressed
+  try:
+    const
+      width: float = 150
+      height: float = 120
+      windowName: string = "Actions"
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = windowName, x = dialogX, y = dialogY,
+        w = width, h = height, flags = {windowBorder, windowTitle,
+        windowNoScrollbar, windowMovable}):
+      setLayoutRowDynamic(30, 1)
+      labelButton(title = button):
+        closePopup()
+        action
+      labelButton(title = "Close"):
+        dialog = none
+        closePopup()
+  except:
+    dialog = setError(message = "Can't show the action's menu.")
+
+proc showWoundedMenu(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show the menu for the selected wounded crew membre
   ##
-  ## * bounds - the rectangle in which the player should click the mouse's
-  ##            button to show the menu
   ## * dialog - the current in-game dialog displayed on the screen
   ## * state  - the current game's state
   ##
   ## Returns the modified parameters dialog and state. Dialog is modified if
   ## any error happened and state is modified when there is no other crew
   ## members to heal.
-  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
-      triggerBounds = bounds, button = (
-      if gameSettings.rightButton: Buttons.right else: Buttons.left)):
-    setLayoutRowDynamic(25, 1)
-    contextualItemLabel(label = "Buy healing", align = centered):
-      try:
-        healWounded(memberIndex = actionId - 1)
-        actionsList = setWoundedList(dialog = dialog)
-        if actionsList.len == 1:
-          state = map
-      except:
-        dialog = setError(message = "Can't heal wounded.")
-    contextualItemLabel(label = "Close", align = centered):
-      discard
+  showActionMenu(button = "Heal wounded"):
+    try:
+      healWounded(memberIndex = actionId - 1)
+      actionsList = setWoundedList(dialog = dialog)
+      if actionsList.len == 1:
+        state = map
+    except:
+      dialog = setError(message = "Can't heal wounded.")
 
 const
   headers: array[3, HeaderData[BaseSortOrders]] = [
@@ -204,35 +222,27 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
           code = setActionMenu, dialog = dialog)
     restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
-  showWoundedMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (
-      actionsList.len * 35).float), dialog = dialog, state = state)
+  if dialog == baseActionDialog:
+    showWoundedMenu(dialog = dialog, state = state)
 
-proc showRepairMenu(bounds: NimRect; dialog: var GameDialog;
-    state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
+proc showRepairMenu(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show the menu for the selected damaged player's ship's module
   ##
-  ## * bounds - the rectangle in which the player should click the mouse's
-  ##            button to show the menu
   ## * dialog - the current in-game dialog displayed on the screen
   ## * state  - the current game's state
   ##
   ## Returns the modified parameters dialog and state. Dialog is modified if
   ## any error happened and state is modified when there is no other ship's
   ## module to repair.
-  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
-      triggerBounds = bounds, button = (
-      if gameSettings.rightButton: Buttons.right else: Buttons.left)):
-    setLayoutRowDynamic(25, 1)
-    contextualItemLabel(label = "Buy repair", align = centered):
-      try:
-        repairShip(moduleIndex = actionId - 1)
-        actionsList = setRepairsList(dialog = dialog)
-        if actionsList.all(pred = proc (x: BaseItemData): bool = x.id < 1):
-          state = map
-      except:
-        dialog = setError(message = "Can't repair the ship.")
-    contextualItemLabel(label = "Close", align = centered):
-      discard
+  showActionMenu(button = "Buy repair"):
+    try:
+      repairShip(moduleIndex = actionId - 1)
+      actionsList = setRepairsList(dialog = dialog)
+      if actionsList.all(pred = proc (x: BaseItemData): bool = x.id < 1):
+        state = map
+    except:
+      dialog = setError(message = "Can't repair the ship.")
 
 proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -282,8 +292,8 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
-  showRepairMenu(bounds = NimRect(x: 0, y: 135, w: windowWidth, h: (
-      actionsList.len * 40).float), dialog = dialog, state = state)
+  if dialog == baseActionDialog:
+    showRepairMenu(dialog = dialog, state = state)
 
 const
   recipesHeaders: array[2, HeaderData[BaseSortOrders]] = [
@@ -292,32 +302,6 @@ const
     HeaderData[BaseSortOrders](label: "Cost", sortAsc: costAsc,
         sortDesc: costDesc)]
   recipesRatio: array[2, cfloat] = [400.cfloat, 200]
-
-template showActionMenu(button: string; action: untyped) =
-  ## Show the menu for the selected action in a base
-  ##
-  ## * button - the text which will be displayed on the action button in the
-  ##            menu
-  ## * action - the code which will be executed when the action button was
-  ##            pressed
-  try:
-    const
-      width: float = 150
-      height: float = 120
-      windowName: string = "Actions"
-    updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = windowName, x = dialogX, y = dialogY,
-        w = width, h = height, flags = {windowBorder, windowTitle,
-        windowNoScrollbar, windowMovable}):
-      setLayoutRowDynamic(30, 1)
-      labelButton(title = button):
-        closePopup()
-        action
-      labelButton(title = "Close"):
-        dialog = none
-        closePopup()
-  except:
-    dialog = setError(message = "Can't show the action's menu.")
 
 proc showRecipeMenu(dialog: var GameDialog;
     state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
