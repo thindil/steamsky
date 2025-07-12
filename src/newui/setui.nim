@@ -481,14 +481,16 @@ proc setWounded*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the repair ship UI
 ############################
 
-proc setRepairsList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
-    tags: [RootEffect], contractual.} =
-  ## Set the list of repair the player's ship's actions
+proc setRepairs*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for repair the player's ship's modules' UI
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog. It is modified if any error
-  ## happened. Additionally it returns the list of repairs actions.
+  ## happened.
+  setMoneyText(action = " to pay for repairs", dialog = dialog)
+  actionsList = @[]
   var cost, time: Natural = 0
   for index, module in playerShip.modules:
     if module.durability == module.maxDurability:
@@ -498,7 +500,7 @@ proc setRepairsList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
     except:
       dialog = setError(message = "Can't count repair cost.")
       return
-    result.add(y = BaseItemData(name: module.name, cost: cost,
+    actionsList.add(y = BaseItemData(name: module.name, cost: cost,
         time: time, id: index + 1))
   cost = 0
   time = 0
@@ -506,9 +508,9 @@ proc setRepairsList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
     repairCost(cost = cost, time = time, moduleIndex = -1)
     countCost(cost = cost)
   except:
-    dialog = setError(message = "Can't count repair cost for slowl repairs.")
+    dialog = setError(message = "Can't count repair cost for slow repair.")
     return
-  result.add(y = BaseItemData(name: "Slowly repair the whole ship",
+  actionsList.add(y = BaseItemData(name: "Slowly repair the whole ship",
       cost: cost, time: time, id: 0))
   let
     baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
@@ -523,7 +525,7 @@ proc setRepairsList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
     except:
       dialog = setError(message = "Can't count repair cost for whole repair.")
       return
-    result.add(y = BaseItemData(name: "Repair the whole ship",
+    actionsList.add(y = BaseItemData(name: "Repair the whole ship",
         cost: cost, time: time, id: -1))
   if population > BasePopulation.medium:
     cost = 0
@@ -534,19 +536,8 @@ proc setRepairsList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
     except:
       dialog = setError(message = "Can't count repair cost for quick repair.")
       return
-    result.add(y = BaseItemData(name: "Quickly repair the whole ship",
+    actionsList.add(y = BaseItemData(name: "Quickly repair the whole ship",
         cost: cost, time: time, id: -2))
-
-proc setRepairs*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
-  ## Set the data for repair the player's ship's modules' UI
-  ##
-  ## * dialog - the current in-game dialog displayed on the screen
-  ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
-  setMoneyText(action = " to pay for repairs", dialog = dialog)
-  actionsList = setRepairsList(dialog = dialog)
 
 ############################
 # Setting the buy recipes UI
