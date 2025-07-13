@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [11.3] - 2025-07-13
 
 ### Changed
 - Generated cargo in bases is now more random
