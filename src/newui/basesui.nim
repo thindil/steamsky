@@ -82,8 +82,13 @@ proc sortItems(sortAsc, sortDesc: BaseSortOrders;
     baseSortOrder = sortDesc
   else:
     baseSortOrder = sortAsc
-  if baseState == healWounded:
+  case baseState
+  of healWounded:
     actionsList = setWoundedList(dialog = dialog)
+  of repairShip:
+    actionsList = setRepairsList(dialog = dialog)
+  else:
+    discard
   actionsList.sort(cmp = sortItems)
 
 var actionId: int = -1
