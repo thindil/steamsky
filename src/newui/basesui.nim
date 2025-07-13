@@ -87,6 +87,8 @@ proc sortItems(sortAsc, sortDesc: BaseSortOrders;
     actionsList = setWoundedList(dialog = dialog)
   of repairShip:
     actionsList = setRepairsList(dialog = dialog)
+  of buyRecipes:
+    actionsList = setRecipesList(dialog = dialog)
   else:
     discard
   actionsList.sort(cmp = sortItems)
