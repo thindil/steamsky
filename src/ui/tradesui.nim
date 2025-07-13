@@ -428,22 +428,27 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   tradeInfo = $freeSpace & " kg"
   label = tradeFrame & ".options.playerinfo.cargoinfo.cargoinfo2"
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
-  tradeInfo = ""
   if baseIndex > 0:
     if skyBases[baseIndex].cargo[0].amount == 0:
-      tradeInfo.add(y = "Base doesn't have any " & moneyName & " to buy anything")
+      tradeInfo = "Base doesn't have any " & moneyName & " to buy anything"
       label = tradeFrame & ".options.baseinfo.baseinfo2"
       tclEval(script = "grid remove " & label)
+      label = tradeFrame & ".options.baseinfo.basecargoinfo2"
+      tclEval(script = "grid remove " & label)
     else:
-      tradeInfo.add(y = "Base has ")
+      tradeInfo = "Base has"
   else:
     if traderCargo[0].amount == 0:
-      tradeInfo.add(y = "Ship doesn't have any " & moneyName & " to buy anything")
+      tradeInfo = "Ship doesn't have any " & moneyName & " to buy anything"
       label = tradeFrame & ".options.baseinfo.baseinfo2"
       tclEval(script = "grid remove " & label)
+      label = tradeFrame & ".options.baseinfo.basecargoinfo2"
+      tclEval(script = "grid remove " & label)
     else:
-      tradeInfo.add(y = "Ship has ")
+      tradeInfo = "Ship has"
   label = tradeFrame & ".options.baseinfo.baseinfo"
+  tclEval(script = label & " configure -text {" & tradeInfo & "}")
+  label = tradeFrame & ".options.baseinfo.basecargoinfo"
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
   label = tradeFrame & ".options.baseinfo.baseinfo2"
   if baseIndex > 0:
@@ -452,6 +457,26 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     if traderCargo[0].amount > 0:
       tradeInfo = $traderCargo[0].amount & " " & moneyName
+  tclEval(script = label & " configure -text {" & tradeInfo & "}")
+  label = tradeFrame & ".options.baseinfo.basecargoinfo2"
+  if baseIndex > 0:
+    var itemsAmount: Natural = case skyBases[baseIndex].size
+      of small:
+        32
+      of medium:
+        64
+      of big:
+        128
+      else:
+        0
+    for item in skyBases[baseIndex].cargo:
+      if item.amount > 0:
+        itemsAmount.dec
+      if itemsAmount == 0:
+        break
+    tradeInfo = $itemsAmount & " free space"
+  else:
+    tradeInfo = "128 free space"
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
   tclEval(script = "grid " & gameHeader & ".morebutton -row 0 -column 2")
