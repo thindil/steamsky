@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to showing last in-game messages like showing their
+## list, selecting and deleting messages, etc.
+
 import std/strutils
 import contracts, nimalyzer
 import ../[config, messages, tk, types]
