@@ -119,9 +119,11 @@ proc nkUnify*(clip: var NimRect; a: NimRect; x0, y0, x1, y1: cfloat) {.raises: [
   ## * y0   - the Y coordinate of top left point of the second rectangle
   ## * x1   - the X coordinate of bottom right point of the second rectangle
   ## * y1   - the X coordinate of bottom right point of the second rectangle
+  ##
+  ## Returns modified parameter clip
   clip.x = max(a.x, x0)
   clip.y = max(a.y, y0)
-  clip.w = max(a.x + a.w, x1) - clip.x
-  clip.h = max(a.y + a.h, y1) - clip.y
+  clip.w = min(a.x + a.w, x1) - clip.x
+  clip.h = min(a.y + a.h, y1) - clip.y
   clip.w = max(0, clip.w)
   clip.h = max(0, clip.h)

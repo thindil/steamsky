@@ -3514,7 +3514,18 @@ proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [],
 #    contractual, exportc.} =
 #  ## Temporary C binding. Internal use only
 #  ##
+#  ## * clip - the unified rectangle
+#  ## * a    - the base recrangle
+#  ## * x0   - the X coordinate of top left point of the second rectangle
+#  ## * y0   - the Y coordinate of top left point of the second rectangle
+#  ## * x1   - the X coordinate of bottom right point of the second rectangle
+#  ## * y1   - the X coordinate of bottom right point of the second rectangle
+#  ##
+#  ## Returns modified parameter clip
 #  var res: NimRect = NimRect(x: clip.x, y: clip.y, w: clip.w, h: clip.h)
 #  nkUnify(clip = res, a = NimRect(x: a.x, y: a.y, w: a.y, h: a.h), x0 = x0,
 #    y0 = y0, x1 = x1, y1 = y1)
-#  clip = new_nk_rect(x = res.x, y = res.y, w = res.w, h = res.h)
+#  clip.x = res.x
+#  clip.y = res.y
+#  clip.w = res.w
+#  clip.h = res.h
