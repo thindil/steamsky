@@ -3510,7 +3510,7 @@ proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [],
 # Temporary exports for old C code
 # --------------------------------
 
-#proc nk_unify(clip: var nk_rect; a: nk_rect; x0, y0, x1, y1: cfloat) {.raises: [], tags: [],
+#proc nk_unify(clip: var nk_rect; a: ptr nk_rect; x0, y0, x1, y1: cfloat) {.raises: [], tags: [],
 #    contractual, exportc.} =
 #  ## Temporary C binding. Internal use only
 #  ##
