@@ -209,6 +209,8 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
         colorLabel(str = text, color = theme.colors[goldenColor])
     addHeader(headers = headers, ratio = ratio, tooltip = "actions",
       code = sortItems, dialog = dialog)
+    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    var currentRow, row: Positive = 1
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
     try:
@@ -220,6 +222,9 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
     for action in actionsList:
+      if currentRow < startRow:
+        currentRow.inc
+        continue
       addButton(label = action.name, tooltip = "Show available options",
           data = action.id, code = setActionMenu, dialog = dialog)
       addButton(label = $action.cost & " " & moneyName,
@@ -228,7 +233,12 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = action.time.formatTime,
           tooltip = "Show available options", data = action.id,
           code = setActionMenu, dialog = dialog)
+      row.inc
+      if row == gameSettings.listsLimit + 1:
+        break
     restoreButtonStyle()
+    restoreButtonStyle()
+    addPagination(page = currentPage, row = row)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
   if dialog == baseActionDialog:
     showWoundedMenu(dialog = dialog, state = state)
@@ -278,6 +288,8 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
         colorLabel(str = text, color = theme.colors[goldenColor])
     addHeader(headers = headers, ratio = ratio, tooltip = "actions",
       code = sortItems, dialog = dialog)
+    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    var currentRow, row: Positive = 1
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
     try:
@@ -289,6 +301,9 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
     for action in actionsList:
+      if currentRow < startRow:
+        currentRow.inc
+        continue
       addButton(label = action.name, tooltip = "Show available options",
           data = action.id, code = setActionMenu, dialog = dialog)
       addButton(label = $action.cost & " " & moneyName,
@@ -297,8 +312,12 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = action.time.formatTime,
           tooltip = "Show available options", data = action.id,
           code = setActionMenu, dialog = dialog)
+      row.inc
+      if row == gameSettings.listsLimit + 1:
+        break
     restoreButtonStyle()
     restoreButtonStyle()
+    addPagination(page = currentPage, row = row)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
   if dialog == baseActionDialog:
     showRepairMenu(dialog = dialog, state = state)
@@ -366,8 +385,8 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
         colorLabel(str = text, color = theme.colors[goldenColor])
     addHeader(headers = recipesHeaders, ratio = recipesRatio,
         tooltip = "actions", code = sortItems, dialog = dialog)
-    let startRow = ((currentPage - 1) * gameSettings.listsLimit) + 1
-    var currentRow, row = 1
+    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    var currentRow, row: Positive = 1
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
     try:
