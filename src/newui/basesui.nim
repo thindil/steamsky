@@ -18,7 +18,7 @@
 ## Provides code related to various interactions in bases, like buying recipes,
 ## repair ship, healing wounded crew memebrs, etc.
 
-import std/[algorithm, sequtils]
+import std/[algorithm, sequtils, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basestrade, basesship2, config, game, types]
 import coreui, errordialog, header, messagesui, setui, table, themes
@@ -349,6 +349,14 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "RecipeGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
+    # Show advanced options if needed
+    if showOptions:
+      setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.1.cfloat, 0.3])
+      label(str = "Name:")
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Search for the selected recipe.")
+      editString(text = nameSearch, maxLen = 64)
     # Show information about money owned by the player
     setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
     for index, text in moneyText:
@@ -369,6 +377,14 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
     for action in actionsList:
+      try:
+        if nameSearch.len > 0 and not itemsList[recipesList[
+            $action.id].resultIndex].name.toLowerAscii.contains(
+            sub = nameSearch.toLowerAscii):
+          continue
+      except:
+        dialog = setError(message = "Can't check name of the recipe")
+        return
       addButton(label = action.name, tooltip = "Show available options",
           data = action.id, code = setActionMenu, dialog = dialog)
       addButton(label = $action.cost & " " & moneyName,
