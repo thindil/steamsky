@@ -33,7 +33,7 @@ proc showMessage(message: MessageData; messageView: string;
   ## * messagesType - the selected type of messages to show
   if message.kind != messagesType and messagesType != default:
     return
-  let messageTag = (if message.color != white: " [list " & (
+  let messageTag: string = (if message.color != white: " [list " & (
       $message.color).toLowerAscii & "]" else: "")
   tclEval(script = messageView & " insert end {" & message.message & "\n}" & messageTag)
 
@@ -52,8 +52,8 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowLastMessages messagestype
   ## MessagesType is the type of messages to show, default all
-  var messagesFrame = mainPaned & ".messagesframe"
-  let messagesCanvas = messagesFrame & ".canvas"
+  var messagesFrame: string = mainPaned & ".messagesframe"
+  let messagesCanvas: string = messagesFrame & ".canvas"
   if tclEval2(script = "winfo exists " & messagesCanvas) == "0":
     tclEval(script = """
       ttk::frame .gameframe.paned.messagesframe
@@ -112,12 +112,12 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "InvokeButton " & closeButton)
     tclEval(script = "grid remove " & closeButton)
     return tclOk
-  let typeBox = messagesCanvas & ".messages.options.types"
+  let typeBox: string = messagesCanvas & ".messages.options.types"
   if argc == 1:
     tclEval(script = typeBox & " current 0")
-  let searchEntry = messagesCanvas & ".messages.options.search"
+  let searchEntry: string = messagesCanvas & ".messages.options.search"
   tclEval(script = searchEntry & " delete 0 end")
-  let messagesView = messagesCanvas & ".messages.list.view"
+  let messagesView: string = messagesCanvas & ".messages.list.view"
   tclEval(script = messagesView & " configure -state normal")
   tclEval(script = messagesView & " delete 1.0 end")
   let messagesType: MessageType = try:
@@ -163,7 +163,7 @@ proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## SelectMessages
-  let typeBox = mainPaned & ".messagesframe.canvas.messages.options.types"
+  let typeBox: string = mainPaned & ".messagesframe.canvas.messages.options.types"
   return showLastMessagesCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SelectMessages", tclEval2(script = typeBox &
       " current")].allocCStringArray)
@@ -202,14 +202,14 @@ proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## SearchMessages text
   ## Text is the string to search in the messages
   let
-    frameName = mainPaned & ".messagesframe.canvas.messages"
-    messagesView = frameName & ".list.view"
+    frameName: string = mainPaned & ".messagesframe.canvas.messages"
+    messagesView: string = frameName & ".list.view"
   tclEval(script = messagesView & " configure -state normal")
   tclEval(script = messagesView & " delete 1.0 end")
   let
-    searchText = $argv[1]
-    typeBox = frameName & ".options.types"
-    messagesType = try:
+    searchText: string = $argv[1]
+    typeBox: string = frameName & ".options.types"
+    messagesType: MessageType = try:
         tclEval2(script = typeBox & " current").parseInt.MessageType
       except:
         return showError(message = "Can't get messages' type.")
@@ -226,13 +226,13 @@ proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   if gameSettings.messagesOrder == olderFirst:
     for i in 1 .. messagesAmount():
-      let message = getMessage(messageIndex = i)
+      let message: MessageData = getMessage(messageIndex = i)
       if message.message.find(sub = searchText) > -1:
         showMessage(message = message, messageView = messagesView,
             messagesType = messagesType)
   else:
     for i in countdown(a = 1, b = messagesAmount()):
-      let message = getMessage(messageIndex = i)
+      let message: MessageData = getMessage(messageIndex = i)
       if message.message.find(sub = searchText) > -1:
         showMessage(message = message, messageView = messagesView,
             messagesType = messagesType)
