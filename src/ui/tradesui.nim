@@ -433,22 +433,20 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       tradeInfo = "Base doesn't have any " & moneyName & " to buy anything"
       label = tradeFrame & ".options.baseinfo.baseinfo2"
       tclEval(script = "grid remove " & label)
-      label = tradeFrame & ".options.baseinfo.basecargoinfo2"
-      tclEval(script = "grid remove " & label)
     else:
       tradeInfo = "Base has"
+    label = tradeFrame & ".options.baseinfo.basecargoinfo.baseinfo"
+    tclEval(script = label & " configure -text {Base has}")
   else:
     if traderCargo[0].amount == 0:
       tradeInfo = "Ship doesn't have any " & moneyName & " to buy anything"
-      label = tradeFrame & ".options.baseinfo.baseinfo2"
-      tclEval(script = "grid remove " & label)
-      label = tradeFrame & ".options.baseinfo.basecargoinfo2"
+      label = tradeFrame & ".options.baseinfo.baseinfo2.baseinfo"
       tclEval(script = "grid remove " & label)
     else:
       tradeInfo = "Ship has"
+    label = tradeFrame & ".options.baseinfo.basecargoinfo"
+    tclEval(script = label & " configure -text {Ship has}")
   label = tradeFrame & ".options.baseinfo.baseinfo"
-  tclEval(script = label & " configure -text {" & tradeInfo & "}")
-  label = tradeFrame & ".options.baseinfo.basecargoinfo"
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
   label = tradeFrame & ".options.baseinfo.baseinfo2"
   if baseIndex > 0:
