@@ -476,6 +476,7 @@ proc setWounded*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   setMoneyText(action = " to pay for healing", dialog = dialog)
   actionsList = setWoundedList(dialog = dialog)
+  currentPage = 1
 
 ############################
 # Setting the repair ship UI
@@ -547,6 +548,7 @@ proc setRepairs*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   setMoneyText(action = " to pay for repairs", dialog = dialog)
   actionsList = setRepairsList(dialog = dialog)
+  currentPage = 1
 
 ############################
 # Setting the buy recipes UI
@@ -591,3 +593,4 @@ proc setRecipes*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   setMoneyText(action = " to buy anything", dialog = dialog)
   actionsList = setRecipesList(dialog = dialog)
+  currentPage = 1
