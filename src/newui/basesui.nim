@@ -366,6 +366,8 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
         colorLabel(str = text, color = theme.colors[goldenColor])
     addHeader(headers = recipesHeaders, ratio = recipesRatio,
         tooltip = "actions", code = sortItems, dialog = dialog)
+    let startRow = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    var currentRow, row = 1
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
     try:
@@ -385,13 +387,20 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't check name of the recipe")
         return
+      if currentRow < startRow:
+        currentRow.inc
+        continue
       addButton(label = action.name, tooltip = "Show available options",
           data = action.id, code = setActionMenu, dialog = dialog)
       addButton(label = $action.cost & " " & moneyName,
           tooltip = "Show available options", data = action.id,
           code = setActionMenu, dialog = dialog)
+      row.inc
+      if row == gameSettings.listsLimit + 1:
+        break
     restoreButtonStyle()
     restoreButtonStyle()
+    addPagination(page = currentPage, row = row)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
   if dialog == baseActionDialog:
     showRecipeMenu(dialog = dialog, state = state)
