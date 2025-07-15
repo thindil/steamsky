@@ -28,9 +28,6 @@ import contracts, nimalyzer
 import nk_button, nk_colors, nk_context, nk_layout, nk_math, nk_tooltip, nk_types, nk_utf, nk_widget
 export nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types, nk_widget
 
-# Temporary disable unused warnings
-{.push hint[XDeclaredButNotUsed]: off.}
-
 ## Provides code for Nuklear binding
 
 # -------
