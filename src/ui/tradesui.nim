@@ -115,7 +115,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
          -style Golden.TLabel] -sticky w -row 0 -column 1
       SetScrollbarBindings $tradeframe.options.baseinfo.baseinfo2 \
          .gameframe.paned.tradeframe.scrolly
-      grid [ttk::frame $tradeframe.options.baseinfo.basecargoinfo]
+      grid [ttk::frame $tradeframe.options.baseinfo.basecargoinfo] -columnspan 2 -sticky w
       SetScrollbarBindings $tradeframe.options.baseinfo.basecargoinfo \
          .gameframe.paned.tradeframe.scrolly
       grid [ttk::label $tradeframe.options.baseinfo.basecargoinfo.baseinfo -wraplength 300 -text {Base has}]
@@ -456,7 +456,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     if traderCargo[0].amount > 0:
       tradeInfo = $traderCargo[0].amount & " " & moneyName
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
-  label = tradeFrame & ".options.baseinfo.basecargoinfo2"
+  label = tradeFrame & ".options.baseinfo.basecargoinfo.baseinfo2"
   if baseIndex > 0:
     var itemsAmount: Natural = case skyBases[baseIndex].size
       of small:
