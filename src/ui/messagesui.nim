@@ -31,10 +31,12 @@ proc showMessage(message: MessageData; messageView: string;
   ## * message      - the message to show
   ## * messageView  - the Tcl treeview name in which the message will be show
   ## * messagesType - the selected type of messages to show
+  {.ruleOff: "ifstatements".}
   if message.kind != messagesType and messagesType != default:
     return
-  let messageTag: string = (if message.color != white: " [list " & (
-      $message.color).toLowerAscii & "]" else: "")
+  {.ruleOn: "ifstatements".}
+  let messageTag: string = (if message.color == white: "" else: " [list " & (
+      $message.color).toLowerAscii & "]")
   tclEval(script = messageView & " insert end {" & message.message & "\n}" & messageTag)
 
 proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
