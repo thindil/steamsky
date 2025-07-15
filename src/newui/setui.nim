@@ -594,3 +594,19 @@ proc setRecipes*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   setMoneyText(action = " to buy anything", dialog = dialog)
   actionsList = setRecipesList(dialog = dialog)
   currentPage = 1
+
+#########################
+# Setting the shipyard UI
+#########################
+
+proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for shipyard UI
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  setMoneyText(action = " to install anything", dialog = dialog)
+  currentPage = 1
+
