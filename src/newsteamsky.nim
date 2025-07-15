@@ -21,8 +21,9 @@
 import std/[os, parseopt, strutils, tables, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
-import newui/[basesschoolui, basesrecruitui, basesui, combatui, coreui,
-    errordialog, goalsui, header, mainmenu, mapsui, themes, tradesui, waitmenu]
+import newui/[basesschoolui, basesrecruitui, basesshipyardui, basesui,
+    combatui, coreui, errordialog, goalsui, header, mainmenu, mapsui, themes,
+    tradesui, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -128,8 +129,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = 200)
   const
-    showGame: array[GameState.mainMenu..GameState.buyRecipes, proc (
-        state: var GameState; dialog: var GameDialog){.nimcall, raises: [].}] = [
+    showGame: array[GameState.mainMenu..GameState.shipyard, proc (
+        state: var GameState; dialog: var GameDialog){.nimcall, raises: [
+            ].}] = [
       GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
         about: showAbout, showFile: mainMenu.showFile,
         hallOfFame: showHallOfFame, loadGame: showLoadGame,
@@ -137,7 +139,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         endGame: backToMainMenu, combat: showCombat, boarding: showBoarding,
         trade: showTrade, school: showSchool, recruits: showRecruits,
         healWounded: showWounded, repairShip: showRepairs,
-        buyRecipes: showRecipes]
+        buyRecipes: showRecipes, shipyard: showShipyard]
     showDialog: array[GameDialog.errorDialog..GameDialog.negotiateDialog, proc(
         dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
@@ -168,7 +170,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         let
           oldState: GameState = state
           oldDialog: GameDialog = dialog
-        if state in GameState.mainMenu..GameState.buyRecipes:
+        if state in GameState.mainMenu..GameState.shipyard:
           # Show the proper window
           showGame[state](state = state, dialog = dialog)
         # Add the tooltips, if enabled
