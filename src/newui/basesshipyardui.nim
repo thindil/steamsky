@@ -18,8 +18,12 @@
 ## Provides code related to installing or removing modules from the player's
 ## ship, like showing the lists of modules, buying or selling them, etc.
 
-import contracts
-import coreui, header
+import contracts, nuklear/nuklear_sdl_renderer
+import ../config
+import coreui, errordialog, header, messagesui, setui, themes
+
+var
+  currentTab: cint = 0
 
 proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -34,3 +38,31 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state,
       options = true):
     return
+  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
+  setLayoutRowDynamic(height = tableHeight, cols = 1)
+  group(title = "ShipyardGroup", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
+    changeStyle(field = spacing, x = 0, y = 0):
+      changeStyle(field = buttonRounding, value = 0):
+        setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.2.cfloat, 0.2])
+        const tabs: array[2, string] = ["Install modules", "Remove modules"]
+        for index, tab in tabs:
+          try:
+            if currentTab == index:
+              changeStyle(src = active, dest = normal):
+                labelButton(title = tab):
+                  discard
+            else:
+              labelButton(title = tab):
+                currentTab = index.cint
+          except:
+            dialog = setError(message = "Can't set the tabs buttons.")
+    # Show information about money owned by the player
+    setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+    for index, text in moneyText:
+      if index mod 2 == 0:
+        label(str = text)
+      else:
+        colorLabel(str = text, color = theme.colors[goldenColor])
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
