@@ -348,6 +348,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
           state = shipyard
           dialog = none
           closePopup()
+          setShipyard(dialog = dialog)
     except:
       dialog = setError(message = "Can't check if the base has shipyard flag.")
       return
