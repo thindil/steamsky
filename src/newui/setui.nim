@@ -274,10 +274,10 @@ var
     ## The base or trader word for info about money
   baseType*: string = ""
     ## The type of the current base
-  cargoWidth*: array[2, cfloat] = [0.cfloat, 0]
+  cargoWidth*: array[4, cfloat] = [0.cfloat, 0, 0, 0]
     ## The width of the text with info about the player's ship's free cargo
     ## space
-  cargoText*: array[2, string] = ["Free cargo space is ", ""]
+  cargoText*: array[4, string] = ["Free cargo space is ", "", "Base has ", ""]
     ## The text with info about the player's ship's free cargo space
   typeIndex*: Natural = 0
     ## The index of the currently selected type of items
@@ -365,17 +365,31 @@ proc refreshItemsList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       return
   if freeSpace < 0:
     freeSpace = 0
-  cargoWidth[0] = try:
-      cargoText[0].getTextWidth.cfloat
-    except:
-      dialog = setError(message = "Can't get the width of the cargo text.")
-      0.0
   cargoText[1] = $freeSpace & " kg"
-  cargoWidth[1] = try:
-      cargoText[1].getTextWidth.cfloat
+  if baseIndex > 0:
+    var itemsAmount: Natural = case skyBases[baseIndex].size
+      of small:
+        32
+      of medium:
+        64
+      of big:
+        128
+      else:
+        0
+    for item in skyBases[baseIndex].cargo:
+      if item.amount > 0:
+        itemsAmount.dec
+      if itemsAmount == 0:
+        break
+    cargoText[2] = $itemsAmount & " free space"
+  else:
+    cargoText[2] = "128 free space"
+  for index, text in cargoText:
+    try:
+      cargoWidth[index] = text.getTextWidth
     except:
-      dialog = setError(message = "Can't get the width of the cargo text.")
-      0.0
+      dialog = setError(message = "Can't get the width of the money text.")
+      return
 
 proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
