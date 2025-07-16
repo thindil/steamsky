@@ -599,6 +599,12 @@ proc setRecipes*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the shipyard UI
 #########################
 
+var
+  modulesText*: array[5, string] = ["You have used", "0", "modules space from max", "0", "allowed."]
+    ## The text with information about money in player's ship's cargo and trader
+  modulesWidth*: array[5, cfloat] = [0, 0, 0, 0, 0]
+    ## The width in pixels of the text with information about money
+
 proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Set the data for shipyard UI
@@ -609,4 +615,13 @@ proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   setMoneyText(action = " to install anything", dialog = dialog)
   currentPage = 1
-
+  for module in playerShip.modules:
+    if module.mType == ModuleType2.hull:
+      modulesText[1] = $module.installedModules
+      modulesText[3] = $module.maxModules
+      break
+  for index, text in modulesText:
+    try:
+      modulesWidth[index] = text.getTextWidth
+    except:
+      dialog = setError(message = "Can't get the width of the money text.")
