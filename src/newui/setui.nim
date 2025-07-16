@@ -618,6 +618,8 @@ var
     ## The text with information about money in player's ship's cargo and trader
   modulesWidth*: array[5, cfloat] = [0, 0, 0, 0, 0]
     ## The width in pixels of the text with information about money
+  modulesAmount*: tuple[installed, max: Natural] = (installed: 0, max: 0)
+    ## The information about modules installed, space on the player's ship
 
 proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -632,7 +634,9 @@ proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for module in playerShip.modules:
     if module.mType == ModuleType2.hull:
       modulesText[1] = $module.installedModules
+      modulesAmount.installed = module.installedModules
       modulesText[3] = $module.maxModules
+      modulesAmount.max = module.maxModules
       break
   for index, text in modulesText:
     try:
