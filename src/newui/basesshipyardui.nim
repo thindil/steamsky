@@ -45,7 +45,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
       windowDisable()
     changeStyle(field = spacing, x = 0, y = 0):
       changeStyle(field = buttonRounding, value = 0):
-        setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.2.cfloat, 0.2])
+        setLayoutRowDynamic(height = 30, cols = 2)
         const tabs: array[2, string] = ["Install modules", "Remove modules"]
         for index, tab in tabs:
           try:
@@ -65,4 +65,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
         label(str = text)
       else:
         colorLabel(str = text, color = theme.colors[goldenColor])
+    # Show information about installed modules
+    setLayoutRowStatic(height = 30, cols = 5, ratio = modulesWidth)
+    label(str = modulesText[0])
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
