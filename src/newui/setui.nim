@@ -381,9 +381,9 @@ proc refreshItemsList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         itemsAmount.dec
       if itemsAmount == 0:
         break
-    cargoText[2] = $itemsAmount & " free space"
+    cargoText[3] = $itemsAmount & " free space"
   else:
-    cargoText[2] = "128 free space"
+    cargoText[3] = "128 free space"
   for index, text in cargoText:
     try:
       cargoWidth[index] = text.getTextWidth
