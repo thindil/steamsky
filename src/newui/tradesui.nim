@@ -382,9 +382,12 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
   # Show information about free cargo space in the player's ship
-  setLayoutRowStatic(height = 30, cols = 2, ratio = cargoWidth)
-  label(str = cargoText[0])
-  colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
+  setLayoutRowStatic(height = 30, cols = cargoWidth.len, ratio = cargoWidth)
+  for index, text in cargoText:
+    if index mod 2 == 0:
+      label(str = text)
+    else:
+      colorLabel(str = text, color = theme.colors[goldenColor])
   # Show the list of items for trade
   let tableHeight: float = windowHeight - 140 - (if showOptions: 45 else: 0) -
       gameSettings.messagesPosition.float
