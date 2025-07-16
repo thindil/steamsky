@@ -130,7 +130,7 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = messagesView & " insert end {There are no messages of that type.}")
   else:
     if gameSettings.messagesOrder == olderFirst:
-      for i in 1 .. messagesAmount():
+      for i in 1..messagesAmount():
         showMessage(message = getMessage(messageIndex = i),
             messageView = messagesView, messagesType = messagesType)
     else:
@@ -217,7 +217,7 @@ proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't get messages' type.")
   if searchText.len == 0:
     if gameSettings.messagesOrder == olderFirst:
-      for i in 1 .. messagesAmount():
+      for i in 1..messagesAmount():
         showMessage(message = getMessage(messageIndex = i),
             messageView = messagesView, messagesType = messagesType)
     else:
@@ -227,7 +227,7 @@ proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     tclSetResult(value = "1")
     return tclOk
   if gameSettings.messagesOrder == olderFirst:
-    for i in 1 .. messagesAmount():
+    for i in 1..messagesAmount():
       let message: MessageData = getMessage(messageIndex = i)
       if message.message.find(sub = searchText) > -1:
         showMessage(message = message, messageView = messagesView,
