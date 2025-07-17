@@ -68,4 +68,9 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     # Show information about installed modules
     setLayoutRowStatic(height = 30, cols = 5, ratio = modulesWidth)
     label(str = modulesText[0])
+    colorLabel(str = modulesText[1], color = if modulesAmount.installed <
+        modulesAmount.max: theme.colors[greenColor] else: theme.colors[redColor])
+    label(str = modulesText[2])
+    colorLabel(str = modulesText[3], color = theme.colors[goldenColor])
+    label(str = modulesText[4])
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
