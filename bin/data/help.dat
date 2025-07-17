@@ -169,6 +169,7 @@ When you undocked from base, in this same menu, you can dock again.
    Prices in bases depends on skill {TalkingSkill} of assigned to trade crew member: with higher skill you can sell items for more and buy for less. Additionally, prices depends on your reputation in base. With high reputation you earn more or pay less for goods, new recruits or services.
    From time to time, base prices of items can change a little (raise or fall). Chance for change depends on size of base, and it is higher when you visit that base less often.
    Prices showed on trade screen are base prices, without bonuses or penalties from reputation and trader skill.
+   The amount of items that bases offer and free space in bases depends on the bases' size. Big bases can have a maximum of 128 different items, medium 64, and small 32.
 
 {u}Buying/selling items{/u}
 
