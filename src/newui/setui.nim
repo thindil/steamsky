@@ -628,6 +628,12 @@ var
     ## The width in pixels of the text with information about money
   modulesAmount*: tuple[installed, max: Natural] = (installed: 0, max: 0)
     ## The information about modules installed, space on the player's ship
+  modulesSortOrder*: ModulesSortOrders = defaultModulesSortOrder
+    ## The current sorting order of the list of modules in a shipyard
+  modulesIndexes*: seq[int] = @[]
+    ## The list of indexes of modules in a shipyard
+  currentTab*: cint = 0
+    ## The current tab on the list of modules in shipyard
 
 proc setModulesList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -637,7 +643,11 @@ proc setModulesList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened. Additionally it returns the list of modules.
-  discard
+  if modulesSortOrder == defaultModulesSortOrder:
+    modulesIndexes = @[]
+    if currentTab == 1:
+      for index in playerShip.modules.low .. playerShip.modules.high:
+        modulesIndexes.add(y = index)
 
 proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
