@@ -20,10 +20,39 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
-import coreui, errordialog, header, messagesui, setui, themes
+import coreui, errordialog, header, messagesui, setui, table, themes
+
+type ModulesSortOrders = enum
+  none, nameAsc, nameDesc, typeAsc, typeDesc, sizeAsc, sizeDesc, materialAsc,
+    materialDesc, priceAsc, priceDesc
+
+proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort items on the trades list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
 
 var
   currentTab: cint = 0
+  headers: array[5, HeaderData[ModulesSortOrders]] = [
+    HeaderData[ModulesSortOrders](label: "Name", sortAsc: nameAsc,
+        sortDesc: nameDesc),
+    HeaderData[ModulesSortOrders](label: "Type", sortAsc: typeAsc,
+        sortDesc: typeDesc),
+    HeaderData[ModulesSortOrders](label: "Size", sortAsc: sizeAsc,
+        sortDesc: sizeDesc),
+    HeaderData[ModulesSortOrders](label: "Material", sortAsc: materialAsc,
+        sortDesc: materialDesc),
+    HeaderData[ModulesSortOrders](label: "Cost", sortAsc: priceAsc,
+        sortDesc: priceDesc)]
+const
+  ratio: array[5, cfloat] = [300.cfloat, 200, 200, 200, 200]
 
 proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -56,6 +85,10 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
             else:
               labelButton(title = tab):
                 currentTab = index.cint
+                if index == 0:
+                  headers[4].label = "Cost"
+                else:
+                  headers[4].label = "Price"
           except:
             dialog = setError(message = "Can't set the tabs buttons.")
     # Show information about money owned by the player
@@ -73,4 +106,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     label(str = modulesText[2])
     colorLabel(str = modulesText[3], color = theme.colors[goldenColor])
     label(str = modulesText[4])
+    # Show the list of items
+    addHeader(headers = headers, ratio = ratio, tooltip = "items",
+      code = sortModules, dialog = dialog)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
