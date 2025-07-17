@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,11 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
+import contracts
 import ../[basestrade, crew, crewinventory, game, tk, types]
 import coreui, dialogs, errordialog, mapsui, updateheader, utilsui2
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Set list of available to train skills for the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -64,7 +66,8 @@ proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show the selected base school
   ##
   ## * clientData - the additional data for the Tcl command
@@ -211,7 +214,7 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "focus -force " & trainButton)
   return tclOk
 
-proc getMemberIndex(): Natural {.raises: [], tags: [].} =
+proc getMemberIndex(): Natural {.raises: [], tags: [], contractual.} =
   ## Get the index in the player ship of the currently selected member
   ##
   ## Returns the crew member's index
@@ -222,7 +225,7 @@ proc getMemberIndex(): Natural {.raises: [], tags: [].} =
       break
     result.inc
 
-proc getSkillIndex(): Positive =
+proc getSkillIndex(): Positive {.raises: [], tags: [], contractual.} =
   ## Get the index of the currently selected skill
   ##
   ## Returns the index of the skill
@@ -238,7 +241,7 @@ proc getSkillIndex(): Positive =
 
 proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.} =
+    WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl, contractual.} =
   ## Train the selected skill
   ##
   ## * clientData - the additional data for the Tcl command
@@ -274,7 +277,8 @@ proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["TrainSkill", $getMemberIndex()].allocCStringArray)
 
 proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Update the cost of training
   ##
   ## * clientData - the additional data for the Tcl command
@@ -315,7 +319,7 @@ proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
     argc: cint; argv: cstringArray): TclResults {.raises: [],
-    tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
   ## Update the minimal and maximum values of spinbox with training cost
   ##
   ## * clientData - the additional data for the Tcl command
@@ -349,7 +353,8 @@ proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
   tclEval(script = amountBox & " set " & $cost)
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("SetSchoolSkills", setSchoolSkillsCommand)
