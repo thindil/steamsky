@@ -22,10 +22,6 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../config
 import coreui, errordialog, header, messagesui, setui, table, themes
 
-type ModulesSortOrders = enum
-  none, nameAsc, nameDesc, typeAsc, typeDesc, sizeAsc, sizeDesc, materialAsc,
-    materialDesc, priceAsc, priceDesc
-
 proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Sort items on the trades list
