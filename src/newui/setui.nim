@@ -613,6 +613,14 @@ proc setRecipes*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the shipyard UI
 #########################
 
+type ModulesSortOrders* = enum
+  ## Sorting order of the list of modules to install or remove
+  none, nameAsc, nameDesc, typeAsc, typeDesc, sizeAsc, sizeDesc, materialAsc,
+    materialDesc, priceAsc, priceDesc
+
+const defaultModulesSortOrder*: ModulesSortOrders = none
+  ## Default sorting order for list of modules to install or remove
+
 var
   modulesText*: array[5, string] = ["You have used", "0", "modules space from max", "0", "allowed."]
     ## The text with information about money in player's ship's cargo and trader
@@ -620,6 +628,16 @@ var
     ## The width in pixels of the text with information about money
   modulesAmount*: tuple[installed, max: Natural] = (installed: 0, max: 0)
     ## The information about modules installed, space on the player's ship
+
+proc setModulesList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Set the list of available modules to install or remove in a shipyard
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened. Additionally it returns the list of modules.
+  discard
 
 proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -643,3 +661,4 @@ proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       modulesWidth[index] = text.getTextWidth
     except:
       dialog = setError(message = "Can't get the width of the money text.")
+  currentPage = 1
