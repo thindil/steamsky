@@ -3502,3 +3502,8 @@ proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [],
   let newColor: nk_colorf = nk_hsva_colorf(h = hsva[0], s = hsva[1], v = hsva[
       2], a = hsva[3])
   result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
+
+# --------------------------------
+# Temporary exports for old C code
+# --------------------------------
+
