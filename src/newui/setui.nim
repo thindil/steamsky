@@ -648,6 +648,9 @@ proc setModulesList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
     if currentTab == 1:
       for index in playerShip.modules.low .. playerShip.modules.high:
         modulesIndexes.add(y = index)
+    else:
+      for index in modulesList.keys:
+        modulesIndexes.add(y = index)
 
 proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
