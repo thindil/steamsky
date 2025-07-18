@@ -35,6 +35,17 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
   ## happened.
   discard
 
+proc showInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected item information
+  ##
+  ## * data   - the index of the selected item
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
+
 var
   headers: array[5, HeaderData[ModulesSortOrders]] = [
     HeaderData[ModulesSortOrders](label: "Name", sortAsc: nameAsc,
@@ -127,5 +138,5 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
               tooltip = "Show the module's info", data = index,
               code = showInstallInfo, dialog = dialog)
         except:
-          return showError(message = "Can't add button with name.")
+          dialog = setError(message = "Can't add button with name.")
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
