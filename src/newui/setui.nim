@@ -674,4 +674,3 @@ proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       modulesWidth[index] = text.getTextWidth
     except:
       dialog = setError(message = "Can't get the width of the money text.")
-  currentPage = 1
