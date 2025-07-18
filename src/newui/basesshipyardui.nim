@@ -35,7 +35,6 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
   discard
 
 var
-  currentTab: cint = 0
   headers: array[5, HeaderData[ModulesSortOrders]] = [
     HeaderData[ModulesSortOrders](label: "Name", sortAsc: nameAsc,
         sortDesc: nameDesc),
@@ -47,6 +46,7 @@ var
         sortDesc: materialDesc),
     HeaderData[ModulesSortOrders](label: "Cost", sortAsc: priceAsc,
         sortDesc: priceDesc)]
+  hasOptions: bool = true
 const
   ratio: array[5, cfloat] = [300.cfloat, 200, 200, 200, 200]
 
@@ -61,7 +61,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state,
-      options = true):
+      options = hasOptions):
     return
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
   setLayoutRowDynamic(height = tableHeight, cols = 1)
@@ -83,8 +83,10 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 currentTab = index.cint
                 if index == 0:
                   headers[4].label = "Cost"
+                  hasOptions = true
                 else:
                   headers[4].label = "Price"
+                  hasOptions = false
           except:
             dialog = setError(message = "Can't set the tabs buttons.")
     # Show information about money owned by the player
