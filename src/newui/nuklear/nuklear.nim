@@ -25,7 +25,7 @@
 
 import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
-import nk_button, nk_colors, nk_context, nk_layout, nk_math, nk_tooltip, nk_types, nk_utf, nk_widget
+import nk_button, nk_colors, nk_context, nk_layout, nk_math, nk_panel, nk_tooltip, nk_types, nk_utf, nk_widget
 export nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types, nk_widget
 
 ## Provides code for Nuklear binding
@@ -1549,81 +1549,6 @@ proc nkFreePageElement(ctx; elem: ptr nk_page_element) {.raises: [], tags: [],
 # -----
 # Panel
 # -----
-proc nkPanelGetPadding(style: nk_style; `type`: PanelType): nk_vec2 {.raises: [
-    ], tags: [], contractual.} =
-  ## Get the padding for the selected panel, based on its type. Internal use
-  ## only
-  ##
-  ## * style - the whole style of the application
-  ## * type  - the selected type of the panel
-  ##
-  ## Returns vector with information about padding for the selected panel
-  case `type`
-  of panelWindow:
-    return style.window.padding
-  of panelGroup:
-    return style.window.group_padding
-  of panelPopup:
-    return style.window.popup_padding
-  of panelContextual:
-    return style.window.contextual_padding
-  of panelCombo:
-    return style.window.combo_padding
-  of panelMenu:
-    return style.window.menu_padding
-  of panelTooltip:
-    return style.window.tooltip_padding
-  else:
-    discard
-
-proc nkPanelGetBorder(style: nk_style; flags: nk_flags; `type`: PanelType): cfloat {.raises: [], tags: [], contractual.} =
-  ## Get the border size for the selected panel, based on its type. Internal use
-  ## only
-  ##
-  ## * style - the whole style of the application
-  ## * type  - the selected type of the panel
-  ##
-  ## Returns size of the border of the selected panel
-  if (flags and windowBorder.ord.int).nk_bool:
-    case `type`
-    of panelWindow:
-      return style.window.border
-    of panelGroup:
-      return style.window.group_border
-    of panelPopup:
-      return style.window.popup_border
-    of panelContextual:
-      return style.window.contextual_border
-    of panelCombo:
-      return style.window.combo_border
-    of panelMenu:
-      return style.window.menu_border
-    of panelTooltip:
-      return style.window.tooltip_border
-    else:
-      return 0
-  else:
-    return 0
-
-proc nkPanelHasHeader(flags: nk_flags; title: string): bool {.raises: [], tags: [], contractual.} =
-  ## Check if a panel has a header to draw. Internal use only
-  ##
-  ## * flags - the panel's flags
-  ## * title - the panel's  title
-  var active: nk_bool = nkFalse
-  active = (flags and (windowClosable.ord.int or windowMinimizable.ord.int)).nk_bool
-  active = (active or (flags and windowTitle.ord.int).nk_bool).nk_bool
-  active = (active and not(flags and windowHidden.ord.int).nk_bool and title.len > 0).nk_bool
-  return active
-
-proc nkPanelIsNonblock(`type`: PanelType): bool {.raises: [], tags: [], contractual.} =
-  ## Check if the selected panel's type is non-blocking panel
-  ##
-  ## * type - the type of panel to check
-  ##
-  ## Returns true if the panel's type is non-blocking, otherwise false.
-  return (`type`.cint and panelSetNonBlock.cint).bool
-
 proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     ], tags: [RootEffect], contractual.} =
   ## Start drawing a Nuklear panel. Internal use only
@@ -1641,7 +1566,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     zeroMem(p = ctx.current.layout, size = ctx.current.layout.sizeof)
     if (ctx.current.flags and windowHidden.cint) == 1 or (
         ctx.current.flags and windowClosed.cint) == 1:
-      zeroMem(p = ctx.current.layout, size = nk_panel.sizeof)
+      zeroMem(p = ctx.current.layout, size = nk_types.nk_panel.sizeof)
       ctx.current.layout.`type` = panelType
       return false;
     # pull state into local stack
