@@ -18,8 +18,9 @@
 ## Provides code related to installing or removing modules from the player's
 ## ship, like showing the lists of modules, buying or selling them, etc.
 
+import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
+import ../[config, game]
 import coreui, errordialog, header, messagesui, setui, table, themes
 
 proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
@@ -104,7 +105,27 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     label(str = modulesText[2])
     colorLabel(str = modulesText[3], color = theme.colors[goldenColor])
     label(str = modulesText[4])
-    # Show the list of items
+    # Show the list of modules
     addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortModules, dialog = dialog)
+    var currentRow: Positive = 1
+    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    for index in modulesIndexes:
+      if currentTab == 0:
+        try:
+          if modulesList[index].price == 0 or skyBases[
+              baseIndex].reputation.level < modulesList[index].reputation:
+            continue
+        except:
+          dialog = setError(message = "Can't get proto module price.")
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      if currentTab == 0:
+        try:
+          addButton(label = modulesList[index].name,
+              tooltip = "Show the module's info", data = index,
+              code = showInstallInfo, dialog = dialog)
+        except:
+          return showError(message = "Can't add button with name.")
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
