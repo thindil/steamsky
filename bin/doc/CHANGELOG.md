@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Generated cargo in bases is now more random
+- Updated help
 
 ### Fixed
 - Undocking or escaping from a base doesn't show the map
