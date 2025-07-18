@@ -16,13 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[basestrade, crew, crewinventory, game, tk, types]
 import coreui, dialogs, errordialog, mapsui, updateheader, utilsui2
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl, contractual.} =
+        TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Set list of available to train skills for the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
