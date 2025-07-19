@@ -357,10 +357,11 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
-    addCommand("SetSchoolSkills", setSchoolSkillsCommand)
-    addCommand("ShowSchool", showSchoolCommand)
-    addCommand("TrainSkill", trainSkillCommand)
-    addCommand("UpdateSchoolCost", updateSchoolCostCommand)
-    addCommand("UpdateSchoolSelectedCost", updateSchoolSelectedCostCommand)
+    addCommand(name = "SetSchoolSkills", nimProc = setSchoolSkillsCommand)
+    addCommand(name = "ShowSchool", nimProc = showSchoolCommand)
+    addCommand(name = "TrainSkill", nimProc = trainSkillCommand)
+    addCommand(name = "UpdateSchoolCost", nimProc = updateSchoolCostCommand)
+    addCommand(name = "UpdateSchoolSelectedCost",
+        nimProc = updateSchoolSelectedCostCommand)
   except:
     showError(message = "Can't add a Tcl command.")
