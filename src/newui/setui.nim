@@ -635,22 +635,21 @@ var
   currentTab*: cint = 0
     ## The current tab on the list of modules in shipyard
 
-proc setModulesList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
+proc setModulesList*(dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Set the list of available modules to install or remove in a shipyard
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog. It is modified if any error
-  ## happened. Additionally it returns the list of modules.
-  if modulesSortOrder == defaultModulesSortOrder:
-    modulesIndexes = @[]
-    if currentTab == 1:
-      for index in playerShip.modules.low .. playerShip.modules.high:
-        modulesIndexes.add(y = index)
-    else:
-      for index in modulesList.keys:
-        modulesIndexes.add(y = index)
+  ## happened.
+  modulesIndexes = @[]
+  if currentTab == 1:
+    for index in playerShip.modules.low .. playerShip.modules.high:
+      modulesIndexes.add(y = index)
+  else:
+    for index in modulesList.keys:
+      modulesIndexes.add(y = index)
 
 proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -660,6 +659,7 @@ proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
+  baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   setMoneyText(action = " to install anything", dialog = dialog)
   currentPage = 1
   for module in playerShip.modules:
@@ -674,3 +674,4 @@ proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       modulesWidth[index] = text.getTextWidth
     except:
       dialog = setError(message = "Can't get the width of the money text.")
+  setModulesList(dialog = dialog)
