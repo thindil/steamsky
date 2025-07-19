@@ -141,9 +141,32 @@ proc findBaseCargo*(protoIndex: Natural;
     return findCargo(localBaseCargo = skyBases[baseIndex].cargo)
   return findCargo(localBaseCargo = traderCargo)
 
+proc countFreeCargo*(baseIndex: ExtendedBasesRange): Natural {.raises: [],
+    tags: [], contractual.} =
+  ## Count the free space in the selected base's cargo
+  ##
+  ## * baseIndex - the index of the base which free space will be count
+  ##
+  ## Returns the amount of free space in the selected base
+  result = case skyBases[baseIndex].size
+    of small:
+      32
+    of medium:
+      64
+    of big:
+      128
+    else:
+      return 0
+  for item in skyBases[baseIndex].cargo:
+    if item.amount > 0:
+      result.dec
+    if result == 0:
+      break
+
 proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability;
-    cargoIndex: int = -1) {.raises: [KeyError, NoFreeSpaceError], tags: [], contractual.} =
+    cargoIndex: int = -1) {.raises: [KeyError, NoFreeSpaceError], tags: [],
+    contractual.} =
   ## Update the selected item amount in the cargo of the base where the player
   ## is
   ##
@@ -166,20 +189,8 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
   {.ruleOff: "assignments".}
   if amount > 0:
     if itemIndex == -1:
-      var itemsAmount: Natural = case skyBases[baseIndex].size
-        of small:
-          32
-        of medium:
-          64
-        of big:
-          128
-        else:
-          0
-      for item in skyBases[baseIndex].cargo:
-        if item.amount > 0:
-          itemsAmount.dec
-        if itemsAmount == 0:
-          raise newException(exceptn = NoFreeSpaceError, message = $protoIndex)
+      if countFreeCargo(baseIndex = baseIndex) == 0:
+        raise newException(exceptn = NoFreeSpaceError, message = $protoIndex)
       skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: protoIndex,
           amount: amount, durability: durability, price: getPrice(
           baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex)))
