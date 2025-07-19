@@ -25,6 +25,7 @@ suite "Unit tests for basescargo module.":
   skyBases[1].population = 100
   skyBases[1].baseType = "1"
   skyBases[1].owner = "POLEIS"
+  skyBases[1].size = big
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
   test "Generate a base's cargo.":
@@ -45,6 +46,11 @@ suite "Unit tests for basescargo module.":
   test "Not find an non-existing item in a base's cargo":
     check:
       findBaseCargo(490) == -1
+
+  test "Count the free cargo in a base's cargo":
+    skyBases[1].cargo = @[]
+    check:
+      countFreeCargo(baseIndex = 1) == 128
 
   test "Remove an item from a base's cargo with protoIndex":
     skyBases[1].cargo = @[]
