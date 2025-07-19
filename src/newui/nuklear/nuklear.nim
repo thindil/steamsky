@@ -77,12 +77,6 @@ proc nk_input_button*(ctx; id: Buttons; x, y: cint; down: nk_bool) {.importc, no
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
-# ------
-# Panels
-# ------
-proc nk_create_panel(ctx): pointer {.importc, cdecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-
 # ----
 # Text
 # ----
@@ -3427,8 +3421,3 @@ proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [],
   let newColor: nk_colorf = nk_hsva_colorf(h = hsva[0], s = hsva[1], v = hsva[
       2], a = hsva[3])
   result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
-
-# --------------------------------
-# Temporary exports for old C code
-# --------------------------------
-

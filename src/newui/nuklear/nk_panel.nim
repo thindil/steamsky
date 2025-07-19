@@ -24,7 +24,17 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import contracts
-import nk_types
+import nk_types, nk_context
+
+# Procedures parameters
+# ---------------------
+using ctx: PContext
+
+# ------------------
+# Low level bindings
+# ------------------
+proc nk_create_panel*(ctx): pointer {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 proc nkPanelGetPadding*(style: nk_style; `type`: PanelType): nk_vec2 {.raises: [
     ], tags: [], contractual.} =
