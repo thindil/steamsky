@@ -458,21 +458,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
   label = tradeFrame & ".options.baseinfo.basecargoinfo.baseinfo2"
   if baseIndex > 0:
-    var itemsAmount: Natural = case skyBases[baseIndex].size
-      of small:
-        32
-      of medium:
-        64
-      of big:
-        128
-      else:
-        0
-    for item in skyBases[baseIndex].cargo:
-      if item.amount > 0:
-        itemsAmount.dec
-      if itemsAmount == 0:
-        break
-    tradeInfo = $itemsAmount & " free space"
+    tradeInfo = $countFreeCargo(baseIndex = baseIndex) & " free space"
   else:
     tradeInfo = "128 free space"
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
