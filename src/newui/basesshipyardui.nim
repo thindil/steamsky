@@ -119,7 +119,17 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     # Show the list of modules
     addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortModules, dialog = dialog)
-    var currentRow: Positive = 1
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    var currentRow, row: Positive = 1
     let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
     for index in modulesIndexes:
       if currentTab == 0:
@@ -139,4 +149,6 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
               code = showInstallInfo, dialog = dialog)
         except:
           dialog = setError(message = "Can't add button with name.")
+    restoreButtonStyle()
+    addPagination(page = currentPage, row = row)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
