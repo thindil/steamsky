@@ -20,8 +20,8 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, basesship, basestrade, basestypes, combat, config, crew,
-    crewinventory, game, maps, shipscargo, shipscrew, types]
+import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
+    crew, crewinventory, game, maps, shipscargo, shipscrew, types]
 import coreui, errordialog, utilsui2
 
 var
@@ -367,21 +367,7 @@ proc refreshItemsList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     freeSpace = 0
   cargoText[1] = $freeSpace & " kg"
   if baseIndex > 0:
-    var itemsAmount: Natural = case skyBases[baseIndex].size
-      of small:
-        32
-      of medium:
-        64
-      of big:
-        128
-      else:
-        0
-    for item in skyBases[baseIndex].cargo:
-      if item.amount > 0:
-        itemsAmount.dec
-      if itemsAmount == 0:
-        break
-    cargoText[3] = $itemsAmount & " free space"
+    cargoText[3] = $countFreeCargo(baseIndex = baseIndex) & " free space"
   else:
     cargoText[3] = "128 free space"
   for index, text in cargoText:
@@ -438,7 +424,8 @@ var
   actionsList*: seq[BaseItemData] = @[]
     ## The list of actions for the selected items in a base
 
-proc countCost(cost: var Natural) {.raises: [KeyError], tags: [RootEffect], contractual.} =
+proc countCost(cost: var Natural) {.raises: [KeyError], tags: [RootEffect],
+    contractual.} =
   ## Modify the selected price based on the game settings and a trader's skill
   ##
   ## * cost   - the cost which will be modified
@@ -622,7 +609,8 @@ const defaultModulesSortOrder*: ModulesSortOrders = none
   ## Default sorting order for list of modules to install or remove
 
 var
-  modulesText*: array[5, string] = ["You have used", "0", "modules space from max", "0", "allowed."]
+  modulesText*: array[5, string] = ["You have used", "0",
+      "modules space from max", "0", "allowed."]
     ## The text with information about money in player's ship's cargo and trader
   modulesWidth*: array[5, cfloat] = [0, 0, 0, 0, 0]
     ## The width in pixels of the text with information about money
