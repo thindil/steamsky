@@ -37,7 +37,18 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
 
 proc showInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
-  ## Show the selected item information
+  ## Show the selected module information
+  ##
+  ## * data   - the index of the selected item
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
+
+proc showRemoveInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected module information
   ##
   ## * data   - the index of the selected item
   ## * dialog - the current in-game dialog displayed on the screen
@@ -93,6 +104,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
             else:
               labelButton(title = tab):
                 currentTab = index.cint
+                setModulesList(dialog = dialog)
                 if index == 0:
                   headers[4].label = "Cost"
                   hasOptions = true
@@ -191,6 +203,31 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
             -1 and cost <= playerShip.cargo[
             moneyIndex2].amount: tableTextColor else: redColor),
             dialog = dialog)
+      else:
+        try:
+          if modulesList[playerShip.modules[index].protoIndex].mType ==
+              ModuleType.hull:
+            continue
+        except:
+          dialog = setError(message = "Can't check module type.")
+        if currentRow < startRow:
+          currentRow.inc
+          continue
+        addButton(label = playerShip.modules[index].name,
+            tooltip = "Show the module's info", data = index,
+            code = showRemoveInfo, dialog = dialog)
+        try:
+          addButton(label = getModuleType(moduleIndex = playerShip.modules[
+              index].protoIndex), tooltip = "Show the module's info",
+              data = index, code = showRemoveInfo, dialog = dialog)
+        except:
+          dialog = setError(message = "Can't add button with player's ship module type.")
+        try:
+          addButton(label = $modulesList[playerShip.modules[
+              index].protoIndex].size, tooltip = "Show the module's info",
+              data = index, code = showRemoveInfo, dialog = dialog)
+        except:
+          dialog = setError(message = "Can't add button with player's ship module size.")
       row.inc
       if row == gameSettings.listsLimit + 1:
         break
