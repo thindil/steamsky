@@ -622,6 +622,9 @@ var
     ## The list of indexes of modules in a shipyard
   currentTab*: cint = 0
     ## The current tab on the list of modules in shipyard
+  maxModuleSize*: Positive = 1
+    ## The maximum size of a module which is allowed to install on the player's
+    ## ship
 
 proc setModulesList*(dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -656,6 +659,11 @@ proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       modulesAmount.installed = module.installedModules
       modulesText[3] = $module.maxModules
       modulesAmount.max = module.maxModules
+      maxModuleSize = try:
+          modulesList[module.protoIndex].value
+        except:
+          dialog = setError(message = "Can't get max size.")
+          0
       break
   for index, text in modulesText:
     try:
