@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to UI for training the player's ship's crew members
+## in bases, like showing the UI, selecting crew member, skill or amount
+## of training, etc.
+
 import std/[strutils, tables]
 import contracts, nimalyzer
 import ../[basestrade, crew, crewinventory, game, tk, types]
