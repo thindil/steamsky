@@ -228,6 +228,31 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
               data = index, code = showRemoveInfo, dialog = dialog)
         except:
           dialog = setError(message = "Can't add button with player's ship module size.")
+        try:
+          addButton(label = $modulesList[playerShip.modules[
+              index].protoIndex].repairMaterial,
+              tooltip = "Show the module's info", data = index,
+              code = showRemoveInfo, dialog = dialog)
+        except:
+          dialog = setError(message = "Can't add button with player's ship repair material.")
+        let damage: float = 1.0 - (playerShip.modules[index].durability.float /
+            playerShip.modules[index].maxDurability.float)
+        var cost: Natural = try:
+            modulesList[playerShip.modules[
+              index].protoIndex].price - (modulesList[playerShip.modules[
+              index].protoIndex].price.float * damage).int
+          except:
+            dialog = setError(message = "Can't get cost of player's ship module.")
+            return
+        if cost == 0:
+          cost = 1
+        try:
+          countPrice(price = cost, traderIndex = findMember(order = talk),
+              reduce = false)
+        except:
+          dialog = setError(message = "Can't count cost of player's ship module.")
+        addButton(label = $cost, tooltip = "Show the module's info",
+            data = index, code = showRemoveInfo, dialog = dialog)
       row.inc
       if row == gameSettings.listsLimit + 1:
         break
