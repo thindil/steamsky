@@ -317,6 +317,8 @@ proc getTradeData*(iIndex: int): tuple[protoIndex: int, maxSellAmount: int,
       countPrice(price = maxPrice, traderIndex = findMember(order = talk),
           reduce = false)
       weight = freeCargo(amount = (itemsList[result.protoIndex].weight * result.maxSellAmount) - maxPrice)
+    if baseIndex > 0 and countFreeCargo(baseIndex = baseIndex) == 0:
+      result.maxSellAmount = 0
   let moneyIndex2: int = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
   if baseCargoIndex > -1 and moneyIndex2 > -1 and ((baseIndex > -1 and
