@@ -20,7 +20,7 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game]
+import ../[config, game, shipmodules, types]
 import coreui, errordialog, header, messagesui, setui, table, themes
 
 proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
@@ -149,6 +149,31 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
               code = showInstallInfo, dialog = dialog)
         except:
           dialog = setError(message = "Can't add button with name.")
+        try:
+          addButton(label = getModuleType(moduleIndex = index),
+              tooltip = "Show the module's info", data = index,
+              code = showInstallInfo, dialog = dialog)
+        except:
+          dialog = setError(message = "Can't add button with type.")
+        let moduleSize: int = try:
+            (if modulesList[index].mType ==
+              ModuleType.hull: modulesList[index].maxValue else: modulesList[index].size)
+          except:
+            dialog = setError(message = "Can't get size of the module.")
+            0
+        try:
+          addButton(label = $moduleSize, tooltip = "Show the module's info",
+              data = index, code = showInstallInfo, color = (if modulesList[
+              index].mType == ModuleType.hull: (if moduleSize <
+              modulesAmount.max: redColor elif moduleSize >
+              modulesAmount.max: greenColor else: tableTextColor) else: (
+              if moduleSize > maxModuleSize: redColor else: tableTextColor)),
+              dialog = dialog)
+        except:
+          dialog = setError(message = "Can't add button with size.")
+      row.inc
+      if row == gameSettings.listsLimit + 1:
+        break
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
