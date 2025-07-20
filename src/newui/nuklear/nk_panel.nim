@@ -26,6 +26,7 @@
 import contracts
 import nk_types, nk_context
 
+# ---------------------
 # Procedures parameters
 # ---------------------
 using ctx: PContext
@@ -36,6 +37,9 @@ using ctx: PContext
 proc nk_create_panel*(ctx): pointer {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
+# -------------------
+# High level bindings
+# -------------------
 proc nkPanelGetPadding*(style: nk_style; `type`: PanelType): nk_vec2 {.raises: [
     ], tags: [], contractual.} =
   ## Get the padding for the selected panel, based on its type. Internal use

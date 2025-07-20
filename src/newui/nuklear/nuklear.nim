@@ -25,8 +25,10 @@
 
 import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
-import nk_button, nk_colors, nk_context, nk_layout, nk_math, nk_panel, nk_tooltip, nk_types, nk_utf, nk_widget
-export nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types, nk_widget
+import nk_button, nk_colors, nk_context, nk_layout, nk_math, nk_page, nk_panel,
+  nk_tooltip, nk_types, nk_utf, nk_widget
+export nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types,
+  nk_widget
 
 ## Provides code for Nuklear binding
 
@@ -495,16 +497,6 @@ proc windowShow*(name: string; state: ShowStates) {.raises: [], tags: [], contra
 # ------
 # Buffer
 # ------
-{.push ruleOff: "namedParams".}
-template `+`[T](p: ptr T; off: nk_size): ptr T =
-  ## Pointer artihmetic, adding
-  ##
-  ## * p   - the pointer to modify
-  ## * off - the value to add to the pointer
-  ##
-  ## Returns the new pointer moved by off.
-  cast[ptr type(p[])](cast[nk_size](p) +% off * p[].sizeof)
-{.pop ruleOn: "namedParams".}
 
 proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
     `type`: BufferAllocationType): pointer {.raises: [], tags: [],
@@ -1508,37 +1500,6 @@ proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T]; member: string): ptr 
 # ------------
 # Page element
 # ------------
-proc nkLinkPageElementIntoFreelist(ctx; elem: ptr nk_page_element)
-  {.raises: [], tags: [], contractual.} =
-  ## Link the element into list of items to free
-  ##
-  ## * ctx  - the Nuklear context
-  ## * elem - the page element which will be freed
-  # link table into freelist
-  if ctx.freelist == nil:
-    ctx.freelist = elem
-  else:
-    elem.next = ctx.freelist
-    ctx.freelist = elem
-
-proc nkFreePageElement(ctx; elem: ptr nk_page_element) {.raises: [], tags: [],
-  contractual.} =
-  ## Free memory used by the selected page element
-  ##
-  ## * ctx  - the Nuklear context
-  ## * elem - the page element which will be removed
-  # we have a pool so just add to free list
-  if ctx.use_pool:
-    nkLinkPageElementIntoFreelist(ctx = ctx, elem = elem)
-    return
-  # if possible remove last element from back of fixed memory buffer
-  let
-    elemEnd: pointer = elem + 1
-    bufferEnd: pointer = ctx.memory.memory.`ptr` + ctx.memory.size
-  if elemEnd == bufferEnd:
-    ctx.memory.size -= elem.sizeOf
-  else:
-    nkLinkPageElementIntoFreelist(ctx = ctx, elem = elem)
 
 # -----
 # Panel

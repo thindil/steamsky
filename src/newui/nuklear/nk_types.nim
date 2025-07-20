@@ -477,6 +477,18 @@ const
   nkUtfMax*: array[nkUtfSize + 1, nk_uint] = [0x10ffff, 0x7f, 0x7ff, 0xffff, 0x10ffff]
     ## The list of end UTF bytes
 
+
+{.push ruleOff: "namedParams".}
+template `+`*[T](p: ptr T; off: nk_size): ptr T =
+  ## Pointer artihmetic, adding
+  ##
+  ## * p   - the pointer to modify
+  ## * off - the value to add to the pointer
+  ##
+  ## Returns the new pointer moved by off.
+  cast[ptr type(p[])](cast[nk_size](p) +% off * p[].sizeof)
+{.pop ruleOn: "namedParams".}
+
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
 # ------------------------------------------------------------------
