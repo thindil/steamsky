@@ -20,7 +20,7 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, shipmodules, types]
+import ../[bases, config, game, shipmodules, shipscrew, types]
 import coreui, errordialog, header, messagesui, setui, table, themes
 
 proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
@@ -171,6 +171,26 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
               dialog = dialog)
         except:
           dialog = setError(message = "Can't add button with size.")
+        try:
+          addButton(label = modulesList[index].repairMaterial,
+              tooltip = "Show the module's info", data = index,
+              code = showInstallInfo, dialog = dialog)
+        except:
+          dialog = setError(message = "Can't add button with repair material.")
+        var cost: Natural = try:
+            modulesList[index].price
+          except:
+            dialog = setError(message = "Can't get cost.")
+            return
+        try:
+          countPrice(price = cost, traderIndex = findMember(order = talk))
+        except:
+          dialog = setError(message = "Can't count price.")
+        addButton(label = $cost, tooltip = "Show the module's info",
+            data = index, code = showInstallInfo, color = (if moneyIndex2 >
+            -1 and cost <= playerShip.cargo[
+            moneyIndex2].amount: tableTextColor else: redColor),
+            dialog = dialog)
       row.inc
       if row == gameSettings.listsLimit + 1:
         break
