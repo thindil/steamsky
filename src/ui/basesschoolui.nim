@@ -38,15 +38,15 @@ proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## SetSchoolSkills
-  let frameName = mainPaned & ".schoolframe.canvas.school"
-  var comboBox = frameName & ".setting.crew"
-  let memberIndex = try:
+  let frameName: string = mainPaned & ".schoolframe.canvas.school"
+  var comboBox: string = frameName & ".setting.crew"
+  let memberIndex: int = try:
       tclEval2(script = comboBox & " current").parseInt
     except:
       return showError(message = "Can't get the member's index")
-  var comboList = ""
+  var comboList: string = ""
   for index, skill in skillsList:
-    var skillLevel = 0
+    var skillLevel: Natural = 0
     for skill2 in playerShip.crew[memberIndex].skills:
       if skill2.index == index:
         skillLevel = skill2.level
@@ -58,8 +58,8 @@ proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
               skillLevel = skillLevel).strip) & "}")
   comboBox = frameName & ".setting.skill"
   let
-    oldComboList = tclEval2(script = comboBox & " cget -values")
-    spinBox = frameName & ".amountbox.amount"
+    oldComboList: string = tclEval2(script = comboBox & " cget -values")
+    spinBox: string = frameName & ".amountbox.amount"
   if oldComboList != comboList:
     tclEval(script = comboBox & " configure -values [list " & comboList & "]")
     tclEval(script = comboBox & " current 0")
@@ -83,8 +83,8 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ShowSchool
-  var schoolFrame = mainPaned & ".schoolframe"
-  let schoolCanvas = schoolFrame & ".canvas"
+  var schoolFrame: string = mainPaned & ".schoolframe"
+  let schoolCanvas: string = schoolFrame & ".canvas"
   if tclEval2(script = "winfo exists " & schoolCanvas) == "0":
     tclEval(script = """
       ttk::frame .gameframe.paned.schoolframe
@@ -177,9 +177,9 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
     showSkyMap(clear = true)
     return tclOk
   tclSetVar(varName = "gamestate", newValue = "crew")
-  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
-  var moneyLabel = schoolCanvas & ".school.money.moneylbl"
+  var moneyLabel: string = schoolCanvas & ".school.money.moneylbl"
   if moneyIndex2 > -1:
     tclEval(script = moneyLabel & " configure -text {You have } -style TLabel")
     moneyLabel = schoolCanvas & ".school.money.money"
@@ -193,10 +193,10 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid remove " & moneyLabel)
   schoolFrame = schoolCanvas & ".school"
   if argc == 1:
-    var comboList = ""
+    var comboList: string = ""
     for member in playerShip.crew:
       comboList.add(y = " " & member.name)
-    let comboBox = schoolCanvas & ".school.setting.crew"
+    let comboBox: string = schoolCanvas & ".school.setting.crew"
     tclEval(script = comboBox & " configure -values [list" & comboList & "]")
     tclEval(script = comboBox & " current 0")
   discard setSchoolSkillsCommand(clientData = clientData, interp = interp,
@@ -211,8 +211,8 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = schoolCanvas & " configure -scrollregion [list " & tclEval2(
       script = schoolCanvas & " bbox all") & "]")
   let
-    comboBox = schoolCanvas & ".school.costbox.amount"
-    trainButton = schoolCanvas & ".school.setting.train"
+    comboBox: string = schoolCanvas & ".school.costbox.amount"
+    trainButton: string = schoolCanvas & ".school.setting.train"
   tclEval(script = "bind " & comboBox & " <Tab> {focus " & trainButton & ";break}")
   showScreen(newScreenName = "schoolframe")
   tclEval(script = "focus -force " & trainButton)
@@ -222,7 +222,7 @@ proc getMemberIndex(): Natural {.raises: [], tags: [], contractual.} =
   ## Get the index in the player ship of the currently selected member
   ##
   ## Returns the crew member's index
-  let memberBox = mainPaned & ".schoolframe.canvas.school.setting.crew"
+  let memberBox: string = mainPaned & ".schoolframe.canvas.school.setting.crew"
   result = 0
   for member in playerShip.crew:
     if member.name == tclEval2(script = memberBox & " get"):
@@ -234,9 +234,9 @@ proc getSkillIndex(): Positive {.raises: [], tags: [], contractual.} =
   ##
   ## Returns the index of the skill
   let
-    skillBox = mainPaned & ".schoolframe.canvas.school.setting.skill"
-    comboBoxValue = tclEval2(script = skillBox & " get")
-    skillName = comboBoxValue[0 .. comboBoxValue.find(sub = ':') - 1]
+    skillBox: string = mainPaned & ".schoolframe.canvas.school.setting.skill"
+    comboBoxValue: string = tclEval2(script = skillBox & " get")
+    skillName: string = comboBoxValue[0 .. comboBoxValue.find(sub = ':') - 1]
   result = 1
   for index, skill in skillsList:
     if skill.name == skillName:
@@ -257,7 +257,7 @@ proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## TrainSkill
-  let amountBox = mainPaned & ".schoolframe.canvas.school." & tclGetVar(
+  let amountBox: string = mainPaned & ".schoolframe.canvas.school." & tclGetVar(
       varName = "traintype") & "box.amount"
   if tclEval2(script = amountBox & " get") == "0":
     return tclOk
@@ -300,7 +300,7 @@ proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
   if argv[2] == "":
     tclSetResult(value = "1")
     return tclOk
-  var amount = try:
+  var amount: Natural = try:
       ($argv[2]).parseInt
     except:
       tclSetResult(value = "0")
@@ -309,14 +309,14 @@ proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
     amount = 1
   elif amount > 100:
     amount = 100
-  var cost = try:
+  var cost: Natural = try:
       trainCost(memberIndex = getMemberIndex(), skillIndex = getSkillIndex()) * amount
     except:
       tclSetResult(value = "1")
       return showError(message = "Can't count cost of training.")
   let
-    comboBox = $argv[1]
-    label = tclEval2(script = "winfo parent " & comboBox) & ".cost"
+    comboBox: string = $argv[1]
+    label: string = tclEval2(script = "winfo parent " & comboBox) & ".cost"
   tclEval(script = label & " configure -text {" & $cost & " " & moneyName & "}")
   tclSetResult(value = "1")
   return tclOk
@@ -336,13 +336,13 @@ proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
   ## Tcl:
   ## UpdateSchoolSelectedCost
   let
-    moneyIndex2 = findItem(inventory = playerShip.cargo,
+    moneyIndex2: int = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
-    cost = try:
+    cost: Natural = try:
         trainCost(memberIndex = getMemberIndex(), skillIndex = getSkillIndex())
       except:
         return showError(message = "Can't get the training cost.")
-    amountBox = mainPaned & ".schoolframe.canvas.school.costbox.amount"
+    amountBox: string = mainPaned & ".schoolframe.canvas.school.costbox.amount"
   if moneyIndex2 > -1 and cost <= playerShip.cargo[moneyIndex2].amount:
     tclEval(script = amountBox & " configure -from " & $cost & " -to " &
         $playerShip.cargo[moneyIndex2].amount)
