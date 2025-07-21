@@ -650,6 +650,9 @@ proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
+  typesList = @["Any"]
+  typeIndex = 0
+  nameSearch = ""
   baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   setMoneyText(action = " to install anything", dialog = dialog)
   currentPage = 1
