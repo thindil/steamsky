@@ -86,48 +86,49 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state,
       options = hasOptions):
     return
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
+  # Show tab buttons
+  changeStyle(field = spacing, x = 0, y = 0):
+    changeStyle(field = buttonRounding, value = 0):
+      setLayoutRowDynamic(height = 30, cols = 2)
+      const tabs: array[2, string] = ["Install modules", "Remove modules"]
+      for index, tab in tabs:
+        try:
+          if currentTab == index:
+            changeStyle(src = active, dest = normal):
+              labelButton(title = tab):
+                discard
+          else:
+            labelButton(title = tab):
+              currentTab = index.cint
+              setModulesList(dialog = dialog)
+              if index == 0:
+                headers[4].label = "Cost"
+                hasOptions = true
+              else:
+                headers[4].label = "Price"
+                hasOptions = false
+        except:
+          dialog = setError(message = "Can't set the tabs buttons.")
+  # Show information about money owned by the player
+  setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+  for index, text in moneyText:
+    if index mod 2 == 0:
+      label(str = text)
+    else:
+      colorLabel(str = text, color = theme.colors[goldenColor])
+  # Show information about installed modules
+  setLayoutRowStatic(height = 30, cols = 5, ratio = modulesWidth)
+  label(str = modulesText[0])
+  colorLabel(str = modulesText[1], color = if modulesAmount.installed <
+      modulesAmount.max: theme.colors[greenColor] else: theme.colors[redColor])
+  label(str = modulesText[2])
+  colorLabel(str = modulesText[3], color = theme.colors[goldenColor])
+  label(str = modulesText[4])
+  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 80
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "ShipyardGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
-    changeStyle(field = spacing, x = 0, y = 0):
-      changeStyle(field = buttonRounding, value = 0):
-        setLayoutRowDynamic(height = 30, cols = 2)
-        const tabs: array[2, string] = ["Install modules", "Remove modules"]
-        for index, tab in tabs:
-          try:
-            if currentTab == index:
-              changeStyle(src = active, dest = normal):
-                labelButton(title = tab):
-                  discard
-            else:
-              labelButton(title = tab):
-                currentTab = index.cint
-                setModulesList(dialog = dialog)
-                if index == 0:
-                  headers[4].label = "Cost"
-                  hasOptions = true
-                else:
-                  headers[4].label = "Price"
-                  hasOptions = false
-          except:
-            dialog = setError(message = "Can't set the tabs buttons.")
-    # Show information about money owned by the player
-    setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
-    for index, text in moneyText:
-      if index mod 2 == 0:
-        label(str = text)
-      else:
-        colorLabel(str = text, color = theme.colors[goldenColor])
-    # Show information about installed modules
-    setLayoutRowStatic(height = 30, cols = 5, ratio = modulesWidth)
-    label(str = modulesText[0])
-    colorLabel(str = modulesText[1], color = if modulesAmount.installed <
-        modulesAmount.max: theme.colors[greenColor] else: theme.colors[redColor])
-    label(str = modulesText[2])
-    colorLabel(str = modulesText[3], color = theme.colors[goldenColor])
-    label(str = modulesText[4])
     # Show the list of modules
     addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortModules, dialog = dialog)
