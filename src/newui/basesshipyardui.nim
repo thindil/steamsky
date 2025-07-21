@@ -126,7 +126,19 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
   label(str = modulesText[4])
   # Show advanced options if needed
   if showOptions:
-    setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
+    setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.3, 0.5])
+    label(str = "Show modules:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show only modules of the selected type")
+    let newType = comboList(items = typesList,
+        selected = typeIndex, itemHeight = 25, x = 200, y = 150)
+    if newType != typeIndex:
+      typeIndex = newType
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Enter a name of a module which you looking for")
+    editString(text = nameSearch, maxLen = 64)
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
       80 - (if showOptions: 45 else: 0)
   setLayoutRowDynamic(height = tableHeight, cols = 1)
