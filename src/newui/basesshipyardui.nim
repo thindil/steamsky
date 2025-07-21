@@ -124,7 +124,11 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
   label(str = modulesText[2])
   colorLabel(str = modulesText[3], color = theme.colors[goldenColor])
   label(str = modulesText[4])
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 80
+  # Show advanced options if needed
+  if showOptions:
+    setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
+  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
+      80 - (if showOptions: 45 else: 0)
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "ShipyardGroup", flags = {windowNoFlags}):
     if dialog != none:
@@ -155,6 +159,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if currentRow < startRow:
         currentRow.inc
         continue
+      # Show modules to install
       if currentTab == 0:
         try:
           addButton(label = modulesList[index].name,
@@ -204,6 +209,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
             -1 and cost <= playerShip.cargo[
             moneyIndex2].amount: tableTextColor else: redColor),
             dialog = dialog)
+      # Show modules to remove
       else:
         try:
           if modulesList[playerShip.modules[index].protoIndex].mType ==
