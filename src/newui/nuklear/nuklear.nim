@@ -25,8 +25,8 @@
 
 import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
-import nk_button, nk_colors, nk_context, nk_layout, nk_math, nk_page, nk_panel,
-  nk_tooltip, nk_types, nk_utf, nk_widget
+import nk_alignment, nk_button, nk_colors, nk_context, nk_layout, nk_math,
+  nk_page, nk_panel, nk_tooltip, nk_types, nk_utf, nk_widget
 export nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types,
   nk_widget
 
@@ -1477,25 +1477,6 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds:
     # TODO
     # if style.draw_end != nil:
     #   style.draw_end(b = `out`, style.userdata)
-
-# ---------
-# Aligmnent
-# ---------
-proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T]; member: string): ptr typedesc[T]
-  {.raises: [], tags: [], contractual.} =
-  ## Get the container of the selected element
-  ##
-  ## * ptr    - the pointer which will be converted
-  ## * type   - the type to which the pointer will be converted
-  ## * member - the member of the container to extract
-  ##
-  ## Returns the pointer to the selected member of the container
-  if member.len == 0:
-    return cast[ptr `type`](`ptr`)
-  let obj: `type` = cast[`type`](`ptr`)
-  for objField, objVal in obj.fieldPairs:
-    if objField == member:
-      return cast[ptr `type`](objVal)
 
 # ------------
 # Page element
