@@ -650,7 +650,10 @@ proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  typesList = @["Any"]
+  typesList = @["Any", "Engines", "Cabins", "Cockpits", "Turrets", "Guns",
+      "Cargo bays", "Hulls", "Armors", "Battering rams", "Alchemy labs",
+      "Furnaces", "Water collectors", "Workshops", "Greenhouses",
+      "Medical rooms", "Harpoon guns", "Training rooms"]
   typeIndex = 0
   nameSearch = ""
   baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
