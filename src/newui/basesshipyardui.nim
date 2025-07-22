@@ -135,6 +135,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
         selected = typeIndex, itemHeight = 25, x = 200, y = 150)
     if newType != typeIndex:
       typeIndex = newType
+      setModulesList(dialog = dialog)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Enter a name of a module which you looking for")
@@ -161,13 +162,6 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     var currentRow, row: Positive = 1
     let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
     for index in modulesIndexes:
-      if currentTab == 0:
-        try:
-          if modulesList[index].price == 0 or skyBases[
-              baseIndex].reputation.level < modulesList[index].reputation:
-            continue
-        except:
-          dialog = setError(message = "Can't get proto module price.")
       if currentRow < startRow:
         currentRow.inc
         continue
