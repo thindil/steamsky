@@ -18,10 +18,72 @@
 ## Provides code related to installing or removing modules from the player's
 ## ship, like showing the lists of modules, buying or selling them, etc.
 
-import std/tables
+import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, config, game, shipmodules, shipscrew, types]
 import coreui, errordialog, header, messagesui, setui, table, themes
+
+type LocalModuleData = object
+  name: string
+  mType: string
+  size: Natural
+  material: string
+  price: Positive = 1
+  id: Natural
+
+proc sortModules(x, y: LocalModuleData): int {.raises: [], tags: [],
+    contractual.} =
+  ## Compare two modules and return which should go first, based on the sort
+  ## order of the modules
+  ##
+  ## * x - the first module to compare
+  ## * y - the second module to compare
+  ##
+  ## Returns 1 if the first module should go first, -1 if the second module
+  ## should go first.
+  case modulesSortOrder
+  of nameAsc:
+    if x.name < y.name:
+      return 1
+    return -1
+  of nameDesc:
+    if x.name > y.name:
+      return 1
+    return -1
+  of typeAsc:
+    if x.mType < y.mType:
+      return 1
+    return -1
+  of typeDesc:
+    if x.mType > y.mType:
+      return 1
+    return -1
+  of sizeAsc:
+    if x.size < y.size:
+      return 1
+    return -1
+  of sizeDesc:
+    if x.size > y.size:
+      return 1
+    return -1
+  of materialAsc:
+    if x.material < y.material:
+      return 1
+    return -1
+  of materialDesc:
+    if x.material > y.material:
+      return 1
+    return -1
+  of priceAsc:
+    if x.price < y.price:
+      return 1
+    return -1
+  of priceDesc:
+    if x.price > y.price:
+      return 1
+    return -1
+  of none:
+    return -1
 
 proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -167,6 +229,12 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
         continue
       # Show modules to install
       if currentTab == 0:
+        try:
+          if nameSearch.len > 0 and modulesList[index].name.toLowerAscii.find(
+              sub = nameSearch.toLowerAscii) == -1:
+            continue
+        except:
+          dialog = setError(message = "Can't check the module's name.")
         try:
           addButton(label = modulesList[index].name,
               tooltip = "Show the module's info", data = index,
