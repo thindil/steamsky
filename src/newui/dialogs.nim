@@ -150,7 +150,7 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Question", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
-        windowNoScrollbar}):
+        windowNoScrollbar, windowMovable}):
       setLayoutRowDynamic(height = 30 * questionData.lines, cols = 1)
       wrapLabel(str = questionData.question)
       setLayoutRowDynamic(height = 30, cols = 2)
@@ -270,7 +270,7 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = messageData.title, x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
-        windowNoScrollbar}):
+        windowNoScrollbar, windowMovable}):
       setLayoutRowDynamic(height = 30 * messageData.lines, cols = 1)
       wrapLabel(str = messageData.text)
       setLayoutRowDynamic(height = 30, cols = 1)
@@ -374,7 +374,7 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
     updateDialog(width = infoWidth, height = height)
     popup(pType = staticPopup, title = infoData.title, x = dialogX,
         y = dialogY, w = infoWidth, h = height, flags = {windowBorder,
-        windowTitle, windowNoScrollbar}):
+        windowTitle, windowNoScrollbar, windowMovable}):
       var index: Natural = 0
       for wAmount in infoData.widgetsAmount:
         if wAmount == 1:
@@ -512,7 +512,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = manipulateData.title, x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
-        windowNoScrollbar}):
+        windowNoScrollbar, windowMovable}):
       var baseCargoIndex, cargoIndex: int = -1
       if manipulateData.itemIndex < 0:
         baseCargoIndex = manipulateData.itemIndex.abs

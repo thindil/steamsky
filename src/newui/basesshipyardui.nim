@@ -146,6 +146,8 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
   for module in localModules:
     modulesIndexes.add(y = module.id)
 
+var moduleIndex: int = -1
+
 proc showInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected module information
@@ -155,7 +157,7 @@ proc showInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  moduleIndex = modulesIndexes[data]
 
 proc showRemoveInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -166,7 +168,7 @@ proc showRemoveInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  moduleIndex = modulesIndexes[data]
 
 var
   headers: array[5, HeaderData[ModulesSortOrders]] = [
