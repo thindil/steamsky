@@ -236,7 +236,7 @@ proc getSkillIndex(): Positive {.raises: [], tags: [], contractual.} =
   let
     skillBox: string = mainPaned & ".schoolframe.canvas.school.setting.skill"
     comboBoxValue: string = tclEval2(script = skillBox & " get")
-    skillName: string = comboBoxValue[0 .. comboBoxValue.find(sub = ':') - 1]
+    skillName: string = comboBoxValue[0..comboBoxValue.find(sub = ':') - 1]
   result = 1
   for index, skill in skillsList:
     if skill.name == skillName:
