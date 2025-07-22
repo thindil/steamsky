@@ -18,7 +18,7 @@
 ## Provides code related to installing or removing modules from the player's
 ## ship, like showing the lists of modules, buying or selling them, etc.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, config, game, shipmodules, shipscrew, types]
 import coreui, errordialog, header, messagesui, setui, table, themes
@@ -95,7 +95,56 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  if modulesSortOrder == sortAsc:
+    modulesSortOrder = sortDesc
+  else:
+    modulesSortOrder = sortAsc
+  var localModules: seq[LocalModuleData]
+  if currentTab == 0:
+    for index, module in modulesList:
+      if index notin modulesIndexes:
+        continue
+      var cost: Natural = module.price
+      try:
+        countPrice(price = cost, traderIndex = findMember(order = talk))
+      except:
+        dialog = setError(message = "Can't count install cost.")
+      if cost == 0:
+        cost = 1
+      try:
+        localModules.add(y = LocalModuleData(name: module.name,
+            mType: getModuleType(moduleIndex = index), size: (if module.mType ==
+            ModuleType.hull: module.maxValue else: module.size),
+            material: module.repairMaterial, price: cost, id: index))
+      except:
+        dialog = setError(message = "Can't add module to install.")
+  else:
+    for index, module in playerShip.modules:
+      let damage: float = 1.0 - (module.durability.float / module.maxDurability.float)
+      var cost: Natural = try:
+          modulesList[module.protoIndex].price - (modulesList[
+              module.protoIndex].price.float * damage).Natural
+        except:
+          dialog = setError(message = "Can't set price for module.")
+          return
+      if cost == 0:
+        cost = 1
+      try:
+        countPrice(price = cost, traderIndex = findMember(order = talk),
+            reduce = false)
+      except:
+        dialog = setError(message = "Can't count price for module.")
+      try:
+        localModules.add(y = LocalModuleData(name: module.name,
+            mType: getModuleType(moduleIndex = module.protoIndex),
+            size: modulesList[module.protoIndex].size, material: modulesList[
+            module.protoIndex].repairMaterial, price: cost, id: index))
+      except:
+        dialog = setError(message = "Can't add module to remove.")
+  localModules.sort(cmp = sortModules)
+  modulesIndexes = @[]
+  for module in localModules:
+    modulesIndexes.add(y = module.id)
 
 proc showInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
