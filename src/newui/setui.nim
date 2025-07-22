@@ -639,7 +639,18 @@ proc setModulesList*(dialog: var GameDialog) {.raises: [],
     for index in playerShip.modules.low .. playerShip.modules.high:
       modulesIndexes.add(y = index)
   else:
-    for index in modulesList.keys:
+    for index, module in modulesList:
+      try:
+        if typeIndex > 0 and typeIndex != modulesList[index].mType.ord:
+          continue
+      except:
+        dialog = setError(message = "Can't check a module's type.")
+      try:
+        if module.price == 0 or skyBases[baseIndex].reputation.level <
+            module.reputation:
+          continue
+      except:
+        dialog = setError(message = "Can't get proto module price.")
       modulesIndexes.add(y = index)
 
 proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
