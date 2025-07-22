@@ -25,8 +25,8 @@
 
 import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
-import nk_alignment, nk_button, nk_colors, nk_context, nk_layout, nk_math,
-  nk_page, nk_panel, nk_tooltip, nk_types, nk_utf, nk_widget
+import nk_button, nk_colors, nk_context, nk_layout, nk_math, nk_panel,
+  nk_tooltip, nk_types, nk_utf, nk_widget
 export nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types,
   nk_widget
 
@@ -1736,16 +1736,6 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.clip = new_nk_rect(x = clip.x, y = clip.y, w = clip.w, h = clip.h)
     return not (layout.flags and windowHidden.cint).nk_bool and not
       (layout.flags and windowMinimized.cint).nk_bool
-
-proc nkFreePanel(ctx; pan: PNkPanel) {.raises: [], tags: [], contractual.} =
-  ## Free memory used by the panel
-  ##
-  ## * ctx - the Nuklear context
-  ## * pan - the panel which memory will be freed
-  let
-    pd: ptr nk_page_data = nkContainerOf(`ptr` = pan, `type` = nk_page_data, member = "")
-    pe: ptr nk_page_element = nkContainerOf(`ptr` = pd, `type` = nk_page_element, member = "data")
-  nkFreePageElement(ctx = ctx, elem = pe)
 
 # ------
 # Popups

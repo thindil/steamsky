@@ -24,7 +24,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import contracts
-import nk_types, nk_context
+import nk_alignment, nk_context, nk_page, nk_types
 
 # ---------------------
 # Procedures parameters
@@ -119,3 +119,14 @@ proc nkPanelIsNonblock*(`type`: PanelType): bool {.raises: [], tags: [],
   ##
   ## Returns true if the panel's type is non-blocking, otherwise false.
   return (`type`.cint and panelSetNonBlock.cint).bool
+
+proc nkFreePanel*(ctx; pan: PNkPanel) {.raises: [], tags: [], contractual.} =
+  ## Free memory used by the panel
+  ##
+  ## * ctx - the Nuklear context
+  ## * pan - the panel which memory will be freed
+  let
+    pd: ptr nk_page_data = nkContainerOf(`ptr` = pan, `type` = nk_page_data, member = "")
+    pe: ptr nk_page_element = nkContainerOf(`ptr` = pd, `type` = nk_page_element, member = "data")
+  nkFreePageElement(ctx = ctx, elem = pe)
+
