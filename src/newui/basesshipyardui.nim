@@ -146,7 +146,10 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
   for module in localModules:
     modulesIndexes.add(y = module.id)
 
-var moduleIndex: int = -1
+var
+  moduleIndex: int = -1
+  compareList: seq[string] = @[]
+  compareIndex: Natural = 0
 
 proc setInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -157,6 +160,15 @@ proc setInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   moduleIndex = data
+  compareList = @[]
+  compareIndex = 0
+  try:
+    for module in playerShip.modules:
+      if modulesList[module.protoIndex].mType == modulesList[moduleIndex].mType:
+        compareList.add(y = module.name)
+  except:
+    dialog = setError(message = "Can't set module iterator.")
+    return
   dialog = moduleDialog
 
 proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
@@ -181,6 +193,13 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    if compareList.len > 0:
+      setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.4.cfloat, 0.6])
+      label(str = "Compare with:")
+      let newCompare = comboList(items = compareList,
+          selected = compareIndex, itemHeight = 25, x = 200, y = 150)
+      if newCompare != compareIndex:
+        compareIndex = newCompare
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
