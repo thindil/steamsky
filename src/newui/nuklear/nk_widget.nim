@@ -33,6 +33,17 @@ import nk_context, nk_types
 # ---------------------
 using ctx: PContext
 
+proc nkWidgetStateReset*(s: var nk_flags) {.raises: [], tags: [], contractual.} =
+  ## Reset the state of a widget. Internal use only
+  ##
+  ## * s - the state to reset
+  ##
+  ## Returns the modified parameter s
+  if (s and widgetStateModified.int).bool:
+    s = widgetStateInactive.int or widgetStateModified.int
+  else:
+    s = widgetStateInactive.ord
+
 proc checkbox*(label: string; checked: var bool): bool {.discardable, raises: [
     ], tags: [], contractual.} =
   ## Create a Nuklear checkbox widget
