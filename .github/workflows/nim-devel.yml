@@ -20,6 +20,9 @@ jobs:
         git config --global --add safe.directory /__w/steamsky/steamsky
         nimble debug -y
 
+    - name: Run the tests
+      run: others/tests.nims 30
+
     - name: Check with Nimalyzer
       run: /root/.nimble/bin/nimalyzer others/nimalyzer.cfg
 
@@ -29,9 +32,6 @@ jobs:
       with:
          name: nimalyzer.log
          path: nimalyzer.log
-
-    - name: Run the tests
-      run: others/tests.nims 30
 
   build_linux:
 
