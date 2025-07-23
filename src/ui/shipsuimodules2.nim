@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
+import contracts
 import ../[game, config, crafts, tk, types]
 import coreui, table
 
@@ -26,7 +27,7 @@ var
     ## The list of indexes of the installed modules
 
 proc getModuleInfo*(moduleIndex: Natural): string {.raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Get the additional information about the module
   ##
   ## * moduleIndex - the index of the module in the player's ship to show info
@@ -97,7 +98,7 @@ proc getModuleInfo*(moduleIndex: Natural): string {.raises: [],
     discard
 
 proc updateModulesInfo*(page: Positive = 1) {.raises: [],
-    tags: [RootEffect].} =
+    tags: [RootEffect], contractual.} =
   ## Update the list of the player's ship's installed modules
   ##
   ## * page - the number of the current page of the list to show
