@@ -21,7 +21,7 @@
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, config, game, shipmodules, shipscrew, types]
-import coreui, errordialog, header, messagesui, setui, table, themes
+import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 type LocalModuleData = object
   name: string
@@ -148,27 +148,65 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
 
 var moduleIndex: int = -1
 
-proc showInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+proc setInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected module information
   ##
   ## * data   - the index of the selected item
   ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
-  moduleIndex = modulesIndexes[data]
+  ## Returns the modified parameter dialog.
+  moduleIndex = data
+  dialog = moduleDialog
 
-proc showRemoveInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected module information
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  const
+    width: float = 400
+    height: float = 400
+
+  let
+    module: BaseModuleData = try:
+        modulesList[moduleIndex]
+      except:
+        dialog = setError(message = "Can't get module data.")
+        return
+    windowName: string = module.name
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 1)
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = windowName)
+
+proc setRemoveInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected module information
   ##
   ## * data   - the index of the selected item
   ## * dialog - the current in-game dialog displayed on the screen
   ##
+  ## Returns the modified parameter dialog.
+  moduleIndex = modulesIndexes[data]
+  dialog = moduleDialog
+
+proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected module information
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  moduleIndex = modulesIndexes[data]
+  if currentTab == 0:
+    showInstallInfo(dialog = dialog)
 
 var
   headers: array[5, HeaderData[ModulesSortOrders]] = [
@@ -289,13 +327,13 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
         try:
           addButton(label = modulesList[index].name,
               tooltip = "Show the module's info", data = index,
-              code = showInstallInfo, dialog = dialog)
+              code = setInstallInfo, dialog = dialog)
         except:
           dialog = setError(message = "Can't add button with name.")
         try:
           addButton(label = getModuleType(moduleIndex = index),
               tooltip = "Show the module's info", data = index,
-              code = showInstallInfo, dialog = dialog)
+              code = setInstallInfo, dialog = dialog)
         except:
           dialog = setError(message = "Can't add button with type.")
         let moduleSize: int = try:
@@ -306,7 +344,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
             0
         try:
           addButton(label = $moduleSize, tooltip = "Show the module's info",
-              data = index, code = showInstallInfo, color = (if modulesList[
+              data = index, code = setInstallInfo, color = (if modulesList[
               index].mType == ModuleType.hull: (if moduleSize <
               modulesAmount.max: redColor elif moduleSize >
               modulesAmount.max: greenColor else: tableTextColor) else: (
@@ -317,7 +355,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
         try:
           addButton(label = modulesList[index].repairMaterial,
               tooltip = "Show the module's info", data = index,
-              code = showInstallInfo, dialog = dialog)
+              code = setInstallInfo, dialog = dialog)
         except:
           dialog = setError(message = "Can't add button with repair material.")
         var cost: Natural = try:
@@ -330,7 +368,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
         except:
           dialog = setError(message = "Can't count price.")
         addButton(label = $cost, tooltip = "Show the module's info",
-            data = index, code = showInstallInfo, color = (if moneyIndex2 >
+            data = index, code = setInstallInfo, color = (if moneyIndex2 >
             -1 and cost <= playerShip.cargo[
             moneyIndex2].amount: tableTextColor else: redColor),
             dialog = dialog)
@@ -347,24 +385,24 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
           continue
         addButton(label = playerShip.modules[index].name,
             tooltip = "Show the module's info", data = index,
-            code = showRemoveInfo, dialog = dialog)
+            code = setRemoveInfo, dialog = dialog)
         try:
           addButton(label = getModuleType(moduleIndex = playerShip.modules[
               index].protoIndex), tooltip = "Show the module's info",
-              data = index, code = showRemoveInfo, dialog = dialog)
+              data = index, code = setRemoveInfo, dialog = dialog)
         except:
           dialog = setError(message = "Can't add button with player's ship module type.")
         try:
           addButton(label = $modulesList[playerShip.modules[
               index].protoIndex].size, tooltip = "Show the module's info",
-              data = index, code = showRemoveInfo, dialog = dialog)
+              data = index, code = setRemoveInfo, dialog = dialog)
         except:
           dialog = setError(message = "Can't add button with player's ship module size.")
         try:
           addButton(label = $modulesList[playerShip.modules[
               index].protoIndex].repairMaterial,
               tooltip = "Show the module's info", data = index,
-              code = showRemoveInfo, dialog = dialog)
+              code = setRemoveInfo, dialog = dialog)
         except:
           dialog = setError(message = "Can't add button with player's ship repair material.")
         let damage: float = 1.0 - (playerShip.modules[index].durability.float /
@@ -384,7 +422,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
         except:
           dialog = setError(message = "Can't count cost of player's ship module.")
         addButton(label = $cost, tooltip = "Show the module's info",
-            data = index, code = showRemoveInfo, dialog = dialog)
+            data = index, code = setRemoveInfo, dialog = dialog)
       row.inc
       if row == gameSettings.listsLimit + 1:
         break
