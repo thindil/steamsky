@@ -223,7 +223,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
     windowName: string = recruit.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowNoScrollbar}):
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     changeStyle(field = spacing, x = 0, y = 0):
       changeStyle(field = buttonRounding, value = 0):
         setLayoutRowDynamic(height = 30, cols = 4)
