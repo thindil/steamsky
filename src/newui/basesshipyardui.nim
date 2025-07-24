@@ -172,6 +172,9 @@ proc setInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     return
   dialog = moduleDialog
 
+proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [], tags: [], contractual.} =
+  discard
+
 proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected module information
@@ -216,6 +219,13 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
       colorLabel(str = $cost & " " & moneyName, color = theme.colors[goldenColor])
     else:
       colorLabel(str = $cost & " " & moneyName, color = theme.colors[redColor])
+    label(str = "Install time:")
+    try:
+      colorLabel(str = $modulesList[moduleIndex].installTime & " minutes",
+          color = theme.colors[goldenColor])
+    except:
+      dialog = setError(message = "Can't show the module's install time.")
+    setModuleInfo(dialog = dialog, installing = true)
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
