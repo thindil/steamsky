@@ -1121,6 +1121,12 @@ proc hasMouseClickInRect*(id: Buttons; rect: NimRect): bool {.raises: [], tags: 
   ## * rect - the rectangle in which the mouse button will be checked
   ##
   ## Returns true if the mouse button was checked in the selected rectangle, otherwise false
+  if ctx.input.addr == nil:
+    return false
+  let
+    buttons: array[Buttons, nk_mouse_button] = cast[array[Buttons, nk_mouse_button]](ctx.input.mouse.buttons)
+    btn: nk_mouse_button = buttons[id]
+  # Old working version
   proc nk_input_has_mouse_click_in_rect(i: ptr nk_input; id: Buttons; rect: nk_rect): nk_bool
     {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
