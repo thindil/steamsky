@@ -57,4 +57,7 @@ suite "Unit tests for events module":
       skyBases[2].population > 0
 
   test "Generating traders.":
-    generateTraders()
+    var traders: seq[Positive] = @[]
+    generateTraders(ships = traders)
+    check:
+      traders.len > 0
