@@ -172,8 +172,40 @@ proc setInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     return
   dialog = moduleDialog
 
-proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [], tags: [], contractual.} =
+proc setCabinInfo(dialog: var GameDialog; installing: bool) {.raises: [],
+    tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Set the information about the selected cabin to install or remove
+  ##
+  ## * dialog     - the current in-game dialog displayed on the screen
+  ## * installing - if true, show installation information, otherwise show
+  ##                removing info.
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   discard
+
+proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
+    tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Set the information about the selected module to install or remove
+  ##
+  ## * dialog     - the current in-game dialog displayed on the screen
+  ## * installing - if true, show installation information, otherwise show
+  ##                removing info.
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  var mType: ModuleType = ModuleType.any
+  if installing:
+    mType = try:
+        modulesList[moduleIndex].mType
+      except:
+        dialog = setError(message = "Can't get protomodule type")
+        return
+  case mType
+  of cabin:
+    setCabinInfo(dialog = dialog, installing = installing)
+  else:
+    discard
 
 proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
