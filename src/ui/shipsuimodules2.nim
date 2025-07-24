@@ -49,12 +49,12 @@ proc getModuleInfo*(moduleIndex: Natural): string {.raises: [],
     except:
       result = "No ammunition assigned, "
     if module.owner[0] == -1:
-      result.add(" no gunner.")
+      result.add(y = " no gunner.")
     else:
-      result.add(" " & playerShip.crew[module.owner[0]].name & " is gunner.")
+      result.add(y = " " & playerShip.crew[module.owner[0]].name & " is gunner.")
   of workshop:
     let recipeName = try:
-        getWorkshopRecipeName(moduleIndex)
+        getWorkshopRecipeName(workshop = moduleIndex)
       except:
         ""
     if recipeName.len > 0:
@@ -63,13 +63,13 @@ proc getModuleInfo*(moduleIndex: Natural): string {.raises: [],
       for owner in module.owner:
         if owner > -1:
           if hasWorkers:
-            result.add(", " & playerShip.crew[owner].name)
+            result.add(y = ", " & playerShip.crew[owner].name)
           else:
-            result.add(", workers: " & playerShip.crew[owner].name)
+            result.add(y = ", workers: " & playerShip.crew[owner].name)
           hasWorkers = true
       if not hasWorkers:
-        result.add(", no workers assigned")
-      result.add(".")
+        result.add(y = ", no workers assigned")
+      result.add(y = ".")
     else:
       result = "No crafting order."
   of engine:
@@ -83,13 +83,13 @@ proc getModuleInfo*(moduleIndex: Natural): string {.raises: [],
         for owner in module.owner:
           if owner > -1:
             if hasTrainees:
-              result.add(", " & playerShip.crew[owner].name)
+              result.add(y = ", " & playerShip.crew[owner].name)
             else:
-              result.add(", trainees: " & playerShip.crew[owner].name)
+              result.add(y = ", trainees: " & playerShip.crew[owner].name)
             hasTrainees = true
         if not hasTrainees:
-          result.add(", no trainees assigned")
-        result.add(".")
+          result.add(y = ", no trainees assigned")
+        result.add(y = ".")
       else:
         result = "Not set for training."
     except:
@@ -113,7 +113,7 @@ proc updateModulesInfo*(page: Positive = 1) {.raises: [],
   if modulesIndexes.len != playerShip.modules.len:
     modulesIndexes = @[]
     for index, _ in playerShip.modules:
-      modulesIndexes.add(index)
+      modulesIndexes.add(y = index)
   clearTable(modulesTable)
   let startRow = ((page - 1) * gameSettings.listsLimit) + 1
   var
