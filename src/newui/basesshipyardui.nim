@@ -120,7 +120,8 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
         dialog = setError(message = "Can't add module to install.")
   else:
     for index, module in playerShip.modules:
-      let damage: float = 1.0 - (module.durability.float / module.maxDurability.float)
+      let damage: float = 1.0 - (module.durability.float /
+          module.maxDurability.float)
       var cost: Natural = try:
           modulesList[module.protoIndex].price - (modulesList[
               module.protoIndex].price.float * damage).Natural
@@ -200,6 +201,21 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
           selected = compareIndex, itemHeight = 25, x = 200, y = 150)
       if newCompare != compareIndex:
         compareIndex = newCompare
+    setLayoutRowDynamic(height = 30, cols = 2)
+    label(str = "Install cost:")
+    var cost: Natural = try:
+        modulesList[moduleIndex].price
+      except:
+        dialog = setError(message = "Can't set the cost.")
+        return
+    try:
+      countPrice(price = cost, traderIndex = findMember(order = talk))
+    except:
+      dialog = setError(message = "Can't count the cost.")
+    if moneyIndex2 > -1 and cost <= playerShip.cargo[moneyIndex2].amount:
+      colorLabel(str = $cost & " " & moneyName, color = theme.colors[goldenColor])
+    else:
+      colorLabel(str = $cost & " " & moneyName, color = theme.colors[redColor])
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
