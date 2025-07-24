@@ -172,13 +172,17 @@ proc setInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     return
   dialog = moduleDialog
 
-proc setCabinInfo(dialog: var GameDialog; installing: bool) {.raises: [],
-    tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc setCabinInfo(dialog: var GameDialog; installing: bool;
+    shipModuleIndex: int; maxValue, maxOwners: Natural) {.raises: [], tags: [
+    WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Set the information about the selected cabin to install or remove
   ##
-  ## * dialog     - the current in-game dialog displayed on the screen
-  ## * installing - if true, show installation information, otherwise show
-  ##                removing info.
+  ## * dialog          - the current in-game dialog displayed on the screen
+  ## * installing      - if true, show installation information, otherwise show
+  ##                     removing info.
+  ## * shipModuleIndex - The index of the module in the player's ship to show
+  ## * maxValue        - The quality of the cabin
+  ## * maxOwners       - The maximum amount of owners of the cabin
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
@@ -194,16 +198,42 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  var mType: ModuleType = ModuleType.any
+  var
+    mType: ModuleType = ModuleType.any
+    shipModuleIndex: int = -1
+    maxValue, maxOwners: Natural = 0
   if installing:
     mType = try:
         modulesList[moduleIndex].mType
       except:
         dialog = setError(message = "Can't get protomodule type")
         return
+    maxValue = try:
+        modulesList[moduleIndex].maxValue
+      except:
+        dialog = setError(message = "Can't get protomodule max value")
+        return
+    maxOwners = try:
+        modulesList[moduleIndex].maxOwners
+      except:
+        dialog = setError(message = "Can't get protomodule max owners")
+        return
+    var moduleIterator: Natural = compareIndex + 1
+    for index, module in playerShip.modules:
+      try:
+        if modulesList[module.protoIndex].mType == mType:
+          moduleIterator.dec
+          if moduleIterator == 0:
+            shipModuleIndex = index
+            break
+      except:
+        dialog = setError(message = "Can't get ship module index")
+        return
   case mType
   of cabin:
-    setCabinInfo(dialog = dialog, installing = installing)
+    setCabinInfo(dialog = dialog, installing = installing,
+        shipModuleIndex = shipModuleIndex, maxValue = maxValue,
+        maxOwners = maxOwners)
   else:
     discard
 
