@@ -119,6 +119,10 @@ type
     ## The size of a base's population
     empty, small, medium, large
 
+  ObjectQuality* = enum
+    ## The quality of an item
+    poor, low, normal, good, excellent
+
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ItemsDurability* = range[0..101] ## The range of the items durability
