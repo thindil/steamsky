@@ -217,6 +217,32 @@ proc setCabinInfo(dialog: var GameDialog; installing: bool;
         colorLabel(str = "luxury (better)", color = theme.colors[greenColor])
       else:
         colorLabel(str = "luxury", color = theme.colors[goldenColor])
+  else:
+    case maxValue
+    of 0..29:
+      colorLabel(str = "minimal", color = theme.colors[goldenColor])
+    of 30..59:
+      colorLabel(str = "basic", color = theme.colors[goldenColor])
+    of 60..79:
+      colorLabel(str = "extended", color = theme.colors[goldenColor])
+    else:
+      colorLabel(str = "luxury", color = theme.colors[goldenColor])
+  label(str = "Max owners:")
+  if installing and shipModuleIndex > -1:
+    try:
+      if modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxOwners > maxOwners:
+        colorLabel(str = $maxOwners & " (less)", color = theme.colors[redColor])
+      elif modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxOwners < maxOwners:
+        colorLabel(str = $maxOwners & " (more)", color = theme.colors[greenColor])
+      else:
+        colorLabel(str = $maxOwners, color = theme.colors[goldenColor])
+    except:
+      dialog = setError(message = "Can't show module owners")
+      return
+  else:
+    colorLabel(str = $maxOwners, color = theme.colors[goldenColor])
 
 proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
