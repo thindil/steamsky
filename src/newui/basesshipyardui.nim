@@ -322,7 +322,31 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
   if weight > 0:
     label(str = "Weight:")
     if shipModuleIndex > -1:
-      discard
+      if weight > playerShip.modules[shipModuleIndex].weight:
+        colorLabel(str = $weight & " kg (heavier)", color = theme.colors[goldenColor])
+      elif weight < playerShip.modules[shipModuleIndex].weight:
+        colorLabel(str = $weight & " kg (lighter)", color = theme.colors[goldenColor])
+      else:
+        colorLabel(str = $weight & " kg", color = theme.colors[goldenColor])
+    else:
+      colorLabel(str = $weight & " kg", color = theme.colors[goldenColor])
+  if installing and shipModuleIndex > -1:
+    label(str = "Durability:")
+    if shipModuleIndex > -1:
+      try:
+        if playerShip.modules[shipModuleIndex].maxDurability > modulesList[
+            moduleIndex].durability:
+          colorLabel(str = "weaker", color = theme.colors[redColor])
+        elif playerShip.modules[shipModuleIndex].maxDurability < modulesList[
+            moduleIndex].durability:
+          colorLabel(str = "stronger", color = theme.colors[greenColor])
+        else:
+          colorLabel(str = "same", color = theme.colors[goldenColor])
+      except:
+        dialog = setError(message = "Can't show module durability")
+        return
+    else:
+      colorLabel(str = "same", color = theme.colors[goldenColor])
 
 proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -333,8 +357,8 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   const
-    width: float = 400
-    height: float = 400
+    width: float = 500
+    height: float = 500
 
   let
     module: BaseModuleData = try:
