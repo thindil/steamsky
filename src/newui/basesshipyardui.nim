@@ -186,7 +186,37 @@ proc setCabinInfo(dialog: var GameDialog; installing: bool;
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  label(str = "Quality:")
+  if installing and shipModuleIndex > -1:
+    case maxValue
+    of 0..29:
+      if playerShip.modules[shipModuleIndex].quality > maxValue:
+        colorLabel(str = "minimal (worse)", color = theme.colors[redColor])
+      elif playerShip.modules[shipModuleIndex].quality < maxValue:
+        colorLabel(str = "minimal (better)", color = theme.colors[greenColor])
+      else:
+        colorLabel(str = "minimal", color = theme.colors[goldenColor])
+    of 30..59:
+      if playerShip.modules[shipModuleIndex].quality > maxValue:
+        colorLabel(str = "basic (worse)", color = theme.colors[redColor])
+      elif playerShip.modules[shipModuleIndex].quality < maxValue:
+        colorLabel(str = "basic (better)", color = theme.colors[greenColor])
+      else:
+        colorLabel(str = "basic", color = theme.colors[goldenColor])
+    of 60..79:
+      if playerShip.modules[shipModuleIndex].quality > maxValue:
+        colorLabel(str = "extended (worse)", color = theme.colors[redColor])
+      elif playerShip.modules[shipModuleIndex].quality < maxValue:
+        colorLabel(str = "extended (better)", color = theme.colors[greenColor])
+      else:
+        colorLabel(str = "extended", color = theme.colors[goldenColor])
+    else:
+      if playerShip.modules[shipModuleIndex].quality > maxValue:
+        colorLabel(str = "luxury (worse)", color = theme.colors[redColor])
+      elif playerShip.modules[shipModuleIndex].quality < maxValue:
+        colorLabel(str = "luxury (better)", color = theme.colors[greenColor])
+      else:
+        colorLabel(str = "luxury", color = theme.colors[goldenColor])
 
 proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
