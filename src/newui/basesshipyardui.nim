@@ -357,7 +357,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   const
-    width: float = 500
+    width: float = 600
     height: float = 500
 
   let
@@ -367,6 +367,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't get module data.")
         return
     windowName: string = module.name
+  setDialog(x = windowWidth / 5, y = windowHeight / 9)
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
@@ -374,7 +375,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
       setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.4.cfloat, 0.6])
       label(str = "Compare with:")
       let newCompare = comboList(items = compareList,
-          selected = compareIndex, itemHeight = 25, x = 200, y = 150)
+          selected = compareIndex, itemHeight = 25, x = 300, y = 150)
       if newCompare != compareIndex:
         compareIndex = newCompare
     setLayoutRowDynamic(height = 30, cols = 2)
