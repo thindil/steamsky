@@ -257,7 +257,8 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
   var
     mType: ModuleType = ModuleType.any
     shipModuleIndex: int = -1
-    maxValue, maxOwners: Natural = 0
+    maxValue, maxOwners, weight: Natural = 0
+    size: Positive = 1
   if installing:
     mType = try:
         modulesList[moduleIndex].mType
@@ -268,6 +269,16 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
         modulesList[moduleIndex].maxValue
       except:
         dialog = setError(message = "Can't get protomodule max value")
+        return
+    size = try:
+        modulesList[moduleIndex].size
+      except:
+        dialog = setError(message = "Can't get protomodule size")
+        return
+    weight = try:
+        modulesList[moduleIndex].weight
+      except:
+        dialog = setError(message = "Can't get protomodule weight")
         return
     maxOwners = try:
         modulesList[moduleIndex].maxOwners
@@ -292,6 +303,26 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
         maxOwners = maxOwners)
   else:
     discard
+  if mType notin [ModuleType.hull, armor]:
+    label(str = "Size:")
+    var added: bool = false
+    if installing:
+      for module in playerShip.modules:
+        try:
+          if module.mType == ModuleType2.hull and size > modulesList[
+              module.protoIndex].value:
+            colorLabel(str = $size & " (need a bigger hull)", color = theme.colors[redColor])
+            added = true
+            break
+        except:
+          dialog = setError(message = "Can't show module's size")
+          return
+    if not added:
+      colorLabel(str = $size, color = theme.colors[goldenColor])
+  if weight > 0:
+    label(str = "Weight:")
+    if shipModuleIndex > -1:
+      discard
 
 proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
