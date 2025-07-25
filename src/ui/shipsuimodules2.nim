@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides various code related to showing the player's ship module's
+## information, like updating module's info, etc. Split from the
+## shipmodulesui module to avoid circular dependencies.
+
 import std/tables
 import contracts
 import ../[game, config, crafts, tk, types]
@@ -114,7 +118,7 @@ proc updateModulesInfo*(page: Positive = 1) {.raises: [],
     modulesIndexes = @[]
     for index, _ in playerShip.modules:
       modulesIndexes.add(y = index)
-  clearTable(modulesTable)
+  clearTable(table = modulesTable)
   let startRow = ((page - 1) * gameSettings.listsLimit) + 1
   var
     currentRow = 1
