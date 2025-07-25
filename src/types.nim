@@ -215,11 +215,13 @@ type
     ## * name       - The name of the item, if different than the default one
     ## * durability - The current durability of the item
     ## * price      - The price for which the item was bought
+    ## * quality    - The quality of the item
     protoIndex*: Natural = 0
     amount*: Positive = 1
     name*: string
     durability*: ItemsDurability = 100
     price*: Natural = 0
+    quality*: ObjectQuality = normal
 
   MobAttributeRecord* = object
     ## Used to store information about the crew member's attributes
