@@ -473,25 +473,32 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't check unique module.")
     setLayoutRowDynamic(height = 30, cols = 1)
     if moneyIndex2 == -1:
-      colorLabel(str = "You don't have any money to buy the module.", color = theme.colors[redColor])
+      colorLabel(str = "You don't have any money to buy the module.",
+          color = theme.colors[redColor])
     else:
       try:
         if playerShip.cargo[moneyIndex2].amount < cost:
-          colorLabel(str = "You don't have enough money to buy the module.", color = theme.colors[redColor])
+          colorLabel(str = "You don't have enough money to buy the module.",
+              color = theme.colors[redColor])
         elif hasUnique:
-          colorLabel(str = "Only one module of that type can be installed on the ship.", color = theme.colors[redColor])
+          colorLabel(str = "Only one module of that type can be installed on the ship.",
+              color = theme.colors[redColor])
         elif modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, hull}:
           if modulesList[moduleIndex].size > maxSize:
-            colorLabel(str = "The selected module is too big for your's ship's hull.", color = theme.colors[redColor])
+            colorLabel(str = "The selected module is too big for your's ship's hull.",
+                color = theme.colors[redColor])
           elif allSpace - usedSpace < modulesList[moduleIndex].size and
               modulesList[moduleIndex].mType != ModuleType.armor:
-            tclEval(script = eLabel & " configure -text {You don't have enough space in your ship's hull to install the module.}")
-          elif modulesList[moduleIndex].mType == ModuleType.hull and modulesList[
-              moduleIndex].maxValue < usedSpace:
-            tclEval(script = eLabel & " configure -text {The selected hull is too small to replace your current hull.}")
-          elif modulesList[moduleIndex].mType in {ModuleType.gun, harpoonGun} and
-              freeTurretIndex == -1:
-            tclEval(script = eLabel & " configure -text {You don't have a free turret to install the selected gun.}")
+            colorLabel(str = "You don't have enough space in your ship's hull to install the module.",
+                color = theme.colors[redColor])
+          elif modulesList[moduleIndex].mType == ModuleType.hull and
+              modulesList[moduleIndex].maxValue < usedSpace:
+            colorLabel(str = "The selected hull is too small to replace your current hull.",
+                color = theme.colors[redColor])
+          elif modulesList[moduleIndex].mType in {ModuleType.gun,
+              harpoonGun} and freeTurretIndex == -1:
+            colorLabel(str = "You don't have a free turret to install the selected gun.",
+                color = theme.colors[redColor])
       except:
         dialog = setError(message = "Can't set error label.")
     addCloseButton(dialog = dialog, isPopup = false)
