@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -24,7 +24,8 @@ import config, game, types
 
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
-    price: Natural = 0) {.raises: [], tags: [], contractual.} =
+    price: Natural = 0; quality: ObjectQuality = normal) {.raises: [], tags: [],
+    contractual.} =
   ## Updated the selected ship cargo, add or remove items to it
   ##
   ## * ship       - The ship which cargo will be updated
@@ -35,6 +36,7 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
   ## * cargoIndex - The ship cargo index of the item which will be modified. Can
   ##                be empty if protoIndex is set
   ## * price      - The price of the item which will be modified
+  ## * quality    - The quality of the item which will be modified
   ##
   ## Returns the modified ship parameter
   require:
@@ -43,7 +45,8 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     var itemIndex: int = -1
     if protoIndex > 0 and cargoIndex < 0:
       for index, item in ship.cargo:
-        if item.protoIndex == protoIndex and item.durability == durability:
+        if item.protoIndex == protoIndex and item.durability == durability and
+            item.quality == quality:
           itemIndex = index
           break
     else:
@@ -52,7 +55,7 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
       return
     if itemIndex == -1:
       ship.cargo.add(y = InventoryData(protoIndex: protoIndex, amount: amount,
-          name: "", durability: durability, price: price))
+          name: "", durability: durability, price: price, quality: quality))
       return
     let newAmount: int = ship.cargo[itemIndex].amount + amount
     if newAmount < 1:
@@ -69,7 +72,8 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     ship.cargo[itemIndex].amount = newAmount
     ship.cargo[itemIndex].price = price
 
-proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.raises: [KeyError], tags: [], contractual.} =
+proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.raises: [
+    KeyError], tags: [], contractual.} =
   ## Get the amount of free space in the selected ship's cargo
   ##
   ## * amount - the amount of space which will be taken or add from the current cargo
