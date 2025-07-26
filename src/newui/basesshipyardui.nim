@@ -311,7 +311,8 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
         try:
           if module.mType == ModuleType2.hull and size > modulesList[
               module.protoIndex].value:
-            colorLabel(str = $size & " (need a bigger hull)", color = theme.colors[redColor])
+            colorLabel(str = $size & " (need a bigger hull)",
+                color = theme.colors[redColor])
             added = true
             break
         except:
@@ -347,6 +348,30 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
         return
     else:
       colorLabel(str = "same", color = theme.colors[goldenColor])
+  if installing:
+    label(str = "Repair/Upgrade material:")
+    var
+      mAmount: Natural = 0
+      infoText: string = ""
+    for item in itemsList.values:
+      try:
+        if item.itemType == modulesList[moduleIndex].repairMaterial:
+          if mAmount > 0:
+            infoText.add(y = " or ")
+          infoText.add(y = item.name)
+          mAmount.inc
+      except:
+        dialog = setError(message = "Can't show repair material")
+        return
+    colorLabel(str = infoText, color = theme.colors[goldenColor])
+    label(str = "Repair/Upgrade skill:")
+    try:
+      colorLabel(str = skillsList[modulesList[moduleIndex].repairSkill].name &
+          "/" & attributesList[skillsList[modulesList[
+          moduleIndex].repairSkill].attribute].name, color = theme.colors[goldenColor])
+    except:
+      dialog = setError(message = "Can't show repair skill")
+      return
 
 proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -370,7 +395,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
   setDialog(x = windowWidth / 5, y = windowHeight / 9)
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+      flags = {windowBorder, windowTitle, windowMovable}):
     if compareList.len > 0:
       setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.4.cfloat, 0.6])
       label(str = "Compare with:")
