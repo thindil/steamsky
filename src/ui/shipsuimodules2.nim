@@ -20,15 +20,17 @@
 ## shipmodulesui module to avoid circular dependencies.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import ../[game, config, crafts, tk, types]
 import coreui, table
 
+{.push ruleOff: "varDeclared".}
 var
   modulesTable*: TableWidget
     ## The UI table with all the installed the player's ship's modules
-  modulesIndexes*: seq[Natural]
+  modulesIndexes*: seq[Natural] = @[]
     ## The list of indexes of the installed modules
+{.pop ruleOn: "varDeclared".}
 
 proc getModuleInfo*(moduleIndex: Natural): string {.raises: [],
     tags: [], contractual.} =
@@ -38,7 +40,7 @@ proc getModuleInfo*(moduleIndex: Natural): string {.raises: [],
   ##
   ## Returns the string with the additional information about the module or the
   ## empty string if no info is available
-  let module = playerShip.modules[moduleIndex]
+  let module: ModuleData = playerShip.modules[moduleIndex]
   case module.mType
   of gun:
     try:
@@ -57,13 +59,13 @@ proc getModuleInfo*(moduleIndex: Natural): string {.raises: [],
     else:
       result.add(y = " " & playerShip.crew[module.owner[0]].name & " is gunner.")
   of workshop:
-    let recipeName = try:
+    let recipeName: string = try:
         getWorkshopRecipeName(workshop = moduleIndex)
       except:
         ""
     if recipeName.len > 0:
       result = recipeName
-      var hasWorkers = false
+      var hasWorkers: bool = false
       for owner in module.owner:
         if owner > -1:
           if hasWorkers:
@@ -83,7 +85,7 @@ proc getModuleInfo*(moduleIndex: Natural): string {.raises: [],
     try:
       if module.trainedSkill > 0:
         result = "Set for training " & skillsList[module.trainedSkill].name
-        var hasTrainees = false
+        var hasTrainees: bool = false
         for owner in module.owner:
           if owner > -1:
             if hasTrainees:
@@ -107,8 +109,8 @@ proc updateModulesInfo*(page: Positive = 1) {.raises: [],
   ##
   ## * page - the number of the current page of the list to show
   let
-    shipCanvas = mainPaned & ".shipinfoframe.modules.canvas"
-    shipInfoFrame = shipCanvas & ".frame"
+    shipCanvas: string = mainPaned & ".shipinfoframe.modules.canvas"
+    shipInfoFrame: string = shipCanvas & ".frame"
   if modulesTable.rowHeight == 0:
     modulesTable = createTable(parent = shipInfoFrame, headers = @["Name",
         "Durability", "Additional info"], scrollbar = mainPaned &
@@ -119,10 +121,10 @@ proc updateModulesInfo*(page: Positive = 1) {.raises: [],
     for index, _ in playerShip.modules:
       modulesIndexes.add(y = index)
   clearTable(table = modulesTable)
-  let startRow = ((page - 1) * gameSettings.listsLimit) + 1
+  let startRow: Positive = ((page - 1) * gameSettings.listsLimit) + 1
   var
-    currentRow = 1
-    row = 2
+    currentRow: Positive = 1
+    row: Positive = 2
   for index in modulesIndexes:
     if currentRow < startRow:
       currentRow.inc
