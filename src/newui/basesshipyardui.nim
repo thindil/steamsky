@@ -372,6 +372,19 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     except:
       dialog = setError(message = "Can't show repair skill")
       return
+    try:
+      if modulesList[moduleIndex].unique:
+        colorLabel(str = " The module is unique. Only one module of that type can be installed on the ship.",
+            color = theme.colors[goldenColor])
+    except:
+      dialog = setError(message = "Can't show module unique info")
+      return
+    try:
+      if modulesList[moduleIndex].description.len > 0:
+        wrapLabel(str = modulesList[moduleIndex].description)
+    except:
+      dialog = setError(message = "Can't show module's description")
+      return
 
 proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
