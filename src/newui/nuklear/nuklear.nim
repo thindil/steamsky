@@ -1132,7 +1132,8 @@ proc hasMouseClickInRect*(id: Buttons; rect: NimRect): bool {.raises: [],
   return nkInbox(px = btn.clicked_pos.x, py = btn.clicked_pos.y, x = rect.x,
     y = rect.y, w = rect.w, h = rect.h)
 
-proc hasMouseClickDownInRect*(id: Buttons; rect: nk_rect; down: nk_bool): bool {.raises: [], tags: [], contractual.} =
+proc hasMouseClickDownInRect*(id: Buttons; rect: nk_rect; down: nk_bool): bool
+  {.raises: [], tags: [], contractual.} =
   ## Check if the mouse button is clicked down in the selected rectangle
   ##
   ## * id   - the mouse button which will be checked
@@ -1140,10 +1141,14 @@ proc hasMouseClickDownInRect*(id: Buttons; rect: nk_rect; down: nk_bool): bool {
   ## * down - if true, the button is clicked down
   ##
   ## Returns true if the mouse button was checked in the selected rectangle, otherwise false
-  proc nk_input_has_mouse_click_down_in_rect(i: ptr nk_input; id: Buttons; rect: nk_rect; down: nk_bool): nk_bool
-    {.importc, nodecl, raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  return nk_input_has_mouse_click_down_in_rect(i = ctx.input.addr, id = id, rect = rect, down = down)
+  if ctx.input.addr == nil:
+    return false
+  let
+    buttons: array[Buttons, nk_mouse_button] =
+      cast[array[Buttons, nk_mouse_button]](ctx.input.mouse.buttons)
+    btn: nk_mouse_button = buttons[id]
+  return hasMouseClickInRect(id = id, rect = NimRect(x: rect.x, y: rect.y,
+    w: rect.w, h: rect.h)) and btn.down == down
 
 proc isMousePressed*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
   ## Check if the selected mouse button is pressed now
