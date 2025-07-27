@@ -372,6 +372,7 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     except:
       dialog = setError(message = "Can't show repair skill")
       return
+    setLayoutRowDynamic(height = 30, cols = 1)
     try:
       if modulesList[moduleIndex].unique:
         colorLabel(str = " The module is unique. Only one module of that type can be installed on the ship.",
@@ -381,7 +382,6 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
       return
     try:
       if modulesList[moduleIndex].description.len > 0:
-        setLayoutRowDynamic(height = 30, cols = 1)
         label(str = "")
         setLayoutRowDynamic(height = 90, cols = 1)
         wrapLabel(str = modulesList[moduleIndex].description)
@@ -471,36 +471,37 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
           break
       except:
         dialog = setError(message = "Can't check unique module.")
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = 60, cols = 1)
     if moneyIndex2 == -1:
-      colorLabel(str = "You don't have any money to buy the module.",
+      colorWrapLabel(str = "You don't have any money to buy the module.",
           color = theme.colors[redColor])
     else:
       try:
         if playerShip.cargo[moneyIndex2].amount < cost:
-          colorLabel(str = "You don't have enough money to buy the module.",
+          colorWrapLabel(str = "You don't have enough money to buy the module.",
               color = theme.colors[redColor])
         elif hasUnique:
-          colorLabel(str = "Only one module of that type can be installed on the ship.",
+          colorWrapLabel(str = "Only one module of that type can be installed on the ship.",
               color = theme.colors[redColor])
         elif modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, hull}:
           if modulesList[moduleIndex].size > maxSize:
-            colorLabel(str = "The selected module is too big for your's ship's hull.",
+            colorWrapLabel(str = "The selected module is too big for your's ship's hull.",
                 color = theme.colors[redColor])
           elif allSpace - usedSpace < modulesList[moduleIndex].size and
               modulesList[moduleIndex].mType != ModuleType.armor:
-            colorLabel(str = "You don't have enough space in your ship's hull to install the module.",
+            colorWrapLabel(str = "You don't have enough space in your ship's hull to install the module.",
                 color = theme.colors[redColor])
           elif modulesList[moduleIndex].mType == ModuleType.hull and
               modulesList[moduleIndex].maxValue < usedSpace:
-            colorLabel(str = "The selected hull is too small to replace your current hull.",
+            colorWrapLabel(str = "The selected hull is too small to replace your current hull.",
                 color = theme.colors[redColor])
           elif modulesList[moduleIndex].mType in {ModuleType.gun,
               harpoonGun} and freeTurretIndex == -1:
-            colorLabel(str = "You don't have a free turret to install the selected gun.",
+            colorWrapLabel(str = "You don't have a free turret to install the selected gun.",
                 color = theme.colors[redColor])
       except:
         dialog = setError(message = "Can't set error label.")
+    setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
