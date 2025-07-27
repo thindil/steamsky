@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -407,7 +407,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
         for modData in module.findAll(tag = "data"):
           case dataIndex
           of 1:
-            installedModules = modData.attr(name = "value").parseInt - 1
+            installedModules = modData.attr(name = "value").parseInt
           of 2:
             maxModules = modData.attr(name = "value").parseInt
           else:
