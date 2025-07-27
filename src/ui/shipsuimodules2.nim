@@ -44,10 +44,9 @@ proc getModuleInfo*(moduleIndex: Natural): string {.raises: [],
   case module.mType
   of gun:
     try:
-      if module.ammoIndex in 0 ..
-          playerShip.cargo.high and itemsList[playerShip.cargo[
-              module.ammoIndex].protoIndex].itemType == itemsTypesList[
-              modulesList[module.protoIndex].value - 1]:
+      if module.ammoIndex in 0..playerShip.cargo.high and itemsList[
+          playerShip.cargo[module.ammoIndex].protoIndex].itemType ==
+          itemsTypesList[modulesList[module.protoIndex].value - 1]:
         result = "Uses " & itemsList[playerShip.cargo[
             module.ammoIndex].protoIndex].name & ", "
       else:
