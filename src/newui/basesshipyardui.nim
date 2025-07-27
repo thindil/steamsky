@@ -172,6 +172,47 @@ proc setInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     return
   dialog = moduleDialog
 
+proc setHullInfo(dialog: var GameDialog; installing: bool;
+  shipModuleIndex: int; value, maxValue: Natural) {.raises: [],
+  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show information about the selected hull module
+  ##
+  ## * installing      - If true, player looking at installing modules list
+  ## * shipModuleIndex - The index of the module in the player's ship to show
+  ## * value           - The max size of the modules which can be installed
+  ## * maxValue        - The amount of modules which can be installed
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  var moduleLabel: string = ""
+  if installing:
+    setLayoutRowDynamic(height = 30, cols = 1)
+    colorLabel(str = "Ship hull can be only replaced.", color = theme.colors[goldenColor])
+    setLayoutRowDynamic(height = 30, cols = 2)
+    label(str = "Modules space:")
+    if maxValue < playerShip.modules[shipModuleIndex].maxModules:
+      colorLabel(str = $maxValue & " (smaller)", color = theme.colors[redColor])
+    elif maxValue > playerShip.modules[shipModuleIndex].maxModules:
+      colorLabel(str = $maxValue & " (bigger)", color = theme.colors[greenColor])
+    else:
+      colorLabel(str = $maxValue, color = theme.colors[goldenColor])
+    label(str = "Max module size:")
+    try:
+      if value < modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].value:
+        tclEval(script = moduleLabel & " configure -text {" & $value & " (smaller)} -style Headerred.TLabel")
+      elif value > modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].value:
+        tclEval(script = moduleLabel & " configure -text {" & $value & " (bigger)} -style Headergreen.TLabel")
+      else:
+        discard tclEval(script = moduleLabel & " configure -text {" & $value & "} -style Golden.TLabel")
+    except:
+      showError(message = "Can't show module size")
+      return
+    if newInfo:
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+      row.inc
+
 proc setCabinInfo(dialog: var GameDialog; installing: bool;
     shipModuleIndex: int; maxValue, maxOwners: Natural) {.raises: [], tags: [
     WriteIOEffect, TimeEffect, RootEffect], contractual.} =
