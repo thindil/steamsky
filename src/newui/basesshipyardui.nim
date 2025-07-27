@@ -172,9 +172,9 @@ proc setInstallInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     return
   dialog = moduleDialog
 
-proc setHullInfo(dialog: var GameDialog; installing: bool;
-  shipModuleIndex: int; value, maxValue: Natural) {.raises: [],
-  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc setHullInfo(dialog: var GameDialog; installing: bool; shipModuleIndex: int;
+    value, maxValue: Natural) {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect], contractual.} =
   ## Show information about the selected hull module
   ##
   ## * installing      - If true, player looking at installing modules list
@@ -184,7 +184,6 @@ proc setHullInfo(dialog: var GameDialog; installing: bool;
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  var moduleLabel: string = ""
   if installing:
     setLayoutRowDynamic(height = 30, cols = 1)
     colorLabel(str = "Ship hull can be only replaced.", color = theme.colors[goldenColor])
@@ -200,18 +199,15 @@ proc setHullInfo(dialog: var GameDialog; installing: bool;
     try:
       if value < modulesList[playerShip.modules[
           shipModuleIndex].protoIndex].value:
-        tclEval(script = moduleLabel & " configure -text {" & $value & " (smaller)} -style Headerred.TLabel")
+        colorLabel(str = $value & " (smaller)", color = theme.colors[redColor])
       elif value > modulesList[playerShip.modules[
           shipModuleIndex].protoIndex].value:
-        tclEval(script = moduleLabel & " configure -text {" & $value & " (bigger)} -style Headergreen.TLabel")
+        colorLabel(str = $value & " (bigger)", color = theme.colors[greenColor])
       else:
-        discard tclEval(script = moduleLabel & " configure -text {" & $value & "} -style Golden.TLabel")
+        colorLabel(str = $value, color = theme.colors[goldenColor])
     except:
-      showError(message = "Can't show module size")
+      dialog = setError(message = "Can't show module size")
       return
-    if newInfo:
-      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
-      row.inc
 
 proc setCabinInfo(dialog: var GameDialog; installing: bool;
     shipModuleIndex: int; maxValue, maxOwners: Natural) {.raises: [], tags: [
@@ -298,7 +294,7 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
   var
     mType: ModuleType = ModuleType.any
     shipModuleIndex: int = -1
-    maxValue, maxOwners, weight: Natural = 0
+    maxValue, maxOwners, weight, value: Natural = 0
     size: Positive = 1
   if installing:
     mType = try:
@@ -310,6 +306,11 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
         modulesList[moduleIndex].maxValue
       except:
         dialog = setError(message = "Can't get protomodule max value")
+        return
+    value = try:
+        modulesList[moduleIndex].value
+      except:
+        dialog = setError(message = "Can't get protomodule value")
         return
     size = try:
         modulesList[moduleIndex].size
@@ -338,6 +339,9 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
         dialog = setError(message = "Can't get ship module index")
         return
   case mType
+  of hull:
+    setHullInfo(dialog = dialog, installing = installing,
+        shipModuleIndex = shipModuleIndex, value = value, maxValue = maxValue)
   of cabin:
     setCabinInfo(dialog = dialog, installing = installing,
         shipModuleIndex = shipModuleIndex, maxValue = maxValue,
