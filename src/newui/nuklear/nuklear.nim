@@ -1132,7 +1132,7 @@ proc hasMouseClickInRect*(id: Buttons; rect: NimRect): bool {.raises: [],
   return nkInbox(px = btn.clicked_pos.x, py = btn.clicked_pos.y, x = rect.x,
     y = rect.y, w = rect.w, h = rect.h)
 
-proc hasMouseClickDownInRect*(id: Buttons; rect: nk_rect; down: nk_bool): bool
+proc hasMouseClickDownInRect*(id: Buttons; rect: NimRect; down: bool): bool
   {.raises: [], tags: [], contractual.} =
   ## Check if the mouse button is clicked down in the selected rectangle
   ##
@@ -1254,7 +1254,7 @@ proc nkButtonBehavior(state: var nk_flags; r: NimRect; i: ptr nk_input;
     state = widgetStateHovered.nk_flags
     if isMouseDown(id = left):
       state = widgetStateActive.nk_flags
-      if hasMouseClickDownInRect(id = left, rect = nk_rect(x: r.x, y: r.y, w: r.w, h: r.h), down = nkTrue):
+      if hasMouseClickDownInRect(id = left, rect = r, down = nkTrue):
         if behavior != default:
           result = isMouseDown(id = left)
         else:
@@ -1524,7 +1524,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     if (win.flags and windowMovable.cint) == 1 and (win.flags and
         windowRom.cint) != 1:
       # calculate draggable window space
-      var header: nk_rect = nk_rect(x: win.bounds.x, y: win.bounds.y,
+      var header: NimRect = NimRect(x: win.bounds.x, y: win.bounds.y,
           w: win.bounds.w, h: 0)
       if nkPanelHasHeader(flags = win.flags, title = title):
         header.h = font.height + 2.0 * style.window.header.padding.y
