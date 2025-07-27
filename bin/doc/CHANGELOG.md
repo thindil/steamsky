@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Reading amount of installed modules on the player's ship from saved game
+
 ## [11.0.3] - 2025-07-20
 
 ### Fixed
