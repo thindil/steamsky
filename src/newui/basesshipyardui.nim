@@ -177,6 +177,7 @@ proc setHullInfo(dialog: var GameDialog; installing: bool; shipModuleIndex: int;
     RootEffect], contractual.} =
   ## Show information about the selected hull module
   ##
+  ## * dialog          - the current in-game dialog displayed on the screen
   ## * installing      - If true, player looking at installing modules list
   ## * shipModuleIndex - The index of the module in the player's ship to show
   ## * value           - The max size of the modules which can be installed
@@ -208,6 +209,39 @@ proc setHullInfo(dialog: var GameDialog; installing: bool; shipModuleIndex: int;
     except:
       dialog = setError(message = "Can't show module size")
       return
+
+proc setEngineInfo(dialog: var GameDialog; installing: bool;
+  shipModuleIndex: int; value, maxValue: Natural) {.raises: [],
+  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show information about the selected engine module
+  ##
+  ## * dialog          - the current in-game dialog displayed on the screen
+  ## * installing      - If true, player looking at installing modules list
+  ## * shipModuleIndex - The index of the module in the player's ship to show
+  ## * value           - The power of the engime
+  ## * maxValue        - The fuel usage of the engine
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  label(str = "Max power:")
+  if installing and shipModuleIndex > -1:
+    if maxValue < playerShip.modules[shipModuleIndex].power:
+      colorLabel(str = $maxValue & " (weaker)", color = theme.colors[redColor])
+    elif maxValue > playerShip.modules[shipModuleIndex].power:
+      colorLabel(str = $maxValue & " (stronger)", color = theme.colors[greenColor])
+    else:
+      colorLabel(str = $maxValue, color = theme.colors[goldenColor])
+    label(str = "Fuel usage:")
+    if value < playerShip.modules[shipModuleIndex].fuelUsage:
+      colorLabel(str = $value & " (less)", color = theme.colors[greenColor])
+    elif value > playerShip.modules[shipModuleIndex].fuelUsage:
+      colorLabel(str = $value & " (more)", color = theme.colors[redColor])
+    else:
+      colorLabel(str = $value, color = theme.colors[goldenColor])
+  else:
+    colorLabel(str = $maxValue, color = theme.colors[goldenColor])
+    label(str = "Fuel usage:")
+    colorLabel(str = $value, color = theme.colors[goldenColor])
 
 proc setCabinInfo(dialog: var GameDialog; installing: bool;
     shipModuleIndex: int; maxValue, maxOwners: Natural) {.raises: [], tags: [
@@ -341,6 +375,9 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
   case mType
   of hull:
     setHullInfo(dialog = dialog, installing = installing,
+        shipModuleIndex = shipModuleIndex, value = value, maxValue = maxValue)
+  of engine:
+    setEngineInfo(dialog = dialog, installing = installing,
         shipModuleIndex = shipModuleIndex, value = value, maxValue = maxValue)
   of cabin:
     setCabinInfo(dialog = dialog, installing = installing,
