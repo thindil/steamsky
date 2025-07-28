@@ -243,6 +243,35 @@ proc setEngineInfo(dialog: var GameDialog; installing: bool;
     label(str = "Fuel usage:")
     colorLabel(str = $value, color = theme.colors[goldenColor])
 
+proc setCargoInfo(dialog: var GameDialog; installing: bool;
+  shipModuleIndex: int; maxValue: Natural) {.raises: [],
+  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show information about the selected cargo module
+  ##
+  ## * dialog          - the current in-game dialog displayed on the screen
+  ## * installing      - If true, player looking at installing modules list
+  ## * shipModuleIndex - The index of the module in the player's ship to show
+  ## * maxValue        - The max capacity of the cargo
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  label(str = "Max cargo:")
+  if installing and shipModuleIndex > -1:
+    try:
+      if maxValue > modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxValue:
+        colorLabel(str = $maxValue & " (bigger)", color = theme.colors[greenColor])
+      elif maxValue < modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxValue:
+        colorLabel(str = $maxValue & " (smaller)", color = theme.colors[redColor])
+      else:
+        colorLabel(str = $maxValue, color = theme.colors[goldenColor])
+    except:
+      dialog = setError(message = "Can't show module weight")
+      return
+  else:
+    colorLabel(str = $maxValue, color = theme.colors[goldenColor])
+
 proc setCabinInfo(dialog: var GameDialog; installing: bool;
     shipModuleIndex: int; maxValue, maxOwners: Natural) {.raises: [], tags: [
     WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -379,6 +408,9 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
   of engine:
     setEngineInfo(dialog = dialog, installing = installing,
         shipModuleIndex = shipModuleIndex, value = value, maxValue = maxValue)
+  of cargo:
+    setCargoInfo(dialog = dialog, installing = installing,
+      shipModuleIndex = shipModuleIndex, maxValue = maxValue)
   of cabin:
     setCabinInfo(dialog = dialog, installing = installing,
         shipModuleIndex = shipModuleIndex, maxValue = maxValue,
