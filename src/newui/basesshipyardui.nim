@@ -344,6 +344,35 @@ proc setCabinInfo(dialog: var GameDialog; installing: bool;
   else:
     colorLabel(str = $maxOwners, color = theme.colors[goldenColor])
 
+proc setWorkshopInfo(dialog: var GameDialog; installing: bool;
+  shipModuleIndex: int; maxOwners: Natural) {.raises: [],
+  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show information about the selected workshop module
+  ##
+  ## * dialog          - the current in-game dialog displayed on the screen
+  ## * installing      - If true, player looking at installing modules list
+  ## * shipModuleIndex - The index of the module in the player's ship to show
+  ## * maxOwners       - The maximum amount of workers in the workshop
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  label(str = "Max workers:")
+  if installing and shipModuleIndex > -1:
+    try:
+      if modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxOwners > maxOwners:
+        colorLabel(str = $maxOwners & " (less)", color = theme.colors[redColor])
+      elif modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxOwners < maxOwners:
+        colorLabel(str = $maxOwners & " (more)", color = theme.colors[greenColor])
+      else:
+        colorLabel(str = $maxOwners, color = theme.colors[goldenColor])
+    except:
+      dialog = setError(message = "Can't show module workers")
+      return
+  else:
+    colorLabel(str = $maxOwners, color = theme.colors[goldenColor])
+
 proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Set the information about the selected module to install or remove
@@ -415,6 +444,9 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     setCabinInfo(dialog = dialog, installing = installing,
         shipModuleIndex = shipModuleIndex, maxValue = maxValue,
         maxOwners = maxOwners)
+  of alchemyLab..greenhouse:
+    setWorkshopInfo(dialog = dialog, installing = installing,
+      shipModuleIndex = shipModuleIndex, maxOwners = maxOwners)
   else:
     discard
   if mType notin [ModuleType.hull, armor]:
