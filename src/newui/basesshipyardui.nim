@@ -432,16 +432,13 @@ proc setGunInfo(dialog: var GameDialog; installing: bool;
           else:
             colorLabel(str = $(speed.abs) & " rounds", color = theme.colors[goldenColor])
       except:
-        dialog= setError(message = "Can't show fire rate")
+        dialog = setError(message = "Can't show fire rate")
         return
     else:
       if speed > 0:
-        tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
+        colorLabel(str = $speed & "/round", color = theme.colors[goldenColor])
       else:
-        tclEval(script = moduleLabel & " configure -text {" & $(speed.abs) & " rounds} -style Golden.TLabel")
-    if newInfo:
-      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
-      row.inc
+        colorLabel(str = $(speed.abs) & " rounds", color = theme.colors[goldenColor])
 
 proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -455,7 +452,7 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
   ## happened.
   var
     mType: ModuleType = ModuleType.any
-    shipModuleIndex: int = -1
+    shipModuleIndex, speed: int = -1
     maxValue, maxOwners, weight, value: Natural = 0
     size: Positive = 1
   if installing:
@@ -489,6 +486,11 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
       except:
         dialog = setError(message = "Can't get protomodule max owners")
         return
+    speed = try:
+        modulesList[moduleIndex].speed
+      except:
+        dialog = setError(message = "Can't get protomodule speed")
+        return
     var moduleIterator: Natural = compareIndex + 1
     for index, module in playerShip.modules:
       try:
@@ -517,6 +519,10 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
   of alchemyLab..greenhouse:
     setWorkshopInfo(dialog = dialog, installing = installing,
       shipModuleIndex = shipModuleIndex, maxOwners = maxOwners)
+  of gun, harpoonGun:
+    setGunInfo(dialog = dialog, installing = installing,
+      shipModuleIndex = shipModuleIndex, speed = speed, value = value,
+      maxValue = maxValue, mType = mType)
   else:
     discard
   if mType notin [ModuleType.hull, armor]:
