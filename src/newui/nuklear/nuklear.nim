@@ -25,10 +25,10 @@
 
 import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
-import nk_button, nk_colors, nk_context, nk_layout, nk_math, nk_panel,
-  nk_tooltip, nk_types, nk_utf, nk_widget
-export nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types,
-  nk_widget
+import nk_button, nk_colors, nk_context, nk_input, nk_layout, nk_math,
+  nk_panel, nk_tooltip, nk_types, nk_utf, nk_widget
+export nk_button, nk_colors, nk_context, nk_input, nk_layout, nk_tooltip,
+  nk_types, nk_widget
 
 ## Provides code for Nuklear binding
 
@@ -1113,42 +1113,6 @@ proc isKeyPressed*(key: Keys): bool {.raises: [], tags: [], contractual.} =
       key: Keys): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   return nk_input_is_key_pressed(i = ctx.input.addr, key = key)
-
-proc hasMouseClickInRect*(id: Buttons; rect: NimRect): bool {.raises: [],
-  tags: [], contractual.} =
-  ## Check if the mouse button was clicked in the selected rectangle
-  ##
-  ## * id   - the mouse button which will be checked
-  ## * rect - the rectangle in which the mouse button will be checked
-  ##
-  ## Returns true if the mouse button was checked in the selected rectangle,
-  ## otherwise false
-  if ctx.input.addr == nil:
-    return false
-  let
-    buttons: array[Buttons, nk_mouse_button] =
-      cast[array[Buttons, nk_mouse_button]](ctx.input.mouse.buttons)
-    btn: nk_mouse_button = buttons[id]
-  return nkInbox(px = btn.clicked_pos.x, py = btn.clicked_pos.y, x = rect.x,
-    y = rect.y, w = rect.w, h = rect.h)
-
-proc hasMouseClickDownInRect*(id: Buttons; rect: NimRect; down: bool): bool
-  {.raises: [], tags: [], contractual.} =
-  ## Check if the mouse button is clicked down in the selected rectangle
-  ##
-  ## * id   - the mouse button which will be checked
-  ## * rect - the rectangle in which the mouse button will be checked
-  ## * down - if true, the button is clicked down
-  ##
-  ## Returns true if the mouse button was checked in the selected rectangle, otherwise false
-  if ctx.input.addr == nil:
-    return false
-  let
-    buttons: array[Buttons, nk_mouse_button] =
-      cast[array[Buttons, nk_mouse_button]](ctx.input.mouse.buttons)
-    btn: nk_mouse_button = buttons[id]
-  return hasMouseClickInRect(id = id, rect = NimRect(x: rect.x, y: rect.y,
-    w: rect.w, h: rect.h)) and btn.down == down
 
 proc isMousePressed*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
   ## Check if the selected mouse button is pressed now
