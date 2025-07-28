@@ -373,6 +373,76 @@ proc setWorkshopInfo(dialog: var GameDialog; installing: bool;
   else:
     colorLabel(str = $maxOwners, color = theme.colors[goldenColor])
 
+proc setGunInfo(dialog: var GameDialog; installing: bool;
+  shipModuleIndex: int; speed: int; value, maxValue: Natural;
+  mType: ModuleType) {.raises: [],
+  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show information about the selected gun or harpoon gun module
+  ##
+  ## * dialog          - the current in-game dialog displayed on the screen
+  ## * installing      - If true, player looking at installing modules list
+  ## * shipModuleIndex - The index of the module in the player's ship to show
+  ## * speed           - The shooting speed of the gun
+  ## * value           - The type of ammunition used
+  ## * maxValue        - The damage done by the gun
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  label(str = "Strength:")
+  if installing and shipModuleIndex > -1:
+    if mType == ModuleType.gun:
+      if playerShip.modules[shipModuleIndex].damage > maxValue:
+        colorLabel(str = $maxValue & " (weaker)", color = theme.colors[redColor])
+      elif playerShip.modules[shipModuleIndex].damage < maxValue:
+        colorLabel(str = $maxValue & " (stronger)", color = theme.colors[greenColor])
+      else:
+        colorLabel(str = $maxValue, color = theme.colors[goldenColor])
+    else:
+      if playerShip.modules[shipModuleIndex].duration > maxValue:
+        colorLabel(str = $maxValue & " (weaker)", color = theme.colors[redColor])
+      elif playerShip.modules[shipModuleIndex].duration < maxValue:
+        colorLabel(str = $maxValue & " (stronger)", color = theme.colors[greenColor])
+      else:
+        colorLabel(str = $maxValue, color = theme.colors[goldenColor])
+  else:
+    colorLabel(str = $maxValue, color = theme.colors[goldenColor])
+  label(str = "Ammunition:")
+  for item in itemsList.values:
+    if item.itemType == itemsTypesList[value - 1]:
+      colorLabel(str = "Any" & item.name[item.name.find(sub = ' ')..^1], color = theme.colors[goldenColor])
+      break
+  if mType == ModuleType.gun:
+    label(str = "Max fire rate:")
+    if installing and shipModuleIndex > -1:
+      try:
+        if modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed > speed:
+          if speed > 0:
+            colorLabel(str = $speed & "/round (slower)", color = theme.colors[redColor])
+          else:
+            colorLabel(str = $(speed.abs) & " rounds (slower)", color = theme.colors[redColor])
+        elif modulesList[playerShip.modules[
+            shipModuleIndex].protoIndex].speed < speed:
+          if speed > 0:
+            colorLabel(str = $speed & "/round (faster)", color = theme.colors[greenColor])
+          else:
+            colorLabel(str = $(speed.abs) & " rounds (faster)", color = theme.colors[greenColor])
+        else:
+          if speed > 0:
+            colorLabel(str = $speed & "/round", color = theme.colors[goldenColor])
+          else:
+            colorLabel(str = $(speed.abs) & " rounds", color = theme.colors[goldenColor])
+      except:
+        dialog= setError(message = "Can't show fire rate")
+        return
+    else:
+      if speed > 0:
+        tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $(speed.abs) & " rounds} -style Golden.TLabel")
+    if newInfo:
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+      row.inc
+
 proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Set the information about the selected module to install or remove
