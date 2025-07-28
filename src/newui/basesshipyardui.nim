@@ -440,6 +440,32 @@ proc setGunInfo(dialog: var GameDialog; installing: bool;
       else:
         colorLabel(str = $(speed.abs) & " rounds", color = theme.colors[goldenColor])
 
+proc setBatteringRamInfo(dialog: var GameDialog; installing: bool;
+  shipModuleIndex: int; maxValue: Natural) {.raises: [],
+  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show information about the selected battering ram module
+  ##
+  ## * dialog          - the current in-game dialog displayed on the screen
+  ## * installing      - If true, player looking at installing modules list
+  ## * row             - The current row in the dialog
+  ## * newInfo         - If true, create the new UI for the info, otherwise reuse
+  ##                     old one. Default value is true.
+  ## * shipModuleIndex - The index of the module in the player's ship to show
+  ## * maxValue        - The damage done by the battering ram
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  label(str = "Strength:")
+  if installing and shipModuleIndex > -1:
+    if playerShip.modules[shipModuleIndex].damage2 > maxValue:
+      colorLabel(str = $maxValue & " (weaker)", color = theme.colors[redColor])
+    elif playerShip.modules[shipModuleIndex].damage2 < maxValue:
+      colorLabel(str = $maxValue & " (stronger)", color = theme.colors[greenColor])
+    else:
+      colorLabel(str = $maxValue, color = theme.colors[goldenColor])
+  else:
+    colorLabel(str = $maxValue, color = theme.colors[goldenColor])
+
 proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Set the information about the selected module to install or remove
@@ -523,6 +549,9 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     setGunInfo(dialog = dialog, installing = installing,
       shipModuleIndex = shipModuleIndex, speed = speed, value = value,
       maxValue = maxValue, mType = mType)
+  of batteringRam:
+    setBatteringRamInfo(dialog = dialog, installing = installing,
+      shipModuleIndex = shipModuleIndex, maxValue = maxValue)
   else:
     discard
   if mType notin [ModuleType.hull, armor]:
