@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import contracts
+import contracts, nimalyzer
 import ../[config, tk]
 import errordialog
 
@@ -512,8 +512,8 @@ proc updateHeadersCommand*(table: TableWidget; command: string) {.raises: [],
       tclEval(script = table.canvas & " bind headerback" & $(i + 1) & " <Button-1> {}")
 
 proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
-        contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual,
+    ruleOff: "params".} =
   ## Update the Tcl variable currentrow and show the currently selected row in
   ## the table
   ##
