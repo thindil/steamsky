@@ -261,7 +261,7 @@ type
     clicked_pos*: nk_vec2
   nk_mouse* {.importc: "struct nk_mouse", nodecl.} = object
     ## Internal Nuklear type
-    delta*: nk_vec2
+    delta*, pos*: nk_vec2
     buttons*: pointer
   nk_input* {.importc: "struct nk_input", nodecl.} = object
     ## Internal Nuklear type

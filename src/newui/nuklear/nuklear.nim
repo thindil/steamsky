@@ -1039,6 +1039,9 @@ proc isMouseHovering*(rect: NimRect): bool {.raises: [], tags: [],
   ## * rect - the area in which the mouse will be checked for hovering
   ##
   ## Returns true if the mouse is hovering over the rectangle, otherwise false
+#  if ctx.input.addr == nil:
+#    return false
+#  return nkInbox(ctx.input.mouse.pos.x, ctx.input.mouse.pos.y, rect.x, rect.y, rect.w, rect.g)
   proc nk_input_is_mouse_hovering_rect(i: ptr nk_input;
       rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
