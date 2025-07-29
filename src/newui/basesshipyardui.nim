@@ -797,14 +797,40 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
     width: float = 600
     height: float = 500
 
-  let
-    shipModuleIndex = moduleIndex - 1
-    windowName: string = playerShip.modules[shipModuleIndex].name
+  let windowName: string = playerShip.modules[moduleIndex].name
   setDialog(x = windowWidth / 5, y = windowHeight / 9)
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 2)
+    label(str = "Remove gain:")
+    let damagePercent: float = (playerShip.modules[moduleIndex].durability.float /
+          playerShip.modules[moduleIndex].maxDurability.float)
+    var cost: Natural = try:
+          modulesList[playerShip.modules[moduleIndex].protoIndex].price - (
+              modulesList[playerShip.modules[
+              moduleIndex].protoIndex].price.float * (1.0 -
+              damagePercent)).Natural
+        except:
+          dialog = setError(message = "Can't set the cost.")
+          return
+    if cost == 0:
+      cost = 1
+    try:
+      countPrice(price = cost, traderIndex = findMember(order = talk),
+          reduce = false)
+    except:
+      dialog = setError(message = "Can't count the cost.")
+      return
+    colorLabel(str = $cost & " " & moneyName, color = theme.colors[greenColor])
+    label(str = "Removing time:")
+    try:
+      colorLabel(str = $modulesList[playerShip.modules[
+          moduleIndex].protoIndex].installTime & " minutes",
+          color = theme.colors[goldenColor])
+    except:
+      dialog = setError(message = "Can't show install time.")
+      return
     labelButton(title = "Remove"):
       discard
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
