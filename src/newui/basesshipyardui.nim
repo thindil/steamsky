@@ -785,6 +785,33 @@ proc setRemoveInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   moduleIndex = modulesIndexes[data]
   dialog = moduleDialog
 
+proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected module information
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  const
+    width: float = 600
+    height: float = 500
+
+  let
+    shipModuleIndex = moduleIndex - 1
+    windowName: string = playerShip.modules[shipModuleIndex].name
+  setDialog(x = windowWidth / 5, y = windowHeight / 9)
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 2)
+    labelButton(title = "Remove"):
+      discard
+    addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
+        isPopup = false, label = "Cancel")
+
+  windowSetFocus(name = windowName)
+
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected module information
@@ -795,6 +822,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   if currentTab == 0:
     showInstallInfo(dialog = dialog)
+  else:
+    showRemoveInfo(dialog = dialog)
 
 var
   headers: array[5, HeaderData[ModulesSortOrders]] = [
