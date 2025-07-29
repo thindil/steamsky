@@ -409,7 +409,8 @@ proc setGunInfo(dialog: var GameDialog; installing: bool;
   label(str = "Ammunition:")
   for item in itemsList.values:
     if item.itemType == itemsTypesList[value - 1]:
-      colorLabel(str = "Any" & item.name[item.name.find(sub = ' ')..^1], color = theme.colors[goldenColor])
+      colorLabel(str = "Any" & item.name[item.name.find(sub = ' ')..^1],
+          color = theme.colors[goldenColor])
       break
   if mType == ModuleType.gun:
     label(str = "Max fire rate:")
@@ -419,13 +420,15 @@ proc setGunInfo(dialog: var GameDialog; installing: bool;
           if speed > 0:
             colorLabel(str = $speed & "/round (slower)", color = theme.colors[redColor])
           else:
-            colorLabel(str = $(speed.abs) & " rounds (slower)", color = theme.colors[redColor])
+            colorLabel(str = $(speed.abs) & " rounds (slower)",
+                color = theme.colors[redColor])
         elif modulesList[playerShip.modules[
             shipModuleIndex].protoIndex].speed < speed:
           if speed > 0:
             colorLabel(str = $speed & "/round (faster)", color = theme.colors[greenColor])
           else:
-            colorLabel(str = $(speed.abs) & " rounds (faster)", color = theme.colors[greenColor])
+            colorLabel(str = $(speed.abs) & " rounds (faster)",
+                color = theme.colors[greenColor])
         else:
           if speed > 0:
             colorLabel(str = $speed & "/round", color = theme.colors[goldenColor])
@@ -722,38 +725,52 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
           break
       except:
         dialog = setError(message = "Can't check unique module.")
+    var btnAmount: Positive = 2
     setLayoutRowDynamic(height = 60, cols = 1)
     if moneyIndex2 == -1:
       colorWrapLabel(str = "You don't have any money to buy the module.",
           color = theme.colors[redColor])
+      btnAmount = 1
     else:
       try:
         if playerShip.cargo[moneyIndex2].amount < cost:
           colorWrapLabel(str = "You don't have enough money to buy the module.",
               color = theme.colors[redColor])
+          btnAmount = 1
         elif hasUnique:
           colorWrapLabel(str = "Only one module of that type can be installed on the ship.",
               color = theme.colors[redColor])
+          btnAmount = 1
         elif modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, hull}:
           if modulesList[moduleIndex].size > maxSize:
             colorWrapLabel(str = "The selected module is too big for your's ship's hull.",
                 color = theme.colors[redColor])
+            btnAmount = 1
           elif allSpace - usedSpace < modulesList[moduleIndex].size and
               modulesList[moduleIndex].mType != ModuleType.armor:
             colorWrapLabel(str = "You don't have enough space in your ship's hull to install the module.",
                 color = theme.colors[redColor])
+            btnAmount = 1
           elif modulesList[moduleIndex].mType == ModuleType.hull and
               modulesList[moduleIndex].maxValue < usedSpace:
             colorWrapLabel(str = "The selected hull is too small to replace your current hull.",
                 color = theme.colors[redColor])
+            btnAmount = 1
           elif modulesList[moduleIndex].mType in {ModuleType.gun,
               harpoonGun} and freeTurretIndex == -1:
             colorWrapLabel(str = "You don't have a free turret to install the selected gun.",
                 color = theme.colors[redColor])
+            btnAmount = 1
       except:
         dialog = setError(message = "Can't set error label.")
-    setLayoutRowDynamic(height = 30, cols = 1)
-    addCloseButton(dialog = dialog, isPopup = false)
+    setLayoutRowDynamic(height = 30, cols = btnAmount)
+    if btnAmount == 2:
+      labelButton(title = "Install"):
+        discard
+      addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
+          isPopup = false, label = "Cancel")
+    else:
+      addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
 
