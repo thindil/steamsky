@@ -1141,7 +1141,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   if tclEval2(script = errorLabel & " cget -text") == "":
     tclEval(script = "grid " & installButton & " -padx {0 5}")
     addCloseButton(name = moduleDialog & ".buttonbox.button", text = "Cancel",
-        command = "CloseDialog " & moduleDialog, column = 1, icon = "exiticon", color = "red")
+        command = "CloseDialog " & moduleDialog, column = 1, icon = "cancelicon", color = "red")
   else:
     tclEval(script = "grid " & errorLabel & " -padx 5 -columnspan 2 -sticky w")
     addCloseButton(name = moduleDialog & ".buttonbox.button", text = "Close",
