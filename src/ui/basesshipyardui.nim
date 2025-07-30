@@ -1425,7 +1425,7 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       " -text Remove -image sellicon -style Dialoggreen.TButton -command {CloseDialog " &
       moduleDialog & ";ManipulateModule remove}")
   tclEval(script = "grid " & removeButton & " -padx {0 5}")
-  addCloseButton(name = moduleDialog & ".buttonbox.button", text = "Close",
+  addCloseButton(name = moduleDialog & ".buttonbox.button", text = "Cancel",
       command = "CloseDialog " & moduleDialog, column = 1, icon = "cancelicon", color = "red")
   tclEval(script = "grid " & frame & " -pady {0 5} -columnspan 2")
   let closeButton: string = moduleDialog & ".buttonbox.button"
