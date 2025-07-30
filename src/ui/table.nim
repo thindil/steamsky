@@ -95,7 +95,7 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     var oldX = x - 5
     try:
       x = coords[2].parseInt + 5
-      result.columnsWidth.add(x - coords[0].parseInt)
+      result.columnsWidth.add(y = x - coords[0].parseInt)
       if index == 0:
         result.rowHeight = coords[3].parseInt + 5
     except ValueError:
@@ -223,8 +223,10 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
   if tooltip.len > 0:
     tclEval(script = "tooltip::tooltip " & table.canvas & " -item " &
         itemId & " \"" & tooltip & "\"")
-  let backgroundColor = addBackground(table, newRow, command)
-  addBindings(table.canvas, itemId, $table.row, command, backgroundColor)
+  let backgroundColor = addBackground(table = table, newRow = newRow,
+      command = command)
+  addBindings(canvas = table.canvas, itemId = itemId, row = $table.row,
+      command = command, color = backgroundColor)
   let
     tclResult = tclEval2(script = table.canvas & " bbox " & itemId)
     coords = tclResult.split
@@ -530,8 +532,8 @@ proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
   ## be updated, action is the name of action which will be taken. Can be
   ## raise or lower
   try:
-    var currentRow: Natural = tclGetVar("currentrow").parseInt
-    let maxRows: Natural = tclGetVar("maxrows").parseInt
+    var currentRow: Natural = tclGetVar(varName = "currentrow").parseInt
+    let maxRows: Natural = tclGetVar(varName = "maxrows").parseInt
     if argv[2] == "lower":
       currentRow.dec
       if currentRow == 0:
@@ -550,7 +552,7 @@ proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = canvas & " itemconfigure row" & $currentRow & " -fill " &
         tclEval2(script = "ttk::style lookup " & gameSettings.interfaceTheme &
         " -selectbackground"))
-    tclSetVar("currentRow", $currentRow)
+    tclSetVar(varName = "currentRow", newValue = $currentRow)
     return tclOk
   except:
     return tclError
@@ -595,8 +597,8 @@ proc hideCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     let
       canvas = $argv[1]
-      color = (if tclGetVar("currentrow").parseInt mod 2 > 0: tclEval2(
-          script = "ttk::style lookup Table -rowcolor") else: tclEval2(
+      color = (if tclGetVar(varName = "currentrow").parseInt mod 2 >
+          0: tclEval2(script = "ttk::style lookup Table -rowcolor") else: tclEval2(
           script = "ttk::style lookup " & gameSettings.interfaceTheme &
           " -background"))
     return tclEval(script = canvas & " itemconfigure row$currentrow -fill " & color)
@@ -624,7 +626,7 @@ proc toggleCheckedButton*(table: TableWidget; row,
   ## * table  - the TableWidget in which the checkbox will be toggled
   ## * row    - the row in which the checkbox is
   ## * column - the column in which the checkbox is
-  if isChecked(table, row, column):
+  if isChecked(table = table, row = row, column = column):
     tclEval(script = table.canvas & " itemconfigure row" & $row & "col" &
         $column & " -image checkbox-unchecked-empty")
   else:
@@ -635,8 +637,8 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Add Tcl commands related to the TableWidget
   try:
-    addCommand("UpdateCurrentRow", updateCurrentRowCommand)
-    addCommand("ExecuteCurrentRow", executeCurrentRowCommand)
-    addCommand("HideCurrentRow", hideCurrentRowCommand)
+    addCommand(name = "UpdateCurrentRow", nimProc = updateCurrentRowCommand)
+    addCommand(name = "ExecuteCurrentRow", nimProc = executeCurrentRowCommand)
+    addCommand(name = "HideCurrentRow", nimProc = hideCurrentRowCommand)
   except:
     showError(message = "Can't add a Tcl command.")
