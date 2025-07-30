@@ -531,6 +531,77 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
       except:
         dialog = setError(message = "Can't get ship module index")
         return
+  else:
+    mType = try:
+        modulesList[playerShip.modules[moduleIndex].protoIndex].mType
+      except:
+        dialog = setError(message = "Can't get module type")
+        return
+    case mType
+    of harpoonGun:
+      maxValue = playerShip.modules[moduleIndex].duration
+      value = try:
+          modulesList[playerShip.modules[moduleIndex].protoIndex].value
+      except:
+        dialog = setError(message = "Can't get module value")
+        return
+    of engine:
+      maxValue = playerShip.modules[moduleIndex].power
+      value = playerShip.modules[moduleIndex].fuelUsage
+    of cabin:
+      maxValue = playerShip.modules[moduleIndex].quality
+      value = playerShip.modules[moduleIndex].cleanliness
+    of gun:
+      maxValue = playerShip.modules[moduleIndex].damage
+      value = try:
+          modulesList[playerShip.modules[moduleIndex].protoIndex].value
+        except:
+          dialog = setError(message = "Can't get module value2")
+          return
+    of cargo:
+      maxValue = try:
+          modulesList[playerShip.modules[moduleIndex].protoIndex].maxValue
+        except:
+          dialog = setError(message = "Can't get module max value")
+          return
+      value = try:
+          modulesList[playerShip.modules[moduleIndex].protoIndex].value
+        except:
+          dialog = setError(message = "Can't get module value3")
+          return
+    of hull:
+      maxValue = playerShip.modules[moduleIndex].maxModules
+      value = try:
+          modulesList[playerShip.modules[moduleIndex].protoIndex].value
+        except:
+          dialog = setError(message = "Can't get module value4")
+          return
+    of batteringRam:
+      maxValue = playerShip.modules[moduleIndex].damage2
+      value = 0
+    else:
+      maxValue = 0
+      value = 0
+    size = try:
+        modulesList[playerShip.modules[moduleIndex].protoIndex].size
+      except:
+        dialog = setError(message = "Can't get module size")
+        return
+    weight = try:
+        modulesList[playerShip.modules[moduleIndex].protoIndex].weight
+      except:
+        dialog = setError(message = "Can't get module weight")
+        return
+    maxOwners = try:
+        modulesList[playerShip.modules[moduleIndex].protoIndex].maxOwners
+      except:
+        dialog = setError(message = "Can't get module max owners")
+        return
+    speed = try:
+        modulesList[playerShip.modules[moduleIndex].protoIndex].speed
+      except:
+        dialog = setError(message = "Can't get module size")
+        return
   case mType
   of hull:
     setHullInfo(dialog = dialog, installing = installing,
@@ -831,6 +902,7 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't show install time.")
       return
+    setModuleInfo(dialog = dialog, installing = false)
     labelButton(title = "Remove"):
       discard
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
