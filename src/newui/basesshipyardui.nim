@@ -924,7 +924,8 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = statusTooltip)
       var val: Natural = (damagePercent * 100.0).int
-      progressBar(value = val, maxValue = 100, modifyable = false)
+      changeStyle(field = progressbar, color = theme.colors[statusColor]):
+        progressBar(value = val, maxValue = 100, modifyable = false)
     labelButton(title = "Remove"):
       discard
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
