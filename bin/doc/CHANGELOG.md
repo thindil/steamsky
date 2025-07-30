@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Text on some close buttons to match the rest
+
 ### Fixed
 - Reading amount of installed modules on the player's ship from saved game
 - Icon for cancel button when installing modules in bases
