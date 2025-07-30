@@ -49,7 +49,7 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
   if skyBases[baseIndex].cargo.len == 0:
     skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: moneyIndex,
         amount: getRandom(min = 50, max = 200) * population,
-        durability: defaultItemDurability, price: 0))
+        durability: defaultItemDurability, price: 0, quality: normal))
     var keys: seq[Positive] = itemsList.keys.toSeq
     randomize()
     keys.shuffle()
@@ -63,7 +63,8 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
           itemsAmount.dec
         skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: key,
             amount: amount, durability: defaultItemDurability, price: getPrice(
-            baseType = skyBases[baseIndex].baseType, itemIndex = key)))
+            baseType = skyBases[baseIndex].baseType, itemIndex = key),
+            quality: normal))
     if "blackmarket" in basesTypesList[skyBases[baseIndex].baseType].flags:
       var amount: Positive = (if population < 150: getRandom(min = 1,
           max = 10) elif population < 300: getRandom(min = 1,
@@ -80,7 +81,8 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
               skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: j,
                   amount: getRandom(min = 0, max = 100) * population,
                   durability: defaultItemDurability, price: getPrice(
-                  baseType = skyBases[baseIndex].baseType, itemIndex = j)))
+                  baseType = skyBases[baseIndex].baseType, itemIndex = j),
+                  quality: normal))
               break
             itemIndex.inc
     else:
@@ -107,13 +109,15 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
               max = getMaxAmount(amount = item.amount)))
 
 proc findBaseCargo*(protoIndex: Natural;
-    durability: ItemsDurability = ItemsDurability.high): int {.raises: [],
-    tags: [], contractual.} =
+    durability: ItemsDurability = ItemsDurability.high;
+    quality: ObjectQuality = normal): int {.raises: [], tags: [],
+    contractual.} =
   ## Find the selected item in the currently visited base's cargo
   ##
   ## * protoIndex - the index of the prototype to search
   ## * durability - the durability of the item to search. Can be empty. If not
   ##                set, the items will not be checked against it.
+  ## * quality    - the quality of the item to search. Can be empty.
   ##
   ## The index of the item with the selected prototype index or -1 if nothing
   ## found.
@@ -130,8 +134,9 @@ proc findBaseCargo*(protoIndex: Natural;
     ## not found
     result = -1
     for index, item in localBaseCargo:
-      if durability < ItemsDurability.high:
-        if item.protoIndex == protoIndex and item.durability == durability:
+      if durability < ItemsDurability.high or quality != normal:
+        if item.protoIndex == protoIndex and item.durability == durability and
+            item.quality == quality:
           return index
       else:
         if item.protoIndex == protoIndex:
