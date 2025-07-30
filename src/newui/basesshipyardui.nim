@@ -903,6 +903,28 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
       dialog = setError(message = "Can't show install time.")
       return
     setModuleInfo(dialog = dialog, installing = false)
+    if damagePercent < 1.0:
+      var
+        statusTooltip: string = ""
+        statusColor: ColorsNames = redColor
+      if damagePercent < 1.0 and damagePercent > 0.79:
+        statusColor = greenColor
+        statusTooltip = "Slightly damaged"
+      elif damagePercent < 0.8 and damagePercent > 0.49:
+        statusColor = yellowColor
+        statusTooltip = "Damaged"
+      elif damagePercent < 0.5 and damagePercent > 0.19:
+        statusColor = yellowColor
+        statusTooltip = "Heavily damaged"
+      elif damagePercent < 0.2 and damagePercent > 0.0:
+        statusTooltip = "Almost destroyed"
+      elif damagePercent == 0.0:
+        statusTooltip = "Destroyed"
+      label(str = "Status:")
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = statusTooltip)
+      var val: Natural = (damagePercent * 100.0).int
+      progressBar(value = val, maxValue = 100, modifyable = false)
     labelButton(title = "Remove"):
       discard
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
