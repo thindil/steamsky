@@ -143,8 +143,16 @@ proc addProgressBar*(tooltip: string; value, maxValue, data: int;
   let bounds: NimRect = getWidgetBounds()
   if gameSettings.showTooltips:
     addTooltip(bounds = bounds, text = tooltip)
-  var val: int = value
-  progressBar(value = val, maxValue = maxValue, modifyable = false)
+  var
+    val: int = value
+    color: ColorsNames = greenColor
+  let percent: float = val.float / maxValue.float
+  if percent in 0.26..0.74:
+    color = yellowColor
+  elif percent < 0.26:
+    color = redColor
+  changeStyle(field = progressbar, color = theme.colors[color]):
+    progressBar(value = val, maxValue = maxValue, modifyable = false)
   if mouseClicked(id = (if gameSettings.rightButton: Buttons.right else: left),
       rect = bounds):
     code(data = data, dialog = dialog)
