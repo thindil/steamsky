@@ -169,9 +169,9 @@ proc countFreeCargo*(baseIndex: ExtendedBasesRange): Natural {.raises: [],
       break
 
 proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
-    durability: ItemsDurability = defaultItemDurability;
-    cargoIndex: int = -1) {.raises: [KeyError, NoFreeSpaceError], tags: [],
-    contractual.} =
+    durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
+    quality: ObjectQuality = normal) {.raises: [KeyError, NoFreeSpaceError],
+    tags: [], contractual.} =
   ## Update the selected item amount in the cargo of the base where the player
   ## is
   ##
@@ -184,11 +184,13 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
   ## * cargoIndex - the index of the item in the base's cargo which will be
   ##                updated. This argument or protoIndex argument must always
   ##                be set, but only one of them.
+  ## * quality    - the quality of the item to search
   let
     baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex
     itemIndex: int = if protoIndex > 0:
-        findBaseCargo(protoIndex = protoIndex, durability = durability)
+        findBaseCargo(protoIndex = protoIndex, durability = durability,
+            quality = quality)
       else:
         cargoIndex
   {.ruleOff: "assignments".}
@@ -198,7 +200,8 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
         raise newException(exceptn = NoFreeSpaceError, message = $protoIndex)
       skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: protoIndex,
           amount: amount, durability: durability, price: getPrice(
-          baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex)))
+          baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex),
+          quality: quality))
     else:
       skyBases[baseIndex].cargo[itemIndex].amount = skyBases[baseIndex].cargo[
           itemIndex].amount + amount
