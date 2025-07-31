@@ -926,6 +926,18 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
       var val: Natural = (damagePercent * 100.0).int
       changeStyle(field = progressbar, color = theme.colors[statusColor]):
         progressBar(value = val, maxValue = 100, modifyable = false)
+    setLayoutRowDynamic(height = 30, cols = 1)
+    try:
+      if modulesList[playerShip.modules[
+          moduleIndex].protoIndex].description.len > 0:
+        label(str = "")
+        setLayoutRowDynamic(height = 90, cols = 1)
+        wrapLabel(str = modulesList[playerShip.modules[
+            moduleIndex].protoIndex].description)
+    except:
+      dialog = setError(message = "Can't show module's description")
+      return
+    setLayoutRowDynamic(height = 30, cols = 2)
     labelButton(title = "Remove"):
       discard
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
