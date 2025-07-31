@@ -65,20 +65,6 @@ proc nk_window_find(ctx; name: cstring): ptr nk_window {.importc, nodecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
-# -----
-# Input
-# -----
-proc nk_input_begin*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_input_end*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_input_key*(ctx; key: Keys; down: nk_bool) {.importc, nodecl,
-    raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_input_button*(ctx; id: Buttons; x, y: cint; down: nk_bool) {.importc, nodecl,
-    raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-
 # ----
 # Text
 # ----
