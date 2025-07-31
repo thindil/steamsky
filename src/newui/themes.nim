@@ -34,7 +34,7 @@ type
       toggleCursorColor, goldenColor, redColor, mapInfoBorderColor,
       mapInfoColor, pinkColor, yellowColor, blueColor, cyanColor, grayColor,
       tableRowColor, tableTextColor, sliderEmptyColor, sliderFillColor,
-      sliderCursorColor
+      sliderCursorColor, progressbarColor
   MapColorsNames* = enum
     ## Names of colors used in the game's map
     mapVisitedColor, mapUnvisitedColor, mapDefaultColor, mapGreenColor,
@@ -128,7 +128,8 @@ let
       "#7f8c8d".parseColor, "#000000".parseColor, "#b16286".parseColor,
       "#d79921".parseColor, "#458588".parseColor, "#00ffff".parseColor,
       "#7f8c8d".parseColor, "#120d0d".parseColor, "#eee8aa".parseColor,
-      "#120d0d".parseColor, "#ffdf00".parseColor, "#500000".parseColor],
+      "#120d0d".parseColor, "#ffdf00".parseColor, "#500000".parseColor,
+      "#4e9a06".parseColor],
       fonts: [defaultThemeFontPath & "Amarante-Regular.ttf",
       defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"],
       mapIcons: ["\uf135", " ", "\uf05b", "\uf059", "\uf53b", "\ufc6a",
@@ -298,10 +299,10 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   setColor(colorName = sliderCursorColor, index = sliderFillColor)
   setColor(colorName = sliderCursorHoverColor, index = sliderCursorColor)
   setColor(colorName = sliderCursorActiveColor, index = sliderCursorColor)
+  setColor(colorName = progressbarColor, index = progressbarColor)
   table[chartColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
   table[colorChartColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
   table[colorChartHighlightColor] = NimColor(r: 255, g: 0, b: 0, a: 255)
   table[tabHeaderColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
-  table[progressbarColor] = NimColor(r: 78, g: 154, b: 6, a: 255)
   table[progressbarBorderColor] = NimColor(r: 55, g: 36, b: 18, a: 255)
   styleFromTable(table = table)
