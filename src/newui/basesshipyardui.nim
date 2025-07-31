@@ -20,7 +20,7 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, config, game, shipmodules, shipscrew, types]
+import ../[bases, basesship2, config, game, shipmodules, shipscrew, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 type LocalModuleData = object
@@ -726,27 +726,29 @@ proc manipulateModule(dialog: var GameDialog) {.raises: [], tags: [RootEffect], 
       upgradeShip(install = true, moduleIndex = moduleIndex)
     else:
       upgradeShip(install = false, moduleIndex = moduleIndex)
-    updateMessages()
+      setModulesList(dialog = dialog)
   except NoMoneyError:
-    dialog = setMessage(text = "You don't have " & moneyName & " to pay for modules.",
+    dialog = setMessage(message = "You don't have " & moneyName & " to pay for modules.",
         title = "Can't install module.")
   except NotEnoughMoneyError:
-    dialog = setMessage(text = "You don't have enough " & moneyName & " to pay for " &
+    dialog = setMessage(message = "You don't have enough " & moneyName & " to pay for " &
         getCurrentExceptionMsg() & ".", title = "Can't install module.")
   except UniqueModuleError:
-    dialog = setMessage(text = "You can't install another " & getCurrentExceptionMsg() &
+    dialog = setMessage(message = "You can't install another " & getCurrentExceptionMsg() &
         " because you have installed one module of that type. Remove the old first.",
         title = "Can't install module.")
   except InstallationError, RemovingError:
-    dialog = setMessage(text = getCurrentExceptionMsg(), title = "Can't " & (currentTab == 0: "install" else: "remove") & " module.")
+    dialog = setMessage(message = getCurrentExceptionMsg(), title = "Can't " &
+      (if currentTab == 0: "install" else: "remove") & " module.")
   except NoFreeCargoError:
-    dialog = setMessage(text = "You don't have enough free space for " & moneyName &
+    dialog = setMessage(message = "You don't have enough free space for " & moneyName &
         " in ship cargo.", title = "Can't remove module")
   except NoMoneyInBaseError:
-    dialog = setMessage(text = "Base don't haev enough " & moneyName &
+    dialog = setMessage(message = "Base don't haev enough " & moneyName &
         " for buy this module.", title = "Can't remove module")
   except:
-    dialog = setError(message = "Can't " & (if currentTab == 0: "install" else: "remove") & " module.")
+    dialog = setError(message = "Can't " & (if currentTab == 0: "install"
+      else: "remove") & " module.")
 
 proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -871,7 +873,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = 30, cols = btnAmount)
     if btnAmount == 2:
       labelButton(title = "Install"):
-        discard
+        manipulateModule(dialog = dialog)
       addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
           isPopup = false, label = "Cancel")
     else:
@@ -973,7 +975,7 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
       return
     setLayoutRowDynamic(height = 30, cols = 2)
     labelButton(title = "Remove"):
-      discard
+      manipulateModule(dialog = dialog)
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
         isPopup = false, label = "Cancel")
 
