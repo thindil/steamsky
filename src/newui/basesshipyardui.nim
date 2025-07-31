@@ -714,6 +714,40 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
       dialog = setError(message = "Can't show module's description")
       return
 
+proc manipulateModule(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Install or remove the selected module
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  try:
+    if currentTab == 0:
+      upgradeShip(install = true, moduleIndex = moduleIndex)
+    else:
+      upgradeShip(install = false, moduleIndex = moduleIndex)
+    updateMessages()
+  except NoMoneyError:
+    dialog = setMessage(text = "You don't have " & moneyName & " to pay for modules.",
+        title = "Can't install module.")
+  except NotEnoughMoneyError:
+    dialog = setMessage(text = "You don't have enough " & moneyName & " to pay for " &
+        getCurrentExceptionMsg() & ".", title = "Can't install module.")
+  except UniqueModuleError:
+    dialog = setMessage(text = "You can't install another " & getCurrentExceptionMsg() &
+        " because you have installed one module of that type. Remove the old first.",
+        title = "Can't install module.")
+  except InstallationError, RemovingError:
+    dialog = setMessage(text = getCurrentExceptionMsg(), title = "Can't " & (currentTab == 0: "install" else: "remove") & " module.")
+  except NoFreeCargoError:
+    dialog = setMessage(text = "You don't have enough free space for " & moneyName &
+        " in ship cargo.", title = "Can't remove module")
+  except NoMoneyInBaseError:
+    dialog = setMessage(text = "Base don't haev enough " & moneyName &
+        " for buy this module.", title = "Can't remove module")
+  except:
+    dialog = setError(message = "Can't " & (if currentTab == 0: "install" else: "remove") & " module.")
+
 proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected module information
