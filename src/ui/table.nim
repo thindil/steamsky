@@ -73,12 +73,12 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     tclEval(script = "grid " & result.canvas & " -sticky nwes -padx {5 0}")
     tclEval(script = "grid columnconfigure " & parent & " " & result.canvas & " -weight 1")
     tclEval(script = "grid rowconfigure " & parent & " " & result.canvas & " -weight 1")
-  var x = 0
-  let headerColor = tclEval2(script = "ttk::style lookup Table -headerforecolor")
-  let headerBackColor = tclEval2(script = "ttk::style lookup Table -headerbackcolor")
-  let borderStyle = tclEval2(script = "ttk::style lookup Table -headerbordercolor")
+  var x: int = 0
+  let headerColor: string = tclEval2(script = "ttk::style lookup Table -headerforecolor")
+  let headerBackColor: string = tclEval2(script = "ttk::style lookup Table -headerbackcolor")
+  let borderStyle: string = tclEval2(script = "ttk::style lookup Table -headerbordercolor")
   for index, header in headers:
-    let headerId = tclEval2(script = result.canvas & " create text " & $x &
+    let headerId: string = tclEval2(script = result.canvas & " create text " & $x &
         " 2 -anchor nw -text {" & header &
         "} -font InterfaceFont -justify center -fill " & headerColor &
         " -tags [list header" & $(index + 1) & "]")
@@ -93,9 +93,9 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
       tclEval(script = "tooltip::tooltip " & result.canvas & " -item " &
           headerId & " \"" & tooltipText & "\"")
     let
-      tclResult = tclEval2(script = result.canvas & " bbox header" & $(index + 1))
-      coords = tclResult.split
-    var oldX = x - 5
+      tclResult: string = tclEval2(script = result.canvas & " bbox header" & $(index + 1))
+      coords: seq[string] = tclResult.split
+    var oldX: int = x - 5
     try:
       x = coords[2].parseInt + 5
       result.columnsWidth.add(y = x - coords[0].parseInt)
@@ -104,7 +104,7 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     except ValueError:
       showError(message = "Can't get coordinates for the table. Result: " & tclResult)
       return
-    let backgroundId = tclEval2(script = result.canvas & " create rectangle " &
+    let backgroundId: string = tclEval2(script = result.canvas & " create rectangle " &
         $oldX & " 0 " & $(x - 2) & " " & $(result.rowHeight - 3) & " -fill " &
             headerBackColor &
         " -outline " & $borderStyle & " -width 2 -tags [list headerback" &
@@ -139,7 +139,7 @@ proc clearTable*(table: var TableWidget) {.raises: [], tags: [], contractual.} =
   ## * table - the TableWidget which data will be cleared
   ##
   ## Returns the modified parameter table
-  let buttonsFrame = table.canvas & ".buttonframe"
+  let buttonsFrame: string = table.canvas & ".buttonframe"
   if tclEval2(script = "winfo exists " & buttonsFrame) == "1":
     tclEval(script = "destroy " & buttonsFrame & ".previous")
     tclEval(script = "destroy " & buttonsFrame & ".next")
@@ -188,7 +188,7 @@ proc addBackground(table: TableWidget; newRow: bool;
       " -background"))
   if not newRow:
     return
-  let itemId = tclEval2(script = table.canvas & " create rectangle 0 " & $(
+  let itemId: string = tclEval2(script = table.canvas & " create rectangle 0 " & $(
       table.row * table.rowHeight) & " 10 " & $((table.row * table.rowHeight) +
       table.rowHeight) & " -fill " & result & " -width 0 -tags [list row" & $(
       table.row) & "]")
@@ -212,27 +212,27 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
   ##             color of the current theme
   ##
   ## Returns the modified parameter table
-  var x = 5
+  var x: int = 5
   for i in 1 .. column - 1:
     x = x + table.columnsWidth[i - 1]
   let
-    textColor = (if color.len > 0: color else: tclEval2(
+    textColor: string = (if color.len > 0: color else: tclEval2(
         script = "ttk::style lookup " & gameSettings.interfaceTheme &
         " -foreground"))
-    itemId = tclEval2(script = table.canvas & " create text " & $x & " " & $((
+    itemId: string = tclEval2(script = table.canvas & " create text " & $x & " " & $((
         table.row * table.rowHeight) + 2) & " -anchor nw -text {" & text &
         "} -font InterfaceFont -fill " & textColor & " -tags [list row" &
         $table.row & "col" & $column & "]")
   if tooltip.len > 0:
     tclEval(script = "tooltip::tooltip " & table.canvas & " -item " &
         itemId & " \"" & tooltip & "\"")
-  let backgroundColor = addBackground(table = table, newRow = newRow,
+  let backgroundColor: string = addBackground(table = table, newRow = newRow,
       command = command)
   addBindings(canvas = table.canvas, itemId = itemId, row = $table.row,
       command = command, color = backgroundColor)
   let
-    tclResult = tclEval2(script = table.canvas & " bbox " & itemId)
-    coords = tclResult.split
+    tclResult: string = tclEval2(script = table.canvas & " bbox " & itemId)
+    coords: seq[string] = tclResult.split
   try:
     x = (coords[2].parseInt + 10) - coords[0].parseInt
   except ValueError:
@@ -250,12 +250,12 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.raises: [],
   ## * table     - the TableWidget in which the elements will be resized and
   ##               moved
   ## * grabFocus - if true, set the keyboard focus on the table after updating
-  var tag = "headerback1"
+  var tag: string = "headerback1"
   tclEval(script = table.canvas & " coords " & tag & " 0 0 " & $(
       table.columnsWidth[0] + 10) & " " & $(table.rowHeight - 3))
   var
-    newX = table.columnsWidth[0] + 20
-    newY = 2
+    newX: int = table.columnsWidth[0] + 20
+    newY: int = 2
   for column in 2 .. table.columnsWidth.len:
     tag = "header" & $column
     tclEval(script = table.canvas & " coords " & tag & " " & $newX & " " & $newY)
@@ -276,8 +276,8 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.raises: [],
     newX = newX + table.columnsWidth[column - 1] + 20
     newY = 2
   let
-    tclResult = tclEval2(script = table.canvas & " bbox all")
-    coords = tclResult.split
+    tclResult: string = tclEval2(script = table.canvas & " bbox all")
+    coords: seq[string] = tclResult.split
   if table.scrollbar.len == 0 or tclEval2(script = "winfo parent " &
       table.canvas) != tclEval2(script = "winfo parent " & table.scrollbar):
     tclEval(script = table.canvas & " configure -height [expr " & coords[3] &
@@ -317,17 +317,17 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
   ## * invenrtColors - if true, invert colors of the progressbar
   ##
   ## Returns modified parameter table
-  var x = 0
+  var x: int = 0
   for i in 1 .. column - 1:
     x = x + table.columnsWidth[i - 1]
-  var itemId = tclEval2(script = table.canvas & " create rectangle " & $x &
+  var itemId: string = tclEval2(script = table.canvas & " create rectangle " & $x &
       " " & $((table.row * table.rowHeight) + 5) & " " & $(x + 102) & " " & $((
       table.row * table.rowHeight) + (table.rowHeight - 10)) & " -fill " &
       tclEval2(script = "ttk::style lookup TProgressbar -troughcolor") &
           " -outline " & tclEval2(
           script = "ttk::style lookup TProgressbar -bordercolor") &
           " -tags [list progressbar" & $table.row & "back" & $column & "]")
-  let backgroundColor = addBackground(table = table, newRow = newRow,
+  let backgroundColor: string = addBackground(table = table, newRow = newRow,
       command = command)
   addBindings(canvas = table.canvas, itemId = itemId, row = $table.row,
       command = command, color = backgroundColor)
@@ -335,8 +335,8 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
     tclEval(script = "tooltip::tooltip " & table.canvas & " -item " &
         itemId & " \"" & tooltip & "\"")
   let
-    tclResult = tclEval2(script = table.canvas & " bbox " & itemId)
-    coords = tclResult.split
+    tclResult: string = tclEval2(script = table.canvas & " bbox " & itemId)
+    coords: seq[string] = tclResult.split
   try:
     x = (coords[2].parseInt + 10) - coords[0].parseInt
   except ValueError:
@@ -344,7 +344,7 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
     return
   if x > table.columnsWidth[column - 1]:
     table.columnsWidth[column - 1] = x
-  var color = ""
+  var color: string = ""
   let length: Natural = (100.0 + ((value.float - maxValue.float) /
       maxValue.float * 100.0)).Natural
   if invertColors:
@@ -384,9 +384,9 @@ proc addPagination*(table: TableWidget; previousCommand: string = "";
   ##                     is pressed
   ## * nextCommand     - the Tcl command executed when the next page button is
   ##                     pressed
-  let buttonsFrame = table.canvas & ".buttonframe"
+  let buttonsFrame: string = table.canvas & ".buttonframe"
   tclEval(script = "ttk::frame " & buttonsFrame)
-  var button: string
+  var button: string = ""
   if previousCommand.len > 0:
     button = buttonsFrame & ".previous"
     tclEval(script = "ttk::button " & button & " -text Previous -command {" &
@@ -421,22 +421,22 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
   ##                    cross
   ##
   ## Returns modified parameter table
-  var x = 5
+  var x: int = 5
   for i in 1 .. column - 1:
     x = x + table.columnsWidth[i - 1]
   let
-    imageName = "${ttk::theme::" & tclEval2(script = "ttk::style theme use") &
+    imageName: string = "${ttk::theme::" & tclEval2(script = "ttk::style theme use") &
       "::Images(checkbox-" & (if checked: "checked" else: (
       if emptyUnchecked: "unchecked-empty" else: "unchecked")) & ")}"
-    itemId = tclEval2(script = table.canvas & " create image " & $x & " " & $((
+    itemId: string = tclEval2(script = table.canvas & " create image " & $x & " " & $((
         table.row * table.rowHeight) + 2) & " -anchor nw -image " & imageName &
         " -tags [list row" & $table.row & "col" & $column & "]")
   if tooltip.len > 0:
     tclEval(script = "tooltip::tooltip " & table.canvas & " -item " &
         itemId & " \"" & tooltip & "\"")
   let
-    tclResult = tclEval2(script = table.canvas & " bbox " & itemId)
-    coords = tclResult.split
+    tclResult: string = tclEval2(script = table.canvas & " bbox " & itemId)
+    coords: seq[string] = tclResult.split
   try:
     x = (coords[2].parseInt + 10) - coords[0].parseInt
   except ValueError:
@@ -454,7 +454,7 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
           " -background"))
       if not newRow:
         return
-      let itemId = tclEval2(script = table.canvas & " create rectangle 0 " & $(
+      let itemId: string = tclEval2(script = table.canvas & " create rectangle 0 " & $(
           table.row * table.rowHeight) & " 10 " & $((table.row *
           table.rowHeight) + table.rowHeight) & " -fill " & result &
           " -width 0 -tags [list row" & $table.row & "]")
@@ -462,7 +462,7 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
       addBindings(canvas = table.canvas, itemId = "row" & $table.row,
           row = $table.row, command = command, color = result)
 
-    let backgroundColor = addBackground(table = table, newRow = newRow,
+    let backgroundColor: string = addBackground(table = table, newRow = newRow,
         command = command)
     addBindings(canvas = table.canvas, itemId = itemId, row = $table.row,
         command = command, color = backgroundColor)
@@ -478,7 +478,7 @@ proc getColumnNumber*(table: TableWidget;
   ## * xPosition - the position in X axis which will be looking for
   ##
   ## The number of column, starts from 1, for the selected position in X axis
-  var position = xPosition
+  var position: int = xPosition
   for index, width in table.columnsWidth:
     if position < width + 20:
       return index + 1
@@ -546,8 +546,8 @@ proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
       if currentRow > maxRows:
         currentRow = maxRows
     let
-      canvas = $argv[1]
-      color = (if currentRow mod 2 > 0: tclEval2(
+      canvas: string = $argv[1]
+      color: string = (if currentRow mod 2 > 0: tclEval2(
         script = "ttk::style lookup Table -rowcolor") else: tclEval2(
         script = "ttk::style lookup " & gameSettings.interfaceTheme &
         " -background"))
@@ -577,7 +577,7 @@ proc executeCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ExecuteCurrentRow canvas
   ## Canvas is the name of Table Tk_Canvas in which the Tcl command related
   ## to the current row will be executed
-  let canvas = $argv[1]
+  let canvas: string = $argv[1]
   return tclEval(script = canvas & " bind row$currentrow <Button-1" & (
       if gameSettings.rightButton: "3" else: "1") & ">")
 
@@ -599,8 +599,8 @@ proc hideCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
   ## background will be recolored
   try:
     let
-      canvas = $argv[1]
-      color = (if tclGetVar(varName = "currentrow").parseInt mod 2 >
+      canvas: string = $argv[1]
+      color: string = (if tclGetVar(varName = "currentrow").parseInt mod 2 >
           0: tclEval2(script = "ttk::style lookup Table -rowcolor") else: tclEval2(
           script = "ttk::style lookup " & gameSettings.interfaceTheme &
           " -background"))
