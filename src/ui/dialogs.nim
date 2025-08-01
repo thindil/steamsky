@@ -414,7 +414,7 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
   tclEval(script = "bind " & button & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
   button = itemDialog & ".cancelbutton"
   tclEval(script = "ttk::button " & button & " -command {CloseDialog " &
-      itemDialog & "} -image cancelicon -style Dialogred.TButton -text {Close}")
+      itemDialog & "} -image cancelicon -style Dialogred.TButton -text {Cancel}")
   tclEval(script = "grid " & button & " -column 1 -row 5 -pady {0 5}")
   tclEval(script = "tooltip::tooltip " & button & " \"Close the dialog \\[Escape key\\]\"")
   tclEval(script = "focus " & button)
