@@ -873,8 +873,10 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't set error label.")
     setLayoutRowDynamic(height = 30, cols = btnAmount)
     if btnAmount == 2:
+      setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       imageLabelButton(image = images[buyIcon], text = "Install", alignment = right):
         manipulateModule(dialog = dialog)
+      restoreButtonStyle()
       addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
           isPopup = false, label = "Cancel")
     else:
@@ -975,8 +977,10 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
       dialog = setError(message = "Can't show module's description")
       return
     setLayoutRowDynamic(height = 30, cols = 2)
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[sellIcon], text = "Remove", alignment = right):
       manipulateModule(dialog = dialog)
+    restoreButtonStyle()
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
         isPopup = false, label = "Cancel")
 
