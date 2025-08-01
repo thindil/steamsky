@@ -21,8 +21,8 @@
 import std/[os, parseopt, strutils, tables, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
-import newui/[basesschoolui, basesrecruitui, basesshipyardui, basesui,
-    combatui, coreui, errordialog, goalsui, header, mainmenu, mapsui, themes,
+import newui/[basesschoolui, basesrecruitui, basesshipyardui, basesui, combatui,
+    coreui, errordialog, goalsui, header, mainmenu, mapsui, missionsui, themes,
     tradesui, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -129,7 +129,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = 200)
   const
-    showGame: array[GameState.mainMenu..GameState.shipyard, proc (
+    showGame: array[GameState.mainMenu..GameState.baseMissions, proc (
         state: var GameState; dialog: var GameDialog){.nimcall, raises: [
             ].}] = [
       GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
@@ -139,7 +139,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         endGame: backToMainMenu, combat: showCombat, boarding: showBoarding,
         trade: showTrade, school: showSchool, recruits: showRecruits,
         healWounded: showWounded, repairShip: showRepairs,
-        buyRecipes: showRecipes, shipyard: showShipyard]
+        buyRecipes: showRecipes, shipyard: showShipyard,
+        baseMissions: showMissions]
     showDialog: array[GameDialog.errorDialog..GameDialog.moduleDialog, proc(
         dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
@@ -171,7 +172,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         let
           oldState: GameState = state
           oldDialog: GameDialog = dialog
-        if state in GameState.mainMenu..GameState.shipyard:
+        if state in GameState.mainMenu..GameState.baseMissions:
           # Show the proper window
           showGame[state](state = state, dialog = dialog)
         # Add the tooltips, if enabled
