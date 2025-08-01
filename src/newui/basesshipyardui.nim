@@ -726,7 +726,8 @@ proc manipulateModule(dialog: var GameDialog) {.raises: [], tags: [RootEffect], 
       upgradeShip(install = true, moduleIndex = moduleIndex)
     else:
       upgradeShip(install = false, moduleIndex = moduleIndex)
-      setModulesList(dialog = dialog)
+    setShipyard(dialog = dialog)
+    dialog = none
   except NoMoneyError:
     dialog = setMessage(message = "You don't have " & moneyName & " to pay for modules.",
         title = "Can't install module.")
@@ -872,7 +873,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't set error label.")
     setLayoutRowDynamic(height = 30, cols = btnAmount)
     if btnAmount == 2:
-      labelButton(title = "Install"):
+      imageLabelButton(image = images[buyIcon], text = "Install", alignment = right):
         manipulateModule(dialog = dialog)
       addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
           isPopup = false, label = "Cancel")
@@ -974,7 +975,7 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
       dialog = setError(message = "Can't show module's description")
       return
     setLayoutRowDynamic(height = 30, cols = 2)
-    labelButton(title = "Remove"):
+    imageLabelButton(image = images[sellIcon], text = "Remove", alignment = right):
       manipulateModule(dialog = dialog)
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
         isPopup = false, label = "Cancel")
