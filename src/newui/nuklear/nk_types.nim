@@ -254,14 +254,15 @@ type
     text*: nk_style_text
     cursor_active*: nk_cursor
     cursors*: pointer
-  nk_mouse_button* {.importc: "struct nk_mouse_button", nodecl.} = object
+  nk_mouse_button* {.importc: "struct nk_mouse_button", nodecl,
+      completeStruct.} = object
     ## Internal Nuklear type
     down*: nk_bool
     clicked*: cuint
     clicked_pos*: nk_vec2
   nk_mouse* {.importc: "struct nk_mouse", nodecl.} = object
     ## Internal Nuklear type
-    delta*, pos*, prev*, scroll_delta*,: nk_vec2
+    delta*, pos*, prev*, scroll_delta*, : nk_vec2
     buttons*: pointer
     grab*, grabbed*, ungrab*: uint8
   nk_input* {.importc: "struct nk_input", nodecl.} = object
