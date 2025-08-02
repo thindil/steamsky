@@ -454,11 +454,11 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
           " -background"))
       if not newRow:
         return
-      let itemId: string = tclEval2(script = table.canvas & " create rectangle 0 " & $(
+      let itemId2: string = tclEval2(script = table.canvas & " create rectangle 0 " & $(
           table.row * table.rowHeight) & " 10 " & $((table.row *
           table.rowHeight) + table.rowHeight) & " -fill " & result &
           " -width 0 -tags [list row" & $table.row & "]")
-      tclEval(script = table.canvas & " lower " & itemId)
+      tclEval(script = table.canvas & " lower " & itemId2)
       addBindings(canvas = table.canvas, itemId = "row" & $table.row,
           row = $table.row, command = command, color = result)
 
