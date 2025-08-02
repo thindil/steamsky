@@ -693,6 +693,12 @@ proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the available missions UI
 ###################################
 
+var
+  missionsText*: array[3, string] = ["You can take", "0", "more missions from the base."]
+    ## The text with information about how many missions can be taken
+  missionsWidth*: array[3, cfloat] = [0, 0, 0]
+    ## The width in pixels of the text with information about missions
+
 proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Set the data for missions available in the base UI
@@ -701,4 +707,8 @@ proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  for index, text in missionsText:
+    try:
+      missionsWidth[index] = text.getTextWidth
+    except:
+      dialog = setError(message = "Can't get the width of the missions text.")
