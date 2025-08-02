@@ -419,6 +419,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
           state = baseMissions
           dialog = none
           closePopup()
+          setMissions(dialog = dialog)
     if playerShip.homeBase != baseIndex:
       labelButton(title = "Set as home"):
         setAsHome(dialog = dialog)
