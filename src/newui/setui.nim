@@ -688,3 +688,17 @@ proc setShipyard*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     except:
       dialog = setError(message = "Can't get the width of the money text.")
   setModulesList(dialog = dialog)
+
+###################################
+# Setting the available missions UI
+###################################
+
+proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for missions available in the base UI
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
