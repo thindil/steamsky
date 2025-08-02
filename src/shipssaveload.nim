@@ -122,6 +122,8 @@ proc savePlayerShip*(saveData: var XmlNode) {.raises: [], tags: [],
       attrs.add(y = ("name", item.name))
     if item.price > 0:
       attrs.add(y = ("price", $item.price))
+    if item.quality != normal:
+      attrs.add(y = ("quality", $item.quality))
     var itemElement: XmlNode = newElement(tag = "cargo")
     itemElement.attrs = attrs.toXmlAttributes
     shipTree.add(son = itemElement)
@@ -460,8 +462,12 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
         itemDurability: int = cargo.attr(name = "durability").parseInt
         price: int = (if cargo.attr(name = "price").len ==
             0: 0 else: cargo.attr(name = "price").parseInt)
+        quality: ObjectQuality = (if cargo.attr(name = "quality").len ==
+            0: normal else: parseEnum[ObjectQuality](s = cargo.attr(
+            name = "quality")))
       playerShip.cargo.add(y = InventoryData(protoIndex: protoIndex,
-          amount: amount, name: name, durability: itemDurability, price: price))
+          amount: amount, name: name, durability: itemDurability, price: price,
+          quality: quality))
     for crew in shipNode.findAll(tag = "member"):
       var member: MemberData = MemberData()
       member.name = crew.attr(name = "name")
