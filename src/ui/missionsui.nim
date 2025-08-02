@@ -289,7 +289,7 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
          -sticky w -column 1 -row 0
       SetScrollbarBindings $missionsframe.missionslabel.missionslbl2 \
          .gameframe.paned.missionsframe.scrolly
-      grid [ttk::label $missionsframe.missionslabel.missionslbl3 -text { more missions in from base.}] \
+      grid [ttk::label $missionsframe.missionslabel.missionslbl3 -text { more missions from the base.}] \
          -sticky w -column 2 -row 0
       SetScrollbarBindings $missionsframe.missionslabel.missionslbl3 \
          .gameframe.paned.missionsframe.scrolly
