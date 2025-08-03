@@ -626,6 +626,19 @@ type
   ShowStates* = enum
     ## When to change the state of a window
     hidden, shown
+  # TODO: test code
+  MouseButton* = object
+    ## Used to store information about a mouse button.
+    down*, clicked*: bool
+    clickedPos*: NimVec2
+  Mouse* = object
+    ## Used to store information about a mouse
+    delta*, pos*, prev*, scrollDelta*, : NimVec2
+    buttons*: array[Buttons.max, MouseButton]
+    grab*, grabbed*, ungrab*: bool
+  Input* = object
+    ## Used to store information about the user's input
+    mouse*: Mouse
 {.pop ruleOn: "namedParams".}
 
 # ---------
@@ -650,6 +663,10 @@ converter toNkFlags*(x: EditTypes): nk_flags =
 converter toCint*(x: bool): cint =
   ## Converts Nim bool type to Nim cint type
   if x: 1 else: 0
+# TODO: test code, continue work
+converter toInput*(x: nk_input): Input =
+  ## Converts Nuklear nk_input type to Nim Input
+  result.mouse.delta = NimVec2(x: x.mouse.delta.x, y: x.mouse.delta.y)
 
 # -------------------
 # Creating structures

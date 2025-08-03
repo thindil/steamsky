@@ -1030,6 +1030,16 @@ proc isMouseHovering*(rect: NimRect): bool {.raises: [], tags: [],
   return nkInbox(px = ctx.input.mouse.pos.x, py = ctx.input.mouse.pos.y,
     x = rect.x, y = rect.y, w = rect.w, h = rect.h)
 
+# TODO: testing code
+#Proc isMouseHovering*(i: Input; rect: NimRect): bool {.raises: [], tags: [],
+#    contractual.} =
+#  ## Check if mouse is hovering over the selected rectangle
+#  ##
+#  ## * rect - the area in which the mouse will be checked for hovering
+#  ##
+#  ## Returns true if the mouse is hovering over the rectangle, otherwise false
+#  return nkInbox(px = i.mouse.pos.x, py = i.mouse.pos.y,  x = rect.x, y = rect.y, w = rect.w, h = rect.h)
+
 proc isMousePrevHovering*(rect: NimRect): bool {.raises: [], tags: [],
     contractual.} =
   ## Check if the mouse was previously hovering over the selected rectangle
