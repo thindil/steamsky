@@ -18,8 +18,8 @@
 ## Provides code related to UI in bases' available missions list, like show
 ## the list, accept a mission, show a mission on the map, etc.
 
-import contracts
-import coreui, header
+import contracts, nuklear/nuklear_sdl_renderer
+import coreui, header, setui, themes
 
 proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -32,3 +32,7 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
+  setLayoutRowStatic(height = 30, cols = 3, ratio = missionsWidth)
+  label(str = missionsText[0])
+  colorLabel(str = missionsText[1], color = theme.colors[goldenColor])
+  label(str = missionsText[2])
