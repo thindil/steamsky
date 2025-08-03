@@ -483,7 +483,7 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
-  ## Drop selected amount of the selected item from the ship's cargo
+  ## Show information about the selected item in the player's ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
   ## * interp     - the Tcl interpreter on which the command was executed
