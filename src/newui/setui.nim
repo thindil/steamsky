@@ -21,7 +21,7 @@
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
-    crew, crewinventory, game, maps, shipscargo, shipscrew, types]
+    crew, crewinventory, game, maps, missions, shipscargo, shipscrew, types]
 import coreui, errordialog, utilsui2
 
 var
@@ -707,6 +707,24 @@ proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
+  var missionsLimit = (case skyBases[skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex].reputation.level
+    of 0..25:
+      1
+    of 26..50:
+      3
+    of 51..75:
+      5
+    of 76..100:
+      10
+    else:
+      0)
+  for mission in acceptedMissions:
+    if mission.startBase == skyMap[playerShip.skyX][playerShip.skyY].baseIndex:
+      missionsLimit.dec
+      if missionsLimit == 0:
+        break
+  missionsText[1] = $missionsLimit
   for index, text in missionsText:
     try:
       missionsWidth[index] = text.getTextWidth
