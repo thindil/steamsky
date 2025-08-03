@@ -336,7 +336,7 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & button & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
   button = itemDialog & ".cancelbutton"
   tclEval(script = "ttk::button " & button &
-      " -image cancelicon -command {CloseDialog " & itemDialog & "} -style Dialogred.TButton -text Close")
+      " -image cancelicon -command {CloseDialog " & itemDialog & "} -style Dialogred.TButton -text Cancel")
   tclEval(script = "grid " & button & " -column 1 -row 4 -padx {5 15} -pady 5 -sticky w")
   tclEval(script = "tooltip::tooltip " & button & " \"Cancel giving and close dialog. \\[Escape key\\]\"")
   tclEval(script = "focus " & button)
