@@ -214,7 +214,7 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
   ## Returns the modified parameter table
   var x: int = 5
   for i in 1 .. column - 1:
-    x = x + table.columnsWidth[i - 1]
+    x += table.columnsWidth[i - 1]
   let
     textColor: string = (if color.len > 0: color else: tclEval2(
         script = "ttk::style lookup " & gameSettings.interfaceTheme &
@@ -264,7 +264,7 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.raises: [],
         " 0 " & $(newX + table.columnsWidth[column - 1] + 10) & " " & $(
             table.rowHeight - 3))
     for row in 1 .. table.row:
-      newY = newY + table.rowHeight
+      newY += table.rowHeight
       tag = "row" & $row & "col" & $column
       tclEval(script = table.canvas & " moveto " & tag & " " & $newX & " " & $newY)
       tag = "progressbar" & $row & "back" & $column
@@ -284,7 +284,7 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.raises: [],
         " - " & coords[1] & "] -width [expr " & coords[2] & " - " & coords[0] & " + 5]")
   newY = table.rowHeight
   for row in 1 .. table.row:
-    newY = newY + table.rowHeight
+    newY += table.rowHeight
     tag = "row" & $row
     try:
       discard tclEval(script = table.canvas & " coords " & tag & " 0 " & $(
@@ -319,7 +319,7 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
   ## Returns modified parameter table
   var x: int = 0
   for i in 1 .. column - 1:
-    x = x + table.columnsWidth[i - 1]
+    x += table.columnsWidth[i - 1]
   var itemId: string = tclEval2(script = table.canvas & " create rectangle " & $x &
       " " & $((table.row * table.rowHeight) + 5) & " " & $(x + 102) & " " & $((
       table.row * table.rowHeight) + (table.rowHeight - 10)) & " -fill " &
@@ -423,7 +423,7 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
   ## Returns modified parameter table
   var x: int = 5
   for i in 1 .. column - 1:
-    x = x + table.columnsWidth[i - 1]
+    x += table.columnsWidth[i - 1]
   let
     imageName: string = "${ttk::theme::" & tclEval2(script = "ttk::style theme use") &
       "::Images(checkbox-" & (if checked: "checked" else: (
