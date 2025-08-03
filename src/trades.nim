@@ -245,8 +245,8 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     eventsList[eventIndex].time += 5
   updateGame(minutes = 5)
 
-proc getTradeData*(iIndex: int): tuple[protoIndex: int, maxSellAmount: int,
-  maxBuyAmount: int, price: int] {.raises: [KeyError], tags: [], contractual.} =
+proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
+  price: int] {.raises: [KeyError], tags: [], contractual.} =
   ## get the data related to the item during trading
   ##
   ## * iIndex - the index of the item which data will be get. If positive, the
