@@ -279,14 +279,16 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
   ##                  the button will not show. Default value is empty.
   var
     protoIndex: Natural = 0
-    itemInfo: string = ""
+    itemInfo, quality: string = ""
   if memberIndex > -1:
     protoIndex = playerShip.crew[memberIndex].inventory[itemIndex].protoIndex
+    quality = $playerShip.crew[memberIndex].inventory[itemIndex].quality
     if playerShip.crew[memberIndex].inventory[itemIndex].durability < defaultItemDurability:
       itemInfo = getItemDamage(itemDurability = playerShip.crew[
           memberIndex].inventory[itemIndex].durability, withColors = true) & '\n'
   else:
     protoIndex = playerShip.cargo[itemIndex].protoIndex
+    quality = $playerShip.cargo[itemIndex].quality
     if playerShip.cargo[itemIndex].durability < defaultItemDurability:
       itemInfo = getItemDamage(itemDurability = playerShip.cargo[
           itemIndex].durability, withColors = true) & '\n'
@@ -323,6 +325,8 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
   if itemsList[protoIndex].itemType.len > 4 and itemsList[protoIndex].itemType[
       0 .. 3] == "Ammo" or itemsList[protoIndex].itemType == "Harpoon":
     itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
+  if protoIndex != moneyIndex:
+    itemInfo.add(y = "\nQuality: {gold}" & quality & "{/gold}")
   if itemsList[protoIndex].description.len > 0:
     itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
   if parent == ".":
