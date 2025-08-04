@@ -246,7 +246,7 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
   updateGame(minutes = 5)
 
 proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
-  price: int] {.raises: [KeyError], tags: [], contractual.} =
+  price: int; quality: ObjectQuality] {.raises: [KeyError], tags: [], contractual.} =
   ## get the data related to the item during trading
   ##
   ## * iIndex - the index of the item which data will be get. If positive, the
@@ -255,7 +255,7 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
   ##
   ## Returns tuple with trade data: proto index of the item, max amount of item
   ## to sell, max amount item to buy and its price
-  result = (-1, 0, 0, 0)
+  result = (-1, 0, 0, 0, normal)
   var baseCargoIndex, cargoIndex: int = -1
   if iIndex < 0:
     baseCargoIndex = iIndex.abs
@@ -268,6 +268,13 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
     return
   elif baseIndex > 0 and baseCargoIndex > skyBases[baseIndex].cargo.high:
     return
+  if iIndex < 0:
+    if baseIndex == 0:
+      result.quality = traderCargo[baseCargoIndex].quality
+    else:
+      result.quality = skyBases[baseIndex].cargo[baseCargoIndex].quality
+  else:
+      result.quality = playerShip.cargo[cargoIndex].quality
   var itemIndex: int = iIndex
   if cargoIndex > -1:
     result.protoIndex = playerShip.cargo[cargoIndex].protoIndex
