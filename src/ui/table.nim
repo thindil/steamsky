@@ -144,8 +144,8 @@ proc clearTable*(table: var TableWidget) {.raises: [], tags: [], contractual.} =
     tclEval(script = "destroy " & buttonsFrame & ".previous")
     tclEval(script = "destroy " & buttonsFrame & ".next")
     tclEval(script = "destroy " & buttonsFrame)
-  for row in 1 .. table.row:
-    for column in 1 .. table.columnsWidth.len:
+  for row in 1..table.row:
+    for column in 1..table.columnsWidth.len:
       tclEval(script = table.canvas & " delete row" & $row & "col" & $column)
       tclEval(script = table.canvas & " delete row" & $row)
       tclEval(script = table.canvas & " delete progressbar" & $row & "back" & $column)
@@ -213,7 +213,7 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
   ##
   ## Returns the modified parameter table
   var x: int = 5
-  for i in 1 .. column - 1:
+  for i in 1..column - 1:
     x += table.columnsWidth[i - 1]
   let
     textColor: string = (if color.len > 0: color else: tclEval2(
@@ -256,14 +256,14 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.raises: [],
   var
     newX: int = table.columnsWidth[0] + 20
     newY: int = 2
-  for column in 2 .. table.columnsWidth.len:
+  for column in 2..table.columnsWidth.len:
     tag = "header" & $column
     tclEval(script = table.canvas & " coords " & tag & " " & $newX & " " & $newY)
     tag = "headerback" & $column
     tclEval(script = table.canvas & " coords " & tag & " " & $(newX - 10) &
         " 0 " & $(newX + table.columnsWidth[column - 1] + 10) & " " & $(
             table.rowHeight - 3))
-    for row in 1 .. table.row:
+    for row in 1..table.row:
       newY += table.rowHeight
       tag = "row" & $row & "col" & $column
       tclEval(script = table.canvas & " moveto " & tag & " " & $newX & " " & $newY)
@@ -283,7 +283,7 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.raises: [],
     tclEval(script = table.canvas & " configure -height [expr " & coords[3] &
         " - " & coords[1] & "] -width [expr " & coords[2] & " - " & coords[0] & " + 5]")
   newY = table.rowHeight
-  for row in 1 .. table.row:
+  for row in 1..table.row:
     newY += table.rowHeight
     tag = "row" & $row
     try:
@@ -318,7 +318,7 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
   ##
   ## Returns modified parameter table
   var x: int = 0
-  for i in 1 .. column - 1:
+  for i in 1..column - 1:
     x += table.columnsWidth[i - 1]
   var itemId: string = tclEval2(script = table.canvas & " create rectangle " & $x &
       " " & $((table.row * table.rowHeight) + 5) & " " & $(x + 102) & " " & $((
@@ -422,7 +422,7 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
   ##
   ## Returns modified parameter table
   var x: int = 5
-  for i in 1 .. column - 1:
+  for i in 1..column - 1:
     x += table.columnsWidth[i - 1]
   let
     imageName: string = "${ttk::theme::" & tclEval2(script = "ttk::style theme use") &
