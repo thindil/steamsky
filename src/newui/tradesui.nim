@@ -246,7 +246,7 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   itemIndex = itemsIndexes[data]
   if data > playerShip.cargo.len:
     itemIndex *= -1
-  let (protoIndex, maxSellAmount, maxBuyAmount, _) = try:
+  let (protoIndex, maxSellAmount, maxBuyAmount, _, quality) = try:
       getTradeData(iIndex = itemIndex)
     except:
       dialog = setError(message = "Can't get the trade's data.")

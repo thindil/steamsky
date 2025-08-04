@@ -829,7 +829,7 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     itemIndex.inc
   else:
     itemIndex.dec
-  let (protoIndex, maxSellAmount, maxBuyAmount, price) = try:
+  let (protoIndex, maxSellAmount, maxBuyAmount, price, quality) = try:
       getTradeData(iIndex = itemIndex)
     except:
       return showError(message = "Can't get the trade's data.")

@@ -441,7 +441,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
   ##
   ## Returns the type of dialog if the dialog was set, otherwise errorDialog
   setDialog(x = windowWidth / 5.0)
-  let (protoIndex, maxSellAmount, maxBuyAmount, price) = try:
+  let (protoIndex, maxSellAmount, maxBuyAmount, price, _) = try:
       getTradeData(iIndex = iIndex)
     except:
       return setError(message = "Can't get the trade's data.")
