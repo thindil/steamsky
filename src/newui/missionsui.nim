@@ -18,9 +18,10 @@
 ## Provides code related to UI in bases' available missions list, like show
 ## the list, accept a mission, show a mission on the map, etc.
 
+import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, types]
-import coreui, header, messagesui, setui, themes
+import ../[config, game, maps, types]
+import coreui, errordialog, header, messagesui, setui, table, themes
 
 type
   MissionsSortOrders = enum
@@ -37,7 +38,9 @@ type
 
 const defaultMissionsSortOrder: MissionsSortOrders = none
 
-var missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
+var
+  missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
+  missionsIndexes: seq[Natural] = @[]
 
 proc sortMissions(x, y: LocalMissionData): int {.raises: [], tags: [],
     contractual.} =
@@ -115,6 +118,34 @@ proc sortMissions(sortAsc, sortDesc: MissionsSortOrders;
     missionsSortOrder = sortDesc
   else:
     missionsSortOrder = sortAsc
+  var localMissions: seq[LocalMissionData] = @[]
+  for index, mission in skyBases[baseIndex].missions:
+    try:
+      localMissions.add(y = LocalMissionData(mType: mission.mType,
+          distance: countDistance(destinationX = mission.targetX,
+          destinationY = mission.targetY), coords: "X: " & $mission.targetX &
+          " Y: " & $mission.targetY, details: (case mission.mType
+        of deliver: itemsList[mission.itemIndex].name & " to " & skyBases[
+            skyMap[mission.targetX][mission.targetY].baseIndex].name
+        of patrol, explore: "X: " & $mission.targetX & " Y: " & $mission.targetY
+        of destroy: protoShipsList[mission.shipIndex].name
+        of passenger: "To " & skyBases[skyMap[mission.targetX][
+            mission.targetY].baseIndex].name), time: mission.time,
+            reward: mission.reward, id: index))
+    except:
+      dialog = setError(message = "Can't add mission to list.")
+  localMissions.sort(cmp = sortMissions)
+  missionsIndexes = @[]
+  for mission in localMissions:
+    missionsIndexes.add(y = mission.id)
+
+const
+  headers: array[2, HeaderData[MissionsSortOrders]] = [
+    HeaderData[MissionsSortOrders](label: "Name", sortAsc: typeAsc,
+        sortDesc: typeDesc),
+    HeaderData[MissionsSortOrders](label: "Distance", sortAsc: distanceAsc,
+        sortDesc: distanceDesc)]
+  ratio: array[2, cfloat] = [300.cfloat, 200]
 
 proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
