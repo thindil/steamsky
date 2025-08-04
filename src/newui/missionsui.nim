@@ -140,12 +140,20 @@ proc sortMissions(sortAsc, sortDesc: MissionsSortOrders;
     missionsIndexes.add(y = mission.id)
 
 const
-  headers: array[2, HeaderData[MissionsSortOrders]] = [
+  headers: array[6, HeaderData[MissionsSortOrders]] = [
     HeaderData[MissionsSortOrders](label: "Name", sortAsc: typeAsc,
         sortDesc: typeDesc),
     HeaderData[MissionsSortOrders](label: "Distance", sortAsc: distanceAsc,
-        sortDesc: distanceDesc)]
-  ratio: array[2, cfloat] = [300.cfloat, 200]
+        sortDesc: distanceDesc),
+    HeaderData[MissionsSortOrders](label: "Coordinates", sortAsc: coordAsc,
+        sortDesc: coordDesc),
+    HeaderData[MissionsSortOrders](label: "Details", sortAsc: detailsAsc,
+        sortDesc: detailsDesc),
+    HeaderData[MissionsSortOrders](label: "Time limit", sortAsc: timeAsc,
+        sortDesc: timeDesc),
+    HeaderData[MissionsSortOrders](label: "Base reward", sortAsc: rewardAsc,
+        sortDesc: rewardDesc)]
+  ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
 proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -168,4 +176,6 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     label(str = missionsText[0])
     colorLabel(str = missionsText[1], color = theme.colors[goldenColor])
     label(str = missionsText[2])
+    addHeader(headers = headers, ratio = ratio, tooltip = "missions",
+      code = sortMissions, dialog = dialog)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
