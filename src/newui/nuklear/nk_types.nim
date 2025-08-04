@@ -663,10 +663,6 @@ converter toNkFlags*(x: EditTypes): nk_flags =
 converter toCint*(x: bool): cint =
   ## Converts Nim bool type to Nim cint type
   if x: 1 else: 0
-# TODO: test code, continue work
-converter toInput*(x: nk_input): Input =
-  ## Converts Nuklear nk_input type to Nim Input
-  result.mouse.delta = NimVec2(x: x.mouse.delta.x, y: x.mouse.delta.y)
 
 # -------------------
 # Creating structures
