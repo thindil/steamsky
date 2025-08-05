@@ -306,10 +306,15 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     dialog = setError(message = "Can't get ammo info.")
     return
   try:
+    if itemInfo.len > 0:
+      itemInfo.add(y = "\n")
+    itemInfo.add(y = "Quality: {gold}" & ($quality).capitalizeAscii & "{/gold}")
+  except:
+    dialog = setError(message = "Can't get quality info.")
+    return
+  try:
     if itemsList[protoIndex].description.len > 0:
-      if itemInfo.len > 0:
-        itemInfo.add(y = "\n")
-      itemInfo.add(y = itemsList[protoIndex].description)
+      itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
   except:
     dialog = setError(message = "Can't get the description.")
     return
