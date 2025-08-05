@@ -24,7 +24,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import contracts
-import nk_alignment, nk_context, nk_page, nk_types
+import nk_context, nk_page, nk_types
+include nk_alignment
 
 # ---------------------
 # Procedures parameters
