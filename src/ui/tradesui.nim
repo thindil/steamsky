@@ -884,10 +884,14 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   except:
     return showError(message = "Can't get ammo info.")
   try:
+    if itemInfo.len > 0:
+      itemInfo.add(y = "\n")
+    itemInfo.add(y = "Quality: {gold}" & ($quality).capitalizeAscii & "{/gold}")
+  except:
+    return showError(message = "Can't get quality info.")
+  try:
     if itemsList[protoIndex].description.len > 0:
-      if itemInfo.len > 0:
-        itemInfo.add(y = "\n\n")
-      itemInfo.add(y = itemsList[protoIndex].description)
+      itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
   except:
     return showError(message = "Can't get the description.")
   try:
