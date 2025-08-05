@@ -350,6 +350,8 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       wAmount = 0
       lineWidth = 0
       startIndex = tagIndex + tagName.len + 3
+      if text[startIndex] == '\n':
+        startIndex.inc
       tagIndex = text.find(sub = '{', start = startIndex)
     infoData = InfoData(data: parts, button1: button1, button2: button2,
         widgetsAmount: widgetsAmount, title: title)
