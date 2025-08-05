@@ -326,7 +326,7 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
       0 .. 3] == "Ammo" or itemsList[protoIndex].itemType == "Harpoon":
     itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
   if protoIndex != moneyIndex:
-    itemInfo.add(y = "\nQuality: {gold}" & quality & "{/gold}")
+    itemInfo.add(y = "\nQuality: {gold}" & quality.capitalizeAscii & "{/gold}")
   if itemsList[protoIndex].description.len > 0:
     itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
   if parent == ".":
