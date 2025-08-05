@@ -16,11 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
+import contracts
 import ../[config, game, maps, tk, types]
 import coreui, dialogs, errordialog, table
 
 proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show information about the selected event
   ##
   ## * clientData - the additional data for the Tcl command
@@ -74,7 +76,8 @@ var
   eventsTable: TableWidget
   eventsIndexes: seq[Natural]
 
-proc updateEventsList*(page: Positive = 1) {.raises: [], tags: [RootEffect].} =
+proc updateEventsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Update and show list of known events
   ##
   ## * page     - the current page of the events' list to show
@@ -225,7 +228,7 @@ proc updateEventsList*(page: Positive = 1) {.raises: [], tags: [RootEffect].} =
 
 proc showEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show the list of known events to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -258,7 +261,7 @@ var eventsSortOrder: EventsSortOrders = defaultEventsSortOrder
 
 proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show the list of known events to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -322,7 +325,8 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
         ""), id: index))
     except:
       return showError(message = "Can't add local event.")
-  proc sortEvents(x, y: LocalEventData): int =
+  proc sortEvents(x, y: LocalEventData): int {.raises: [], tags: [],
+      contractual.} =
     case eventsSortOrder
     of typeAsc:
       if x.eType < y.eType:
@@ -373,7 +377,8 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   updateEventsList()
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Adds Tcl commands related to the known events UI
   try:
     addCommand("ShowEventInfo", showEventInfoCommand)
