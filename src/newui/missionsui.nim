@@ -38,9 +38,7 @@ type
 
 const defaultMissionsSortOrder: MissionsSortOrders = none
 
-var
-  missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
-  missionsIndexes: seq[Natural] = @[]
+var missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
 
 proc sortMissions(x, y: LocalMissionData): int {.raises: [], tags: [],
     contractual.} =
