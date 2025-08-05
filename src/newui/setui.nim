@@ -698,6 +698,8 @@ var
     ## The text with information about how many missions can be taken
   missionsWidth*: array[3, cfloat] = [0, 0, 0]
     ## The width in pixels of the text with information about missions
+  missionsIndexes*: seq[Natural] = @[]
+    ## The list of indexes of available missions in a base
 
 proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -707,8 +709,8 @@ proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  var missionsLimit = (case skyBases[skyMap[playerShip.skyX][
-      playerShip.skyY].baseIndex].reputation.level
+  baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var missionsLimit = (case skyBases[baseIndex].reputation.level
     of 0..25:
       1
     of 26..50:
@@ -720,7 +722,7 @@ proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     else:
       0)
   for mission in acceptedMissions:
-    if mission.startBase == skyMap[playerShip.skyX][playerShip.skyY].baseIndex:
+    if mission.startBase == baseIndex:
       missionsLimit.dec
       if missionsLimit == 0:
         break
@@ -730,3 +732,6 @@ proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       missionsWidth[index] = text.getTextWidth
     except:
       dialog = setError(message = "Can't get the width of the missions text.")
+  missionsIndexes = @[]
+  for index, _ in skyBases[baseIndex].missions:
+    missionsIndexes.add(y = index)
