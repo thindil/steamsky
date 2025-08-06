@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -18,7 +18,7 @@
 ## Provides code related to the player's ship's crew members' inventories,
 ## like finding items in them, counting free space, damaging items, etc.
 
-import std/tables
+import std/[math, tables]
 import contracts
 import game, shipscargo, types, utils
 
@@ -186,6 +186,18 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
   var
     item: InventoryData = inventory[itemIndex]
     damageChance: int = itemsList[item.protoIndex].value[1]
+  # Modify the item's chance to damage, based on its quality
+  case item.quality
+  of poor:
+    damageChance += (damageChance.float * 0.4).ceil.int
+  of low:
+    damageChance += (damageChance.float * 0.2).ceil.int
+  of normal:
+    discard
+  of good:
+    damageChance -= (damageChance.float * 0.2).ceil.int
+  of excellent:
+    damageChance -= (damageChance.float * 0.4).ceil.int
   if skillLevel > 0:
     damageChance -= (skillLevel / 5).int
     if damageChance < 1:
@@ -195,7 +207,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
   if item.amount > 1:
     inventory.add(y = InventoryData(protoIndex: item.protoIndex,
         amount: item.amount - 1, name: item.name, durability: item.durability,
-        price: item.price))
+        price: item.price, quality: item.quality))
     item.amount = 1
   if item.durability > ItemsDurability.low:
     item.durability.dec
