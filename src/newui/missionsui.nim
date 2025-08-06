@@ -164,16 +164,33 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
+  # Show information about amount of missions which the player can take
+  setLayoutRowStatic(height = 30, cols = 3, ratio = missionsWidth)
+  label(str = missionsText[0])
+  colorLabel(str = missionsText[1], color = theme.colors[goldenColor])
+  label(str = missionsText[2])
+  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 50
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "MissionsGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
-    # Show information about amount of missions which the player can take
-    setLayoutRowStatic(height = 30, cols = 3, ratio = missionsWidth)
-    label(str = missionsText[0])
-    colorLabel(str = missionsText[1], color = theme.colors[goldenColor])
-    label(str = missionsText[2])
+    # Show the list of missions
     addHeader(headers = headers, ratio = ratio, tooltip = "missions",
       code = sortMissions, dialog = dialog)
+    var currentRow = 1
+    let startRow = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    var row: Positive = 1
+    restoreButtonStyle()
+    addPagination(page = currentPage, row = row)
+  # Show the last in-game messages
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
