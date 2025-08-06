@@ -23,7 +23,9 @@
 # OR TORT *(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-proc nkContainerOf[T](`ptr`: pointer; `type`: typedesc[T];
+import contracts
+
+proc nkContainerOf*[T](`ptr`: pointer; `type`: typedesc[T];
     member: string): ptr typedesc[T] {.raises: [], tags: [], contractual.} =
   ## Get the container of the selected element
   ##
