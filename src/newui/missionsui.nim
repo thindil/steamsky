@@ -20,7 +20,7 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, maps, types]
+import ../[config, game, maps, missions, types]
 import coreui, errordialog, header, messagesui, setui, table, themes
 
 type
@@ -153,6 +153,17 @@ const
         sortDesc: rewardDesc)]
   ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
+var missionIndex: int = -1
+
+proc setMissionInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [],
+    contractual.} =
+  ## Set the data needed for show information about the selected mission
+  ##
+  ## * data
+  ## * dialog
+  missionIndex = data
+  dialog = missionDialog
+
 proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the UI with the list of available missions in the base
@@ -190,6 +201,32 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
     var row: Positive = 1
+    for index in missionsIndexes:
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      var
+        canAccept: bool = true
+        cabinTaken: bool = false
+        mission: MissionData = skyBases[baseIndex].missions[index]
+      if mission.mType == passenger:
+        canAccept = false
+        for module in playerShip.modules:
+          if (module.mType == ModuleType2.cabin and not canAccept) and
+              module.quality >= mission.data:
+            canAccept = false
+            cabinTaken = true
+            for owner in module.owner:
+              if owner == -1:
+                cabinTaken = false
+                canAccept = true
+                break
+            if canAccept:
+              break
+      addButton(label = getMissionType(mType = mission.mType),
+          tooltip = "Show more info about the mission", data = index,
+          code = setMissionInfo, dialog = dialog, color = (
+          if canAccept: tableTextColor elif cabinTaken: yellowColor else: redColor))
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
   # Show the last in-game messages
