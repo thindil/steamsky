@@ -33,9 +33,8 @@ type
     ## Used to show any in-game dialog window
     none, loading, questionDialog, errorDialog, waitDialog, gameMenuDialog,
       newGoalDialog, boardingDialog, defendingDialog, recruitDialog,
-      negotiateDialog, moduleDialog, baseActionDialog, ordersDialog,
-      destinationDialog, messageDialog, infoDialog, buyDialog, sellDialog
-
+      negotiateDialog, moduleDialog, missionDialog, baseActionDialog,
+      ordersDialog, destinationDialog, messageDialog, infoDialog, buyDialog, sellDialog
 const
   dtime*: float = 20.0        ## The length in miliseconds of one game's frame
   menuWidth*: Positive = 600  ## The width of the game's main window
