@@ -735,3 +735,4 @@ proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   missionsIndexes = @[]
   for index, _ in skyBases[baseIndex].missions:
     missionsIndexes.add(y = index)
+  currentPage = 1
