@@ -227,6 +227,13 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip = "Show more info about the mission", data = index,
           code = setMissionInfo, dialog = dialog, color = (
           if canAccept: tableTextColor elif cabinTaken: yellowColor else: redColor))
+      addButton(label = $countDistance(destinationX = mission.targetX,
+          destinationY = mission.targetY),
+          tooltip = "The distance to the mission", data = index,
+          code = setMissionInfo, dialog = dialog)
+      addButton(label = "X: " & $mission.targetX & " Y: " & $mission.targetY,
+          tooltip = "Show more info about the mission", data = index,
+          code = setMissionInfo, dialog = dialog)
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
   # Show the last in-game messages
