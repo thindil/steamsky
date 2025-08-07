@@ -20,7 +20,7 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, maps, missions, types]
+import ../[config, events, game, maps, missions, types, utils]
 import coreui, errordialog, header, messagesui, setui, table, themes
 
 type
@@ -151,7 +151,7 @@ const
         sortDesc: timeDesc),
     HeaderData[MissionsSortOrders](label: "Base reward", sortAsc: rewardAsc,
         sortDesc: rewardDesc)]
-  ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
+  ratio: array[6, cfloat] = [300.cfloat, 200, 200, 300, 200, 200]
 
 var missionIndex: int = -1
 
@@ -234,6 +234,46 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = "X: " & $mission.targetX & " Y: " & $mission.targetY,
           tooltip = "Show more info about the mission", data = index,
           code = setMissionInfo, dialog = dialog)
+      canAccept = true
+      cabinTaken = false
+      case mission.mType
+      of deliver:
+        try:
+          addButton(label = itemsList[skyBases[baseIndex].missions[
+              index].itemIndex].name & " to " & skyBases[skyMap[
+              mission.targetX][mission.targetY].baseIndex].name,
+              tooltip = "Show more info about the mission", data = index,
+              code = setMissionInfo, dialog = dialog)
+        except:
+          dialog = setError(message = "Can't add delivery button.")
+          return
+      of patrol, explore:
+        addButton(label = "X: " & $mission.targetX & " Y: " & $mission.targetY,
+            tooltip = "Show more info about the mission", data = index,
+            code = setMissionInfo, dialog = dialog)
+      of destroy:
+        if mission.shipIndex == -1:
+          var enemies: seq[Positive] = @[]
+          try:
+            generateEnemies(enemies = enemies, withTraders = false)
+          except:
+            dialog = setError(message = "Can't generate enemies.")
+            return
+          mission.shipIndex = enemies[getRandom(min = enemies.low,
+              max = enemies.high)]
+          skyBases[baseIndex].missions[index].shipIndex = mission.shipIndex
+        try:
+          addButton(label = protoShipsList[mission.shipIndex].name,
+              tooltip = "Show more info about the mission", data = index,
+              code = setMissionInfo, dialog = dialog)
+        except:
+          dialog = setError(message = "Can't add destroy button.")
+          return
+      of passenger:
+        addButton(label = "To " & skyBases[skyMap[mission.targetX][
+            mission.targetY].baseIndex].name,
+            tooltip = "Show more info about the mission", data = index,
+            code = setMissionInfo, dialog = dialog)
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
   # Show the last in-game messages
