@@ -21,7 +21,7 @@
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, events, game, maps, missions, types, utils]
-import coreui, errordialog, header, messagesui, setui, table, themes, utilsui2
+import coreui, dialogs, errordialog, header, messagesui, setui, table, themes, utilsui2
 
 type
   MissionsSortOrders = enum
@@ -154,6 +154,30 @@ const
   ratio: array[6, cfloat] = [300.cfloat, 200, 200, 300, 200, 200]
 
 var missionIndex: int = -1
+
+proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected mission information
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  const
+    width: float = 400
+    height: float = 400
+
+  let
+    mission: MissionData = skyBases[baseIndex].missions[missionIndex]
+    windowName: string = "More info about " & getMissionType(
+        mType = mission.mType)
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 1)
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = windowName)
 
 proc setMissionInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [],
     contractual.} =
