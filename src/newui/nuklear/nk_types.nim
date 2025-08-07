@@ -160,18 +160,27 @@ type
 # -------
 {.push ruleOff: "namedParams".}
 type
-  nk_color* {.importc: "struct nk_color", nodecl.} = object
+  nk_color* {.importc: "struct nk_color".} = object
     ## Internal Nuklear type
     r*, g*, b*, a*: nk_byte
-  nk_colorf* {.importc: "struct nk_colorf", nodecl.} = object
+  nk_colorf* {.importc: "struct nk_colorf".} = object
     ## Internal Nuklear type
     r*, g*, b*, a*: cfloat
-  nk_vec2* {.importc: "struct nk_vec2", nodecl, completeStruct.} = object
+  nk_vec2* {.importc: "struct nk_vec2", completeStruct.} = object
     ## Internal Nuklear type
     x*, y*: cfloat
-  nk_vec2i* {.importc: "struct nk_vec2i", nodecl, completeStruct.} = object
+  nk_vec2i* {.importc: "struct nk_vec2i".} = object
     ## Internal Nuklear type
     x*, y*: cshort
+  nk_handle* {.bycopy, union.} = object
+    ## Internal Nuklear type
+    `ptr`*: pointer
+    id*: cint
+  nk_image* {.importc: "struct nk_image", nodecl.} = object
+    ## Internal Nuklear type
+    handle*: nk_handle
+    w*, h*: nk_ushort
+    region*: array[4, nk_ushort]
   nk_nine_slice* {.importc: "struct nk_nine_slice", nodecl.} = object
     ## Internal Nuklear type
     image*: nk_image
@@ -203,6 +212,9 @@ type
     background*, group_text_color*: nk_color
     border*, combo_border*, contextual_border*, menu_border*, group_border*,
       tooltip_border*, popup_border*, rounding*: cfloat
+  nk_rect* {.importc: "struct nk_rect", nodecl.} = object
+    ## Internal Nuklear type
+    x*, y*, w*, h*: cfloat
   nk_draw_command* {.importc: "struct nk_draw_command", nodecl.} = object
     ## Internal Nuklear type
     elem_count*: cuint
@@ -228,10 +240,6 @@ type
   nk_style_progress* {.importc: "struct nk_style_progress", nodecl.} = object
     cursor_normal*: nk_style_item
     ## Internal Nuklear type
-  nk_handle* {.bycopy, union.} = object
-    ## Internal Nuklear type
-    `ptr`*: pointer
-    id*: cint
   nk_text_width_f* = proc (arg1: nk_handle; h: cfloat; arg3: cstring;
       len: cint): cfloat {.cdecl.}
     ## Internal Nuklear type
@@ -254,12 +262,14 @@ type
     text*: nk_style_text
     cursor_active*: nk_cursor
     cursors*: pointer
-  nk_mouse_button* {.importc: "struct nk_mouse_button", nodecl,
+  nk_mouse_button* {.importc: "struct nk_mouse_button",
       completeStruct.} = object
     ## Internal Nuklear type
     down*: nk_bool
     clicked*: cuint
     clicked_pos*: nk_vec2
+  ButtonsArray* = array[Buttons.max, nk_mouse_button]
+    ## The array of mouse buttons
   nk_mouse* {.importc: "struct nk_mouse", nodecl.} = object
     ## Internal Nuklear type
     delta*, pos*, prev*, scroll_delta*, : nk_vec2
@@ -348,6 +358,8 @@ type
     ## Internal Nuklear type
     index*, columns*, tree_depth*: cint
     ratio*, item_width*, item_height*, height*: cfloat
+  PNkPanel* = ptr nk_panel
+    ## Pointer to nk_panel structure
   nk_panel* {.importc: "struct nk_panel", nodecl.} = object
     ## Internal Nuklear type
     `type`*: PanelType
@@ -411,6 +423,8 @@ type
     calls*: nk_size
   nk_table* {.importc: "struct nk_table", nodecl.} = object
     ## Internal Nuklear type
+    `seq`*, size*: cuint
+    next*, prev*: ptr nk_table
   nk_page_data* {.bycopy, union.} = object
     ## Internal Nuklear type
     tbl*: nk_table
@@ -431,9 +445,6 @@ type
     freelist*: pointer
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle ## Interna Nuklear data
-  nk_rect* {.importc: "struct nk_rect", nodecl.} = object
-    ## Internal Nuklear type
-    x*, y*, w*, h*: cfloat
   nk_text_edit* = object
     ## Internal Nuklear type
   nk_font* {.importc: "struct nk_font", nodecl.} = object
@@ -444,21 +455,12 @@ type
   nk_font_config* {.importc: "struct nk_font_config", nodecl.} = object
     ## Internal Nuklear type
     `range`*: pointer
-  nk_image* {.importc: "struct nk_image", nodecl.} = object
-    ## Internal Nuklear type
-    handle*: nk_handle
-    w*, h*: nk_ushort
-    region*: array[4, nk_ushort]
   nk_text* {.importc: "struct nk_text", nodecl.} = object
     ## Internal Nuklear type
     padding*: nk_vec2
     background*, text*: nk_color
   PNkWindow* = ptr nk_window
     ## Pointer to nk_window structure
-  PNkPanel* = ptr nk_panel
-    ## Pointer to nk_panel structure
-  ButtonsArray* = array[Buttons.max, nk_mouse_button]
-    ## The array of mouse buttons
   CursorsArray* = array[cursorCount, nk_cursor]
     ## The array of mouse buttons
 

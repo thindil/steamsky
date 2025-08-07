@@ -57,8 +57,7 @@ proc hasMouseClickInRect*(id: Buttons; rect: NimRect): bool {.raises: [],
   if ctx.input.addr == nil:
     return false
   let
-    buttons: array[Buttons, nk_mouse_button] =
-      cast[array[Buttons, nk_mouse_button]](ctx.input.mouse.buttons)
+    buttons: ButtonsArray = cast[ButtonsArray](ctx.input.mouse.buttons)
     btn: nk_mouse_button = buttons[id]
   return nkInbox(px = btn.clicked_pos.x, py = btn.clicked_pos.y, x = rect.x,
     y = rect.y, w = rect.w, h = rect.h)
@@ -75,8 +74,7 @@ proc hasMouseClickDownInRect*(id: Buttons; rect: NimRect; down: bool): bool
   if ctx.input.addr == nil:
     return false
   let
-    buttons: array[Buttons, nk_mouse_button] =
-      cast[array[Buttons, nk_mouse_button]](ctx.input.mouse.buttons)
+    buttons: ButtonsArray = cast[ButtonsArray](ctx.input.mouse.buttons)
     btn: nk_mouse_button = buttons[id]
   return hasMouseClickInRect(id = id, rect = NimRect(x: rect.x, y: rect.y,
     w: rect.w, h: rect.h)) and btn.down == down
