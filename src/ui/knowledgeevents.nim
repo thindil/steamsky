@@ -87,7 +87,7 @@ proc updateEventsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
     eventsCanvas = mainPaned & ".knowledgeframe.events.canvas"
     eventsFrame = eventsCanvas & ".frame"
   var rows = try:
-      tclEval2(script = "grid size " & eventsFrame).split(" ")[1].parseInt
+      tclEval2(script = "grid size " & eventsFrame).split(sep = " ")[1].parseInt
     except:
       showError(message = "Can't get the amount of rows.")
       return
@@ -381,8 +381,8 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Adds Tcl commands related to the known events UI
   try:
-    addCommand("ShowEventInfo", showEventInfoCommand)
-    addCommand("ShowEvents", showEventsCommand)
-    addCommand("SortKnownEvents", sortEventsCommand)
+    addCommand(name = "ShowEventInfo", nimProc = showEventInfoCommand)
+    addCommand(name = "ShowEvents", nimProc = showEventsCommand)
+    addCommand(name = "SortKnownEvents", nimProc = sortEventsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
