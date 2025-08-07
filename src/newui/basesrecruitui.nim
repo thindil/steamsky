@@ -472,8 +472,10 @@ proc setRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [],
     contractual.} =
   ## Set the data needed for show information about the selected recruit
   ##
-  ## * data
-  ## * dialog
+  ## * data   - the index of the selected recruit
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
   recruitIndex = data
   dialog = recruitDialog
 
