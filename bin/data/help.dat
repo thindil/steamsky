@@ -423,6 +423,7 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 {b}*{/b} When you are waiting in place outside sky bases, your ship will be use fuel too. Watch out on it, because if you will not have enough fuel, you may fall from sky and die.
 {b}*{/b} You may "zoom in" or "zoom out" map with mouse wheel, while holding SHIFT key (it changing size of font used for map) or with {GameKey 24} and {GameKey 25} keys.
 {b}*{/b} You may change all keyboard shortcuts in 'Game Options' menu (key {GameKey 19}).
-{b}*{/b} The maximum amount of items to sell or buy from bases or traders may be different from equal comparison between amount of {MoneyName} while will be used or gain and amount of items which will be sold or bought. The reason is that the maximum amount is count with all bonuses for the prices. When you buy or sell more items in bulk, you will get a better price for them. From the other side, buying or selling more often gives you more experience and reputation.</entry>
+{b}*{/b} The maximum amount of items to sell or buy from bases or traders may be different from equal comparison between amount of {MoneyName} while will be used or gain and amount of items which will be sold or bought. The reason is that the maximum amount is count with all bonuses for the prices. When you buy or sell more items in bulk, you will get a better price for them. From the other side, buying or selling more often gives you more experience and reputation.
+{b}*{/b} The quality of items affects their chance of damage. Poor quality items are more susceptible to damage when used, while high quality items are less likely to damage.</entry>
 </help>
 
