@@ -21,7 +21,7 @@
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, events, game, maps, missions, types, utils]
-import coreui, errordialog, header, messagesui, setui, table, themes
+import coreui, errordialog, header, messagesui, setui, table, themes, utilsui2
 
 type
   MissionsSortOrders = enum
@@ -274,6 +274,13 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
             mission.targetY].baseIndex].name,
             tooltip = "Show more info about the mission", data = index,
             code = setMissionInfo, dialog = dialog)
+      var missionTime: string = ""
+      minutesToDate(minutes = mission.time, infoText = missionTime)
+      addButton(label = missionTime, tooltip = "The time limit for finish and return the mission",
+          data = index, code = setMissionInfo, dialog = dialog)
+      addButton(label = $((mission.reward.float * mission.multiplier).Natural) &
+          " " & moneyName, tooltip = "The base money reward for the mission",
+          data = index, code = setMissionInfo, dialog = dialog)
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
   # Show the last in-game messages
