@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Text on some close buttons to match the rest
+- Updated help
 
 ### Fixed
 - Reading amount of installed modules on the player's ship from saved game
