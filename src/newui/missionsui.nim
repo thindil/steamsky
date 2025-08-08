@@ -20,7 +20,7 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, events, game, maps, missions, types, utils]
+import ../[config, events, game, maps, missions, ships, types, utils]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes, utilsui2
 
 type
@@ -180,18 +180,21 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Item:")
       try:
-        colorLabel(str = itemsList[mission.itemIndex].name, color = theme.colors[goldenColor])
+        colorLabel(str = itemsList[mission.itemIndex].name,
+            color = theme.colors[goldenColor])
       except:
         dialog = setError(message = "Can't get item name.")
         return
       label(str = "Weight:")
       try:
-        colorLabel(str = $itemsList[mission.itemIndex].weight, color = theme.colors[goldenColor])
+        colorLabel(str = $itemsList[mission.itemIndex].weight,
+            color = theme.colors[goldenColor])
       except:
         dialog = setError(message = "Can't get item weight.")
         return
       label(str = "To base:")
-      colorLabel(str = skyBases[skyMap[mission.targetX][mission.targetY].baseIndex].name, color = theme.colors[goldenColor])
+      colorLabel(str = skyBases[skyMap[mission.targetX][
+          mission.targetY].baseIndex].name, color = theme.colors[goldenColor])
     of patrol:
       setLayoutRowDynamic(height = 30, cols = 1)
       colorLabel(str = "Patrol selected area", color = theme.colors[goldenColor])
@@ -199,7 +202,8 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Target:")
       try:
-        colorLabel(str = protoShipsList[mission.shipIndex].name, color = theme.colors[goldenColor])
+        colorLabel(str = protoShipsList[mission.shipIndex].name,
+            color = theme.colors[goldenColor])
       except:
         dialog = setError(message = "Can't get ship's name.")
         return
@@ -207,7 +211,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       setLayoutRowDynamic(height = 30, cols = 1)
       colorLabel(str = "Explore selected area", color = theme.colors[goldenColor])
     of passenger:
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = 60, cols = 2)
       var cabinTaken: bool = false
       canAccept = false
       for module in playerShip.modules:
@@ -224,14 +228,15 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
             break
       if baseIndex == 0:
         canAccept = true
-      label(str = "Needed quality of cabin:")
-      colorLabel(str = getCabinQuality(quality = mission.data) & (if canAccept: "" elif: cabinTaken: " (taken)" else: " (no cabin)"), color = (if canAccept: theme.colors[greenColor] elif cabinTaken: theme.colors[goldenColor] else: theme.colors[redColor]))
-#      tclEval(script = label & " insert end {" & getCabinQuality(
-#          quality = mission.data) & (
-#          if canAccept: "} [list green]" elif cabinTaken: " (taken)} [list gold]" else: " (no cabin)} [list red]"))
-#      tclEval(script = label & " insert end {\nTo base: }")
-#      tclEval(script = label & " insert end {" & skyBases[skyMap[mission.targetX][
-#          mission.targetY].baseIndex].name & "} [list gold]")
+      wrapLabel(str = "Needed quality of cabin:")
+      colorWrapLabel(str = getCabinQuality(quality = mission.data) & (
+          if canAccept: "" elif cabinTaken: " (taken)" else: " (no cabin)"),
+          color = (if canAccept: theme.colors[
+          greenColor] elif cabinTaken: theme.colors[
+          goldenColor] else: theme.colors[redColor]))
+      label(str = "To base:")
+      colorLabel(str = skyBases[skyMap[mission.targetX][
+          mission.targetY].baseIndex].name, color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
