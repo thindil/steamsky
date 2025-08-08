@@ -165,7 +165,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   const
     width: float = 400
-    height: float = 400
+    height: float = 300
 
   let
     mission: MissionData = skyBases[baseIndex].missions[missionIndex]
@@ -174,6 +174,63 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    var canAccept: bool = true
+    case mission.mType
+    of deliver:
+      setLayoutRowDynamic(height = 30, cols = 2)
+      label(str = "Item:")
+      try:
+        colorLabel(str = itemsList[mission.itemIndex].name, color = theme.colors[goldenColor])
+      except:
+        dialog = setError(message = "Can't get item name.")
+        return
+      label(str = "Weight:")
+      try:
+        colorLabel(str = $itemsList[mission.itemIndex].weight, color = theme.colors[goldenColor])
+      except:
+        dialog = setError(message = "Can't get item weight.")
+        return
+      label(str = "To base:")
+      colorLabel(str = skyBases[skyMap[mission.targetX][mission.targetY].baseIndex].name, color = theme.colors[goldenColor])
+    of patrol:
+      setLayoutRowDynamic(height = 30, cols = 1)
+#      tclEval(script = label & " insert end {Patrol selected area} [list gold]")
+    of destroy:
+      setLayoutRowDynamic(height = 30, cols = 2)
+#      tclEval(script = label & " insert end {Target: }")
+#      try:
+#        tclEval(script = label & " insert end {" & protoShipsList[
+#            mission.shipIndex].name & "} [list gold]")
+#      except:
+#        return showError(message = "Can't get ship's name.")
+    of explore:
+      setLayoutRowDynamic(height = 30, cols = 1)
+#      tclEval(script = label & " insert end {Explore selected area} [list gold]")
+    of passenger:
+      setLayoutRowDynamic(height = 30, cols = 3)
+#      var cabinTaken: bool = false
+#      canAccept = false
+#      for module in playerShip.modules:
+#        if (module.mType == ModuleType2.cabin and not canAccept) and
+#            module.quality >= mission.data:
+#          canAccept = true
+#          cabinTaken = false
+#          for owner in module.owner:
+#            if owner > -1:
+#              cabinTaken = true
+#              canAccept = false
+#              break
+#          if canAccept:
+#            break
+#      if baseIndex == 0:
+#        canAccept = true
+#      tclEval(script = label & " insert end {Needed quality of cabin: }")
+#      tclEval(script = label & " insert end {" & getCabinQuality(
+#          quality = mission.data) & (
+#          if canAccept: "} [list green]" elif cabinTaken: " (taken)} [list gold]" else: " (no cabin)} [list red]"))
+#      tclEval(script = label & " insert end {\nTo base: }")
+#      tclEval(script = label & " insert end {" & skyBases[skyMap[mission.targetX][
+#          mission.targetY].baseIndex].name & "} [list gold]")
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
