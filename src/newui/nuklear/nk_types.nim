@@ -155,6 +155,25 @@ type
     ## Heading diretions
     up, right, down, left
 
+# ---------
+# Constants
+# ---------
+const
+  nkUtfInvalid*: nk_rune = 0xfffd
+    ## An invalid UTF-8 rune
+  nkUtfSize*: Positive = 4
+    ## The number of bytes of UTF glyph
+  nkUtfMask*: array[nkUtfSize + 1, nk_byte] = [0xc0, 0x80, 0xe0, 0xf0, 0xf8]
+    ## The list of UTF mask bytes
+  nkUtfByte*: array[nkUtfSize + 1, nk_byte] = [0x80, 0, 0xc0, 0xe0, 0xf0]
+    ## The list of UTF bytes
+  nkUtfMin*: array[nkUtfSize + 1, nk_uint] = [0, 0, 0x80, 0x800, 0x10000]
+    ## The list of start UTF bytes
+  nkUtfMax*: array[nkUtfSize + 1, nk_uint] = [0x10ffff, 0x7f, 0x7ff, 0xffff, 0x10ffff]
+    ## The list of end UTF bytes
+  nkWindowMaxName: Positive = 64
+    ## The maximum lenght of a window's name
+
 # -------
 # Objects
 # -------
@@ -386,11 +405,11 @@ type
   nk_scroll* {.importc: "struct nk_scroll", nodecl.} = object
     ## Internal Nuklear type
     x*, y*: cuint
-  nk_window* {.importc: "struct nk_window", nodecl.} = object
+  nk_window* {.importc: "struct nk_window", completeStruct.} = object
     ## Internal Nuklear type
     layout*: PNkPanel
     popup*: nk_popup_state
-    parent*: ptr nk_window
+    parent*, next*, prev*: ptr nk_window
     bounds*: nk_rect
     seq*: uint
     flags*: nk_flags
@@ -398,6 +417,13 @@ type
     edit*: nk_edit_state
     property*: nk_property_state
     scrollbar*: nk_scroll
+    name*: nk_hash
+    name_string*: array[nkWindowMaxName, char]
+    scrollbar_hiding_timer*: float
+    scrolled*: uint
+    widgets_disabled*: nk_bool
+    tables*: ptr nk_table
+    table_count*: uint
   nk_memory* {.importc: "struct nk_memory", nodecl.} = object
     ## Internal Nuklear type
     `ptr`*: ptr nk_size
@@ -463,24 +489,6 @@ type
     ## Pointer to nk_window structure
   CursorsArray* = array[cursorCount, nk_cursor]
     ## The array of mouse buttons
-
-# ---------
-# Constants
-# ---------
-const
-  nkUtfInvalid*: nk_rune = 0xfffd
-    ## An invalid UTF-8 rune
-  nkUtfSize*: Positive = 4
-    ## The number of bytes of UTF glyph
-  nkUtfMask*: array[nkUtfSize + 1, nk_byte] = [0xc0, 0x80, 0xe0, 0xf0, 0xf8]
-    ## The list of UTF mask bytes
-  nkUtfByte*: array[nkUtfSize + 1, nk_byte] = [0x80, 0, 0xc0, 0xe0, 0xf0]
-    ## The list of UTF bytes
-  nkUtfMin*: array[nkUtfSize + 1, nk_uint] = [0, 0, 0x80, 0x800, 0x10000]
-    ## The list of start UTF bytes
-  nkUtfMax*: array[nkUtfSize + 1, nk_uint] = [0x10ffff, 0x7f, 0x7ff, 0xffff, 0x10ffff]
-    ## The list of end UTF bytes
-
 
 {.push ruleOff: "namedParams".}
 template `+`*[T](p: ptr T; off: nk_size): ptr T =
