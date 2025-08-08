@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the list of known events, like showing information,
+## sorting or showing them on the map.
+
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[config, game, maps, tk, types]
@@ -327,6 +330,14 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't add local event.")
   proc sortEvents(x, y: LocalEventData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two events and return which should go first, based on the sort
+    ## order of the events
+    ##
+    ## * x - the first event to compare
+    ## * y - the second event to compare
+    ##
+    ## Returns 1 if the first event should go first, -1 if the second event
+    ## should go first.
     case eventsSortOrder
     of typeAsc:
       if x.eType < y.eType:
