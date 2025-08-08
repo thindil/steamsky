@@ -20,7 +20,7 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, events, game, maps, missions, ships, types, utils]
+import ../[config, events, game, items, maps, missions, ships, types, utils]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes, utilsui2
 
 type
@@ -237,6 +237,27 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       label(str = "To base:")
       colorLabel(str = skyBases[skyMap[mission.targetX][
           mission.targetY].baseIndex].name, color = theme.colors[goldenColor])
+    let travelValues: TravelArray = try:
+            travelInfo(distance = (if mission.mType in {
+            deliver, passenger}: countDistance(destinationX = mission.targetX,
+            destinationY = mission.targetY) else: countDistance(
+            destinationX = mission.targetX, destinationY = mission.targetY) * 2))
+          except:
+            dialog = setError(message = "Can't count travel values.")
+            return
+    if travelValues[1] > 0:
+      var missionInfo: string = ""
+      minutesToDate(minutes = travelValues[1], infoText = missionInfo)
+      setLayoutRowDynamic(height = 30, cols = 2)
+      label(str = "ETA:")
+      colorLabel(str = missionInfo, color = theme.colors[goldenColor])
+      label(str = "Approx fuel usage:")
+      try:
+        colorLabel(str = $travelValues[2] & " " & itemsList[findProtoItem(
+            itemType = fuelType)].name, color = theme.colors[goldenColor])
+      except:
+        dialog = setError(message = "Can't get fuel name.")
+        return
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
