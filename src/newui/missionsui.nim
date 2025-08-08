@@ -194,37 +194,38 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       colorLabel(str = skyBases[skyMap[mission.targetX][mission.targetY].baseIndex].name, color = theme.colors[goldenColor])
     of patrol:
       setLayoutRowDynamic(height = 30, cols = 1)
-#      tclEval(script = label & " insert end {Patrol selected area} [list gold]")
+      colorLabel(str = "Patrol selected area", color = theme.colors[goldenColor])
     of destroy:
       setLayoutRowDynamic(height = 30, cols = 2)
-#      tclEval(script = label & " insert end {Target: }")
-#      try:
-#        tclEval(script = label & " insert end {" & protoShipsList[
-#            mission.shipIndex].name & "} [list gold]")
-#      except:
-#        return showError(message = "Can't get ship's name.")
+      label(str = "Target:")
+      try:
+        colorLabel(str = protoShipsList[mission.shipIndex].name, color = theme.colors[goldenColor])
+      except:
+        dialog = setError(message = "Can't get ship's name.")
+        return
     of explore:
       setLayoutRowDynamic(height = 30, cols = 1)
-#      tclEval(script = label & " insert end {Explore selected area} [list gold]")
+      colorLabel(str = "Explore selected area", color = theme.colors[goldenColor])
     of passenger:
-      setLayoutRowDynamic(height = 30, cols = 3)
-#      var cabinTaken: bool = false
-#      canAccept = false
-#      for module in playerShip.modules:
-#        if (module.mType == ModuleType2.cabin and not canAccept) and
-#            module.quality >= mission.data:
-#          canAccept = true
-#          cabinTaken = false
-#          for owner in module.owner:
-#            if owner > -1:
-#              cabinTaken = true
-#              canAccept = false
-#              break
-#          if canAccept:
-#            break
-#      if baseIndex == 0:
-#        canAccept = true
-#      tclEval(script = label & " insert end {Needed quality of cabin: }")
+      setLayoutRowDynamic(height = 30, cols = 2)
+      var cabinTaken: bool = false
+      canAccept = false
+      for module in playerShip.modules:
+        if (module.mType == ModuleType2.cabin and not canAccept) and
+            module.quality >= mission.data:
+          canAccept = true
+          cabinTaken = false
+          for owner in module.owner:
+            if owner > -1:
+              cabinTaken = true
+              canAccept = false
+              break
+          if canAccept:
+            break
+      if baseIndex == 0:
+        canAccept = true
+      label(str = "Needed quality of cabin:")
+      colorLabel(str = getCabinQuality(quality = mission.data) & (if canAccept: "" elif: cabinTaken: " (taken)" else: " (no cabin)"), color = (if canAccept: theme.colors[greenColor] elif cabinTaken: theme.colors[goldenColor] else: theme.colors[redColor]))
 #      tclEval(script = label & " insert end {" & getCabinQuality(
 #          quality = mission.data) & (
 #          if canAccept: "} [list green]" elif cabinTaken: " (taken)} [list gold]" else: " (no cabin)} [list red]"))
