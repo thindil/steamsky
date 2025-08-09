@@ -258,7 +258,12 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       except:
         dialog = setError(message = "Can't get fuel name.")
         return
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = 30, cols = 2)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show the mission on the map.")
+    labelButton(title = "Show"):
+        discard
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
