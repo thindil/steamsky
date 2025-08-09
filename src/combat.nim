@@ -322,8 +322,20 @@ proc countMeleeDamage(attacker, defender: MemberData; playerAttack2: bool;
   ## of the skill used by the attacker.
   var baseDamage: Natural = attacker.attributes[strengthIndex].level
   if attacker.equipment[weapon] > -1:
-    baseDamage += itemsList[attacker.inventory[
-        attacker.equipment[weapon]].protoIndex].value[2]
+    let attackerWeapon: InventoryData = attacker.inventory[
+        attacker.equipment[weapon]]
+    baseDamage += itemsList[attackerWeapon.protoIndex].value[2]
+    case attackerWeapon.quality
+    of poor:
+      baseDamage -= (itemsList[attackerWeapon.protoIndex].value[2].float * 0.2).floor.int
+    of low:
+      baseDamage -= (itemsList[attackerWeapon.protoIndex].value[2].float * 0.1).floor.int
+    of normal:
+      discard
+    of good:
+      baseDamage += (itemsList[attackerWeapon.protoIndex].value[2].float * 0.1).ceil.int
+    of excellent:
+      baseDamage += (itemsList[attackerWeapon.protoIndex].value[2].float * 0.2).ceil.int
   var wounds: float = 1.0 - (attacker.health.float / 100.0)
   result.damage = (baseDamage - (baseDamage.float * wounds.float).int)
   if attacker.thirst > 40:
@@ -385,7 +397,8 @@ proc countMeleeDamage(attacker, defender: MemberData; playerAttack2: bool;
 
 proc characterAttack(attackerIndex2, defenderIndex2: Natural; playerAttack,
     playerAttack2: bool; orderIndex: var int): bool {.raises: [
-    KeyError, CrewNoSpaceError, IOError, ReputationError], tags: [WriteIOEffect], contractual.} =
+    KeyError, CrewNoSpaceError, IOError, ReputationError], tags: [
+        WriteIOEffect], contractual.} =
   ## The attack of the selected crew member on its target
   ##
   ## * attackerIndex2 - the index of the crew member which attacks
@@ -696,7 +709,8 @@ proc countHitLocation(armorIndex, gunnerIndex, gunnerOrder: int;
 proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
     gunnerIndex, shoots, gunnerOrder, speedBonus, ammoIndex: int;
     module: ModuleData; hitLocation: var int): bool {.raises: [
-    KeyError, IOError, ReputationError], tags: [WriteIOEffect, RootEffect], contractual.} =
+    KeyError, IOError, ReputationError], tags: [WriteIOEffect, RootEffect],
+        contractual.} =
   ## Shoot to the enemy ship
   ##
   ## * ship                 - the ship which will shoot
