@@ -26,8 +26,10 @@ import ../[bases, basestypes, config, crew2, events2, game, game2, maps,
 import coreui, dialogs, errordialog, header, messagesui, themes, utilsui2
 
 var
-  centerX: MapXRange = 1
-  centerY: MapYRange = 1
+  centerX*: MapXRange = 1
+    ## The X coordinate of the center point of the map
+  centerY*: MapYRange = 1
+    ## The Y coordinate of the center point of the map
 
 proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
