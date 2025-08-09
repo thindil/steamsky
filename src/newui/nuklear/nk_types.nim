@@ -267,6 +267,8 @@ type
     userdata*: nk_handle
     height*: cfloat
     width*: nk_text_width_f
+  PNkUserFont* = ptr nk_user_font
+    ## Pointer to nk_user_font structure
   nk_style_text* {.importc: "struct nk_style_text", nodecl.} = object
     ## Internal Nuklear type
     padding*: nk_vec2
@@ -277,7 +279,7 @@ type
     window*: nk_style_window
     button*: nk_style_button
     progress*: nk_style_progress
-    font*: ptr nk_user_font
+    font*: PNkUserFont
     text*: nk_style_text
     cursor_active*: nk_cursor
     cursors*: pointer
@@ -369,7 +371,7 @@ type
     x*, y*: cshort
     w*, h*: cushort
     background*, foreground*: nk_color
-    font*: ptr nk_user_font
+    font*: PNkUserFont
     height*: cfloat
     length*: cint
     `string`*: cstring
@@ -391,7 +393,7 @@ type
     has_scrolling*, offset_x*, offset_y*: cuint
   nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
     ## Internal Nuklear type
-    win*: ptr nk_window
+    win*: PNkWindow
     active*: nk_bool
     `type`*: PanelType
     name*: nk_hash
@@ -409,7 +411,7 @@ type
     ## Internal Nuklear type
     layout*: PNkPanel
     popup*: nk_popup_state
-    parent*, next*, prev*: ptr nk_window
+    parent*, next*, prev*: PNkWindow
     bounds*: nk_rect
     seq*: uint
     flags*: nk_flags
@@ -424,6 +426,8 @@ type
     widgets_disabled*: nk_bool
     tables*: ptr nk_table
     table_count*: uint
+  PNkWindow* = ptr nk_window
+    ## Pointer to nk_window structure
   nk_memory* {.importc: "struct nk_memory", nodecl.} = object
     ## Internal Nuklear type
     `ptr`*: ptr nk_size
@@ -464,7 +468,7 @@ type
     ## Internal Nuklear type
     style*: nk_style
     input*: nk_input
-    current*, active*: ptr nk_window
+    current*, active*: PNkWindow
     seq*: uint
     memory*: nk_buffer
     use_pool*: bool
@@ -475,7 +479,7 @@ type
     ## Internal Nuklear type
   nk_font* {.importc: "struct nk_font", nodecl.} = object
     ## Internal Nuklear type
-    handle*: nk_user_font
+    handle*: PNkUserFont
   nk_font_atlas* {.importc: "struct nk_font_atlas", nodecl.} = object
     ## Internal Nuklear type
   nk_font_config* {.importc: "struct nk_font_config", nodecl.} = object
@@ -485,8 +489,6 @@ type
     ## Internal Nuklear type
     padding*: nk_vec2
     background*, text*: nk_color
-  PNkWindow* = ptr nk_window
-    ## Pointer to nk_window structure
   CursorsArray* = array[cursorCount, nk_cursor]
     ## The array of mouse buttons
 

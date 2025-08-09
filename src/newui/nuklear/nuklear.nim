@@ -138,7 +138,7 @@ proc nk_tree_element_pop(ctx) {.importc, cdecl, raises: [], tags: [], contractua
 proc nk_style_item_color(col: nk_color): nk_style_item {.importc, cdecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_style_set_font*(ctx; font: ptr nk_user_font) {.importc, nodecl,
+proc nk_style_set_font*(ctx; font: ptr PNkUserFont) {.importc, nodecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
