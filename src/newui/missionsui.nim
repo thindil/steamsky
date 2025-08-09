@@ -21,7 +21,7 @@
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, events, game, items, maps, missions, ships, types, utils]
-import coreui, dialogs, errordialog, header, messagesui, setui, table, themes, utilsui2
+import coreui, dialogs, errordialog, header, mapsui, messagesui, setui, table, themes, utilsui2
 
 type
   MissionsSortOrders = enum
@@ -265,7 +265,9 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[showColoredIcon], text = "Show",
         alignment = right):
-      discard
+      centerX = mission.targetX
+      centerY = mission.targetY
+      dialog = none
     restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
 
