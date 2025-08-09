@@ -261,9 +261,12 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = 30, cols = 2)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
-          text = "Show the mission on the map.")
-    labelButton(title = "Show"):
-        discard
+          text = "Show the mission on the map")
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    imageLabelButton(image = images[showColoredIcon], text = "Show",
+        alignment = right):
+      discard
+    restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
