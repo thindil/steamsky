@@ -39,13 +39,13 @@ proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowEventInfo eventindex
   ## EventIndex is the index of the event to show
   let
-    eventIndex = try:
+    eventIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the event index.")
-    baseIndex = skyMap[eventsList[eventIndex].skyX][eventsList[
+    baseIndex: ExtendedBasesRange = skyMap[eventsList[eventIndex].skyX][eventsList[
         eventIndex].skyY].baseIndex
-  var eventInfo = "X: {gold}" & $eventsList[eventIndex].skyX &
+  var eventInfo: string = "X: {gold}" & $eventsList[eventIndex].skyX &
       "{/gold} Y: {gold}" & $eventsList[eventIndex].skyY & "{/gold}"
   case eventsList[eventIndex].eType
   of enemyShip, enemyPatrol, trader, friendlyShip:
@@ -75,9 +75,11 @@ proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       text: "Show", color: "green"))
   return tclOk
 
+{.push ruleOff: "varDeclared".}
 var
   eventsTable: TableWidget
-  eventsIndexes: seq[Natural]
+  eventsIndexes: seq[Natural] = @[]
+{.pop ruleOn: "varDeclared".}
 
 proc updateEventsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -87,17 +89,17 @@ proc updateEventsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
   if eventsTable.row > 1:
     clearTable(table = eventsTable)
   let
-    eventsCanvas = mainPaned & ".knowledgeframe.events.canvas"
-    eventsFrame = eventsCanvas & ".frame"
-  var rows = try:
+    eventsCanvas: string = mainPaned & ".knowledgeframe.events.canvas"
+    eventsFrame: string = eventsCanvas & ".frame"
+  var rows: int = try:
       tclEval2(script = "grid size " & eventsFrame).split(sep = " ")[1].parseInt
     except:
       showError(message = "Can't get the amount of rows.")
       return
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = eventsFrame)
   var
-    label = ""
-    row = 1
+    label: string = ""
+    row: Positive = 1
   if eventsList.len == 0:
     label = eventsFrame & ".noevents"
     tclEval(script = "ttk::label " & label & " -text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 350")
@@ -115,10 +117,10 @@ proc updateEventsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
       eventsIndexes = @[]
       for index, _ in eventsList:
         eventsIndexes.add(y = index)
-    let startRow = ((page - 1) * gameSettings.listsLimit) + 1
+    let startRow: Positive = ((page - 1) * gameSettings.listsLimit) + 1
     var
-      currentRow = 1
-      color = ""
+      currentRow: Positive = 1
+      color: string = ""
     for event in eventsIndexes:
       if currentRow < startRow:
         currentRow.inc
@@ -277,7 +279,7 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortKnownEvents x
   ## X is X axis coordinate where the player clicked the mouse button
-  let column = try:
+  let column: int = try:
         getColumnNumber(table = eventsTable, xPosition = ($argv[1]).parseInt)
       except:
         return showError(message = "Can't get the column number.")
@@ -310,7 +312,7 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     coords: string
     details: string
     id: Natural
-  var localEvents: seq[LocalEventData]
+  var localEvents: seq[LocalEventData] = @[]
   for index, event in eventsList:
     try:
       localEvents.add(y = LocalEventData(eType: event.eType,
