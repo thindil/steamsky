@@ -344,43 +344,35 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     of typeAsc:
       if x.eType < y.eType:
         return 1
-      else:
-        return -1
+      return -1
     of typeDesc:
       if x.eType > y.eType:
         return 1
-      else:
-        return -1
+      return -1
     of distanceAsc:
       if x.distance < y.distance:
         return 1
-      else:
-        return -1
+      return -1
     of distanceDesc:
       if x.distance > y.distance:
         return 1
-      else:
-        return -1
+      return -1
     of detailsAsc:
       if x.details < y.details:
         return 1
-      else:
-        return -1
+      return -1
     of detailsDesc:
       if x.details > y.details:
         return 1
-      else:
-        return -1
+      return -1
     of coordAsc:
       if x.coords < y.coords:
         return 1
-      else:
-        return -1
+      return -1
     of coordDesc:
       if x.coords > y.coords:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
   localEvents.sort(cmp = sortEvents)
