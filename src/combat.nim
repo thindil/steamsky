@@ -307,6 +307,26 @@ proc finishCombat() {.raises: [KeyError, ValueError, CrewOrderError,
       if not progressStory(nextStep = true):
         return
 
+proc countItemBonus(value: int; quality: ObjectQuality): int {.raises: [],
+    tags: [], contractual.} =
+  ## Count a bonus from an item's quality to the selected value
+  ##
+  ## * value   - the base value on which the bonus will be counted
+  ## * quality - the quality of an item from which the bonus will be counted
+  ##
+  ## Returns the value of the bonus from an item
+  case quality
+  of poor:
+    return -((value.float * 0.2).floor.int)
+  of low:
+    return -((value.float * 0.1).floor.int)
+  of normal:
+    return 0
+  of good:
+    return (value.float * 0.1).floor.int
+  of excellent:
+    return (value.float * 0.2).floor.int
+
 proc countMeleeDamage(attacker, defender: MemberData; playerAttack2: bool;
     hitLocation: EquipmentLocations): tuple [damage, hitChance,
     attackSkill: int] {.raises: [KeyError], tags: [], contractual.} =
@@ -325,17 +345,8 @@ proc countMeleeDamage(attacker, defender: MemberData; playerAttack2: bool;
     let attackerWeapon: InventoryData = attacker.inventory[
         attacker.equipment[weapon]]
     baseDamage += itemsList[attackerWeapon.protoIndex].value[2]
-    case attackerWeapon.quality
-    of poor:
-      baseDamage -= (itemsList[attackerWeapon.protoIndex].value[2].float * 0.2).floor.int
-    of low:
-      baseDamage -= (itemsList[attackerWeapon.protoIndex].value[2].float * 0.1).floor.int
-    of normal:
-      discard
-    of good:
-      baseDamage += (itemsList[attackerWeapon.protoIndex].value[2].float * 0.1).ceil.int
-    of excellent:
-      baseDamage += (itemsList[attackerWeapon.protoIndex].value[2].float * 0.2).ceil.int
+    baseDamage += countItemBonus(value = itemsList[
+        attackerWeapon.protoIndex].value[2], quality = attackerWeapon.quality)
   var wounds: float = 1.0 - (attacker.health.float / 100.0)
   result.damage = (baseDamage - (baseDamage.float * wounds.float).int)
   if attacker.thirst > 40:
