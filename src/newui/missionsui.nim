@@ -268,6 +268,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       centerX = mission.targetX
       centerY = mission.targetY
       dialog = none
+      mapPreview = true
     restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
 
@@ -277,8 +278,10 @@ proc setMissionInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [],
     contractual.} =
   ## Set the data needed for show information about the selected mission
   ##
-  ## * data
-  ## * dialog
+  ## * data   - the index of the selected mission
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
   missionIndex = data
   dialog = missionDialog
 
@@ -291,6 +294,9 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
+  if mapPreview:
+    state = map
+    return
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
   # Show information about amount of missions which the player can take
