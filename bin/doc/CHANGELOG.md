@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [11.4] - 2025-08-10
 
 ### Changed
 - Text on some close buttons to match the rest
