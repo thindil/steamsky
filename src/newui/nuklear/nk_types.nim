@@ -379,18 +379,24 @@ type
     ## Internal Nuklear type
     index*, columns*, tree_depth*: cint
     ratio*, item_width*, item_height*, height*: cfloat
-  PNkPanel* = ptr nk_panel
-    ## Pointer to nk_panel structure
+  nk_scroll* {.importc: "struct nk_scroll", completeStruct.} = object
+    ## Internal Nuklear type
+    x*, y*: cuint
+  nk_menu_state* {.importc: "struct nk_menu_state", completeStruct.} = object
+    x*, y*, w*, h*: cfloat
+    offset*: nk_scroll
   nk_panel* {.importc: "struct nk_panel", nodecl.} = object
     ## Internal Nuklear type
     `type`*: PanelType
-    clip*: nk_rect
+    clip*, bounds*: nk_rect
     flags*: nk_flags
-    bounds*: nk_rect
     border*, at_y*, at_x*, max_x*, header_height*, footer_height*: cfloat
     row*: nk_row_layout
     parent*: PNkPanel
     has_scrolling*, offset_x*, offset_y*: cuint
+    menu*: nk_menu_state
+  PNkPanel* = ptr nk_panel
+    ## Pointer to nk_panel structure
   nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
     ## Internal Nuklear type
     win*: PNkWindow
@@ -404,9 +410,6 @@ type
   nk_property_state* {.importc: "struct nk_property_state", nodecl.} = object
     ## Internal Nuklear type
     active*: cint
-  nk_scroll* {.importc: "struct nk_scroll", nodecl.} = object
-    ## Internal Nuklear type
-    x*, y*: cuint
   nk_window* {.importc: "struct nk_window", completeStruct.} = object
     ## Internal Nuklear type
     layout*: PNkPanel
