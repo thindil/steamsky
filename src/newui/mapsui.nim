@@ -30,6 +30,8 @@ var
     ## The X coordinate of the center point of the map
   centerY*: MapYRange = 1
     ## The Y coordinate of the center point of the map
+  mapPreview*: bool = false
+    ## If true, the map is in the preview mode
 
 proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -50,6 +52,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't set the game's images.")
   centerX = playerShip.skyX
   centerY = playerShip.skyY
+  mapPreview = false
 
 proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
     ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -656,6 +659,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
   discard showHeader(dialog = dialog, state = state)
+  if playerShip.speed != docked and mapPreview:
+    mapPreview = false
   # draw dialogs
   showDestinationMenu(dialog = dialog)
   # draw map
@@ -721,6 +726,27 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               skyMap[x][y].visited = true
               mapChar = theme.mapIcons[playerShipIcon]
               mapColor = theme.mapColors[mapDefaultColor]
+            elif mapPreview:
+              for mission in skyBases[skyMap[playerShip.skyX][
+                  playerShip.skyY].baseIndex].missions:
+                if mission.targetX == x and mission.targetY == y:
+                  case mission.mType
+                  of deliver:
+                    mapChar = theme.mapIcons[deliverIcon]
+                    mapColor = theme.mapColors[mapYellowColor]
+                  of destroy:
+                    mapChar = theme.mapIcons[destroyIcon]
+                    mapColor = theme.mapColors[mapRedColor]
+                  of patrol:
+                    mapChar = theme.mapIcons[patrolIcon]
+                    mapColor = theme.mapColors[mapLimeColor]
+                  of explore:
+                    mapChar = theme.mapIcons[exploreIcon]
+                    mapColor = theme.mapColors[mapGreenColor]
+                  of passenger:
+                    mapChar = theme.mapIcons[passengerIcon]
+                    mapColor = theme.mapColors[mapCyanColor]
+                  break
             else:
               if x == playerShip.destinationX and y == playerShip.destinationY:
                 mapChar = theme.mapIcons[targetIcon]
