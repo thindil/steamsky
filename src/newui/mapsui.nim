@@ -30,8 +30,6 @@ var
     ## The X coordinate of the center point of the map
   centerY*: MapYRange = 1
     ## The Y coordinate of the center point of the map
-  mapPreview*: bool = false
-    ## If true, the map is in the preview mode
 
 proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
