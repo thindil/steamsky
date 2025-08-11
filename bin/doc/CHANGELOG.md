@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [11.4] - 2025-08-10
 
+### Added
+- Limit items in bases. Large bases can have max 128 various items for trade,
+  medium 64 and small 32.
+
 ### Changed
 - Text on some close buttons to match the rest
 - Updated help
@@ -13,10 +17,6 @@ All notable changes to this project will be documented in this file.
 - Typos in the list of available missions in bases
 
 ## [11.3] - 2025-07-13
-
-### Added
-- Limit items in bases. Large bases can have max 128 various items for trade,
-  medium 64 and small 32.
 
 ### Changed
 - Generated cargo in bases is now more random
