@@ -21,7 +21,8 @@
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, events, game, items, maps, missions, ships, types, utils]
-import coreui, dialogs, errordialog, header, mapsui, messagesui, setui, table, themes, utilsui2
+import coreui, dialogs, errordialog, header, mapsui, messagesui, setui, table,
+    themes, utilsui2
 
 type
   MissionsSortOrders = enum
@@ -258,7 +259,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       except:
         dialog = setError(message = "Can't get fuel name.")
         return
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = 30, cols = (if canAccept: 3 else: 2))
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show the mission on the map")
@@ -271,6 +272,13 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       mapPreview = true
     restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
+    if canAccept:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Start negotiating accepting the mission")
+      imageLabelButton(image = images[negotiateIcon], text = "Accept",
+          alignment = right):
+        dialog = acceptMissionDialog
 
   windowSetFocus(name = windowName)
 
