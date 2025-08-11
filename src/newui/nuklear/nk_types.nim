@@ -173,6 +173,8 @@ const
     ## The list of end UTF bytes
   nkWindowMaxName: Positive = 64
     ## The maximum lenght of a window's name
+  nkMaxLayoutRowTemplateColumns: Positive = 16
+    ## The max amount of columns in row template
 
 # -------
 # Objects
@@ -375,10 +377,12 @@ type
     height*: cfloat
     length*: cint
     `string`*: cstring
-  nk_row_layout* {.importc: "struct nk_row_layout".} = object
+  nk_row_layout* {.importc: "struct nk_row_layout", completeStruct.} = object
     ## Internal Nuklear type
     index*, columns*, tree_depth*: cint
-    ratio*, item_width*, item_height*, height*: cfloat
+    ratio*, item_width*, item_height*, height*, min_height*, item_offset*,
+      filled*: cfloat
+    templates: array[nkMaxLayoutRowTemplateColumns, cfloat]
   nk_scroll* {.importc: "struct nk_scroll", completeStruct.} = object
     ## Internal Nuklear type
     x*, y*: cuint
