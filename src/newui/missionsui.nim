@@ -282,6 +282,29 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
+proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the dialog to accept the selected mission
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  const
+    width: float = 400
+    height: float = 300
+
+  let
+    mission: MissionData = skyBases[baseIndex].missions[missionIndex]
+    windowName: string = "Accept " & getMissionType(mType = mission.mType)
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 1)
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = windowName)
+
 proc setMissionInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [],
     contractual.} =
   ## Set the data needed for show information about the selected mission
