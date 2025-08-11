@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
+import contracts
 import ../[config, crew2, events2, game, game2, maps, messages, missions2,
     shipscargo, shipscrew, shipsmovement, tk, types]
 import combatui, coreui, dialogs, errordialog, ordersmenu, statisticsui
@@ -24,7 +25,8 @@ const buttonNames: array[1 .. 13, string] = ["show", "nw", "n", "ne", "w",
     "wait", "e", "sw", "s", "se", "hide", "left", "right"]
 
 proc hideMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Hide buttons used to move the map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -44,7 +46,8 @@ proc hideMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Show buttons used to move the map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -68,7 +71,8 @@ proc showMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc moveMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Move buttons used to move the map to the right or left corner
   ##
   ## * clientData - the additional data for the Tcl command
@@ -94,7 +98,8 @@ proc moveMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc moveMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Move the map cell info frame when the mouse enters it
   ##
   ## * clientData - the additional data for the Tcl command
@@ -113,7 +118,8 @@ proc moveMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.}
   ## Draw the sky map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -127,7 +133,8 @@ proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
   ## DrawMap
 
 proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.}
   ## Zoom in or our the sky map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -141,7 +148,8 @@ proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ZoomMap
 
 proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.}
   ## Update the information about the selected map's cell
   ##
   ## * clientData - the additional data for the Tcl command
@@ -156,7 +164,8 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## X and Y are coordinates of the map cell which info will be show
 
 proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.}
   ## Create and show the destination menu dialog
   ##
   ## * clientData - the additional data for the Tcl command
@@ -171,7 +180,8 @@ proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   ## X and Y are the map coordinates for which the destination menu will be show
 
 proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.}
   ## Set the current map cell as the destination for the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -185,7 +195,8 @@ proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
   ## SetDestination
 
 proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.}
   ## Move the map in the selected direction
   ##
   ## * clientData - the additional data for the Tcl command
@@ -201,7 +212,7 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.}
+        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl, contractual.}
   ## Move the player's ship in the selected direction and check what happened
   ##
   ## * clientData - the additional data for the Tcl command
@@ -216,7 +227,8 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Direction in which the player's ship will be moved
 
 proc quitGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Ask the player if they wants to quit from the game and if yes, save the
   ## game and show the main menu
   ##
@@ -233,7 +245,8 @@ proc quitGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc resignGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Resing from the game - if the player resigned, kill they character and
   ## continue as for death of the player's character
   ##
@@ -251,7 +264,8 @@ proc resignGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showStatsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show the screen with the player's game statistics
   ##
   ## * clientData - the additional data for the Tcl command
@@ -268,7 +282,8 @@ proc showStatsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.}
   ## Show the sky map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -284,7 +299,8 @@ proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
   ## to do special actions when closing them
 
 proc moveMouseCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Move the mouse cursor with keyboard
   ##
   ## * clientData - the additional data for the Tcl command
@@ -333,7 +349,8 @@ proc moveMouseCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleFullScreenCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Toggle the game's full screen mode
   ##
   ## * clientData - the additional data for the Tcl command
@@ -354,7 +371,8 @@ proc toggleFullScreenCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc resizeLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Resize the last messages window
   ##
   ## * clientData - the additional data for the Tcl command
@@ -389,7 +407,7 @@ proc resizeLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.}
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.}
   ## Show the main menu of the game
   ##
   ## * clientData - the additional data for the Tcl command
@@ -403,7 +421,7 @@ proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowGameMenu
 
 proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.}
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.}
   ## Invoke the selected game menu option with the selected keyboard shortcut
   ##
   ## * clientData - the additional data for the Tcl command
@@ -418,7 +436,8 @@ proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Shortcut, the keyboard shortcut which was pressed
 
 proc setShipSpeedCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Set the new speed for the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -439,7 +458,8 @@ proc setShipSpeedCommand(clientData: cint; interp: PInterp; argc: cint;
     showMessage(text = message, title = "Changing the ship's speed.")
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   try:
     addCommand("HideMapButtons", hideMapButtonsCommand)
     addCommand("ShowMapButtons", showMapButtonsCommand)
