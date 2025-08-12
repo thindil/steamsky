@@ -309,7 +309,18 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
     colorLabel(str = $(missionReward) & " " & moneyName, color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = 30, cols = 1)
     label(str = "Percent of " & moneyName & " as reward:")
+    setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.75.cfloat, 0.25])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Move left - more reputation from mission but less money, move right - more money from mission but less reputation.")
     slider(min = 0, val = missionPercent, max = 200, step = 1)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Move left - more reputation from mission but less money, move right - more money from mission but less reputation.")
+    let newPercent: int = property2(name = "#", min = 0, val = missionPercent,
+        max = 200, step = 1, incPerPixel = 1)
+    if newPercent != missionPercent:
+      missionPercent = newPercent
     missionReward = (((mission.reward.float * mission.multiplier) *
         missionPercent.float) / 100.0).Natural
     setLayoutRowDynamic(height = 30, cols = 2)
