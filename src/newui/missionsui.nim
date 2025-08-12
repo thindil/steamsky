@@ -300,8 +300,17 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = 30, cols = 1)
-    addCloseButton(dialog = dialog, isPopup = false)
+    setLayoutRowDynamic(height = 30, cols = 2)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Accept the mission")
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    imageLabelButton(image = images[negotiateColoredIcon], text = "Accept",
+        alignment = right):
+      dialog = none
+    restoreButtonStyle()
+    addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
+        isPopup = false, label = "Cancel")
 
   windowSetFocus(name = windowName)
 
