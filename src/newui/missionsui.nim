@@ -154,7 +154,9 @@ const
         sortDesc: rewardDesc)]
   ratio: array[6, cfloat] = [300.cfloat, 200, 200, 300, 200, 200]
 
-var missionIndex: int = -1
+var
+  missionIndex: int = -1
+  missionReward: Natural = 0
 
 proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -279,6 +281,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       imageLabelButton(image = images[negotiateIcon], text = "Accept",
           alignment = right):
         dialog = acceptMissionDialog
+        missionReward =  (mission.reward.float * mission.multiplier).Natural
 
   windowSetFocus(name = windowName)
 
@@ -300,6 +303,11 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 2)
+    label(str = "Reward:")
+    colorLabel(str = $(missionReward) & " " & moneyName, color = theme.colors[goldenColor])
+    setLayoutRowDynamic(height = 30, cols = 1)
+    label(str = "Percent of " & moneyName & " as reward:")
     setLayoutRowDynamic(height = 30, cols = 2)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
