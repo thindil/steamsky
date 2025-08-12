@@ -608,6 +608,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           dialog = setError(message = "Can't trade item.")
       restoreButtonStyle()
       # Close button
-      addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor)
+      addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
+          label = "Cancel")
   except:
     dialog = setError(message = "Can't show the info")
