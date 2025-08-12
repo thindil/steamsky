@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import contracts
+import contracts, nimalyzer
 import ../[config, crew2, events2, game, game2, maps, messages, missions2,
     shipscargo, shipscrew, shipsmovement, tk, types]
 import combatui, coreui, dialogs, errordialog, ordersmenu, statisticsui
@@ -26,7 +26,7 @@ const buttonNames: array[1 .. 13, string] = ["show", "nw", "n", "ne", "w",
 
 proc hideMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
-        contractual.} =
+        contractual, ruleOff: "params".} =
   ## Hide buttons used to move the map
   ##
   ## * clientData - the additional data for the Tcl command
