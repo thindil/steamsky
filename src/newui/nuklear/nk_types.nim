@@ -175,6 +175,8 @@ const
     ## The maximum lenght of a window's name
   nkMaxLayoutRowTemplateColumns: Positive = 16
     ## The max amount of columns in row template
+  nkChartMaxSlot: Positive = 4
+    ## The max amount of slot in charts
 
 # -------
 # Objects
@@ -389,6 +391,13 @@ type
   nk_menu_state* {.importc: "struct nk_menu_state", completeStruct.} = object
     x*, y*, w*, h*: cfloat
     offset*: nk_scroll
+  nk_chart_slot* {.importc: "struct nk_chart_slot".} = object
+    ## Internal Nuklear type
+  nk_chart* {.importc: "struct nk_chart".} = object
+    ## Internal Nuklear type
+    slot*: cint
+    x, y, w, h: cfloat
+    slots: pointer # TODO: change into array[nkChartMaxSlot, nk_chart_slot]
   nk_panel* {.importc: "struct nk_panel", nodecl.} = object
     ## Internal Nuklear type
     `type`*: PanelType
@@ -399,6 +408,7 @@ type
     parent*: PNkPanel
     has_scrolling*, offset_x*, offset_y*: cuint
     menu*: nk_menu_state
+    chart*: nk_chart
   PNkPanel* = ptr nk_panel
     ## Pointer to nk_panel structure
   nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
