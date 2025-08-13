@@ -66,7 +66,7 @@ proc showMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   var buttonName = buttonsBox & ".show"
   tclEval(script = "grid remove " & buttonName)
   buttonName = (if tclEval2(script = "grid info " & buttonsBox).contains(
-      "-sticky es"): buttonsBox & ".left" else: buttonsBox & ".right")
+      sub = "-sticky es"): buttonsBox & ".left" else: buttonsBox & ".right")
   tclEval(script = "grid " & buttonName)
   return tclOk
 
@@ -113,8 +113,8 @@ proc moveMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## MoveMapInfo
   let mapInfoFrame = mainPaned & ".mapframe.info"
   tclEval(script = "grid configure " & mapInfoFrame & " -sticky " & (
-      if tclEval2(script = "grid info " & mapInfoFrame).find("-sticky ne") ==
-      -1: "ne" else: "wn"))
+      if tclEval2(script = "grid info " & mapInfoFrame).find(
+      sub = "-sticky ne") == -1: "ne" else: "wn"))
   return tclOk
 
 proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -461,27 +461,28 @@ proc setShipSpeedCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   try:
-    addCommand("HideMapButtons", hideMapButtonsCommand)
-    addCommand("ShowMapButtons", showMapButtonsCommand)
-    addCommand("MoveMapButtons", moveMapButtonsCommand)
-    addCommand("MoveMapInfo", moveMapInfoCommand)
-    addCommand("DrawMap", drawMapCommand)
-    addCommand("ZoomMap", zoomMapCommand)
-    addCommand("UpdateMapInfo", updateMapInfoCommand)
-    addCommand("ShowDestinationMenu", showDestinationMenuCommand)
-    addCommand("SetDestination", setShipDestinationCommand)
-    addCommand("MoveMap", moveMapCommand)
-    addCommand("MoveShip", moveShipCommand)
-    addCommand("QuitGame", quitGameCommand)
-    addCommand("ResignGame", resignGameCommand)
-    addCommand("ShowStats", showStatsCommand)
-    addCommand("ShowSkyMap", showSkyMapCommand)
-    addCommand("MoveCursor", moveMouseCommand)
-    addCommand("ToggleFullScreen", toggleFullScreenCommand)
-    addCommand("ResizeLastMessages", resizeLastMessagesCommand)
-    addCommand("ShowGameMenu", showGameMenuCommand)
-    addCommand("InvokeMenu", invokeMenuCommand)
-    addCommand("SetShipSpeed", setShipSpeedCommand)
+    addCommand(name = "HideMapButtons", nimProc = hideMapButtonsCommand)
+    addCommand(name = "ShowMapButtons", nimProc = showMapButtonsCommand)
+    addCommand(name = "MoveMapButtons", nimProc = moveMapButtonsCommand)
+    addCommand(name = "MoveMapInfo", nimProc = moveMapInfoCommand)
+    addCommand(name = "DrawMap", nimProc = drawMapCommand)
+    addCommand(name = "ZoomMap", nimProc = zoomMapCommand)
+    addCommand(name = "UpdateMapInfo", nimProc = updateMapInfoCommand)
+    addCommand(name = "ShowDestinationMenu",
+        nimProc = showDestinationMenuCommand)
+    addCommand(name = "SetDestination", nimProc = setShipDestinationCommand)
+    addCommand(name = "MoveMap", nimProc = moveMapCommand)
+    addCommand(name = "MoveShip", nimProc = moveShipCommand)
+    addCommand(name = "QuitGame", nimProc = quitGameCommand)
+    addCommand(name = "ResignGame", nimProc = resignGameCommand)
+    addCommand(name = "ShowStats", nimProc = showStatsCommand)
+    addCommand(name = "ShowSkyMap", nimProc = showSkyMapCommand)
+    addCommand(name = "MoveCursor", nimProc = moveMouseCommand)
+    addCommand(name = "ToggleFullScreen", nimProc = toggleFullScreenCommand)
+    addCommand(name = "ResizeLastMessages", nimProc = resizeLastMessagesCommand)
+    addCommand(name = "ShowGameMenu", nimProc = showGameMenuCommand)
+    addCommand(name = "InvokeMenu", nimProc = invokeMenuCommand)
+    addCommand(name = "SetShipSpeed", nimProc = setShipSpeedCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
@@ -495,7 +496,7 @@ proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
     discard tclEval(script = mapView & " configure -width [expr [winfo width $mapview] / [font measure MapFont {" &
         themesList[gameSettings.interfaceTheme].emptyMapIcon & "}]]")
   except:
-    return showError("Can't set map width.")
+    return showError(message = "Can't set map width.")
   tclEval(script = mapView & " configure -height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]")
   if tclGetVar(varName = "refreshmap") == "1":
     drawMap()
@@ -521,17 +522,17 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     mapView = mainPaned & ".mapframe.map"
     mapIndex = tclEval2(script = mapView & " index @" & $argv[1] & "," & $argv[2])
   try:
-    if startY + (mapIndex[0 .. mapIndex.find(".") - 1]).parseInt - 1 < 1:
+    if startY + (mapIndex[0 .. mapIndex.find(sub = ".") - 1]).parseInt - 1 < 1:
       return tclOk
-    mapY = startY + (mapIndex[0 .. mapIndex.find(".") - 1]).parseInt - 1
+    mapY = startY + (mapIndex[0 .. mapIndex.find(sub = ".") - 1]).parseInt - 1
     if mapY > 1_024:
       return tclOk
   except:
     return showError(message = "Cant' set map Y coordinate.")
   try:
-    if startX + (mapIndex[mapIndex.find(".") + 1 .. ^1]).parseInt < 1:
+    if startX + (mapIndex[mapIndex.find(sub = ".") + 1 .. ^1]).parseInt < 1:
       return tclOk
-    mapX = startX + (mapIndex[mapIndex.find(".") + 1 .. ^1]).parseInt
+    mapX = startX + (mapIndex[mapIndex.find(sub = ".") + 1 .. ^1]).parseInt
     if mapX > 1_024:
       return tclOk
   except:
@@ -847,7 +848,8 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
           return
       if playerShip.destinationX == playerShip.skyX and
           playerShip.destinationY == playerShip.skyY:
-        addMessage("You reached your travel destination.", mType = orderMessage)
+        addMessage(message = "You reached your travel destination.",
+            mType = orderMessage)
         playerShip.destinationX = 0
         playerShip.destinationY = 0
         if gameSettings.autoFinish:
@@ -965,7 +967,8 @@ proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "focus " & button)
     else:
       tclEval(script = "grid " & button & " -sticky we -padx 5")
-    shortcuts.add(MenuShortcut(buttonName: gameMenu & name, shortcut: shortcut))
+    shortcuts.add(y = MenuShortcut(buttonName: gameMenu & name,
+        shortcut: shortcut))
     row.inc
 
   addButton(name = ".shipinfo", label = "Ship information",
