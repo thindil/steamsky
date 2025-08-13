@@ -737,3 +737,18 @@ proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     missionsIndexes.add(y = index)
   currentPage = 1
   mapPreview = false
+
+#####################
+# Setting the loot UI
+#####################
+
+proc setLoot*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for loot UI
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  currentPage = 1
+  baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
