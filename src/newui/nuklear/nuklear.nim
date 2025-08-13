@@ -610,7 +610,7 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: BufferAllocationType; size,
 # ----
 # Draw
 # ----
-proc nkCommandBufferPush(b: ptr nk_command_buffer; t: CommandType;
+proc nkCommandBufferPush(b: PNkCommandBuffer; t: CommandType;
     size: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Add a command to the commands buffer. Internal use only
   ##
@@ -648,7 +648,7 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: CommandType;
 # ----
 # Misc
 # ----
-proc nkPushScissor(b: ptr nk_command_buffer; r: NimRect) {.raises: [], tags: [
+proc nkPushScissor(b: PNkCommandBuffer; r: NimRect) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Clear the rectangle. Internal use only
   ##
@@ -668,7 +668,7 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: NimRect) {.raises: [], tags: [
     cmd.w = max(x = 0.cushort, y = r.w.cushort)
     cmd.h = max(x = 0.cushort, y = r.h.cushort)
 
-proc nkStrokeRect(b: ptr nk_command_buffer, rect: NimRect, rounding,
+proc nkStrokeRect(b: PNkCommandBuffer, rect: NimRect, rounding,
   lineThickness: float, c: nk_color) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw a rectangle. Internal use only
@@ -697,7 +697,7 @@ proc nkStrokeRect(b: ptr nk_command_buffer, rect: NimRect, rounding,
   cmd.h = max(x = 0.cushort, y = rect.h.cushort)
   cmd.color = c
 
-proc nkStrokeTriangle(b: ptr nk_command_buffer; x0, y0, x1, y1, x2, y2,
+proc nkStrokeTriangle(b: PNkCommandBuffer; x0, y0, x1, y1, x2, y2,
   lineThickness: cfloat; c: nk_color) {.raises: [], tags: [], contractual.} =
   ## Draw a triangle. Internal use only
   ##
@@ -732,7 +732,7 @@ proc nkStrokeTriangle(b: ptr nk_command_buffer; x0, y0, x1, y1, x2, y2,
   cmd.c.y = y2.cshort
   cmd.color = c
 
-proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float;
+proc nkFillRect(b: PNkCommandBuffer; rect: NimRect; rounding: float;
   c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the rectangle with the selected color
   ##
@@ -760,7 +760,7 @@ proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float;
   cmd.h = max(0, rect.h).cushort
   cmd.color = c
 
-proc nkFillCircle(b: ptr nk_command_buffer; rect: NimRect; c: nk_color)
+proc nkFillCircle(b: PNkCommandBuffer; rect: NimRect; c: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the circle with the selected color
   ##
@@ -786,7 +786,7 @@ proc nkFillCircle(b: ptr nk_command_buffer; rect: NimRect; c: nk_color)
   cmd.h = max(0, rect.h).cushort
   cmd.color = c
 
-proc nkFillTriangle(b: ptr nk_command_buffer, x0, y0, x1, y1, x2, y2: cfloat,
+proc nkFillTriangle(b: PNkCommandBuffer, x0, y0, x1, y1, x2, y2: cfloat,
   c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the circle with the selected color
   ##
@@ -821,7 +821,7 @@ proc nkFillTriangle(b: ptr nk_command_buffer, x0, y0, x1, y1, x2, y2: cfloat,
   cmd.c.y = y2.cshort
   cmd.color = c
 
-proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_color)
+proc nkDrawImage(b: PNkCommandBuffer; r: NimRect; img: PImage; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected image
   ##
@@ -848,7 +848,7 @@ proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_colo
   cmd.img = cast[nk_image](img)
   cmd.col = col
 
-proc nkDrawNineSlice(b: ptr nk_command_buffer; r: NimRect; slc: ptr nk_nine_slice; col: nk_color)
+proc nkDrawNineSlice(b: PNkCommandBuffer; r: NimRect; slc: ptr nk_nine_slice; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected fragments of an image
   ##
@@ -964,7 +964,7 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
     textWidth = sepWidth
     return if sepLen == 0: len else: sepLen
 
-proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var int;
+proc nkDrawText(b: PNkCommandBuffer; r: NimRect; str: string; length: var int;
   font: ptr nk_user_font; bg, fg: nk_color) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw the selected text
@@ -1124,7 +1124,7 @@ proc isMouseReleased*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
 # ----
 # Text
 # ----
-proc nkWidgetText(o: ptr nk_command_buffer; b: var NimRect; str: string; len: var int;
+proc nkWidgetText(o: PNkCommandBuffer; b: var NimRect; str: string; len: var int;
   t: ptr nk_text; a: nk_flags; f: ptr nk_user_font) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw a text widget. Internal use only
@@ -1216,7 +1216,7 @@ proc nkButtonBehavior(state: var nk_flags; r: NimRect; i: ptr nk_input;
   elif isMousePrevHovering(rect = r):
     state = state or widgetStateLeft.ord
 
-proc nkDoButton(state: var nk_flags; `out`: ptr nk_command_buffer; r: NimRect;
+proc nkDoButton(state: var nk_flags; `out`: PNkCommandBuffer; r: NimRect;
   style: ptr nk_style_button; `in`: ptr nk_input; behavior: ButtonBehavior;
   content: var NimRect): bool {.raises: [], tags: [], contractual.} =
   ## Draw a button. Internal use only
@@ -1250,7 +1250,7 @@ proc nkDoButton(state: var nk_flags; `out`: ptr nk_command_buffer; r: NimRect;
     bounds.h = r.h + 2 * style.touch_padding.y
     return nkButtonBehavior(state = state, r = bounds, i = `in`, behavior = behavior)
 
-proc nkDrawButton(`out`: ptr nk_command_buffer; bounds: NimRect;
+proc nkDrawButton(`out`: PNkCommandBuffer; bounds: NimRect;
   state: nk_flags; style: ptr nk_style_button): nk_style_item {.raises: [],
   tags: [RootEffect], contractual.} =
   ## Draw a button. Internal use only
@@ -1284,7 +1284,7 @@ proc nkDrawButton(`out`: ptr nk_command_buffer; bounds: NimRect;
       lineThickness = style.border, c = nk_rgb_factor(col = bg.color,
       factor = style.color_factor_background))
 
-proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
+proc nkDrawSymbol(`out`: PNkCommandBuffer; `type`: SymbolType;
   content: var NimRect; background, foreground: nk_color; borderWidth: float;
   font: ptr nk_user_font) {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected symbol
@@ -1367,7 +1367,7 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
   else:
     discard
 
-proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: var NimRect;
+proc nkDrawButtonSymbol(`out`: PNkCommandBuffer; bounds, content: var NimRect;
   state: nk_flags; style: ptr nk_style_button; `type`: SymbolType;
   font: ptr nk_user_font) {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only
@@ -1393,7 +1393,7 @@ proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: var NimRe
   nkDrawSymbol(`out` = `out`, `type` = `type`, content = content,
     background = bg, foreground = sym, borderWidth = 1, font = font)
 
-proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds: var NimRect,
+proc nkDoButtonSymbol(state: var nk_flags; `out`: PNkCommandBuffer; bounds: var NimRect,
   symbol: SymbolType; behavior: ButtonBehavior; style: ptr nk_style_button;
   `in`: ptr nk_input; font: ptr nk_user_font): bool {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only

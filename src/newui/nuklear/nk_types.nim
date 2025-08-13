@@ -173,9 +173,9 @@ const
     ## The list of end UTF bytes
   nkWindowMaxName: Positive = 64
     ## The maximum lenght of a window's name
-  nkMaxLayoutRowTemplateColumns: Positive = 16
+  nkMaxLayoutRowTemplateColumns*: Positive = 16
     ## The max amount of columns in row template
-  nkChartMaxSlot: Positive = 4
+  nkChartMaxSlot*: Positive = 4
     ## The max amount of slot in charts
 
 # -------
@@ -334,6 +334,7 @@ type
     clip*: nk_rect
     base*: ptr nk_buffer
     use_clipping*: cint
+  PNkCommandBuffer* = ptr nk_command_buffer
   nk_command_image* {.importc: "struct nk_command_image".} = object
     ## Internal Nuklear type
     header*: nk_command
@@ -391,13 +392,19 @@ type
   nk_menu_state* {.importc: "struct nk_menu_state", completeStruct.} = object
     x*, y*, w*, h*: cfloat
     offset*: nk_scroll
-  nk_chart_slot* {.importc: "struct nk_chart_slot".} = object
+  nk_chart_slot* {.importc: "struct nk_chart_slot", completeStruct.} = object
+    `type`*: ChartType
+    color*, highlight*: nk_color
+    min*, max*, range*: cfloat
+    count*, index*: cint
+    last*: nk_vec2
+    show_markers: nk_bool
     ## Internal Nuklear type
-  nk_chart* {.importc: "struct nk_chart".} = object
+  nk_chart* {.importc: "struct nk_chart", completeStruct.} = object
     ## Internal Nuklear type
     slot*: cint
     x, y, w, h: cfloat
-    slots: pointer # TODO: change into array[nkChartMaxSlot, nk_chart_slot]
+    slots: pointer
   nk_panel* {.importc: "struct nk_panel", nodecl.} = object
     ## Internal Nuklear type
     `type`*: PanelType
@@ -409,6 +416,7 @@ type
     has_scrolling*, offset_x*, offset_y*: cuint
     menu*: nk_menu_state
     chart*: nk_chart
+    buffer*: PNkCommandBuffer
   PNkPanel* = ptr nk_panel
     ## Pointer to nk_panel structure
   nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
