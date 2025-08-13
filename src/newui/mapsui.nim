@@ -647,6 +647,30 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show the destination's menu")
 
+proc showMission(mType: MissionsTypes): tuple[icon: string;
+    color: Color] {.raises: [], tags: [], contractual.} =
+  ## Show the mission info on the map, based on the missions' type
+  ##
+  ## * mType - the type of the mission
+  ##
+  ## Returns the tuple with icon and color tag for the selected mission
+  case mType
+  of deliver:
+    result.icon = theme.mapIcons[deliverIcon]
+    result.color = theme.mapColors[mapYellowColor]
+  of destroy:
+    result.icon = theme.mapIcons[destroyIcon]
+    result.color = theme.mapColors[mapRedColor]
+  of patrol:
+    result.icon = theme.mapIcons[patrolIcon]
+    result.color = theme.mapColors[mapLimeColor]
+  of explore:
+    result.icon = theme.mapIcons[exploreIcon]
+    result.color = theme.mapColors[mapGreenColor]
+  of passenger:
+    result.icon = theme.mapIcons[passengerIcon]
+    result.color = theme.mapColors[mapCyanColor]
+
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the game's map
@@ -728,22 +752,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               for mission in skyBases[skyMap[playerShip.skyX][
                   playerShip.skyY].baseIndex].missions:
                 if mission.targetX == x and mission.targetY == y:
-                  case mission.mType
-                  of deliver:
-                    mapChar = theme.mapIcons[deliverIcon]
-                    mapColor = theme.mapColors[mapYellowColor]
-                  of destroy:
-                    mapChar = theme.mapIcons[destroyIcon]
-                    mapColor = theme.mapColors[mapRedColor]
-                  of patrol:
-                    mapChar = theme.mapIcons[patrolIcon]
-                    mapColor = theme.mapColors[mapLimeColor]
-                  of explore:
-                    mapChar = theme.mapIcons[exploreIcon]
-                    mapColor = theme.mapColors[mapGreenColor]
-                  of passenger:
-                    mapChar = theme.mapIcons[passengerIcon]
-                    mapColor = theme.mapColors[mapCyanColor]
+                  (mapChar, mapColor) = showMission(mType = mission.mType)
                   break
             else:
               if x == playerShip.destinationX and y == playerShip.destinationY:
@@ -753,22 +762,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 mapChar = theme.mapIcons[storyIcon]
                 mapColor = theme.mapColors[mapGreenColor]
               elif skyMap[x][y].missionIndex > -1:
-                case acceptedMissions[skyMap[x][y].missionIndex].mType
-                of deliver:
-                  mapChar = theme.mapIcons[deliverIcon]
-                  mapColor = theme.mapColors[mapYellowColor]
-                of destroy:
-                  mapChar = theme.mapIcons[destroyIcon]
-                  mapColor = theme.mapColors[mapRedColor]
-                of patrol:
-                  mapChar = theme.mapIcons[patrolIcon]
-                  mapColor = theme.mapColors[mapLimeColor]
-                of explore:
-                  mapChar = theme.mapIcons[exploreIcon]
-                  mapColor = theme.mapColors[mapGreenColor]
-                of passenger:
-                  mapChar = theme.mapIcons[passengerIcon]
-                  mapColor = theme.mapColors[mapCyanColor]
+                (mapChar, mapColor) = showMission(mType = acceptedMissions[
+                    skyMap[x][y].missionIndex].mType)
               elif skyMap[x][y].eventIndex > -1:
                 if skyMap[x][y].eventIndex > eventsList.high:
                   skyMap[x][y].eventIndex = -1
