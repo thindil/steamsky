@@ -20,7 +20,7 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, events, game, items, maps, missions, ships, types, utils]
+import ../[config, events, game, items, maps, missions, missions2, ships, types, utils]
 import coreui, dialogs, errordialog, header, mapsui, messagesui, setui, table,
     themes, utilsui2
 
@@ -202,10 +202,10 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       setLayoutRowDynamic(height = 30, cols = 1)
       colorLabel(str = "Patrol selected area", color = theme.colors[goldenColor])
     of destroy:
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = 60, cols = 2)
       label(str = "Target:")
       try:
-        colorLabel(str = protoShipsList[mission.shipIndex].name,
+        colorWrapLabel(str = protoShipsList[mission.shipIndex].name,
             color = theme.colors[goldenColor])
       except:
         dialog = setError(message = "Can't get ship's name.")
@@ -321,8 +321,7 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
         max = 200, step = 1, incPerPixel = 1)
     if newPercent != missionPercent:
       missionPercent = newPercent
-    missionReward = (((mission.reward.float * mission.multiplier) *
-        missionPercent.float) / 100.0).Natural
+    missionReward = ((mission.reward.float * missionPercent.float) / 100.0).Natural
     setLayoutRowDynamic(height = 30, cols = 2)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
@@ -331,6 +330,16 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
     imageLabelButton(image = images[negotiateColoredIcon], text = "Accept",
         alignment = right):
       dialog = none
+      skyBases[baseIndex].missions[missionIndex].multiplier = (missionPercent.float / 100.0)
+      try:
+        acceptMission(missionIndex = missionIndex)
+      except MissionAcceptingError:
+        dialog = setMessage(message = getCurrentExceptionMsg(), title = "Can't accept mission")
+        return
+      except:
+        dialog = setError(message = "Can't accept mission.")
+        return
+      setMissions(dialog = dialog)
     restoreButtonStyle()
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
         isPopup = false, label = "Cancel")
@@ -357,7 +366,7 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  if mapPreview:
+  if mapPreview or missionsText[1] == "0":
     state = map
     return
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
