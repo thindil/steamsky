@@ -139,6 +139,30 @@ proc showSkyMap*(clear: bool = false) {.raises: [], tags: [WriteIOEffect,
             res = "showstats")
     currentStory.showText = true
 
+proc showMission(currentTheme: ThemeRecord; mType: MissionsTypes): tuple[icon,
+    tag: string] {.raises: [], tags: [], contractual.} =
+  ## Show the mission info on the map, based on the missions' type
+  ##
+  ## * mType - the type of the mission
+  ##
+  ## Returns the tuple with icon and text tag for the selected mission
+  case mType
+  of deliver:
+    result.icon = currentTheme.deliverIcon
+    result.tag = "yellow"
+  of destroy:
+    result.icon = currentTheme.destroyIcon
+    result.tag = "red"
+  of patrol:
+    result.icon = currentTheme.patrolIcon
+    result.tag = "lime"
+  of explore:
+    result.icon = currentTheme.exploreIcon
+    result.tag = "green"
+  of passenger:
+    result.icon = currentTheme.passengerIcon
+    result.tag = "cyan"
+
 proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Draw the map on the screen
@@ -211,22 +235,8 @@ proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
           mapChar = currentTheme.storyIcon
           mapTag = "green"
         elif skyMap[x][y].missionIndex > -1:
-          case acceptedMissions[skyMap[x][y].missionIndex].mType
-          of deliver:
-            mapChar = currentTheme.deliverIcon
-            mapTag = "yellow"
-          of destroy:
-            mapChar = currentTheme.destroyIcon
-            mapTag = "red"
-          of patrol:
-            mapChar = currentTheme.patrolIcon
-            mapTag = "lime"
-          of explore:
-            mapChar = currentTheme.exploreIcon
-            mapTag = "green"
-          of passenger:
-            mapChar = currentTheme.passengerIcon
-            mapTag = "cyan"
+          (mapChar, mapTag) = showMission(currentTheme = currentTheme,
+              mType = acceptedMissions[skyMap[x][y].missionIndex].mType)
           if not skyMap[x][y].visited:
             mapTag &= " unvisited"
         elif skyMap[x][y].eventIndex > -1:
@@ -281,22 +291,8 @@ proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
         for mission in skyBases[skyMap[playerShip.skyX][
             playerShip.skyY].baseIndex].missions:
           if mission.targetX == x and mission.targetY == y:
-            case mission.mType
-            of deliver:
-              mapChar = currentTheme.deliverIcon
-              mapTag = "yellow"
-            of destroy:
-              mapChar = currentTheme.destroyIcon
-              mapTag = "red"
-            of patrol:
-              mapChar = currentTheme.patrolIcon
-              mapTag = "lime"
-            of explore:
-              mapChar = currentTheme.exploreIcon
-              mapTag = "green"
-            of passenger:
-              mapChar = currentTheme.passengerIcon
-              mapTag = "cyan"
+            (mapChar, mapTag) = showMission(currentTheme = currentTheme,
+                mType = mission.mType)
             if not skyMap[x][y].visited:
               mapTag &= " unvisited"
             break
@@ -392,16 +388,16 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
           baseInfoText: string = "\n"
           color: string = ""
         case skyBases[baseIndex].reputation.level
-        of -100.. -75:
+        of -100 .. -75:
           baseInfoText &= "You are hated here"
           color = "red"
-        of -74.. -50:
+        of -74 .. -50:
           baseInfoText &= "You are outlawed here"
           color = "red"
-        of -49.. -25:
+        of -49 .. -25:
           baseInfoText &= "You are disliked here"
           color = "red"
-        of -24.. -1:
+        of -24 .. -1:
           baseInfoText &= "They are unfriendly to you"
           color = "red"
         of 0:
