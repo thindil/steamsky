@@ -275,6 +275,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
       state = loot
       dialog = none
       closePopup()
+      setLoot(dialog = dialog)
   else:
     labelButton(title = "Escape"):
       dockingOrder(escape = true, dialog = dialog, state = state)
