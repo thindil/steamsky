@@ -20,7 +20,36 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
-import coreui, header, messagesui, setui, themes
+import coreui, header, messagesui, setui, table, themes
+
+proc sortLoot(sortAsc, sortDesc: ItemsSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort items on the loot list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if itemsSortOrder == sortAsc:
+    itemsSortOrder = sortDesc
+  else:
+    itemsSortOrder = sortAsc
+
+const
+  headers: array[5, HeaderData[ItemsSortOrders]] = [
+    HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
+        sortDesc: nameDesc),
+    HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc,
+        sortDesc: typeDesc),
+    HeaderData[ItemsSortOrders](label: "Durability", sortAsc: durabilityAsc,
+        sortDesc: durabilityDesc),
+    HeaderData[ItemsSortOrders](label: "Owned", sortAsc: ownedAsc,
+        sortDesc: ownedDesc),
+    HeaderData[ItemsSortOrders](label: "Available", sortAsc: availableAsc,
+        sortDesc: availableDesc)]
+  ratio: array[5, cfloat] = [300.cfloat, 200, 200, 200, 200]
 
 proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -52,5 +81,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "LootGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
+    addHeader(headers = headers, ratio = ratio, tooltip = "items",
+      code = sortLoot, dialog = dialog)
   # Show the last in-game messages
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
