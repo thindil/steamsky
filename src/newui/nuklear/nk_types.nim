@@ -177,6 +177,7 @@ const
     ## The max amount of columns in row template
   nkChartMaxSlot*: Positive = 4
     ## The max amount of slot in charts
+  nkMaxNumberBuffer*: Positive = 64
 
 # -------
 # Objects
@@ -429,16 +430,20 @@ type
   nk_edit_state* {.importc: "struct nk_edit_state", nodecl.} = object
     ## Internal Nuklear type
     active*: cint
-  nk_property_state* {.importc: "struct nk_property_state", nodecl.} = object
+  nk_property_state* {.importc: "struct nk_property_state",
+      completeStruct.} = object
     ## Internal Nuklear type
-    active*: cint
+    active*, prev*, length*, cursor*, select_start*, select_end*, state*: cint
+    buffer*: array[nkMaxNumberBuffer, char]
+    name*: nk_hash
+    seq*, old*: cuint
   nk_window* {.importc: "struct nk_window", completeStruct.} = object
     ## Internal Nuklear type
     layout*: PNkPanel
     popup*: nk_popup_state
     parent*, next*, prev*: PNkWindow
     bounds*: nk_rect
-    seq*: uint
+    seq*, scrolled*, table_count: cuint
     flags*: nk_flags
     buffer*: nk_command_buffer
     edit*: nk_edit_state
@@ -446,11 +451,9 @@ type
     scrollbar*: nk_scroll
     name*: nk_hash
     name_string*: array[nkWindowMaxName, char]
-    scrollbar_hiding_timer*: float
-    scrolled*: uint
+    scrollbar_hiding_timer*: cfloat
     widgets_disabled*: nk_bool
     tables*: ptr nk_table
-    table_count*: uint
   PNkWindow* = ptr nk_window
     ## Pointer to nk_window structure
   nk_memory* {.importc: "struct nk_memory", nodecl.} = object
@@ -494,7 +497,7 @@ type
     style*: nk_style
     input*: nk_input
     current*, active*: PNkWindow
-    seq*: uint
+    seq*: cuint
     memory*: nk_buffer
     use_pool*: bool
     freelist*: pointer
