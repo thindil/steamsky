@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the Tcl commands for the main game map like
+## showing the map, showing or hiding movement buttons, etc.
+
 import std/strutils
 import contracts, nimalyzer
 import ../[config, crew2, events2, game, game2, maps, messages, missions2,
@@ -460,6 +463,7 @@ proc setShipSpeedCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
+  ## Adds Tcl commands related to the main game map
   try:
     addCommand(name = "HideMapButtons", nimProc = hideMapButtonsCommand)
     addCommand(name = "ShowMapButtons", nimProc = showMapButtonsCommand)
