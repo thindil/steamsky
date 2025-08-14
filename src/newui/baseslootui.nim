@@ -18,9 +18,81 @@
 ## Provides code related to recruit new crew members in bases, like show the
 ## UI, start negotiating, show information about a recruit, etc.
 
+import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
-import coreui, header, messagesui, setui, table, themes
+import ../[basescargo, config, game, items]
+import coreui, errordialog, header, messagesui, setui, table, themes
+
+var itemIndex: int = -1
+
+type LocalItemData = object
+  name: string
+  iType: string
+  damage: float
+  owned: Natural
+  available: Natural
+  id: Natural
+
+proc sortItems(x, y: LocalItemData): int =
+  ## Check how to sort the selected items on the list
+  ##
+  ## * x - the first item to sort
+  ## * y - the second item to sort
+  ##
+  ## Returns 1 if the x item should go first, otherwise -1
+  case itemsSortOrder
+  of nameAsc:
+    if x.name < y.name:
+      return 1
+    else:
+      return -1
+  of nameDesc:
+    if x.name > y.name:
+      return 1
+    else:
+      return -1
+  of typeAsc:
+    if x.iType < y.iType:
+      return 1
+    else:
+      return -1
+  of typeDesc:
+    if x.iType > y.iType:
+      return 1
+    else:
+      return -1
+  of durabilityAsc:
+    if x.damage < y.damage:
+      return 1
+    else:
+      return -1
+  of durabilityDesc:
+    if x.damage > y.damage:
+      return 1
+    else:
+      return -1
+  of ownedAsc:
+    if x.owned < y.owned:
+      return 1
+    else:
+      return -1
+  of ownedDesc:
+    if x.owned > y.owned:
+      return 1
+    else:
+      return -1
+  of availableAsc:
+    if x.available < y.available:
+      return 1
+    else:
+      return -1
+  of availableDesc:
+    if x.available > y.available:
+      return 1
+    else:
+      return -1
+  else:
+    return -1
 
 proc sortLoot(sortAsc, sortDesc: ItemsSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -36,6 +108,47 @@ proc sortLoot(sortAsc, sortDesc: ItemsSortOrders;
     itemsSortOrder = sortDesc
   else:
     itemsSortOrder = sortAsc
+  var localItems: seq[LocalItemData]
+  var indexesList: seq[Natural]
+  for index, item in playerShip.cargo:
+    let
+      protoIndex = item.protoIndex
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+          durability = item.durability)
+    try:
+      localItems.add(y = LocalItemData(name: getItemName(item = item),
+          iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
+          protoIndex].itemType else: itemsList[protoIndex].showType),
+              damage: (
+          item.durability.float / defaultItemDurability.float),
+          owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
+          baseCargoIndex].amount else: 0), id: index))
+    except:
+      dialog = setError(message = "Can't add item from the player's ship's cargo.")
+      return
+  localItems.sort(cmp = sortItems)
+  itemsIndexes = @[]
+  for item in localItems:
+    itemsIndexes.add(y = item.id)
+  itemsIndexes.add(y = -1)
+  localItems = @[]
+  for index, item in baseCargo:
+    if index in indexesList:
+      continue
+    let protoIndex = item.protoIndex
+    try:
+      localItems.add(y = LocalItemData(name: itemsList[protoIndex].name,
+          iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
+          protoIndex].itemType else: itemsList[protoIndex].showType),
+              damage: (
+          item.durability.float / defaultItemDurability.float), owned: 0,
+          available: item.amount, id: index))
+    except:
+      dialog = setError(message = "Can't add item from the base's cargo.")
+      return
+  localItems.sort(cmp = sortItems)
+  for item in localItems:
+    itemsIndexes.add(y = item.id)
 
 const
   headers: array[5, HeaderData[ItemsSortOrders]] = [
