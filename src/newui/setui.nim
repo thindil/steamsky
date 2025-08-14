@@ -751,4 +751,11 @@ proc setLoot*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   currentPage = 1
+  typesList = @["All"]
   baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  baseCargo = skyBases[baseIndex].cargo
+  baseType = skyBases[baseIndex].baseType
+  location = "Base"
+  refreshItemsList(dialog = dialog)
+  if dialog == GameDialog.errorDialog:
+    return
