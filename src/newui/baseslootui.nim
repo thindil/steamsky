@@ -20,7 +20,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
-import coreui, header, messagesui
+import coreui, header, messagesui, setui, themes
 
 proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -33,8 +33,21 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
+  setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.1.cfloat, 0.3])
+  label(str = "Type:")
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Show only items of the selected type")
+  let newType = comboList(items = typesList,
+      selected = typeIndex, itemHeight = 25, x = 200, y = 150)
+  if newType != typeIndex:
+    typeIndex = newType
+  # Show information about free cargo space in the player's ship
+  setLayoutRowStatic(height = 30, cols = 2, ratio = [cargoWidth[0], cargoWidth[1]])
+  label(str = cargoText[0])
+  colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   # Show the list of items to loot
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
+  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 65
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "LootGroup", flags = {windowNoFlags}):
     if dialog != none:
