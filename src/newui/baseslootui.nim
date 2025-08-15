@@ -18,9 +18,9 @@
 ## Provides code related to recruit new crew members in bases, like show the
 ## UI, start negotiating, show information about a recruit, etc.
 
-import std/[algorithm, tables]
+import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basescargo, basestypes, config, game, items, maps, types]
+import ../[basescargo, basestypes, config, game, items, maps, shipscargo, types]
 import coreui, errordialog, header, messagesui, setui, table, themes
 
 var itemIndex: int = -1
@@ -177,6 +177,7 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     protoIndex: int = (if cargoIndex > -1: playerShip.cargo[
       cargoIndex].protoIndex else: skyBases[baseIndex].cargo[
       baseCargoIndex].protoIndex)
+    quality: ObjectQuality = (if cargoIndex > -1: playerShip.cargo[cargoIndex].quality else: skyBases[baseIndex].cargo[baseCargoIndex].quality)
   var itemInfo = ""
   try:
     if itemsList[protoIndex].itemType == weaponType:
@@ -244,17 +245,29 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't get the description.")
     return
-  try:
-    dialog = setInfo(text = itemInfo, title = itemsList[protoIndex].name,
-        button1 = (if maxBuyAmount ==
-        0: emptyButtonSettings else: ButtonSettings(
-        tooltip: "Buy item from the base", code: setBuyDialog,
-        icon: buyDefaultIcon.ord, text: "Buy", color: "")), button2 = (
-        if maxSellAmount == 0: emptyButtonSettings else: ButtonSettings(
-        tooltip: "Sell item from the ship cargo", code: setSellDialog,
-        icon: sellDefaultIcon.ord, text: "Sell", color: "")))
-  except:
-    dialog = setError(message = "Can't show the item's info.")
+  var maxAmount: int = (if baseCargoIndex > -1: skyBases[baseIndex].cargo[
+      baseCargoIndex].amount else: 0)
+  let
+    freeAmount: int = try:
+        (if baseCargoIndex > -1: (freeCargo(amount = 0).float /
+          itemsList[skyBases[baseIndex].cargo[
+          baseCargoIndex].protoIndex].weight.float).Natural else: 0)
+      except:
+        dialog = setError(message = "Can't count free amount.")
+        return
+    cargoMaxAmount: Natural = (if cargoIndex > -1: playerShip.cargo[
+        cargoIndex].amount.Natural else: 0)
+  if maxAmount > freeAmount:
+    maxAmount = freeAmount
+#  try:
+#    dialog = setInfo(text = itemInfo, title = itemsList[protoIndex].name,
+#        button1 = (
+#        if maxAmount == 0: emptyButtonSettings else: ButtonSettings(
+#        tooltip: "Take item from the base", code: setGiveDialog, icon: giveDefaultIcon.ord, text: "Take", color: "")), button2 = (
+#        if cargoMaxAmount == 0: emptyButtonSettings else: ButtonSettings(
+#        tooltip: "Drop item from the ship cargo", code: settDropDialog, icon: dropDefaultIcon.ord, text: "Drop", color: "")))
+#  except:
+#    dialog = setError(message = "Can't show the item's info.")
 
 const
   headers: array[5, HeaderData[ItemsSortOrders]] = [
