@@ -42,9 +42,9 @@ proc hideMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## HideMapButtons
   for i in 2 .. 13:
-    let buttonName = mainPaned & ".mapframe.buttons." & buttonNames[i]
+    let buttonName: string = mainPaned & ".mapframe.buttons." & buttonNames[i]
     tclEval(script = "grid remove " & buttonName)
-  let buttonName = mainPaned & ".mapframe.buttons.show"
+  let buttonName: string = mainPaned & ".mapframe.buttons.show"
   tclEval(script = "grid " & buttonName)
   return tclOk
 
@@ -62,11 +62,11 @@ proc showMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ShowMapButtons
-  let buttonsBox = mainPaned & ".mapframe.buttons"
+  let buttonsBox: string = mainPaned & ".mapframe.buttons"
   for i in 2 .. 11:
-    let buttonName = buttonsBox & "." & buttonNames[i]
+    let buttonName: string = buttonsBox & "." & buttonNames[i]
     tclEval(script = "grid " & buttonName)
-  var buttonName = buttonsBox & ".show"
+  var buttonName: string = buttonsBox & ".show"
   tclEval(script = "grid remove " & buttonName)
   buttonName = (if tclEval2(script = "grid info " & buttonsBox).contains(
       sub = "-sticky es"): buttonsBox & ".left" else: buttonsBox & ".right")
@@ -88,8 +88,8 @@ proc moveMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## MoveMapButtons buttonname
   ## Buttonname is the name of the button which was clicked
-  let buttonsBox = mainPaned & ".mapframe.buttons"
-  var button = buttonsBox & "." & $argv[1]
+  let buttonsBox: string = mainPaned & ".mapframe.buttons"
+  var button: string = buttonsBox & "." & $argv[1]
   tclEval(script = "grid remove " & button)
   if argv[1] == "left":
     button = buttonsBox & ".right"
@@ -114,7 +114,7 @@ proc moveMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## MoveMapInfo
-  let mapInfoFrame = mainPaned & ".mapframe.info"
+  let mapInfoFrame: string = mainPaned & ".mapframe.info"
   tclEval(script = "grid configure " & mapInfoFrame & " -sticky " & (
       if tclEval2(script = "grid info " & mapInfoFrame).find(
       sub = "-sticky ne") == -1: "ne" else: "wn"))
@@ -317,7 +317,7 @@ proc moveMouseCommand(clientData: cint; interp: PInterp; argc: cint;
   ## MoveCursor direction
   ## Direction is the direction in which the mouse cursor should be moves or
   ## click if emulate clicking with the left or right button
-  let mapView = mainPaned & ".mapframe.map"
+  let mapView: string = mainPaned & ".mapframe.map"
   if tclEval2(script = "focus") != mapView:
     tclEval(script = "focus -force " & mapView)
     return tclOk
@@ -395,11 +395,11 @@ proc resizeLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     gameSettings.windowHeight = tclEval2(script = "winfo height .").parseInt
   except:
     return showError(message = "Can't set the window height.")
-  var panedPosition = (if gameSettings.windowHeight -
+  var panedPosition: Natural = (if gameSettings.windowHeight -
       gameSettings.messagesPosition <
       0: gameSettings.windowHeight else: gameSettings.windowHeight -
       gameSettings.messagesPosition)
-  let sashPosition = try:
+  let sashPosition: Natural = try:
         tclEval2(script = mainPaned & " sashpos 0").parseInt
       except:
         return showError(message = "Can't set the sash position.")
@@ -453,7 +453,7 @@ proc setShipSpeedCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SetShipSpeed speed
   ## Speed is the new speed order for the player's ship.
-  let message = try:
+  let message: string = try:
       changeShipSpeed(speedValue = (($argv[1]).parseInt + 1).ShipSpeed)
     except:
       return showError(message = "Can't change the player's ship speed.")
@@ -495,7 +495,7 @@ import mapsui, themes
 
 proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
-  let mapView = mainPaned & ".mapframe.map"
+  let mapView: string = mainPaned & ".mapframe.map"
   try:
     discard tclEval(script = mapView & " configure -width [expr [winfo width $mapview] / [font measure MapFont {" &
         themesList[gameSettings.interfaceTheme].emptyMapIcon & "}]]")
@@ -518,13 +518,13 @@ proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetVar(varName = "refreshmap", newValue = "1")
   return drawMapCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
-var mapX, mapY = 0
+var mapX, mapY: Natural = 0
 
 proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   let
-    mapView = mainPaned & ".mapframe.map"
-    mapIndex = tclEval2(script = mapView & " index @" & $argv[1] & "," & $argv[2])
+    mapView: string = mainPaned & ".mapframe.map"
+    mapIndex: string = tclEval2(script = mapView & " index @" & $argv[1] & "," & $argv[2])
   try:
     if startY + (mapIndex[0 .. mapIndex.find(sub = ".") - 1]).parseInt - 1 < 1:
       return tclOk
@@ -549,18 +549,18 @@ proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   if (mapX == 0 or mapY == 0) and updateMapInfoCommand(clientData = clientData,
       interp = interp, argc = argc, argv = argv) != tclOk:
     return tclError
-  let destinationDialog = createDialog(name = ".gameframe.destinationmenu",
+  let destinationDialog: string = createDialog(name = ".gameframe.destinationmenu",
       title = "Set destination", parentName = ".gameframe")
   if playerShip.skyX == mapX and playerShip.skyY == mapY:
     tclEval(script = "CloseDialog " & destinationDialog)
     return showOrdersCommand(clientData = clientData, interp = interp,
         argc = argc, argv = argv)
-  var button = destinationDialog & ".set"
+  var button: string = destinationDialog & ".set"
   tclEval(script = "ttk::button " & button &
       " -text {Set destination} -command {SetDestination;CloseDialog " &
       destinationDialog & "}")
   tclEval(script = "grid " & button & " -sticky we -padx 5")
-  let dialogCloseButton = destinationDialog & ".button"
+  let dialogCloseButton: string = destinationDialog & ".button"
   tclEval(script = "ttk::button " & dialogCloseButton &
       " -text Close -command {CloseDialog " & destinationDialog & "}")
   tclEval(script = "bind " & button & " <Escape> {" & dialogCloseButton & " invoke;break}")
@@ -604,24 +604,24 @@ proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
-  let mapView = mainPaned & ".mapframe.map"
+  let mapView: string = mainPaned & ".mapframe.map"
   if tclEval2(script = "winfo ismapped " & mapView) == "0":
     return tclOk
   let
-    mapHeight = try:
+    mapHeight: Natural = try:
         tclEval2(script = mapView & " cget -height").parseInt
       except:
         return showError(message = "Can't get the map's height.")
-    mapWidth = try:
+    mapWidth: Natural = try:
         tclEval2(script = mapView & " cget -width").parseInt
       except:
         return showError(message = "Can't get the map's width.")
-    dialogName = ".gameframe.movemapdialog"
+    dialogName: string = ".gameframe.movemapdialog"
   if argv[1] == "centeronship":
     centerX = playerShip.skyX
     centerY = playerShip.skyY
   elif argv[1] == "movemapto":
-    var spinBox = dialogName & ".x"
+    var spinBox: string = dialogName & ".x"
     centerX = try:
         tclEval2(script = spinBox & " get").parseInt
       except:
