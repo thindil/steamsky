@@ -20,7 +20,7 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basescargo, basestypes, config, game, items]
+import ../[basescargo, basestypes, config, game, items, maps, types]
 import coreui, errordialog, header, messagesui, setui, table, themes
 
 var itemIndex: int = -1
@@ -162,6 +162,99 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   itemIndex = itemsIndexes[data]
   if data > playerShip.cargo.len:
     itemIndex *= -1
+  var
+    cargoIndex: int = -1
+    baseCargoIndex: int = 0
+  if itemIndex < 0:
+    baseCargoIndex = (itemIndex + 1).abs
+  else:
+    cargoIndex = itemIndex - 1
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if cargoIndex > playerShip.cargo.high or baseCargoIndex > skyBases[
+      baseIndex].cargo.high:
+    return
+  let
+    protoIndex: int = (if cargoIndex > -1: playerShip.cargo[
+      cargoIndex].protoIndex else: skyBases[baseIndex].cargo[
+      baseCargoIndex].protoIndex)
+  var itemInfo = ""
+  try:
+    if itemsList[protoIndex].itemType == weaponType:
+      itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[
+          protoIndex].value[3]].name & "/" & attributesList[skillsList[
+              itemsList[protoIndex].value[
+          3]].attribute].name & (if itemsList[protoIndex].value[4] ==
+          1: "\nCan be used with shield." else: "\nCan't be used with shield (two-handed weapon).") & "\n{/gold}Damage type: {gold}")
+      case itemsList[protoIndex].value[5]
+      of 1:
+        itemInfo.add(y = "cutting")
+      of 2:
+        itemInfo.add(y = "impaling")
+      of 3:
+        itemInfo.add(y = "blunt")
+      else:
+        discard
+      itemInfo.add(y = "{/gold}")
+  except:
+    dialog = setError(message = "Can't show weapon info.")
+    return
+  let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor,
+      armsArmor, legsArmor, shieldType]
+  for itemType in itemTypes:
+    try:
+      if itemsList[protoIndex].itemType == itemType:
+        if itemInfo.len > 0:
+          itemInfo.add(y = "\n")
+        itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
+            itemData = itemsList[protoIndex].value[1]) &
+            "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
+        break
+    except:
+      dialog = setError(message = "Can't get damage chance.")
+      return
+  try:
+    if itemsList[protoIndex].itemType in toolsList:
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
+          itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+  except:
+    dialog = setError(message = "Can't get tool info.")
+    return
+  try:
+    if itemsList[protoIndex].itemType.len > 4 and (itemsList[
+        protoIndex].itemType[0..3] == "Ammo" or itemsList[
+        protoIndex].itemType == "Harpoon"):
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      itemInfo.add(y = "Strength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
+  except:
+    dialog = setError(message = "Can't get ammo info.")
+    return
+  try:
+    if itemInfo.len > 0:
+      itemInfo.add(y = "\n")
+    itemInfo.add(y = "Quality: {gold}" & ($quality).capitalizeAscii & "{/gold}")
+  except:
+    dialog = setError(message = "Can't get quality info.")
+    return
+  try:
+    if itemsList[protoIndex].description.len > 0:
+      itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
+  except:
+    dialog = setError(message = "Can't get the description.")
+    return
+  try:
+    dialog = setInfo(text = itemInfo, title = itemsList[protoIndex].name,
+        button1 = (if maxBuyAmount ==
+        0: emptyButtonSettings else: ButtonSettings(
+        tooltip: "Buy item from the base", code: setBuyDialog,
+        icon: buyDefaultIcon.ord, text: "Buy", color: "")), button2 = (
+        if maxSellAmount == 0: emptyButtonSettings else: ButtonSettings(
+        tooltip: "Sell item from the ship cargo", code: setSellDialog,
+        icon: sellDefaultIcon.ord, text: "Sell", color: "")))
+  except:
+    dialog = setError(message = "Can't show the item's info.")
 
 const
   headers: array[5, HeaderData[ItemsSortOrders]] = [
