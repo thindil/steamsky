@@ -21,7 +21,7 @@
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basescargo, basestypes, config, game, items, maps, shipscargo, types]
-import coreui, errordialog, header, messagesui, setui, table, themes
+import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 var itemIndex: int = -1
 
@@ -150,6 +150,36 @@ proc sortLoot(sortAsc, sortDesc: ItemsSortOrders;
   for item in localItems:
     itemsIndexes.add(y = item.id)
 
+proc setGiveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the dialog for giving items
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  closePopup()
+  var baseCargoIndex: int = -1
+  if itemIndex > -1:
+    let
+      protoIndex: Natural = playerShip.cargo[itemIndex].protoIndex
+    baseCargoIndex = -findBaseCargo(protoIndex = protoIndex,
+        durability = playerShip.cargo[itemIndex].durability)
+  else:
+    baseCargoIndex = itemIndex
+  dialog = setManipulate(action = giveAction, iIndex = baseCargoIndex)
+
+proc setDropDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the dialog for dropping items
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  closePopup()
+  dialog = setManipulate(action = dropAction, iIndex = itemIndex)
+
 proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected item information
@@ -265,7 +295,7 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
 #        if maxAmount == 0: emptyButtonSettings else: ButtonSettings(
 #        tooltip: "Take item from the base", code: setGiveDialog, icon: giveDefaultIcon.ord, text: "Take", color: "")), button2 = (
 #        if cargoMaxAmount == 0: emptyButtonSettings else: ButtonSettings(
-#        tooltip: "Drop item from the ship cargo", code: settDropDialog, icon: dropDefaultIcon.ord, text: "Drop", color: "")))
+#        tooltip: "Drop item from the ship cargo", code: setDropDialog, icon: dropDefaultIcon.ord, text: "Drop", color: "")))
 #  except:
 #    dialog = setError(message = "Can't show the item's info.")
 
