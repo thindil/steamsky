@@ -163,11 +163,12 @@ proc showMission(currentTheme: ThemeRecord; mType: MissionsTypes): tuple[icon,
     result.icon = currentTheme.passengerIcon
     result.tag = "cyan"
 
+var preview: bool = false
+
 proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Draw the map on the screen
-  var preview: bool = (if tclGetVar(varName = "mappreview").len >
-      0: true else: false)
+  preview = (if tclGetVar(varName = "mappreview").len > 0: true else: false)
   if preview and playerShip.speed != docked:
     tclUnsetVar(varName = "mappreview")
     preview = false
@@ -388,16 +389,16 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
           baseInfoText: string = "\n"
           color: string = ""
         case skyBases[baseIndex].reputation.level
-        of -100.. -75:
+        of -100 .. -75:
           baseInfoText &= "You are hated here"
           color = "red"
-        of -74.. -50:
+        of -74 .. -50:
           baseInfoText &= "You are outlawed here"
           color = "red"
-        of -49.. -25:
+        of -49 .. -25:
           baseInfoText &= "You are disliked here"
           color = "red"
-        of -24.. -1:
+        of -24 .. -1:
           baseInfoText &= "They are unfriendly to you"
           color = "red"
         of 0:
@@ -444,6 +445,34 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
     of passenger:
       missionInfoText &= "Transport passenger"
     insertText(newText = missionInfoText)
+  if preview:
+    for mission in skyBases[skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex].missions:
+      if mission.targetX == x and mission.targetY == y:
+        var missionInfoText: string = "\n"
+        if skyMap[x][y].baseIndex > 0 or skyMap[x][y].eventIndex > -1:
+          missionInfoText &= "\n"
+        case mission.mType
+        of deliver:
+          try:
+            missionInfoText &= "Deliver " & itemsList[mission.itemIndex].name
+          except:
+            showError(message = "Can't get the name of the item to deliver.")
+            return
+        of destroy:
+          try:
+            missionInfoText &= "Destroy " & protoShipsList[
+                mission.shipIndex].name
+          except:
+            showError(message = "Can't get the name of the ship to destroy.")
+            return
+        of patrol:
+          missionInfoText &= "Patrol area"
+        of explore:
+          missionInfoText &= "Explore area"
+        of passenger:
+          missionInfoText &= "Transport passenger"
+        insertText(newText = missionInfoText)
   if currentStory.index.len > 0:
     var storyX, storyY: Natural = 1
     try:
