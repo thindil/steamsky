@@ -184,28 +184,28 @@ const
 # -------
 {.push ruleOff: "namedParams".}
 type
-  nk_color* {.importc: "struct nk_color".} = object
+  nk_color* {.importc: "struct nk_color", completeStruct.} = object
     ## Internal Nuklear type
     r*, g*, b*, a*: nk_byte
-  nk_colorf* {.importc: "struct nk_colorf".} = object
+  nk_colorf* {.importc: "struct nk_colorf", completeStruct.} = object
     ## Internal Nuklear type
     r*, g*, b*, a*: cfloat
   nk_vec2* {.importc: "struct nk_vec2", completeStruct.} = object
     ## Internal Nuklear type
     x*, y*: cfloat
-  nk_vec2i* {.importc: "struct nk_vec2i".} = object
+  nk_vec2i* {.importc: "struct nk_vec2i", completeStruct.} = object
     ## Internal Nuklear type
     x*, y*: cshort
   nk_handle* {.bycopy, union.} = object
     ## Internal Nuklear type
     `ptr`*: pointer
     id*: cint
-  nk_image* {.importc: "struct nk_image", nodecl.} = object
+  nk_image* {.importc: "struct nk_image", completeStruct.} = object
     ## Internal Nuklear type
     handle*: nk_handle
     w*, h*: nk_ushort
     region*: array[4, nk_ushort]
-  nk_nine_slice* {.importc: "struct nk_nine_slice", nodecl.} = object
+  nk_nine_slice* {.importc: "struct nk_nine_slice", completeStruct.} = object
     ## Internal Nuklear type
     image*: nk_image
     l*, t*, r*, b*: nk_ushort
@@ -248,7 +248,7 @@ type
       userdata*: nk_handle
   nk_draw_f* = proc(b: ptr nk_command_buffer; userData: nk_handle) {.cdecl.}
     ## Internal Nuklear type
-  nk_style_button* {.importc: "struct nk_style_button", nodecl.} = object
+  nk_style_button* {.importc: "struct nk_style_button", completeStruct.} = object
     ## Internal Nuklear type
     normal*, hover*, active*: nk_style_item
     border_color*, text_background*, text_normal*, text_hover*,
@@ -479,16 +479,17 @@ type
     pool*: nk_allocator
     grow_factor*: cfloat
     calls*: nk_size
-  nk_table* {.importc: "struct nk_table", nodecl.} = object
+  nk_table* {.importc: "struct nk_table".} = object
     ## Internal Nuklear type
     `seq`*, size*: cuint
+    keys*, values*: pointer
     next*, prev*: ptr nk_table
   nk_page_data* {.bycopy, union.} = object
     ## Internal Nuklear type
     tbl*: nk_table
     pan*: nk_panel
     win*: nk_window
-  nk_page_element* {.importc: "struct nk_page_element", nodecl.} = object
+  nk_page_element* {.importc: "struct nk_page_element".} = object
     data*: nk_page_data
     next*, prev*: pointer
     ## Internal Nuklear type
