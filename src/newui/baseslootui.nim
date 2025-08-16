@@ -199,7 +199,8 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     baseCargoIndex = (itemIndex + 1).abs
   else:
     cargoIndex = itemIndex - 1
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   if cargoIndex > playerShip.cargo.high or baseCargoIndex > skyBases[
       baseIndex].cargo.high:
     return
@@ -207,7 +208,9 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     protoIndex: int = (if cargoIndex > -1: playerShip.cargo[
       cargoIndex].protoIndex else: skyBases[baseIndex].cargo[
       baseCargoIndex].protoIndex)
-    quality: ObjectQuality = (if cargoIndex > -1: playerShip.cargo[cargoIndex].quality else: skyBases[baseIndex].cargo[baseCargoIndex].quality)
+    quality: ObjectQuality = (if cargoIndex > -1: playerShip.cargo[
+        cargoIndex].quality else: skyBases[baseIndex].cargo[
+        baseCargoIndex].quality)
   var itemInfo = ""
   try:
     if itemsList[protoIndex].itemType == weaponType:
@@ -289,15 +292,16 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
         cargoIndex].amount.Natural else: 0)
   if maxAmount > freeAmount:
     maxAmount = freeAmount
-#  try:
-#    dialog = setInfo(text = itemInfo, title = itemsList[protoIndex].name,
-#        button1 = (
-#        if maxAmount == 0: emptyButtonSettings else: ButtonSettings(
-#        tooltip: "Take item from the base", code: setGiveDialog, icon: giveDefaultIcon.ord, text: "Take", color: "")), button2 = (
-#        if cargoMaxAmount == 0: emptyButtonSettings else: ButtonSettings(
-#        tooltip: "Drop item from the ship cargo", code: setDropDialog, icon: dropDefaultIcon.ord, text: "Drop", color: "")))
-#  except:
-#    dialog = setError(message = "Can't show the item's info.")
+  try:
+    dialog = setInfo(text = itemInfo, title = itemsList[protoIndex].name,
+        button1 = (if maxAmount == 0: emptyButtonSettings else: ButtonSettings(
+        tooltip: "Take item from the base", code: setGiveDialog,
+        icon: giveIcon.ord, text: "Take", color: "")), button2 = (
+        if cargoMaxAmount == 0: emptyButtonSettings else: ButtonSettings(
+        tooltip: "Drop item from the ship cargo", code: setDropDialog,
+        icon: dropIcon.ord, text: "Drop", color: "")))
+  except:
+    dialog = setError(message = "Can't show the item's info.")
 
 const
   headers: array[5, HeaderData[ItemsSortOrders]] = [
