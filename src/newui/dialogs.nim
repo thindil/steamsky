@@ -450,9 +450,9 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
         return setError(message = "Can't get the trade's data.")
     try:
       manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (
-          if action == buyAction: maxBuyAmount else: maxSellAmount), cost: price,
-          title: (if action == buyAction: "Buy " else: "Sell ") & itemsList[
-          protoIndex].name, amount: 1, warning: "", allCost: price)
+          if action == buyAction: maxBuyAmount else: maxSellAmount),
+          cost: price, title: (if action == buyAction: "Buy " else: "Sell ") &
+          itemsList[protoIndex].name, amount: 1, warning: "", allCost: price)
     except:
       return setError(message = "Can't set the manipulate data.")
     if action == buyAction:
