@@ -299,9 +299,13 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   if cargoIndex > playerShip.cargo.high or baseCargoIndex > skyBases[
       baseIndex].cargo.high:
     return tclOk
-  let protoIndex: int = (if cargoIndex > -1: playerShip.cargo[
+  let
+    protoIndex: int = (if cargoIndex > -1: playerShip.cargo[
       cargoIndex].protoIndex else: skyBases[baseIndex].cargo[
       baseCargoIndex].protoIndex)
+    quality: ObjectQuality = (if cargoIndex > -1: playerShip.cargo[
+        cargoIndex].quality else: skyBases[baseIndex].cargo[
+        baseCargoIndex].quality)
   var itemInfo: string = try:
       "Weight: {gold}" & $itemsList[protoIndex].weight & " kg{/gold}"
     except:
@@ -353,6 +357,12 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
   except:
     return showError(message = "Can't show ammo info.")
+  try:
+    if itemInfo.len > 0:
+      itemInfo.add(y = "\n")
+    itemInfo.add(y = "Quality: {gold}" & ($quality).capitalizeAscii & "{/gold}")
+  except:
+    return showError(message = "Can't get quality info.")
   try:
     if itemsList[protoIndex].description.len > 0:
       itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
