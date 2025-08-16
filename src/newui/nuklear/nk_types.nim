@@ -214,18 +214,31 @@ type
     color*: nk_color
     image*: nk_image
     slice*: nk_nine_slice
-  nk_style_item* {.importc: "struct nk_style_item", nodecl.} = object
+  nk_style_item* {.importc: "struct nk_style_item", completeStruct.} = object
     ## Internal Nuklear type
     `type`*: StyleItemType
     data*: pointer
-  nk_style_window_header* {.importc, nodecl.} = object
+  nk_style_button* {.importc: "struct nk_style_button", completeStruct.} = object
+    ## Internal Nuklear type
+    normal*, hover*, active*: nk_style_item
+    border_color*, text_background*, text_normal*, text_hover*,
+      text_active*: nk_color
+    rounding*, border*, color_factor_background*, color_factor_text*,
+      disabled_factor*: cfloat
+    padding*, image_padding*, touch_padding*: nk_vec2
+    alignment*: nk_flags
+    # TODO: should be nk_handle, nk_draw_f
+    userdata*: cint
+    draw_begin*: cint
+    draw_end*: cint
+  nk_style_window_header* {.importc: "struct nk_style_window_header", nodecl.} = object
     ## Internal Nuklear type
     align*: StyleHeaderAlign
     padding*, label_padding*, spacing*: nk_vec2
     active*, hover*, normal*: nk_style_item
     label_active*, label_hover*, label_normal*: nk_color
     close_symbol*, minimize_symbol*, maximize_symbol*: SymbolType
-    close_button*, minimize_button*, maximize_button*: nk_style_button
+    close_button*, minimize_button*: nk_style_button
   nk_style_window* {.importc, nodecl.} = object
     ## Internal Nuklear type
     header*: nk_style_window_header
@@ -248,19 +261,6 @@ type
       userdata*: nk_handle
   nk_draw_f* = proc(b: ptr nk_command_buffer; userData: nk_handle) {.cdecl.}
     ## Internal Nuklear type
-  nk_style_button* {.importc: "struct nk_style_button", completeStruct.} = object
-    ## Internal Nuklear type
-    normal*, hover*, active*: nk_style_item
-    border_color*, text_background*, text_normal*, text_hover*,
-      text_active*: nk_color
-    rounding*, border*, color_factor_background*, color_factor_text*,
-      disabled_factor*: cfloat
-    padding*, image_padding*, touch_padding*: nk_vec2
-    alignment*: nk_flags
-    # TODO: should be nk_handle, nk_draw_f
-    userdata*: cint
-    draw_begin*: cint
-    draw_end*: cint
   nk_style_progress* {.importc: "struct nk_style_progress", nodecl.} = object
     cursor_normal*: nk_style_item
     ## Internal Nuklear type
