@@ -672,10 +672,10 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
 proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   var
-    res = 0
-    message = ""
-    newX, newY = 0
-    startsCombat = false
+    res: int = 0
+    message: string = ""
+    newX, newY: int = 0
+    startsCombat: bool = false
 
   proc updateCoordinates() =
     if playerShip.destinationX > playerShip.skyX:
@@ -813,7 +813,7 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
           break
       if gameSettings.autoMoveStop != never and skyMap[playerShip.skyX][
           playerShip.skyY].eventIndex > -1:
-        let eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+        let eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
         case gameSettings.autoMoveStop
         of any:
           if eventsList[eventIndex].eType in {enemyShip, trader, friendlyShip, enemyPatrol}:
@@ -829,7 +829,7 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
             break
         of never:
           discard
-      let messageDialog = ".message"
+      let messageDialog: string = ".message"
       if tclEval2(script = "winfo exists " & messageDialog) == "0":
         try:
           if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
@@ -949,7 +949,7 @@ proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
-  var gameMenu = ".gameframe.gamemenu"
+  var gameMenu: string = ".gameframe.gamemenu"
   if tclEval2(script = "winfo exists " & gameMenu) == "1":
     tclEval(script = "CloseDialog " & gameMenu)
     return tclOk
@@ -957,11 +957,11 @@ proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   type MenuShortcut = object
     buttonName, shortcut: string
   var
-    shortcuts: seq[MenuShortcut]
-    row = 1
+    shortcuts: seq[MenuShortcut] = @[]
+    row: Positive = 1
 
   proc addButton(name, label, command, shortcut: string; last: bool = false) =
-    let button = gameMenu & name
+    let button: string = gameMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label & " [" &
         shortcut & "]} -command {CloseDialog " & gameMenu & ";" & command & "}")
     if last:
@@ -977,7 +977,7 @@ proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
 
   addButton(name = ".shipinfo", label = "Ship information",
       command = "ShowShipInfo", shortcut = menuAccelerators[1])
-  let state = tclGetVar(varName = "gamestate")
+  let state: string = tclGetVar(varName = "gamestate")
   if state notin ["combat", "dead"]:
     addButton(name = ".shiporders", label = "Ship orders",
         command = "ShowOrders", shortcut = menuAccelerators[2])
@@ -1005,7 +1005,7 @@ proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   addButton(name = ".close", label = "Close", command = "CloseDialog " &
       gameMenu, shortcut = "Escape", last = true)
   for button in shortcuts:
-    let menuButton = button.buttonName
+    let menuButton: string = button.buttonName
     for shortcut in shortcuts:
       tclEval(script = "bind " & menuButton & " <KeyPress-" &
           shortcut.shortcut & "> {" & shortcut.buttonName & " invoke;break}")
@@ -1015,7 +1015,7 @@ proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
-  let focusedWidget = tclEval2(script = "focus")
+  let focusedWidget: string = tclEval2(script = "focus")
   if tclEval2(script = "winfo class " & focusedWidget) == "TEntry" or tclEval2(
       script = "tk busy status " & gameHeader) == "1":
     return tclOk
