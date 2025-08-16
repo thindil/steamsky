@@ -55,7 +55,8 @@ type
       moveStepIcon, expandIcon, contractIcon, selectAllIcon, unselectAllIcon,
       cancelIcon, assignCrewIcon, exitIcon, moreOptionsIcon, contract2Icon,
       expand2Icon, buyDefaultIcon, sellDefaultIcon, buyIcon, sellIcon,
-      negotiateIcon, helpIcon, negotiateColoredIcon, showColoredIcon
+      negotiateIcon, helpIcon, negotiateColoredIcon, showColoredIcon, giveIcon,
+      dropIcon
   MapIconsNames* = enum
     ## Names of icons used in the game's map
     playerShipIcon, emptyMapIcon, targetIcon, storyIcon, deliverIcon,
@@ -115,7 +116,8 @@ let
       defaultThemeIconPath & "buy.svg", defaultThemeIconPath & "sell.svg",
       defaultThemeIconPath & "negotiate.svg", defaultThemeIconPath &
       "help.svg", defaultThemeIconPath & "negotiate2.svg",
-      defaultThemeIconPath & "show2.svg"],
+      defaultThemeIconPath & "show2.svg", defaultThemeIconPath & "give.svg",
+      defaultThemeIconPath & "drop.svg"],
       colors: ["#1a130c".parseColor, "#eee8aa".parseColor,
       "#4e9a06".parseColor, "#372412".parseColor, "#291913".parseColor,
       "#500000".parseColor, "#120d0d".parseColor, "#ffdf00".parseColor,
