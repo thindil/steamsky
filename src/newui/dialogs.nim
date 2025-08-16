@@ -52,7 +52,7 @@ type
     widgetsAmount: seq[Positive]
   ManipulateType* = enum
     ## Types of action, used to manipulate items, like selling or buying items
-    sellAction, buyAction
+    sellAction, buyAction, giveAction, dropAction
   ManipulateData = object
     itemIndex: int
     maxAmount: Natural
@@ -443,21 +443,27 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
   ##
   ## Returns the type of dialog if the dialog was set, otherwise errorDialog
   setDialog(x = windowWidth / 5.0)
-  let (protoIndex, maxSellAmount, maxBuyAmount, price, _) = try:
-      getTradeData(iIndex = iIndex)
+  if action in [buyAction, sellAction]:
+    let (protoIndex, maxSellAmount, maxBuyAmount, price, _) = try:
+        getTradeData(iIndex = iIndex)
+      except:
+        return setError(message = "Can't get the trade's data.")
+    try:
+      manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (
+          if action == buyAction: maxBuyAmount else: maxSellAmount), cost: price,
+          title: (if action == buyAction: "Buy " else: "Sell ") & itemsList[
+          protoIndex].name, amount: 1, warning: "", allCost: price)
     except:
-      return setError(message = "Can't get the trade's data.")
-  try:
-    manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (
-        if action == buyAction: maxBuyAmount else: maxSellAmount), cost: price,
-        title: (if action == buyAction: "Buy " else: "Sell ") & itemsList[
-        protoIndex].name, amount: 1, warning: "", allCost: price)
-  except:
-    return setError(message = "Can't set the manipulate data.")
-  if action == buyAction:
-    return buyDialog
+      return setError(message = "Can't set the manipulate data.")
+    if action == buyAction:
+      return buyDialog
+    else:
+      return sellDialog
   else:
-    return sellDialog
+    if action == giveAction:
+      return giveDialog
+    else:
+      return dropDialog
 
 proc updateCost(amount, cargoIndex: Natural; buying: bool) {.raises: [KeyError],
     tags: [], contractual.} =
