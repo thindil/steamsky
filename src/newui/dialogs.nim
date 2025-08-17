@@ -52,7 +52,7 @@ type
     widgetsAmount: seq[Positive]
   ManipulateType* = enum
     ## Types of action, used to manipulate items, like selling or buying items
-    sellAction, buyAction, giveAction, dropAction
+    sellAction, buyAction, takeAction, dropAction
   ManipulateData = object
     itemIndex: int
     maxAmount: Natural
@@ -460,8 +460,19 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
     else:
       return sellDialog
   else:
-    if action == giveAction:
-      return giveDialog
+    let (protoIndex, maxAmount, cargoMaxAmount, _) = try:
+        getLootData(itemIndex = iIndex)
+      except:
+        return setError(message = "Can't get the trade's data.")
+    try:
+      manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (
+          if action == buyAction: maxAmount else: cargoMaxAmount),
+          cost: 0, title: (if action == takeAction: "Take " else: "Drop ") &
+          itemsList[protoIndex].name, amount: 1, warning: "", allCost: 0)
+    except:
+      return setError(message = "Can't set the manipulate data.")
+    if action == takeAction:
+      return takeDialog
     else:
       return dropDialog
 
