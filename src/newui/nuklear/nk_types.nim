@@ -218,7 +218,8 @@ type
     ## Internal Nuklear type
     `type`*: StyleItemType
     data*: pointer
-  nk_style_button* {.importc: "struct nk_style_button", completeStruct.} = object
+  nk_style_button* {.importc: "struct nk_style_button",
+      completeStruct.} = object
     ## Internal Nuklear type
     normal*, hover*, active*: nk_style_item
     border_color*, text_background*, text_normal*, text_hover*,
@@ -231,7 +232,8 @@ type
     userdata*: cint
     draw_begin*: cint
     draw_end*: cint
-  nk_style_window_header* {.importc: "struct nk_style_window_header", nodecl.} = object
+  nk_style_window_header* {.importc: "struct nk_style_window_header",
+      completeStruct.} = object
     ## Internal Nuklear type
     align*: StyleHeaderAlign
     padding*, label_padding*, spacing*: nk_vec2
@@ -239,17 +241,20 @@ type
     label_active*, label_hover*, label_normal*: nk_color
     close_symbol*, minimize_symbol*, maximize_symbol*: SymbolType
     close_button*, minimize_button*: nk_style_button
-  nk_style_window* {.importc, nodecl.} = object
+  nk_style_window* {.importc: "struct nk_style_window", completeStruct.} = object
     ## Internal Nuklear type
     header*: nk_style_window_header
-    fixed_background*: nk_style_item
+    fixed_background*, scaler*: nk_style_item
     spacing*, scrollbar_size*, padding*, group_padding*, popup_padding*,
       contextual_padding*, combo_padding*, menu_padding*,
-      tooltip_padding*: nk_vec2
-    background*, group_text_color*: nk_color
+      tooltip_padding*, min_size*: nk_vec2
+    background*, group_text_color*, border_color*, popup_border_color*,
+      popup_background*, combo_border_color*, contextual_border_color*,
+      menu_border_color*, group_border_color*, tooltip_border_color*,
+      tooltip_background*, : nk_color
     border*, combo_border*, contextual_border*, menu_border*, group_border*,
       tooltip_border*, popup_border*, rounding*: cfloat
-  nk_rect* {.importc: "struct nk_rect", nodecl.} = object
+  nk_rect* {.importc: "struct nk_rect", completeStruct.} = object
     ## Internal Nuklear type
     x*, y*, w*, h*: cfloat
   nk_draw_command* {.importc: "struct nk_draw_command", nodecl.} = object
