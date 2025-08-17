@@ -616,7 +616,7 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval2(script = mapView & " cget -width").parseInt
       except:
         return showError(message = "Can't get the map's width.")
-    dialogName: string = ".gameframe.movemapdialog"
+  const dialogName: string = ".gameframe.movemapdialog"
   if argv[1] == "centeronship":
     centerX = playerShip.skyX
     centerY = playerShip.skyY
@@ -829,7 +829,7 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
             break
         of never:
           discard
-      let messageDialog: string = ".message"
+      const messageDialog: string = ".message"
       if tclEval2(script = "winfo exists " & messageDialog) == "0":
         try:
           if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
@@ -1019,7 +1019,7 @@ proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   if tclEval2(script = "winfo class " & focusedWidget) == "TEntry" or tclEval2(
       script = "tk busy status " & gameHeader) == "1":
     return tclOk
-  let menuCommands: array[1 .. 11, string] = ["ShowShipInfo", "ShowOrders",
+  const menuCommands: array[1 .. 11, string] = ["ShowShipInfo", "ShowOrders",
       "ShowCrafting", "ShowLastMessages", "ShowKnowledge", "ShowWait",
       "ShowStats", "ShowHelp", "ShowOptions", "QuitGame", "ResignGame"]
   for index, accel in menuAccelerators:
