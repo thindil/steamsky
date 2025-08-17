@@ -247,14 +247,14 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
 
 proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
   price: int; quality: ObjectQuality] {.raises: [KeyError], tags: [], contractual.} =
-  ## get the data related to the item during trading
+  ## Get the data related to the item during trading
   ##
   ## * iIndex - the index of the item which data will be get. If positive, the
   ##            item is in the player's ship's cargo, negative in the trader's
   ##            cargo.
   ##
   ## Returns tuple with trade data: proto index of the item, max amount of item
-  ## to sell, max amount item to buy and its price
+  ## to sell, max amount item to buy, its price and quality
   result = (-1, 0, 0, 0, normal)
   var baseCargoIndex, cargoIndex: int = -1
   if iIndex < 0:
