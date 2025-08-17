@@ -20,7 +20,7 @@
 
 import std/[random, sequtils, tables]
 import contracts, nimalyzer
-import bases, basestypes, game, maps, types, utils
+import bases, basestypes, crewinventory, game, maps, shipscargo, types, utils
 
 proc generateCargo*() {.raises: [KeyError], tags: [],
     contractual.} =
@@ -213,3 +213,46 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
         baseIndex].cargo[itemIndex].protoIndex) and itemIndex > 0:
       skyBases[baseIndex].cargo.delete(i = itemIndex)
   {.ruleOn: "assignments".}
+
+proc getLootData*(itemIndex: int): tuple[protoIndex, maxAmount,
+    cargoMaxAmount: int; quality: ObjectQuality] {.raises: [KeyError], tags: [],
+    contractual.} =
+  ## Get the data related to the item during looting a base
+  ##
+  ## * iIndex - the index of the item which data will be get. If positive, the
+  ##            item is in the player's ship's cargo, negative in the base's
+  ##            cargo.
+  ##
+  ## Returns tuple with trade data: proto index of the item, max amount of item
+  ## to get, max amount item to drop and its quality
+  var
+    cargoIndex: int = -1
+    baseCargoIndex: int = 0
+  if itemIndex < 0:
+    baseCargoIndex = (itemIndex + 1).abs
+  else:
+    cargoIndex = itemIndex - 1
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
+  if cargoIndex > playerShip.cargo.high or baseCargoIndex > skyBases[
+      baseIndex].cargo.high:
+    return
+  result.protoIndex = (if cargoIndex > -1: playerShip.cargo[
+      cargoIndex].protoIndex else: skyBases[baseIndex].cargo[
+      baseCargoIndex].protoIndex)
+  result.quality = (if cargoIndex > -1: playerShip.cargo[
+        cargoIndex].quality else: skyBases[baseIndex].cargo[
+        baseCargoIndex].quality)
+  if cargoIndex > 0:
+    baseCargoIndex = findBaseCargo(protoIndex = result.protoIndex)
+  else:
+    cargoIndex = findItem(inventory = playerShip.cargo, protoIndex = result.protoIndex)
+  result.maxAmount = (if baseCargoIndex > -1: skyBases[baseIndex].cargo[
+      baseCargoIndex].amount else: 0)
+  let freeAmount: int = (if baseCargoIndex > -1: (freeCargo(amount = 0).float /
+      itemsList[skyBases[baseIndex].cargo[
+      baseCargoIndex].protoIndex].weight.float).Natural else: 0)
+  result.cargoMaxAmount = (if cargoIndex > -1: playerShip.cargo[
+      cargoIndex].amount.Natural else: 0)
+  if result.maxAmount > freeAmount:
+    result.maxAmount = freeAmount
