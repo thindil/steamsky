@@ -20,7 +20,7 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basescargo, basestypes, config, game, items, maps, shipscargo, types]
+import ../[basescargo, basestypes, config, game, items, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 var itemIndex: int = -1
@@ -167,7 +167,7 @@ proc setGiveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         durability = playerShip.cargo[itemIndex].durability)
   else:
     baseCargoIndex = itemIndex
-  dialog = setManipulate(action = giveAction, iIndex = baseCargoIndex)
+  dialog = setManipulate(action = takeAction, iIndex = baseCargoIndex)
 
 proc setDropDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -192,25 +192,11 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   itemIndex = itemsIndexes[data]
   if data > playerShip.cargo.len:
     itemIndex *= -1
-  var
-    cargoIndex: int = -1
-    baseCargoIndex: int = 0
-  if itemIndex < 0:
-    baseCargoIndex = (itemIndex + 1).abs
-  else:
-    cargoIndex = itemIndex - 1
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
-      playerShip.skyY].baseIndex
-  if cargoIndex > playerShip.cargo.high or baseCargoIndex > skyBases[
-      baseIndex].cargo.high:
-    return
-  let
-    protoIndex: int = (if cargoIndex > -1: playerShip.cargo[
-      cargoIndex].protoIndex else: skyBases[baseIndex].cargo[
-      baseCargoIndex].protoIndex)
-    quality: ObjectQuality = (if cargoIndex > -1: playerShip.cargo[
-        cargoIndex].quality else: skyBases[baseIndex].cargo[
-        baseCargoIndex].quality)
+  let (protoIndex, maxAmount, cargoMaxAmount, quality) = try:
+      getLootData(itemIndex = itemIndex)
+    except:
+      dialog = setError(message = "Can't get the trade's data.")
+      return
   var itemInfo = ""
   try:
     if itemsList[protoIndex].itemType == weaponType:
@@ -278,20 +264,6 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't get the description.")
     return
-  var maxAmount: int = (if baseCargoIndex > -1: skyBases[baseIndex].cargo[
-      baseCargoIndex].amount else: 0)
-  let
-    freeAmount: int = try:
-        (if baseCargoIndex > -1: (freeCargo(amount = 0).float /
-          itemsList[skyBases[baseIndex].cargo[
-          baseCargoIndex].protoIndex].weight.float).Natural else: 0)
-      except:
-        dialog = setError(message = "Can't count free amount.")
-        return
-    cargoMaxAmount: Natural = (if cargoIndex > -1: playerShip.cargo[
-        cargoIndex].amount.Natural else: 0)
-  if maxAmount > freeAmount:
-    maxAmount = freeAmount
   try:
     dialog = setInfo(text = itemInfo, title = itemsList[protoIndex].name,
         button1 = (if maxAmount == 0: emptyButtonSettings else: ButtonSettings(
