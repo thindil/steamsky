@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,8 +20,7 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
-import ../[basescargo, config, crewinventory, game, items, maps, messages,
-    shipscargo, tk, types]
+import ../[basescargo, config, game, items, maps, messages, shipscargo, tk, types]
 import coreui, dialogs, errordialog, dialogs2, mapsui, table, updateheader, utilsui2
 
 {.push ruleOff:"varDeclared".}
@@ -288,24 +287,10 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       ($argv[1]).parseInt
     except:
       return showError(message = "Can't get item's index.")
-  var
-    cargoIndex: int = -1
-    baseCargoIndex: int = 0
-  if itemIndex < 0:
-    baseCargoIndex = (itemIndex + 1).abs
-  else:
-    cargoIndex = itemIndex - 1
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  if cargoIndex > playerShip.cargo.high or baseCargoIndex > skyBases[
-      baseIndex].cargo.high:
-    return tclOk
-  let
-    protoIndex: int = (if cargoIndex > -1: playerShip.cargo[
-      cargoIndex].protoIndex else: skyBases[baseIndex].cargo[
-      baseCargoIndex].protoIndex)
-    quality: ObjectQuality = (if cargoIndex > -1: playerShip.cargo[
-        cargoIndex].quality else: skyBases[baseIndex].cargo[
-        baseCargoIndex].quality)
+  let (protoIndex, maxAmount, cargoMaxAmount, quality) = try:
+      getLootData(itemIndex = itemIndex)
+    except:
+      return showError(message = "Can't get the trade's data.")
   var itemInfo: string = try:
       "Weight: {gold}" & $itemsList[protoIndex].weight & " kg{/gold}"
     except:
@@ -368,23 +353,6 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
   except:
     return showError(message = "Can't show item's description.")
-  if cargoIndex > 0:
-    baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
-  else:
-    cargoIndex = findItem(inventory = playerShip.cargo, protoIndex = protoIndex)
-  var maxAmount: int = (if baseCargoIndex > -1: skyBases[baseIndex].cargo[
-      baseCargoIndex].amount else: 0)
-  let
-    freeAmount: int = try:
-        (if baseCargoIndex > -1: (freeCargo(amount = 0).float /
-          itemsList[skyBases[baseIndex].cargo[
-          baseCargoIndex].protoIndex].weight.float).Natural else: 0)
-      except:
-        return showError(message = "Can't count free amount.")
-    cargoMaxAmount: Natural = (if cargoIndex > -1: playerShip.cargo[
-        cargoIndex].amount.Natural else: 0)
-  if maxAmount > freeAmount:
-    maxAmount = freeAmount
   try:
     showInfo(text = itemInfo, title = itemsList[protoIndex].name, button1 = (
         if maxAmount == 0: emptyButtonSettings else: ButtonSettings(
