@@ -521,7 +521,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
   ##
   ## Returns the parameter dialog. It is modified only when the player closed
   ## the dialog. Returns true if an item was sold or bought, otherwise false
-  if dialog notin {buyDialog, sellDialog}:
+  if dialog notin buyDialog..dropDialog:
     return false
   result = false
   try:
@@ -548,8 +548,9 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           incPerPixel = 1)
       if newValue != manipulateData.amount:
         manipulateData.amount = newValue
-        updateCost(amount = newValue, cargoIndex = cargoIndex,
-            buying = dialog == buyDialog)
+        if dialog in {buyDialog, sellDialog}:
+          updateCost(amount = newValue, cargoIndex = cargoIndex,
+              buying = dialog == buyDialog)
       # Amount buttons
       const amounts: array[1..3, Positive] = [100, 500, 1000]
       var cols: Positive = 1
@@ -560,8 +561,9 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       for i in 1..cols - 1:
         labelButton(title = $amounts[i]):
           manipulateData.amount = amounts[i]
-          updateCost(amount = amounts[i], cargoIndex = cargoIndex,
-              buying = dialog == buyDialog)
+          if dialog in {buyDialog, sellDialog}:
+            updateCost(amount = amounts[i], cargoIndex = cargoIndex,
+                buying = dialog == buyDialog)
       labelButton(title = "Max"):
         manipulateData.amount = manipulateData.maxAmount
         updateCost(amount = manipulateData.amount, cargoIndex = cargoIndex,
