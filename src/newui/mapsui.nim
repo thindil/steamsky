@@ -172,6 +172,23 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
         label(str = "Explore area")
       of passenger:
         label(str = "Transport passenger")
+    if mapPreview:
+      for mission in skyBases[skyMap[playerShip.skyX][
+          playerShip.skyY].baseIndex].missions:
+        if mission.targetX == x and mission.targetY == y:
+          setLayoutRowDynamic(height = 50, cols = 1)
+          case mission.mType
+          of deliver:
+            wrapLabel(str = "Deliver " & itemsList[mission.itemIndex].name)
+          of destroy:
+            wrapLabel(str = "Destroy " & protoShipsList[mission.shipIndex].name)
+          of patrol:
+            label(str = "Patrol area")
+          of explore:
+            label(str = "Explore area")
+          of passenger:
+            label(str = "Transport passenger")
+          break
     if currentStory.index.len > 0:
       var storyX, storyY: Natural = 1
       (storyX, storyY) = getStoryLocation()
