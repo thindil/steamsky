@@ -404,14 +404,6 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
     for i in playerShip.cargo.len + 1 .. itemsIndexes.high:
       if row == gameSettings.listsLimit + 1:
         break
-      try:
-        if itemsIndexes[i] in indexesList or not isBuyable(baseType = baseType,
-            itemIndex = baseCargo[itemsIndexes[i]].protoIndex,
-            baseIndex = baseIndex) or baseCargo[itemsIndexes[i]].amount == 0:
-          continue
-      except:
-        dialog = setError(message = "Can't check if item is buyable2.")
-        return
       let
         protoIndex = baseCargo[itemsIndexes[i]].protoIndex
         itemType = try:
