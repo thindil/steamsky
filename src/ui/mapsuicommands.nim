@@ -321,34 +321,37 @@ proc moveMouseCommand(clientData: cint; interp: PInterp; argc: cint;
   if tclEval2(script = "focus") != mapView:
     tclEval(script = "focus -force " & mapView)
     return tclOk
-  if argv[1] == "click":
+  case argv[1]
+  of "click":
     tclEval(script = "event generate " & mapView & " <Button-" & (
         if gameSettings.rightButton: "3" else: "1") & "> -x " & $argv[2] &
         " -y " & $argv[3])
-  elif argv[1] == "nw":
+  of "nw":
     tclEval(script = "event generate " & mapView &
         " <Motion> -warp 1 -x [expr " & $argv[2] & "-5] -y [expr " & $argv[3] & "-5]")
-  elif argv[1] == "n":
+  of "n":
     tclEval(script = "event generate " & mapView & " <Motion> -warp 1 -x " &
         $argv[2] & " -y [expr " & $argv[3] & "-5]")
-  elif argv[1] == "ne":
+  of "ne":
     tclEval(script = "event generate " & mapView &
         " <Motion> -warp 1 -x [expr " & $argv[2] & "+5] -y [expr " & $argv[3] & "-5]")
-  elif argv[1] == "w":
+  of "w":
     tclEval(script = "event generate " & mapView &
         " <Motion> -warp 1 -x [expr " & $argv[2] & "-5] -y " & $argv[3])
-  elif argv[1] == "e":
+  of "e":
     tclEval(script = "event generate " & mapView &
         " <Motion> -warp 1 -x [expr " & $argv[2] & "+5] -y " & $argv[3])
-  elif argv[1] == "sw":
+  of "sw":
     tclEval(script = "event generate " & mapView &
         " <Motion> -warp 1 -x [expr " & $argv[2] & "-5] -y [expr " & $argv[3] & "+5]")
-  elif argv[1] == "s":
+  of "s":
     tclEval(script = "event generate " & mapView & " <Motion> -warp 1 -x " &
         $argv[2] & " -y [expr " & $argv[3] & "+5]")
-  elif argv[1] == "se":
+  of "se":
     tclEval(script = "event generate " & mapView &
         " <Motion> -warp 1 -x [expr " & $argv[2] & "+5] -y [expr " & $argv[3] & "+5]")
+  else:
+    discard
   return tclOk
 
 proc toggleFullScreenCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -617,10 +620,11 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get the map's width.")
   const dialogName: string = ".gameframe.movemapdialog"
-  if argv[1] == "centeronship":
+  case argv[1]
+  of "centeronship":
     centerX = playerShip.skyX
     centerY = playerShip.skyY
-  elif argv[1] == "movemapto":
+  of "movemapto":
     var spinBox: string = dialogName & ".x"
     centerX = try:
         tclEval2(script = spinBox & " get").parseInt
@@ -631,41 +635,43 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval2(script = spinBox & " get").parseInt
       except:
         return showError(message = "Can't set center Y.")
-  elif argv[1] == "n":
+  of "n":
     centerY = (if centerY - (mapHeight / 3).int < 1: (mapHeight /
         3).int else: centerY - (mapHeight / 3).int)
-  elif argv[1] == "s":
+  of "s":
     centerY = (if centerY + (mapHeight / 3).int > 1_024: (mapHeight /
         3).int else: centerY + (mapHeight / 3).int)
-  elif argv[1] == "w":
+  of "w":
     centerX = (if centerX - (mapWidth / 3).int < 1: (mapWidth /
         3).int else: centerX - (mapWidth / 3).int)
-  elif argv[1] == "e":
+  of "e":
     centerX = (if centerX + (mapWidth / 3).int > 1_024: (mapWidth /
         3).int else: centerX + (mapWidth / 3).int)
-  elif argv[1] == "nw":
+  of "nw":
     centerY = (if centerY - (mapHeight / 3).int < 1: (mapHeight /
         3).int else: centerY - (mapHeight / 3).int)
     centerX = (if centerX - (mapWidth / 3).int < 1: (mapWidth /
         3).int else: centerX - (mapWidth / 3).int)
-  elif argv[1] == "ne":
+  of "ne":
     centerY = (if centerY - (mapHeight / 3).int < 1: (mapHeight /
         3).int else: centerY - (mapHeight / 3).int)
     centerX = (if centerX + (mapWidth / 3).int > 1_024: (mapWidth /
         3).int else: centerX + (mapWidth / 3).int)
-  elif argv[1] == "sw":
+  of "sw":
     centerY = (if centerY + (mapHeight / 3).int > 1_024: (mapHeight /
         3).int else: centerY + (mapHeight / 3).int)
     centerX = (if centerX - (mapWidth / 3).int < 1: (mapWidth /
         3).int else: centerX - (mapWidth / 3).int)
-  elif argv[1] == "se":
+  of "se":
     centerY = (if centerY + (mapHeight / 3).int > 1_024: (mapHeight /
         3).int else: centerY + (mapHeight / 3).int)
     centerX = (if centerX + (mapWidth / 3).int > 1_024: (mapWidth /
         3).int else: centerX + (mapWidth / 3).int)
-  elif argv[1] == "centeronhome":
+  of "centeronhome":
     centerX = skyBases[playerShip.homeBase].skyX
     centerY = skyBases[playerShip.homeBase].skyY
+  else:
+    discard
   drawMap()
   return tclOk
 
@@ -687,55 +693,56 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     elif playerShip.destinationY < playerShip.skyY:
       newY = -1
 
-  if argv[1] == "n":
+  case argv[1]:
+  of "n":
     res = try:
         moveShip(x = 0, y = -1, message = message)
       except:
         showError(message = "Can't move the ship.")
         return
-  elif argv[1] == "s":
+  of "s":
     res = try:
         moveShip(x = 0, y = 1, message = message)
       except:
         showError(message = "Can't move the ship.")
         return
-  elif argv[1] == "e":
+  of "e":
     res = try:
         moveShip(x = 1, y = 0, message = message)
       except:
         showError(message = "Can't move the ship.")
         return
-  elif argv[1] == "w":
+  of "w":
     res = try:
         moveShip(x = -1, y = 0, message = message)
       except:
         showError(message = "Can't move the ship.")
         return
-  elif argv[1] == "sw":
+  of "sw":
     res = try:
         moveShip(x = -1, y = 1, message = message)
       except:
         showError(message = "Can't move the ship.")
         return
-  elif argv[1] == "se":
+  of "se":
     res = try:
         moveShip(x = 1, y = 1, message = message)
       except:
         showError(message = "Can't move the ship.")
         return
-  elif argv[1] == "nw":
+  of "nw":
     res = try:
         moveShip(x = -1, y = -1, message = message)
       except:
         showError(message = "Can't move the ship.")
         return
-  elif argv[1] == "ne":
+  of "ne":
     res = try:
         moveShip(x = 1, y = -1, message = message)
       except:
         showError(message = "Can't move the ship.")
         return
-  elif argv[1] == "waitormove":
+  of "waitormove":
     if playerShip.destinationX == 0 and playerShip.destinationY == 0:
       res = 1
       try:
@@ -764,7 +771,7 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
               showError(message = "Can't finish missions.")
               return
         res = 4
-  elif argv[1] == "moveto":
+  of "moveto":
     while true:
       newX = 0
       newY = 0
@@ -866,6 +873,8 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
         break
       if res in 6 .. 7:
         break
+  else:
+    discard
   case res
   # Ship moved, check for events
   of 1:
