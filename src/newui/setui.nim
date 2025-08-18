@@ -770,13 +770,8 @@ proc refreshLootList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         except:
           dialog = setError(message = "Can't get item type.")
           return
-    try:
-      if typesList.find(item = itemType) == -1 and itemsList[
-          protoIndex].price > 0:
-        typesList.add(y = itemType)
-    except:
-      dialog = setError(message = "Can't add item type.")
-      return
+    if typesList.find(item = itemType) == -1:
+      typesList.add(y = itemType)
   let currentItemIndex: Positive = playerShip.cargo.len + 1
   for i in currentItemIndex..itemsIndexes.high:
     let
@@ -792,24 +787,6 @@ proc refreshLootList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if typesList.find(item = itemType) == -1:
       typesList.add(y = itemType)
   moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
-  moneyText = @[]
-  moneyWidth = @[]
-  if moneyIndex == -1:
-    moneyText.add(y = "You don't have " & moneyName & " to buy anything")
-  else:
-    moneyText.add(y = "You have ")
-    moneyText.add(y = $playerShip.cargo[moneyIndex2].amount & " " & moneyName)
-  if baseCargo[0].amount == 0:
-    moneyText.add(y = " " & location & " doesn't have any " & moneyName & " to buy anything")
-  else:
-    moneyText.add(y = " " & location & " has ")
-    moneyText.add(y = $baseCargo[0].amount & " " & moneyName)
-  for text in moneyText:
-    try:
-      moneyWidth.add(y = text.getTextWidth)
-    except:
-      dialog = setError(message = "Can't get the width of the money text.")
-      return
   var freeSpace = try:
       freeCargo(amount = 0)
     except:
