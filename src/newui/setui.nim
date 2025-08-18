@@ -742,6 +742,93 @@ proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the loot UI
 #####################
 
+proc refreshLootList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the list of items for loot
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if itemsSortOrder == defaultItemsSortOrder:
+    itemsIndexes = @[]
+    for index in playerShip.cargo.low .. playerShip.cargo.high:
+      itemsIndexes.add(y = index)
+    itemsIndexes.add(y = -1)
+    for index in baseCargo.low .. baseCargo.high:
+      itemsIndexes.add(y = index)
+  for i in itemsIndexes:
+    if i == -1:
+      break
+    let
+      protoIndex = playerShip.cargo[i].protoIndex
+      itemType = try:
+          if itemsList[protoIndex].showType.len == 0:
+            itemsList[protoIndex].itemType
+          else:
+            itemsList[protoIndex].showType
+        except:
+          dialog = setError(message = "Can't get item type.")
+          return
+    try:
+      if typesList.find(item = itemType) == -1 and itemsList[
+          protoIndex].price > 0:
+        typesList.add(y = itemType)
+    except:
+      dialog = setError(message = "Can't add item type.")
+      return
+  let currentItemIndex: Positive = playerShip.cargo.len + 1
+  for i in currentItemIndex..itemsIndexes.high:
+    let
+      protoIndex = baseCargo[itemsIndexes[i]].protoIndex
+      itemType = try:
+          if itemsList[protoIndex].showType.len == 0:
+            itemsList[protoIndex].itemType
+          else:
+            itemsList[protoIndex].showType
+        except:
+          dialog = setError(message = "Can't get item type3.")
+          return
+    if typesList.find(item = itemType) == -1:
+      typesList.add(y = itemType)
+  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+  moneyText = @[]
+  moneyWidth = @[]
+  if moneyIndex == -1:
+    moneyText.add(y = "You don't have " & moneyName & " to buy anything")
+  else:
+    moneyText.add(y = "You have ")
+    moneyText.add(y = $playerShip.cargo[moneyIndex2].amount & " " & moneyName)
+  if baseCargo[0].amount == 0:
+    moneyText.add(y = " " & location & " doesn't have any " & moneyName & " to buy anything")
+  else:
+    moneyText.add(y = " " & location & " has ")
+    moneyText.add(y = $baseCargo[0].amount & " " & moneyName)
+  for text in moneyText:
+    try:
+      moneyWidth.add(y = text.getTextWidth)
+    except:
+      dialog = setError(message = "Can't get the width of the money text.")
+      return
+  var freeSpace = try:
+      freeCargo(amount = 0)
+    except:
+      dialog = setError(message = "Can't get free space.")
+      return
+  if freeSpace < 0:
+    freeSpace = 0
+  cargoText[1] = $freeSpace & " kg"
+  if baseIndex > 0:
+    cargoText[3] = $countFreeCargo(baseIndex = baseIndex) & " free space"
+  else:
+    cargoText[3] = "128 free space"
+  for index, text in cargoText:
+    try:
+      cargoWidth[index] = text.getTextWidth
+    except:
+      dialog = setError(message = "Can't get the width of the money text.")
+      return
+
 proc setLoot*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Set the data for loot UI
@@ -756,6 +843,6 @@ proc setLoot*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   baseCargo = skyBases[baseIndex].cargo
   baseType = skyBases[baseIndex].baseType
   location = "Base"
-  refreshItemsList(dialog = dialog)
+  refreshLootList(dialog = dialog)
   if dialog == GameDialog.errorDialog:
     return
