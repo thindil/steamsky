@@ -150,7 +150,7 @@ proc sortLoot(sortAsc, sortDesc: ItemsSortOrders;
   for item in localItems:
     itemsIndexes.add(y = item.id)
 
-proc setGiveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc setTakeDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Set the dialog for giving items
   ##
@@ -267,7 +267,7 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   try:
     dialog = setInfo(text = itemInfo, title = itemsList[protoIndex].name,
         button1 = (if maxAmount == 0: emptyButtonSettings else: ButtonSettings(
-        tooltip: "Take item from the base", code: setGiveDialog,
+        tooltip: "Take item from the base", code: setTakeDialog,
         icon: giveIcon.ord, text: "Take", color: "")), button2 = (
         if cargoMaxAmount == 0: emptyButtonSettings else: ButtonSettings(
         tooltip: "Drop item from the ship cargo", code: setDropDialog,
