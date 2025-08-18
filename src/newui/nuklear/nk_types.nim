@@ -218,6 +218,8 @@ type
     ## Internal Nuklear type
     `type`*: StyleItemType
     data*: pointer
+  nk_draw_f* = proc(b: ptr nk_command_buffer; userData: nk_handle) {.cdecl.}
+    ## Internal Nuklear type
   nk_style_button* {.importc: "struct nk_style_button",
       completeStruct.} = object
     ## Internal Nuklear type
@@ -241,7 +243,8 @@ type
     label_active*, label_hover*, label_normal*: nk_color
     close_symbol*, minimize_symbol*, maximize_symbol*: SymbolType
     close_button*, minimize_button*: nk_style_button
-  nk_style_window* {.importc: "struct nk_style_window", completeStruct.} = object
+  nk_style_window* {.importc: "struct nk_style_window",
+      completeStruct.} = object
     ## Internal Nuklear type
     header*: nk_style_window_header
     fixed_background*, scaler*: nk_style_item
@@ -257,17 +260,26 @@ type
   nk_rect* {.importc: "struct nk_rect", completeStruct.} = object
     ## Internal Nuklear type
     x*, y*, w*, h*: cfloat
-  nk_draw_command* {.importc: "struct nk_draw_command", nodecl.} = object
+  nk_draw_command* {.importc: "struct nk_draw_command",
+      completeStruct.} = object
     ## Internal Nuklear type
     elem_count*: cuint
     clip_rect*: nk_rect
     texture*: nk_handle
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle
-  nk_draw_f* = proc(b: ptr nk_command_buffer; userData: nk_handle) {.cdecl.}
+  nk_style_progress* {.importc: "struct nk_style_progress",
+      completeStruct.} = object
     ## Internal Nuklear type
-  nk_style_progress* {.importc: "struct nk_style_progress", nodecl.} = object
-    cursor_normal*: nk_style_item
+    cursor_normal*, cursor_hover*, cursor_active*, normal*, hover*,
+      active*: nk_style_item
+    border_color*, cursor_border_color*: nk_color
+    rounding*, border*, cursor_border*, cursor_rounding*, color_factor*,
+      disabled_factor*: cfloat
+    padding*: nk_vec2
+    userdata*: nk_handle
+    draw_begin*: ptr nk_draw_f
+    draw_end*: ptr nk_draw_f
     ## Internal Nuklear type
   nk_text_width_f* = proc (arg1: nk_handle; h: cfloat; arg3: cstring;
       len: cint): cfloat {.cdecl.}
