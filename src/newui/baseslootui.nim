@@ -392,6 +392,8 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
     for i in playerShip.cargo.len + 1 .. itemsIndexes.high:
       if row == gameSettings.listsLimit + 1:
         break
+      if itemsIndexes[i] in indexesList:
+        continue
       let
         protoIndex = baseCargo[itemsIndexes[i]].protoIndex
         itemType = try:
