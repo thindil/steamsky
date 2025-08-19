@@ -675,6 +675,22 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
   drawMap()
   return tclOk
 
+proc updateCoordinates(newX, newY: var int) {.raises: [], tags: [], contractual.} =
+  ## Update the new coordinates of the player's ship
+  ##
+  ## * newX - the new X coordinate of the player's ship
+  ## * newY - the new Y coordinate of the player's ship
+  ##
+  ## Returns modified parameters newX and newY.
+  if playerShip.destinationX > playerShip.skyX:
+    newX = 1
+  elif playerShip.destinationX < playerShip.skyX:
+    newX = -1
+  if playerShip.destinationY > playerShip.skyY:
+    newY = 1
+  elif playerShip.destinationY < playerShip.skyY:
+    newY = -1
+
 proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   var
@@ -682,17 +698,6 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     message: string = ""
     newX, newY: int = 0
     startsCombat: bool = false
-
-  proc updateCoordinates() =
-    if playerShip.destinationX > playerShip.skyX:
-      newX = 1
-    elif playerShip.destinationX < playerShip.skyX:
-      newX = -1
-    if playerShip.destinationY > playerShip.skyY:
-      newY = 1
-    elif playerShip.destinationY < playerShip.skyY:
-      newY = -1
-
   case argv[1]:
   of "n":
     res = try:
@@ -752,7 +757,7 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
         showError(message = "Can't update the game.")
         return
     else:
-      updateCoordinates()
+      updateCoordinates(newX = newX, newY = newY)
       res = try:
           moveShip(x = newX, y = newY, message = message)
         except:
@@ -775,7 +780,7 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     while true:
       newX = 0
       newY = 0
-      updateCoordinates()
+      updateCoordinates(newX = newX, newY = newY)
       res = try:
           moveShip(x = newX, y = newY, message = message)
         except:
