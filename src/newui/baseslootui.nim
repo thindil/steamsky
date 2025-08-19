@@ -20,7 +20,7 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basescargo, basestypes, config, game, items, types]
+import ../[basescargo, config, game, items, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 var itemIndex: int = -1
@@ -342,13 +342,6 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
       currentItemIndex.inc
       if i == -1:
         break
-      try:
-        if getPrice(baseType = baseType, itemIndex = playerShip.cargo[
-            i].protoIndex) == 0:
-          continue
-      except:
-        dialog = setError(message = "Can't get price.")
-        break
       let
         protoIndex: Natural = playerShip.cargo[i].protoIndex
         baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
@@ -371,17 +364,12 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
         currentRow.inc
         continue
       var baseAmount = 0
-      if baseIndex > 0:
-        try:
-          if baseCargoIndex > -1 and isBuyable(baseType = baseType,
-              itemIndex = protoIndex):
-            baseAmount = baseCargo[baseCargoIndex].amount
-        except:
-          dialog = setError(message = "Can't get base amount.")
-          return
-      else:
+      try:
         if baseCargoIndex > -1:
           baseAmount = baseCargo[baseCargoIndex].amount
+      except:
+        dialog = setError(message = "Can't get base amount.")
+        return
       addButton(label = itemName, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
       addButton(label = itemType, tooltip = "Show available options of item.",
