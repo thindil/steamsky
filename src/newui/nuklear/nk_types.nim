@@ -284,6 +284,15 @@ type
   nk_text_width_f* = proc (arg1: nk_handle; h: cfloat; arg3: cstring;
       len: cint): cfloat {.cdecl.}
     ## Internal Nuklear type
+  nk_user_font_glyph* {.importc: "struct nk_user_font_glyph",
+      completeStruct.} = object
+    ## Internal Nuklear type
+    uv*: array[2, nk_vec2]
+    offset*: nk_vec2
+    width*, height*, xadvance*: cfloat
+  nk_query_font_glyph_f* = proc(handle: nk_handle; fontHeight: cfloat;
+      glyph: nk_user_font_glyph; codepoint, nextCodepoint: nk_rune) {.cdecl.}
+    ## Internal Nuklear type
   nk_user_font* {.importc: "struct nk_user_font", nodecl.} = object
     ## Internal Nuklear type
     userdata*: nk_handle
