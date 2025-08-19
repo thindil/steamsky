@@ -756,7 +756,6 @@ proc refreshLootList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       itemsIndexes.add(y = index)
     itemsIndexes.add(y = -1)
     for index in baseCargo.low..baseCargo.high:
-      # FIXME: don't add money here
       itemsIndexes.add(y = index)
   for i in itemsIndexes:
     if i == -1:
