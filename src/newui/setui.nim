@@ -752,10 +752,11 @@ proc refreshLootList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   if itemsSortOrder == defaultItemsSortOrder:
     itemsIndexes = @[]
-    for index in playerShip.cargo.low .. playerShip.cargo.high:
+    for index in playerShip.cargo.low..playerShip.cargo.high:
       itemsIndexes.add(y = index)
     itemsIndexes.add(y = -1)
-    for index in baseCargo.low .. baseCargo.high:
+    for index in baseCargo.low..baseCargo.high:
+      # FIXME: don't add money here
       itemsIndexes.add(y = index)
   for i in itemsIndexes:
     if i == -1:
@@ -795,10 +796,7 @@ proc refreshLootList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if freeSpace < 0:
     freeSpace = 0
   cargoText[1] = $freeSpace & " kg"
-  if baseIndex > 0:
-    cargoText[3] = $countFreeCargo(baseIndex = baseIndex) & " free space"
-  else:
-    cargoText[3] = "128 free space"
+  cargoText[3] = $countFreeCargo(baseIndex = baseIndex) & " free space"
   for index, text in cargoText:
     try:
       cargoWidth[index] = text.getTextWidth
