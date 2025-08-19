@@ -192,6 +192,10 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   itemIndex = itemsIndexes[data]
   if data > playerShip.cargo.len:
     itemIndex *= -1
+  if itemIndex < 0:
+    itemIndex.dec
+  else:
+    itemIndex.inc
   let (protoIndex, maxAmount, cargoMaxAmount, quality) = try:
       getLootData(itemIndex = itemIndex)
     except:
