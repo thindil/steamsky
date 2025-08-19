@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Information about a mission in the map's info when previewing available
+  missions in bases
+
 ### Fixed
 - Entries in changelog
 
@@ -10,7 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Limit items in bases. Large bases can have max 128 various items for trade,
-  medium 64 and small 32.
+  medium 64 and small 32
 
 ### Changed
 - Text on some close buttons to match the rest
