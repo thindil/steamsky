@@ -24,7 +24,7 @@ import ../[config, crew2, events2, game, game2, maps, messages, missions2,
     shipscargo, shipscrew, shipsmovement, tk, types]
 import combatui, coreui, dialogs, errordialog, ordersmenu, statisticsui
 
-const buttonNames: array[1 .. 13, string] = ["show", "nw", "n", "ne", "w",
+const buttonNames: array[1..13, string] = ["show", "nw", "n", "ne", "w",
     "wait", "e", "sw", "s", "se", "hide", "left", "right"]
 
 proc hideMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -41,7 +41,7 @@ proc hideMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## HideMapButtons
-  for i in 2 .. 13:
+  for i in 2..13:
     let buttonName: string = mainPaned & ".mapframe.buttons." & buttonNames[i]
     tclEval(script = "grid remove " & buttonName)
   let buttonName: string = mainPaned & ".mapframe.buttons.show"
@@ -63,7 +63,7 @@ proc showMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowMapButtons
   let buttonsBox: string = mainPaned & ".mapframe.buttons"
-  for i in 2 .. 11:
+  for i in 2..11:
     let buttonName: string = buttonsBox & "." & buttonNames[i]
     tclEval(script = "grid " & buttonName)
   var buttonName: string = buttonsBox & ".show"
@@ -537,9 +537,9 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   except:
     return showError(message = "Cant' set map Y coordinate.")
   try:
-    if startX + (mapIndex[mapIndex.find(sub = ".") + 1 .. ^1]).parseInt < 1:
+    if startX + (mapIndex[mapIndex.find(sub = ".") + 1..^1]).parseInt < 1:
       return tclOk
-    mapX = startX + (mapIndex[mapIndex.find(sub = ".") + 1 .. ^1]).parseInt
+    mapX = startX + (mapIndex[mapIndex.find(sub = ".") + 1..^1]).parseInt
     if mapX > 1_024:
       return tclOk
   except:
@@ -1033,7 +1033,7 @@ proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   if tclEval2(script = "winfo class " & focusedWidget) == "TEntry" or tclEval2(
       script = "tk busy status " & gameHeader) == "1":
     return tclOk
-  const menuCommands: array[1 .. 11, string] = ["ShowShipInfo", "ShowOrders",
+  const menuCommands: array[1..11, string] = ["ShowShipInfo", "ShowOrders",
       "ShowCrafting", "ShowLastMessages", "ShowKnowledge", "ShowWait",
       "ShowStats", "ShowHelp", "ShowOptions", "QuitGame", "ResignGame"]
   for index, accel in menuAccelerators:
