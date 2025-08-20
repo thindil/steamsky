@@ -161,10 +161,9 @@ proc setTakeDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   closePopup()
   var baseCargoIndex: int = -1
   if itemIndex > -1:
-    let
-      protoIndex: Natural = playerShip.cargo[itemIndex].protoIndex
+    let protoIndex: Natural = playerShip.cargo[itemIndex - 1].protoIndex
     baseCargoIndex = -findBaseCargo(protoIndex = protoIndex,
-        durability = playerShip.cargo[itemIndex].durability)
+        durability = playerShip.cargo[itemIndex - 1].durability)
   else:
     baseCargoIndex = itemIndex
   dialog = setManipulate(action = takeAction, iIndex = baseCargoIndex)
