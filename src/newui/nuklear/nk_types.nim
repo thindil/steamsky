@@ -293,18 +293,25 @@ type
   nk_query_font_glyph_f* = proc(handle: nk_handle; fontHeight: cfloat;
       glyph: nk_user_font_glyph; codepoint, nextCodepoint: nk_rune) {.cdecl.}
     ## Internal Nuklear type
-  nk_user_font* {.importc: "struct nk_user_font", nodecl.} = object
+  nk_user_font* {.importc: "struct nk_user_font", completeStruct.} = object
     ## Internal Nuklear type
     userdata*: nk_handle
     height*: cfloat
     width*: nk_text_width_f
+    when defined(nkIncludeVertexBufferOutput):
+      query*: nk_query_font_glyph_f
+      texture*: nk_handle
   PNkUserFont* = ptr nk_user_font
     ## Pointer to nk_user_font structure
-  nk_style_text* {.importc: "struct nk_style_text", nodecl.} = object
+  nk_style_text* {.importc: "struct nk_style_text", completeStruct.} = object
     ## Internal Nuklear type
     padding*: nk_vec2
-  nk_cursor* {.importc: "struct nk_cursor", nodecl.} = object
+    color*: nk_color
+    color_factor*, disabled_factor*: cfloat
+  nk_cursor* {.importc: "struct nk_cursor", completeStruct.} = object
     ## Internal Nuklear type
+    img*: nk_image
+    size*, offset*: nk_vec2
   nk_style* {.importc: "struct nk_style", nodecl.} = object
     ## Internal Nuklear type
     window*: nk_style_window
