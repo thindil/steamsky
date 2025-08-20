@@ -538,7 +538,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
         let
           baseIndex: int = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
           protoIndex: int = skyBases[baseIndex].cargo[baseCargoIndex].protoIndex
-        cargoIndex = findItem(inventory = playerShip.cargo, protoIndex = protoIndex)
+        cargoIndex = findItem(inventory = playerShip.cargo,
+            protoIndex = protoIndex)
       else:
         cargoIndex = manipulateData.itemIndex
       if cargoIndex > -1:
@@ -581,11 +582,18 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       setLayoutRowDynamic(height = 30, cols = 1)
       colorLabel(str = manipulateData.warning, color = theme.colors[redColor])
       # Action (buy, sell, etc) button
+      type ActionData = object
+        icon: IconsNames
+        label: string
+      let actionButton: ActionData = case dialog
+        of buyDialog:
+          ActionData(icon: buyIcon, label: "Buy")
+        else:
+          ActionData(icon: buyIcon, label: "Invalid")
       setLayoutRowDynamic(height = 30, cols = 2)
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-      imageLabelButton(image = images[(if dialog ==
-          buyDialog: buyIcon else: sellIcon)], text = (if dialog ==
-          buyDialog: "Buy" else: "Sell"), alignment = right):
+      imageLabelButton(image = images[actionButton.icon],
+          text = actionButton.label, alignment = right):
         closePopup()
         let
           baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
