@@ -476,8 +476,8 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
     else:
       return dropDialog
 
-proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [KeyError],
-    tags: [], contractual.} =
+proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
+    KeyError], tags: [], contractual.} =
   ## Update cost of the item and the warning message
   ##
   ## * amount     - the amount of the item
@@ -494,24 +494,26 @@ proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [KeyE
     if getItemAmount(itemType = fuelType) - manipulateData.allCost <=
         gameSettings.lowFuel:
       manipulateData.warning = "You will spend " & moneyName & " below low level of fuel."
-  else:
+  elif dialog in {sellDialog, dropDialog}:
+    echo cargoIndex
+    let action: string = (if dialog == sellDialog: "sell" else: "drop")
     if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
       let amount: int = getItemAmount(itemType = fuelType) - amount
       if amount <= gameSettings.lowFuel:
-        manipulateData.warning = "You will sell amount below low lewel of fuel."
+        manipulateData.warning = "You will " & action & " amount below low lewel of fuel."
     for member in playerShip.crew:
       let faction: FactionData = factionsList[member.faction]
       if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in
           faction.drinksTypes:
         let amount: int = getItemsAmount(iType = "Drinks") - amount
         if amount <= gameSettings.lowDrinks:
-          manipulateData.warning = "You will sell amount below low lewel of drinks."
+          manipulateData.warning = "You will " & action & " amount below low lewel of drinks."
           break
       elif itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in
           faction.foodTypes:
         let amount: int = getItemsAmount(iType = "Food") - amount
         if amount <= gameSettings.lowFood:
-          manipulateData.warning = "You will sell amount below low lewel of food."
+          manipulateData.warning = "You will " & action & " amount below low lewel of food."
           break
 
 proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
@@ -567,10 +569,12 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       for i in 1..cols - 1:
         labelButton(title = $amounts[i]):
           manipulateData.amount = amounts[i]
-          updateCost(amount = amounts[i], cargoIndex = cargoIndex, dialog = dialog)
+          updateCost(amount = amounts[i], cargoIndex = cargoIndex,
+              dialog = dialog)
       labelButton(title = "Max"):
         manipulateData.amount = manipulateData.maxAmount
-        updateCost(amount = manipulateData.amount, cargoIndex = cargoIndex, dialog = dialog)
+        updateCost(amount = manipulateData.amount, cargoIndex = cargoIndex,
+            dialog = dialog)
       # Labels
       if manipulateData.cost > 0:
         setLayoutRowDynamic(height = 30, cols = 2)
