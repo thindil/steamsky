@@ -466,7 +466,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
         return setError(message = "Can't get the trade's data.")
     try:
       manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (
-          if action == buyAction: maxAmount else: cargoMaxAmount),
+          if action == takeAction: maxAmount else: cargoMaxAmount),
           cost: 0, title: (if action == takeAction: "Take " else: "Drop ") &
           itemsList[protoIndex].name, amount: 1, warning: "", allCost: 0)
     except:
@@ -571,8 +571,9 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
                 buying = dialog == buyDialog)
       labelButton(title = "Max"):
         manipulateData.amount = manipulateData.maxAmount
-        updateCost(amount = manipulateData.amount, cargoIndex = cargoIndex,
-            buying = dialog == buyDialog)
+        if dialog in {buyDialog, sellDialog}:
+          updateCost(amount = manipulateData.amount, cargoIndex = cargoIndex,
+              buying = dialog == buyDialog)
       # Labels
       if manipulateData.cost > 0:
         setLayoutRowDynamic(height = 30, cols = 2)
@@ -588,6 +589,12 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       let actionButton: ActionData = case dialog
         of buyDialog:
           ActionData(icon: buyIcon, label: "Buy")
+        of sellDialog:
+          ActionData(icon: sellIcon, label: "Sell")
+        of takeDialog:
+          ActionData(icon: giveIcon, label: "Take")
+        of dropDialog:
+          ActionData(icon: dropIcon, label: "Drop")
         else:
           ActionData(icon: buyIcon, label: "Invalid")
       setLayoutRowDynamic(height = 30, cols = 2)
