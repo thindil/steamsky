@@ -196,12 +196,14 @@ proc loadBasesTypes*(fileName: string) {.raises: [DataLoadingError],
             messageLevel = lvlInfo)
       basesTypesList[baseTypeIndex] = baseType
 
-proc getPrice*(baseType: string; itemIndex: Positive): Natural {.raises: [
-    KeyError], tags: [], contractual.} =
+proc getPrice*(baseType: string; itemIndex: Positive;
+    quality: ObjectQuality = normal): Natural {.raises: [KeyError], tags: [],
+    contractual.} =
   ## Get the price of the selected item in the selected type of bases
   ##
   ## * baseType  - the type of base from which the price will be taken
   ## * itemIndex - the index of the item's prototype which price will be taken
+  ## * quality   - the quality of the item which price will be taken
   ##
   ## Returns the price of the selected item
   require:
@@ -209,12 +211,30 @@ proc getPrice*(baseType: string; itemIndex: Positive): Natural {.raises: [
   body:
     if itemsList[itemIndex].price == 0:
       return 0
+
+    proc countPrice(price: Natural): Natural {.raises: [], tags: [],
+        contractual.} =
+      ## Count price for the item, based on its quality
+      case quality
+      of poor:
+        result = (price.float * 0.5).Natural
+      of low:
+        result = (price.float * 0.75).Natural
+      of normal:
+        result = price
+      of good:
+        result = (price.float * 1.5).Natural
+      of excellent:
+        result = (price.float * 1.75).Natural
+      if result == 0:
+        result = 1
+
     if basesTypesList[baseType].trades.hasKey(key = itemIndex):
       if basesTypesList[baseType].trades[itemIndex][1] > 0:
-        return basesTypesList[baseType].trades[itemIndex][1]
+        return countPrice(price = basesTypesList[baseType].trades[itemIndex][1])
       elif basesTypesList[baseType].trades[itemIndex][2] > 0:
-        return basesTypesList[baseType].trades[itemIndex][2]
-    return itemsList[itemIndex].price
+        return countPrice(price = basesTypesList[baseType].trades[itemIndex][2])
+    return countPrice(price = itemsList[itemIndex].price)
 
 proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
     baseIndex: ExtendedBasesRange = 0): bool {.raises: [KeyError],
