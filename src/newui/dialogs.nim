@@ -483,11 +483,12 @@ proc updateCost(amount, cargoIndex: Natural; buying: bool) {.raises: [KeyError],
   ## * amount     - the amount of the item
   ## * cargoIndex - the index of the item in the player's ship's cargo
   ## * buying     - if true, the item will be bought, otherwise false
-  if manipulateData.cost == 0:
-    return
-  manipulateData.allCost = manipulateData.amount * manipulateData.cost
-  countPrice(price = manipulateData.allCost, traderIndex = findMember(
-      order = talk), reduce = buying)
+  if manipulateData.cost > 0:
+    manipulateData.allCost = manipulateData.amount * manipulateData.cost
+    countPrice(price = manipulateData.allCost, traderIndex = findMember(
+        order = talk), reduce = buying)
+  else:
+    manipulateData.allCost = manipulateData.amount
   manipulateData.warning = ""
   if buying:
     if getItemAmount(itemType = fuelType) - manipulateData.allCost <=
@@ -553,9 +554,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           incPerPixel = 1)
       if newValue != manipulateData.amount:
         manipulateData.amount = newValue
-        if dialog in {buyDialog, sellDialog}:
-          updateCost(amount = newValue, cargoIndex = cargoIndex,
-              buying = dialog == buyDialog)
+        updateCost(amount = newValue, cargoIndex = cargoIndex,
+            buying = dialog == buyDialog)
       # Amount buttons
       const amounts: array[1..3, Positive] = [100, 500, 1000]
       var cols: Positive = 1
@@ -566,14 +566,12 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       for i in 1..cols - 1:
         labelButton(title = $amounts[i]):
           manipulateData.amount = amounts[i]
-          if dialog in {buyDialog, sellDialog}:
-            updateCost(amount = amounts[i], cargoIndex = cargoIndex,
-                buying = dialog == buyDialog)
+          updateCost(amount = amounts[i], cargoIndex = cargoIndex,
+              buying = dialog == buyDialog)
       labelButton(title = "Max"):
         manipulateData.amount = manipulateData.maxAmount
-        if dialog in {buyDialog, sellDialog}:
-          updateCost(amount = manipulateData.amount, cargoIndex = cargoIndex,
-              buying = dialog == buyDialog)
+        updateCost(amount = manipulateData.amount, cargoIndex = cargoIndex,
+            buying = dialog == buyDialog)
       # Labels
       if manipulateData.cost > 0:
         setLayoutRowDynamic(height = 30, cols = 2)
@@ -606,12 +604,19 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
           trader = (if baseIndex > 0: "base" else: "ship")
         try:
-          if dialog == buyDialog:
+          case dialog
+          of buyDialog:
             buyItems(baseItemIndex = manipulateData.itemIndex.abs,
                 amount = $manipulateData.amount)
-          else:
+          of sellDialog:
             sellItems(itemIndex = manipulateData.itemIndex,
                 amount = $manipulateData.amount)
+          of takeDialog:
+            discard
+          of dropDialog:
+            discard
+          else:
+            return false
           dialog = none
           result = true
         except CantBuyError:
