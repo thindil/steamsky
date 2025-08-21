@@ -476,21 +476,21 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
     else:
       return dropDialog
 
-proc updateCost(amount, cargoIndex: Natural; buying: bool) {.raises: [KeyError],
+proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [KeyError],
     tags: [], contractual.} =
   ## Update cost of the item and the warning message
   ##
   ## * amount     - the amount of the item
   ## * cargoIndex - the index of the item in the player's ship's cargo
-  ## * buying     - if true, the item will be bought, otherwise false
+  ## * dialog     - the type of dialog to show
   if manipulateData.cost > 0:
     manipulateData.allCost = manipulateData.amount * manipulateData.cost
     countPrice(price = manipulateData.allCost, traderIndex = findMember(
-        order = talk), reduce = buying)
+        order = talk), reduce = dialog == buyDialog)
   else:
     manipulateData.allCost = manipulateData.amount
   manipulateData.warning = ""
-  if buying:
+  if dialog == buyDialog:
     if getItemAmount(itemType = fuelType) - manipulateData.allCost <=
         gameSettings.lowFuel:
       manipulateData.warning = "You will spend " & moneyName & " below low level of fuel."
@@ -556,8 +556,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           incPerPixel = 1)
       if newValue != manipulateData.amount:
         manipulateData.amount = newValue
-        updateCost(amount = newValue, cargoIndex = cargoIndex,
-            buying = dialog == buyDialog)
+        updateCost(amount = newValue, cargoIndex = cargoIndex, dialog = dialog)
       # Amount buttons
       const amounts: array[1..3, Positive] = [100, 500, 1000]
       var cols: Positive = 1
@@ -568,12 +567,10 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       for i in 1..cols - 1:
         labelButton(title = $amounts[i]):
           manipulateData.amount = amounts[i]
-          updateCost(amount = amounts[i], cargoIndex = cargoIndex,
-              buying = dialog == buyDialog)
+          updateCost(amount = amounts[i], cargoIndex = cargoIndex, dialog = dialog)
       labelButton(title = "Max"):
         manipulateData.amount = manipulateData.maxAmount
-        updateCost(amount = manipulateData.amount, cargoIndex = cargoIndex,
-            buying = dialog == buyDialog)
+        updateCost(amount = manipulateData.amount, cargoIndex = cargoIndex, dialog = dialog)
       # Labels
       if manipulateData.cost > 0:
         setLayoutRowDynamic(height = 30, cols = 2)
