@@ -312,15 +312,18 @@ type
     ## Internal Nuklear type
     img*: nk_image
     size*, offset*: nk_vec2
+  PNkCursor* = ptr nk_cursor
+    ## Pointer to nk_user_font structure
   nk_style* {.importc: "struct nk_style", nodecl.} = object
     ## Internal Nuklear type
     window*: nk_style_window
-    button*: nk_style_button
+    button*, contextual_button*, menu_button*: nk_style_button
     progress*: nk_style_progress
     font*: PNkUserFont
     text*: nk_style_text
-    cursor_active*: nk_cursor
+    cursor_active*, cursor_last*: PNkCursor
     cursors*: pointer
+    cursor_visible*: cint
   nk_mouse_button* {.importc: "struct nk_mouse_button",
       completeStruct.} = object
     ## Internal Nuklear type

@@ -1492,7 +1492,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
         win.bounds.y += `in`.mouse.delta.y
         buttons[Buttons.left].clicked_pos.x += `in`.mouse.delta.x
         buttons[Buttons.left].clicked_pos.y += `in`.mouse.delta.y
-        ctx.style.cursor_active = cursors[cursorMove]
+        ctx.style.cursor_active = cursors[cursorMove].addr
       `in`.mouse.buttons = buttons.addr
 
     # setup panel
