@@ -314,6 +314,15 @@ type
     size*, offset*: nk_vec2
   PNkCursor* = ptr nk_cursor
     ## Pointer to nk_user_font structure
+  nk_style_toggle* {.importc: "struct nk_style_toggle",
+      completeStruct.} = object
+    ## Internal Nuklear type
+    normal*, hover*, active*, cursor_normal*, cursor_hover*: nk_style_item
+    border_color*, text_normal*, text_hover*, text_active*,
+      text_background*: nk_color
+    text_alignment*: nk_flags
+    padding*, touch_padding*: nk_vec2
+    spacing*, border*, color_factor*, disabled_factor*: cfloat
   nk_style* {.importc: "struct nk_style", nodecl.} = object
     ## Internal Nuklear type
     window*: nk_style_window
@@ -324,6 +333,7 @@ type
     cursor_active*, cursor_last*: PNkCursor
     cursors*: pointer
     cursor_visible*: cint
+    option*, checkbox*: nk_style_toggle
   nk_mouse_button* {.importc: "struct nk_mouse_button",
       completeStruct.} = object
     ## Internal Nuklear type
