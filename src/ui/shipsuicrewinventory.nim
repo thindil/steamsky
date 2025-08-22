@@ -110,7 +110,7 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   updateTable(table = inventoryTable)
   return tclOk
 
-proc resetSelection() =
+proc resetSelection() {.raises: [], tags: [], contractual.} =
   ## Reset the currently selected items in the crew member inventory
   for index, _ in playerShip.crew[memberIndex].inventory:
     if tclGetVar(varName = "invindex" & $(index + 1)) == "1":
@@ -329,7 +329,8 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
           itemIndex = index), id: index))
     except:
       return showError(message = "Can't add item to local inventory.")
-  proc sortInventory(x, y: LocalItemData): int =
+  proc sortInventory(x, y: LocalItemData): int {.raises: [], tags: [],
+      contractual.} =
     case inventorySortOrder
     of selectedAsc:
       if x.selected < y.selected:
