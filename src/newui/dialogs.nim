@@ -534,14 +534,13 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
     popup(pType = staticPopup, title = manipulateData.title, x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar, windowMovable}):
-      var baseCargoIndex, cargoIndex: int = -1
+      var baseCargoIndex, cargoIndex, protoIndex: int = -1
       if manipulateData.itemIndex < 0:
         baseCargoIndex = manipulateData.itemIndex.abs
         if dialog == takeDialog:
           baseCargoIndex.dec
-        let
-          baseIndex: int = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-          protoIndex: int = skyBases[baseIndex].cargo[baseCargoIndex].protoIndex
+        let baseIndex: int = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+        protoIndex = skyBases[baseIndex].cargo[baseCargoIndex].protoIndex
         cargoIndex = findItem(inventory = playerShip.cargo,
             protoIndex = protoIndex)
       else:
@@ -549,7 +548,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
         if dialog == dropDialog:
           cargoIndex.dec
       if cargoIndex > -1:
-        let protoIndex: int = playerShip.cargo[cargoIndex].protoIndex
+        protoIndex = playerShip.cargo[cargoIndex].protoIndex
         if baseCargoIndex == -1:
           baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
       setLayoutRowDynamic(height = 30, cols = 2)
@@ -618,7 +617,31 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           of takeDialog:
             discard
           of dropDialog:
-            discard
+            if baseCargoIndex > -1:
+              try:
+                updateBaseCargo(cargoIndex = baseCargoIndex,
+                    amount = manipulateData.amount,
+                    durability = playerShip.cargo[cargoIndex].durability)
+              except:
+                dialog = setError(message = "Can't update the base's cargo.")
+                return
+            else:
+              try:
+                updateBaseCargo(protoIndex = protoIndex,
+                    amount = manipulateData.amount,
+                    durability = playerShip.cargo[cargoIndex].durability)
+              except:
+                dialog = setError(message = "Can't update the base's cargo2.")
+                return
+            updateCargo(ship = playerShip, cargoIndex = cargoIndex,
+                amount = -manipulateData.amount, durability = playerShip.cargo[
+                cargoIndex].durability)
+            try:
+              addMessage(message = "You drop " & $manipulateData.amount & " " &
+                  itemsList[protoIndex].name & ".", mType = orderMessage)
+            except:
+              dialog = setError(message = "Can't add message.")
+              return
           else:
             return false
           dialog = none
