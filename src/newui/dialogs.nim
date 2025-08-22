@@ -495,7 +495,6 @@ proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
         gameSettings.lowFuel:
       manipulateData.warning = "You will spend " & moneyName & " below low level of fuel."
   elif dialog in {sellDialog, dropDialog}:
-    echo cargoIndex
     let action: string = (if dialog == sellDialog: "sell" else: "drop")
     if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
       let amount: int = getItemAmount(itemType = fuelType) - amount
@@ -538,7 +537,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       var baseCargoIndex, cargoIndex: int = -1
       if manipulateData.itemIndex < 0:
         baseCargoIndex = manipulateData.itemIndex.abs
-        if dialog in {takeDialog, dropDialog}:
+        if dialog == takeDialog:
           baseCargoIndex.dec
         let
           baseIndex: int = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
@@ -547,6 +546,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             protoIndex = protoIndex)
       else:
         cargoIndex = manipulateData.itemIndex
+        if dialog == dropDialog:
+          cargoIndex.dec
       if cargoIndex > -1:
         let protoIndex: int = playerShip.cargo[cargoIndex].protoIndex
         if baseCargoIndex == -1:
