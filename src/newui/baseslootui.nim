@@ -305,6 +305,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   if showManipulateItem(dialog = dialog):
     refreshLootList(dialog = dialog)
+    baseCargo = skyBases[baseIndex].cargo
   setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.1.cfloat, 0.3])
   label(str = "Type:")
   if gameSettings.showTooltips:
