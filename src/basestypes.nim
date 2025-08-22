@@ -18,7 +18,7 @@
 ## Provides code related to sky bases types like loading them from file,
 ## getting price, checking do an item is buyable.
 
-import std/[colors, logging, strutils, tables, xmlparser, xmltree]
+import std/[colors, logging, math, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, types
 
@@ -217,15 +217,15 @@ proc getPrice*(baseType: string; itemIndex: Positive;
       ## Count price for the item, based on its quality
       case quality
       of poor:
-        result = (price.float * 0.5).Natural
+        result = (price.float * 0.5).ceil.Natural
       of low:
-        result = (price.float * 0.75).Natural
+        result = (price.float * 0.75).ceil.Natural
       of normal:
         result = price
       of good:
-        result = (price.float * 1.5).Natural
+        result = (price.float * 1.5).floor.Natural
       of excellent:
-        result = (price.float * 1.75).Natural
+        result = (price.float * 1.75).floor.Natural
       if result == 0:
         result = 1
 
