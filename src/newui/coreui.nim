@@ -31,7 +31,7 @@ type
 
   GameDialog* = enum
     ## Used to show any in-game dialog window
-    none, loading, questionDialog, errorDialog, waitDialog, gameMenuDialog,
+    none, loading, questionDialog, gameMenuDialog, errorDialog, waitDialog,
       newGoalDialog, boardingDialog, defendingDialog, recruitDialog,
       negotiateDialog, moduleDialog, missionDialog, acceptMissionDialog,
       baseActionDialog, ordersDialog, destinationDialog, messageDialog,
