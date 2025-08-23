@@ -21,9 +21,9 @@ import ../[basestypes, basescargo, config, crewinventory, events, game, items,
 import coreui, dialogs, dialogs2, errordialog, mapsui, table, updateheader, utilsui2
 
 type ItemsSortOrders = enum
-  nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, priceAsc,
-    priceDesc, profitAsc, profitDesc, weightAsc, weightDesc, ownedAsc,
-    ownedDesc, availableAsc, availableDesc, none
+  nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc,
+    qualityAsc, qualityDesc, priceAsc, priceDesc, profitAsc, profitDesc,
+    weightAsc, weightDesc, ownedAsc, ownedDesc, availableAsc, availableDesc, none
 
 const defaultItemsSortOrder: ItemsSortOrders = none
 
@@ -129,7 +129,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & tradeFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
     tradeFrame = tradeCanvas & ".trade"
     tradeTable = createTable(parent = tradeFrame, headers = @["Name", "Type",
-        "Durability", "Price", "Profit", "Weight", "Owned", "Available"],
+        "Durability", "Quality", "Price", "Profit", "Weight", "Owned",
+        "Available"],
         scrollbar = mainPaned & ".tradeframe.scrolly",
         command = "SortTradeItems",
         tooltipTExt = "Press mouse button to sort the items.")
@@ -269,12 +270,15 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     addProgressbar(table = tradeTable, value = playerShip.cargo[i].durability,
         maxValue = defaultItemDurability, tooltip = itemDurability,
         command = "ShowTradeItemInfo " & $(i + 1), column = 3)
-    addButton(table = tradeTable, text = $price,
+    addButton(table = tradeTable, text = $playerShip.cargo[i].quality,
         tooltip = "Show available options for item",
         command = "ShowTradeItemInfo " & $(i + 1), column = 4)
+    addButton(table = tradeTable, text = $price,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $(i + 1), column = 5)
     addButton(table = tradeTable, text = $profit,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $(i + 1), column = 5, color = (
+        command = "ShowTradeItemInfo " & $(i + 1), column = 6, color = (
         if profit >
         0: tclGetVar(varName = "ttk::theme::" & gameSettings.interfaceTheme &
         "::colors(-green)") elif profit < 0: tclGetVar(
@@ -283,15 +287,15 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       addButton(table = tradeTable, text = $itemsList[protoIndex].weight &
           " kg", tooltip = "Show available options for item",
-          command = "ShowTradeItemInfo " & $(i + 1), column = 6)
+          command = "ShowTradeItemInfo " & $(i + 1), column = 7)
     except:
       return showError(message = "Can't show weight")
     addButton(table = tradeTable, text = $playerShip.cargo[i].amount,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $(i + 1), column = 7)
+        command = "ShowTradeItemInfo " & $(i + 1), column = 8)
     addButton(table = tradeTable, text = $baseAmount,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $(i + 1), column = 8, newRow = true)
+        command = "ShowTradeItemInfo " & $(i + 1), column = 9, newRow = true)
     if tradeTable.row == gameSettings.listsLimit + 1:
       break
   currentItemIndex = playerShip.cargo.len + 1
@@ -366,26 +370,27 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
         i]].durability, maxValue = defaultItemDurability,
         tooltip = itemDurability, command = "ShowTradeItemInfo -" &
         $(itemsIndexes[i] + 1), column = 3)
+    addButton(table = tradeTable, text = $baseCargo[itemsIndexes[ i]].quality, tooltip = "Show available options for item", command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 4)
     addButton(table = tradeTable, text = $price,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 4)
+        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 5)
     addButton(table = tradeTable, text = $(-price),
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 5,
+        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 6,
         newRow = false, color = tclGetVar(varName = "ttk::theme::" &
         gameSettings.interfaceTheme & "::colors(-red)"))
     try:
       addButton(table = tradeTable, text = $itemsList[protoIndex].weight &
           " kg", tooltip = "Show available options for item",
-          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 6)
+          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 7)
     except:
       return showError(message = "Can't show item weight2.")
     addButton(table = tradeTable, text = "0",
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 7)
+        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 8)
     addButton(table = tradeTable, text = $baseAmount,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 8, newRow = true)
+        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 9, newRow = true)
   let arguments = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
       "}" elif argc == 2: $argv[1] & " {}" else: "All {}")
   if page > 1:
@@ -517,26 +522,31 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       itemsSortOrder = durabilityAsc
   of 4:
+    if itemsSortOrder == qualityAsc:
+      itemsSortOrder = qualityDesc
+    else:
+      itemsSortOrder = qualityAsc
+  of 5:
     if itemsSortOrder == priceAsc:
       itemsSortOrder = priceDesc
     else:
       itemsSortOrder = priceAsc
-  of 5:
+  of 6:
     if itemsSortOrder == profitAsc:
       itemsSortOrder = profitDesc
     else:
       itemsSortOrder = profitAsc
-  of 6:
+  of 7:
     if itemsSortOrder == weightAsc:
       itemsSortOrder = weightDesc
     else:
       itemsSortOrder = weightAsc
-  of 7:
+  of 8:
     if itemsSortOrder == ownedAsc:
       itemsSortOrder = ownedDesc
     else:
       itemsSortOrder = ownedAsc
-  of 8:
+  of 9:
     if itemsSortOrder == availableAsc:
       itemsSortOrder = availableDesc
     else:
@@ -558,15 +568,12 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   var indexesList: seq[Natural]
   let eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
   type LocalItemData = object
-    name: string
-    iType: string
+    name, iType: string
     damage: float
-    price: Natural
+    price, owned, available, id: Natural
     profit: int
     weight: Positive = 1
-    owned: Natural
-    available: Natural
-    id: Natural
+    quality: ObjectQuality
   var localItems: seq[LocalItemData]
   for index, item in playerShip.cargo:
     let
@@ -593,7 +600,7 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
           item.durability.float / defaultItemDurability.float), price: price,
           profit: price - item.price, weight: itemsList[protoIndex].weight,
           owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
-          baseCargoIndex].amount else: 0), id: index))
+          baseCargoIndex].amount else: 0), id: index, quality: item.quality))
     except:
       return showError(message = "Can't add item from the player's ship's cargo.")
 
@@ -626,6 +633,16 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of durabilityDesc:
       if x.damage > y.damage:
+        return 1
+      else:
+        return -1
+    of qualityAsc:
+      if x.quality < y.quality:
+        return 1
+      else:
+        return -1
+    of qualityDesc:
+      if x.quality > y.quality:
         return 1
       else:
         return -1
@@ -703,7 +720,7 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
           protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
           item.durability.float / defaultItemDurability.float), price: price,
           profit: -price, weight: itemsList[protoIndex].weight, owned: 0,
-          available: item.amount, id: index))
+          available: item.amount, id: index, quality: item.quality))
     except:
       return showError(message = "Can't add item from the base's cargo.")
   localItems.sort(cmp = sortItems)
