@@ -615,7 +615,27 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             sellItems(itemIndex = manipulateData.itemIndex,
                 amount = $manipulateData.amount)
           of takeDialog:
-            discard
+            if cargoIndex > -1:
+              updateCargo(ship = playerShip, cargoIndex = cargoIndex,
+                  amount = manipulateData.amount, durability = skyBases[
+                  baseIndex].cargo[baseCargoIndex].durability)
+            else:
+              updateCargo(ship = playerShip, protoIndex = protoIndex,
+                  amount = manipulateData.amount, durability = skyBases[
+                  baseIndex].cargo[baseCargoIndex].durability)
+            try:
+              updateBaseCargo(cargoIndex = baseCargoIndex,
+                  amount = -manipulateData.amount, durability = skyBases[
+                  baseIndex].cargo[baseCargoIndex].durability)
+            except:
+              dialog = setError(message = "Can't update the base's cargo3.")
+              return
+            try:
+              addMessage(message = "You took " & $manipulateData.amount & " " &
+                  itemsList[protoIndex].name & ".", mType = orderMessage)
+            except:
+              dialog = setError(message = "Can't add message.")
+              return
           of dropDialog:
             if baseCargoIndex > -1:
               try:
