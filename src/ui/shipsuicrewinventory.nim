@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[config, crewinventory, game, items, shipscargo, shipscrew, tk, types]
 import coreui, dialogs, errordialog, table, utilsui2
 
@@ -30,7 +30,7 @@ var
 
 proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl, contractual.} =
+    RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Update inventory list of the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
