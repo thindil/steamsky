@@ -26,15 +26,12 @@ import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 var itemIndex: int = -1
 
 type LocalItemData = object
-  name: string
-  iType: string
+  name, iType: string
   damage: float
-  price: Natural
+  price, owned, available, id: Natural
   profit: int
   weight: Positive = 1
-  owned: Natural
-  available: Natural
-  id: Natural
+  quality: ObjectQuality
 
 proc sortItems(x, y: LocalItemData): int =
   ## Check how to sort the selected items on the list
@@ -71,6 +68,16 @@ proc sortItems(x, y: LocalItemData): int =
       return -1
   of durabilityDesc:
     if x.damage > y.damage:
+      return 1
+    else:
+      return -1
+  of qualityAsc:
+    if x.quality < y.quality:
+      return 1
+    else:
+      return -1
+  of qualityDesc:
+    if x.quality > y.quality:
       return 1
     else:
       return -1
@@ -170,7 +177,7 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
           item.durability.float / defaultItemDurability.float), price: price,
           profit: price - item.price, weight: itemsList[protoIndex].weight,
           owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
-          baseCargoIndex].amount else: 0), id: index))
+          baseCargoIndex].amount else: 0), id: index, quality: item.quality))
     except:
       dialog = setError(message = "Can't add item from the player's ship's cargo.")
       return
@@ -196,7 +203,7 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
               damage: (
           item.durability.float / defaultItemDurability.float), price: price,
           profit: -price, weight: itemsList[protoIndex].weight, owned: 0,
-          available: item.amount, id: index))
+          available: item.amount, id: index, quality: item.quality))
     except:
       dialog = setError(message = "Can't add item from the base's cargo.")
       return
@@ -331,13 +338,15 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     dialog = setError(message = "Can't show the item's info.")
 
 const
-  headers: array[8, HeaderData[ItemsSortOrders]] = [
+  headers: array[9, HeaderData[ItemsSortOrders]] = [
     HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
         sortDesc: nameDesc),
     HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc,
         sortDesc: typeDesc),
     HeaderData[ItemsSortOrders](label: "Durability", sortAsc: durabilityAsc,
         sortDesc: durabilityDesc),
+    HeaderData[ItemsSortOrders](label: "Quality", sortAsc: qualityAsc,
+        sortDesc: qualityDesc),
     HeaderData[ItemsSortOrders](label: "Price", sortAsc: priceAsc,
         sortDesc: priceDesc),
     HeaderData[ItemsSortOrders](label: "Profit", sortAsc: profitAsc,
@@ -348,7 +357,7 @@ const
         sortDesc: ownedDesc),
     HeaderData[ItemsSortOrders](label: "Available", sortAsc: availableAsc,
         sortDesc: availableDesc)]
-  ratio: array[8, cfloat] = [300.cfloat, 200, 200, 200, 200, 200, 200, 200]
+  ratio: array[9, cfloat] = [300.cfloat, 200, 200, 200, 200, 200, 200, 200, 200]
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -493,6 +502,9 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         else: "Unused"), value = playerShip.cargo[i].durability,
         maxValue = defaultItemDurability, data = i, code = showItemInfo,
         dialog = dialog)
+      addButton(label = ($playerShip.cargo[i].quality).capitalizeAscii,
+          tooltip = "Show available options of item.", data = i,
+          code = showItemInfo, dialog = dialog)
       addButton(label = $price, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
       addButton(label = $profit, tooltip = "Show available options of item.",
@@ -571,6 +583,10 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         else: "Unused"), value = durability,
         maxValue = defaultItemDurability, data = i, code = showItemInfo,
         dialog = dialog)
+      addButton(label = ($skyBases[baseIndex].cargo[itemsIndexes[
+          i]].quality).capitalizeAscii,
+          tooltip = "Show available options of item.", data = i,
+          code = showItemInfo, dialog = dialog)
       addButton(label = $price, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
       setButtonStyle(field = textNormal, color = theme.colors[redColor])
