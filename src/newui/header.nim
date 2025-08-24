@@ -403,13 +403,14 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
   showInfo(dialog = dialog)
   return false
 
-proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show the main game's menu
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * state   - the current state of the game
   ##
-  ## Returns the modified parameters dialog.
+  ## Returns the modified parameters dialog and state.
   const
     width: float = 200
     windowName: string = "Game Menu"
@@ -424,7 +425,8 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(30, 1)
     labelButton(title = "Ship information"):
-      discard
+      state = shipInfo
+      dialog = none
     if playerShip.crew[0].health > 0 and not inCombat:
       labelButton(title = "Ship orders"):
         setDialog()
