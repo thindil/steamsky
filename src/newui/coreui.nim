@@ -54,6 +54,7 @@ var
   theme*: ThemeData = defaultTheme ## The current game's theme
   showOptions*: bool = false       ## If true, show more options in the selected screen
   mapPreview*: bool = false        ## If true, the map is in the preview mode
+  previousState*: GameState = map  ## The previous screen in the game
 
 proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
         4) {.raises: [], tags: [], contractual.} =
