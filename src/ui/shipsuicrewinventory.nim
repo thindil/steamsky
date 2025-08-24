@@ -312,7 +312,7 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   var localInventory: seq[LocalItemData]
   for index, _ in inventoryIndexes:
     try:
-      localInventory.add(LocalItemData(selected: tclGetVar(
+      localInventory.add(y = LocalItemData(selected: tclGetVar(
           varName = "invindex" & $(index + 1)) == "1", name: getItemName(
           item = playerShip.crew[memberIndex].inventory[index],
           damageInfo = false, toLower = false), damage: playerShip.crew[
@@ -649,8 +649,8 @@ proc moveItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## MoveItems
-  for index in countdown(playerShip.crew[memberIndex].inventory.high,
-      playerShip.crew[memberIndex].inventory.low):
+  for index in countdown(a = playerShip.crew[memberIndex].inventory.high,
+      b = playerShip.crew[memberIndex].inventory.low):
     if tclGetVar(varName = "invindex" & $(index + 1)) == "1":
       moveItem(itemIndex = index, amount = playerShip.crew[
           memberIndex].inventory[index].amount)
@@ -833,17 +833,21 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Adds Tcl commands related to the crew UI
   try:
-    addCommand("ShowMemberInventory", showMemberInventoryCommand)
-    addCommand("SortCrewInventory", sortCrewInventoryCommand)
-    addCommand("ShowMoveItem", showMoveItemCommand)
-    addCommand("ToggleAllInventory", toggleAllInventoryCommand)
-    addCommand("SetUseItem", setUseItemCommand)
-    addCommand("UpdateInventory", updateInventoryCommand)
-    addCommand("MoveItem", moveItemCommand)
-    addCommand("MoveItems", moveItemsCommand)
-    addCommand("ToggleInventoryItems", toggleInventoryItemsCommand)
-    addCommand("ToggleInventoryItem", toggleInventoryItemCommand)
-    addCommand("ShowInventoryItemInfo", showInventoryItemInfoCommand)
-    addCommand("ValidateMoveAmount", validateMoveAmountCommand)
+    addCommand(name = "ShowMemberInventory",
+        nimProc = showMemberInventoryCommand)
+    addCommand(name = "SortCrewInventory", nimProc = sortCrewInventoryCommand)
+    addCommand(name = "ShowMoveItem", nimProc = showMoveItemCommand)
+    addCommand(name = "ToggleAllInventory", nimProc = toggleAllInventoryCommand)
+    addCommand(name = "SetUseItem", nimProc = setUseItemCommand)
+    addCommand(name = "UpdateInventory", nimProc = updateInventoryCommand)
+    addCommand(name = "MoveItem", nimProc = moveItemCommand)
+    addCommand(name = "MoveItems", nimProc = moveItemsCommand)
+    addCommand(name = "ToggleInventoryItems",
+        nimProc = toggleInventoryItemsCommand)
+    addCommand(name = "ToggleInventoryItem",
+        nimProc = toggleInventoryItemCommand)
+    addCommand(name = "ShowInventoryItemInfo",
+        nimProc = showInventoryItemInfoCommand)
+    addCommand(name = "ValidateMoveAmount", nimProc = validateMoveAmountCommand)
   except:
     showError(message = "Can't add a Tcl command.")
