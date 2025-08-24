@@ -251,9 +251,8 @@ type
   ItemsSortOrders* = enum
     ## Sorting order of the list of items to trade
     nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc,
-      priceAsc, priceDesc, profitAsc, profitDesc, weightAsc, weightDesc,
-        ownedAsc,
-      ownedDesc, availableAsc, availableDesc, none
+      qualityAsc, qualityDesc, priceAsc, priceDesc, profitAsc, profitDesc,
+      weightAsc, weightDesc, ownedAsc, ownedDesc, availableAsc, availableDesc, none
 
 const defaultItemsSortOrder*: ItemsSortOrders = none
   ## Default sorting order for list of items to trade
