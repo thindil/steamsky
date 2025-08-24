@@ -323,7 +323,8 @@ type
     text_alignment*: nk_flags
     padding*, touch_padding*: nk_vec2
     spacing*, border*, color_factor*, disabled_factor*: cfloat
-  nk_style_selectable* {.importc: "struct nk_style_selectable".} = object
+  nk_style_selectable* {.importc: "struct nk_style_selectable",
+      completeStruct.} = object
     ## Internal Nuklear type
     normal*, hover*, pressed*, normal_active*, hover_active*,
       pressed_active*: nk_style_item
@@ -332,6 +333,19 @@ type
     text_alignment*: nk_flags
     rounding*, color_factor*, disabled_factor*: cfloat
     padding*, touch_padding, image_padding*: nk_vec2
+    userdata*: nk_handle
+    draw_begin*: ptr nk_draw_f
+    draw_end*: ptr nk_draw_f
+  nk_style_slider* {.importc: "struct nk_style_slider", completeStruct.} = object
+    ## Internal Nuklear type
+    normal*, hover*, active*, bar_normal*, bar_hover*, bar_active*,
+      cursor_normal*, cursor_hover*, cursor_active*: nk_style_item
+    border_color*, bar_filled*: nk_color
+    border*, rounding*, bar_height*, color_factor*, disabled_factor*: cfloat
+    padding*, spacing*, cursor_size*: nk_vec2
+    show_buttons*: cint
+    inc_button*, dec_button*: nk_style_button
+    inc_symbol*, dec_symbol*: SymbolType
     userdata*: nk_handle
     draw_begin*: ptr nk_draw_f
     draw_end*: ptr nk_draw_f
@@ -347,6 +361,7 @@ type
     cursor_visible*: cint
     option*, checkbox*: nk_style_toggle
     selectable*: nk_style_selectable
+    slider*: nk_style_slider
   nk_mouse_button* {.importc: "struct nk_mouse_button",
       completeStruct.} = object
     ## Internal Nuklear type
