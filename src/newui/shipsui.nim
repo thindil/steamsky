@@ -30,5 +30,5 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
+  if showHeader(dialog = dialog, close = previous, state = state):
     return
