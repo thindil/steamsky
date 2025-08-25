@@ -270,8 +270,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     addProgressbar(table = tradeTable, value = playerShip.cargo[i].durability,
         maxValue = defaultItemDurability, tooltip = itemDurability,
         command = "ShowTradeItemInfo " & $(i + 1), column = 3)
-    addButton(table = tradeTable, text = $playerShip.cargo[i].quality,
-        tooltip = "Show available options for item",
+    addButton(table = tradeTable, text = ($playerShip.cargo[
+        i].quality).capitalizeAscii, tooltip = "Show available options for item",
         command = "ShowTradeItemInfo " & $(i + 1), column = 4)
     addButton(table = tradeTable, text = $price,
         tooltip = "Show available options for item",
@@ -370,7 +370,10 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
         i]].durability, maxValue = defaultItemDurability,
         tooltip = itemDurability, command = "ShowTradeItemInfo -" &
         $(itemsIndexes[i] + 1), column = 3)
-    addButton(table = tradeTable, text = $baseCargo[itemsIndexes[ i]].quality, tooltip = "Show available options for item", command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 4)
+    addButton(table = tradeTable, text = ($baseCargo[itemsIndexes[
+        i]].quality).capitalizeAscii,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 4)
     addButton(table = tradeTable, text = $price,
         tooltip = "Show available options for item",
         command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 5)
