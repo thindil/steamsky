@@ -569,8 +569,7 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showHeader(dialog = dialog, close = (if endCombat: CloseDestination.map else:
     CloseDestination.none), state = state):
     return
-  let
-    height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
   setLayoutRowDynamic(height = height, cols = (if expandedSection == 0: 2 else: 1))
   var ordersList: seq[string] = @[]
   for member in game.enemy.ship.crew:
