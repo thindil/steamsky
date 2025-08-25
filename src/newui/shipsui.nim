@@ -18,8 +18,11 @@
 ## Provides code related to the information about the player's ship, like
 ## minimizing/maximizin its sections, setting the ship's name, etc.
 
-import contracts
-import coreui, header
+import contracts, nuklear/nuklear_sdl_renderer
+import ../config
+import coreui, header, messagesui
+
+var expandedSection: Natural = 0
 
 proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -32,3 +35,30 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = previous, state = state):
     return
+  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+  if expandedSection == 0:
+    setLayoutRowDynamic(height = height / 2, cols = 2)
+  else:
+    setLayoutRowDynamic(height = height, cols = 1)
+  # General info about the player's ship
+  if expandedSection in {0, 1}:
+    group(title = "General info:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
+  # The player's ship's crew info
+  if expandedSection in {0, 2}:
+    group(title = "Crew info:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
+  # The player's ship's modules info
+  if expandedSection in {0, 3}:
+    group(title = "Modules info:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
+  # The player's ship's cargo info
+  if expandedSection in {0, 4}:
+    group(title = "Cargo info:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
+  showLastMessages(theme = theme, dialog = dialog, inCombat = true,
+    height = windowHeight - height - 75)
