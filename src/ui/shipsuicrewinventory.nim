@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the player's ship's crew inventory, like showing
+## it, equiping or droping items from it, etc.
+
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[config, crewinventory, game, items, shipscargo, shipscrew, tk, types]
@@ -329,8 +332,17 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
           itemIndex = index), id: index))
     except:
       return showError(message = "Can't add item to local inventory.")
+
   proc sortInventory(x, y: LocalItemData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two items and return which should go first, based on the sort
+    ## order of the items
+    ##
+    ## * x - the first item to compare
+    ## * y - the second item to compare
+    ##
+    ## Returns 1 if the first item should go first, -1 if the second item
+    ## should go first.
     case inventorySortOrder
     of selectedAsc:
       if x.selected < y.selected:
@@ -404,6 +416,7 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of none:
       return -1
+
   localInventory.sort(cmp = sortInventory)
   inventoryIndexes = @[]
   for item in localInventory:
