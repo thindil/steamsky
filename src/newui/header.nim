@@ -200,7 +200,7 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
 type
   CloseDestination* = enum
     ## Destination for the close button in the header
-    none, combat, map
+    none, combat, map, previous
 
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     state: var GameState; options: bool = false): bool {.raises: [], tags: [
@@ -357,10 +357,15 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
           text = "Back to the " & $close & " screen")
     imageButton(image = images[exitIcon]):
       showOptions = false
-      if close == combat:
+      case close
+      of combat:
         state = combat
-      else:
+      of map:
         state = map
+      of previous:
+        state = previousState
+      of none:
+        discard
   if options:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
