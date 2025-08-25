@@ -336,7 +336,8 @@ type
     userdata*: nk_handle
     draw_begin*: ptr nk_draw_f
     draw_end*: ptr nk_draw_f
-  nk_style_slider* {.importc: "struct nk_style_slider", completeStruct.} = object
+  nk_style_slider* {.importc: "struct nk_style_slider",
+      completeStruct.} = object
     ## Internal Nuklear type
     normal*, hover*, active*, bar_normal*, bar_hover*, bar_active*,
       cursor_normal*, cursor_hover*, cursor_active*: nk_style_item
@@ -349,6 +350,14 @@ type
     userdata*: nk_handle
     draw_begin*: ptr nk_draw_f
     draw_end*: ptr nk_draw_f
+  nk_style_knob* {.importc: "struct nk_style_knob", completeStruct.} = object
+    ## Internal Nuklear type
+    normal*, hover*, active*: nk_style_item
+    border_color*, knob_normal*, knob_hover*, knob_active*, knob_border_color*,
+      cursor_normal*, cursor_hover*, cursor_active*: nk_color
+    border*, knob_border*, cursor_width*, color_factor*,
+      disabled_factor*: cfloat
+    padding*, spacing*: nk_vec2
   nk_style* {.importc: "struct nk_style", nodecl.} = object
     ## Internal Nuklear type
     window*: nk_style_window
@@ -362,6 +371,7 @@ type
     option*, checkbox*: nk_style_toggle
     selectable*: nk_style_selectable
     slider*: nk_style_slider
+    knob*: nk_style_knob
   nk_mouse_button* {.importc: "struct nk_mouse_button",
       completeStruct.} = object
     ## Internal Nuklear type
