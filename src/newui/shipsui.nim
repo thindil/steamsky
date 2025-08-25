@@ -19,8 +19,8 @@
 ## minimizing/maximizin its sections, setting the ship's name, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
-import coreui, header, messagesui
+import ../[config, game]
+import coreui, header, messagesui, themes
 
 var expandedSection: Natural = 0
 
@@ -45,20 +45,61 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "General info:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
+      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize the ship general info")
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+        if expandedSection == 1:
+          expandedSection = 0
+        else:
+          expandedSection = 1
+      setLayoutRowDynamic(height = 35, cols = 3)
+      label(str = "Name:")
+      colorLabel(str = playerShip.name, color = theme.colors[goldenColor])
+      labelButton(title = "s"):
+          discard
   # The player's ship's crew info
   if expandedSection in {0, 2}:
     group(title = "Crew info:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
+      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize the ship crew info")
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+        if expandedSection == 2:
+          expandedSection = 0
+        else:
+          expandedSection = 2
   # The player's ship's modules info
   if expandedSection in {0, 3}:
     group(title = "Modules info:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
+      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize the ship modules info")
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+        if expandedSection == 3:
+          expandedSection = 0
+        else:
+          expandedSection = 3
   # The player's ship's cargo info
   if expandedSection in {0, 4}:
     group(title = "Cargo info:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
+      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize the ship cargo info")
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+        if expandedSection == 4:
+          expandedSection = 0
+        else:
+          expandedSection = 4
   showLastMessages(theme = theme, dialog = dialog, inCombat = true,
     height = windowHeight - height - 75)
