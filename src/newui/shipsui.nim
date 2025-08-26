@@ -54,9 +54,18 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 1
-      setLayoutRowDynamic(height = 35, cols = 3)
+      setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "The name of your ship")
       label(str = "Name:")
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "The name of your ship")
       colorLabel(str = playerShip.name, color = theme.colors[goldenColor])
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Set a new name for the ship")
       labelButton(title = "s"):
           discard
   # The player's ship's crew info
