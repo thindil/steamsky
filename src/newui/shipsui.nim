@@ -24,6 +24,20 @@ import coreui, header, messagesui, themes
 
 var expandedSection: Natural = 0
 
+proc showGeneralInfo() {.raises: [], tags: [], contractual.} =
+  ## Show the general info about the player's ship
+  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = "The name of your ship")
+  label(str = "Name:")
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = "The name of your ship")
+  colorLabel(str = playerShip.name, color = theme.colors[goldenColor])
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = "Set a new name for the ship")
+  labelButton(title = "s"):
+    discard
+
 proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the screen with information about the player's ship
@@ -49,25 +63,13 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Maximize/minimize the ship general info")
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+      imageButton(image = (if expandedSection == 0: images[
+          expandIcon] else: images[contractIcon])):
         if expandedSection == 1:
           expandedSection = 0
         else:
           expandedSection = 1
-      setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "The name of your ship")
-      label(str = "Name:")
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "The name of your ship")
-      colorLabel(str = playerShip.name, color = theme.colors[goldenColor])
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Set a new name for the ship")
-      labelButton(title = "s"):
-          discard
+      showGeneralInfo()
   # The player's ship's crew info
   if expandedSection in {0, 2}:
     group(title = "Crew info:", flags = {windowBorder, windowTitle}):
@@ -77,7 +79,8 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Maximize/minimize the ship crew info")
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+      imageButton(image = (if expandedSection == 0: images[
+          expandIcon] else: images[contractIcon])):
         if expandedSection == 2:
           expandedSection = 0
         else:
@@ -91,7 +94,8 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Maximize/minimize the ship modules info")
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+      imageButton(image = (if expandedSection == 0: images[
+          expandIcon] else: images[contractIcon])):
         if expandedSection == 3:
           expandedSection = 0
         else:
@@ -105,7 +109,8 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Maximize/minimize the ship cargo info")
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+      imageButton(image = (if expandedSection == 0: images[
+          expandIcon] else: images[contractIcon])):
         if expandedSection == 4:
           expandedSection = 0
         else:
