@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash on sorting the player's ship's crew members' inventory
+
 ## [11.0.4] - 2025-08-17
 
 ### Fixed
