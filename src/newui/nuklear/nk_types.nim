@@ -358,11 +358,18 @@ type
     border*, knob_border*, cursor_width*, color_factor*,
       disabled_factor*: cfloat
     padding*, spacing*: nk_vec2
+  nk_style_edit* {.importc: "struct nk_style_edit", nodecl.} = object
+    ## Internal Nuklear type
+    normal*, hover*, active*: nk_style_item
+    border_color*, cursor_normal*, cursor_hover*, cursor_text_normal*,
+      cursor_text_hover*, text_normal*, text_hover*, text_active*,
+      selected_normal*, selected_hover*, selected_text_normal*,
+      selected_text_hover*: nk_color
   nk_style* {.importc: "struct nk_style", nodecl.} = object
     ## Internal Nuklear type
     window*: nk_style_window
     button*, contextual_button*, menu_button*: nk_style_button
-    progress*: nk_style_progress
+    progress*, property*: nk_style_progress
     font*: PNkUserFont
     text*: nk_style_text
     cursor_active*, cursor_last*: PNkCursor
