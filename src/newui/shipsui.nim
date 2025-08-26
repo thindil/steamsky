@@ -35,7 +35,7 @@ proc showGeneralInfo() {.raises: [], tags: [], contractual.} =
   colorLabel(str = playerShip.name, color = theme.colors[goldenColor])
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = "Set a new name for the ship")
-  labelButton(title = "s"):
+  imageButton(image = images[editIcon]):
     discard
 
 proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
