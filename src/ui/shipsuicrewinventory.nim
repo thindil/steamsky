@@ -424,7 +424,7 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   for item in localInventory:
     inventoryIndexes.add(y = item.id)
   return updateInventoryCommand(clientData = clientData, interp = interp,
-      argc = 2, argv = @["UpdateInventory", ($memberIndex)].allocCStringArray)
+      argc = 2, argv = @["UpdateInventory", ($(memberIndex + 1))].allocCStringArray)
 
 proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
