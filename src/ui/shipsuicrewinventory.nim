@@ -23,13 +23,15 @@ import contracts, nimalyzer
 import ../[config, crewinventory, game, items, shipscargo, shipscrew, tk, types]
 import coreui, dialogs, errordialog, table, utilsui2
 
+{.push ruleOff:"varDeclared".}
 var
   inventoryTable: TableWidget
     ## The UI table with the list of items in the crew member's inventory
-  memberIndex: Natural
+  memberIndex: Natural = 0
     ## The index of the selected crew member
-  inventoryIndexes: seq[Natural]
+  inventoryIndexes: seq[Natural] = @[]
     ## The list of indexes of items in the crew member's inventory
+{.pop ruleOn:"varDeclared".}
 
 proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -53,18 +55,18 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't get the member index.")
   if inventoryTable.row > 1:
     inventoryTable.clearTable
-  let member = playerShip.crew[memberIndex]
+  let member: MemberData = playerShip.crew[memberIndex]
   if inventoryIndexes.len != member.inventory.len:
     inventoryIndexes = @[]
     for index, _ in member.inventory:
       inventoryIndexes.add(y = index)
   let
-    page = try:
+    page: Positive = try:
         (if argc == 3: ($argv[2]).parseInt else: 1)
       except:
         return showError(message = "Can't get the page number.")
-    startRow = ((page - 1) * gameSettings.listsLimit) + 1
-  var currentRow = 1
+    startRow: Positive = ((page - 1) * gameSettings.listsLimit) + 1
+  var currentRow: Positive = 1
   for index, item in inventoryIndexes:
     if currentRow < startRow:
       currentRow.inc
@@ -134,7 +136,7 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowMemberInventory memberindex
   ## MemberIndex is the index of the crew member to show inventory
-  let localMemberIndex = try:
+  let localMemberIndex: Natural = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the member index.")
@@ -147,25 +149,25 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   memberIndex = localMemberIndex
   resetSelection()
   let
-    memberDialog = createDialog(name = ".memberdialog",
+    memberDialog: string = createDialog(name = ".memberdialog",
         title = "Inventory of " & playerShip.crew[memberIndex].name, columns = 2)
-    dialogCloseButton = memberDialog & ".button"
+    dialogCloseButton: string = memberDialog & ".button"
   tclEval(script = "ttk::button " & dialogCloseButton &
       " -image exiticon -command {CloseDialog " & memberDialog & "} -text {Close} -style Dialog.TButton")
   tclEval(script = "tooltip::tooltip " & dialogCloseButton & " \"Close inventory \\[Escape key\\]\"")
-  let yScroll = memberDialog & ".yscroll"
+  let yScroll: string = memberDialog & ".yscroll"
   tclEval(script = "ttk::scrollbar " & yScroll & " -orient vertical -command [list .memberdialog.canvas yview]")
-  let memberCanvas = memberDialog & ".canvas"
+  let memberCanvas: string = memberDialog & ".canvas"
   tclEval(script = "canvas " & memberCanvas & " -yscrollcommand [list " &
       yScroll & " set]")
   tclEval(script = "grid " & memberCanvas & " -padx 5 -pady 5")
   tclEval(script = "grid " & yScroll & " -row 1 -column 1 -padx 5 -pady 5 -sticky ns")
   tclEval(script = "::autoscroll::autoscroll " & yScroll)
-  let memberFrame = memberCanvas & ".frame"
+  let memberFrame: string = memberCanvas & ".frame"
   tclEval(script = "ttk::frame " & memberFrame)
-  let freeSpaceFrame = memberFrame & ".freeframe"
+  let freeSpaceFrame: string = memberFrame & ".freeframe"
   tclEval(script = "ttk::frame " & freeSpaceFrame)
-  var freeSpaceLabel = freeSpaceFrame & ".freespace"
+  var freeSpaceLabel: string = freeSpaceFrame & ".freespace"
   tclEval(script = "ttk::label " & freeSpaceLabel &
       " -text {Free inventory space:}")
   tclEval(script = "grid " & freeSpaceLabel)
@@ -174,19 +176,19 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       " -text {" & $freeInventory(
       memberIndex = memberIndex, amount = 0) & " kg} -style Golden.TLabel")
   tclEval(script = "grid " & freeSpaceLabel & " -row 0 -column 1")
-  var height = try:
+  var height: Positive = try:
       10 + tclEval2(script = "winfo reqheight " &
         freeSpaceLabel).parseInt
     except:
       return showError(message = "Can't count the height of the label.")
   tclEval(script = "grid " & freeSpaceFrame & " -sticky w -padx 5")
-  let buttonsBox = memberFrame & ".selectbox"
+  let buttonsBox: string = memberFrame & ".selectbox"
   tclEval(script = "ttk::frame " & buttonsBox)
-  let selectAllButton = buttonsBox & ".selectallbutton"
+  let selectAllButton: string = buttonsBox & ".selectallbutton"
   tclEval(script = "ttk::button " & selectAllButton & " -image selectallicon -command {ToggleAllInventory select} -style Small.TButton")
   tclEval(script = "tooltip::tooltip " & selectAllButton & " \"Select all items.\"")
   tclEval(script = "grid " & selectAllButton & " -sticky w")
-  let unselectAllButton = buttonsBox & ".unselectallbutton"
+  let unselectAllButton: string = buttonsBox & ".unselectallbutton"
   tclEval(script = "ttk::button " & unselectAllButton & " -image unselectallicon -command {ToggleAllInventory unselect} -style Small.TButton")
   tclEval(script = "tooltip::tooltip " & selectAllButton & " \"Unselect all items.\"")
   tclEval(script = "grid " & unselectAllButton & " -sticky w -row 0 -column 1")
@@ -207,7 +209,7 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
         inventoryTable.canvas).parseInt
     except:
       return showError(message = "Can't count the height of the table.")
-  var width = try:
+  var width: Positive = try:
       tclEval2(script = "winfo reqwidth " &
         inventoryTable.canvas).parseInt
     except:
@@ -244,7 +246,7 @@ type InventorySortOrders = enum
 
 const defaultInventorySortOrder: InventorySortOrders = none
 
-var inventorySortOrder = defaultInventorySortOrder
+var inventorySortOrder: InventorySortOrders = defaultInventorySortOrder
 
 proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -261,7 +263,7 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortCrewInventory x
   ## X is X axis coordinate where the player clicked the mouse button
-  let column = try:
+  let column: Positive = try:
       (if argv[1] == "-1": Positive.high else: getColumnNumber(
         table = inventoryTable, xPosition = ($argv[1]).parseInt))
     except:
@@ -312,7 +314,7 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     weight: Positive = 1
     used: bool = false
     id: Natural = 0
-  var localInventory: seq[LocalItemData]
+  var localInventory: seq[LocalItemData] = @[]
   for index, _ in inventoryIndexes:
     try:
       localInventory.add(y = LocalItemData(selected: tclGetVar(
@@ -439,7 +441,7 @@ proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SetUseItem itemindex
   ## itemindex is the index of the item which will be set
-  let itemIndex = try:
+  let itemIndex: Natural = try:
       ($argv[1]).parseInt - 1
     except:
       return showError(message = "Can't get the item index.")
@@ -447,7 +449,7 @@ proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
     takeOffItem(memberIndex = memberIndex, itemIndex = itemIndex)
     return sortCrewInventoryCommand(clientData = clientData, interp = interp,
         argc = 2, argv = @["SortCrewInventory", "-1"].allocCStringArray)
-  let itemType = try:
+  let itemType: string = try:
       itemsList[playerShip.crew[memberIndex].inventory[
           itemIndex].protoIndex].itemType
     except:
@@ -505,23 +507,23 @@ proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowMoveItem itemindex
   ## itemindex is the index of the item which will be set
   let
-    itemIndex = try:
+    itemIndex: Natural = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the item index.")
-    itemDialog = createDialog(name = ".itemdialog", title = "Move " &
+    itemDialog: string = createDialog(name = ".itemdialog", title = "Move " &
         getItemName(item = playerShip.crew[memberIndex].inventory[itemIndex]) &
         " to ship cargo", titleWidth = 400, columns = 2,
         parentName = ".memberDialog")
-    maxAmount = playerShip.crew[memberIndex].inventory[itemIndex].amount
-    amountBox = itemDialog & ".amount"
-  var button = itemDialog & ".movebutton"
+    maxAmount: Natural = playerShip.crew[memberIndex].inventory[itemIndex].amount
+    amountBox: string = itemDialog & ".amount"
+  var button: string = itemDialog & ".movebutton"
   tclEval(script = "ttk::button " & button & " -text Move -command {MoveItem " &
       $argv[1] & "} -image moveicon -style Dialoggreen.TButton")
   tclEval(script = "ttk::spinbox " & amountBox & " -width 5 -from 1 -to " &
       $maxAmount & " -validate key -validatecommand {ValidateMoveAmount " &
       $maxAmount & " %P " & button & " %W}")
-  var maxAmountButton = itemDialog & ".amountlbl"
+  var maxAmountButton: string = itemDialog & ".amountlbl"
   tclEval(script = "ttk::button " & maxAmountButton & " -text {Amount (max: " &
       $maxAmount & "):} -command {" & amountBox & " set " & $maxAmount & ";" &
       amountBox & " validate}")
