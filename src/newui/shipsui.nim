@@ -20,12 +20,38 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game]
-import coreui, header, messagesui, themes
+import coreui, dialogs, header, messagesui, themes
 
 var expandedSection: Natural = 0
 
-proc showGeneralInfo() {.raises: [], tags: [], contractual.} =
+proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the dialog to rename things
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  const
+    width: float = 400
+    height: float = 200
+
+  let windowName: string = "Rename the ship"
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 1)
+    addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
+        isPopup = false, label = "Cancel")
+
+  windowSetFocus(name = windowName)
+
+proc showGeneralInfo(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## Show the general info about the player's ship
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
   setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = "The name of your ship")
@@ -36,7 +62,7 @@ proc showGeneralInfo() {.raises: [], tags: [], contractual.} =
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = "Set a new name for the ship")
   imageButton(image = images[editIcon]):
-    discard
+    dialog = renameDialog
 
 proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -69,7 +95,7 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 1
-      showGeneralInfo()
+      showGeneralInfo(dialog = dialog)
   # The player's ship's crew info
   if expandedSection in {0, 2}:
     group(title = "Crew info:", flags = {windowBorder, windowTitle}):
