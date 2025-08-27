@@ -612,7 +612,7 @@ proc moveItem(itemIndex: Natural; amount: Positive) {.raises: [],
     except:
       showError(message = "Can't give order to the crew member.")
       return
-  let typeBox = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
+  let typeBox: string = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
   tclEval(script = "event generate " & typeBox & " <<ComboboxSelected>>")
 
 proc moveItemCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -630,14 +630,14 @@ proc moveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## MoveItem itemindex
   ## itemindex is the index of the item which will be set
+  const itemDialog: string = ".itemdialog"
   let
-    itemIndex = try:
+    itemIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get item index.")
-    itemDialog = ".itemdialog"
-    amountBox = itemDialog & ".amount"
-    amount = try:
+    amountBox: string = itemDialog & ".amount"
+    amount: Natural = try:
         tclEval2(script = amountBox & " get").parseInt
       except:
         return showError(message = "Can't get the amount of item to move.")
@@ -692,8 +692,8 @@ proc toggleInventoryItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ToggleInventoryItems action
   ## Action is the action to do with the selected items. Possible values are
   ## equip and unequip
-  var isUsed = false
-  let equip = argv[1] == "equip"
+  var isUsed: bool = false
+  let equip: bool = argv[1] == "equip"
   for index, _ in playerShip.crew[memberIndex].inventory:
     if tclGetVar(varName = "invindex" & $(index + 1)) == "1":
       isUsed = itemIsUsed(memberIndex = memberIndex, itemIndex = index)
@@ -722,7 +722,7 @@ proc toggleInventoryItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ToggleInventoryItem rowindex, itemindex
   ## Rowindex is the index of the row in which is the selected item,
   ## itemindex is the index of the selected item in crew member inventory.
-  let row = try:
+  let row: int = try:
       ($argv[1]).parseInt
     except:
       return showError(message = "Can't take the number of the row.")
@@ -748,17 +748,17 @@ proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowInventoryItemInfo memberindex itemindex
   ## itemindex is the index of the item which will be show
-  var selection = false
+  var selection: bool = false
   for index, _ in playerShip.crew[memberIndex].inventory:
     if tclGetVar(varName = "invindex" & $(index + 1)) == "1":
       selection = true
       break
   if selection:
-    let itemsMenu = createDialog(name = ".itemsmenu",
+    let itemsMenu: string = createDialog(name = ".itemsmenu",
         title = "Selected items actions", parentName = ".memberdialog")
 
     proc addButton(name, label, command: string) =
-      let button = itemsMenu & name
+      let button: string = itemsMenu & name
       tclEval(script = "ttk::button " & button & " -text {" & label &
           "} -command {CloseDialog " & itemsMenu & " .memberdialog;" & command & "}")
       tclEval(script = "grid " & button & " -sticky we -padx 5" & (
@@ -779,23 +779,23 @@ proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     showDialog(dialog = itemsMenu, parentFrame = ".memberdialog")
     return tclOk
   let
-    itemIndex = try:
+    itemIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the index of the item.")
-    itemType = try:
+    itemType: string = try:
           itemsList[playerShip.crew[memberIndex].inventory[
               itemIndex].protoIndex].itemType
         except:
           return showError(message = "Can't get the type of the item.")
     typesArray: array[1 .. 6, string] = [weaponType, shieldType, headArmor,
         chestArmor, armsArmor, legsArmor]
-  var equipable = itemType in toolsList
+  var equipable: bool = itemType in toolsList
   for iType in typesArray:
     if iType == itemType:
       equipable = true
       break
-  let used = itemIsUsed(memberIndex = memberIndex, itemIndex = itemIndex)
+  let used: bool = itemIsUsed(memberIndex = memberIndex, itemIndex = itemIndex)
   try:
     showInventoryItemInfo(parent = ".memberdialog", memberIndex = memberIndex,
         itemIndex = itemIndex, button1 = ButtonSettings(text: "Move",
@@ -825,13 +825,13 @@ proc validateMoveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ValidateMoveAmount maxvalue amount button spinbox
   try:
-    var amount = 0
+    var amount: Natural = 0
     if argv[2].len > 0:
       amount = ($argv[2]).parseInt
     let
-      button = $argv[3]
-      maxVal = ($argv[1]).parseInt
-      spinBox = $argv[4]
+      button: string = $argv[3]
+      maxVal: Natural = ($argv[1]).parseInt
+      spinBox: string = $argv[4]
     if amount < 1:
       tclEval(script = button & " configure -state disabled")
       tclSetResult(value = "1")
