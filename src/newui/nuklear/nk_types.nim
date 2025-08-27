@@ -358,6 +358,20 @@ type
     border*, knob_border*, cursor_width*, color_factor*,
       disabled_factor*: cfloat
     padding*, spacing*: nk_vec2
+  nk_style_scrollbar* {.importc: "struct nk_style_scrollbar",
+      completeStruct.} = object
+    ## Internal Nuklear type
+    normal*, hover*, active*, cursor_normal*, cursor_hover*,
+      cursor_active: nk_style_item
+    border_color*, cursor_border_color*: nk_color
+    border*, rounding*, border_cursor*, color_factor*, disabled_factor*: cfloat
+    padding*: nk_vec2
+    show_buttons*: cint
+    inc_button*, dec_button*: nk_style_button
+    inc_symbol, dec_symbol*: SymbolType
+    userdata*: nk_handle
+    draw_begin*: ptr nk_draw_f
+    draw_end*: ptr nk_draw_f
   nk_style_edit* {.importc: "struct nk_style_edit", nodecl.} = object
     ## Internal Nuklear type
     normal*, hover*, active*: nk_style_item
@@ -365,6 +379,7 @@ type
       cursor_text_hover*, text_normal*, text_hover*, text_active*,
       selected_normal*, selected_hover*, selected_text_normal*,
       selected_text_hover*: nk_color
+    scrollbar*: nk_style_scrollbar
   nk_style* {.importc: "struct nk_style", nodecl.} = object
     ## Internal Nuklear type
     window*: nk_style_window
