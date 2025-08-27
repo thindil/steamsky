@@ -552,12 +552,11 @@ proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   if (mapX == 0 or mapY == 0) and updateMapInfoCommand(clientData = clientData,
       interp = interp, argc = argc, argv = argv) != tclOk:
     return tclError
-  let destinationDialog: string = createDialog(name = ".gameframe.destinationmenu",
-      title = "Set destination", parentName = ".gameframe")
   if playerShip.skyX == mapX and playerShip.skyY == mapY:
-    tclEval(script = "CloseDialog " & destinationDialog)
     return showOrdersCommand(clientData = clientData, interp = interp,
         argc = argc, argv = argv)
+  let destinationDialog: string = createDialog(name = ".gameframe.destinationmenu",
+      title = "Set destination", parentName = ".gameframe")
   var button: string = destinationDialog & ".set"
   tclEval(script = "ttk::button " & button &
       " -text {Set destination} -command {SetDestination;CloseDialog " &
