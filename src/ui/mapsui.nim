@@ -1028,7 +1028,7 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     tclEval(script = "bind " & mapView & " <Configure> {DrawMap}")
     tclEval(script = "bind " & mapView & " <Motion> {UpdateMapInfo %x %y}")
     tclEval(script = "bind " & mapView & " <Button-" & (
-        if gameSettings.rightButton: "3" else: "1") & "> {ShowDestinationMenu %X %Y}")
+        if gameSettings.rightButton: "3" else: "1") & "> {ShowDestinationMenu %X %Y;break}")
     tclEval(script = "bind " & mapView & " <MouseWheel> {if {%D > 0} {ZoomMap raise} else {ZoomMap lower}}")
     tclEval(script = "bind " & mapView & " <Button-4> {ZoomMap raise}")
     tclEval(script = "bind " & mapView & " <Button-5> {ZoomMap lower}")
