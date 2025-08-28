@@ -249,6 +249,8 @@ proc createPlayerShip(randomBase: Positive;
   ## * playerFaction - the faction to which the player's character belongs
   require:
     randomBase < skyBases.len
+  ensure:
+    playerShip.crew.len > 0
   body:
     playerShip = createShip(protoIndex = playerFaction.careers[
         newGameSettings.playerCareer].shipIndex,
