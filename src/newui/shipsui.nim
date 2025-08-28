@@ -22,7 +22,9 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game]
 import coreui, dialogs, header, messagesui, themes
 
-var expandedSection: Natural = 0
+var
+  expandedSection: Natural = 0
+  newName: string = ""
 
 proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -41,12 +43,27 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 1)
+    label(str = "Enter a new name:")
+    editString(text = newName, maxLen = 64)
+    setLayoutRowDynamic(height = 30, cols = 2)
+    if newName.len == 0:
+      disabled:
+        imageLabelButton(image = images[editColoredIcon], text = "Rename",
+            alignment = right):
+          discard
+    else:
+      imageLabelButton(image = images[editColoredIcon], text = "Rename",
+          alignment = right):
+        playerShip.name = newName
+        newName = ""
+        dialog = none
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
         isPopup = false, label = "Cancel")
 
   windowSetFocus(name = windowName)
 
-proc showGeneralInfo(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc showGeneralInfo(dialog: var GameDialog) {.raises: [], tags: [],
+    contractual.} =
   ## Show the general info about the player's ship
   ##
   ## * dialog - the current in-game dialog displayed on the screen
