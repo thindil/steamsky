@@ -80,6 +80,19 @@ proc showGeneralInfo(dialog: var GameDialog) {.raises: [], tags: [],
     addTooltip(bounds = getWidgetBounds(), text = "Set a new name for the ship")
   imageButton(image = images[editIcon]):
     dialog = renameDialog
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Your ship the current home base")
+  label(str = "Home:")
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Your ship the current home base")
+  colorLabel(str = skyBases[playerShip.homeBase].name, color = theme.colors[goldenColor])
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Your ship the current home base")
+  imageButton(image = images[editIcon]):
+    dialog = renameDialog
 
 proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
