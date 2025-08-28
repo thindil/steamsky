@@ -562,6 +562,7 @@ proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & dialogCloseButton & " <Escape> {" &
       dialogCloseButton & " invoke;break}")
   showDialog(dialog = destinationDialog, parentFrame = ".gameframe")
+  tclEval(script = "focus " & dialogCloseButton)
   return tclOk
 
 proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
