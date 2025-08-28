@@ -372,7 +372,7 @@ type
     userdata*: nk_handle
     draw_begin*: ptr nk_draw_f
     draw_end*: ptr nk_draw_f
-  nk_style_edit* {.importc: "struct nk_style_edit", nodecl.} = object
+  nk_style_edit* {.importc: "struct nk_style_edit", completeStruct.} = object
     ## Internal Nuklear type
     normal*, hover*, active*: nk_style_item
     border_color*, cursor_normal*, cursor_hover*, cursor_text_normal*,
@@ -380,6 +380,9 @@ type
       selected_normal*, selected_hover*, selected_text_normal*,
       selected_text_hover*: nk_color
     scrollbar*: nk_style_scrollbar
+    border*, rounding*, cursor_size*, row_padding*, color_factor*,
+      disabled_factor*: cfloat
+    scrollbar_size*, padding*: nk_vec2
   nk_style* {.importc: "struct nk_style", nodecl.} = object
     ## Internal Nuklear type
     window*: nk_style_window
@@ -394,6 +397,7 @@ type
     selectable*: nk_style_selectable
     slider*: nk_style_slider
     knob*: nk_style_knob
+    edit*: nk_style_edit
   nk_mouse_button* {.importc: "struct nk_mouse_button",
       completeStruct.} = object
     ## Internal Nuklear type
