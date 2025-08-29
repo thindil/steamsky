@@ -383,6 +383,13 @@ type
     border*, rounding*, cursor_size*, row_padding*, color_factor*,
       disabled_factor*: cfloat
     scrollbar_size*, padding*: nk_vec2
+  nk_style_chart* {.importc: "struct nk_style_chart", completeStruct.} = object
+    ## Internal Nuklear type
+    background*: nk_style_item
+    border_color*, selected_color*, color*: nk_color
+    border*, rounding*, color_factor*, disabled_factor*: cfloat
+    padding*: nk_vec2
+    show_markers*: nk_bool
   nk_style* {.importc: "struct nk_style", nodecl.} = object
     ## Internal Nuklear type
     window*: nk_style_window
@@ -398,6 +405,8 @@ type
     slider*: nk_style_slider
     knob*: nk_style_knob
     edit*: nk_style_edit
+    chart*: nk_style_chart
+    scrollh*, scrollv*: nk_style_scrollbar
   nk_mouse_button* {.importc: "struct nk_mouse_button",
       completeStruct.} = object
     ## Internal Nuklear type
