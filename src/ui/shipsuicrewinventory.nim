@@ -440,6 +440,7 @@ proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
           itemIndex].protoIndex].itemType
     except:
       return showError(message = "Can't get the item type.")
+  {.ruleOff: "ifStatements".}
   if itemType == weaponType:
     try:
       if itemsList[playerShip.crew[memberIndex].inventory[
@@ -474,6 +475,7 @@ proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
     playerShip.crew[memberIndex].equipment[legs] = itemIndex
   elif itemType in toolsList:
     playerShip.crew[memberIndex].equipment[tool] = itemIndex
+  {.ruleOn: "ifStatements".}
   return sortCrewInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SortCrewInventory", "-1"].allocCStringArray)
 
