@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
 - Crash on sorting the player's ship's crew members' inventory
 - Closing the player's ship's orders menu with Escape key
 - Closing the player's ship's travel destination menu with Escape key
+- Blocking the player's ship's crew member's inventory window when moving
+  items from it to the ship's cargo
 
 ## [11.4] - 2025-08-10
 
