@@ -495,7 +495,7 @@ proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
     itemDialog = createDialog(name = ".itemdialog", title = "Move " &
         getItemName(item = playerShip.crew[memberIndex].inventory[itemIndex]) &
         " to ship cargo", titleWidth = 400, columns = 2,
-        parentName = ".memberDialog")
+        parentName = ".memberdialog")
     maxAmount = playerShip.crew[memberIndex].inventory[itemIndex].amount
     amountBox = itemDialog & ".amount"
   var button = itemDialog & ".movebutton"
