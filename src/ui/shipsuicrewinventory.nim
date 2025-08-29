@@ -532,7 +532,7 @@ proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "focus " & button)
   tclEval(script = "bind " & button & " <Tab> {focus " & itemDialog & ".movebutton;break}")
   tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
-  showDialog(dialog = itemDialog)
+  showDialog(dialog = itemDialog, parentFrame = ".memberdialog")
   return tclOk
 
 proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
