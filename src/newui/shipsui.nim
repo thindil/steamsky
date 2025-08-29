@@ -20,7 +20,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game]
-import coreui, dialogs, header, messagesui, themes
+import coreui, dialogs, header, mapsui, messagesui, themes
 
 var
   expandedSection: Natural = 0
@@ -62,13 +62,14 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
-proc showGeneralInfo(dialog: var GameDialog) {.raises: [], tags: [],
-    contractual.} =
+proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [], contractual.} =
   ## Show the general info about the player's ship
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * state - the current game's state
   ##
-  ## Returns the modified parameter dialog.
+  ## Returns the modified parameters dialog and state.
   setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = "The name of your ship")
@@ -89,10 +90,11 @@ proc showGeneralInfo(dialog: var GameDialog) {.raises: [], tags: [],
         text = "Your ship the current home base")
   colorLabel(str = skyBases[playerShip.homeBase].name, color = theme.colors[goldenColor])
   if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Your ship the current home base")
-  imageButton(image = images[editIcon]):
-    dialog = renameDialog
+    addTooltip(bounds = getWidgetBounds(), text = "Show the home base on map")
+  imageButton(image = images[showIcon]):
+    centerX = skyBases[playerShip.homeBase].skyX
+    centerY = skyBases[playerShip.homeBase].skyY
+    state = map
 
 proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -125,7 +127,7 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 1
-      showGeneralInfo(dialog = dialog)
+      showGeneralInfo(dialog = dialog, state = state)
   # The player's ship's crew info
   if expandedSection in {0, 2}:
     group(title = "Crew info:", flags = {windowBorder, windowTitle}):
