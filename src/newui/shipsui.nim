@@ -18,9 +18,10 @@
 ## Provides code related to the information about the player's ship, like
 ## minimizing/maximizin its sections, setting the ship's name, etc.
 
+import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game]
-import coreui, dialogs, header, mapsui, messagesui, themes
+import ../[config, game, types]
+import coreui, dialogs, errordialog, header, mapsui, messagesui, themes
 
 var
   expandedSection: Natural = 0
@@ -63,7 +64,7 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
   windowSetFocus(name = windowName)
 
 proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
-    tags: [], contractual.} =
+    tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the general info about the player's ship
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -81,6 +82,68 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     addTooltip(bounds = getWidgetBounds(), text = "Set a new name for the ship")
   imageButton(image = images[editIcon]):
     dialog = renameDialog
+  if playerShip.upgradeModule > -1:
+    label(str = "Upgrade:")
+    var
+      upgradeInfo: string = playerShip.modules[
+          playerShip.upgradeModule].name & " "
+      maxUpgrade: int = 0
+    case playerShip.modules[playerShip.upgradeModule].upgradeAction
+    of durability:
+      upgradeInfo.add(y = "(durability)")
+      maxUpgrade = try:
+          modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].durability
+        except:
+          dialog = setError(message = "Can't set max upgrade info.")
+          return
+    of maxValue:
+      try:
+        case modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].mType
+        of engine:
+          upgradeInfo.add(y = "(power)")
+          maxUpgrade = (modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue / 20).int
+        of cabin:
+          upgradeInfo.add(y = "(quality)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue
+        of gun, batteringRam:
+          upgradeInfo.add(y = "(damage)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue * 2
+        of hull:
+          upgradeInfo.add(y = "(enlarge)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue * 40
+        of harpoonGun:
+          upgradeInfo.add(y = "(strength)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue * 10
+        else:
+          discard
+      except:
+        dialog = setError(message = "Can't set upgrade info.")
+        return
+    of value:
+      try:
+        if modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].mType == engine:
+          upgradeInfo.add(y = "(fuel usage)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].value * 20
+      except:
+        dialog = setError(message = "Can't set upgrade fuel usage info.")
+        return
+    else:
+      discard
+    maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
+    if maxUpgrade == 0:
+      maxUpgrade = 1
+    let
+      upgradePercent: float = 1.0 - (playerShip.modules[
+          playerShip.upgradeModule].upgradeProgress.float / maxUpgrade.float)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Your ship the current home base")
