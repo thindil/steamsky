@@ -22,20 +22,22 @@ import std/[math, tables]
 import contracts
 import game, shipscargo, types, utils
 
-proc findItem*(inventory: seq[InventoryData];
-    protoIndex: Natural = 0; itemType: string = "";
-    durability: ItemsDurability = ItemsDurability.high;
-    quality: Positive = 100): int {.raises: [], tags: [],
-        contractual.} =
+proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
+    itemType: string = ""; durability: ItemsDurability = ItemsDurability.high;
+    quality: Positive = 100;
+    itemQuality: ObjectQuality = normal): int {.raises: [], tags: [],
+    contractual.} =
   ## Find the index of the selected item in the selected inventory
   ##
-  ## * inventory  - the inventory in which the item will be looking for
-  ## * protoIndex - the index of prototype item of the item to find. Can be
-  ##                empty. If empty, itemType parameter must be set
-  ## * itemType   - the type of prototype item of the item to find. Can be
-  ##                empty. If empty, protoIndex parameter must be set
-  ## * durability - the durability of the item to find. Can be empty
-  ## * quality    - the quality of the item to find. Can be empty
+  ## * inventory    - the inventory in which the item will be looking for
+  ## * protoIndex   - the index of prototype item of the item to find. Can be
+  ##                  empty. If empty, itemType parameter must be set
+  ## * itemType     - the type of prototype item of the item to find. Can be
+  ##                  empty. If empty, protoIndex parameter must be set
+  ## * durability   - the durability of the item to find. Can be empty
+  ## * quality      - the quality of the item to find. Can be empty
+  ## * objectQualty - the quality of the item to find (good, normal, poor, etc).
+  ##                  Can be empty
   ##
   ## Returns the index of the item in the selected inventory which meet searching
   ## criteria or -1 if item not found.
@@ -46,21 +48,23 @@ proc findItem*(inventory: seq[InventoryData];
     try:
       if protoIndex > 0:
         for index, item in inventory:
-          if item.protoIndex == protoIndex and itemsList[protoIndex].value[1] <= quality:
+          if item.protoIndex == protoIndex and itemsList[protoIndex].value[1] <=
+              quality and item.quality == itemQuality:
             if durability < ItemsDurability.high and item.durability != durability:
               continue
             return index
       elif itemType.len > 0:
         for index, item in inventory:
           if itemsList[item.protoIndex].itemType == itemType and itemsList[
-              item.protoIndex].value[1] <= quality:
+              item.protoIndex].value[1] <= quality and item.quality == itemQuality:
             if durability < ItemsDurability.high and item.durability != durability:
               continue
             return index
     except KeyError:
       discard
 
-proc freeInventory*(memberIndex: Natural; amount: int): int {.raises: [], tags: [], contractual.} =
+proc freeInventory*(memberIndex: Natural; amount: int): int {.raises: [],
+    tags: [], contractual.} =
   ## Get the amount of free space in the selected player ship's crew member's
   ## inventory.
   ##
