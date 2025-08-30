@@ -776,7 +776,7 @@ proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
               itemIndex].protoIndex].itemType
         except:
           return showError(message = "Can't get the type of the item.")
-    typesArray: array[1 .. 6, string] = [weaponType, shieldType, headArmor,
+    typesArray: array[1..6, string] = [weaponType, shieldType, headArmor,
         chestArmor, armsArmor, legsArmor]
   var equipable: bool = itemType in toolsList
   for iType in typesArray:
