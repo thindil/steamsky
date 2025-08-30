@@ -63,7 +63,8 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
-proc cancelUpgrade(dialog: var GameDialog) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc cancelUpgrade(dialog: var GameDialog) {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect], contractual.} =
   ## Cancel the current player's ship's upgrade
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -85,6 +86,20 @@ proc cancelUpgrade(dialog: var GameDialog) {.raises: [], tags: [WriteIOEffect, T
         return
       break
   addMessage(message = "You stopped current upgrade.", mType = orderMessage)
+
+proc setRepair(moduleIndex: int = -1) {.raises: [], tags: [], contractual.} =
+  ## Remove or set the current player's ship's repair's priority
+  ##
+  ## * moduleIndex - the index of the module which will be repaired first. If
+  ##                 -1, remove the priority
+  playerShip.repairModule = moduleIndex
+  if moduleIndex == -1:
+    addMessage(message = "You removed the repair's priority.",
+        mType = orderMessage)
+  else:
+    addMessage(message = "You assigned " & playerShip.modules[
+        playerShip.repairModule].name & " as the repair's priority.",
+        mType = orderMessage)
 
 proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -177,6 +192,22 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
       addTooltip(bounds = getWidgetBounds(), text = "Stop the current upgrade")
     imageButton(image = images[cancelIcon]):
       cancelUpgrade(dialog = dialog)
+  if playerShip.repairModule > -1:
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "If damaged, the module will be repaired as the first")
+    label(str = "Repair first:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "If damaged, the module will be repaired as the first")
+    colorLabel(str = playerShip.modules[playerShip.repairModule].name,
+        color = theme.colors[goldenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Remove the repair priority")
+    imageButton(image = images[cancelIcon]):
+      setRepair()
   setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
