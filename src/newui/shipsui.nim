@@ -83,6 +83,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   imageButton(image = images[editIcon]):
     dialog = renameDialog
   if playerShip.upgradeModule > -1:
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Upgrade:")
     var
       upgradeInfo: string = playerShip.modules[
@@ -141,9 +142,19 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
     if maxUpgrade == 0:
       maxUpgrade = 1
-    let
-      upgradePercent: float = 1.0 - (playerShip.modules[
-          playerShip.upgradeModule].upgradeProgress.float / maxUpgrade.float)
+    var upgradePercent: int = 100 - ((playerShip.modules[
+        playerShip.upgradeModule].upgradeProgress.float / maxUpgrade.float) * 100.0).int
+    colorLabel(str = upgradeInfo, color = theme.colors[goldenColor])
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.9.cfloat, 0.1])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "The current ship's upgrade progress")
+    progressBar(value = upgradePercent, maxValue = 100, modifyable = false)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Stop the current upgrade")
+    imageButton(image = images[cancelIcon]):
+      discard
+  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Your ship the current home base")
