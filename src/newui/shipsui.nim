@@ -20,7 +20,7 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, messages, shipscrew, types]
+import ../[config, game, maps, messages, shipscrew, types]
 import coreui, dialogs, errordialog, header, mapsui, messagesui, themes
 
 var
@@ -208,6 +208,27 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
           text = "Remove the repair priority")
     imageButton(image = images[cancelIcon]):
       setRepair()
+  if playerShip.destinationX > 0 and playerShip.destinationY > 0:
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "The current travel destination of your ship")
+    label(str = "Destination:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "The current travel destination of your ship")
+    if skyMap[playerShip.destinationX][playerShip.destinationY].baseIndex > 0:
+      colorLabel(str = skyBases[skyMap[playerShip.destinationX][
+          playerShip.destinationY].baseIndex].name, color = theme.colors[goldenColor])
+    else:
+      colorLabel(str = "X: " & $playerShip.destinationX & " Y: " &
+          $playerShip.destinationY, color = theme.colors[goldenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Reset the ship destination")
+    imageButton(image = images[cancelIcon]):
+      playerShip.destinationX = 0
+      playerShip.destinationY = 0
   setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
