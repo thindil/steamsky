@@ -285,7 +285,8 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
   let baseType: string = (if baseIndex > 0: skyBases[baseIndex].baseType else: "0")
   if iIndex > -1:
     baseCargoIndex = findBaseCargo(protoIndex = result.protoIndex,
-        durability = playerShip.cargo[cargoIndex].durability)
+      durability = playerShip.cargo[cargoIndex].durability,
+      quality = result.quality)
     if baseCargoIndex > -1:
       result.price = (if baseIndex > 0: skyBases[baseIndex].cargo[
           baseCargoIndex].price else: traderCargo[baseCargoIndex].price)
@@ -293,8 +294,8 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
       result.price = getPrice(baseType = baseType, itemIndex = result.protoIndex)
   else:
     itemIndex = findItem(inventory = playerShip.cargo,
-        protoIndex = result.protoIndex, durability = (if baseIndex > 0: skyBases[
-            baseIndex].cargo[
+      protoIndex = result.protoIndex,
+      durability = (if baseIndex > 0: skyBases[ baseIndex].cargo[
         baseCargoIndex].durability else: traderCargo[
         baseCargoIndex].durability))
     result.price = (if baseIndex > 0: skyBases[baseIndex].cargo[
