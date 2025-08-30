@@ -20,7 +20,7 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, types]
+import ../[config, game, messages, shipscrew, types]
 import coreui, dialogs, errordialog, header, mapsui, messagesui, themes
 
 var
@@ -62,6 +62,29 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
         isPopup = false, label = "Cancel")
 
   windowSetFocus(name = windowName)
+
+proc cancelUpgrade(dialog: var GameDialog) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Cancel the current player's ship's upgrade
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  playerShip.upgradeModule = -1
+  for index, member in playerShip.crew:
+    if member.order == upgrading:
+      try:
+        giveOrders(ship = playerShip, memberIndex = index,
+            givenOrder = rest)
+      except CrewOrderError:
+        dialog = setMessage(message = getCurrentExceptionMsg(),
+            title = "Can't give orders")
+        return
+      except:
+        dialog = setError(message = "Can't give orders to a crew member.")
+        return
+      break
+  addMessage(message = "You stopped current upgrade.", mType = orderMessage)
 
 proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -153,7 +176,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Stop the current upgrade")
     imageButton(image = images[cancelIcon]):
-      discard
+      cancelUpgrade(dialog = dialog)
   setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
