@@ -390,6 +390,15 @@ type
     border*, rounding*, color_factor*, disabled_factor*: cfloat
     padding*: nk_vec2
     show_markers*: nk_bool
+  nk_style_tab* {.importc: "struct nk_style_tab", completeStruct.} = object
+    ## Internal Nuklear type
+    background*: nk_style_item
+    border_color*, text*: nk_color
+    tab_maximize_button*, tab_minimize_button*, node_maximize_button*,
+      node_minimize_button*: nk_style_button
+    sym_minimize*, sym_maximize*: SymbolType
+    border*, rounding*, indent*, color_factor*, disabled_factor*: cfloat
+    padding*, spacing*: nk_vec2
   nk_style* {.importc: "struct nk_style", nodecl.} = object
     ## Internal Nuklear type
     window*: nk_style_window
@@ -407,6 +416,7 @@ type
     edit*: nk_style_edit
     chart*: nk_style_chart
     scrollh*, scrollv*: nk_style_scrollbar
+    tab*: nk_style_tab
   nk_mouse_button* {.importc: "struct nk_mouse_button",
       completeStruct.} = object
     ## Internal Nuklear type
