@@ -105,7 +105,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
          $shipinfoframe.general.scrolly
       grid [ttk::label $shipcanvas.frame.repairlbl -style Golden.TLabel] -column 1 \
          -row 4 -sticky w
-      SetScrollbarBindings $shipcanvas.frame.upgradelbl \
+      SetScrollbarBindings $shipcanvas.frame.repairlbl \
          $shipinfoframe.general.scrolly
       tooltip::tooltip $shipcanvas.frame.repairlbl \
          {If damaged, the module will be repaired as the first}
@@ -122,7 +122,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
          -row 5 -sticky w
       tooltip::tooltip $shipcanvas.frame.destinationlbl \
          {The current travel destination of your ship}
-      SetScrollbarBindings $shipcanvas.frame.upgradelbl \
+      SetScrollbarBindings $shipcanvas.frame.destinationlbl \
          $shipinfoframe.general.scrolly
       grid [ttk::button $shipcanvas.frame.canceldestination -style Small.TButton \
          -command {ResetDestination}] -row 5 -column 2 -sticky w
