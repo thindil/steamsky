@@ -263,12 +263,24 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     addTooltip(bounds = getWidgetBounds(),
         text = "Your reputation among factions")
   label(str = "Reputation:")
-  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.3.cfloat, 0.3])
+  setLayoutRowDynamic(height = 35, cols = 2)
   for index, faction in factionsList:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show information about the faction")
     labelButton(title = faction.name):
-      discard
+      try:
+        dialog = setInfo(text = faction.description[0..faction.description.rfind( sub = '\n') - 1], title = faction.name)
+      except:
+        dialog = setError(message = "Can't show information about the faction.")
+        return
     let repLevel: int = getReputation(factionIndex = index)
-    label(str = getReputationText(reputationLevel = repLevel))
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Your reputation with the faction")
+    colorLabel(str = getReputationText(reputationLevel = repLevel), color = (
+        if repLevel > 0: theme.colors[greenColor] elif repLevel <
+        0: theme.colors[redColor] else: theme.colors[goldenColor]))
 
 proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
