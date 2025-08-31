@@ -20,7 +20,7 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, maps, messages, shipscrew, types]
+import ../[config, game, maps, messages, ships, shipscrew, types]
 import coreui, dialogs, errordialog, header, mapsui, messagesui, themes
 
 var
@@ -244,6 +244,25 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     centerX = skyBases[playerShip.homeBase].skyX
     centerY = skyBases[playerShip.homeBase].skyY
     state = map
+  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines")
+  label(str = "Weight:")
+  try:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines")
+    colorLabel(str = $countShipWeight(ship = playerShip) & "kg",
+        color = theme.colors[goldenColor])
+  except:
+    dialog = setError(message = "Can't show the ship's weight")
+    return
+  setLayoutRowDynamic(height = 35, cols = 1)
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Your reputation among factions")
+  label(str = "Reputation:")
 
 proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
