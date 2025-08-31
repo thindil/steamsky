@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, math, strutils, tables]
+import contracts
 import ../[basestypes, basescargo, config, crewinventory, events, game, items,
     maps, shipscargo, tk, trades, types]
 import coreui, dialogs, dialogs2, errordialog, mapsui, table, updateheader, utilsui2
@@ -34,7 +35,7 @@ var
 
 proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show information about trading
   ##
   ## * clientData - the additional data for the Tcl command
@@ -488,7 +489,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Sort the trading list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -738,7 +739,7 @@ var itemIndex = -1
 
 proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.} =
+    WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl, contractual.} =
   ## Buy or sell the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -826,7 +827,7 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl.} =
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show information about the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -930,7 +931,7 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl.} =
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show dialog to enter amount of items to sell or buy
   ##
   ## * clientData - the additional data for the Tcl command
@@ -975,7 +976,7 @@ proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc searchTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show only this items which contains the selected sequence
   ##
   ## * clientData - the additional data for the Tcl command
@@ -999,7 +1000,7 @@ proc searchTradeCommand(clientData: cint; interp: PInterp; argc: cint;
           searchText].allocCStringArray)
 
 proc tradeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
   ## Maximize or minimize the options for the list of items to trade
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1029,7 +1030,7 @@ proc tradeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowTrade", showTradeCommand)
