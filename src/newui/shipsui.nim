@@ -20,7 +20,7 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, maps, messages, ships, shipscrew, types]
+import ../[config, game, maps, messages, reputation, ships, shipscrew, types]
 import coreui, dialogs, errordialog, header, mapsui, messagesui, themes
 
 var
@@ -263,6 +263,12 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     addTooltip(bounds = getWidgetBounds(),
         text = "Your reputation among factions")
   label(str = "Reputation:")
+  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.3.cfloat, 0.3])
+  for index, faction in factionsList:
+    labelButton(title = faction.name):
+      discard
+    let repLevel: int = getReputation(factionIndex = index)
+    label(str = getReputationText(reputationLevel = repLevel))
 
 proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
