@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 - Closing the player's ship's travel destination menu with Escape key
 - Blocking the player's ship's crew member's inventory window when moving
   items from it to the ship's cargo
+- Scrolling with mouse's wheel doesn't work in general info in the player's
+  ship info screen
 
 ## [11.0.4] - 2025-08-17
 
