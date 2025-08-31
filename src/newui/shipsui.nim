@@ -18,7 +18,7 @@
 ## Provides code related to the information about the player's ship, like
 ## minimizing/maximizin its sections, setting the ship's name, etc.
 
-import std/tables
+import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, messages, reputation, ships, shipscrew, types]
 import coreui, dialogs, errordialog, header, mapsui, messagesui, themes
@@ -270,7 +270,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
           text = "Show information about the faction")
     labelButton(title = faction.name):
       try:
-        dialog = setInfo(text = faction.description[0..faction.description.rfind( sub = '\n') - 1], title = faction.name)
+        dialog = setInfo(text = faction.description[
+            0..faction.description.rfind(sub = '\n') - 1], title = faction.name)
       except:
         dialog = setError(message = "Can't show information about the faction.")
         return
