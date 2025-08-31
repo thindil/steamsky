@@ -399,7 +399,16 @@ type
     sym_minimize*, sym_maximize*: SymbolType
     border*, rounding*, indent*, color_factor*, disabled_factor*: cfloat
     padding*, spacing*: nk_vec2
-  nk_style* {.importc: "struct nk_style", nodecl.} = object
+  nk_style_combo* {.importc: "struct nk_style_combo", completeStruct.} = object
+    ## Internal Nuklear type
+    normal*, hover*, active*: nk_style_item
+    border_color*, label_normal*, label_hover*, label_active*, symbol_normal*,
+      symbol_hover*, symbol_active*: nk_color
+    button*: nk_style_button
+    sym_normal*, sym_hover*, sym_active*: SymbolType
+    border*, rounding*, color_factor*, disabled_factor*: cfloat
+    content_padding*, button_padding*, spacing*: nk_vec2
+  nk_style* {.importc: "struct nk_style", completeStruct.} = object
     ## Internal Nuklear type
     window*: nk_style_window
     button*, contextual_button*, menu_button*: nk_style_button
@@ -417,6 +426,7 @@ type
     chart*: nk_style_chart
     scrollh*, scrollv*: nk_style_scrollbar
     tab*: nk_style_tab
+    combo*: nk_style_combo
   nk_mouse_button* {.importc: "struct nk_mouse_button",
       completeStruct.} = object
     ## Internal Nuklear type
