@@ -18,7 +18,7 @@
 ## Provides code related to the information about the player's ship's crew
 ## members, like listing them, showing information, give orders, etc.
 
-import contracts
+import contracts, nuklear/nuklear_sdl_renderer
 
 var
   showCrewOptions*: bool = false
@@ -26,4 +26,6 @@ var
 
 proc showCrewInfo*() {.raises: [], tags: [], contractual.} =
   ## Show the list of the player's ship's crew members
-  discard
+  if showCrewOptions:
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.1])
+    label(str = "Orders for all:")
