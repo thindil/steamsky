@@ -21,7 +21,7 @@
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, messages, reputation, ships, shipscrew, types]
-import coreui, dialogs, errordialog, header, mapsui, messagesui, themes
+import coreui, dialogs, errordialog, header, mapsui, messagesui, shipsuicrew, themes
 
 var
   expandedSection: Natural = 0
@@ -330,6 +330,7 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 2
+      showCrewInfo()
   # The player's ship's modules info
   if expandedSection in {0, 3}:
     group(title = "Modules info:", flags = {windowBorder, windowTitle}):
