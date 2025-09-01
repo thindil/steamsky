@@ -435,11 +435,13 @@ type
     clicked_pos*: nk_vec2
   ButtonsArray* = array[Buttons.max, nk_mouse_button]
     ## The array of mouse buttons
-  nk_mouse* {.importc: "struct nk_mouse", nodecl.} = object
+  nk_mouse* {.importc: "struct nk_mouse", completeStruct.} = object
     ## Internal Nuklear type
     delta*, pos*, prev*, scroll_delta*, : nk_vec2
     buttons*: pointer
     grab*, grabbed*, ungrab*: uint8
+    when defined(nkButtonTriggerOnRelease):
+      down_pos*: nk_vec2
   nk_input* {.importc: "struct nk_input", nodecl.} = object
     ## Internal Nuklear type
     mouse*: nk_mouse
