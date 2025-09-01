@@ -608,7 +608,8 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't add item from the player's ship's cargo.")
 
-  proc sortItems(x, y: LocalItemData): int =
+  proc sortItems(x, y: LocalItemData): int {.raises: [], tags: [],
+      contractual.} =
     case itemsSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -1000,7 +1001,8 @@ proc searchTradeCommand(clientData: cint; interp: PInterp; argc: cint;
           searchText].allocCStringArray)
 
 proc tradeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Maximize or minimize the options for the list of items to trade
   ##
   ## * clientData - the additional data for the Tcl command
