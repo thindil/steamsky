@@ -297,7 +297,7 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
       protoIndex = result.protoIndex,
       durability = (if baseIndex > 0: skyBases[ baseIndex].cargo[
         baseCargoIndex].durability else: traderCargo[
-        baseCargoIndex].durability))
+        baseCargoIndex].durability), itemQuality = result.quality)
     result.price = (if baseIndex > 0: skyBases[baseIndex].cargo[
         baseCargoIndex].price else: traderCargo[baseCargoIndex].price)
   if itemIndex > -1:
