@@ -21,7 +21,7 @@
 import std/[colors, math, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, messages, shipscargo, shipsmovement, types]
-import coreui, dialogs, errordialog, ordersmenu, themes, waitmenu
+import coreui, dialogs, errordialog, ordersmenu, setui, themes, waitmenu
 
 proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -432,6 +432,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
     labelButton(title = "Ship information"):
       if state != shipInfo:
         previousState = state
+        setShipInfo()
         state = shipInfo
       else:
         state = previousState
