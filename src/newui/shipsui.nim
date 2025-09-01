@@ -320,7 +320,7 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Crew info:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      setLayoutRowStatic(height = 35, cols = 2, width = 35)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Maximize/minimize the ship crew info")
@@ -330,6 +330,11 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 2
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show/Hide additional options related to managing the crew")
+      imageButton(image = images[moreOptionsIcon]):
+        showCrewOptions = not showCrewOptions
       showCrewInfo()
   # The player's ship's modules info
   if expandedSection in {0, 3}:

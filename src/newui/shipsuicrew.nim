@@ -20,6 +20,10 @@
 
 import contracts
 
+var
+  showCrewOptions*: bool = false
+    ## Show additonal options for managing the player's ship's crew
+
 proc showCrewInfo*() {.raises: [], tags: [], contractual.} =
   ## Show the list of the player's ship's crew members
   discard
