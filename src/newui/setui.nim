@@ -819,3 +819,24 @@ proc setLoot*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   refreshLootList(dialog = dialog)
   if dialog == GameDialog.errorDialog:
     return
+
+##########################
+# Setting the ship info UI
+##########################
+
+var
+  needClean*: bool = false
+    ## If true, the ship needs cleaning
+  needRepair*: bool = false
+    ## If true, the ship needs repairs
+
+proc setShipInfo*() {.raises: [], tags: [], contractual.} =
+  ## Set the data for the player's ship's info screen
+  for module in playerShip.modules:
+    if module.durability < module.maxDurability:
+      needRepair = true
+    if module.durability > 0 and module.mType == ModuleType2.cabin and
+        module.cleanliness < module.quality:
+      needClean = true
+    if needRepair and needClean:
+      break
