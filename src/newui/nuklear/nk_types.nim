@@ -442,6 +442,12 @@ type
     grab*, grabbed*, ungrab*: uint8
     when defined(nkButtonTriggerOnRelease):
       down_pos*: nk_vec2
+  nk_key* {.importc: "struct nk_key", completeStruct.} = object
+    ## Internal Nuklear type
+    down*: nk_bool
+    clicked*: cuint
+  KeysArray* = array[keyMax, nk_key]
+    ## The array of keyboard keys
   nk_input* {.importc: "struct nk_input", nodecl.} = object
     ## Internal Nuklear type
     mouse*: nk_mouse
