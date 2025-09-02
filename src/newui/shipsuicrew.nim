@@ -19,7 +19,8 @@
 ## members, like listing them, showing information, give orders, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import setui
+import ../config
+import coreui, setui, themes
 
 var
   showCrewOptions*: bool = false
@@ -39,3 +40,17 @@ proc showCrewInfo*() {.raises: [], tags: [], contractual.} =
       ratio.add(y = 0.1.cfloat)
     setLayoutRowDynamic(height = 35, cols = cols, ratio = ratio)
     label(str = "Orders for all:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Go rest everyone")
+    imageButton(image = images[goRestIcon]):
+      discard
+    if needClean:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = "Clean the ship everyone")
+      imageButton(image = images[cleanOrderIcon]):
+        discard
+    if needRepair:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = "Repair the ship everyone")
+      imageButton(image = images[repairOrderIcon]):
+        discard
