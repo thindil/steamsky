@@ -19,12 +19,29 @@
 ## members, like listing them, showing information, give orders, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
-import coreui, setui, themes
+import ../[config, game, messages, shipscrew, types]
+import coreui, errordialog, setui, themes
 
 var
   showCrewOptions*: bool = false
     ## Show additonal options for managing the player's ship's crew
+
+proc ordersForAll(order: CrewOrders; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Give the selected order to all crew members
+  ##
+  ## * order - the order to give
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  for i in playerShip.crew.low .. playerShip.crew.high:
+    try:
+      giveOrders(ship = playerShip, memberIndex = i, givenOrder = order)
+    except CrewOrderError:
+      addMessage(message = getCurrentExceptionMsg(), mType = orderMessage)
+    except:
+      dialog = setError(message = "Can't give orders.")
 
 proc showCrewInfo*() {.raises: [], tags: [], contractual.} =
   ## Show the list of the player's ship's crew members
@@ -51,6 +68,7 @@ proc showCrewInfo*() {.raises: [], tags: [], contractual.} =
         discard
     if needRepair:
       if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Repair the ship everyone")
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Repair the ship everyone")
       imageButton(image = images[repairOrderIcon]):
         discard
