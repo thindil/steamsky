@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, math, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[basestypes, basescargo, config, crewinventory, events, game, items,
     maps, shipscargo, tk, trades, types]
 import coreui, dialogs, dialogs2, errordialog, mapsui, table, updateheader, utilsui2
@@ -35,7 +35,7 @@ var
 
 proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl, contractual.} =
+    RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Show information about trading
   ##
   ## * clientData - the additional data for the Tcl command
