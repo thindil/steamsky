@@ -43,8 +43,14 @@ proc ordersForAll(order: CrewOrders; dialog: var GameDialog) {.raises: [],
     except:
       dialog = setError(message = "Can't give orders.")
 
-proc showCrewInfo*() {.raises: [], tags: [], contractual.} =
+proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Show the list of the player's ship's crew members
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   if showCrewOptions:
     var
       cols: Positive = 2
@@ -60,15 +66,15 @@ proc showCrewInfo*() {.raises: [], tags: [], contractual.} =
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Go rest everyone")
     imageButton(image = images[goRestIcon]):
-      discard
+      ordersForAll(order = rest, dialog = dialog)
     if needClean:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Clean the ship everyone")
       imageButton(image = images[cleanOrderIcon]):
-        discard
+        ordersForAll(order = clean, dialog = dialog)
     if needRepair:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Repair the ship everyone")
       imageButton(image = images[repairOrderIcon]):
-        discard
+        ordersForAll(order = repair, dialog = dialog)

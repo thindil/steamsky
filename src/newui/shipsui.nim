@@ -335,7 +335,7 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
             text = "Show/Hide additional options related to managing the crew")
       imageButton(image = images[moreOptionsIcon]):
         showCrewOptions = not showCrewOptions
-      showCrewInfo()
+      showCrewInfo(dialog = dialog)
   # The player's ship's modules info
   if expandedSection in {0, 3}:
     group(title = "Modules info:", flags = {windowBorder, windowTitle}):
