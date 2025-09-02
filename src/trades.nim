@@ -142,7 +142,8 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
       if profit > skyBases[baseIndex].cargo[0].amount:
         raise newException(exceptn = NoMoneyInBaseError, message = itemName)
       updateBaseCargo(protoIndex = protoIndex, amount = sellAmount,
-          durability = playerShip.cargo[itemIndex].durability)
+        durability = playerShip.cargo[itemIndex].durability,
+        quality = playerShip.cargo[itemIndex].quality)
     else:
       if profit > traderCargo[0].amount:
         raise newException(exceptn = NoMoneyInBaseError, message = itemName)
@@ -154,10 +155,11 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
           cargoAdded = true
           break
       if not cargoAdded:
-        traderCargo.add(y = BaseCargo(protoIndex: protoIndex, amount: sellAmount,
-            durability: playerShip.cargo[itemIndex].durability,
-                price: itemsList[
-            protoIndex].price))
+        traderCargo.add(y = BaseCargo(protoIndex: protoIndex,
+          amount: sellAmount,
+          durability: playerShip.cargo[itemIndex].durability,
+          price: itemsList[protoIndex].price,
+          quality: playerShip.cargo[itemIndex].quality))
     updateCargo(ship = playerShip, cargoIndex = itemIndex, amount = -sellAmount,
         price = playerShip.cargo[itemIndex].price)
     updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = profit)
@@ -225,13 +227,16 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     traderCargo[0].amount += cost
   if baseIndex > 0:
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
-        durability = skyBases[baseIndex].cargo[baseItemIndex].durability, price = price)
+        durability = skyBases[baseIndex].cargo[baseItemIndex].durability,
+        price = price, quality = skyBases[baseIndex].cargo[baseItemIndex].quality)
     updateBaseCargo(cargoIndex = baseItemIndex.cint, amount = -buyAmount,
-        durability = skyBases[baseIndex].cargo[baseItemIndex].durability)
+        durability = skyBases[baseIndex].cargo[baseItemIndex].durability,
+        quality = skyBases[baseIndex].cargo[baseItemIndex].quality)
     gainRep(baseIndex = baseIndex, points = 1)
   else:
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
-        durability = traderCargo[baseItemIndex].durability, price = price)
+        durability = traderCargo[baseItemIndex].durability, price = price,
+        quality = skyBases[baseIndex].cargo[baseItemIndex].quality)
     traderCargo[baseItemIndex].amount -= buyAmount
     if traderCargo[baseItemIndex].amount == 0:
       traderCargo.delete(i = baseItemIndex)
