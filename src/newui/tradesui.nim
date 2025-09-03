@@ -443,7 +443,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       let
         protoIndex: Natural = playerShip.cargo[i].protoIndex
         baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
-            durability = playerShip.cargo[i].durability)
+            durability = playerShip.cargo[i].durability,
+            quality = playerShip.cargo[i].quality)
       if baseCargoIndex > -1:
         indexesList.add(y = baseCargoIndex)
       let itemType = try:
