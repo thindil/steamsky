@@ -20,7 +20,13 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, messages, shipscrew, types]
-import coreui, errordialog, setui, themes
+import coreui, errordialog, setui, table, themes
+
+type
+  CrewSortOrders = enum
+    nameAsc, nameDesc, orderAsc, orderDesc, skillAsc, skillDesc, healthAsc,
+      healthDesc, fatigueAsc, fatigueDesc, thirstAsc, thirstDesc, hungerAsc,
+      hungerDesc, moraleAsc, moraleDesc, none
 
 var
   showCrewOptions*: bool = false
@@ -43,6 +49,26 @@ proc ordersForAll(order: CrewOrders; dialog: var GameDialog) {.raises: [],
       addMessage(message = getCurrentExceptionMsg(), mType = orderMessage)
     except:
       dialog = setError(message = "Can't give orders.")
+
+const
+  headers: array[8, HeaderData[CrewSortOrders]] = [
+    HeaderData[CrewSortOrders](label: "Name", sortAsc: nameAsc,
+        sortDesc: nameDesc),
+    HeaderData[CrewSortOrders](label: "Order", sortAsc: orderAsc,
+        sortDesc: orderDesc),
+    HeaderData[CrewSortOrders](label: "Skill", sortAsc: skillAsc,
+        sortDesc: skillDesc),
+    HeaderData[CrewSortOrders](label: "Health", sortAsc: healthAsc,
+        sortDesc: healthDesc),
+    HeaderData[CrewSortOrders](label: "Fatigue", sortAsc: fatigueAsc,
+        sortDesc: fatigueDesc),
+    HeaderData[CrewSortOrders](label: "Thirst", sortAsc: thirstAsc,
+        sortDesc: thirstDesc),
+    HeaderData[CrewSortOrders](label: "Hunger", sortAsc: hungerAsc,
+        sortDesc: hungerDesc),
+    HeaderData[CrewSortOrders](label: "Morale", sortAsc: moraleAsc,
+        sortDesc: moraleDesc)]
+  ratio: array[8, cfloat] = [300.cfloat, 200, 200, 200, 200, 200, 200, 200]
 
 proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
