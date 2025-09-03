@@ -212,7 +212,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     let
       protoIndex = playerShip.cargo[i].protoIndex
       baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
-          durability = playerShip.cargo[i].durability)
+          durability = playerShip.cargo[i].durability,
+          quality = playerShip.cargo[i].quality)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
     let itemType = try:
@@ -1035,12 +1036,12 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
-    addCommand("ShowTrade", showTradeCommand)
-    addCommand("SortTradeItems", sortTradeItemsCommand)
-    addCommand("TradeItem", tradeItemCommand)
-    addCommand("ShowTradeItemInfo", showTradeItemInfoCommand)
-    addCommand("TradeAmount", tradeAmountCommand)
-    addCommand("SearchTrade", searchTradeCommand)
-    addCommand("TradeMore", tradeMoreCommand)
+    addCommand(name = "ShowTrade", nimProc = showTradeCommand)
+    addCommand(name = "SortTradeItems", nimProc = sortTradeItemsCommand)
+    addCommand(name = "TradeItem", nimProc = tradeItemCommand)
+    addCommand(name = "ShowTradeItemInfo", nimProc = showTradeItemInfoCommand)
+    addCommand(name = "TradeAmount", nimProc = tradeAmountCommand)
+    addCommand(name = "SearchTrade", nimProc = searchTradeCommand)
+    addCommand(name = "TradeMore", nimProc = tradeMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
