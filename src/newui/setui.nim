@@ -829,6 +829,9 @@ var
     ## If true, the ship needs cleaning
   needRepair*: bool = false
     ## If true, the ship needs repairs
+  crewSkillsList*: seq[string] = @["Highest"]
+    ## The list of skills to which the player's ship's crew members can be
+    ## listed
 
 proc setShipInfo*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the player's ship's info screen
@@ -840,3 +843,6 @@ proc setShipInfo*() {.raises: [], tags: [], contractual.} =
       needClean = true
     if needRepair and needClean:
       break
+  if crewSkillsList.len == 1:
+    for skill in skillsList.values:
+      crewSkillsList.add(y = skill.name)
