@@ -448,9 +448,14 @@ type
     clicked*: cuint
   KeysArray* = array[keyMax, nk_key]
     ## The array of keyboard keys
-  nk_input* {.importc: "struct nk_input", nodecl.} = object
+  nk_keyboard* {.importc: "struct nk_keyboard", completeStruct.} = object
+    ## Internal Nuklear type
+    keys*, text*: pointer
+    text_len*: cint
+  nk_input* {.importc: "struct nk_input", completeStruct.} = object
     ## Internal Nuklear type
     mouse*: nk_mouse
+    keyboard*: nk_keyboard
   nk_popup_buffer* {.importc: "struct nk_popup_buffer", nodecl.} = object
     ## Internal Nuklear type
     begin*, `end`*, parent*, last*: nk_size
