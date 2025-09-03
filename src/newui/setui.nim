@@ -257,7 +257,6 @@ type
 const defaultItemsSortOrder*: ItemsSortOrders = none
   ## Default sorting order for list of items to trade
 
-
 var
   itemsSortOrder*: ItemsSortOrders = defaultItemsSortOrder
     ## The current sorting order of the list of items for trade
