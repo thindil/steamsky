@@ -28,10 +28,28 @@ type
       healthDesc, fatigueAsc, fatigueDesc, thirstAsc, thirstDesc, hungerAsc,
       hungerDesc, moraleAsc, moraleDesc, none
 
+const defaultCrewSortOrder*: CrewSortOrders = none
+
 var
   showCrewOptions*: bool = false
     ## Show additonal options for managing the player's ship's crew
   skillIndex: Natural = 0
+  crewSortOrder: CrewSortOrders = defaultCrewSortOrder
+
+proc sortCrew(sortAsc, sortDesc: CrewSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort items on the trades list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if crewSortOrder == sortAsc:
+    crewSortOrder = sortDesc
+  else:
+    crewSortOrder = sortAsc
 
 proc ordersForAll(order: CrewOrders; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -126,3 +144,6 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       addTooltip(bounds = getWidgetBounds(), text = "Unselect all crew member")
     imageButton(image = images[unselectAllIcon]):
       discard
+  # Show the list of crew members
+  addHeader(headers = headers, ratio = ratio, tooltip = "items",
+      code = sortCrew, dialog = dialog)
