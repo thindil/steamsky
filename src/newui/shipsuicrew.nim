@@ -25,6 +25,7 @@ import coreui, errordialog, setui, themes
 var
   showCrewOptions*: bool = false
     ## Show additonal options for managing the player's ship's crew
+  skillIndex: Natural = 0
 
 proc ordersForAll(order: CrewOrders; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -78,3 +79,24 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             text = "Repair the ship everyone")
       imageButton(image = images[repairOrderIcon]):
         ordersForAll(order = repair, dialog = dialog)
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
+    label(str = "Skill:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
+    let newSkill = comboList(items = crewSkillsList,
+        selected = skillIndex, itemHeight = 25, x = 200, y = 150)
+    if newSkill != skillIndex:
+      skillIndex = newSkill
+    setLayoutRowStatic(height = 35, cols = 2, width = 35)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Select all crew member")
+    imageButton(image = images[selectAllIcon]):
+      discard
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Unselect all crew member")
+    imageButton(image = images[unselectAllIcon]):
+      discard
