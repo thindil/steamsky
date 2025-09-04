@@ -147,3 +147,9 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   # Show the list of crew members
   addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortCrew, dialog = dialog)
+  var currentRow: Positive = 1
+  let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+  for index, mIndex in crewIndexes:
+    if currentRow < startRow:
+      currentRow.inc
+      continue
