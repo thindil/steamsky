@@ -831,6 +831,14 @@ var
   crewSkillsList*: seq[string] = @["Highest"]
     ## The list of skills to which the player's ship's crew members can be
     ## listed
+  crewIndexes*: seq[int] = @[]
+    ## The list of indexes of the player's ship's crew members
+
+proc refreshCrewList*() {.raises: [], tags: [],  contractual.} =
+  ## Set the list of crew members in the player's ship
+  crewIndexes = @[]
+  for index in playerShip.crew.low..playerShip.crew.high:
+    itemsIndexes.add(y = index)
 
 proc setShipInfo*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the player's ship's info screen
@@ -845,3 +853,4 @@ proc setShipInfo*() {.raises: [], tags: [], contractual.} =
   if crewSkillsList.len == 1:
     for skill in skillsList.values:
       crewSkillsList.add(y = skill.name)
+  refreshCrewList()
