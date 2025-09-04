@@ -114,7 +114,7 @@ proc sortLoot(sortAsc, sortDesc: ItemsSortOrders;
     let
       protoIndex = item.protoIndex
       baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
-          durability = item.durability)
+          durability = item.durability, quality = item.quality)
     try:
       localItems.add(y = LocalItemData(name: getItemName(item = item),
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
@@ -163,7 +163,8 @@ proc setTakeDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if itemIndex - 1 > -1:
     let protoIndex: Natural = playerShip.cargo[itemIndex - 1].protoIndex
     baseCargoIndex = -findBaseCargo(protoIndex = protoIndex,
-        durability = playerShip.cargo[itemIndex - 1].durability) - 1
+        durability = playerShip.cargo[itemIndex - 1].durability,
+            quality = playerShip.cargo[itemIndex - 1].quality) - 1
   else:
     baseCargoIndex = itemIndex
   dialog = setManipulate(action = takeAction, iIndex = baseCargoIndex)
@@ -351,7 +352,8 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
       let
         protoIndex: Natural = playerShip.cargo[i].protoIndex
         baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
-            durability = playerShip.cargo[i].durability)
+            durability = playerShip.cargo[i].durability,
+                quality = playerShip.cargo[i].quality)
       if baseCargoIndex > -1:
         indexesList.add(y = baseCargoIndex)
       let itemType = try:

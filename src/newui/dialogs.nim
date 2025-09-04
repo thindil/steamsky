@@ -550,7 +550,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       if cargoIndex > -1:
         protoIndex = playerShip.cargo[cargoIndex].protoIndex
         if baseCargoIndex == -1:
-          baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
+          baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+              quality = playerShip.cargo[cargoIndex].quality)
       setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Amount (max: " & $manipulateData.maxAmount & "):")
       let newValue: int = property2(name = "#", min = 1,
@@ -626,7 +627,9 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             try:
               updateBaseCargo(cargoIndex = baseCargoIndex,
                   amount = -manipulateData.amount, durability = skyBases[
-                  baseIndex].cargo[baseCargoIndex].durability)
+                  baseIndex].cargo[baseCargoIndex].durability,
+                      quality = skyBases[baseIndex].cargo[
+                      baseCargoIndex].quality)
             except:
               dialog = setError(message = "Can't update the base's cargo3.")
               return

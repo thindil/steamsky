@@ -587,7 +587,7 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     let
       protoIndex = item.protoIndex
       baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
-          durability = item.durability)
+          durability = item.durability, quality = item.quality)
     var price: int
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
@@ -775,7 +775,8 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
   if cargoIndex > -1:
     protoIndex = playerShip.cargo[cargoIndex].protoIndex
     if baseCargoIndex == -1:
-      baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+          quality = playerShip.cargo[cargoIndex].quality)
   else:
     protoIndex = (if baseIndex == 0: traderCargo[
         baseCargoIndex].protoIndex else: skyBases[baseIndex].cargo[
