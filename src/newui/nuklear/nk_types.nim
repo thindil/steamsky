@@ -456,7 +456,8 @@ type
     ## Internal Nuklear type
     mouse*: nk_mouse
     keyboard*: nk_keyboard
-  nk_popup_buffer* {.importc: "struct nk_popup_buffer", nodecl.} = object
+  nk_popup_buffer* {.importc: "struct nk_popup_buffer",
+      completeStruct.} = object
     ## Internal Nuklear type
     begin*, `end`*, parent*, last*: nk_size
     active*: nk_bool
@@ -476,17 +477,20 @@ type
     next*: nk_size
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle ## Interna Nuklear data
-  nk_command_scissor* {.importc: "struct nk_command_scissor".} = object
+  nk_command_scissor* {.importc: "struct nk_command_scissor",
+      completeStruct.} = object
     ## Internal Nuklear type
     header*: nk_command
     x*, y*: cshort
     w*, h*: cushort
-  nk_command_buffer* {.importc: "struct nk_command_buffer".} = object
+  nk_command_buffer* {.importc: "struct nk_command_buffer",
+      completeStruct.} = object
     ## Internal Nuklear type
     begin*, `end`*, last*: nk_size
     clip*: nk_rect
     base*: ptr nk_buffer
     use_clipping*: cint
+    userdata*: nk_handle
   PNkCommandBuffer* = ptr nk_command_buffer
   nk_command_image* {.importc: "struct nk_command_image".} = object
     ## Internal Nuklear type
