@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -72,7 +72,7 @@ proc repairShip*(moduleIndex: int) {.raises: [NothingToRepairError,
       addMessage(message = "You bought an entire ship repair for " & $cost &
           " " & moneyName & ".", mType = tradeMessage)
     updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
-    updateBaseCargo(protoIndex = moneyIndex, amount = cost)
+    updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 1)
     updateGame(minutes = time)
@@ -130,7 +130,7 @@ proc installModule(moduleIndex, traderIndex, moneyIndex2, hullIndex: int;
         raise newException(exceptn = InstallationError,
             message = "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.")
     updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
-    updateBaseCargo(protoIndex = moneyIndex, amount = price)
+    updateBaseCargo(protoIndex = moneyIndex, amount = price, quality = normal)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = baseIndex, points = 1)
     updateGame(minutes = modulesList[moduleIndex].installTime)
@@ -330,7 +330,7 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
             giveOrders(ship = playerShip, memberIndex = owner,
                 givenOrder = rest, checkPriorities = false)
       updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = price)
-      updateBaseCargo(protoIndex = moneyIndex, amount = price)
+      updateBaseCargo(protoIndex = moneyIndex, amount = price, quality = normal)
       gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
       gainRep(baseIndex = baseIndex, points = 1)
       updateGame(minutes = modulesList[playerShip.modules[

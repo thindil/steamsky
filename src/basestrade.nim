@@ -130,7 +130,7 @@ proc buyRecipe*(recipeIndex: string) {.raises: [CantBuyError,
       recipeName: string = itemsList[recipesList[recipeIndex].resultIndex].name
       moneyIndex2: int = checkMoney(price = cost, message = recipeName)
     updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
-    updateBaseCargo(protoIndex = moneyIndex, amount = cost)
+    updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
     knownRecipes.add(y = recipeIndex)
     addMessage(message = "You bought the recipe for " & recipeName & " for " &
         $cost & " of " & moneyName & ".", mType = tradeMessage)
@@ -210,7 +210,7 @@ proc healWounded*(memberIndex: int) {.raises: [CantHealError,
           $cost & " " & moneyName & ".", mType = tradeMessage)
     var moneyIndex2: int = checkMoney(price = cost)
     updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
-    updateBaseCargo(protoIndex = moneyIndex, amount = cost)
+    updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     let baseIndex: BasesRange = skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex
@@ -281,7 +281,7 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
       gainExp(amount = gainedExp, skillNumber = skillIndex,
           crewIndex = memberIndex)
       updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
-      updateBaseCargo(protoIndex = moneyIndex, amount = cost)
+      updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
       let traderIndex: int = findMember(order = talk)
       if traderIndex > 0:
         gainExp(amount = 5, skillNumber = talkingSkill, crewIndex = traderIndex)

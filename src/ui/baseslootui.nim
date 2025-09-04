@@ -23,11 +23,11 @@ import contracts, nimalyzer
 import ../[basescargo, config, game, items, maps, messages, shipscargo, tk, types]
 import coreui, dialogs, errordialog, dialogs2, mapsui, table, updateheader, utilsui2
 
-{.push ruleOff:"varDeclared".}
+{.push ruleOff: "varDeclared".}
 var
   lootTable: TableWidget
   itemsIndexes: seq[int] = @[]
-{.pop ruleOn:"varDeclared".}
+{.pop ruleOn: "varDeclared".}
 
 type ItemsSortOrders = enum
   none, nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc,
@@ -101,7 +101,8 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
   lootFrame = lootCanvas & ".loot"
   var comboBox: string = lootFrame & ".options.type"
   let
-    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
     currentBaseCargo: seq[BaseCargo] = skyBases[baseIndex].cargo
   if itemsSortOrder == defaultItemsSortOrder:
     itemsIndexes = @[]
@@ -142,7 +143,8 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     let
       protoIndex: int = playerShip.cargo[index].protoIndex
       baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
-          durability = playerShip.cargo[index].durability)
+          durability = playerShip.cargo[index].durability,
+          quality = playerShip.cargo[index].quality)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
     let itemType: string = try:
@@ -211,8 +213,8 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
         command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 1)
     addButton(table = lootTable, text = itemType, tooltip = tableTooltip,
         command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 2)
-    let itemDurability: string = (if currentBaseCargo[itemsIndexes[index]].durability <
-        100: getItemDamage(itemDurability = currentBaseCargo[itemsIndexes[
+    let itemDurability: string = (if currentBaseCargo[itemsIndexes[
+        index]].durability < 100: getItemDamage(itemDurability = currentBaseCargo[itemsIndexes[
         index]].durability) else: "Unused")
     addProgressbar(table = lootTable, value = currentBaseCargo[itemsIndexes[
         index]].durability, maxValue = defaultItemDurability,
@@ -386,11 +388,13 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     cargoIndex = itemIndex - 1
   var protoIndex: int = 0
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   if cargoIndex > -1:
     protoIndex = playerShip.cargo[cargoIndex].protoIndex
     if baseCargoIndex == -1:
-      baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+          quality = playerShip.cargo[cargoIndex].quality)
   else:
     protoIndex = skyBases[baseIndex].cargo[baseCargoIndex].protoIndex
   var amount: int = 0
@@ -404,13 +408,15 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
     if baseCargoIndex > -1:
       try:
         updateBaseCargo(cargoIndex = baseCargoIndex, amount = amount,
-            durability = playerShip.cargo[cargoIndex].durability)
+            durability = playerShip.cargo[cargoIndex].durability,
+            quality = playerShip.cargo[cargoIndex].quality)
       except:
         return showError(message = "Can't update the base's cargo.")
     else:
       try:
         updateBaseCargo(protoIndex = protoIndex, amount = amount,
-            durability = playerShip.cargo[cargoIndex].durability)
+            durability = playerShip.cargo[cargoIndex].durability,
+            quality = playerShip.cargo[cargoIndex].quality)
       except:
         return showError(message = "Can't update the base's cargo2.")
     updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = -amount,
@@ -441,7 +447,8 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
           durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
     try:
       updateBaseCargo(cargoIndex = baseCargoIndex, amount = -(amount),
-          durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
+          durability = skyBases[baseIndex].cargo[baseCargoIndex].durability,
+          quality = skyBases[baseIndex].cargo[baseCargoIndex].quality)
     except:
       return showError(message = "Can't update the base's cargo3.")
     try:
@@ -489,7 +496,8 @@ proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't take item from base.")
     else:
-      let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+      let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+          playerShip.skyY].baseIndex
       try:
         showManipulateItem(title = "Take " & itemsList[skyBases[
             baseIndex].cargo[(itemIndex + 1).abs].protoIndex].name,
@@ -558,13 +566,14 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   var
     localItems: seq[LocalItemData] = @[]
     indexesList: seq[Natural] = @[]
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   var localBaseCargo: seq[BaseCargo] = skyBases[baseIndex].cargo
   for index, item in playerShip.cargo:
     let
       protoIndex: int = item.protoIndex
       baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
-          durability = item.durability)
+          durability = item.durability, quality = item.quality)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
     try:

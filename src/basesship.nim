@@ -50,7 +50,7 @@ proc payForDock*() {.raises: [KeyError, ReputationError, NoFreeSpaceError],
   if dockingCost > playerShip.cargo[moneyIndex2].amount:
     dockingCost = playerShip.cargo[moneyIndex].amount
   updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -(dockingCost))
-  updateBaseCargo(protoIndex = moneyIndex, amount = dockingCost)
+  updateBaseCargo(protoIndex = moneyIndex, amount = dockingCost, quality = normal)
   addMessage(message = "You pay " & $dockingCost & " " & moneyName &
       " docking fee.", mType = otherMessage)
   if traderIndex > -1:

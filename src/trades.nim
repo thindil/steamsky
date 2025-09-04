@@ -91,7 +91,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
       protoIndex: Natural = playerShip.cargo[itemIndex].protoIndex
     var baseItemIndex: int = -1
     if baseIndex > 0:
-      baseItemIndex = findBaseCargo(protoIndex = protoIndex)
+      baseItemIndex = findBaseCargo(protoIndex = protoIndex, quality = playerShip.cargo[itemIndex].quality)
     else:
       for index, item in traderCargo:
         if item.protoIndex == protoIndex:
@@ -164,7 +164,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
         price = playerShip.cargo[itemIndex].price)
     updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = profit)
     if baseIndex > 0:
-      updateBaseCargo(protoIndex = moneyIndex, amount = -profit)
+      updateBaseCargo(protoIndex = moneyIndex, amount = -profit, quality = normal)
       gainRep(baseIndex = baseIndex, points = 1)
       if itemsList[protoIndex].reputation > skyBases[
           baseIndex].reputation.level:
@@ -222,7 +222,7 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     raise newException(exceptn = NotEnoughMoneyError, message = itemName)
   updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
   if baseIndex > 0:
-    updateBaseCargo(protoIndex = moneyIndex, amount = cost)
+    updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
   else:
     traderCargo[0].amount += cost
   if baseIndex > 0:
