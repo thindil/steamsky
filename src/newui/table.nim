@@ -128,7 +128,7 @@ proc addButton*(label, tooltip: string; data: int; code: ButtonCode;
 proc addProgressBar*(tooltip: string; value, maxValue, data: int;
     code: ButtonCode; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
-  ## Add a progress abr to the table
+  ## Add a progress bar to the table
   ##
   ## * tooltip  - the text to show as a tooltip for the progess bar
   ## * value    - the current value of the progress bar
@@ -156,3 +156,15 @@ proc addProgressBar*(tooltip: string; value, maxValue, data: int;
   if mouseClicked(id = (if gameSettings.rightButton: Buttons.right else: left),
       rect = bounds):
     code(data = data, dialog = dialog)
+
+proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [], contractual.} =
+  ## Add a check button to the table
+  ##
+  ## * tooltip  - the text to show as a tooltip for the check button
+  ## * checked  - if true, the button is checked, otherwise false
+  ##
+  ## Returns modified parameter checked. It is modified when the player check
+  ## or uncheck the button.
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = tooltip)
+  checkbox(label = "", checked = checked)
