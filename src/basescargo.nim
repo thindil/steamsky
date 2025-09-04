@@ -129,14 +129,14 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
 
 proc findBaseCargo*(protoIndex: Natural;
     durability: ItemsDurability = ItemsDurability.high;
-    quality: ObjectQuality = normal): int {.raises: [], tags: [],
+    quality: ObjectQuality): int {.raises: [], tags: [],
     contractual.} =
   ## Find the selected item in the currently visited base's cargo
   ##
   ## * protoIndex - the index of the prototype to search
   ## * durability - the durability of the item to search. Can be empty. If not
   ##                set, the items will not be checked against it.
-  ## * quality    - the quality of the item to search. Can be empty.
+  ## * quality    - the quality of the item to search.
   ##
   ## The index of the item with the selected prototype index or -1 if nothing
   ## found.
@@ -189,7 +189,7 @@ proc countFreeCargo*(baseIndex: ExtendedBasesRange): Natural {.raises: [],
 
 proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
-    quality: ObjectQuality = normal) {.raises: [KeyError, NoFreeSpaceError],
+    quality: ObjectQuality) {.raises: [KeyError, NoFreeSpaceError],
     tags: [], contractual.} =
   ## Update the selected item amount in the cargo of the base where the player
   ## is
@@ -263,9 +263,11 @@ proc getLootData*(itemIndex: int): tuple[protoIndex, maxAmount,
         cargoIndex].quality else: skyBases[baseIndex].cargo[
         baseCargoIndex].quality)
   if cargoIndex > 0:
-    baseCargoIndex = findBaseCargo(protoIndex = result.protoIndex)
+    baseCargoIndex = findBaseCargo(protoIndex = result.protoIndex,
+        quality = result.quality)
   else:
-    cargoIndex = findItem(inventory = playerShip.cargo, protoIndex = result.protoIndex)
+    cargoIndex = findItem(inventory = playerShip.cargo,
+        protoIndex = result.protoIndex)
   result.maxAmount = (if baseCargoIndex > -1: skyBases[baseIndex].cargo[
       baseCargoIndex].amount else: 0)
   let freeAmount: int = (if baseCargoIndex > -1: (freeCargo(amount = 0).float /
