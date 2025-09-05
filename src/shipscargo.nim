@@ -24,7 +24,7 @@ import config, game, types
 
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
-    price: Natural = 0; quality: ObjectQuality = normal) {.raises: [], tags: [],
+    price: Natural = 0; quality: ObjectQuality) {.raises: [], tags: [],
     contractual.} =
   ## Updated the selected ship cargo, add or remove items to it
   ##
