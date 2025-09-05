@@ -31,10 +31,12 @@ type ItemsSortOrders = enum
 
 const defaultItemsSortOrder: ItemsSortOrders = none
 
+{.push ruleOff: "varDeclared".}
 var
   tradeTable: TableWidget
   itemsSortOrder: ItemsSortOrders = defaultItemsSortOrder
-  itemsIndexes: seq[int]
+  itemsIndexes: seq[int] = @[]
+{.pop ruleOn: "varDeclared".}
 
 proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
