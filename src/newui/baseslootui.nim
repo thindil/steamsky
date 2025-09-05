@@ -345,7 +345,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setButtonStyle(field = border, value = 0)
     var row: Positive = 1
     # Show the list of items in the player's ship's cargo
-    for i in itemsIndexes:
+    for index, i in itemsIndexes:
       currentItemIndex.inc
       if i == -1:
         break
@@ -379,19 +379,19 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't get base amount.")
         return
       addButton(label = itemName, tooltip = "Show available options of item.",
-        data = i, code = showItemInfo, dialog = dialog)
+        data = index, code = showItemInfo, dialog = dialog)
       addButton(label = itemType, tooltip = "Show available options of item.",
-        data = i, code = showItemInfo, dialog = dialog)
+        data = index, code = showItemInfo, dialog = dialog)
       addProgressBar(tooltip = (if playerShip.cargo[i].durability < 100:
         getItemDamage(itemDurability = playerShip.cargo[i].durability)
         else: "Unused"), value = playerShip.cargo[i].durability,
-        maxValue = defaultItemDurability, data = i, code = showItemInfo,
+        maxValue = defaultItemDurability, data = index, code = showItemInfo,
         dialog = dialog)
       addButton(label = $playerShip.cargo[i].amount,
-        tooltip = "Show available options of item.", data = i,
+        tooltip = "Show available options of item.", data = index,
         code = showItemInfo, dialog = dialog)
       addButton(label = $baseAmount, tooltip = "Show available options of item.",
-        data = i, code = showItemInfo, dialog = dialog)
+        data = index, code = showItemInfo, dialog = dialog)
       row.inc
       if row == gameSettings.listsLimit + 1:
         break
