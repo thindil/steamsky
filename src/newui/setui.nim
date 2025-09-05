@@ -823,6 +823,15 @@ proc setLoot*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the ship info UI
 ##########################
 
+type
+  CrewData* = object
+    ## Stores data needed to show information about the player's ship's crew
+    ## members
+    index*: int
+      ## The index of the crew member
+    checked*: bool
+      ## If true, the crew member is checked, otherwise false
+
 var
   needClean*: bool = false
     ## If true, the ship needs cleaning
@@ -831,14 +840,14 @@ var
   crewSkillsList*: seq[string] = @["Highest"]
     ## The list of skills to which the player's ship's crew members can be
     ## listed
-  crewIndexes*: seq[int] = @[]
-    ## The list of indexes of the player's ship's crew members
+  crewDataList*: seq[CrewData] = @[]
+    ## The list of data related to the player's ship's crew members
 
 proc refreshCrewList*() {.raises: [], tags: [],  contractual.} =
   ## Set the list of crew members in the player's ship
-  crewIndexes = @[]
+  crewDataList = @[]
   for index in playerShip.crew.low..playerShip.crew.high:
-    itemsIndexes.add(y = index)
+    crewDataList.add(y = CrewData(index: index, checked: false))
 
 proc setShipInfo*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the player's ship's info screen
