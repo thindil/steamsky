@@ -24,9 +24,9 @@ import coreui, errordialog, setui, table, themes
 
 type
   CrewSortOrders = enum
-    nameAsc, nameDesc, orderAsc, orderDesc, skillAsc, skillDesc, healthAsc,
-      healthDesc, fatigueAsc, fatigueDesc, thirstAsc, thirstDesc, hungerAsc,
-      hungerDesc, moraleAsc, moraleDesc, none
+    checkedAsc, checkedDesc, nameAsc, nameDesc, orderAsc, orderDesc, skillAsc,
+      skillDesc, healthAsc, healthDesc, fatigueAsc, fatigueDesc, thirstAsc,
+      thirstDesc, hungerAsc, hungerDesc, moraleAsc, moraleDesc, none
 
 const defaultCrewSortOrder*: CrewSortOrders = none
 
@@ -68,8 +68,21 @@ proc ordersForAll(order: CrewOrders; dialog: var GameDialog) {.raises: [],
     except:
       dialog = setError(message = "Can't give orders.")
 
+proc showMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected member information
+  ##
+  ## * data   - the index of the selected item
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  crewIndex = crewDataList[data].index
+
 const
-  headers: array[8, HeaderData[CrewSortOrders]] = [
+  headers: array[9, HeaderData[CrewSortOrders]] = [
+    HeaderData[CrewSortOrders](label: "", sortAsc: checkedAsc,
+        sortDesc: checkedDesc),
     HeaderData[CrewSortOrders](label: "Name", sortAsc: nameAsc,
         sortDesc: nameDesc),
     HeaderData[CrewSortOrders](label: "Order", sortAsc: orderAsc,
@@ -86,7 +99,7 @@ const
         sortDesc: hungerDesc),
     HeaderData[CrewSortOrders](label: "Morale", sortAsc: moraleAsc,
         sortDesc: moraleDesc)]
-  ratio: array[8, cfloat] = [300.cfloat, 200, 200, 200, 200, 200, 200, 200]
+  ratio: array[9, cfloat] = [40.cfloat, 300, 200, 200, 200, 200, 200, 200, 200]
 
 proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -149,7 +162,11 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       code = sortCrew, dialog = dialog)
   var currentRow: Positive = 1
   let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-  for index, mIndex in crewIndexes:
+  for index, data in crewDataList.mpairs:
     if currentRow < startRow:
       currentRow.inc
       continue
+    addCheckButton(tooltip = "Select the crew member to give orders to them.",
+        checked = data.checked)
+    addButton(label = playerShip.crew[data.index].name, tooltip = "Show available crew member's options",
+      data = data.index, code = showMemberInfo, dialog = dialog)
