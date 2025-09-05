@@ -430,7 +430,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setButtonStyle(field = border, value = 0)
     var row: Positive = 1
     # Show the list of items in the player's ship's cargo
-    for i in itemsIndexes:
+    for index, i in itemsIndexes:
       currentItemIndex.inc
       if i == -1:
         break
@@ -496,35 +496,35 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if baseCargoIndex > -1:
           baseAmount = baseCargo[baseCargoIndex].amount
       addButton(label = itemName, tooltip = "Show available options of item.",
-        data = i, code = showItemInfo, dialog = dialog)
+        data = index, code = showItemInfo, dialog = dialog)
       addButton(label = itemType, tooltip = "Show available options of item.",
-        data = i, code = showItemInfo, dialog = dialog)
+        data = index, code = showItemInfo, dialog = dialog)
       addProgressBar(tooltip = (if playerShip.cargo[i].durability < 100:
         getItemDamage(itemDurability = playerShip.cargo[i].durability)
         else: "Unused"), value = playerShip.cargo[i].durability,
-        maxValue = defaultItemDurability, data = i, code = showItemInfo,
+        maxValue = defaultItemDurability, data = index, code = showItemInfo,
         dialog = dialog)
       addButton(label = ($playerShip.cargo[i].quality).capitalizeAscii,
-          tooltip = "Show available options of item.", data = i,
+          tooltip = "Show available options of item.", data = index,
           code = showItemInfo, dialog = dialog)
       addButton(label = $price, tooltip = "Show available options of item.",
-        data = i, code = showItemInfo, dialog = dialog)
+        data = index, code = showItemInfo, dialog = dialog)
       addButton(label = $profit, tooltip = "Show available options of item.",
-          data = i, code = showItemInfo, dialog = dialog, color = (if profit >
+          data = index, code = showItemInfo, dialog = dialog, color = (if profit >
           0: greenColor elif profit < 0: redColor else: tableTextColor))
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       try:
         addButton(label = $itemsList[protoIndex].weight & " kg",
-          tooltip = "Show available options of item.", data = i,
+          tooltip = "Show available options of item.", data = index,
           code = showItemInfo, dialog = dialog)
       except:
         dialog = setError(message = "Can't show weight")
         return
       addButton(label = $playerShip.cargo[i].amount,
-        tooltip = "Show available options of item.", data = i,
+        tooltip = "Show available options of item.", data = index,
         code = showItemInfo, dialog = dialog)
       addButton(label = $baseAmount, tooltip = "Show available options of item.",
-        data = i, code = showItemInfo, dialog = dialog)
+        data = index, code = showItemInfo, dialog = dialog)
       row.inc
       if row == gameSettings.listsLimit + 1:
         break
