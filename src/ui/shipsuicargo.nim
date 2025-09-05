@@ -396,7 +396,7 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   except:
     return showError(message = "Can't update the member's inventory.")
   updateCargo(ship = playerShip, amount = -amount, cargoIndex = itemIndex,
-      price = item.price)
+      price = item.price, quality = item.quality)
   discard closeDialogCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["CloseDialog", ".itemdialog"].allocCStringArray)
   updateHeader()
@@ -473,7 +473,8 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
     updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
         itemIndex].protoIndex, amount = -dropAmount,
         durability = playerShip.cargo[itemIndex].durability,
-        price = playerShip.cargo[itemIndex].price)
+        price = playerShip.cargo[itemIndex].price,
+        quality = playerShip.cargo[itemIndex].quality)
   discard closeDialogCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["CloseDialog", ".itemdialog"].allocCStringArray)
   updateHeader()

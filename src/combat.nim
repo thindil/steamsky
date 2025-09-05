@@ -71,7 +71,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
     generateTraderCargo(protoIndex = enemyIndex)
     for item in traderCargo:
       updateCargo(ship = enemyShip, protoIndex = item.protoIndex,
-          amount = item.amount)
+          amount = item.amount, quality = item.quality)
     traderCargo = @[]
   var minFreeSpace: int = 0
   for module in enemyShip.modules:
@@ -224,7 +224,7 @@ proc finishCombat() {.raises: [KeyError, ValueError, CrewOrderError,
     addMessage(message = "You looted " & $lootAmount & " " & moneyName &
         " from " & enemyName & ".", mType = combatMessage)
     updateCargo(ship = playerShip, protoIndex = moneyIndex,
-        amount = lootAmount)
+        amount = lootAmount, quality = normal)
   shipFreeSpace = freeCargo(amount = 0)
   if wasBoarded and shipFreeSpace > 0:
     var message: string = "Additionally, your boarding party takes from " &
@@ -240,7 +240,7 @@ proc finishCombat() {.raises: [KeyError, ValueError, CrewOrderError,
         if item != game.enemy.ship.cargo[0]:
           message &= ","
         updateCargo(ship = playerShip, protoIndex = item.protoIndex,
-            amount = lootAmount)
+            amount = lootAmount, quality = item.quality)
         message = message & " " & $lootAmount & " " & itemsList[
             item.protoIndex].name
         shipFreeSpace = freeCargo(amount = 0)
@@ -263,7 +263,7 @@ proc finishCombat() {.raises: [KeyError, ValueError, CrewOrderError,
           if progressStory():
             if step.finishCondition == loot:
               updateCargo(ship = playerShip, protoIndex = stepData[
-                  0].parseInt, amount = 1)
+                  0].parseInt, amount = 1, quality = normal)
   for mIndex, member in playerShip.crew:
     if member.order in {boarding, defend}:
       giveOrders(ship = playerShip, memberIndex = mIndex, givenOrder = rest)
@@ -845,7 +845,8 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
       else:
         addMessage(message = shootMessage, mType = combatMessage, color = cyan)
     if ammoIndex > -1:
-      updateCargo(ship = ship, cargoIndex = ammoIndex, amount = -1)
+      updateCargo(ship = ship, cargoIndex = ammoIndex, amount = -1,
+          quality = ship.cargo[ammoIndex].quality)
     if ship.crew == playerShip.crew and gunnerIndex > -1:
       gainExp(amount = 2, skillNumber = gunnerySkill,
           crewIndex = gunnerIndex)

@@ -71,7 +71,8 @@ proc repairShip*(moduleIndex: int) {.raises: [NothingToRepairError,
           module.durability = module.maxDurability
       addMessage(message = "You bought an entire ship repair for " & $cost &
           " " & moneyName & ".", mType = tradeMessage)
-    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
+    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost,
+        quality = normal)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 1)
@@ -129,7 +130,8 @@ proc installModule(moduleIndex, traderIndex, moneyIndex2, hullIndex: int;
           freeTurretIndex == -1:
         raise newException(exceptn = InstallationError,
             message = "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.")
-    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
+    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price,
+        quality = normal)
     updateBaseCargo(protoIndex = moneyIndex, amount = price, quality = normal)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = baseIndex, points = 1)
@@ -329,7 +331,8 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
           if owner > -1:
             giveOrders(ship = playerShip, memberIndex = owner,
                 givenOrder = rest, checkPriorities = false)
-      updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = price)
+      updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = price,
+          quality = normal)
       updateBaseCargo(protoIndex = moneyIndex, amount = price, quality = normal)
       gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
       gainRep(baseIndex = baseIndex, points = 1)

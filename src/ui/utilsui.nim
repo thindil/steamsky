@@ -112,7 +112,8 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
             moneyName & "}")
         if argv[4] == "buy":
           if getItemAmount(itemType = fuelType) - cost <= gameSettings.lowFuel:
-            tclEval(script = label & " configure -text {You will spend " & moneyName & " below low level of fuel.}")
+            tclEval(script = label & " configure -text {You will spend " &
+                moneyName & " below low level of fuel.}")
             tclEval(script = "grid " & label)
           else:
             tclEval(script = "grid remove " & label)
@@ -287,7 +288,8 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
           " for change ship home base.", title = "No money")
       return tclOk
     playerShip.homeBase = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
+    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price,
+        quality = normal)
     addMessage(message = "You changed your ship home base to: " & skyBases[
         playerShip.homeBase].name, mType = otherMessage)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
@@ -374,7 +376,8 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
         res = "showstats")
   else:
     let
-      baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+      baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+          playerShip.skyY].baseIndex
       memberIndex: int = try:
           ($argv[1]).parseInt - 1
         except:

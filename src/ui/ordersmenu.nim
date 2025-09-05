@@ -819,7 +819,8 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't show message.")
     updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-        itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount))
+        itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount),
+        quality = playerShip.cargo[itemIndex].quality)
   else:
     try:
       gainRep(baseIndex = baseIndex, points = (playerShip.cargo[

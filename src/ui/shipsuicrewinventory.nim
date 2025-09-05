@@ -578,7 +578,8 @@ proc moveItem(itemIndex: Natural; amount: Positive) {.raises: [],
   updateCargo(ship = playerShip, protoIndex = playerShip.crew[
       memberIndex].inventory[itemIndex].protoIndex, amount = amount,
       durability = playerShip.crew[memberIndex].inventory[itemIndex].durability,
-      price = playerShip.crew[memberIndex].inventory[itemIndex].price)
+      price = playerShip.crew[memberIndex].inventory[itemIndex].price,
+      quality = playerShip.crew[memberIndex].inventory[itemIndex].quality)
   try:
     updateInventory(memberIndex = memberIndex, amount = -amount,
         inventoryIndex = itemIndex, ship = playerShip)
