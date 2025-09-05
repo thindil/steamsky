@@ -492,37 +492,43 @@ type
     use_clipping*: cint
     userdata*: nk_handle
   PNkCommandBuffer* = ptr nk_command_buffer
-  nk_command_image* {.importc: "struct nk_command_image".} = object
+  nk_command_image* {.importc: "struct nk_command_image",
+      completeStruct.} = object
     ## Internal Nuklear type
     header*: nk_command
     x*, y*: cshort
     w*, h*: cushort
     img*: nk_image
     col*: nk_color
-  nk_command_rect* {.importc: "struct nk_command_rect".} = object
+  nk_command_rect* {.importc: "struct nk_command_rect",
+      completeStruct.} = object
     ## Internal Nuklear type
     header*: nk_command
     rounding*, w*, h*, line_thickness*: cushort
     x*, y*: cshort
     color*: nk_color
-  nk_command_rect_filled* {.importc: "struct nk_command_rect_filled".} = object
+  nk_command_rect_filled* {.importc: "struct nk_command_rect_filled",
+      completeStruct.} = object
     ## Internal Nuklear type
     header*: nk_command
     rounding*, w*, h*: cushort
     x*, y*: cshort
     color*: nk_color
-  nk_command_triangle* {.importc: "struct nk_command_triangle".} = object
+  nk_command_triangle* {.importc: "struct nk_command_triangle",
+      completeStruct.} = object
     ## Internal Nuklear type
     header*: nk_command
     line_thickness*: cshort
     a*, b*, c*: nk_vec2i
     color*: nk_color
-  nk_command_triangle_filled* {.importc: "struct nk_command_triangle_filled".} = object
+  nk_command_triangle_filled* {.importc: "struct nk_command_triangle_filled",
+      completeStruct.} = object
     ## Internal Nuklear type
     header*: nk_command
     a*, b*, c*: nk_vec2i
     color*: nk_color
-  nk_command_circle_filled* {.importc: "struct nk_command_circle_filled".} = object
+  nk_command_circle_filled* {.importc: "struct nk_command_circle_filled",
+      completeStruct.} = object
     ## Internal Nuklear type
     header*: nk_command
     w*, h*: cushort
