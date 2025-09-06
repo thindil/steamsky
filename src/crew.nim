@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -248,7 +248,8 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
               healAmount = playerShip.cargo[toolIndex].amount
             else:
               healAmount = healAmount.abs
-            updateCargo(ship = playerShip, amount = -(healAmount))
+            updateCargo(ship = playerShip, amount = -(healAmount),
+                cargoIndex = toolIndex)
           else:
             toolIndex = findItem(inventory = playerShip.crew[
                 memberIndex].inventory, itemType = faction.healingTools)
