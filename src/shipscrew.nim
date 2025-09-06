@@ -241,7 +241,8 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
         toolsIndex].protoIndex].itemType != requiredTool:
       updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
           toolsIndex].protoIndex, amount = 1, durability = ship.crew[
-          memberIndex].inventory[toolsIndex].durability)
+          memberIndex].inventory[toolsIndex].durability, quality = ship.crew[
+          memberIndex].inventory[toolsIndex].quality)
       updateInventory(memberIndex = memberIndex, amount = -1,
           inventoryIndex = toolsIndex, ship = ship)
       toolsIndex = -1
@@ -289,8 +290,9 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
         if toolsIndex > -1:
           updateCargo(ship = ship, protoIndex = ship.crew[
               memberIndex].inventory[toolsIndex].protoIndex, amount = 1,
-                  durability = ship.crew[
-              memberIndex].inventory[toolsIndex].durability)
+              durability = ship.crew[memberIndex].inventory[
+              toolsIndex].durability, quality = ship.crew[
+              memberIndex].inventory[toolsIndex].quality)
           updateInventory(memberIndex = memberIndex, amount = -1,
               inventoryIndex = toolsIndex, ship = ship)
     return true
@@ -383,10 +385,10 @@ proc giveRestOrder(ship: var ShipRecord; memberIndex: Natural) {.raises: [
     if ship.crew[memberIndex].order in [repair, clean, upgrading, train]:
       var toolsIndex: int = ship.crew[memberIndex].equipment[tool]
       if toolsIndex > -1:
-        updateCargo(ship = ship, protoIndex = ship.crew[
-            memberIndex].inventory[toolsIndex].protoIndex, amount = 1,
-                durability = ship.crew[
-            memberIndex].inventory[toolsIndex].durability)
+        updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
+            toolsIndex].protoIndex, amount = 1, durability = ship.crew[
+            memberIndex].inventory[toolsIndex].durability, quality = ship.crew[
+            memberIndex].inventory[toolsIndex].quality)
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = toolsIndex, ship = ship)
 

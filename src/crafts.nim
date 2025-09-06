@@ -318,7 +318,8 @@ proc resetOrder(module: var ModuleData; moduleOwner, toolIndex,
     updateCargo(ship = playerShip, protoIndex = playerShip.crew[
         crafterIndex].inventory[toolIndex].protoIndex, amount = 1,
         durability = playerShip.crew[crafterIndex].inventory[
-        toolIndex].durability)
+        toolIndex].durability, quality = playerShip.crew[
+        crafterIndex].inventory[toolIndex].quality)
     updateInventory(memberIndex = crafterIndex, amount = -1,
         inventoryIndex = toolIndex, ship = playerShip)
   var haveWorker: bool = false
@@ -446,10 +447,11 @@ proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
     return true
   if module.craftingIndex.len > 11 and module.craftingIndex[0..10] == "Deconstruct":
     updateCargo(ship = playerShip, protoIndex = recipe.resultIndex,
-        amount = resultAmount)
+        amount = resultAmount, quality = normal)
   else:
     updateCargo(ship = playerShip, protoIndex = recipesList[
-        module.craftingIndex].resultIndex, amount = resultAmount)
+        module.craftingIndex].resultIndex, amount = resultAmount,
+        quality = normal)
   for key, protoRecipe in recipesList:
     if protoRecipe.resultIndex == recipe.resultIndex:
       updateCraftingOrders(index = key)

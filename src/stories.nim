@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -514,7 +514,8 @@ proc startStory*(factionName: string; condition: StartConditionType) {.raises: [
         currentStory = CurrentStoryData(index: sIndex, step: 1, currentStep: 1,
             maxSteps: getRandom(min = story.minSteps, max = story.maxSteps),
             showText: true, data: step, finishedStep: any)
-        updateCargo(ship = playerShip, protoIndex = story.startData[0].parseInt, amount = 1)
+        updateCargo(ship = playerShip, protoIndex = story.startData[0].parseInt,
+            amount = 1, quality = normal)
         finishedStories.add(y = FinishedStoryData(index: currentStory.index,
             stepsAmount: currentStory.maxSteps, stepsTexts: @[]))
         return

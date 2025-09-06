@@ -386,7 +386,8 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
       updateMorale(ship = playerShip, memberIndex = memberIndex,
           value = itemsList[playerShip.cargo[itemIndex].protoIndex].value[2])
     updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-        itemIndex].protoIndex, amount = -1)
+        itemIndex].protoIndex, amount = -1, quality = playerShip.cargo[
+        itemIndex].quality)
     return consumeValue
   itemIndex = findItem(inventory = playerShip.crew[memberIndex].inventory,
       itemType = itemType)
@@ -480,7 +481,8 @@ proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
       if member.equipment[tool] > -1:
         updateCargo(ship = playerShip, protoIndex = member.inventory[
             member.equipment[tool]].protoIndex, amount = 1,
-            durability = member.inventory[member.equipment[tool]].durability)
+            durability = member.inventory[member.equipment[tool]].durability,
+            quality = member.inventory[member.equipment[tool]].quality)
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = member.equipment[tool], ship = playerShip)
         member.equipment[tool] = -1

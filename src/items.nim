@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -304,7 +304,8 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
           protoIndex].value[1] < toolQuality:
         updateCargo(ship = playerShip, protoIndex = protoIndex, amount = 1,
             durability = playerShip.crew[memberIndex].inventory[
-            result].durability)
+            result].durability, quality = playerShip.crew[
+            memberIndex].inventory[result].quality)
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = result, ship = playerShip)
         result = -1
@@ -319,7 +320,8 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
               protoIndex = playerShip.cargo[result].protoIndex,
               durability = playerShip.cargo[result].durability,
                   ship = playerShip)
-          updateCargo(ship = playerShip, amount = -1, cargoIndex = result)
+          updateCargo(ship = playerShip, amount = -1, cargoIndex = result,
+              quality = playerShip.crew[memberIndex].inventory[result].quality)
           result = findItem(inventory = playerShip.crew[memberIndex].inventory,
               itemType = itemType, quality = toolQuality)
         except CrewNoSpaceError:
