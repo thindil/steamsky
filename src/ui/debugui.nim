@@ -563,7 +563,7 @@ proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   try:
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = tclEval2(
-        script = itemBox & " get").parseInt)
+        script = itemBox & " get").parseInt, quality = normal)
   except:
     return showError(message = "Can't update the cargo.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
@@ -593,7 +593,8 @@ proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't geet item index.")
   try:
     updateCargo(ship = playerShip, amount = tclEval2(script = itemBox &
-        " get").parseInt, cargoIndex = itemIndex)
+        " get").parseInt, cargoIndex = itemIndex, quality = playerShip.cargo[
+            itemIndex].quality)
   except:
     return showError(message = "Can't update the cargo.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)

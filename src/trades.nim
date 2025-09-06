@@ -161,8 +161,8 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
           price: itemsList[protoIndex].price,
           quality: playerShip.cargo[itemIndex].quality))
     updateCargo(ship = playerShip, cargoIndex = itemIndex, amount = -sellAmount,
-        price = playerShip.cargo[itemIndex].price)
-    updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = profit)
+        price = playerShip.cargo[itemIndex].price, quality = playerShip.cargo[itemIndex].quality)
+    updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = profit, quality = normal)
     if baseIndex > 0:
       updateBaseCargo(protoIndex = moneyIndex, amount = -profit, quality = normal)
       gainRep(baseIndex = baseIndex, points = 1)
@@ -220,7 +220,7 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     raise newException(exceptn = NoMoneyError, message = itemName)
   if cost > playerShip.cargo[moneyIndex2].amount:
     raise newException(exceptn = NotEnoughMoneyError, message = itemName)
-  updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
+  updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost, quality = normal)
   if baseIndex > 0:
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
   else:

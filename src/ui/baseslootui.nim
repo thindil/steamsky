@@ -420,7 +420,8 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't update the base's cargo2.")
     updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = -amount,
-        durability = playerShip.cargo[cargoIndex].durability)
+        durability = playerShip.cargo[cargoIndex].durability,
+        quality = playerShip.cargo[cargoIndex].quality)
     try:
       addMessage(message = "You drop " & $amount & " " & itemsList[
           protoIndex].name & ".", mType = orderMessage)
@@ -441,10 +442,12 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't count free cargo.")
     if cargoIndex > -1:
       updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = amount,
-          durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
+          durability = skyBases[baseIndex].cargo[baseCargoIndex].durability,
+          quality = skyBases[baseIndex].cargo[baseCargoIndex].quality)
     else:
       updateCargo(ship = playerShip, protoIndex = protoIndex, amount = amount,
-          durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
+          durability = skyBases[baseIndex].cargo[baseCargoIndex].durability,
+          quality = skyBases[baseIndex].cargo[baseCargoIndex].quality)
     try:
       updateBaseCargo(cargoIndex = baseCargoIndex, amount = -(amount),
           durability = skyBases[baseIndex].cargo[baseCargoIndex].durability,
