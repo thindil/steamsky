@@ -18,6 +18,7 @@
 ## Provides code related to the information about the player's ship's crew
 ## members, like listing them, showing information, give orders, etc.
 
+import std/strutils
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, messages, shipscrew, types]
 import coreui, errordialog, setui, table, themes
@@ -78,6 +79,17 @@ proc showMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   crewIndex = crewDataList[data].index
+
+proc showGiveOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the dialog to give an order for the selected crew member
+  ##
+  ## * data   - the index of the selected item
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
 
 const
   headers: array[9, HeaderData[CrewSortOrders]] = [
@@ -161,12 +173,29 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortCrew, dialog = dialog)
   var currentRow: Positive = 1
+  saveButtonStyle()
+  setButtonStyle(field = borderColor, a = 0)
+  try:
+    setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+  except:
+    dialog = setError(message = "Can't set table color")
+    return
+  setButtonStyle(field = rounding, value = 0)
+  setButtonStyle(field = border, value = 0)
   let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+  var row: Positive = 1
   for index, data in crewDataList.mpairs:
     if currentRow < startRow:
       currentRow.inc
       continue
     addCheckButton(tooltip = "Select the crew member to give orders to them.",
         checked = data.checked)
-    addButton(label = playerShip.crew[data.index].name, tooltip = "Show available crew member's options",
-      data = data.index, code = showMemberInfo, dialog = dialog)
+    addButton(label = playerShip.crew[data.index].name,
+        tooltip = "Show available crew member's options", data = data.index,
+        code = showMemberInfo, dialog = dialog)
+    addButton(label = ($playerShip.crew[data.index].order).capitalizeAscii,
+        tooltip = "The current order for the selected crew member. Press the mouse button to change it.",
+        data = data.index, code = showGiveOrder, dialog = dialog)
+  restoreButtonStyle()
+  addPagination(page = currentPage, row = row)
