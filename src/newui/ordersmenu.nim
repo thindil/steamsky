@@ -586,7 +586,8 @@ proc deliverMedicines(dialog: var GameDialog; forFree: bool = true) {.raises: [
       dialog = setError(message = "Can't show message.")
       return
     updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-        itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount))
+        itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount),
+        quality = playerShip.cargo[itemIndex].quality)
   else:
     try:
       gainRep(baseIndex = baseIndex, points = (playerShip.cargo[

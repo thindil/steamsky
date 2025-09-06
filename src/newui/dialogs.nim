@@ -192,7 +192,7 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
           playerShip.homeBase = skyMap[playerShip.skyX][
               playerShip.skyY].baseIndex
           updateCargo(ship = playerShip, cargoIndex = moneyIndex2,
-              amount = -price)
+              amount = -price, quality = normal)
           addMessage(message = "You changed your ship home base to: " &
               skyBases[playerShip.homeBase].name, mType = otherMessage)
           let traderIndex: int = findMember(order = talk)
@@ -619,11 +619,13 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             if cargoIndex > -1:
               updateCargo(ship = playerShip, cargoIndex = cargoIndex,
                   amount = manipulateData.amount, durability = skyBases[
-                  baseIndex].cargo[baseCargoIndex].durability)
+                  baseIndex].cargo[baseCargoIndex].durability,
+                  quality = skyBases[baseIndex].cargo[baseCargoIndex].quality)
             else:
               updateCargo(ship = playerShip, protoIndex = protoIndex,
                   amount = manipulateData.amount, durability = skyBases[
-                  baseIndex].cargo[baseCargoIndex].durability)
+                  baseIndex].cargo[baseCargoIndex].durability,
+                  quality = skyBases[baseIndex].cargo[baseCargoIndex].quality)
             try:
               updateBaseCargo(cargoIndex = baseCargoIndex,
                   amount = -manipulateData.amount, durability = skyBases[
@@ -660,7 +662,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
                 return
             updateCargo(ship = playerShip, cargoIndex = cargoIndex,
                 amount = -manipulateData.amount, durability = playerShip.cargo[
-                cargoIndex].durability)
+                cargoIndex].durability, quality = playerShip.cargo[
+                cargoIndex].quality)
             try:
               addMessage(message = "You drop " & $manipulateData.amount & " " &
                   itemsList[protoIndex].name & ".", mType = orderMessage)
