@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
   items from it to the ship's cargo
 - Scrolling with mouse's wheel doesn't work in general info in the player's
   ship info screen
+- Using healing tools during healing the player's ship's crew members
 
 ## [11.4] - 2025-08-10
 
