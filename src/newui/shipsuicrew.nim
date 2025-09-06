@@ -18,9 +18,9 @@
 ## Provides code related to the information about the player's ship's crew
 ## members, like listing them, showing information, give orders, etc.
 
-import std/strutils
+import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, messages, shipscrew, types]
+import ../[config, crew, game, messages, shipscrew, types]
 import coreui, errordialog, setui, table, themes
 
 type
@@ -90,6 +90,30 @@ proc showGiveOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   discard
+
+proc getHighestSkill(memberIndex: Natural;
+    dialog: var GameDialog): string {.raises: [],
+
+tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Get the name of the highest skill of the selected crew member
+  ##
+  ## * memberIndex - the crew index of the member which the highest skill will
+  ##                 be get
+  ## * dialog -      the current in-game dialog displayed on the screen
+  ##
+  ## Returns the name of the highest skill of the selected crew member
+  var
+    highestLevel: Positive = 1
+    highestIndex: Positive = 1
+  for skill in playerShip.crew[memberIndex].skills:
+    if skill.level > highestLevel:
+      highestLevel = skill.level
+      highestIndex = skill.index
+  try:
+    return skillsList[highestIndex].name
+  except KeyError:
+    dialog = setError(message = "Can't thge the highest skill. Index: " & $highestIndex)
+    return "Unknown"
 
 const
   headers: array[9, HeaderData[CrewSortOrders]] = [
@@ -185,6 +209,7 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   setButtonStyle(field = border, value = 0)
   let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
   var row: Positive = 1
+  var skill: Natural = 0
   for index, data in crewDataList.mpairs:
     if currentRow < startRow:
       currentRow.inc
@@ -197,5 +222,19 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     addButton(label = ($playerShip.crew[data.index].order).capitalizeAscii,
         tooltip = "The current order for the selected crew member. Press the mouse button to change it.",
         data = data.index, code = showGiveOrder, dialog = dialog)
+    if skill == 0:
+      addButton(label = getHighestSkill(memberIndex = data.index,
+          dialog = dialog),
+          tooltip = "The highest skill of the selected crew member",
+          data = data.index, code = showMemberInfo, dialog = dialog)
+    else:
+      try:
+        addButton(label = getSkillLevelName(skillLevel = getSkillLevel(
+            member = playerShip.crew[data.index], skillIndex = findSkillIndex(
+            skillName = ""))), tooltip = "The level of " & "" &
+            " of the selected crew member", data = data.index,
+            code = showMemberInfo, dialog = dialog)
+      except KeyError:
+        dialog = setError(message = "Can't get the level of the skill.")
   restoreButtonStyle()
   addPagination(page = currentPage, row = row)
