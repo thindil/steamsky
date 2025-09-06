@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -40,13 +40,14 @@ proc dailyPayment*() {.raises: [KeyError, Exception], tags: [
       if haveMoney:
         if playerShip.cargo[moneyIndex2].amount < member.payment[1]:
           let moneyNeeded: Natural = playerShip.cargo[moneyIndex2].amount
-          updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = (0 - moneyNeeded))
+          updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = (0 -
+              moneyNeeded), quality = normal)
           addMessage(message = "You don't have enough " & moneyName &
               " to pay your crew members.", mType = tradeMessage, color = red)
           haveMoney = false
         if haveMoney:
           updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = (0 -
-              member.payment[1]))
+              member.payment[1]), quality = normal)
           var payMessage: string = "You pay " & member.name
           if member.gender == 'M':
             payMessage.add(y = " his ")
@@ -248,7 +249,9 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
               healAmount = playerShip.cargo[toolIndex].amount
             else:
               healAmount = healAmount.abs
-            updateCargo(ship = playerShip, amount = -(healAmount))
+            updateCargo(ship = playerShip, amount = -(healAmount),
+                cargoIndex = toolIndex, quality = playerShip.cargo[
+                toolIndex].quality)
           else:
             toolIndex = findItem(inventory = playerShip.crew[
                 memberIndex].inventory, itemType = faction.healingTools)
