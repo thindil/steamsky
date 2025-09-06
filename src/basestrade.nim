@@ -85,7 +85,8 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
         contractLength: contractLength, morale: [1: morale, 2: 0],
         loyalty: morale, homeBase: recruit.homeBase, faction: recruit.faction))
     let moneyIndex2: int = checkMoney(price = price, message = recruit.name)
-    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
+    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price,
+        quality = normal)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = baseIndex, points = 1)
     addMessage(message = "You hired " & recruit.name & " for " & $price & " " &
@@ -129,7 +130,8 @@ proc buyRecipe*(recipeIndex: string) {.raises: [CantBuyError,
     let
       recipeName: string = itemsList[recipesList[recipeIndex].resultIndex].name
       moneyIndex2: int = checkMoney(price = cost, message = recipeName)
-    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
+    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost,
+        quality = normal)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
     knownRecipes.add(y = recipeIndex)
     addMessage(message = "You bought the recipe for " & recipeName & " for " &
@@ -209,7 +211,8 @@ proc healWounded*(memberIndex: int) {.raises: [CantHealError,
       addMessage(message = "You paid for healing all wounded crew members for " &
           $cost & " " & moneyName & ".", mType = tradeMessage)
     var moneyIndex2: int = checkMoney(price = cost)
-    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
+    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost,
+        quality = normal)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     let baseIndex: BasesRange = skyMap[playerShip.skyX][
@@ -280,7 +283,8 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
         gainedExp = 100
       gainExp(amount = gainedExp, skillNumber = skillIndex,
           crewIndex = memberIndex)
-      updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
+      updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost,
+          quality = normal)
       updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
       let traderIndex: int = findMember(order = talk)
       if traderIndex > 0:

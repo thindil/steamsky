@@ -23,8 +23,8 @@ import contracts
 import bases, bases2, config, crewinventory, game, game2, gamesaveload, maps,
     messages, ships, shipscargo, shipscrew, shipscrew2, types, utils
 
-proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError, ReputationError],
-    tags: [WriteIOEffect], contractual.} =
+proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError,
+    ReputationError], tags: [WriteIOEffect], contractual.} =
   ## Count the fuel usage when the player waits in the open space
   ##
   ## * minutes - the amount of minutes passed
@@ -37,7 +37,8 @@ proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError, ReputationErr
   var fuelNeeded: int = baseFuelNeeded * (minutes / 10).int
   if getRandom(min = 1, max = 10) < (minutes mod 10):
     fuelNeeded *= baseFuelNeeded
-  let fuelIndex: int = findItem(inventory = playerShip.cargo, itemType = fuelType)
+  let fuelIndex: int = findItem(inventory = playerShip.cargo,
+      itemType = fuelType)
   if fuelIndex == -1:
     addMessage(message = "Ship falls from the sky due to a lack of fuel.",
         mType = otherMessage, color = red)
@@ -49,7 +50,8 @@ proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError, ReputationErr
     death(memberIndex = 0, reason = "fall of the ship", ship = playerShip)
     return
   updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-      fuelIndex].protoIndex, amount = fuelNeeded)
+      fuelIndex].protoIndex, amount = fuelNeeded, quality = playerShip.cargo[
+          fuelIndex].quality)
 
 proc haveOrderRequirements(): string {.raises: [KeyError], tags: [],
     contractual.} =
@@ -87,7 +89,8 @@ proc haveOrderRequirements(): string {.raises: [KeyError], tags: [],
     return "You don't have an engineer on duty."
   return ""
 
-proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.raises: [KeyError, ValueError], tags: [], contractual.} =
+proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.raises: [
+    KeyError, ValueError], tags: [], contractual.} =
   ## Count the real speed of the ship in meters per minute
   ##
   ## * ship     - the ship which speed will be count
@@ -102,7 +105,8 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.raises: [Ke
   for module in ship.modules:
     if module.mType == ModuleType2.engine and not module.disabled:
       baseSpeed = module.power * 10
-      var damage: float = 1.0 - (module.durability.float / module.maxDurability.float)
+      var damage: float = 1.0 - (module.durability.float /
+          module.maxDurability.float)
       newSpeed += (baseSpeed - (baseSpeed.float * damage).Natural)
   newSpeed = ((newSpeed.float - countShipWeight(ship = ship).float) *
       25.0).int
@@ -137,8 +141,8 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.raises: [Ke
     return 0
   return newSpeed.Natural
 
-proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
-    RootEffect], contractual.} =
+proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
+    IOError, Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Dock, undock or escape the player's ship from the currently visited base
   ##
   ## * docking - if true, the player is docking to the base
@@ -190,7 +194,8 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
     if escape:
       let roll: Positive = getRandom(min = 1, max = 100)
       var
-        messageText: string = "Ship escaped from base " & skyBases[baseIndex].name & " without paying."
+        messageText: string = "Ship escaped from base " & skyBases[
+            baseIndex].name & " without paying."
         color: MessageColor = white
       if roll in 1..40:
         let moduleIndex: Natural = getRandom(min = playerShip.modules.low,
@@ -236,7 +241,8 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
         if dockingCost > playerShip.cargo[moneyIndex2].amount:
           return "You can't undock to this base because you don't have enough " &
               moneyName & " to pay for docking."
-        updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -(dockingCost))
+        updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -(
+            dockingCost), quality = normal)
         if traderIndex > -1:
           gainExp(amount = 1, skillNumber = talkingSkill,
               crewIndex = traderIndex)
@@ -316,7 +322,8 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
   message = haveOrderRequirements()
   if message.len > 0:
     return 0
-  var fuelIndex: int = findItem(inventory = playerShip.cargo, itemType = fuelType)
+  var fuelIndex: int = findItem(inventory = playerShip.cargo,
+      itemType = fuelType)
   if fuelIndex == -1:
     message = "You don't have any fuel."
     return 0
@@ -337,7 +344,8 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
   playerShip.skyX = newX
   playerShip.skyY = newY
   updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-      fuelIndex].protoIndex, amount = fuelNeeded)
+      fuelIndex].protoIndex, amount = fuelNeeded, quality = playerShip.cargo[
+          fuelIndex].quality)
   var timePassed: int = (100.0 / speed).int
   if timePassed > 0:
     case playerShip.speed

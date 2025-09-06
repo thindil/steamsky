@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -92,7 +92,8 @@ proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
                   toolsIndex > repairMaterial:
                 toolsIndex.dec
               updateCargo(ship = playerShip, cargoIndex = repairMaterial,
-                  amount = -(repairValue))
+                  amount = -(repairValue), quality = playerShip.cargo[
+                      repairMaterial].quality)
               playerShip.modules[moduleIndex].durability += repairValue
               if repairValue > crewRepairPoints[pointsIndex]:
                 repairValue = crewRepairPoints[pointsIndex]

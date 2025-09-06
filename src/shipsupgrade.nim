@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -89,7 +89,8 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
   if times == 0:
     return
   var upgradePoints: int = ((getSkillLevel(member = playerShip.crew[
-      workerIndex], skillIndex = modulesList[upgradedModule.protoIndex].repairSkill) /
+      workerIndex], skillIndex = modulesList[
+          upgradedModule.protoIndex].repairSkill) /
       10).int * times) + times
   while upgradePoints > 0 and upgradedModule.upgradeProgress > 0:
     var resultAmount: Natural = upgradePoints
@@ -155,7 +156,8 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
     var upgradeProgress: int = upgradedModule.upgradeProgress - resultAmount
     upgradePoints -= resultAmount
     updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-        upgradeMaterial].protoIndex, amount = -(materialCost))
+        upgradeMaterial].protoIndex, amount = -(materialCost),
+            quality = playerShip.cargo[upgradeMaterial].quality)
     if upgradeProgress == 0:
       var weightGain: int = (modulesList[upgradedModule.protoIndex].weight /
           modulesList[upgradedModule.protoIndex].durability).int
@@ -191,26 +193,31 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
           upgradeValue = upgradedModule.maxModules
         of ModuleType2.engine:
           weightGain = (modulesList[upgradedModule.protoIndex].maxValue / 40).int
-          upgradedModule.power += (modulesList[upgradedModule.protoIndex].maxValue / 20).int
+          upgradedModule.power += (modulesList[
+              upgradedModule.protoIndex].maxValue / 20).int
           upgradeValue = upgradedModule.power
         of ModuleType2.cabin:
-          upgradedModule.quality += (modulesList[upgradedModule.protoIndex].maxValue / 20).int
+          upgradedModule.quality += (modulesList[
+              upgradedModule.protoIndex].maxValue / 20).int
           upgradeValue = upgradedModule.quality
         of ModuleType2.gun:
           if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:
-            upgradedModule.damage += (modulesList[upgradedModule.protoIndex].maxValue / 20).int
+            upgradedModule.damage += (modulesList[
+                upgradedModule.protoIndex].maxValue / 20).int
           else:
             upgradedModule.damage.inc
           upgradeValue = upgradedModule.damage
         of ModuleType2.batteringRam:
           if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:
-            upgradedModule.damage2 += (modulesList[upgradedModule.protoIndex].maxValue / 20).int
+            upgradedModule.damage2 += (modulesList[
+                upgradedModule.protoIndex].maxValue / 20).int
           else:
             upgradedModule.damage2.inc
           upgradeValue = upgradedModule.damage2
         of ModuleType2.harpoonGun:
           if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:
-            upgradedModule.duration += (modulesList[upgradedModule.protoIndex].maxValue / 20).int
+            upgradedModule.duration += (modulesList[
+                upgradedModule.protoIndex].maxValue / 20).int
           else:
             upgradedModule.duration.inc
           upgradeValue = upgradedModule.duration
@@ -242,7 +249,8 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
       upgradedModule.upgradeProgress = upgradeProgress
   playerShip.modules[playerShip.upgradeModule] = upgradedModule
 
-proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.raises: [ShipUpgradeError, KeyError], tags: [], contractual.} =
+proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.raises: [
+    ShipUpgradeError, KeyError], tags: [], contractual.} =
   ## Set the module's upgrade of the player's ship
   ##
   ## * moduleIndex - the index of the module to upgrade
