@@ -208,7 +208,6 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   setButtonStyle(field = border, value = 0)
   let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
   var row: Positive = 1
-  var skill: Natural = 0
   for index, data in crewDataList.mpairs:
     if currentRow < startRow:
       currentRow.inc
@@ -221,7 +220,7 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     addButton(label = ($playerShip.crew[data.index].order).capitalizeAscii,
         tooltip = "The current order for the selected crew member. Press the mouse button to change it.",
         data = data.index, code = showGiveOrder, dialog = dialog)
-    if skill == 0:
+    if skillIndex == 0:
       addButton(label = getHighestSkill(memberIndex = data.index,
           dialog = dialog),
           tooltip = "The highest skill of the selected crew member",
@@ -230,10 +229,14 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       try:
         addButton(label = getSkillLevelName(skillLevel = getSkillLevel(
             member = playerShip.crew[data.index], skillIndex = findSkillIndex(
-            skillName = ""))), tooltip = "The level of " & "" &
+            skillName = crewSkillsList[skillIndex]))),
+            tooltip = "The level of " & crewSkillsList[skillIndex] &
             " of the selected crew member", data = data.index,
             code = showMemberInfo, dialog = dialog)
       except KeyError:
         dialog = setError(message = "Can't get the level of the skill.")
+    addProgressBar(tooltip = "The current health level of the selected crew member",
+        value = playerShip.crew[data.index].health, maxValue = SkillRange.high,
+        data = data.index, code = showMemberInfo, dialog = dialog)
   restoreButtonStyle()
   addPagination(page = currentPage, row = row)
