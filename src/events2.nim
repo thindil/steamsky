@@ -197,11 +197,12 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
             itemIndex.dec
             if itemIndex == 0 and getPrice(baseType = skyBases[skyMap[
                 playerShip.skyX][playerShip.skyY].baseIndex].baseType,
-                itemIndex = j) > 0:
+                itemIndex = j, quality = normal) > 0:
               newItemIndex = j
               break
           if getPrice(baseType = skyBases[skyMap[playerShip.skyX][
-              playerShip.skyY].baseIndex].baseType, itemIndex = newItemIndex) > 0:
+              playerShip.skyY].baseIndex].baseType, itemIndex = newItemIndex,
+              quality = normal) > 0:
             break
         eventsList.add(y = EventData(eType: doublePrice, skyX: playerShip.skyX,
             skyY: playerShip.skyY, time: getRandom(min = 1_440, max = 2_880),

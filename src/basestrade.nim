@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -118,9 +118,10 @@ proc buyRecipe*(recipeIndex: string) {.raises: [CantBuyError,
       raise newException(exceptn = NoTraderError, message = "")
     var cost: Natural = 0
     if getPrice(baseType = baseType, itemIndex = recipesList[
-        recipeIndex].resultIndex) > 0:
+        recipeIndex].resultIndex, quality = normal) > 0:
       cost = getPrice(baseType = baseType, itemIndex = recipesList[
-          recipeIndex].resultIndex) * recipesList[recipeIndex].difficulty * 10
+          recipeIndex].resultIndex, quality = normal) * recipesList[
+              recipeIndex].difficulty * 10
     else:
       cost = recipesList[recipeIndex].difficulty * 10
     cost = (cost.float * newGameSettings.pricesBonus).Natural
@@ -158,13 +159,13 @@ proc healCost*(cost, time: var Natural; memberIndex: int) {.raises: [KeyError],
       time = 5 * (100 - playerShip.crew[memberIndex].health)
       cost = (5 * (100 - playerShip.crew[memberIndex].health)) * getPrice(
           baseType = "0", itemIndex = findProtoItem(itemType = factionsList[
-          playerShip.crew[memberIndex].faction].healingTools))
+          playerShip.crew[memberIndex].faction].healingTools), quality = normal)
     else:
       for member in playerShip.crew:
         time += (5 * (100 - member.health))
         cost += ((5 * (100 - member.health)) * getPrice(baseType = "0",
             itemIndex = findProtoItem(itemType = factionsList[
-            member.faction].healingTools)))
+            member.faction].healingTools), quality = normal))
     cost = (cost.float * newGameSettings.pricesBonus).Natural
     if cost == 0:
       cost = 1

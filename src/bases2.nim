@@ -138,7 +138,7 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
           for j in 1 .. itemsList.len:
             itemIndex.dec
             if itemIndex <= 0 and getPrice(baseType = skyBases[skyMap[eventX][
-                eventY].baseIndex].baseType, itemIndex = j) > 0:
+                eventY].baseIndex].baseType, itemIndex = j, quality = normal) > 0:
               newItemIndex = j
               break setDoublePrice
       eventsList.add(y = EventData(eType: doublePrice, skyX: eventX,

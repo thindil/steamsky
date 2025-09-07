@@ -112,9 +112,10 @@ proc setRecipesTable(baseIndex: BasesRange; argc: cint; argv: cstringArray;
       return false
     try:
       cost = if getPrice(baseType = baseType, itemIndex = recipesList[
-          index].resultIndex) > 0:
+          index].resultIndex, quality = normal) > 0:
           getPrice(baseType = baseType, itemIndex = recipesList[
-              index].resultIndex) * recipesList[index].difficulty * 10
+              index].resultIndex, quality = normal) * recipesList[
+                  index].difficulty * 10
         else:
           recipesList[index].difficulty * 10
     except:
@@ -465,9 +466,11 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     try:
       cost = (if getPrice(baseType = skyBases[baseIndex].baseType,
-          itemIndex = recipesList[itemIndex].resultIndex) > 0: getPrice(
+          itemIndex = recipesList[itemIndex].resultIndex, quality = normal) >
+              0: getPrice(
           baseType = skyBases[baseIndex].baseType, itemIndex = recipesList[
-          itemIndex].resultIndex) * recipesList[itemIndex].difficulty *
+          itemIndex].resultIndex, quality = normal) * recipesList[
+              itemIndex].difficulty *
           10 else: recipesList[itemIndex].difficulty * 10)
     except:
       return showError(message = "Can't count the recipe cost")
@@ -644,8 +647,10 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       var cost: Natural = 0
       try:
         cost = (if getPrice(baseType = skyBases[baseIndex].baseType,
-            itemIndex = recipe.resultIndex) > 0: getPrice(baseType = skyBases[
-            baseIndex].baseType, itemIndex = recipe.resultIndex) *
+            itemIndex = recipe.resultIndex, quality = normal) > 0: getPrice(
+            baseType = skyBases[
+            baseIndex].baseType, itemIndex = recipe.resultIndex,
+            quality = normal) *
             recipe.difficulty * 10 else: recipe.difficulty * 10)
       except:
         return showError(message = "Can't get recipe cost.")

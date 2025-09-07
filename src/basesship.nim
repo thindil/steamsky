@@ -77,7 +77,7 @@ proc repairCost*(cost, time: var Natural; moduleIndex: int) {.raises: [
     protoIndex = findProtoItem(itemType = modulesList[playerShip.modules[
         moduleIndex].protoIndex].repairMaterial)
     cost = time * getPrice(baseType = skyBases[baseIndex].baseType,
-        itemIndex = protoIndex)
+        itemIndex = protoIndex, quality = normal)
   else:
     for module in playerShip.modules:
       if module.durability < module.maxDurability:
@@ -85,7 +85,8 @@ proc repairCost*(cost, time: var Natural; moduleIndex: int) {.raises: [
         protoIndex = findProtoItem(itemType = modulesList[
             module.protoIndex].repairMaterial)
         cost += ((module.maxDurability - module.durability) * getPrice(
-            baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex))
+            baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex,
+                quality = normal))
     if moduleIndex == -2:
       cost *= 2
       time = (time / 2).Natural
