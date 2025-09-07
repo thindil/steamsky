@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [11.5] - 2025-09-07
 
 ### Added
 - Information about a mission in the map's info when previewing available
