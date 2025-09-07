@@ -54,12 +54,12 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowTrade ?itemtype? ?searchstring?
   ## Itemtype is type of items to show, searchstring is string which is
   ## looking for in items names
-  var tradeFrame = mainPaned & ".tradeframe"
+  var tradeFrame: string = mainPaned & ".tradeframe"
   let
-    tradeCanvas = tradeFrame & ".canvas"
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
-  var label = tradeCanvas & ".trade.options.playerinfo.moneyinfo"
+    tradeCanvas: string = tradeFrame & ".canvas"
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+  var label: string = tradeCanvas & ".trade.options.playerinfo.moneyinfo"
   if tclEval2(script = "winfo exists " & label) == "0":
     tclEval(script = """
       ttk::frame .gameframe.paned.tradeframe
@@ -151,17 +151,17 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     showSkyMap(clear = true)
     return tclOk
   tclSetVar(varName = "gamestate", newValue = "trade")
-  let searchEntry = tradeCanvas & ".trade.options.search"
+  let searchEntry: string = tradeCanvas & ".trade.options.search"
   if argc < 3:
     tclEval(script = searchEntry & " delete 0 end")
   tclEval(script = closeButton & " configure -command {ShowSkyMap ShowTrade}")
   tclEval(script = gameHeader & ".morebutton configure -command {TradeMore}")
   tradeFrame = tradeCanvas & ".trade"
-  let comboBox = tradeFrame & ".options.type"
+  let comboBox: string = tradeFrame & ".options.type"
   clearTable(table = tradeTable)
   var
-    baseType: string
-    baseCargo: seq[BaseCargo]
+    baseType: string = ""
+    baseCargo: seq[BaseCargo] = @[]
   if baseIndex > 0:
     baseType = skyBases[baseIndex].baseType
     baseCargo = skyBases[baseIndex].cargo
@@ -180,8 +180,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     if i == -1:
       break
     let
-      protoIndex = playerShip.cargo[i].protoIndex
-      itemType = try:
+      protoIndex: Natural = playerShip.cargo[i].protoIndex
+      itemType: string = try:
           if itemsList[protoIndex].showType.len == 0:
             itemsList[protoIndex].itemType
           else:
@@ -195,33 +195,33 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't add item type.")
   var
-    currentItemIndex = 0
-    indexesList: seq[Natural]
-    currentRow = 1
+    currentItemIndex: Natural = 0
+    indexesList: seq[Natural] = @[]
+    currentRow: Positive = 1
   let
-    page = try:
+    page: Positive = try:
         (if argc == 4: ($argv[3]).parseInt else: 1)
       except:
         return showError(message = "Can't get page.")
-    startRow = ((page - 1) * gameSettings.listsLimit) + 1
+    startRow: Positive = ((page - 1) * gameSettings.listsLimit) + 1
   for i in itemsIndexes:
     currentItemIndex.inc
     if i == -1:
       break
     try:
       if getPrice(baseType = baseType, itemIndex = playerShip.cargo[
-          i].protoIndex) == 0:
+          i].protoIndex, quality = normal) == 0:
         continue
     except:
       return showError(message = "Can't get price.")
     let
-      protoIndex = playerShip.cargo[i].protoIndex
-      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+      protoIndex: Natural = playerShip.cargo[i].protoIndex
+      baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
           durability = playerShip.cargo[i].durability,
           quality = playerShip.cargo[i].quality)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
-    let itemType = try:
+    let itemType: string = try:
           if itemsList[protoIndex].showType.len == 0:
             itemsList[protoIndex].itemType
           else:
@@ -230,7 +230,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
           return showError(message = "Can't get item type2.")
     if argc > 1 and argv[1] != "All" and itemType != $argv[1]:
       continue
-    let itemName = getItemName(item = playerShip.cargo[i], damageInfo = false,
+    let itemName: string = getItemName(item = playerShip.cargo[i], damageInfo = false,
         toLower = false)
     if argc == 3 and itemName.toLowerAscii.find(sub = ($argv[
         2]).toLowerAscii) == -1:
@@ -238,10 +238,10 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     if currentRow < startRow:
       currentRow.inc
       continue
-    var price = 0
+    var price: int = 0
     if baseCargoIndex == -1:
       try:
-        price = getPrice(baseType = baseType, itemIndex = protoIndex)
+        price = getPrice(baseType = baseType, itemIndex = protoIndex, quality = normal)
       except:
         return showError(message = "Can't get price2.")
     else:
@@ -253,8 +253,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       if eventsList[eventIndex].eType == doublePrice and eventsList[
           eventIndex].itemIndex == protoIndex:
         price = price * 2
-    let profit = price - playerShip.cargo[i].price
-    var baseAmount = 0
+    let profit: int = price - playerShip.cargo[i].price
+    var baseAmount: Natural = 0
     if baseIndex > 0:
       try:
         if baseCargoIndex > -1 and isBuyable(baseType = baseType,
@@ -271,7 +271,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = tradeTable, text = itemType,
         tooltip = "Show available options for item",
         command = "ShowTradeItemInfo " & $(i + 1), column = 2)
-    let itemDurability = (if playerShip.cargo[i].durability <
+    let itemDurability: string = (if playerShip.cargo[i].durability <
         100: getItemDamage(itemDurability = playerShip.cargo[
         i].durability) else: "Unused")
     addProgressbar(table = tradeTable, value = playerShip.cargo[i].durability,
@@ -308,8 +308,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   currentItemIndex = playerShip.cargo.len + 1
   for i in currentItemIndex .. itemsIndexes.high:
     let
-      protoIndex = baseCargo[itemsIndexes[i]].protoIndex
-      itemType = try:
+      protoIndex: Natural = baseCargo[itemsIndexes[i]].protoIndex
+      itemType: string = try:
           if itemsList[protoIndex].showType.len == 0:
             itemsList[protoIndex].itemType
           else:
@@ -596,7 +596,7 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       price = baseCargo[baseCargoIndex].price
     else:
       price = try:
-          getPrice(baseType = baseType, itemIndex = protoIndex)
+          getPrice(baseType = baseType, itemIndex = protoIndex, quality = item.quality)
         except:
           return showError(message = "Can't get price.")
     if eventIndex > -1:
