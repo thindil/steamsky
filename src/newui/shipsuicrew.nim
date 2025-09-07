@@ -92,9 +92,8 @@ proc showGiveOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
   discard
 
 proc getHighestSkill(memberIndex: Natural;
-    dialog: var GameDialog): string {.raises: [],
-
-tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+    dialog: var GameDialog): string {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect], contractual.} =
   ## Get the name of the highest skill of the selected crew member
   ##
   ## * memberIndex - the crew index of the member which the highest skill will
