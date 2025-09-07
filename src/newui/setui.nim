@@ -571,9 +571,9 @@ proc setRecipesList*(dialog: var GameDialog): seq[BaseItemData] {.raises: [],
           baseIndex].baseType].recipes and recipe.reputation <= skyBases[
           baseIndex].reputation.level:
         cost = if getPrice(baseType = baseType, itemIndex = recipesList[
-            index].resultIndex) > 0: getPrice(baseType = baseType,
-            itemIndex = recipesList[index].resultIndex) * recipesList[
-            index].difficulty * 10
+            index].resultIndex, quality = normal) > 0: getPrice(
+            baseType = baseType, itemIndex = recipesList[index].resultIndex,
+            quality = normal) * recipesList[index].difficulty * 10
           else:
             recipesList[index].difficulty * 10
         countCost(cost = cost)
@@ -843,7 +843,7 @@ var
   crewDataList*: seq[CrewData] = @[]
     ## The list of data related to the player's ship's crew members
 
-proc refreshCrewList*() {.raises: [], tags: [],  contractual.} =
+proc refreshCrewList*() {.raises: [], tags: [], contractual.} =
   ## Set the list of crew members in the player's ship
   crewDataList = @[]
   for index in playerShip.crew.low..playerShip.crew.high:

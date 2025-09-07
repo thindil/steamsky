@@ -257,7 +257,7 @@ proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
         itemIndex].reputation:
       return false
     if checkFlag and "blackmarket" in basesTypesList[baseType].flags and
-        getPrice(baseType = baseType, itemIndex = itemIndex) > 0:
+        getPrice(baseType = baseType, itemIndex = itemIndex, quality = normal) > 0:
       return true
     if not basesTypesList[baseType].trades.hasKey(key = itemIndex):
       return false

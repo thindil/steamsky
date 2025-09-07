@@ -159,9 +159,9 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
     inventory.add(y = itemIndex)
     equipment[equipIndex] = inventory.high
     price += getPrice(baseType = skyBases[baseIndex].baseType,
-        itemIndex = itemIndex)
+        itemIndex = itemIndex, quality = normal)
     payment += (getPrice(baseType = skyBases[baseIndex].baseType,
-        itemIndex = itemIndex) / 10).int
+        itemIndex = itemIndex, quality = normal) / 10).int
 
   if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30:
     return

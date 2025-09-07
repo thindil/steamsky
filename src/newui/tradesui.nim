@@ -161,7 +161,8 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
       price = baseCargo[baseCargoIndex].price
     else:
       price = try:
-          getPrice(baseType = baseType, itemIndex = protoIndex)
+          getPrice(baseType = baseType, itemIndex = protoIndex,
+              quality = item.quality)
         except:
           dialog = setError(message = "Can't get price.")
           return
@@ -436,7 +437,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         break
       try:
         if getPrice(baseType = baseType, itemIndex = playerShip.cargo[
-            i].protoIndex) == 0:
+            i].protoIndex, quality = normal) == 0:
           continue
       except:
         dialog = setError(message = "Can't get price.")
@@ -469,7 +470,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       var price = 0
       if baseCargoIndex == -1:
         try:
-          price = getPrice(baseType = baseType, itemIndex = protoIndex)
+          price = getPrice(baseType = baseType, itemIndex = protoIndex,
+              quality = playerShip.cargo[i].quality)
         except:
           dialog = setError(message = "Can't get price2.")
           return
@@ -510,7 +512,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = $price, tooltip = "Show available options of item.",
         data = index, code = showItemInfo, dialog = dialog)
       addButton(label = $profit, tooltip = "Show available options of item.",
-          data = index, code = showItemInfo, dialog = dialog, color = (if profit >
+          data = index, code = showItemInfo, dialog = dialog, color = (
+          if profit >
           0: greenColor elif profit < 0: redColor else: tableTextColor))
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       try:
