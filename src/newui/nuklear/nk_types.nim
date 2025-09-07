@@ -534,7 +534,7 @@ type
     w*, h*: cushort
     x*, y*: cshort
     color*: nk_color
-  nk_command_text* {.importc: "struct nk_command_text".} = object
+  nk_command_text* {.importc: "struct nk_command_text", completeStruct.} = object
     ## Internal Nuklear type
     x*, y*: cshort
     w*, h*: cushort
@@ -543,6 +543,7 @@ type
     height*: cfloat
     length*: cint
     `string`*: cstring
+    header*: nk_command
   nk_row_layout* {.importc: "struct nk_row_layout", completeStruct.} = object
     ## Internal Nuklear type
     index*, columns*, tree_depth*: cint
@@ -568,7 +569,7 @@ type
     slot*: cint
     x, y, w, h: cfloat
     slots: pointer
-  nk_panel* {.importc: "struct nk_panel", nodecl.} = object
+  nk_panel* {.importc: "struct nk_panel", completeStruct.} = object
     ## Internal Nuklear type
     `type`*: PanelType
     clip*, bounds*: nk_rect
