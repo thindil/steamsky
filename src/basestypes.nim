@@ -197,7 +197,7 @@ proc loadBasesTypes*(fileName: string) {.raises: [DataLoadingError],
       basesTypesList[baseTypeIndex] = baseType
 
 proc getPrice*(baseType: string; itemIndex: Positive;
-    quality: ObjectQuality = normal): Natural {.raises: [KeyError], tags: [],
+    quality: ObjectQuality): Natural {.raises: [KeyError], tags: [],
     contractual.} =
   ## Get the price of the selected item in the selected type of bases
   ##
