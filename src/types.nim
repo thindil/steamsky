@@ -121,7 +121,7 @@ type
 
   ObjectQuality* = enum
     ## The quality of an item
-    poor, low, normal, good, excellent
+    poor, low, normal, good, excellent, any
 
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
