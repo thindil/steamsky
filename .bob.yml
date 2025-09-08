@@ -1,7 +1,0 @@
-version: 2.0
-- command:
-   name: push
-   execute:
-      - fossil push
-      - fossil git export --force
-   description: Update remote Fossil repository and its Git mirror
