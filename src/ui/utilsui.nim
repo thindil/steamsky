@@ -272,7 +272,7 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ShowLoadGame")
   of "sethomebase":
     let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex)
+        protoIndex = moneyIndex, itemQuality = normal)
     if moneyIndex2 == -1:
       showMessage(text = "You don't have any " & moneyName &
           " for change ship home base.", title = "No money")
