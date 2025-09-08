@@ -36,7 +36,6 @@ proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
   ## * durability   - the durability of the item to find. Can be empty
   ## * quality      - the quality of the item to find. Can be empty
   ## * itemQuality  - the quality of the item to find (good, normal, poor, etc).
-  ##                  Can be empty
   ##
   ## Returns the index of the item in the selected inventory which meet searching
   ## criteria or -1 if item not found.
@@ -117,9 +116,9 @@ proc takeOffItem*(memberIndex, itemIndex: Natural) {.raises: [],
 
 proc updateInventory*(memberIndex: Natural; amount: int;
     protoIndex: Natural = 0; durability: ItemsDurability = 0;
-    inventoryIndex: int = -1; price: Natural = 0;
-    ship: var ShipRecord) {.raises: [CrewNoSpaceError, KeyError],
-    tags: [], contractual.} =
+    inventoryIndex: int = -1; price: Natural = 0; ship: var ShipRecord;
+    quality: ObjectQuality) {.raises: [CrewNoSpaceError, KeyError], tags: [],
+    contractual.} =
   ## Update the inventory of the selected crew member.
   ##
   ## * memberIndex    - the index of the crew member which inventory will be updated
@@ -133,6 +132,7 @@ proc updateInventory*(memberIndex: Natural; amount: int;
   ##                    must be set then. Default value is 0.
   ## * price          - the price of the item to update. Default value is 0.
   ## * ship           - the ship in which the crew member inventory will be updated
+  ## * quality        - the quality of the item to update (good, normal, poor, etc).
   ##
   ## Returns the updated ship argument
   require:
@@ -142,10 +142,11 @@ proc updateInventory*(memberIndex: Natural; amount: int;
     if inventoryIndex == -1:
       if durability > 0:
         itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
-            protoIndex = protoIndex, durability = durability)
+            protoIndex = protoIndex, durability = durability,
+                itemQuality = quality)
       else:
         itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
-            protoIndex = protoIndex)
+            protoIndex = protoIndex, itemQuality = quality)
     else:
       itemIndex = inventoryIndex
     if amount > 0:
