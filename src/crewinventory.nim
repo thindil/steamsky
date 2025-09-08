@@ -35,7 +35,7 @@ proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
   ##                  empty. If empty, protoIndex parameter must be set
   ## * durability   - the durability of the item to find. Can be empty
   ## * quality      - the quality of the item to find. Can be empty
-  ## * objectQualty - the quality of the item to find (good, normal, poor, etc).
+  ## * itemQuality  - the quality of the item to find (good, normal, poor, etc).
   ##                  Can be empty
   ##
   ## Returns the index of the item in the selected inventory which meet searching
