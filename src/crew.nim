@@ -29,7 +29,7 @@ proc dailyPayment*() {.raises: [KeyError, Exception], tags: [
   ## Pay daily payments to the player's ship crew members and update the lenght
   ## of their contracts
   let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex)
+      protoIndex = moneyIndex, itemQuality = any)
   for index, member in playerShip.crew:
     if member.payment[1] > 0:
       var haveMoney: bool = true
@@ -243,7 +243,7 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
         if healAmount > 0:
           healAmount *= (-1)
           toolIndex = findItem(inventory = playerShip.cargo,
-              itemType = faction.healingTools)
+              itemType = faction.healingTools, itemQuality = any)
           if toolIndex > -1:
             if playerShip.cargo[toolIndex].amount < healAmount.abs:
               healAmount = playerShip.cargo[toolIndex].amount
@@ -254,7 +254,8 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
                 toolIndex].quality)
           else:
             toolIndex = findItem(inventory = playerShip.crew[
-                memberIndex].inventory, itemType = faction.healingTools)
+                memberIndex].inventory, itemType = faction.healingTools,
+                itemQuality = any)
             if toolIndex > -1:
               if playerShip.crew[memberIndex].inventory[toolIndex].amount <
                   healAmount.abs:
@@ -263,7 +264,9 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
               else:
                 healAmount = healAmount.abs
               updateInventory(memberIndex = memberIndex, amount = -(healAmount),
-                  inventoryIndex = toolIndex, ship = playerShip)
+                  inventoryIndex = toolIndex, ship = playerShip,
+                      quality = playerShip.crew[memberIndex].inventory[
+                      toolIndex].quality)
         if healAmount > 0:
           for index, member in playerShip.crew.mpairs:
             if member.health < 100 and index != memberIndex:
@@ -293,10 +296,11 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
         healAmount = 0
         var faction: FactionData = factionsList[member.faction]
         toolIndex = findItem(inventory = playerShip.cargo,
-            itemType = faction.healingTools)
+            itemType = faction.healingTools, itemQuality = any)
         if toolIndex == -1:
           toolIndex = findItem(inventory = playerShip.crew[
-              memberIndex].inventory, itemType = faction.healingTools)
+              memberIndex].inventory, itemType = faction.healingTools,
+              itemQuality = any)
           if toolIndex == -1:
             healAmount = -1
         break
@@ -377,7 +381,7 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
   ## consumed
   var
     itemIndex: int = findItem(inventory = playerShip.cargo,
-        itemType = itemType)
+        itemType = itemType, itemQuality = any)
     consumeValue: Natural = 0
   if itemIndex > -1:
     consumeValue = itemsList[playerShip.cargo[itemIndex].protoIndex].value[1]
@@ -390,7 +394,7 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
         itemIndex].quality)
     return consumeValue
   itemIndex = findItem(inventory = playerShip.crew[memberIndex].inventory,
-      itemType = itemType)
+      itemType = itemType, itemQuality = any)
   if itemIndex > -1:
     consumeValue = itemsList[playerShip.crew[memberIndex].inventory[
         itemIndex].protoIndex].value[1]
@@ -401,7 +405,8 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
           value = itemsList[playerShip.crew[memberIndex].inventory[
               itemIndex].protoIndex].value[2])
     updateInventory(memberIndex = memberIndex, amount = -1,
-        inventoryIndex = itemIndex, ship = playerShip)
+        inventoryIndex = itemIndex, ship = playerShip, quality = playerShip.crew[memberIndex].inventory[
+              itemIndex].quality)
     return consumeValue
   return 0
 
@@ -484,7 +489,8 @@ proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
             durability = member.inventory[member.equipment[tool]].durability,
             quality = member.inventory[member.equipment[tool]].quality)
         updateInventory(memberIndex = memberIndex, amount = -1,
-            inventoryIndex = member.equipment[tool], ship = playerShip)
+            inventoryIndex = member.equipment[tool], ship = playerShip,
+                quality = member.inventory[member.equipment[tool]].quality)
         member.equipment[tool] = -1
       addMessage(message = member.name &
           " is too tired to work, they're going to rest.",
