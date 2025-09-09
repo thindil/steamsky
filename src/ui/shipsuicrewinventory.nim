@@ -23,7 +23,7 @@ import contracts, nimalyzer
 import ../[config, crewinventory, game, items, shipscargo, shipscrew, tk, types]
 import coreui, dialogs, errordialog, table, utilsui2
 
-{.push ruleOff:"varDeclared".}
+{.push ruleOff: "varDeclared".}
 var
   inventoryTable: TableWidget
     ## The UI table with the list of items in the crew member's inventory
@@ -31,7 +31,7 @@ var
     ## The index of the selected crew member
   inventoryIndexes: seq[Natural] = @[]
     ## The list of indexes of items in the crew member's inventory
-{.pop ruleOn:"varDeclared".}
+{.pop ruleOn: "varDeclared".}
 
 proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -410,7 +410,8 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   for item in localInventory:
     inventoryIndexes.add(y = item.id)
   return updateInventoryCommand(clientData = clientData, interp = interp,
-      argc = 2, argv = @["UpdateInventory", ($(memberIndex + 1))].allocCStringArray)
+      argc = 2, argv = @["UpdateInventory", ($(memberIndex +
+          1))].allocCStringArray)
 
 proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -503,7 +504,8 @@ proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
         getItemName(item = playerShip.crew[memberIndex].inventory[itemIndex]) &
         " to ship cargo", titleWidth = 400, columns = 2,
         parentName = ".memberdialog")
-    maxAmount: Natural = playerShip.crew[memberIndex].inventory[itemIndex].amount
+    maxAmount: Natural = playerShip.crew[memberIndex].inventory[
+        itemIndex].amount
     amountBox: string = itemDialog & ".amount"
   var button: string = itemDialog & ".movebutton"
   tclEval(script = "ttk::button " & button & " -text Move -command {MoveItem " &
@@ -582,15 +584,20 @@ proc moveItem(itemIndex: Natural; amount: Positive) {.raises: [],
       quality = playerShip.crew[memberIndex].inventory[itemIndex].quality)
   try:
     updateInventory(memberIndex = memberIndex, amount = -amount,
-        inventoryIndex = itemIndex, ship = playerShip)
+        inventoryIndex = itemIndex, ship = playerShip,
+        quality = playerShip.crew[memberIndex].inventory[itemIndex].quality)
   except:
     showError(message = "Can't update the crew member inventory.")
     return
   if (playerShip.crew[memberIndex].order == clean and findItem(
       inventory = playerShip.crew[memberIndex].inventory,
-      itemType = cleaningTools) == -1) or (playerShip.crew[memberIndex].order in
+      itemType = cleaningTools, itemQuality = playerShip.crew[
+          memberIndex].inventory[itemIndex].quality) == -1) or (playerShip.crew[
+          memberIndex].order in
       {upgrading, repair} and findItem(inventory = playerShip.crew[
-      memberIndex].inventory, itemType = repairTools) == -1):
+      memberIndex].inventory, itemType = repairTools,
+      itemQuality = playerShip.crew[memberIndex].inventory[
+          itemIndex].quality) == -1):
     try:
       giveOrders(ship = playerShip, memberIndex = memberIndex,
           givenOrder = rest)

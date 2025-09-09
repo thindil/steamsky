@@ -147,7 +147,8 @@ proc showModuleDamage(currentRow: var Natural; module: ModuleData; moduleFrame,
     statusTooltip.add(y = " (max upgrade)")
   let progressBar: string = moduleFrame & ".damagebar"
   tclEval(script = "ttk::progressbar " & progressBar &
-      " -takefocus 0 -orient horizontal -maximum 1.0 -value {" & $damagePercent & "}" & progressBarStyle)
+      " -takefocus 0 -orient horizontal -maximum 1.0 -value {" &
+      $damagePercent & "}" & progressBarStyle)
   tclEval(script = "tooltip::tooltip " & progressBar & " \"" & statusTooltip & "\"")
   tclEval(script = "grid " & progressBar & " -row " & $currentRow & " -column 1 -sticky we")
   var infoButton: string = moduleFrame & ".repairbutton"
@@ -307,7 +308,8 @@ proc showModuleUpgrade(currentRow: var Natural; height: var Positive;
         " -style Horizontal.TProgressbar"
     progressBar2: string = moduleFrame & ".upgradebar"
   tclEval(script = "ttk::progressbar " & progressBar2 &
-      " -takefocus 0 -orient horizontal -maximum 1.0 -value {" & $(upgradePercent.float) &
+      " -takefocus 0 -orient horizontal -maximum 1.0 -value {" & $(
+          upgradePercent.float) &
       "}" & progressBarStyle2)
   tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" & moduleInfo & "\"")
   label = addLabel(name = moduleFrame & ".upgradelbl",
@@ -501,7 +503,8 @@ proc showCabinInfo(currentRow: var Natural; module: ModuleData; label,
     progressBarStyle = ""
   var progressBar2: string = moduleFrame & ".cleanbar"
   tclEval(script = "ttk::progressbar " & progressBar2 &
-      " -takefocus 0 -orient horizontal -maximum 1.0 -value {" & $(1.0 - damagePercent2) &
+      " -takefocus 0 -orient horizontal -maximum 1.0 -value {" & $(1.0 -
+          damagePercent2) &
       "}" & progressBarStyle)
   tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" &
       newStatusTooltip & "\"")
@@ -650,7 +653,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           tclEval(script = moduleText & " insert end { or }")
         tclEval(script = moduleText & " insert end {" & item.name & "}" & (
             if findItem(inventory = playerShip.cargo,
-                itemType = item.itemType) ==
+                itemType = item.itemType, itemQuality = any) ==
             -1: " [list red]" else: " [list gold]"))
         mAmount.inc
     except:
@@ -839,7 +842,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
             if mAmount > 0:
               tclEval(script = ammoText & " insert end { or } [list gold]")
             tclEval(script = ammoText & " insert end {" & item.name & "}" & (
-                if findItem(inventory = playerShip.cargo, protoIndex = index) >
+                if findItem(inventory = playerShip.cargo, protoIndex = index,
+                    itemQuality = any) >
                 -1: " [list gold]" else: " [list red]"))
             mAmount.inc
         except:
@@ -956,7 +960,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     for member in playerShip.crew:
       try:
         if member.health < 100 and findItem(inventory = playerShip.cargo,
-            itemType = factionsList[playerShip.crew[0].faction].healingTools) > -1:
+            itemType = factionsList[playerShip.crew[0].faction].healingTools,
+                itemQuality = any) > -1:
           hasHealingTool = true
           break
       except:

@@ -290,7 +290,8 @@ proc checkRecipe*(recipeIndex: string): Positive {.raises: [
           message = recipeName)
     var haveTool: bool = false
     if recipe.tool != "None" and findItem(inventory = playerShip.cargo,
-        itemType = recipe.tool, quality = recipe.toolQuality) > 0:
+        itemType = recipe.tool, quality = recipe.toolQuality,
+        itemQuality = any) > 0:
       haveTool = true
       if not haveTool:
         raise newException(exceptn = CraftingNoToolsError, message = recipeName)
@@ -321,7 +322,8 @@ proc resetOrder(module: var ModuleData; moduleOwner, toolIndex,
         toolIndex].durability, quality = playerShip.crew[
         crafterIndex].inventory[toolIndex].quality)
     updateInventory(memberIndex = crafterIndex, amount = -1,
-        inventoryIndex = toolIndex, ship = playerShip)
+        inventoryIndex = toolIndex, ship = playerShip,
+        quality = playerShip.crew[crafterIndex].inventory[toolIndex].quality)
   var haveWorker: bool = false
   for i in module.owner.low..module.owner.high:
     if module.owner[i] == moduleOwner or moduleOwner == -1:
@@ -571,7 +573,7 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
         var craftingMaterial: int = -1
         for materialIndex in materialIndexes.mitems:
           craftingMaterial = findItem(inventory = playerShip.cargo,
-              itemType = itemsList[materialIndex].itemType)
+              itemType = itemsList[materialIndex].itemType, itemQuality = any)
           if craftingMaterial == -1:
             addMessage(message = "You don't have the crafting materials for " &
                 recipeName & ".", mType = craftMessage, color = red)
