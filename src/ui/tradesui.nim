@@ -334,8 +334,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't check if item is buyable2.")
     let
-      protoIndex = baseCargo[itemsIndexes[i]].protoIndex
-      itemType = try:
+      protoIndex: Positive = baseCargo[itemsIndexes[i]].protoIndex
+      itemType: string = try:
           if itemsList[protoIndex].showType.len == 0:
             itemsList[protoIndex].itemType
           else:
@@ -344,7 +344,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
           return showError(message = "Can't get item type4.")
     if argc > 1 and argv[1] != "All" and itemType != $argv[1]:
       continue
-    let itemName = try:
+    let itemName: string = try:
           itemsList[protoIndex].name
         except:
           return showError(message = "Can't get item name2.")
@@ -354,7 +354,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     if currentRow < startRow:
       currentRow.inc
       continue
-    var price = if baseIndex > 0:
+    var price: Natural = if baseIndex > 0:
         skyBases[baseIndex].cargo[itemsIndexes[i]].price
       else:
         traderCargo[itemsIndexes[i]].price
@@ -362,7 +362,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       if eventsList[eventIndex].eType == doublePrice and eventsList[
           eventIndex].itemIndex == protoIndex:
         price = price * 2
-    let baseAmount = (if baseIndex == 0: traderCargo[itemsIndexes[
+    let baseAmount: Natural = (if baseIndex == 0: traderCargo[itemsIndexes[
         i]].amount else: skyBases[baseIndex].cargo[itemsIndexes[i]].amount)
     addButton(table = tradeTable, text = itemName,
         tooltip = "Show available options for item",
@@ -370,7 +370,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = tradeTable, text = itemType,
         tooltip = "Show available options for item",
         command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 2)
-    let itemDurability = (if baseCargo[itemsIndexes[i]].durability <
+    let itemDurability: string = (if baseCargo[itemsIndexes[i]].durability <
         100: getItemDamage(itemDurability = baseCargo[itemsIndexes[
         i]].durability) else: "Unused")
     addProgressbar(table = tradeTable, value = baseCargo[itemsIndexes[
@@ -401,7 +401,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = tradeTable, text = $baseAmount,
         tooltip = "Show available options for item",
         command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 9, newRow = true)
-  let arguments = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
+  let arguments: string = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
       "}" elif argc == 2: $argv[1] & " {}" else: "All {}")
   if page > 1:
     if tradeTable.row < gameSettings.listsLimit + 1:
@@ -419,9 +419,9 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = comboBox & " configure -values [list " & itemsTypes & "]")
   if argc == 1:
     tclEval(script = comboBox & " current 0")
-  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex, itemQuality = any)
-  var tradeInfo = ""
+  var tradeInfo: string = ""
   if moneyIndex2 > -1:
     tradeInfo = "You have"
     label = tradeFrame & ".options.playerinfo.moneyinfo2"
@@ -434,7 +434,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid remove " & label)
   label = tradeFrame & ".options.playerinfo.moneyinfo"
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
-  var freeSpace = try:
+  var freeSpace: int = try:
       freeCargo(amount = 0)
     except:
       return showError(message = "Can't get free space.")
@@ -509,11 +509,11 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## SortTradeItems x
   ## X is X axis coordinate where the player clicked the mouse button
   let
-    xPos = try:
+    xPos: int = try:
         ($argv[1]).parseInt
       except:
         return showError(message = "Can't get X position on table.")
-    column = (if xPos > -1: getColumnNumber(table = tradeTable,
+    column: Natural = (if xPos > -1: getColumnNumber(table = tradeTable,
         xPosition = xPos) else: itemsSortOrder.ord + 1)
   case column
   of 1:
@@ -565,18 +565,18 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     discard
   if itemsSortOrder == defaultItemsSortOrder:
     return tclOk
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   var
-    baseCargo: seq[BaseCargo]
-    baseType: string
+    baseCargo: seq[BaseCargo] = @[]
+    baseType: string = ""
   if baseIndex > 0:
     baseCargo = skyBases[baseIndex].cargo
     baseType = skyBases[baseIndex].baseType
   else:
     baseCargo = traderCargo
     baseType = "0"
-  var indexesList: seq[Natural]
-  let eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+  var indexesList: seq[Natural] = @[]
+  let eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
   type LocalItemData = object
     name, iType: string
     damage: float
@@ -584,13 +584,13 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     profit: int
     weight: Positive = 1
     quality: ObjectQuality
-  var localItems: seq[LocalItemData]
+  var localItems: seq[LocalItemData] = @[]
   for index, item in playerShip.cargo:
     let
-      protoIndex = item.protoIndex
-      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+      protoIndex: Positive = item.protoIndex
+      baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
           durability = item.durability, quality = item.quality)
-    var price: int
+    var price: int = 0
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
       price = baseCargo[baseCargoIndex].price
@@ -727,8 +727,8 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   for index, item in baseCargo:
     if index in indexesList:
       continue
-    let protoIndex = item.protoIndex
-    var price = item.price
+    let protoIndex: Positive = item.protoIndex
+    var price: Natural = item.price
     if eventIndex > -1:
       if eventsList[eventIndex].eType == doublePrice and eventsList[
           eventIndex].itemIndex == protoIndex:
@@ -745,12 +745,12 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   localItems.sort(cmp = sortItems)
   for item in localItems:
     itemsIndexes.add(y = item.id)
-  let typeBox = mainPaned & ".tradeframe.canvas.trade.options.type"
+  let typeBox: string = mainPaned & ".tradeframe.canvas.trade.options.type"
   return showTradeCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowTrade", tclEval2(script = typeBox &
       " get")].allocCStringArray)
 
-var itemIndex = -1
+var itemIndex: int = -1
 
 proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -772,8 +772,8 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     baseCargoIndex = itemIndex.abs
   else:
     cargoIndex = itemIndex
-  var protoIndex = 0
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var protoIndex: Natural = 0
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if cargoIndex > -1:
     protoIndex = playerShip.cargo[cargoIndex].protoIndex
     if baseCargoIndex == -1:
@@ -783,7 +783,7 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     protoIndex = (if baseIndex == 0: traderCargo[
         baseCargoIndex].protoIndex else: skyBases[baseIndex].cargo[
         baseCargoIndex].protoIndex)
-  let trader = (if baseIndex > 0: "base" else: "ship")
+  let trader: string = (if baseIndex > 0: "base" else: "ship")
   try:
     if argc > 2:
       if argv[1] == "buy":
@@ -791,7 +791,7 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
       else:
         sellItems(itemIndex = cargoIndex, amount = $argv[2])
     else:
-      let amountBox = ".itemdialog.amount"
+      const amountBox: string = ".itemdialog.amount"
       if argv[1] == "buy":
         buyItems(baseItemIndex = baseCargoIndex, amount = tclEval2(
             script = amountBox & " get"))
@@ -836,7 +836,7 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't trade item.")
   updateHeader()
   updateMessages()
-  let typeBox = ".gameframe.paned.tradeframe.canvas.trade.options.type"
+  const typeBox: string = ".gameframe.paned.tradeframe.canvas.trade.options.type"
   return showTradeCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowTrade", tclEval2(script = typeBox &
       " get")].allocCStringArray)
@@ -870,7 +870,7 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       getTradeData(iIndex = itemIndex)
     except:
       return showError(message = "Can't get the trade's data.")
-  var itemInfo = ""
+  var itemInfo: string = ""
   try:
     if itemsList[protoIndex].itemType == weaponType:
       itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[protoIndex].value[
@@ -974,7 +974,7 @@ proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
             itemIndex = itemIndex, maxAmount = ($argv[2]).parseInt, cost = (
                 $argv[3]).parseInt)
       else:
-        let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+        let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
         if baseIndex > 0:
           showManipulateItem(title = "Buy " & itemsList[skyBases[
               baseIndex].cargo[itemIndex.abs].protoIndex].name,
@@ -1005,8 +1005,8 @@ proc searchTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SearchTrade
   let
-    typeBox = mainPaned & ".tradeframe.canvas.trade.options.type"
-    searchText = $argv[1]
+    typeBox: string = mainPaned & ".tradeframe.canvas.trade.options.type"
+    searchText: string = $argv[1]
   if searchText.len == 0:
     return showTradeCommand(clientData = clientData, interp = interp, argc = 2,
         argv = @["ShowTrade", tclEval2(script = typeBox &
@@ -1031,8 +1031,8 @@ proc tradeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   ## TradeMore
   ## If th argument is set to show, show the options, otherwise hide them.
   let
-    tradeFrame = mainPaned & ".tradeframe"
-    button = gameHeader & ".morebutton"
+    tradeFrame: string = mainPaned & ".tradeframe"
+    button: string = gameHeader & ".morebutton"
   if tclEval2(script = "winfo ismapped " & tradeFrame &
       ".canvas.trade.options.typelabel") == "1":
     tclEval(script = "grid remove " & tradeFrame & ".canvas.trade.options.typelabel")
