@@ -164,7 +164,8 @@ proc updateInventory*(memberIndex: Natural; amount: int;
     if itemIndex == -1:
       ship.crew[memberIndex].inventory.add(y = InventoryData(
           protoIndex: protoIndex, amount: amount, name: itemsList[
-          protoIndex].name, durability: durability, price: price))
+          protoIndex].name, durability: durability, price: price,
+          quality: (if quality == any: normal else: quality)))
     else:
       let newAmount: Natural = ship.crew[memberIndex].inventory[
           itemIndex].amount + amount
@@ -200,7 +201,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     damageChance += (damageChance.float * 0.4).ceil.int
   of low:
     damageChance += (damageChance.float * 0.2).ceil.int
-  of normal:
+  of normal, any:
     discard
   of good:
     damageChance -= (damageChance.float * 0.2).ceil.int
@@ -226,7 +227,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
           quality = normal)
     else:
       updateInventory(memberIndex = memberIndex, amount = -1,
-          inventoryIndex = itemIndex, ship = ship)
+          inventoryIndex = itemIndex, ship = ship, quality = item.quality)
     return
   inventory[itemIndex] = item
   var i: int = 0
@@ -241,9 +242,9 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
               quality = normal)
         else:
           updateInventory(memberIndex = memberIndex, amount = 0 - inventory[
-              j].amount, inventoryIndex = j, ship = ship)
+              j].amount, inventoryIndex = j, ship = ship, quality = item.quality)
           updateInventory(memberIndex = memberIndex, amount = inventory[
-              j].amount, inventoryIndex = i, ship = ship)
+              j].amount, inventoryIndex = i, ship = ship, quality = item.quality)
         i.dec
         break
     i.inc
