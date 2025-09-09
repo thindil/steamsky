@@ -31,7 +31,7 @@ proc payForDock*() {.raises: [KeyError, ReputationError, NoFreeSpaceError],
   if getBasePopulation(baseIndex = baseIndex) == empty:
     return
   let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex)
+      protoIndex = moneyIndex, itemQuality = any)
   if moneyIndex2 == -1:
     gainRep(baseIndex = baseIndex, points = -10)
     addMessage(message = "You don't have " & moneyName &

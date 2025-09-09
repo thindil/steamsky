@@ -220,7 +220,7 @@ proc getPrice*(baseType: string; itemIndex: Positive;
         result = (price.float * 0.5).ceil.Natural
       of low:
         result = (price.float * 0.75).ceil.Natural
-      of normal:
+      of normal, any:
         result = price
       of good:
         result = (price.float * 1.5).floor.Natural

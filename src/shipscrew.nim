@@ -244,7 +244,8 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
           memberIndex].inventory[toolsIndex].durability, quality = ship.crew[
           memberIndex].inventory[toolsIndex].quality)
       updateInventory(memberIndex = memberIndex, amount = -1,
-          inventoryIndex = toolsIndex, ship = ship)
+          inventoryIndex = toolsIndex, ship = ship, quality = ship.crew[
+          memberIndex].inventory[toolsIndex].quality)
       toolsIndex = -1
     var toolQuality: ItemsDurability = defaultItemDurability
     if givenOrder in [upgrading, repair, clean, train]:
@@ -259,10 +260,11 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
       if requiredTool.len > 0:
         if toolsIndex == -1:
           toolsIndex = findItem(inventory = ship.cargo, itemType = requiredTool,
-              quality = toolQuality)
+              quality = toolQuality, itemQuality = any)
           if toolsIndex == -1:
             toolsIndex = findItem(inventory = ship.crew[memberIndex].inventory,
-                itemType = requiredTool, quality = toolQuality)
+                itemType = requiredTool, quality = toolQuality,
+                    itemQuality = any)
             if toolsIndex > -1:
               ship.crew[memberIndex].equipment[tool] = toolsIndex
           else:
@@ -294,7 +296,8 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
               toolsIndex].durability, quality = ship.crew[
               memberIndex].inventory[toolsIndex].quality)
           updateInventory(memberIndex = memberIndex, amount = -1,
-              inventoryIndex = toolsIndex, ship = ship)
+              inventoryIndex = toolsIndex, ship = ship, quality = ship.crew[
+              memberIndex].inventory[toolsIndex].quality)
     return true
 
 proc showOrderMessage(givenOrder: CrewOrders; memberName: string;
@@ -390,7 +393,8 @@ proc giveRestOrder(ship: var ShipRecord; memberIndex: Natural) {.raises: [
             memberIndex].inventory[toolsIndex].durability, quality = ship.crew[
             memberIndex].inventory[toolsIndex].quality)
         updateInventory(memberIndex = memberIndex, amount = -1,
-            inventoryIndex = toolsIndex, ship = ship)
+            inventoryIndex = toolsIndex, ship = ship, quality = ship.crew[
+            memberIndex].inventory[toolsIndex].quality)
 
 proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int = -1;
@@ -606,7 +610,7 @@ proc setOrdersConditions(havePilot, haveEngineer, haveUpgrade, haveTrader,
         discard
     if member.health < 100:
       if findItem(inventory = ship.cargo, itemType = factionsList[
-          member.faction].healingTools) > -1:
+          member.faction].healingTools, itemQuality = any) > -1:
         canHeal = true
   for module in ship.modules:
     if module.durability > 0:
@@ -673,23 +677,24 @@ proc updateCrewOrders(havePilot, haveEngineer, haveUpgrade, haveTrader, canHeal,
       maxPriority = maxPriority):
     updateOrders(ship = ship)
   if not haveUpgrade and ship.upgradeModule > -1 and findItem(
-      inventory = ship.cargo, itemType = repairTools) > -1:
+      inventory = ship.cargo, itemType = repairTools, itemQuality = any) > -1:
     if findItem(inventory = ship.cargo, itemType = modulesList[ship.modules[
-        ship.upgradeModule].protoIndex].repairMaterial) > -1 and updatePosition(
-            ship = ship, order = upgrading, maxPriority = maxPriority):
+        ship.upgradeModule].protoIndex].repairMaterial, itemQuality = any) >
+            -1 and updatePosition(ship = ship, order = upgrading,
+                maxPriority = maxPriority):
       updateOrders(ship = ship)
   if (not haveTrader and needTrader) and updatePosition(ship = ship,
       order = talk, maxPriority = maxPriority):
     updateOrders(ship = ship)
-  if (needClean and findItem(inventory = ship.cargo, itemType = cleaningTools) >
-      -1) and updatePosition(ship = ship, order = clean,
+  if (needClean and findItem(inventory = ship.cargo, itemType = cleaningTools,
+      itemQuality = any) > -1) and updatePosition(ship = ship, order = clean,
           maxPriority = maxPriority):
     updateOrders(ship = ship)
   if canHeal and updatePosition(ship = ship, order = heal,
       maxPriority = maxPriority):
     updateOrders(ship = ship)
-  if (needRepairs and findItem(inventory = ship.cargo, itemType = repairTools) >
-      -1) and updatePosition(ship = ship, order = repair,
+  if (needRepairs and findItem(inventory = ship.cargo, itemType = repairTools,
+      itemQuality = any) > -1) and updatePosition(ship = ship, order = repair,
           maxPriority = maxPriority):
     updateOrders(ship = ship)
   if updatePosition(ship = ship, order = defend, maxPriority = maxPriority):
