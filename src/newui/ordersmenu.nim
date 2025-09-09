@@ -121,7 +121,7 @@ proc countHeight(baseIndex: ExtendedBasesRange;
       if haveTrader:
         let itemIndex: int = try:
             findItem(inventory = playerShip.cargo,
-              itemType = factionsList[skyBases[baseIndex].owner].healingTools)
+              itemType = factionsList[skyBases[baseIndex].owner].healingTools, itemQuality = any)
           except:
             dialog = setError(message = "Can't find medicine in the ship cargo.")
             return
@@ -563,7 +563,7 @@ proc deliverMedicines(dialog: var GameDialog; forFree: bool = true) {.raises: [
     eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
     itemIndex: int = try:
         findItem(inventory = playerShip.cargo, itemType = factionsList[skyBases[
-            baseIndex].owner].healingTools)
+            baseIndex].owner].healingTools, itemQuality = any)
       except:
         dialog = setError(message = "Can't get index of medicines.")
         return
@@ -710,7 +710,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
             let itemIndex: int = try:
                 findItem(inventory = playerShip.cargo,
                   itemType = factionsList[skyBases[
-                      baseIndex].owner].healingTools)
+                      baseIndex].owner].healingTools, itemQuality = any)
               except:
                 dialog = setError(message = "Can't find medicinet in the ship cargo.")
                 return

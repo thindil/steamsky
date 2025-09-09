@@ -179,7 +179,7 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
             dialog = setError(message = "Can't kill the player.")
         of homeBase:
           let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-              protoIndex = moneyIndex)
+              protoIndex = moneyIndex, itemQuality = normal)
           if moneyIndex2 == -1:
             dialog = setMessage(message = "You don't have any " & moneyName &
                 " for change ship home base.", title = "No money")
@@ -542,7 +542,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
         let baseIndex: int = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
         protoIndex = skyBases[baseIndex].cargo[baseCargoIndex].protoIndex
         cargoIndex = findItem(inventory = playerShip.cargo,
-            protoIndex = protoIndex)
+            protoIndex = protoIndex, itemQuality = skyBases[baseIndex].cargo[
+                baseCargoIndex].quality)
       else:
         cargoIndex = manipulateData.itemIndex
         if dialog == dropDialog:

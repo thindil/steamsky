@@ -20,7 +20,8 @@
 
 import std/[algorithm, tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, basestrade, config, crew, crewinventory, game, maps, shipscrew, types]
+import ../[bases, basestrade, config, crew, crewinventory, game, maps,
+    shipscrew, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 type
@@ -318,7 +319,8 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       maxDaily = recruit.payment * 2
       currentProfit = 0
       currentContract = 0
-      moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+      moneyIndex2 = findItem(inventory = playerShip.cargo,
+          protoIndex = moneyIndex, itemQuality = any)
       moneyText = @[]
       moneyWidth = @[]
       if moneyIndex2 == -1:
@@ -439,16 +441,16 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
         dialog = none
         try:
           let contractLen: int = case currentContract
-              of 1:
-                100
-              of 2:
-                30
-              of 3:
-                20
-              of 4:
-                10
-              else:
-                -1
+            of 1:
+              100
+            of 2:
+              30
+            of 3:
+              20
+            of 4:
+              10
+            else:
+              -1
           hireRecruit(recruitIndex = recruitIndex, cost = cost,
               dailyPayment = currentDaily, tradePayment = currentProfit,
               contractLength = contractLen)

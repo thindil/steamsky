@@ -41,7 +41,8 @@ proc setMoneyText(action: string; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex,
+      itemQuality = normal)
   moneyText = @[]
   moneyWidth = @[]
   if moneyIndex == -1:
@@ -337,7 +338,8 @@ proc refreshItemsList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     except:
       dialog = setError(message = "Can't check if item is buyable.")
       return
-  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex,
+      itemQuality = normal)
   moneyText = @[]
   moneyWidth = @[]
   if moneyIndex == -1:
@@ -784,7 +786,8 @@ proc refreshLootList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           return
     if typesList.find(item = itemType) == -1:
       typesList.add(y = itemType)
-  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex,
+      itemQuality = normal)
   var freeSpace = try:
       freeCargo(amount = 0)
     except:

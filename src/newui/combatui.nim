@@ -287,7 +287,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
               if item.itemType == itemsTypesList[modulesList[playerShip.modules[
                   gun[1]].protoIndex].value - 1]:
                 let ammoIndex: int = findItem(inventory = playerShip.cargo,
-                    protoIndex = itemIndex)
+                    protoIndex = itemIndex, itemQuality = any)
                 if ammoIndex > -1:
                   ammoAmount = ammoAmount + playerShip.cargo[ammoIndex].amount
             except:
