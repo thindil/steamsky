@@ -178,7 +178,7 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   tclSetVar(varName = "gamestate", newValue = "crew")
   let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex)
+      protoIndex = moneyIndex, itemQuality = any)
   var moneyLabel: string = schoolCanvas & ".school.money.moneylbl"
   if moneyIndex2 > -1:
     tclEval(script = moneyLabel & " configure -text {You have } -style TLabel")
@@ -337,7 +337,7 @@ proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
   ## UpdateSchoolSelectedCost
   let
     moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex)
+        protoIndex = moneyIndex, itemQuality = any)
     cost: Natural = try:
         trainCost(memberIndex = getMemberIndex(), skillIndex = getSkillIndex())
       except:

@@ -155,7 +155,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
       break
   shipyardFrame = shipyardCanvas & ".shipyard"
   let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex)
+      protoIndex = moneyIndex, itemQuality = any)
   var moneyLabel: string = shipyardCanvas & ".shipyard.moneyinfo.lblmoney"
   tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
   if moneyIndex2 > -1:
@@ -885,7 +885,7 @@ proc setModuleInfo(installing: bool; row: var Positive;
       showError(message = "Can't count protomodule cost")
       return
     moneyIndex2 = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex)
+        protoIndex = moneyIndex, itemQuality = any)
     tclEval(script = moduleLabel & " configure -text {" & $cost & " " &
         moneyName & "} " & (if moneyIndex == -1 or playerShip.cargo[
         moneyIndex2].amount <
@@ -1202,7 +1202,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   setModuleInfo(installing = true, row = row)
   let
     moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex)
+        protoIndex = moneyIndex, itemQuality = any)
     errorLabel: string = moduleDialog & ".errorLabel"
     frame: string = moduleDialog & ".buttonbox"
   tclEval(script = "ttk::frame " & frame)

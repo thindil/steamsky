@@ -38,7 +38,8 @@ proc checkMoney(price: Positive; message: string = ""): int {.raises: [
   ##
   ## Returns the index of the money in the player's ship's cargo
   body:
-    result = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+    result = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex,
+        itemQuality = any)
     if result == -1:
       raise newException(exceptn = NoMoneyError, message = message)
     if playerShip.cargo[result].amount < price:
@@ -274,7 +275,7 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
         cost: Natural = trainCost(memberIndex = memberIndex,
             skillIndex = skillIndex)
         moneyIndex2: int = findItem(inventory = playerShip.cargo,
-            protoIndex = moneyIndex)
+            protoIndex = moneyIndex, itemQuality = any)
       if cost == 0 or playerShip.cargo[moneyIndex2].amount < cost or (
           not isAmount and maxAmount < cost):
         break
