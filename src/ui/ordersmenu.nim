@@ -282,7 +282,8 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
       if haveTrader:
         let itemIndex: int = try:
             findItem(inventory = playerShip.cargo,
-              itemType = factionsList[skyBases[baseIndex].owner].healingTools)
+              itemType = factionsList[skyBases[baseIndex].owner].healingTools,
+              itemQuality = any)
           except:
             return showError(message = "Can't find medicinet in the ship cargo.")
         if itemIndex > -1:
@@ -799,7 +800,7 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
     eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
     itemIndex: int = try:
         findItem(inventory = playerShip.cargo, itemType = factionsList[skyBases[
-            baseIndex].owner].healingTools)
+            baseIndex].owner].healingTools, itemQuality = any)
       except:
         return showError(message = "Can't get index of medicines.")
     event: EventData = eventsList[eventIndex]

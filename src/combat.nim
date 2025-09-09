@@ -96,13 +96,15 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
         else:
           getRandom(min = 1, max = 1000)
       cargoItemIndex: int = findItem(inventory = enemyShip.cargo,
-          protoIndex = newItemIndex)
+          protoIndex = newItemIndex, itemQuality = normal)
     if cargoItemIndex > -1:
       enemyShip.cargo[cargoItemIndex].amount += itemAmount
     else:
       if freeCargo(amount = 0 - (itemsList[newItemIndex].weight * itemAmount)) > -1:
         enemyShip.cargo.add(y = InventoryData(protoIndex: newItemIndex,
-            amount: itemAmount, durability: defaultItemDurability, name: "", price: 0))
+            amount: itemAmount, durability: defaultItemDurability, name: "",
+            price: 0,
+            quality: normal))
   var enemyGuns: seq[array[1..3, int]] = @[]
   for index, module in enemyShip.modules:
     if module.mType in {ModuleType2.gun, harpoonGun} and module.durability > 0:
@@ -320,7 +322,7 @@ proc countItemBonus(value: int; quality: ObjectQuality): int {.raises: [],
     return -((value.float * 0.2).floor.int)
   of low:
     return -((value.float * 0.1).floor.int)
-  of normal:
+  of normal, any:
     return 0
   of good:
     return (value.float * 0.1).floor.int
@@ -1206,7 +1208,8 @@ proc combatTurn*() {.raises: [KeyError, IOError, ValueError,
     speedBonus: int = 0
     ammoIndex2: int = -1
 
-  if findItem(inventory = playerShip.cargo, itemType = fuelType) == -1:
+  if findItem(inventory = playerShip.cargo, itemType = fuelType,
+      itemQuality = any) == -1:
     addMessage(message = "Ship fall from sky due to lack of fuel.",
         mType = otherMessage, color = red)
     death(memberIndex = 0, reason = "fall of the ship", ship = playerShip)

@@ -35,7 +35,7 @@ proc checkTool(toolNeeded: string): bool {.raises: [], tags: [], contractual.} =
     for index, item in itemsList:
       if item.itemType == toolNeeded:
         let cargoIndex: int = findItem(inventory = playerShip.cargo,
-            protoIndex = index)
+            protoIndex = index, itemQuality = any)
         if cargoIndex > -1:
           result = true
           break
@@ -75,7 +75,7 @@ proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
     for itemIndex, item in itemsList:
       if item.itemType == material:
         var cargoIndex: int = findItem(inventory = playerShip.cargo,
-            protoIndex = itemIndex)
+            protoIndex = itemIndex, itemQuality = any)
         if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
             recipe.materialAmounts[materialIndex]:
           hasMaterials = true
@@ -982,7 +982,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         if mAmount > 0:
           tclEval(script = recipeText & " insert end { or } [list gold]")
         let cargoIndex: int = findItem(inventory = playerShip.cargo,
-            protoIndex = iIndex)
+            protoIndex = iIndex, itemQuality = any)
         if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
             recipe.materialAmounts[mIndex]:
           tclEval(script = recipeText & " insert end {" &
@@ -1004,7 +1004,8 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         if mAmount > 0:
           tclEval(script = recipeText & " insert end { or } [list gold]")
         let cargoIndex: int = findItem(inventory = playerShip.cargo,
-            protoIndex = iIndex, quality = recipe.toolQuality)
+            protoIndex = iIndex, quality = recipe.toolQuality,
+            itemQuality = any)
         if cargoIndex > -1:
           haveTool = true
         tclEval(script = recipeText & " insert end {" & item.name & "}" & (

@@ -186,7 +186,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
           if item.itemType == itemsTypesList[modulesList[playerShip.modules[gun[
               1]].protoIndex].value - 1]:
             let ammoIndex: int = findItem(inventory = playerShip.cargo,
-                protoIndex = itemIndex)
+                protoIndex = itemIndex, itemQuality = any)
             if ammoIndex > -1:
               ammoAmount += playerShip.cargo[ammoIndex].amount
         except:

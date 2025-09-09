@@ -56,17 +56,14 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
           newItemIndex = i
           break
       let cargoItemIndex: int = findItem(inventory = traderShip.cargo,
-          protoIndex = newItemIndex)
+          protoIndex = newItemIndex, itemQuality = normal)
       if cargoItemIndex > -1:
         traderCargo[cargoItemIndex].amount += itemAmount
         traderShip.cargo[cargoItemIndex].amount += itemAmount
       else:
         if freeCargo(amount = 0 - (itemsList[newItemIndex].weight *
             itemAmount)) > -1:
-          traderCargo.add(y = BaseCargo(protoIndex: newItemIndex,
-              amount: itemAmount, durability: defaultItemDurability,
-              price: itemsList[
-              newItemIndex].price))
+          traderCargo.add(y = BaseCargo(protoIndex: newItemIndex, amount: itemAmount, durability: defaultItemDurability, price: itemsList[ newItemIndex].price, quality: normal))
           traderShip.cargo.add(y = InventoryData(protoIndex: newItemIndex,
               amount: itemAmount, durability: defaultItemDurability, name: "", price: 0))
         else:
@@ -215,7 +212,7 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
   if freeCargo(amount = cost - (itemsList[itemIndex].weight * buyAmount)) < 0:
     raise newException(exceptn = NoFreeCargoError, message = "")
   let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex)
+      protoIndex = moneyIndex, itemQuality = any)
   if moneyIndex2 == -1:
     raise newException(exceptn = NoMoneyError, message = itemName)
   if cost > playerShip.cargo[moneyIndex2].amount:
@@ -333,7 +330,7 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
     if baseIndex > 0 and countFreeCargo(baseIndex = baseIndex) == 0 and baseCargoIndex == -1:
       result.maxSellAmount = 0
   let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex)
+      protoIndex = moneyIndex, itemQuality = any)
   if baseCargoIndex > -1 and moneyIndex2 > -1 and ((baseIndex > -1 and
       isBuyable(baseType = baseType, itemIndex = result.protoIndex)) or
           baseIndex == 0):
