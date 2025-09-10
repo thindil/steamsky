@@ -238,5 +238,24 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     addProgressBar(tooltip = "The current health level of the selected crew member",
         value = playerShip.crew[data.index].health, maxValue = SkillRange.high,
         data = data.index, code = showMemberInfo, dialog = dialog)
+    var tiredLevel: int = playerShip.crew[data.index].tired - playerShip.crew[
+        data.index].attributes[conditionIndex].level
+    if tiredLevel < 0:
+      tiredLevel = 0
+    addProgressBar(tooltip = "The current tired level of the selected crew member",
+        value = tiredLevel, maxValue = SkillRange.high, data = data.index,
+        code = showMemberInfo, dialog = dialog)
+    addProgressBar(tooltip = "The current thirst level of the selected crew member",
+        value = playerShip.crew[data.index].thirst, maxValue = SkillRange.high,
+        data = data.index, code = showMemberInfo, dialog = dialog)
+    addProgressBar(tooltip = "The current hunger level of the selected crew member",
+        value = playerShip.crew[data.index].hunger, maxValue = SkillRange.high,
+        data = data.index, code = showMemberInfo, dialog = dialog)
+    addProgressBar(tooltip = "The current morale level of the selected crew member",
+        value = playerShip.crew[data.index].morale[1], maxValue = SkillRange.high,
+        data = data.index, code = showMemberInfo, dialog = dialog)
+    row.inc
+    if row == gameSettings.listsLimit + 1:
+      break
   restoreButtonStyle()
   addPagination(page = currentPage, row = row)
