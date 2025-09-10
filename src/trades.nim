@@ -38,8 +38,7 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
     for item in traderShip.cargo:
       traderCargo.add(y = BaseCargo(protoIndex: item.protoIndex,
           amount: item.amount, durability: defaultItemDurability,
-          price: itemsList[
-          item.protoIndex].price))
+          price: itemsList[item.protoIndex].price, quality: normal))
     var cargoAmount: Natural = if traderShip.crew.len < 5: getRandom(min = 1, max = 3)
         elif traderShip.crew.len < 10: getRandom(min = 1, max = 5)
         else: getRandom(min = 1, max = 10)
@@ -63,9 +62,12 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
       else:
         if freeCargo(amount = 0 - (itemsList[newItemIndex].weight *
             itemAmount)) > -1:
-          traderCargo.add(y = BaseCargo(protoIndex: newItemIndex, amount: itemAmount, durability: defaultItemDurability, price: itemsList[ newItemIndex].price, quality: normal))
+          traderCargo.add(y = BaseCargo(protoIndex: newItemIndex,
+            amount: itemAmount, durability: defaultItemDurability,
+            price: itemsList[ newItemIndex].price, quality: normal))
           traderShip.cargo.add(y = InventoryData(protoIndex: newItemIndex,
-              amount: itemAmount, durability: defaultItemDurability, name: "", price: 0))
+              amount: itemAmount, durability: defaultItemDurability, name: "",
+              price: 0, quality: normal))
         else:
           cargoAmount = 1
       cargoAmount.dec
