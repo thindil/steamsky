@@ -610,6 +610,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = $baseAmount, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
       row.inc
+      if row == gameSettings.listsLimit + 1:
+        break
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
