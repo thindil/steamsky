@@ -320,7 +320,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       currentProfit = 0
       currentContract = 0
       moneyIndex2 = findItem(inventory = playerShip.cargo,
-          protoIndex = moneyIndex, itemQuality = any)
+          protoIndex = moneyIndex, itemQuality = normal)
       moneyText = @[]
       moneyWidth = @[]
       if moneyIndex2 == -1:

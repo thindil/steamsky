@@ -29,7 +29,7 @@ proc dailyPayment*() {.raises: [KeyError, Exception], tags: [
   ## Pay daily payments to the player's ship crew members and update the lenght
   ## of their contracts
   let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex, itemQuality = any)
+      protoIndex = moneyIndex, itemQuality = normal)
   for index, member in playerShip.crew:
     if member.payment[1] > 0:
       var haveMoney: bool = true

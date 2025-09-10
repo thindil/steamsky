@@ -53,7 +53,7 @@ proc repairShip*(moduleIndex: int) {.raises: [NothingToRepairError,
     let traderIndex: int = findMember(order = talk)
     countPrice(price = cost, traderIndex = traderIndex)
     let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = any)
+        protoIndex = moneyIndex, itemQuality = normal)
     if playerShip.cargo[moneyIndex2].amount < cost:
       raise newException(exceptn = NotEnoughMoneyError, message = "")
     for index, member in playerShip.crew:
@@ -258,7 +258,7 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
   ##                 module in the player's ship to remove
   body:
     let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = any)
+        protoIndex = moneyIndex, itemQuality = normal)
     if moneyIndex2 == -1:
       raise newException(exceptn = NoMoneyError, message = "")
     var hullIndex, modulesAmount, freeTurretIndex: int = 0
