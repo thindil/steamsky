@@ -420,7 +420,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   if argc == 1:
     tclEval(script = comboBox & " current 0")
   let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex, itemQuality = any)
+      protoIndex = moneyIndex, itemQuality = normal)
   var tradeInfo: string = ""
   if moneyIndex2 > -1:
     tradeInfo = "You have"

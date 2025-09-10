@@ -236,7 +236,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid configure " & baseTable.canvas & " -row 2")
   let
     moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = any)
+        protoIndex = moneyIndex, itemQuality = normal)
   var moneyLabel: string = baseCanvas & ".base.moneyframe.lblmoney"
   if moneyIndex2 > -1:
     tclEval(script = moneyLabel & " configure -text {You have } -style TLabel")
@@ -483,7 +483,7 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't count the recipe's price")
   let
     moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = any)
+        protoIndex = moneyIndex, itemQuality = normal)
     baseMenu: string = createDialog(name = ".basemenu", title = "Actions",
         parentName = ".")
 
