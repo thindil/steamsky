@@ -583,13 +583,15 @@ type
     buffer*: PNkCommandBuffer
   PNkPanel* = ptr nk_panel
     ## Pointer to nk_panel structure
-  nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
+  nk_popup_state* {.importc: "struct nk_popup_state", completeStruct.} = object
     ## Internal Nuklear type
     win*: PNkWindow
     active*: nk_bool
     `type`*: PanelType
     name*: nk_hash
     buf*: nk_popup_buffer
+    combo_count*, con_count*, col_old*, active_con*: cuint
+    header*: nk_rect
   nk_edit_state* {.importc: "struct nk_edit_state", nodecl.} = object
     ## Internal Nuklear type
     active*: cint
