@@ -418,7 +418,7 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = moneyInfo & " configure -state disabled")
   let
     moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = any)
+        protoIndex = moneyIndex, itemQuality = normal)
     hireButton: string = dialogName & ".buttonbox.hirebutton"
   if moneyIndex > -1 and playerShip.cargo[moneyIndex2].amount < cost:
     tclEval(script = hireButton & " configure -state disabled")
@@ -614,7 +614,7 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-goldenyellow)"))
   let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex, itemQuality = any)
+      protoIndex = moneyIndex, itemQuality = normal)
   if moneyIndex2 > -1:
     tclEval(script = moneyInfo & " insert end {You have }")
     tclEval(script = moneyInfo & " insert end {" & $playerShip.cargo[

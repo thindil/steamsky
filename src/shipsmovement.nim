@@ -224,7 +224,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
             baseIndex].name & ".", mType = orderMessage)
       else:
         let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-            protoIndex = moneyIndex, itemQuality = any)
+            protoIndex = moneyIndex, itemQuality = normal)
         if moneyIndex2 == -1:
           return "You can't undock from this base because you don't have any " &
               moneyName & " to pay for docking."
