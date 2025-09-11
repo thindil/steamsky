@@ -18,7 +18,7 @@
 ## Provides code related to the information about the player's ship's crew
 ## members, like listing them, showing information, give orders, etc.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, crew, game, messages, shipscrew, types]
 import coreui, errordialog, setui, table, themes
@@ -189,6 +189,10 @@ proc sortCrew(sortAsc, sortDesc: CrewSortOrders;
               1], id: index))
     except:
       dialog = setError(message = "Can't add local crew member.")
+  localCrew.sort(cmp = sortMembers)
+  crewDataList = @[]
+  for member in localCrew:
+    crewDataList.add(y = CrewData(index: member.id, checked: member.selected))
 
 proc ordersForAll(order: CrewOrders; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -369,7 +373,8 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         value = playerShip.crew[data.index].hunger, maxValue = SkillRange.high,
         data = data.index, code = showMemberInfo, dialog = dialog)
     addProgressBar(tooltip = "The current morale level of the selected crew member",
-        value = playerShip.crew[data.index].morale[1], maxValue = SkillRange.high,
+        value = playerShip.crew[data.index].morale[1],
+            maxValue = SkillRange.high,
         data = data.index, code = showMemberInfo, dialog = dialog)
     row.inc
     if row == gameSettings.listsLimit + 1:
