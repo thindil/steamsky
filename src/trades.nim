@@ -20,8 +20,8 @@
 
 import std/[math, strutils, tables]
 import contracts
-import bases, basescargo, basestypes, crewinventory, game, game2, maps,
-    messages, ships, shipscargo, shipscrew, types, utils
+import bases, basescargo, basestypes, crewinventory, game, game2, items, maps,
+  messages, ships, shipscargo, shipscrew, types, utils
 
 proc generateTraderCargo*(protoIndex: Positive) {.raises: [
     KeyError], tags: [], contractual.} =
@@ -38,7 +38,7 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
     for item in traderShip.cargo:
       traderCargo.add(y = BaseCargo(protoIndex: item.protoIndex,
           amount: item.amount, durability: defaultItemDurability,
-          price: itemsList[item.protoIndex].price, quality: normal))
+          price: itemsList[item.protoIndex].price, quality: getQuality()))
     var cargoAmount: Natural = if traderShip.crew.len < 5: getRandom(min = 1, max = 3)
         elif traderShip.crew.len < 10: getRandom(min = 1, max = 5)
         else: getRandom(min = 1, max = 10)
@@ -54,8 +54,10 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
         if itemIndex == 0:
           newItemIndex = i
           break
-      let cargoItemIndex: int = findItem(inventory = traderShip.cargo,
-          protoIndex = newItemIndex, itemQuality = normal)
+      let
+        quality: ObjectQuality = getQuality()
+        cargoItemIndex: int = findItem(inventory = traderShip.cargo,
+          protoIndex = newItemIndex, itemQuality = quality)
       if cargoItemIndex > -1:
         traderCargo[cargoItemIndex].amount += itemAmount
         traderShip.cargo[cargoItemIndex].amount += itemAmount
@@ -64,10 +66,10 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
             itemAmount)) > -1:
           traderCargo.add(y = BaseCargo(protoIndex: newItemIndex,
             amount: itemAmount, durability: defaultItemDurability,
-            price: itemsList[ newItemIndex].price, quality: normal))
+            price: itemsList[ newItemIndex].price, quality: quality))
           traderShip.cargo.add(y = InventoryData(protoIndex: newItemIndex,
               amount: itemAmount, durability: defaultItemDurability, name: "",
-              price: 0, quality: normal))
+              price: 0, quality: quality))
         else:
           cargoAmount = 1
       cargoAmount.dec
