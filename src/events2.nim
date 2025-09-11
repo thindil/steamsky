@@ -89,7 +89,7 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
           timePassed = 1
         gainExp(amount = 1, skillNumber = pilotingSkill, crewIndex = pilotIndex)
         updateCargo(ship = playerShip, protoIndex = findProtoItem(
-            itemType = fuelType), amount = countFuelNeeded(), quality = normal)
+            itemType = fuelType), amount = countFuelNeeded(), quality = any)
         updateGame(minutes = timePassed)
     # Friendly trader
     of 21..23:

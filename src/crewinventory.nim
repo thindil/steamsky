@@ -224,7 +224,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
   if item.durability == 0:
     if memberIndex == -1:
       updateCargo(ship = ship, cargoIndex = itemIndex, amount = -1,
-          quality = normal)
+          quality = any)
     else:
       updateInventory(memberIndex = memberIndex, amount = -1,
           inventoryIndex = itemIndex, ship = ship, quality = item.quality)
@@ -237,9 +237,9 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
           i].durability == inventory[j].durability and i != j:
         if memberIndex == -1:
           updateCargo(ship = ship, cargoIndex = j, amount = 0 - inventory[
-              j].amount, quality = normal)
+              j].amount, quality = any)
           updateCargo(ship = ship, cargoIndex = i, amount = inventory[j].amount,
-              quality = normal)
+              quality = any)
         else:
           updateInventory(memberIndex = memberIndex, amount = 0 - inventory[
               j].amount, inventoryIndex = j, ship = ship, quality = item.quality)
