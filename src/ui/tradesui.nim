@@ -57,7 +57,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   var tradeFrame: string = mainPaned & ".tradeframe"
   let
     tradeCanvas: string = tradeFrame & ".canvas"
-    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
     eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
   var label: string = tradeCanvas & ".trade.options.playerinfo.moneyinfo"
   if tclEval2(script = "winfo exists " & label) == "0":
@@ -230,8 +231,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
           return showError(message = "Can't get item type2.")
     if argc > 1 and argv[1] != "All" and itemType != $argv[1]:
       continue
-    let itemName: string = getItemName(item = playerShip.cargo[i], damageInfo = false,
-        toLower = false)
+    let itemName: string = getItemName(item = playerShip.cargo[i],
+        damageInfo = false, toLower = false)
     if argc == 3 and itemName.toLowerAscii.find(sub = ($argv[
         2]).toLowerAscii) == -1:
       continue
@@ -241,7 +242,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     var price: int = 0
     if baseCargoIndex == -1:
       try:
-        price = getPrice(baseType = baseType, itemIndex = protoIndex, quality = normal)
+        price = getPrice(baseType = baseType, itemIndex = protoIndex,
+            quality = playerShip.cargo[i].quality)
       except:
         return showError(message = "Can't get price2.")
     else:
@@ -565,7 +567,8 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     discard
   if itemsSortOrder == defaultItemsSortOrder:
     return tclOk
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   var
     baseCargo: seq[BaseCargo] = @[]
     baseType: string = ""
@@ -596,7 +599,8 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       price = baseCargo[baseCargoIndex].price
     else:
       price = try:
-          getPrice(baseType = baseType, itemIndex = protoIndex, quality = item.quality)
+          getPrice(baseType = baseType, itemIndex = protoIndex,
+              quality = item.quality)
         except:
           return showError(message = "Can't get price.")
     if eventIndex > -1:
@@ -755,7 +759,8 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     cargoIndex = itemIndex
   var protoIndex: Natural = 0
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   if cargoIndex > -1:
     protoIndex = playerShip.cargo[cargoIndex].protoIndex
     if baseCargoIndex == -1:
@@ -956,7 +961,8 @@ proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
             itemIndex = itemIndex, maxAmount = ($argv[2]).parseInt, cost = (
                 $argv[3]).parseInt)
       else:
-        let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+        let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+            playerShip.skyY].baseIndex
         if baseIndex > 0:
           showManipulateItem(title = "Buy " & itemsList[skyBases[
               baseIndex].cargo[itemIndex.abs].protoIndex].name,
