@@ -592,9 +592,13 @@ type
     buf*: nk_popup_buffer
     combo_count*, con_count*, col_old*, active_con*: cuint
     header*: nk_rect
-  nk_edit_state* {.importc: "struct nk_edit_state", nodecl.} = object
+  nk_edit_state* {.importc: "struct nk_edit_state", completeStruct.} = object
     ## Internal Nuklear type
-    active*: cint
+    active*, prev*, cursor*, sel_start*, sel_end*: cint
+    name*: nk_hash
+    seq*, old*: cuint
+    scrollbar*: nk_scroll
+    mode*, single_line*: uint8
   nk_property_state* {.importc: "struct nk_property_state",
       completeStruct.} = object
     ## Internal Nuklear type
