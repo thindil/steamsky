@@ -25,9 +25,20 @@ import coreui, errordialog, setui, table, themes
 
 type
   CrewSortOrders = enum
-    checkedAsc, checkedDesc, nameAsc, nameDesc, orderAsc, orderDesc, skillAsc,
+    selectedAsc, selectedDesc, nameAsc, nameDesc, orderAsc, orderDesc, skillAsc,
       skillDesc, healthAsc, healthDesc, fatigueAsc, fatigueDesc, thirstAsc,
       thirstDesc, hungerAsc, hungerDesc, moraleAsc, moraleDesc, none
+  LocalMemberData = object
+    selected: bool
+    name: string
+    order: string
+    skill: string
+    health: SkillRange
+    fatigue: int
+    thirst: SkillRange
+    hunger: SkillRange
+    morale: SkillRange
+    id: Natural
 
 const defaultCrewSortOrder*: CrewSortOrders = none
 
@@ -36,6 +47,92 @@ var
     ## Show additonal options for managing the player's ship's crew
   skillIndex: Natural = 0
   crewSortOrder: CrewSortOrders = defaultCrewSortOrder
+
+proc sortMembers(x, y: LocalMemberData): int {.raises: [], tags: [],
+    contractual.} =
+  ## Compare two members and return which should go first, members on the sort
+  ## order of the members
+  ##
+  ## * x - the first member to compare
+  ## * y - the second member to compare
+  ##
+  ## Returns 1 if the first member should go first, -1 if the second member
+  ## should go first.
+  case crewSortOrder
+  of selectedAsc:
+    if x.selected < y.selected:
+      return 1
+    return -1
+  of selectedDesc:
+    if x.selected > y.selected:
+      return 1
+    return -1
+  of nameAsc:
+    if x.name < y.name:
+      return 1
+    return -1
+  of nameDesc:
+    if x.name > y.name:
+      return 1
+    return -1
+  of orderAsc:
+    if x.order < y.order:
+      return 1
+    return -1
+  of orderDesc:
+    if x.order > y.order:
+      return 1
+    return -1
+  of skillAsc:
+    if x.skill < y.skill:
+      return 1
+    return -1
+  of skillDesc:
+    if x.skill > y.skill:
+      return 1
+    return -1
+  of healthAsc:
+    if x.health < y.health:
+      return 1
+    return -1
+  of healthDesc:
+    if x.health > y.health:
+      return 1
+    return -1
+  of fatigueAsc:
+    if x.fatigue < y.fatigue:
+      return 1
+    return -1
+  of fatigueDesc:
+    if x.fatigue > y.fatigue:
+      return 1
+    return -1
+  of thirstAsc:
+    if x.thirst < y.thirst:
+      return 1
+    return -1
+  of thirstDesc:
+    if x.thirst > y.thirst:
+      return 1
+    return -1
+  of hungerAsc:
+    if x.hunger < y.hunger:
+      return 1
+    return -1
+  of hungerDesc:
+    if x.hunger > y.hunger:
+      return 1
+    return -1
+  of moraleAsc:
+    if x.morale < y.morale:
+      return 1
+    return -1
+  of moraleDesc:
+    if x.morale > y.morale:
+      return 1
+    return -1
+  of none:
+    return -1
 
 proc sortCrew(sortAsc, sortDesc: CrewSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -116,8 +213,8 @@ proc getHighestSkill(memberIndex: Natural;
 
 const
   headers: array[9, HeaderData[CrewSortOrders]] = [
-    HeaderData[CrewSortOrders](label: "", sortAsc: checkedAsc,
-        sortDesc: checkedDesc),
+    HeaderData[CrewSortOrders](label: "", sortAsc: selectedAsc,
+        sortDesc: selectedDesc),
     HeaderData[CrewSortOrders](label: "Name", sortAsc: nameAsc,
         sortDesc: nameDesc),
     HeaderData[CrewSortOrders](label: "Order", sortAsc: orderAsc,
@@ -187,11 +284,13 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Select all crew member")
     imageButton(image = images[selectAllIcon]):
-      discard
+      for data in crewDataList.mitems:
+        data.checked = true
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Unselect all crew member")
     imageButton(image = images[unselectAllIcon]):
-      discard
+      for data in crewDataList.mitems:
+        data.checked = false
   # Show the list of crew members
   addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortCrew, dialog = dialog)
