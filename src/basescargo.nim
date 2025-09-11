@@ -20,7 +20,7 @@
 
 import std/[random, sequtils, tables]
 import contracts, nimalyzer
-import bases, basestypes, crewinventory, game, maps, shipscargo, types, utils
+import bases, basestypes, crewinventory, game, items, maps, shipscargo, types, utils
 
 proc generateCargo*() {.raises: [KeyError], tags: [],
     contractual.} =
@@ -54,22 +54,6 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
     randomize()
     keys.shuffle()
 
-    proc getQuality(): ObjectQuality {.raises: [], tags: [], contractual.} =
-      ## Get the random quality for an item
-      ##
-      ## Returns random quality for an item
-      case getRandom(min = 1, max = 100):
-        of 1:
-          return poor
-        of 2..5:
-          return low
-        of 95..99:
-          return good
-        of 100:
-          return excellent
-        else:
-          return normal
-
     for key in keys:
       if isBuyable(baseType = skyBases[baseIndex].baseType, itemIndex = key,
           checkFlag = false):
@@ -81,7 +65,8 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
         let quality: ObjectQuality = getQuality()
         skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: key,
             amount: amount, durability: defaultItemDurability, price: getPrice(
-            baseType = skyBases[baseIndex].baseType, itemIndex = key, quality = quality),
+            baseType = skyBases[baseIndex].baseType, itemIndex = key,
+                quality = quality),
             quality: quality))
     if "blackmarket" in basesTypesList[skyBases[baseIndex].baseType].flags:
       var amount: Positive = (if population < 150: getRandom(min = 1,
@@ -100,7 +85,8 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
               skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: j,
                   amount: getRandom(min = 0, max = 100) * population,
                   durability: defaultItemDurability, price: getPrice(
-                  baseType = skyBases[baseIndex].baseType, itemIndex = j, quality = quality),
+                  baseType = skyBases[baseIndex].baseType, itemIndex = j,
+                      quality = quality),
                   quality: quality))
               break
             itemIndex.inc
@@ -219,7 +205,8 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
         raise newException(exceptn = NoFreeSpaceError, message = $protoIndex)
       skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: protoIndex,
           amount: amount, durability: durability, price: getPrice(
-          baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex, quality = quality),
+          baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex,
+              quality = quality),
           quality: quality))
     else:
       skyBases[baseIndex].cargo[itemIndex].amount = skyBases[baseIndex].cargo[
