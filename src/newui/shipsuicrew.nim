@@ -134,6 +134,29 @@ proc sortMembers(x, y: LocalMemberData): int {.raises: [], tags: [],
   of none:
     return -1
 
+proc getHighestSkill(memberIndex: Natural;
+    dialog: var GameDialog): string {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect], contractual.} =
+  ## Get the name of the highest skill of the selected crew member
+  ##
+  ## * memberIndex - the crew index of the member which the highest skill will
+  ##                 be get
+  ## * dialog -      the current in-game dialog displayed on the screen
+  ##
+  ## Returns the name of the highest skill of the selected crew member
+  var
+    highestLevel: Positive = 1
+    highestIndex: Positive = 1
+  for skill in playerShip.crew[memberIndex].skills:
+    if skill.level > highestLevel:
+      highestLevel = skill.level
+      highestIndex = skill.index
+  try:
+    return skillsList[highestIndex].name
+  except KeyError:
+    dialog = setError(message = "Can't thge the highest skill. Index: " & $highestIndex)
+    return "Unknown"
+
 proc sortCrew(sortAsc, sortDesc: CrewSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Sort items on the trades list
@@ -148,6 +171,24 @@ proc sortCrew(sortAsc, sortDesc: CrewSortOrders;
     crewSortOrder = sortDesc
   else:
     crewSortOrder = sortAsc
+  var localCrew: seq[LocalMemberData] = @[]
+  for index, member in playerShip.crew:
+    var selected: bool = false
+    for data in crewDataList:
+      if data.index == index:
+        selected = data.checked
+        break
+    try:
+      localCrew.add(y = LocalMemberData(selected: selected, name: member.name,
+          order: $member.order, skill: (if skillIndex == 0: getHighestSkill(
+          memberIndex = index, dialog = dialog) else: getSkillLevelName(
+          skillLevel = getSkillLevel(
+          member = member, skillIndex = skillIndex))), health: member.health,
+          fatigue: member.tired - member.attributes[conditionIndex].level,
+          thirst: member.thirst, hunger: member.hunger, morale: member.morale[
+              1], id: index))
+    except:
+      dialog = setError(message = "Can't add local crew member.")
 
 proc ordersForAll(order: CrewOrders; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -187,29 +228,6 @@ proc showGiveOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   discard
-
-proc getHighestSkill(memberIndex: Natural;
-    dialog: var GameDialog): string {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect], contractual.} =
-  ## Get the name of the highest skill of the selected crew member
-  ##
-  ## * memberIndex - the crew index of the member which the highest skill will
-  ##                 be get
-  ## * dialog -      the current in-game dialog displayed on the screen
-  ##
-  ## Returns the name of the highest skill of the selected crew member
-  var
-    highestLevel: Positive = 1
-    highestIndex: Positive = 1
-  for skill in playerShip.crew[memberIndex].skills:
-    if skill.level > highestLevel:
-      highestLevel = skill.level
-      highestIndex = skill.index
-  try:
-    return skillsList[highestIndex].name
-  except KeyError:
-    dialog = setError(message = "Can't thge the highest skill. Index: " & $highestIndex)
-    return "Unknown"
 
 const
   headers: array[9, HeaderData[CrewSortOrders]] = [
