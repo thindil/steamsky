@@ -21,7 +21,7 @@
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, crew, game, messages, shipscrew, types]
-import coreui, errordialog, setui, table, themes
+import coreui, dialogs, errordialog, setui, table, themes
 
 type
   CrewSortOrders = enum
@@ -222,9 +222,9 @@ proc showMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   crewIndex = crewDataList[data].index
 
-proc showGiveOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
+proc setGiveOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
-  ## Show the dialog to give an order for the selected crew member
+  ## Set the dialog to give an order for the selected crew member
   ##
   ## * data   - the index of the selected item
   ## * dialog - the current in-game dialog displayed on the screen
@@ -232,6 +232,29 @@ proc showGiveOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   crewIndex = crewDataList[data].index
+  dialog = giveOrderDialog
+
+proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the dialog to give an order for the selected crew member
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  const
+    width: float = 400
+    height: float = 400
+
+  let
+    member: MemberData = playerShip.crew[crewIndex]
+    windowName: string = "Change order for " & member.name
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 2)
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = windowName)
 
 const
   headers: array[9, HeaderData[CrewSortOrders]] = [
@@ -263,6 +286,7 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
+  # Show options related to managing the crew
   if showCrewOptions:
     var
       cols: Positive = 2
@@ -340,7 +364,7 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         code = showMemberInfo, dialog = dialog)
     addButton(label = ($playerShip.crew[data.index].order).capitalizeAscii,
         tooltip = "The current order for the selected crew member. Press the mouse button to change it.",
-        data = data.index, code = showGiveOrder, dialog = dialog)
+        data = data.index, code = setGiveOrder, dialog = dialog)
     if skillIndex == 0:
       addButton(label = getHighestSkill(memberIndex = data.index,
           dialog = dialog),
