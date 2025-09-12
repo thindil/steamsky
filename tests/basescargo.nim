@@ -1,5 +1,5 @@
 import unittest2
-import ../src/[careers, factions, items]
+import ../src/[careers, factions]
 include ../src/basescargo
 
 suite "Unit tests for basescargo module.":
@@ -16,11 +16,12 @@ suite "Unit tests for basescargo module.":
   playerShip.skyY = 1
   playerShip.crew = @[]
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
-      homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
-      1, 0, 0], order: talk, loyalty: 100, skills: @[SkillInfo(index: 4, level: 4,
-      experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
+      homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1,
+      1, 1, 0, 0], order: talk, loyalty: 100, skills: @[SkillInfo(index: 4,
+      level: 4, experience: 0)], attributes: @[MobAttributeRecord(level: 3,
+      experience: 0), MobAttributeRecord(level: 3, experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
-      experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
+      experience: 0)], health: 100))
   skyMap[1][1].baseIndex = 1
   skyBases[1].population = 100
   skyBases[1].baseType = "1"
@@ -37,15 +38,15 @@ suite "Unit tests for basescargo module.":
     skyBases[1].cargo = @[]
     generateCargo()
     check:
-      findBaseCargo(1) == 0
+      findBaseCargo(1, quality = normal) == 0
 
   test "Not find an existing item in a base's cargo":
     check:
-      findBaseCargo(40) == -1
+      findBaseCargo(40, quality = normal) == -1
 
   test "Not find an non-existing item in a base's cargo":
     check:
-      findBaseCargo(490) == -1
+      findBaseCargo(490, quality = normal) == -1
 
   test "Count the free cargo in a base's cargo":
     skyBases[1].cargo = @[]
@@ -58,13 +59,13 @@ suite "Unit tests for basescargo module.":
     let
       amount = skyBases[1].cargo[0].amount - 1
       protoIndex = skyBases[1].cargo[0].protoIndex
-    updateBaseCargo(protoIndex, -1)
+    updateBaseCargo(protoIndex, -1, quality = normal)
     check:
       skyBases[1].cargo[0].amount == amount
 
   test "Remove an item from a base's cargo with amount":
     let
       amount = skyBases[1].cargo[0].amount - 1
-    updateBaseCargo(cargoIndex = 0, amount = -1)
+    updateBaseCargo(cargoIndex = 0, amount = -1, quality = normal)
     check:
       skyBases[1].cargo[0].amount == amount

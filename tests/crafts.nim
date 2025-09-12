@@ -17,7 +17,7 @@ suite "Unit tests for crafts module":
       durability: 100))
   playerShip.modules.add(ModuleData(mType: ModuleType2.cargoRoom, protoIndex: 7,
       durability: 100))
-  updateCargo(playerShip, 6, 10)
+  updateCargo(playerShip, 6, 10, quality = normal)
 
   test "Set the amount for a crafting order.":
     setRecipe(0, 10, "1")

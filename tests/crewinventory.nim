@@ -40,18 +40,18 @@ suite "Unit tests for crewinventory module":
       not itemIsUsed(0, 1)
 
   test "Adding an item to the player's inventory.":
-    updateInventory(0, 1, 1, ship = playerShip)
+    updateInventory(0, 1, 1, ship = playerShip, quality = normal)
     check:
       playerShip.crew[0].inventory[0].amount == 2
 
   test "Removing an item from the player's inventory.":
-    updateInventory(0, -1, 1, ship = playerShip)
+    updateInventory(0, -1, 1, ship = playerShip, quality = normal)
     check:
       playerShip.crew[0].inventory[0].amount == 1
 
   test "Adding too much items to the player's inventory.":
     expect CrewNoSpaceError:
-      updateInventory(0, 10_000, 1, ship = playerShip)
+      updateInventory(0, 10_000, 1, ship = playerShip, quality = normal)
     check:
       playerShip.crew[0].inventory[0].amount == 1
 
@@ -63,19 +63,21 @@ suite "Unit tests for crewinventory module":
 
   test "Find an item in inventory by proto index.":
     check:
-      findItem(inventory, 67) == 1
+      findItem(inventory, 67, itemQuality = normal) == 1
 
   test "Find an item in inventory by item type.":
     check:
-      findItem(inventory = inventory, itemType = "Weapon") == 0
+      findItem(inventory = inventory, itemType = "Weapon",
+          itemQuality = normal) == 0
 
   test "Not find an item in inventory by proto index.":
     check:
-      findItem(inventory, 500) == -1
+      findItem(inventory, 500, itemQuality = normal) == -1
 
   test "Not find an item in inventory with item type":
     check:
-      findItem(inventory = inventory, itemType = "asdasdas") == -1
+      findItem(inventory = inventory, itemType = "asdasdas",
+          itemQuality = normal) == -1
 
   test "Getting quality of a training tool.":
     check:

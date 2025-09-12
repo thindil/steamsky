@@ -28,15 +28,15 @@ suite "Unit tests for shipscargo module":
       experience: 0)], health: 100))
 
   test "Remove an item from the player's ship cargo":
-    updateCargo(playerShip, 1, -1)
+    updateCargo(playerShip, 1, -1, quality = normal)
     check:
       playerShip.cargo[0].amount == 99
 
   test "Add an item to the player's ship cargo":
-    updateCargo(playerShip, 1, 1)
+    updateCargo(playerShip, 1, 1, quality = normal)
     check:
       playerShip.cargo[0].amount == 100
-    updateCargo(playerShip, 40, -1)
+    updateCargo(playerShip, 40, -1, quality = normal)
 
   test "Checking a free space in the player's ship cargo.":
     check:

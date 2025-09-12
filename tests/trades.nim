@@ -1,4 +1,4 @@
-import ../src/[careers, crafts, factions, items, mobs, reputation, shipmodules]
+import ../src/[careers, crafts, factions, mobs, reputation, shipmodules]
 import unittest2
 include ../src/trades
 
@@ -71,5 +71,5 @@ suite "Unit tests for trades module":
 
   test "Buying an item.":
     generateCargo()
-    updateBaseCargo(skyBases[1].cargo[2].protoIndex, 2)
+    updateBaseCargo(skyBases[1].cargo[2].protoIndex, 2, quality = normal)
     buyItems(2, "1")
