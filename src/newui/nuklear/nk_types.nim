@@ -625,10 +625,15 @@ type
     tables*: ptr nk_table
   PNkWindow* = ptr nk_window
     ## Pointer to nk_window structure
+  nk_buffer_marker* = object
+    ## Internal Nuklear type
+    active*: nk_bool
+    offset*: nk_size
   nk_memory* {.importc: "struct nk_memory", nodecl.} = object
     ## Internal Nuklear type
     `ptr`*: ptr nk_size
     size*: nk_size
+    marker*: array[bufferMax, nk_buffer_marker]
   nk_plugin_alloc* = proc (handle: nk_handle; old: pointer;
       size: nk_size): pointer {.cdecl.}
     ## Internal Nuklear type
