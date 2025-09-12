@@ -231,7 +231,7 @@ proc showGiveOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  crewIndex = crewDataList[data].index
 
 const
   headers: array[9, HeaderData[CrewSortOrders]] = [
