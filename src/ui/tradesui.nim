@@ -38,6 +38,95 @@ var
   itemsIndexes: seq[int] = @[]
 {.pop ruleOn: "varDeclared".}
 
+proc createTradeUi(tradeFrame: var string, tradeCanvas: string) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Create the trade screen UI
+  ##
+  ## * tradeFrame  - the frame which holds the trade screen UI parts
+  ## * tradeCanvas - the main canvas for the trade screen UI
+  ##
+  ## Returns modified parameter tradeFrame.
+  tclEval(script = """
+    ttk::frame .gameframe.paned.tradeframe
+    set tradecanvas [canvas .gameframe.paned.tradeframe.canvas \
+       -yscrollcommand [list .gameframe.paned.tradeframe.scrolly set] \
+       -xscrollcommand [list .gameframe.paned.tradeframe.scrollx set]]
+    pack [ttk::scrollbar .gameframe.paned.tradeframe.scrolly -orient vertical \
+       -command [list $tradecanvas yview]] -side right -fill y
+    pack $tradecanvas -side top -fill both
+    pack [ttk::scrollbar .gameframe.paned.tradeframe.scrollx -orient horizontal \
+       -command [list $tradecanvas xview]] -fill x
+    SetScrollbarBindings $tradecanvas .gameframe.paned.tradeframe.scrolly
+    ::autoscroll::autoscroll .gameframe.paned.tradeframe.scrolly
+    ::autoscroll::autoscroll .gameframe.paned.tradeframe.scrollx
+    set tradeframe [ttk::frame $tradecanvas.trade]
+    SetScrollbarBindings $tradeframe .gameframe.paned.tradeframe.scrolly
+    # Type of items to show
+    grid [ttk::frame $tradeframe.options] -sticky w
+    SetScrollbarBindings $tradeframe.options .gameframe.paned.tradeframe.scrolly
+    ttk::label $tradeframe.options.typelabel -text {Type:}
+    SetScrollbarBindings $tradeframe.options.typelabel \
+       .gameframe.paned.tradeframe.scrolly
+    ttk::combobox $tradeframe.options.type -state readonly
+    bind $tradeframe.options.type <<ComboboxSelected>> \
+       {ShowTrade [$tradeframe.options.type get]}
+    tooltip::tooltip $tradeframe.options.type {Show only items of the selected type}
+    ttk::entry $tradeframe.options.search -validate key \
+       -validatecommand {SearchTrade %P}
+    tooltip::tooltip $tradeframe.options.search {Enter a name of an item which you looking for}
+    grid [ttk::frame $tradeframe.options.playerinfo] -sticky nw -columnspan 2 -row 1
+    SetScrollbarBindings $tradeframe.options.playerinfo \
+       .gameframe.paned.tradeframe.scrolly
+    grid [ttk::label $tradeframe.options.playerinfo.moneyinfo -wraplength 300] \
+       -sticky w
+    SetScrollbarBindings $tradeframe.options.playerinfo.moneyinfo \
+       .gameframe.paned.tradeframe.scrolly
+    ttk::label $tradeframe.options.playerinfo.moneyinfo2 -wraplength 300 \
+       -style Golden.TLabel
+    SetScrollbarBindings $tradeframe.options.playerinfo.moneyinfo2 \
+       .gameframe.paned.tradeframe.scrolly
+    grid [ttk::frame $tradeframe.options.playerinfo.cargoinfo] -columnspan 2
+    SetScrollbarBindings $tradeframe.options.playerinfo.cargoinfo \
+       .gameframe.paned.tradeframe.scrolly
+    grid [ttk::label $tradeframe.options.playerinfo.cargoinfo.cargoinfo -wraplength 300 -text {Free cargo space is }] \
+       -sticky w
+    SetScrollbarBindings $tradeframe.options.playerinfo.cargoinfo.cargoinfo \
+       .gameframe.paned.tradeframe.scrolly
+    grid [ttk::label $tradeframe.options.playerinfo.cargoinfo.cargoinfo2 -wraplength 300 \
+       -style Golden.TLabel] -sticky w -row 0 -column 1
+    SetScrollbarBindings $tradeframe.options.playerinfo.cargoinfo.cargoinfo2 \
+       .gameframe.paned.tradeframe.scrolly
+    grid [ttk::frame $tradeframe.options.baseinfo] -sticky nw -column 2 -row 1
+    SetScrollbarBindings $tradeframe.options.baseinfo \
+       .gameframe.paned.tradeframe.scrolly
+    grid [ttk::label $tradeframe.options.baseinfo.baseinfo -wraplength 300]
+    SetScrollbarBindings $tradeframe.options.baseinfo.baseinfo \
+       .gameframe.paned.tradeframe.scrolly
+    grid [ttk::label $tradeframe.options.baseinfo.baseinfo2 -wraplength 300 \
+       -style Golden.TLabel] -sticky w -row 0 -column 1
+    SetScrollbarBindings $tradeframe.options.baseinfo.baseinfo2 \
+       .gameframe.paned.tradeframe.scrolly
+    grid [ttk::frame $tradeframe.options.baseinfo.basecargoinfo] -columnspan 2 -sticky w
+    SetScrollbarBindings $tradeframe.options.baseinfo.basecargoinfo \
+       .gameframe.paned.tradeframe.scrolly
+    grid [ttk::label $tradeframe.options.baseinfo.basecargoinfo.baseinfo -wraplength 300 -text {Base has}]
+    SetScrollbarBindings $tradeframe.options.basecargoinfo.baseinfo \
+       .gameframe.paned.tradeframe.scrolly
+    grid [ttk::label $tradeframe.options.baseinfo.basecargoinfo.baseinfo2 -wraplength 300 \
+       -style Golden.TLabel] -sticky w -row 0 -column 1
+    SetScrollbarBindings $tradeframe.options.baseinfo.basecargoinfo.baseinfo2 \
+       .gameframe.paned.tradeframe.scrolly
+  """)
+  tclEval(script = "bind " & tradeFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
+  tradeFrame = tradeCanvas & ".trade"
+  tradeTable = createTable(parent = tradeFrame, headers = @["Name", "Type",
+      "Durability", "Quality", "Price", "Profit", "Weight", "Owned",
+      "Available"],
+      scrollbar = mainPaned & ".tradeframe.scrolly",
+      command = "SortTradeItems",
+      tooltipTExt = "Press mouse button to sort the items.")
+  tclEval(script = "grid configure " & tradeTable.canvas & " -row 1")
+
 proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
     RootEffect], cdecl, contractual, ruleOff: "params".} =
@@ -62,86 +151,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
   var label: string = tradeCanvas & ".trade.options.playerinfo.moneyinfo"
   if tclEval2(script = "winfo exists " & label) == "0":
-    tclEval(script = """
-      ttk::frame .gameframe.paned.tradeframe
-      set tradecanvas [canvas .gameframe.paned.tradeframe.canvas \
-         -yscrollcommand [list .gameframe.paned.tradeframe.scrolly set] \
-         -xscrollcommand [list .gameframe.paned.tradeframe.scrollx set]]
-      pack [ttk::scrollbar .gameframe.paned.tradeframe.scrolly -orient vertical \
-         -command [list $tradecanvas yview]] -side right -fill y
-      pack $tradecanvas -side top -fill both
-      pack [ttk::scrollbar .gameframe.paned.tradeframe.scrollx -orient horizontal \
-         -command [list $tradecanvas xview]] -fill x
-      SetScrollbarBindings $tradecanvas .gameframe.paned.tradeframe.scrolly
-      ::autoscroll::autoscroll .gameframe.paned.tradeframe.scrolly
-      ::autoscroll::autoscroll .gameframe.paned.tradeframe.scrollx
-      set tradeframe [ttk::frame $tradecanvas.trade]
-      SetScrollbarBindings $tradeframe .gameframe.paned.tradeframe.scrolly
-      # Type of items to show
-      grid [ttk::frame $tradeframe.options] -sticky w
-      SetScrollbarBindings $tradeframe.options .gameframe.paned.tradeframe.scrolly
-      ttk::label $tradeframe.options.typelabel -text {Type:}
-      SetScrollbarBindings $tradeframe.options.typelabel \
-         .gameframe.paned.tradeframe.scrolly
-      ttk::combobox $tradeframe.options.type -state readonly
-      bind $tradeframe.options.type <<ComboboxSelected>> \
-         {ShowTrade [$tradeframe.options.type get]}
-      tooltip::tooltip $tradeframe.options.type {Show only items of the selected type}
-      ttk::entry $tradeframe.options.search -validate key \
-         -validatecommand {SearchTrade %P}
-      tooltip::tooltip $tradeframe.options.search {Enter a name of an item which you looking for}
-      grid [ttk::frame $tradeframe.options.playerinfo] -sticky nw -columnspan 2 -row 1
-      SetScrollbarBindings $tradeframe.options.playerinfo \
-         .gameframe.paned.tradeframe.scrolly
-      grid [ttk::label $tradeframe.options.playerinfo.moneyinfo -wraplength 300] \
-         -sticky w
-      SetScrollbarBindings $tradeframe.options.playerinfo.moneyinfo \
-         .gameframe.paned.tradeframe.scrolly
-      ttk::label $tradeframe.options.playerinfo.moneyinfo2 -wraplength 300 \
-         -style Golden.TLabel
-      SetScrollbarBindings $tradeframe.options.playerinfo.moneyinfo2 \
-         .gameframe.paned.tradeframe.scrolly
-      grid [ttk::frame $tradeframe.options.playerinfo.cargoinfo] -columnspan 2
-      SetScrollbarBindings $tradeframe.options.playerinfo.cargoinfo \
-         .gameframe.paned.tradeframe.scrolly
-      grid [ttk::label $tradeframe.options.playerinfo.cargoinfo.cargoinfo -wraplength 300 -text {Free cargo space is }] \
-         -sticky w
-      SetScrollbarBindings $tradeframe.options.playerinfo.cargoinfo.cargoinfo \
-         .gameframe.paned.tradeframe.scrolly
-      grid [ttk::label $tradeframe.options.playerinfo.cargoinfo.cargoinfo2 -wraplength 300 \
-         -style Golden.TLabel] -sticky w -row 0 -column 1
-      SetScrollbarBindings $tradeframe.options.playerinfo.cargoinfo.cargoinfo2 \
-         .gameframe.paned.tradeframe.scrolly
-      grid [ttk::frame $tradeframe.options.baseinfo] -sticky nw -column 2 -row 1
-      SetScrollbarBindings $tradeframe.options.baseinfo \
-         .gameframe.paned.tradeframe.scrolly
-      grid [ttk::label $tradeframe.options.baseinfo.baseinfo -wraplength 300]
-      SetScrollbarBindings $tradeframe.options.baseinfo.baseinfo \
-         .gameframe.paned.tradeframe.scrolly
-      grid [ttk::label $tradeframe.options.baseinfo.baseinfo2 -wraplength 300 \
-         -style Golden.TLabel] -sticky w -row 0 -column 1
-      SetScrollbarBindings $tradeframe.options.baseinfo.baseinfo2 \
-         .gameframe.paned.tradeframe.scrolly
-      grid [ttk::frame $tradeframe.options.baseinfo.basecargoinfo] -columnspan 2 -sticky w
-      SetScrollbarBindings $tradeframe.options.baseinfo.basecargoinfo \
-         .gameframe.paned.tradeframe.scrolly
-      grid [ttk::label $tradeframe.options.baseinfo.basecargoinfo.baseinfo -wraplength 300 -text {Base has}]
-      SetScrollbarBindings $tradeframe.options.basecargoinfo.baseinfo \
-         .gameframe.paned.tradeframe.scrolly
-      grid [ttk::label $tradeframe.options.baseinfo.basecargoinfo.baseinfo2 -wraplength 300 \
-         -style Golden.TLabel] -sticky w -row 0 -column 1
-      SetScrollbarBindings $tradeframe.options.baseinfo.basecargoinfo.baseinfo2 \
-         .gameframe.paned.tradeframe.scrolly
-    """)
-    tclEval(script = "bind " & tradeFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
-    tradeFrame = tradeCanvas & ".trade"
-    tradeTable = createTable(parent = tradeFrame, headers = @["Name", "Type",
-        "Durability", "Quality", "Price", "Profit", "Weight", "Owned",
-        "Available"],
-        scrollbar = mainPaned & ".tradeframe.scrolly",
-        command = "SortTradeItems",
-        tooltipTExt = "Press mouse button to sort the items.")
-    tclEval(script = "grid configure " & tradeTable.canvas & " -row 1")
+    createTradeUi(tradeFrame = tradeFrame, tradeCanvas = tradeCanvas)
   elif tclEval2(script = "winfo ismapped " & label) == "1" and argc == 1:
     itemsSortOrder = defaultItemsSortOrder
     tclEval(script = "grid remove " & closeButton)
