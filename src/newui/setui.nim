@@ -834,6 +834,9 @@ type
       ## The index of the crew member
     checked*: bool
       ## If true, the crew member is checked, otherwise false
+  AvailableOrder* = object
+    text*: string
+    order*: CrewOrders
 
 var
   needClean*: bool = false
@@ -845,6 +848,8 @@ var
     ## listed
   crewDataList*: seq[CrewData] = @[]
     ## The list of data related to the player's ship's crew members
+  availableOrders*: seq[AvailableOrder] = @[]
+    ## The list of available orders for the selected crew member
 
 proc refreshCrewList*() {.raises: [], tags: [], contractual.} =
   ## Set the list of crew members in the player's ship
@@ -866,3 +871,94 @@ proc setShipInfo*() {.raises: [], tags: [], contractual.} =
     for skill in skillsList.values:
       crewSkillsList.add(y = skill.name)
   refreshCrewList()
+
+proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+        contractual.} =
+  ## Set the list of available orders for the selected crew member
+  ##
+  ## * memberIndex - the index of the crew member for which the list will be set
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  availableOrders = @[]
+  var needRepair, needClean: bool = false
+  for module in playerShip.modules:
+    if module.durability < module.maxDurability:
+      needRepair = true
+    if (module.durability > 0 and module.mType == ModuleType2.cabin) and
+        module.cleanliness < module.quality:
+      needClean = true
+    if needRepair and needClean:
+      break
+  let member: MemberData = playerShip.crew[memberIndex]
+  if ((member.tired == 100 or member.hunger == 100 or member.thirst == 100) and
+      member.order != rest) or member.skills.len == 0 or
+      member.contractLength == 0:
+    availableOrders.add(y = AvailableOrder(text: "Go on break", order: rest))
+  else:
+    if member.order != pilot:
+      availableOrders.add(y = AvailableOrder(text: "Go piloting the ship", order: pilot))
+    if member.order != engineer:
+      availableOrders.add(y = AvailableOrder(text: "Go engineering the ship", order: engineer))
+
+    proc isWorking(owners: seq[int]; mIndex: Natural): bool =
+      for owner in owners:
+        if owner == mIndex:
+          return true
+      return false
+
+    var orderAdded: bool = false
+    for index, module in playerShip.modules:
+      if module.durability > 0:
+        case module.mType
+        of gun, harpoonGun:
+          if module.owner[0] != memberIndex:
+            availableOrders.add(y = AvailableOrder(text: "Operate " & module.name, order: gunner))
+        of workshop:
+          if not isWorking(owners = module.owner, mIndex = memberIndex) and
+              module.craftingIndex.len > 0:
+            try:
+              availableOrders.add(y = AvailableOrder(text: (if module.craftingIndex.len >
+                  6 and module.craftingIndex[0 .. 4] == "Study": "Study " &
+                  itemsList[module.craftingIndex[6..
+                  ^1].strip.parseInt].name elif module.craftingIndex.len >
+                  12 and module.craftingIndex[0 .. 10] ==
+                  "Deconstruct": "Deconstruct " & itemsList[
+                  module.craftingIndex[12..
+                  ^1].strip.parseInt].name else: "Manufacture " &
+                  $module.craftingAmount & "x " & itemsList[recipesList[
+                  module.craftingIndex].resultIndex].name), order: craft))
+            except:
+              dialog = setError(message = "Can't add an available order.")
+              return
+#        of cabin:
+#          if module.cleanliness < module.quality and member.order != clean and needClean:
+#            availableOrders.add(y = " {Clean ship}")
+#            tclCommands.add(y = " {Clean " & $(memberIndex + 1) & "}")
+#            needClean = false
+#        of trainingRoom:
+#          if not isWorking(owners = module.owner, mIndex = memberIndex):
+#            availableOrders.add(y = " {Go training in " & module.name & "}")
+#            tclCommands.add(y = " {Train " & $(memberIndex + 1) & " " & $(
+#                index + 1) & "}")
+        else:
+          discard
+#        if needRepair and not orderAdded:
+#          availableOrders.add(y = " {Repair ship}")
+#          tclCommands.add(y = " {Repair " & $(memberIndex + 1) & "}")
+#          orderAdded = true
+#    for index, member2 in playerShip.crew:
+#      if member2.health < 100 and index != memberIndex and member2.order != heal:
+#        availableOrders.add(y = " {Heal wounded crew members}")
+#        tclCommands.add(y = " {Heal " & $(memberIndex + 1) & "}")
+#        break
+#    if playerShip.upgradeModule > -1 and member.order != upgrading:
+#      availableOrders.add(y = " {Upgrade module}")
+#      tclCommands.add(y = " {Upgrading " & $(memberIndex + 1) & "}")
+#    if member.order != talk:
+#      availableOrders.add(y = " {Talk with others}")
+#      tclCommands.add(y = " {Talk " & $(memberIndex + 1) & "}")
+#    if member.order != rest:
+#      availableOrders.add(y = " {Go on break}")
+#      tclCommands.add(y = " {Rest " & $(memberIndex + 1) & "}")
