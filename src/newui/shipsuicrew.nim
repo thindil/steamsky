@@ -18,9 +18,9 @@
 ## Provides code related to the information about the player's ship's crew
 ## members, like listing them, showing information, give orders, etc.
 
-import std/[algorithm, strutils, tables]
+import std/[algorithm, sequtils, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crew, game, messages, shipscrew, types]
+import ../[config, crew, game, messages, shipscrew, shipscrew2, types]
 import coreui, dialogs, errordialog, setui, table, themes
 
 type
@@ -243,7 +243,7 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog.
   const
     width: float = 400
-    height: float = 400
+    height: float = 200
 
   let
     member: MemberData = playerShip.crew[crewIndex]
@@ -252,6 +252,12 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 2)
+    label(str = "Current order:")
+    try:
+      colorLabel(str = getCurrentOrder(memberIndex = crewIndex),
+          color = theme.colors[goldenColor])
+    except:
+      dialog = setError(message = "Can't get the current order.")
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -300,7 +306,9 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     setLayoutRowDynamic(height = 35, cols = cols, ratio = ratio)
     label(str = "Orders for all:")
     if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Go rest everyone")
+      addTooltip(bounds = getWidgetBounds(), text = "Go rest " &
+        (if crewDataList.any(proc (x: CrewData): bool = x.checked):
+          "selected crew members" else: "everyone"))
     imageButton(image = images[goRestIcon]):
       ordersForAll(order = rest, dialog = dialog)
     if needClean:
