@@ -629,11 +629,10 @@ type
     ## Internal Nuklear type
     active*: nk_bool
     offset*: nk_size
-  nk_memory* {.importc: "struct nk_memory", nodecl.} = object
+  nk_memory* {.importc: "struct nk_memory", completeStruct.} = object
     ## Internal Nuklear type
     `ptr`*: ptr nk_size
     size*: nk_size
-    marker*: array[bufferMax, nk_buffer_marker]
   nk_plugin_alloc* = proc (handle: nk_handle; old: pointer;
       size: nk_size): pointer {.cdecl.}
     ## Internal Nuklear type
@@ -653,6 +652,7 @@ type
     pool*: nk_allocator
     grow_factor*: cfloat
     calls*: nk_size
+    marker*: array[bufferMax, nk_buffer_marker]
   nk_table* {.importc: "struct nk_table".} = object
     ## Internal Nuklear type
     `seq`*, size*: cuint
