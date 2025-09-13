@@ -258,7 +258,8 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
           color = theme.colors[goldenColor])
     except:
       dialog = setError(message = "Can't get the current order.")
-    addCloseButton(dialog = dialog, isPopup = false)
+    addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
+        label = "Cancel", isPopup = false)
 
   windowSetFocus(name = windowName)
 
