@@ -10,11 +10,11 @@ suite "Unit tests for basestypes module":
 
   test "Get the price of a non-buyable item.":
     check:
-      getPrice("0", 1) == 0
+      getPrice("0", 1, quality = normal) == 0
 
   test "Get the price of a buyable item.":
     check:
-      getPrice("1", 2) > 0
+      getPrice("1", 2, quality = normal) > 0
 
   test "Check if the item is non-buyable.":
     check:
