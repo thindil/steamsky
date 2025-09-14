@@ -127,6 +127,134 @@ proc createTradeUi(tradeFrame: var string, tradeCanvas: string) {.raises: [],
       tooltipTExt = "Press mouse button to sort the items.")
   tclEval(script = "grid configure " & tradeTable.canvas & " -row 1")
 
+proc showPlayersItems(currentItemIndex: var Natural; baseType: string;
+    indexesList: var seq[Natural]; argc: cint; argv: cstringArray;
+    startRow: Positive; currentRow: var Positive; baseIndex: ExtendedBasesRange;
+    eventIndex: int; baseCargo: seq[BaseCargo]): bool {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the list of items available to trade from the player's ship's cargo
+  ##
+  ## * currentItemIndex - the current index of the item to show
+  ## * baseType         - the type of base in which the list will be show
+  ## * indexesList      - the list of items' indexes
+  ## * argc             - the amount of arguments sent via Tcl
+  ## * argv             - the list of arguments sent via Tcl
+  ## * startRow         - the number of first row
+  ## * currentRow       - the current row in the table
+  ## * baseIndex        - the index of the base in which trade will be
+  ## * eventIndex       - the index of an event on the map
+  ## * baseCargo        - the cargo of the base
+  ##
+  ## Returns true if the list was properly shown, otherwise false
+  for i in itemsIndexes:
+    currentItemIndex.inc
+    if i == -1:
+      break
+    try:
+      if getPrice(baseType = baseType, itemIndex = playerShip.cargo[
+          i].protoIndex, quality = normal) == 0:
+        continue
+    except:
+      showError(message = "Can't get price.")
+      return false
+    let
+      protoIndex: Natural = playerShip.cargo[i].protoIndex
+      baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
+          durability = playerShip.cargo[i].durability,
+          quality = playerShip.cargo[i].quality)
+    if baseCargoIndex > -1:
+      indexesList.add(y = baseCargoIndex)
+    let itemType: string = try:
+          if itemsList[protoIndex].showType.len == 0:
+            itemsList[protoIndex].itemType
+          else:
+            itemsList[protoIndex].showType
+        except:
+          showError(message = "Can't get item type2.")
+          return false
+    if argc > 1 and argv[1] != "All" and itemType != $argv[1]:
+      continue
+    let itemName: string = getItemName(item = playerShip.cargo[i],
+        damageInfo = false, toLower = false)
+    if argc == 3 and itemName.toLowerAscii.find(sub = ($argv[
+        2]).toLowerAscii) == -1:
+      continue
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    var price: int = 0
+    if baseCargoIndex == -1:
+      try:
+        price = getPrice(baseType = baseType, itemIndex = protoIndex,
+            quality = playerShip.cargo[i].quality)
+      except:
+        showError(message = "Can't get price2.")
+        return false
+    else:
+      price = if baseIndex > 0:
+          skyBases[baseIndex].cargo[baseCargoIndex].price
+        else:
+          traderCargo[baseCargoIndex].price
+    if eventIndex > -1:
+      if eventsList[eventIndex].eType == doublePrice and eventsList[
+          eventIndex].itemIndex == protoIndex:
+        price *= 2
+    let profit: int = price - playerShip.cargo[i].price
+    var baseAmount: Natural = 0
+    if baseIndex > 0:
+      try:
+        if baseCargoIndex > -1 and isBuyable(baseType = baseType,
+            itemIndex = protoIndex):
+          baseAmount = baseCargo[baseCargoIndex].amount
+      except:
+        showError(message = "Can't get base amount.")
+        return false
+    else:
+      if baseCargoIndex > -1:
+        baseAmount = baseCargo[baseCargoIndex].amount
+    addButton(table = tradeTable, text = itemName,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $(i + 1), column = 1)
+    addButton(table = tradeTable, text = itemType,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $(i + 1), column = 2)
+    let itemDurability: string = (if playerShip.cargo[i].durability <
+        100: getItemDamage(itemDurability = playerShip.cargo[
+        i].durability) else: "Unused")
+    addProgressbar(table = tradeTable, value = playerShip.cargo[i].durability,
+        maxValue = defaultItemDurability, tooltip = itemDurability,
+        command = "ShowTradeItemInfo " & $(i + 1), column = 3)
+    addButton(table = tradeTable, text = ($playerShip.cargo[
+        i].quality).capitalizeAscii, tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $(i + 1), column = 4)
+    addButton(table = tradeTable, text = $price,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $(i + 1), column = 5)
+    addButton(table = tradeTable, text = $profit,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $(i + 1), column = 6, color = (
+        if profit >
+        0: tclGetVar(varName = "ttk::theme::" & gameSettings.interfaceTheme &
+        "::colors(-green)") elif profit < 0: tclGetVar(
+        varName = "ttk::theme::" & gameSettings.interfaceTheme &
+        "::colors(-green)") else: ""))
+    try:
+      addButton(table = tradeTable, text = $itemsList[protoIndex].weight &
+          " kg", tooltip = "Show available options for item",
+          command = "ShowTradeItemInfo " & $(i + 1), column = 7)
+    except:
+      showError(message = "Can't show weight")
+      return false
+    addButton(table = tradeTable, text = $playerShip.cargo[i].amount,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $(i + 1), column = 8)
+    addButton(table = tradeTable, text = $baseAmount,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $(i + 1), column = 9, newRow = true)
+    if tradeTable.row == gameSettings.listsLimit + 1:
+      break
+  return true
+
 proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
     RootEffect], cdecl, contractual, ruleOff: "params".} =
@@ -215,108 +343,11 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get page.")
     startRow: Positive = ((page - 1) * gameSettings.listsLimit) + 1
-  for i in itemsIndexes:
-    currentItemIndex.inc
-    if i == -1:
-      break
-    try:
-      if getPrice(baseType = baseType, itemIndex = playerShip.cargo[
-          i].protoIndex, quality = normal) == 0:
-        continue
-    except:
-      return showError(message = "Can't get price.")
-    let
-      protoIndex: Natural = playerShip.cargo[i].protoIndex
-      baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
-          durability = playerShip.cargo[i].durability,
-          quality = playerShip.cargo[i].quality)
-    if baseCargoIndex > -1:
-      indexesList.add(y = baseCargoIndex)
-    let itemType: string = try:
-          if itemsList[protoIndex].showType.len == 0:
-            itemsList[protoIndex].itemType
-          else:
-            itemsList[protoIndex].showType
-        except:
-          return showError(message = "Can't get item type2.")
-    if argc > 1 and argv[1] != "All" and itemType != $argv[1]:
-      continue
-    let itemName: string = getItemName(item = playerShip.cargo[i],
-        damageInfo = false, toLower = false)
-    if argc == 3 and itemName.toLowerAscii.find(sub = ($argv[
-        2]).toLowerAscii) == -1:
-      continue
-    if currentRow < startRow:
-      currentRow.inc
-      continue
-    var price: int = 0
-    if baseCargoIndex == -1:
-      try:
-        price = getPrice(baseType = baseType, itemIndex = protoIndex,
-            quality = playerShip.cargo[i].quality)
-      except:
-        return showError(message = "Can't get price2.")
-    else:
-      price = if baseIndex > 0:
-          skyBases[baseIndex].cargo[baseCargoIndex].price
-        else:
-          traderCargo[baseCargoIndex].price
-    if eventIndex > -1:
-      if eventsList[eventIndex].eType == doublePrice and eventsList[
-          eventIndex].itemIndex == protoIndex:
-        price *= 2
-    let profit: int = price - playerShip.cargo[i].price
-    var baseAmount: Natural = 0
-    if baseIndex > 0:
-      try:
-        if baseCargoIndex > -1 and isBuyable(baseType = baseType,
-            itemIndex = protoIndex):
-          baseAmount = baseCargo[baseCargoIndex].amount
-      except:
-        return showError(message = "Can't get base amount.")
-    else:
-      if baseCargoIndex > -1:
-        baseAmount = baseCargo[baseCargoIndex].amount
-    addButton(table = tradeTable, text = itemName,
-        tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $(i + 1), column = 1)
-    addButton(table = tradeTable, text = itemType,
-        tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $(i + 1), column = 2)
-    let itemDurability: string = (if playerShip.cargo[i].durability <
-        100: getItemDamage(itemDurability = playerShip.cargo[
-        i].durability) else: "Unused")
-    addProgressbar(table = tradeTable, value = playerShip.cargo[i].durability,
-        maxValue = defaultItemDurability, tooltip = itemDurability,
-        command = "ShowTradeItemInfo " & $(i + 1), column = 3)
-    addButton(table = tradeTable, text = ($playerShip.cargo[
-        i].quality).capitalizeAscii, tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $(i + 1), column = 4)
-    addButton(table = tradeTable, text = $price,
-        tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $(i + 1), column = 5)
-    addButton(table = tradeTable, text = $profit,
-        tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $(i + 1), column = 6, color = (
-        if profit >
-        0: tclGetVar(varName = "ttk::theme::" & gameSettings.interfaceTheme &
-        "::colors(-green)") elif profit < 0: tclGetVar(
-        varName = "ttk::theme::" & gameSettings.interfaceTheme &
-        "::colors(-green)") else: ""))
-    try:
-      addButton(table = tradeTable, text = $itemsList[protoIndex].weight &
-          " kg", tooltip = "Show available options for item",
-          command = "ShowTradeItemInfo " & $(i + 1), column = 7)
-    except:
-      return showError(message = "Can't show weight")
-    addButton(table = tradeTable, text = $playerShip.cargo[i].amount,
-        tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $(i + 1), column = 8)
-    addButton(table = tradeTable, text = $baseAmount,
-        tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $(i + 1), column = 9, newRow = true)
-    if tradeTable.row == gameSettings.listsLimit + 1:
-      break
+  if not showPlayersItems(currentItemIndex = currentItemIndex,
+      baseType = baseType, indexesList = indexesList, argc = argc, argv = argv,
+      startRow = startRow, currentRow = currentRow, baseIndex = baseIndex,
+      eventIndex = eventIndex, baseCargo = baseCargo):
+    return tclOk
   currentItemIndex = playerShip.cargo.len + 1
   for i in currentItemIndex .. itemsIndexes.high:
     let
