@@ -213,17 +213,6 @@ proc ordersForAll(order: CrewOrders; dialog: var GameDialog) {.raises: [],
     except:
       dialog = setError(message = "Can't give orders.")
 
-proc showMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
-    RootEffect], contractual.} =
-  ## Show the selected member information
-  ##
-  ## * data   - the index of the selected item
-  ## * dialog - the current in-game dialog displayed on the screen
-  ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
-  crewIndex = crewDataList[data].index
-
 proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog)
   {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Set the list of available orders for the selected crew member
@@ -380,6 +369,40 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
+proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Set the dialog with information about the selected member
+  ##
+  ## * data   - the index of the selected item
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  crewIndex = crewDataList[data].index
+
+proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the dialog to give an order for the selected crew member
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  const
+    width: float = 400
+    height: float = 200
+
+  let
+    member: MemberData = playerShip.crew[crewIndex]
+    windowName: string = "Change order for " & member.name
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 2)
+    addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
+        label = "Cancel", isPopup = false)
+
+  windowSetFocus(name = windowName)
+
 const
   headers: array[9, HeaderData[CrewSortOrders]] = [
     HeaderData[CrewSortOrders](label: "", sortAsc: selectedAsc,
@@ -487,7 +510,7 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         checked = data.checked)
     addButton(label = playerShip.crew[data.index].name,
         tooltip = "Show available crew member's options", data = data.index,
-        code = showMemberInfo, dialog = dialog)
+        code = setMemberInfo, dialog = dialog)
     addButton(label = ($playerShip.crew[data.index].order).capitalizeAscii,
         tooltip = "The current order for the selected crew member. Press the mouse button to change it.",
         data = data.index, code = setGiveOrder, dialog = dialog)
@@ -495,7 +518,7 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       addButton(label = getHighestSkill(memberIndex = data.index,
           dialog = dialog),
           tooltip = "The highest skill of the selected crew member",
-          data = data.index, code = showMemberInfo, dialog = dialog)
+          data = data.index, code = setMemberInfo, dialog = dialog)
     else:
       try:
         addButton(label = getSkillLevelName(skillLevel = getSkillLevel(
@@ -503,29 +526,29 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             skillName = crewSkillsList[skillIndex]))),
             tooltip = "The level of " & crewSkillsList[skillIndex] &
             " of the selected crew member", data = data.index,
-            code = showMemberInfo, dialog = dialog)
+            code = setMemberInfo, dialog = dialog)
       except KeyError:
         dialog = setError(message = "Can't get the level of the skill.")
     addProgressBar(tooltip = "The current health level of the selected crew member",
         value = playerShip.crew[data.index].health, maxValue = SkillRange.high,
-        data = data.index, code = showMemberInfo, dialog = dialog)
+        data = data.index, code = setMemberInfo, dialog = dialog)
     var tiredLevel: int = playerShip.crew[data.index].tired - playerShip.crew[
         data.index].attributes[conditionIndex].level
     if tiredLevel < 0:
       tiredLevel = 0
     addProgressBar(tooltip = "The current tired level of the selected crew member",
         value = tiredLevel, maxValue = SkillRange.high, data = data.index,
-        code = showMemberInfo, dialog = dialog)
+        code = setMemberInfo, dialog = dialog)
     addProgressBar(tooltip = "The current thirst level of the selected crew member",
         value = playerShip.crew[data.index].thirst, maxValue = SkillRange.high,
-        data = data.index, code = showMemberInfo, dialog = dialog)
+        data = data.index, code = setMemberInfo, dialog = dialog)
     addProgressBar(tooltip = "The current hunger level of the selected crew member",
         value = playerShip.crew[data.index].hunger, maxValue = SkillRange.high,
-        data = data.index, code = showMemberInfo, dialog = dialog)
+        data = data.index, code = setMemberInfo, dialog = dialog)
     addProgressBar(tooltip = "The current morale level of the selected crew member",
         value = playerShip.crew[data.index].morale[1],
             maxValue = SkillRange.high,
-        data = data.index, code = showMemberInfo, dialog = dialog)
+        data = data.index, code = setMemberInfo, dialog = dialog)
     row.inc
     if row == gameSettings.listsLimit + 1:
       break
