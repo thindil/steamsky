@@ -845,10 +845,6 @@ var
     ## listed
   crewDataList*: seq[CrewData] = @[]
     ## The list of data related to the player's ship's crew members
-  availableOrdersText*: seq[string] = @[]
-    ## The list of available orders names for the selected crew member
-  availableOrders*: seq[CrewOrders] = @[]
-    ## The list of available orders for the selected crew member
 
 proc refreshCrewList*() {.raises: [], tags: [], contractual.} =
   ## Set the list of crew members in the player's ship
@@ -871,98 +867,3 @@ proc setShipInfo*() {.raises: [], tags: [], contractual.} =
       crewSkillsList.add(y = skill.name)
   refreshCrewList()
 
-proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog)
-  {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
-  ## Set the list of available orders for the selected crew member
-  ##
-  ## * memberIndex - the index of the crew member for which the list will be set
-  ## * dialog - the current in-game dialog displayed on the screen
-  ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
-  availableOrdersText = @[]
-  availableOrders = @[]
-  var needRepair, needClean: bool = false
-  for module in playerShip.modules:
-    if module.durability < module.maxDurability:
-      needRepair = true
-    if (module.durability > 0 and module.mType == ModuleType2.cabin) and
-        module.cleanliness < module.quality:
-      needClean = true
-    if needRepair and needClean:
-      break
-  let member: MemberData = playerShip.crew[memberIndex]
-  if ((member.tired == 100 or member.hunger == 100 or member.thirst == 100) and
-      member.order != rest) or member.skills.len == 0 or
-      member.contractLength == 0:
-    availableOrdersText.add(y = "Go on break")
-    availableOrders.add(y = rest)
-  else:
-    if member.order != pilot:
-      availableOrdersText.add(y = "Go piloting the ship")
-      availableOrders.add(y = pilot)
-    if member.order != engineer:
-      availableOrdersText.add(y = "Go engineering the ship")
-      availableOrders.add(y = engineer)
-
-    proc isWorking(owners: seq[int]; mIndex: Natural): bool =
-      for owner in owners:
-        if owner == mIndex:
-          return true
-      return false
-
-    var orderAdded: bool = false
-    for index, module in playerShip.modules:
-      if module.durability > 0:
-        case module.mType
-        of gun, harpoonGun:
-          if module.owner[0] != memberIndex:
-            availableOrdersText.add(y = "Operate " & module.name)
-            availableOrders.add(y = gunner)
-        of workshop:
-          if not isWorking(owners = module.owner, mIndex = memberIndex) and
-              module.craftingIndex.len > 0:
-            try:
-              availableOrdersText.add(y = (if module.craftingIndex.len >
-                  6 and module.craftingIndex[0 .. 4] == "Study": "Study " &
-                  itemsList[module.craftingIndex[6 ..
-                  ^1].strip.parseInt].name elif module.craftingIndex.len >
-                  12 and module.craftingIndex[0 .. 10] ==
-                  "Deconstruct": "Deconstruct " & itemsList[
-                  module.craftingIndex[12 ..
-                  ^1].strip.parseInt].name else: "Manufacture " &
-                  $module.craftingAmount & "x " & itemsList[recipesList[
-                  module.craftingIndex].resultIndex].name))
-              availableOrders.add(y = craft)
-            except:
-              dialog = setError(message = "Can't add an available order.")
-              return
-        of cabin:
-          if module.cleanliness < module.quality and member.order != clean and needClean:
-            availableOrdersText.add(y = "Clean ship")
-            availableOrders.add(y = clean)
-            needClean = false
-        of trainingRoom:
-          if not isWorking(owners = module.owner, mIndex = memberIndex):
-            availableOrdersText.add(y = "Go training in " & module.name)
-            availableOrders.add(y = train)
-        else:
-          discard
-        if needRepair and not orderAdded:
-          availableOrdersText.add(y = "Repair ship")
-          availableOrders.add(y = repair)
-          orderAdded = true
-    for index, member2 in playerShip.crew:
-      if member2.health < 100 and index != memberIndex and member2.order != heal:
-        availableOrdersText.add(y = "Heal wounded crew members")
-        availableOrders.add(y = heal)
-        break
-    if playerShip.upgradeModule > -1 and member.order != upgrading:
-      availableOrdersText.add(y = "Upgrade module")
-      availableOrders.add(y = upgrading)
-    if member.order != talk:
-      availableOrdersText.add(y = "Talk with others")
-      availableOrders.add(y = talk)
-    if member.order != rest:
-      availableOrdersText.add(y = "Go on break")
-      availableOrders.add(y = rest)
