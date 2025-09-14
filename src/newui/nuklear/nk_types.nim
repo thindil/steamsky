@@ -534,7 +534,8 @@ type
     w*, h*: cushort
     x*, y*: cshort
     color*: nk_color
-  nk_command_text* {.importc: "struct nk_command_text", completeStruct.} = object
+  nk_command_text* {.importc: "struct nk_command_text",
+      completeStruct.} = object
     ## Internal Nuklear type
     x*, y*: cshort
     w*, h*: cushort
@@ -638,12 +639,12 @@ type
     ## Internal Nuklear type
   nk_plugin_free* = proc (handle: nk_handle; old: pointer) {.cdecl.}
     ## Internal Nuklear type
-  nk_allocator* {.importc: "struct nk_allocator", nodecl.} = object
+  nk_allocator* {.importc: "struct nk_allocator", completeStruct.} = object
     ## Internal Nuklear type
     alloc*: nk_plugin_alloc
     free*: nk_plugin_free
     userdata*: nk_handle
-  nk_buffer* {.importc: "struct nk_buffer", nodecl.} = object
+  nk_buffer* {.importc: "struct nk_buffer", completeStruct.} = object
     ## Internal Nuklear type
     allocated*, needed*: nk_size
     memory*: nk_memory
@@ -653,7 +654,7 @@ type
     grow_factor*: cfloat
     calls*: nk_size
     marker*: array[bufferMax, nk_buffer_marker]
-  nk_table* {.importc: "struct nk_table".} = object
+  nk_table* {.importc: "struct nk_table", completeStruct.} = object
     ## Internal Nuklear type
     `seq`*, size*: cuint
     keys*, values*: pointer
@@ -663,7 +664,8 @@ type
     tbl*: nk_table
     pan*: nk_panel
     win*: nk_window
-  nk_page_element* {.importc: "struct nk_page_element".} = object
+  nk_page_element* {.importc: "struct nk_page_element",
+      completeStruct.} = object
     data*: nk_page_data
     next*, prev*: pointer
     ## Internal Nuklear type
