@@ -45,7 +45,7 @@ const defaultCrewSortOrder*: CrewSortOrders = none
 var
   showCrewOptions*: bool = false
     ## Show additonal options for managing the player's ship's crew
-  skillIndex: Natural = 0
+  skillIndex, currentOrder: Natural = 0
   crewSortOrder: CrewSortOrders = defaultCrewSortOrder
 
 proc sortMembers(x, y: LocalMemberData): int {.raises: [], tags: [],
@@ -233,6 +233,8 @@ proc setGiveOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   crewIndex = crewDataList[data].index
   dialog = giveOrderDialog
+  currentOrder = 0
+  setAvailableOrders(memberIndex = crewIndex, dialog = dialog)
 
 proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -258,10 +260,22 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
           color = theme.colors[goldenColor])
     except:
       dialog = setError(message = "Can't get the current order.")
+    label(str = "New order:")
+    let newOrder = comboList(items = availableOrdersText,
+        selected = currentOrder, itemHeight = 25, x = 200, y = 150)
+    if newOrder != currentOrder:
+      currentOrder = newOrder
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[giveOrderColoredIcon], text = "Assign",
         alignment = right):
       dialog = none
+      try:
+        giveOrders(ship = playerShip, memberIndex = crewIndex,
+            givenOrder = availableOrders[currentOrder])
+      except CrewOrderError:
+        addMessage(message = getCurrentExceptionMsg(), mType = orderMessage)
+      except:
+        dialog = setError(message = "Can't give orders.")
     restoreButtonStyle()
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
         label = "Cancel", isPopup = false)
