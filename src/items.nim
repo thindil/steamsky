@@ -18,7 +18,7 @@
 ## Provides code related items used by the player and NPC's, like loading
 ## them from files, getting random item, etc.
 
-import std/[logging, strutils, tables, xmlparser, xmltree]
+import std/[logging, math, strutils, tables, xmlparser, xmltree]
 import contracts, nimalyzer
 import config, crewinventory, game, log, messages, shipscargo, shipscrew, types, utils
 
@@ -448,3 +448,23 @@ proc getQuality*(): ObjectQuality {.raises: [], tags: [], contractual.} =
       return excellent
     else:
       return normal
+
+proc countItemBonus*(value: int; quality: ObjectQuality): int {.raises: [],
+    tags: [], contractual.} =
+  ## Count a bonus from an item's quality to the selected value
+  ##
+  ## * value   - the base value on which the bonus will be counted
+  ## * quality - the quality of an item from which the bonus will be counted
+  ##
+  ## Returns the value of the bonus from an item
+  case quality
+  of poor:
+    return -((value.float * 0.2).floor.int)
+  of low:
+    return -((value.float * 0.1).floor.int)
+  of normal, any:
+    return 0
+  of good:
+    return (value.float * 0.1).floor.int
+  of excellent:
+    return (value.float * 0.2).floor.int
