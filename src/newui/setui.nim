@@ -871,8 +871,8 @@ proc setShipInfo*() {.raises: [], tags: [], contractual.} =
       crewSkillsList.add(y = skill.name)
   refreshCrewList()
 
-proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
-        contractual.} =
+proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog)
+  {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Set the list of available orders for the selected crew member
   ##
   ## * memberIndex - the index of the crew member for which the list will be set
@@ -925,11 +925,11 @@ proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog) {.raises:
             try:
               availableOrdersText.add(y = (if module.craftingIndex.len >
                   6 and module.craftingIndex[0 .. 4] == "Study": "Study " &
-                  itemsList[module.craftingIndex[6..
+                  itemsList[module.craftingIndex[6 ..
                   ^1].strip.parseInt].name elif module.craftingIndex.len >
                   12 and module.craftingIndex[0 .. 10] ==
                   "Deconstruct": "Deconstruct " & itemsList[
-                  module.craftingIndex[12..
+                  module.craftingIndex[12 ..
                   ^1].strip.parseInt].name else: "Manufacture " &
                   $module.craftingAmount & "x " & itemsList[recipesList[
                   module.craftingIndex].resultIndex].name))
