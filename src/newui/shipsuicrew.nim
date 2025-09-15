@@ -381,6 +381,8 @@ proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   crewIndex = crewDataList[data].index
   dialog = memberDialog
 
+var currentTab: cint = 0
+
 proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the dialog to give an order for the selected crew member
@@ -390,7 +392,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog.
   const
     width: float = 400
-    height: float = 200
+    height: float = 500
 
   let
     member: MemberData = playerShip.crew[crewIndex]
@@ -398,7 +400,33 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    changeStyle(field = spacing, x = 0, y = 0):
+      changeStyle(field = buttonRounding, value = 0):
+        setLayoutRowDynamic(height = 30, cols = 4)
+        const tabs: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
+        for index, tab in tabs:
+          try:
+            if currentTab == index:
+              changeStyle(src = active, dest = normal):
+                labelButton(title = tab):
+                  discard
+            else:
+              labelButton(title = tab):
+                currentTab = index.cint
+          except:
+            dialog = setError(message = "Can't set the tabs buttons.")
+    setLayoutRowDynamic(height = height - 125, cols = 1)
+    group(title = "InfoGroup", flags = {windowNoFlags}):
+      case currentTab
+      # General info about the selected crew member
+      of 0:
+        discard
+      else:
+        discard
     setLayoutRowDynamic(height = 30, cols = 2)
+    imageLabelButton(image = images[inventoryIcon], text = "Inventory",
+        alignment = right):
+      discard
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
