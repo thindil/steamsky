@@ -669,6 +669,9 @@ type
     data*: nk_page_data
     next*, prev*: pointer
     ## Internal Nuklear type
+  nk_str* {.importc: "struct nk_str", completeStruct.} = object
+    buffer*: nk_buffer
+    len*: cint
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
