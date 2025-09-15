@@ -51,8 +51,9 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't get the amount of rows")
   deleteWidgets(startIndex = 3, endIndex = rows - 1, frame = cargoInfoFrame)
   cargoTable = createTable(parent = cargoInfoFrame, headers = @["Name",
-      "Durability", "Type", "Amount", "Weight"], scrollbar = mainPaned &
-      ".shipinfoframe.cargo.scrolly", command = "SortShipCargo",
+      "Durability", "Quality", "Type", "Amount", "Weight"],
+      scrollbar = mainPaned & ".shipinfoframe.cargo.scrolly",
+      command = "SortShipCargo",
       tooltipText = "Press mouse button to sort the cargo.")
   if cargoIndexes.len != playerShip.cargo.len:
     cargoIndexes = @[]
@@ -107,15 +108,18 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
         maxValue = defaultItemDurability,
         tooltip = "The current durability of the selected item",
         command = "ShowCargoItemInfo " & $(index + 1), column = 2)
+    addButton(table = cargoTable, text = ($item.quality).capitalizeAscii,
+        tooltip = "The quality of the selected item",
+        command = "ShowCargoItemInfo " & $(index + 1), column = 3)
     addButton(table = cargoTable, text = itemType,
         tooltip = "The type of the selected item",
-        command = "ShowCargoItemInfo " & $(index + 1), column = 3)
+        command = "ShowCargoItemInfo " & $(index + 1), column = 4)
     addButton(table = cargoTable, text = $item.amount,
         tooltip = "The amount of the selected item",
-        command = "ShowCargoItemInfo " & $(index + 1), column = 4)
+        command = "ShowCargoItemInfo " & $(index + 1), column = 5)
     addButton(table = cargoTable, text = $(item.amount * protoItem.weight) &
         " kg", tooltip = "The total weight of the selected item",
-        command = "ShowCargoItemInfo " & $(index + 1), column = 5, newRow = true)
+        command = "ShowCargoItemInfo " & $(index + 1), column = 6, newRow = true)
     if cargoTable.row == gameSettings.listsLimit + 1:
       break
   if page > 1:
@@ -135,8 +139,7 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 type cargoSortOrders = enum
-  nameAsc, nameDesc, durabilityAsc, durabilityDesc, typeAsc, typeDesc,
-    amountAsc, amountDesc, weightAsc, weightDesc, none
+  nameAsc, nameDesc, durabilityAsc, durabilityDesc, qualityAsc, qualityDesc, typeAsc, typeDesc, amountAsc, amountDesc, weightAsc, weightDesc, none
 
 const defaultCargoSortOrder = none
 
@@ -174,16 +177,21 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       cargoSortOrder = durabilityAsc
   of 3:
+    if cargoSortOrder == qualityAsc:
+      cargoSortOrder = qualityDesc
+    else:
+      cargoSortOrder = qualityAsc
+  of 4:
     if cargoSortOrder == typeAsc:
       cargoSortOrder = typeDesc
     else:
       cargoSortOrder = typeAsc
-  of 4:
+  of 5:
     if cargoSortOrder == amountAsc:
       cargoSortOrder = amountDesc
     else:
       cargoSortOrder = amountAsc
-  of 5:
+  of 6:
     if cargoSortOrder == weightAsc:
       cargoSortOrder = weightDesc
     else:
@@ -199,6 +207,7 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     itemType: string
     amount: Positive = 1
     weight: Positive = 1
+    quality: ObjectQuality
     id: Natural
   var localCargo: seq[LocalCargoData]
   for index, item in playerShip.cargo:
@@ -209,7 +218,7 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
           item.protoIndex].showType.len > 0: itemsList[
           item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
           amount: item.amount, weight: item.amount * itemsList[
-          item.protoIndex].weight, id: index))
+          item.protoIndex].weight, quality: item.quality, id: index))
     except:
       return showError(message = "Can't add local item to cargo.")
   proc sortCargo(x, y: LocalCargoData): int =
@@ -231,6 +240,16 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of durabilityDesc:
       if x.damage > y.damage:
+        return 1
+      else:
+        return -1
+    of qualityAsc:
+      if x.quality < y.quality:
+        return 1
+      else:
+        return -1
+    of qualityDesc:
+      if x.quality > y.quality:
         return 1
       else:
         return -1
@@ -274,7 +293,8 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowCargo"].allocCStringArray)
 
 proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl.} =
   ## Show UI to give the selected item from the ship cargo to the selected
   ## crew member
   ##
@@ -405,7 +425,8 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["SortShipCargo", "-1"].allocCStringArray)
 
 proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl.} =
   ## Show UI to drop the selected item from the ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -483,7 +504,8 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["SortShipCargo", "-1"].allocCStringArray)
 
 proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl.} =
   ## Show information about the selected item in the player's ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -512,7 +534,8 @@ proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl.} =
   ## Update max give amount after selecting the crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -555,7 +578,8 @@ proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
       "):} -command {" & amountBox & " set " & $maxAmount & ";" & amountBox & " validate}")
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("ShowCargo", showCargoCommand)
