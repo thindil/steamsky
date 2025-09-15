@@ -379,6 +379,7 @@ proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   crewIndex = crewDataList[data].index
+  dialog = memberDialog
 
 proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -398,8 +399,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 2)
-    addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
-        label = "Cancel", isPopup = false)
+    addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
 
