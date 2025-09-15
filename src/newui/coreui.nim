@@ -34,9 +34,9 @@ type
     none, loading, questionDialog, gameMenuDialog, errorDialog, waitDialog,
       newGoalDialog, boardingDialog, defendingDialog, recruitDialog,
       negotiateDialog, moduleDialog, missionDialog, acceptMissionDialog,
-      renameDialog, giveOrderDialog, baseActionDialog, ordersDialog,
-      destinationDialog, messageDialog, infoDialog, buyDialog, sellDialog,
-      takeDialog, dropDialog
+      renameDialog, giveOrderDialog, memberDialog, baseActionDialog,
+      ordersDialog, destinationDialog, messageDialog, infoDialog, buyDialog,
+      sellDialog, takeDialog, dropDialog
 
 const
   dtime*: float = 20.0        ## The length in miliseconds of one game's frame
