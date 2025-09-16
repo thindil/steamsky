@@ -666,9 +666,18 @@ type
     win*: nk_window
   nk_page_element* {.importc: "struct nk_page_element",
       completeStruct.} = object
+    ## Internal Nuklear type
     data*: nk_page_data
     next*, prev*: pointer
+  nk_text_edit* {.importc: "struct nk_text_edit", nodecl.} = object
     ## Internal Nuklear type
+    clip*: nk_clipboard
+  nk_plugin_paste* = proc (handle: nk_handle; edit: ptr nk_text_edit) {.cdecl.}
+    ## Internal Nuklear type
+  nk_plugin_copy* = proc (handle: nk_handle; text: cstring; len: cint) {.cdecl.}
+    ## Internal Nuklear type
+  nk_clipboard* {.importc: "struct nk_clipboard", nodecl.} = object
+    userdata*: nk_handle
   nk_str* {.importc: "struct nk_str", completeStruct.} = object
     buffer*: nk_buffer
     len*: cint
@@ -683,8 +692,6 @@ type
     freelist*: pointer
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle ## Interna Nuklear data
-  nk_text_edit* = object
-    ## Internal Nuklear type
   nk_font* {.importc: "struct nk_font", nodecl.} = object
     ## Internal Nuklear type
     handle*: PNkUserFont
