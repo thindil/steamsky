@@ -21,7 +21,8 @@
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, messages, reputation, ships, shipscrew, types]
-import coreui, dialogs, errordialog, header, mapsui, messagesui, shipsuicrew, themes
+import coreui, dialogs, errordialog, header, mapsui, messagesui, setui,
+    shipsuicrew, themes
 
 var
   expandedSection: Natural = 0
@@ -39,12 +40,14 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
     width: float = 400
     height: float = 200
 
-  let windowName: string = "Rename the ship"
+  let windowName: string = "Rename the " & (if dialog ==
+      renameDialog: "ship" else: "crew member")
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 1)
-    label(str = "Enter a new name:")
+    label(str = "Enter a new name" & (if dialog == renameMemberDialog: " for " &
+        playerShip.crew[crewIndex].name else: "") & ":")
     editString(text = newName, maxLen = 64)
     setLayoutRowDynamic(height = 30, cols = 2)
     if newName.len == 0:
@@ -55,7 +58,10 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
     else:
       imageLabelButton(image = images[editColoredIcon], text = "Rename",
           alignment = right):
-        playerShip.name = newName
+        if dialog == renameDialog:
+          playerShip.name = newName
+        else:
+          playerShip.crew[crewIndex].name = newName
         newName = ""
         dialog = none
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
