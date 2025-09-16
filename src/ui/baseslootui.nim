@@ -31,7 +31,7 @@ var
 
 type ItemsSortOrders = enum
   none, nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc,
-    ownedAsc, ownedDesc, availableAsc, availableDesc
+    qualityAsc, qualityDesc, ownedAsc, ownedDesc, availableAsc, availableDesc
 
 const defaultItemsSortOrder: ItemsSortOrders = none
 
@@ -91,7 +91,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & lootFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
     lootFrame = lootCanvas & ".loot"
     lootTable = createTable(parent = lootFrame, headers = @["Name", "Type",
-        "Durability", "Owned", "Available"],
+        "Durability", "Quality", "Owned", "Available"],
         scrollbar = ".gameframe.paned.lootframe.scrolly",
         command = "SortLootItems",
         tooltipText = "Press mouse button to sort the items.")
@@ -169,12 +169,15 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     addProgressbar(table = lootTable, value = playerShip.cargo[
         index].durability, maxValue = defaultItemDurability,
         tooltip = itemDurability, command = "ShowLootItemInfo " & $(index + 1), column = 3)
+    addButton(table = lootTable, text = ($playerShip.cargo[
+        index].quality).capitalizeAscii, tooltip = tableTooltip,
+        command = "ShowLootItemInfo " & $(index + 1), column = 4)
     addButton(table = lootTable, text = $playerShip.cargo[index].amount,
-        tooltip = tableTooltip, command = "ShowLootItemInfo " & $(index + 1), column = 4)
+        tooltip = tableTooltip, command = "ShowLootItemInfo " & $(index + 1), column = 5)
     let baseAmount: int = if baseCargoIndex > -1: skyBases[baseIndex].cargo[
         baseCargoIndex].amount else: 0
     addButton(table = lootTable, text = $baseAmount, tooltip = tableTooltip,
-        command = "ShowLootItemInfo " & $(index + 1), column = 5, newRow = true)
+        command = "ShowLootItemInfo " & $(index + 1), column = 6, newRow = true)
     if lootTable.row == gameSettings.listsLimit + 1:
       break
   currentItemIndex = playerShip.cargo.len + 2
@@ -214,17 +217,21 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = lootTable, text = itemType, tooltip = tableTooltip,
         command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 2)
     let itemDurability: string = (if currentBaseCargo[itemsIndexes[
-        index]].durability < 100: getItemDamage(itemDurability = currentBaseCargo[itemsIndexes[
+        index]].durability < 100: getItemDamage(
+        itemDurability = currentBaseCargo[itemsIndexes[
         index]].durability) else: "Unused")
     addProgressbar(table = lootTable, value = currentBaseCargo[itemsIndexes[
         index]].durability, maxValue = defaultItemDurability,
         tooltip = itemDurability, command = "ShowLootItemInfo -" & $(
         itemsIndexes[index] + 1), column = 3)
-    addButton(table = lootTable, text = "0", tooltip = tableTooltip,
+    addButton(table = lootTable, text = ($currentBaseCargo[itemsIndexes[
+        index]].quality).capitalizeAscii, tooltip = tableTooltip,
         command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 4)
+    addButton(table = lootTable, text = "0", tooltip = tableTooltip,
+        command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 5)
     let baseAmount: int = skyBases[baseIndex].cargo[itemsIndexes[index]].amount
     addButton(table = lootTable, text = $baseAmount, tooltip = tableTooltip,
-        command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 5, newRow = true)
+        command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 6, newRow = true)
   let arguments: string = (if argc > 1: "{" & $argv[1] & "}" else: "All")
   if page > 1:
     if lootTable.row < gameSettings.listsLimit + 1:
@@ -546,11 +553,16 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       itemsSortOrder = durabilityAsc
   of 4:
+    if itemsSortOrder == qualityAsc:
+      itemsSortOrder = qualityDesc
+    else:
+      itemsSortOrder = ownedAsc
+  of 5:
     if itemsSortOrder == ownedAsc:
       itemsSortOrder = ownedDesc
     else:
       itemsSortOrder = ownedAsc
-  of 5:
+  of 6:
     if itemsSortOrder == availableAsc:
       itemsSortOrder = availableDesc
     else:
@@ -565,6 +577,7 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     damage: float
     owned: Natural
     available: Natural
+    quality: ObjectQuality
     id: Natural
   var
     localItems: seq[LocalItemData] = @[]
@@ -586,7 +599,7 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
           item.durability.float / defaultItemDurability.float),
           owned: item.amount, available: (if baseCargoIndex >
           -1: localBaseCargo[
-          baseCargoIndex].amount else: 0), id: index))
+          baseCargoIndex].amount else: 0), quality: item.quality, id: index))
     except:
       return showError(message = "Can't add player's ship's item.")
   proc sortItems(x, y: LocalItemData): int {.raises: [], tags: [],
@@ -624,6 +637,14 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       if x.damage > y.damage:
         return 1
       return -1
+    of qualityAsc:
+      if x.quality < y.quality:
+        return 1
+      return -1
+    of qualityDesc:
+      if x.quality > y.quality:
+        return 1
+      return -1
     of ownedAsc:
       if x.owned < y.owned:
         return 1
@@ -657,7 +678,7 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
           item.durability.float / defaultItemDurability.float), owned: 0,
-          available: item.amount, id: index))
+          available: item.amount, quality: item.quality, id: index))
     except:
       return showError(message = "Can't add the base's item.")
   localItems.sort(cmp = sortItems)
