@@ -396,7 +396,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
 
   let
     member: MemberData = playerShip.crew[crewIndex]
-    windowName: string = "Change order for " & member.name
+    windowName: string = member.name & "'s details"
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
@@ -420,10 +420,16 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       case currentTab
       # General info about the selected crew member
       of 0:
-        discard
+        setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+        label(str = "Name:")
+        colorLabel(str = member.name, color = theme.colors[goldenColor])
+        imageButton(image = images[editIcon]):
+          discard
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = 2)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Show the crew member inventory")
     imageLabelButton(image = images[inventoryIcon], text = "Inventory",
         alignment = right):
       discard
