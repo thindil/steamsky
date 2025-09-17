@@ -50,6 +50,7 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
         playerShip.crew[crewIndex].name else: "") & ":")
     editString(text = newName, maxLen = 64)
     setLayoutRowDynamic(height = 30, cols = 2)
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     if newName.len == 0:
       disabled:
         imageLabelButton(image = images[editColoredIcon], text = "Rename",
@@ -64,6 +65,7 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
           playerShip.crew[crewIndex].name = newName
         newName = ""
         dialog = none
+    restoreButtonStyle()
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
         isPopup = false, label = "Cancel")
 
