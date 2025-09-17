@@ -444,7 +444,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               discard
       else:
         discard
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
+        crewIndex > 0: 3 else: 2))
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show the crew member inventory")
@@ -452,6 +453,13 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         alignment = right):
       discard
     addCloseButton(dialog = dialog, isPopup = false)
+    if playerShip.speed == docked and crewIndex > 0:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Remove the crew member from the ship's crew.")
+      imageLabelButton(image = images[dismissIcon], text = "Dismiss",
+          alignment = right):
+        discard
 
   windowSetFocus(name = windowName)
 
