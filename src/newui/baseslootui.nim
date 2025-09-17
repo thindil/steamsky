@@ -31,6 +31,7 @@ type LocalItemData = object
   damage: float
   owned: Natural
   available: Natural
+  quality: ObjectQuality
   id: Natural
 
 proc sortItems(x, y: LocalItemData): int =
@@ -68,6 +69,16 @@ proc sortItems(x, y: LocalItemData): int =
       return -1
   of durabilityDesc:
     if x.damage > y.damage:
+      return 1
+    else:
+      return -1
+  of qualityAsc:
+    if x.quality < y.quality:
+      return 1
+    else:
+      return -1
+  of qualityDesc:
+    if x.quality > y.quality:
       return 1
     else:
       return -1
@@ -116,13 +127,12 @@ proc sortLoot(sortAsc, sortDesc: ItemsSortOrders;
       baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
           durability = item.durability, quality = item.quality)
     try:
-      localItems.add(y = LocalItemData(name: getItemName(item = item),
-          iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
-          protoIndex].itemType else: itemsList[protoIndex].showType),
-              damage: (
+      localItems.add(y = LocalItemData(name: getItemName(item = item), iType: (
+          if itemsList[protoIndex].showType.len == 0: itemsList[
+          protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
           item.durability.float / defaultItemDurability.float),
           owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
-          baseCargoIndex].amount else: 0), id: index))
+          baseCargoIndex].amount else: 0), quality: item.quality, id: index))
     except:
       dialog = setError(message = "Can't add item from the player's ship's cargo.")
       return
@@ -139,10 +149,9 @@ proc sortLoot(sortAsc, sortDesc: ItemsSortOrders;
     try:
       localItems.add(y = LocalItemData(name: itemsList[protoIndex].name,
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
-          protoIndex].itemType else: itemsList[protoIndex].showType),
-              damage: (
+          protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
           item.durability.float / defaultItemDurability.float), owned: 0,
-          available: item.amount, id: index))
+          available: item.amount, quality: item.quality, id: index))
     except:
       dialog = setError(message = "Can't add item from the base's cargo.")
       return
@@ -280,13 +289,15 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     dialog = setError(message = "Can't show the item's info.")
 
 const
-  headers: array[5, HeaderData[ItemsSortOrders]] = [
+  headers: array[6, HeaderData[ItemsSortOrders]] = [
     HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
         sortDesc: nameDesc),
     HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc,
         sortDesc: typeDesc),
     HeaderData[ItemsSortOrders](label: "Durability", sortAsc: durabilityAsc,
         sortDesc: durabilityDesc),
+    HeaderData[ItemsSortOrders](label: "Quality", sortAsc: qualityAsc,
+        sortDesc: qualityDesc),
     HeaderData[ItemsSortOrders](label: "Owned", sortAsc: ownedAsc,
         sortDesc: ownedDesc),
     HeaderData[ItemsSortOrders](label: "Available", sortAsc: availableAsc,
@@ -387,6 +398,9 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
         else: "Unused"), value = playerShip.cargo[i].durability,
         maxValue = defaultItemDurability, data = index, code = showItemInfo,
         dialog = dialog)
+      addButton(label = ($playerShip.cargo[i].quality).capitalizeAscii,
+          tooltip = "Show available options of item.", data = index,
+          code = showItemInfo, dialog = dialog)
       addButton(label = $playerShip.cargo[i].amount,
         tooltip = "Show available options of item.", data = index,
         code = showItemInfo, dialog = dialog)
@@ -435,6 +449,9 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
         else: "Unused"), value = durability,
         maxValue = defaultItemDurability, data = i, code = showItemInfo,
         dialog = dialog)
+      addButton(label = ($baseCargo[itemsIndexes[i]].quality).capitalizeAscii,
+          tooltip = "Show available options of item.", data = i,
+          code = showItemInfo, dialog = dialog)
       addButton(label = "0", tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
       addButton(label = $baseAmount, tooltip = "Show available options of item.",
