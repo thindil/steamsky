@@ -676,8 +676,10 @@ type
     ## Internal Nuklear type
   nk_plugin_copy* = proc (handle: nk_handle; text: cstring; len: cint) {.cdecl.}
     ## Internal Nuklear type
-  nk_clipboard* {.importc: "struct nk_clipboard", nodecl.} = object
+  nk_clipboard* {.importc: "struct nk_clipboard", completeStruct.} = object
     userdata*: nk_handle
+    copy*: nk_plugin_copy
+    paste*: nk_plugin_paste
   nk_str* {.importc: "struct nk_str", completeStruct.} = object
     buffer*: nk_buffer
     len*: cint
@@ -690,6 +692,8 @@ type
     memory*: nk_buffer
     use_pool*: bool
     freelist*: pointer
+    clip*: nk_clipboard
+    last_widget_state*: nk_flags
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle ## Interna Nuklear data
   nk_font* {.importc: "struct nk_font", nodecl.} = object
