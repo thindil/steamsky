@@ -274,7 +274,7 @@ proc showTraderItems(currentItemIndex: Natural; baseType: string;
   ## * baseCargo        - the cargo of the base
   ##
   ## Returns true if the list was properly shown, otherwise false
-  for i in currentItemIndex .. itemsIndexes.high:
+  for i in currentItemIndex..itemsIndexes.high:
     if tradeTable.row == gameSettings.listsLimit + 1:
       break
     try:
@@ -452,7 +452,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       eventIndex = eventIndex, baseCargo = baseCargo):
     return tclOk
   currentItemIndex = playerShip.cargo.len + 1
-  for i in currentItemIndex .. itemsIndexes.high:
+  for i in currentItemIndex..itemsIndexes.high:
     let
       protoIndex: Natural = baseCargo[itemsIndexes[i]].protoIndex
       itemType: string = try:
