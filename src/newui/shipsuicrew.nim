@@ -425,11 +425,29 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         colorLabel(str = member.name, color = theme.colors[goldenColor])
         imageButton(image = images[editIcon]):
           dialog = renameMemberDialog
+        if member.morale[1] != 50:
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+          label(str = "Morale:")
+          if gameSettings.showNumbers:
+            colorLabel(str = $member.morale[1] & "%", color = theme.colors[goldenColor])
+          else:
+            case member.morale[1]
+            of 0 .. 24:
+              colorLabel(str = "Upset", color = theme.colors[goldenColor])
+            of 25 .. 49:
+              colorLabel(str = "Unhappy", color = theme.colors[goldenColor])
+            of 51 .. 74:
+              colorLabel(str = "Happy", color = theme.colors[goldenColor])
+            of 75 .. 100:
+              colorLabel(str = "Excited", color = theme.colors[goldenColor])
+            else:
+              discard
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = 2)
     if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Show the crew member inventory")
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show the crew member inventory")
     imageLabelButton(image = images[inventoryIcon], text = "Inventory",
         alignment = right):
       discard
