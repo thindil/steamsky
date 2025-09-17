@@ -424,7 +424,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         label(str = "Name:")
         colorLabel(str = member.name, color = theme.colors[goldenColor])
         imageButton(image = images[editIcon]):
-          discard
+          dialog = renameMemberDialog
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = 2)
