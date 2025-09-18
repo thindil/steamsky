@@ -16,11 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
+import contracts
 import ../[config, game, tk, types]
 import coreui, combatui, errordialog, mapsui, themes, utilsui2
 
 proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Show the selected options tab
   ##
   ## * clientData - the additional data for the Tcl command
@@ -129,7 +131,8 @@ var accels: array[53, AccelData] = [AccelData(shortcut: menuAccelerators[1],
     configName: "ResizeFourth")]
 
 proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show the selected options tab
   ##
   ## * clientData - the additional data for the Tcl command
@@ -949,23 +952,23 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       name: optionsCanvas & ".options.general.autoreturn", value: (
       if gameSettings.autoReturn: "1" else: "0")), WidgetData(
       name: optionsCanvas & ".options.general.autodestination", value:
-      (if gameSettings.autoDestination: "1" else: "0")), WidgetData(
-      name: optionsCanvas & ".options.general.autofinish", value: (
-      if gameSettings.autoFinish: "1" else: "0")), WidgetData(
-      name: optionsCanvas & ".options.general.autoaskforbases", value: (
-      if gameSettings.autoAskForBases: "1" else: "0")), WidgetData(
-      name: optionsCanvas & ".options.general.autoaskforevents", value: (
-      if gameSettings.autoAskForEvents: "1" else: "0")), WidgetData(
-      name: optionsCanvas & ".options.interface.rightbutton", value: (
-      if gameSettings.rightButton: "1" else: "0")), WidgetData(
-      name: optionsCanvas & ".options.interface.showtooltips", value: (
-      if gameSettings.showTooltips: "1" else: "0")), WidgetData(
-      name: optionsCanvas & ".options.interface.showmessages", value: (
-      if gameSettings.showLastMessages: "1" else: "0")), WidgetData(
-      name: optionsCanvas & ".options.interface.fullscreen", value: (
-      if gameSettings.fullScreen: "1" else: "0")), WidgetData(
-      name: optionsCanvas & ".options.interface.shownumbers", value: (
-      if gameSettings.showNumbers: "1" else: "0"))]
+    (if gameSettings.autoDestination: "1" else: "0")), WidgetData(
+    name: optionsCanvas & ".options.general.autofinish", value: (
+    if gameSettings.autoFinish: "1" else: "0")), WidgetData(
+    name: optionsCanvas & ".options.general.autoaskforbases", value: (
+    if gameSettings.autoAskForBases: "1" else: "0")), WidgetData(
+    name: optionsCanvas & ".options.general.autoaskforevents", value: (
+    if gameSettings.autoAskForEvents: "1" else: "0")), WidgetData(
+    name: optionsCanvas & ".options.interface.rightbutton", value: (
+    if gameSettings.rightButton: "1" else: "0")), WidgetData(
+    name: optionsCanvas & ".options.interface.showtooltips", value: (
+    if gameSettings.showTooltips: "1" else: "0")), WidgetData(
+    name: optionsCanvas & ".options.interface.showmessages", value: (
+    if gameSettings.showLastMessages: "1" else: "0")), WidgetData(
+    name: optionsCanvas & ".options.interface.fullscreen", value: (
+    if gameSettings.fullScreen: "1" else: "0")), WidgetData(
+    name: optionsCanvas & ".options.interface.shownumbers", value: (
+    if gameSettings.showNumbers: "1" else: "0"))]
   for checkBox in checkboxArray:
     tclSetVar(varName = checkBox.name, newValue = checkBox.value)
   let spinboxArray: array[11, WidgetData] = [WidgetData(name: optionsCanvas &
@@ -1035,7 +1038,8 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = argc, argv = argv)
 
 proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Set the selected font
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1065,7 +1069,8 @@ proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setDefaultFontsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Set the default values for fonts
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1090,7 +1095,7 @@ proc setDefaultFontsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.} =
+    WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl, contractual.} =
   ## Save all options and back to the map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1281,7 +1286,8 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Reset the selected group of keys to their default values
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1413,7 +1419,8 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("ShowOptionsTab", showOptionsTabCommand)
