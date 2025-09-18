@@ -447,6 +447,40 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               colorLabel(str = "Heavily wounded", color = theme.colors[goldenColor])
             else:
               discard
+        if tiredPoints > 0:
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+          label(str = "Tiredness:")
+          if gameSettings.showNumbers:
+            colorLabel(str = $tiredPoints & "%", color = theme.colors[goldenColor])
+          else:
+            case tiredPoints:
+            of 1 .. 40:
+              colorLabel(str = "Bit tired", color = theme.colors[goldenColor])
+            of 41 .. 80:
+              colorLabel(str = "Tired", color = theme.colors[goldenColor])
+            of 81 .. 99:
+              colorLabel(str = "Very tired", color = theme.colors[goldenColor])
+            of 100:
+              colorLabel(str = "Unconscious", color = theme.colors[goldenColor])
+            else:
+              discard
+        if member.thirst > 0:
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+          label(str = "Thirst:")
+          if gameSettings.showNumbers:
+            colorLabel(str = $member.thirst & "%", color = theme.colors[goldenColor])
+          else:
+            case member.thirst:
+            of 1 .. 40:
+              colorLabel(str = "Bit thirsty", color = theme.colors[goldenColor])
+            of 41 .. 80:
+              colorLabel(str = "Thirsty", color = theme.colors[goldenColor])
+            of 81 .. 99:
+              colorLabel(str = "Very thirsty", color = theme.colors[goldenColor])
+            of 100:
+              colorLabel(str = "Dehydrated", color = theme.colors[goldenColor])
+            else:
+              discard
         if member.morale[1] != 50:
           setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
           label(str = "Morale:")
