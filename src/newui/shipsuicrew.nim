@@ -430,6 +430,9 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
         label(str = "Name:")
         colorLabel(str = member.name, color = theme.colors[goldenColor])
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Set a new name for the crew member.")
         imageButton(image = images[editIcon]):
           dialog = renameMemberDialog
         if member.health < 100:
@@ -481,6 +484,23 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               colorLabel(str = "Dehydrated", color = theme.colors[goldenColor])
             else:
               discard
+        if member.hunger > 0:
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+          label(str = "Hunger:")
+          if gameSettings.showNumbers:
+            colorLabel(str = $member.hunger & "%", color = theme.colors[goldenColor])
+          else:
+            case member.hunger:
+            of 1 .. 40:
+              colorLabel(str = "Bit hungry", color = theme.colors[goldenColor])
+            of 41 .. 80:
+              colorLabel(str = "Hungry", color = theme.colors[goldenColor])
+            of 81 .. 99:
+              colorLabel(str = "Very hungry", color = theme.colors[goldenColor])
+            of 100:
+              colorLabel(str = "Starving", color = theme.colors[goldenColor])
+            else:
+              discard
         if member.morale[1] != 50:
           setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
           label(str = "Morale:")
@@ -498,6 +518,15 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               colorLabel(str = "Excited", color = theme.colors[goldenColor])
             else:
               discard
+        if member.skills.len > 0:
+          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+          label(str = "Order:")
+          try:
+            colorLabel(str = getCurrentOrder(memberIndex = crewIndex),
+                color = theme.colors[goldenColor])
+          except:
+            dialog = setError(message = "Can't show the order info.")
+            return
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
