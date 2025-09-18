@@ -369,6 +369,10 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
+var
+  currentTab: cint = 0
+  tiredPoints: int = 0
+
 proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Set the dialog with information about the selected member
@@ -380,8 +384,11 @@ proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   crewIndex = crewDataList[data].index
   dialog = memberDialog
-
-var currentTab: cint = 0
+  currentTab = 0
+  tiredPoints = playerShip.crew[crewIndex].tired - playerShip.crew[
+      crewIndex].attributes[conditionIndex].level
+  if tiredPoints < 0:
+    tiredPoints = 0
 
 proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -418,13 +425,28 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = height - 125, cols = 1)
     group(title = "InfoGroup", flags = {windowNoFlags}):
       case currentTab
-      # General info about the selected crew member
+      # General information about the selected crew member
       of 0:
         setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
         label(str = "Name:")
         colorLabel(str = member.name, color = theme.colors[goldenColor])
         imageButton(image = images[editIcon]):
           dialog = renameMemberDialog
+        if member.health < 100:
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+          label(str = "Health:")
+          if gameSettings.showNumbers:
+            colorLabel(str = $member.health & "%", color = theme.colors[goldenColor])
+          else:
+            case member.health:
+            of 81 .. 99:
+              colorLabel(str = "Slightly wounded", color = theme.colors[goldenColor])
+            of 51 .. 80:
+              colorLabel(str = "Wounded", color = theme.colors[goldenColor])
+            of 1 .. 50:
+              colorLabel(str = "Heavily wounded", color = theme.colors[goldenColor])
+            else:
+              discard
         if member.morale[1] != 50:
           setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
           label(str = "Morale:")
