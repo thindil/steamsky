@@ -65,6 +65,18 @@ proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
     except KeyError:
       discard
 
+proc moneyAmount*(inventory: seq[InventoryData]): Natural {.raises: [], tags: [],
+    contractual.} =
+  ## Get the summarized amount of money from the selected inventory
+  ##
+  ## * inventory - the inventory in which money will be looked for
+  ##
+  ## Returns the amount of money in the selected inventory
+  result = 0
+  for item in inventory:
+    if item.protoIndex == moneyIndex:
+      result += item.amount
+
 proc freeInventory*(memberIndex: Natural; amount: int): int {.raises: [],
     tags: [], contractual.} =
   ## Get the amount of free space in the selected player ship's crew member's
@@ -242,9 +254,11 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
               quality = any)
         else:
           updateInventory(memberIndex = memberIndex, amount = 0 - inventory[
-              j].amount, inventoryIndex = j, ship = ship, quality = item.quality)
+              j].amount, inventoryIndex = j, ship = ship,
+              quality = item.quality)
           updateInventory(memberIndex = memberIndex, amount = inventory[
-              j].amount, inventoryIndex = i, ship = ship, quality = item.quality)
+              j].amount, inventoryIndex = i, ship = ship,
+              quality = item.quality)
         i.dec
         break
     i.inc
