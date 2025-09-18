@@ -432,7 +432,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         colorLabel(str = member.name, color = theme.colors[goldenColor])
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
-              text = "Set a new name for the crew member.")
+              text = "Set a new name for the crew member")
         imageButton(image = images[editIcon]):
           dialog = renameMemberDialog
         if member.health < 100:
@@ -527,6 +527,27 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
           except:
             dialog = setError(message = "Can't show the order info.")
             return
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Set a new order for the crew member")
+          imageButton(image = images[giveOrderIcon]):
+            dialog = giveOrderDialog
+            setGiveOrder(data = crewIndex, dialog = dialog)
+        let faction: FactionData = try:
+            factionsList[member.faction]
+          except:
+            dialog = setError(message = "Can't get the crew member's faction.")
+            return
+        if "nogender" notin faction.flags:
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+          label(str = "Gender:")
+          colorLabel(str = (if member.gender == 'M': "Male" else: "Female"),
+              color = theme.colors[goldenColor])
+        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+        label(str = "Faction:")
+        colorLabel(str = faction.name, color = theme.colors[goldenColor])
+        label(str = "Home base:")
+        colorLabel(str = skyBases[member.homeBase].name, color = theme.colors[goldenColor])
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
