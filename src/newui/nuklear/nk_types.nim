@@ -154,6 +154,9 @@ type
   Heading* = enum
     ## Heading diretions
     up, right, down, left
+  ButtonBehavior* = enum
+    ## The types of buttons behavior
+    default, repeater
 
 # ---------
 # Constants
@@ -182,6 +185,14 @@ const
 # -------
 # Objects
 # -------
+
+template nkConfigurationStackType(prefix, name, typ: untyped) =
+  ## Used to create stacks for configuration
+  type
+    nk_config_stack_typ_element* = object
+      address*: ptr prefix_type
+      old_value*: prefix_type
+
 {.push ruleOff: "namedParams".}
 type
   nk_color* {.importc: "struct nk_color", completeStruct.} = object
@@ -694,6 +705,7 @@ type
     freelist*: pointer
     clip*: nk_clipboard
     last_widget_state*: nk_flags
+    button_behavior*: ButtonBehavior
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle ## Interna Nuklear data
   nk_font* {.importc: "struct nk_font", nodecl.} = object
@@ -842,9 +854,6 @@ type
       headerTextColor, groupTextColor, selectActiveTextColor, propertyTextColor,
       popupColor, popupBorderColor, progressbarColor, progressbarBorderColor,
       countColors
-  ButtonBehavior* = enum
-    ## The types of buttons behavior
-    default, repeater
   PanelSet* {.size: sizeof(cint).} = enum
     ## The setting of panels
     panelSetNonBlock = panelContextual.int or panelCombo.int or panelMenu.int or
