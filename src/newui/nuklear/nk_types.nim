@@ -187,11 +187,18 @@ const
 # -------
 
 template nkConfigurationStackType(prefix, name, typ: untyped) =
-  ## Used to create stacks for configuration
+  ## Used to create stack elements for configuration
   type
     nk_config_stack_typ_element* = object
       address*: ptr prefix_type
       old_value*: prefix_type
+
+template nkConfigStack(typ, size: untyped) =
+  ## Used to create stacks for configuration
+  type
+    nk_config_stack_typ* = object
+      head*: cint
+      elements*: array[size, nk_config_stack_typ_element]
 
 {.push ruleOff: "namedParams".}
 type
@@ -680,9 +687,16 @@ type
     ## Internal Nuklear type
     data*: nk_page_data
     next*, prev*: pointer
+  nk_str* {.importc: "struct nk_str", completeStruct.} = object
+    buffer*: nk_buffer
+    len*: cint
+  nk_plugin_filter* = proc (text: nk_text_edit, unicode: nk_rune) {.cdecl.}
   nk_text_edit* {.importc: "struct nk_text_edit", nodecl.} = object
     ## Internal Nuklear type
     clip*: nk_clipboard
+    string*: nk_str
+    filter*: nk_plugin_filter
+    scrollbar*: nk_vec2
   nk_plugin_paste* = proc (handle: nk_handle; edit: ptr nk_text_edit) {.cdecl.}
     ## Internal Nuklear type
   nk_plugin_copy* = proc (handle: nk_handle; text: cstring; len: cint) {.cdecl.}
@@ -691,9 +705,6 @@ type
     userdata*: nk_handle
     copy*: nk_plugin_copy
     paste*: nk_plugin_paste
-  nk_str* {.importc: "struct nk_str", completeStruct.} = object
-    buffer*: nk_buffer
-    len*: cint
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
