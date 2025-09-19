@@ -578,13 +578,21 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
                 color = theme.colors[goldenColor])
       # Attributes of the selected crew member
       of 1:
-        setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
         for index, attrib in member.attributes:
+          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
           label(str = attributesList[index].name & ":")
           colorLabel(str = getAttributeLevelName(attributeLevel = attrib.level),
               color = theme.colors[goldenColor])
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Show detailed information about the selected attribute.")
           imageButton(image = images[helpIcon]):
-            discard
+            let attribute: AttributeRecord = attributesList[index]
+            dialog = setInfo(text = attribute.description,
+                title = attribute.name)
+          setLayoutRowDynamic(height = 20, cols = 1)
+          var level = (if attrib.level > 2: attrib.level * 2 else: 6)
+          progressBar(value = level, maxValue = SkillRange.high, modifyable = false)
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
