@@ -21,7 +21,7 @@
 import std/[algorithm, sequtils, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, crew, game, messages, shipscrew, shipscrew2, types]
-import coreui, dialogs, errordialog, setui, table, themes
+import coreui, dialogs, errordialog, setui, table, themes, utilsui2
 
 type
   CrewSortOrders = enum
@@ -548,6 +548,15 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         colorLabel(str = faction.name, color = theme.colors[goldenColor])
         label(str = "Home base:")
         colorLabel(str = skyBases[member.homeBase].name, color = theme.colors[goldenColor])
+        if member.skills.len == 0 or member.contractLength == 0:
+          setLayoutRowDynamic(height = 35, cols = 1)
+          label(str = "Passenger")
+          if member.contractLength > 0:
+            setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+            label(str = "Time limit:")
+            var memberInfo: string = ""
+            minutesToDate(minutes = member.contractLength, infoText = memberInfo)
+            colorLabel(str = memberInfo, color = theme.colors[goldenColor])
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
