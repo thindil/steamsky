@@ -409,8 +409,13 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     changeStyle(field = spacing, x = 0, y = 0):
       changeStyle(field = buttonRounding, value = 0):
-        setLayoutRowDynamic(height = 30, cols = 4)
-        const tabs: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
+        var tabs: seq[string] = @[]
+        if member.skills.len > 0 and member.contractLength != 0:
+          setLayoutRowDynamic(height = 30, cols = 4)
+          tabs = @["General", "Attributes", "Skills", "Inventory"]
+        else:
+          setLayoutRowDynamic(height = 30, cols = 1)
+          tabs = @["General"]
         for index, tab in tabs:
           try:
             if currentTab == index:
@@ -571,6 +576,15 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
                 $member.payment[2] &
                 " percent of profit from each trade" else: ""),
                 color = theme.colors[goldenColor])
+      # Attributes of the selected crew member
+      of 1:
+        setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+        for index, attrib in member.attributes:
+          label(str = attributesList[index].name & ":")
+          colorLabel(str = getAttributeLevelName(attributeLevel = attrib.level),
+              color = theme.colors[goldenColor])
+          imageButton(image = images[helpIcon]):
+            discard
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
