@@ -82,3 +82,11 @@ suite "Unit tests for crewinventory module":
   test "Getting quality of a training tool.":
     check:
       getTrainingToolQuality(0, 1) == 100
+
+  test "Finding no money in inventory":
+    check:
+      moneyAmount(inventory) == 0
+
+  test "Getting money amount from inventory":
+    check:
+      moneyAmount(playerShip.crew[0].inventory) == 1
