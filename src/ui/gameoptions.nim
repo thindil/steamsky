@@ -1113,14 +1113,20 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid remove " & closeButton)
   const rootName = ".gameframe.paned.optionsframe.canvas.options"
 
-  proc getCheckboxValue(checkboxName: string): bool =
+  proc getCheckboxValue(checkboxName: string): bool {.raises: [], tags: [],
+      contractual.} =
     return tclGetVar(varName = rootName & checkboxName) == "1"
 
   gameSettings.autoRest = getCheckboxValue(checkboxName = ".general.autorest")
 
-  proc getComboboxValue(comboboxName: string): Natural =
+  proc getComboboxValue(comboboxName: string): Natural {.raises: [], tags: [
+      RootEffect], contractual.} =
     let comboBox = rootName & comboboxName
-    return tclEval2(script = comboBox & " current").parseInt
+    try:
+      return tclEval2(script = comboBox & " current").parseInt
+    except:
+      showError(message = "Can't get the value of the combo box.")
+      return 0
 
   gameSettings.undockSpeed = try:
       (getComboboxValue(comboboxName = ".general.speed") + 1).ShipSpeed
@@ -1139,9 +1145,14 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   gameSettings.autoAskForEvents = getCheckboxValue(
       checkboxName = ".general.autoaskforevents")
 
-  proc getSpinboxValue(spinboxName: string): Natural =
+  proc getSpinboxValue(spinboxName: string): Natural {.raises: [], tags: [
+      RootEffect], contractual.} =
     let spinBox = rootName & spinboxName
-    return tclEval2(script = spinBox & " get").parseInt
+    try:
+      return tclEval2(script = spinBox & " get").parseInt
+    except:
+      showError(message = "Can't get the value of the spin box.")
+      return 0
 
   gameSettings.lowFuel = try:
       getSpinboxValue(spinboxName = ".general.fuel")
