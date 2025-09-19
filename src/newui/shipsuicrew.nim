@@ -436,7 +436,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         imageButton(image = images[editIcon]):
           dialog = renameMemberDialog
         if member.health < 100:
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Health:")
           if gameSettings.showNumbers:
             colorLabel(str = $member.health & "%", color = theme.colors[goldenColor])
@@ -451,7 +451,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if tiredPoints > 0:
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Tiredness:")
           if gameSettings.showNumbers:
             colorLabel(str = $tiredPoints & "%", color = theme.colors[goldenColor])
@@ -468,7 +468,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.thirst > 0:
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Thirst:")
           if gameSettings.showNumbers:
             colorLabel(str = $member.thirst & "%", color = theme.colors[goldenColor])
@@ -485,7 +485,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.hunger > 0:
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Hunger:")
           if gameSettings.showNumbers:
             colorLabel(str = $member.hunger & "%", color = theme.colors[goldenColor])
@@ -502,7 +502,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.morale[1] != 50:
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Morale:")
           if gameSettings.showNumbers:
             colorLabel(str = $member.morale[1] & "%", color = theme.colors[goldenColor])
@@ -539,11 +539,11 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setError(message = "Can't get the crew member's faction.")
             return
         if "nogender" notin faction.flags:
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Gender:")
           colorLabel(str = (if member.gender == 'M': "Male" else: "Female"),
               color = theme.colors[goldenColor])
-        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
         label(str = "Faction:")
         colorLabel(str = faction.name, color = theme.colors[goldenColor])
         label(str = "Home base:")
@@ -552,11 +552,25 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
           setLayoutRowDynamic(height = 35, cols = 1)
           label(str = "Passenger")
           if member.contractLength > 0:
-            setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+            setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
             label(str = "Time limit:")
             var memberInfo: string = ""
-            minutesToDate(minutes = member.contractLength, infoText = memberInfo)
+            minutesToDate(minutes = member.contractLength,
+                infoText = memberInfo)
             colorLabel(str = memberInfo, color = theme.colors[goldenColor])
+        else:
+          if crewIndex > 0:
+            setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+            label(str = "Contract length:")
+            colorLabel(str = (if member.contractLength >
+                0: $member.contractLength & " days" else: "Pernament"),
+                color = theme.colors[goldenColor])
+            label(str = "Payment:")
+            colorLabel(str = $member.payment[1] & " " & moneyName &
+                " each day" & (if member.payment[2] > 0: " and " &
+                $member.payment[2] &
+                " percent of profit from each trade" else: ""),
+                color = theme.colors[goldenColor])
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
