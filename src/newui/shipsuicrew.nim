@@ -591,8 +591,19 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setInfo(text = attribute.description,
                 title = attribute.name)
           setLayoutRowDynamic(height = 20, cols = 1)
-          var level = (if attrib.level > 2: attrib.level * 2 else: 6)
-          progressBar(value = level, maxValue = SkillRange.high, modifyable = false)
+          var level: int = (if attrib.level > 2: attrib.level * 2 else: 6)
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "The current level of the attribute.")
+          progressBar(value = level, maxValue = SkillRange.high,
+              modifyable = false)
+          setLayoutRowDynamic(height = 5, cols = 1)
+          var exp: int = ((attrib.experience.float / (attrib.level.float *
+              250.0)) * 100.0).int
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Experience need to reach the next level")
+          progressBar(value = exp, maxValue = 100, modifyable = false)
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
