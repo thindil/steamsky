@@ -643,8 +643,23 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
           var newPriority = comboList(items = priorityLevels,
               selected = setPriorites[index], itemHeight = 25, x = 200, y = 150)
           if newPriority != setPriorites[index]:
+            if newPriority == 2:
+              for order in playerShip.crew[crewIndex].orders.mitems:
+                if order == 2:
+                  order = 1
+                  break
+              setPriorites = playerShip.crew[crewIndex].orders
             setPriorites[index] = newPriority
             playerShip.crew[crewIndex].orders[index] = newPriority
+            try:
+              updateOrders(ship = playerShip)
+            except CrewOrderError, CrewNoSpaceError:
+              dialog = setMessage(message = getCurrentExceptionMsg(),
+                  title = "Can't give an order")
+              return
+            except:
+              dialog = setError(message = "Can't update orders.")
+              return
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
