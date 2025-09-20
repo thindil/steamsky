@@ -65,8 +65,8 @@ proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
     except KeyError:
       discard
 
-proc moneyAmount*(inventory: seq[InventoryData]): Natural {.raises: [], tags: [],
-    contractual.} =
+proc moneyAmount*(inventory: seq[InventoryData]): Natural {.raises: [], tags: [
+    ], contractual.} =
   ## Get the summarized amount of money from the selected inventory
   ##
   ## * inventory - the inventory in which money will be looked for
@@ -76,6 +76,28 @@ proc moneyAmount*(inventory: seq[InventoryData]): Natural {.raises: [], tags: []
   for item in inventory:
     if item.protoIndex == moneyIndex:
       result += item.amount
+
+proc updateMoney*(inventory: seq[InventoryData]; amount: int;
+    quality: ObjectQuality) {.raises: [], tags: [], contractual.} =
+  ## Update the amount of money in the selected inventory
+  ##
+  ## * inventory - the inventory in which money will be updated
+  ## * amount    - the amount about which the money should be updated
+  ## * quality   - the quality of money which should be updated. If any, update
+  ##               the lowest quality of money
+  var mIndex: int = -1
+  if quality == any:
+    var newQuality: ObjectQuality = ObjectQuality.high
+    for index, item in inventory:
+      if item.protoIndex == moneyIndex and item.quality < newQuality:
+        mIndex = index
+        newQuality = item.quality
+  else:
+    for index, item in inventory:
+      if item.protoIndex == moneyIndex and item.quality == quality:
+        mIndex = index
+        break
+  #TODO: updating inventory
 
 proc freeInventory*(memberIndex: Natural; amount: int): int {.raises: [],
     tags: [], contractual.} =
