@@ -604,6 +604,27 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             addTooltip(bounds = getWidgetBounds(),
                 text = "Experience need to reach the next level")
           progressBar(value = exp, maxValue = 100, modifyable = false)
+      # Skills of the selected crew member
+      of 2:
+        for index, skill in member.skills:
+          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+          try:
+            label(str = skillsList[skill.index].name & ":")
+          except:
+            dialog = setError(message = "Can't get the skill name.")
+            return
+          colorLabel(str = getSkillLevelName(skillLevel = skill.level),
+              color = theme.colors[goldenColor])
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Show detailed information about the selected skill.")
+          imageButton(image = images[helpIcon]):
+            try:
+              let skill: SkillRecord = skillsList[skill.index]
+              dialog = setInfo(text = skill.description, title = skill.name)
+            except:
+              dialog = setError(message = "Can't get the skill info")
+              return
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
