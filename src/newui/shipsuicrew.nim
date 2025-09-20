@@ -372,6 +372,7 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
 var
   currentTab: cint = 0
   tiredPoints: int = 0
+  setPriorites: array[1..12, Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -389,6 +390,7 @@ proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
       crewIndex].attributes[conditionIndex].level
   if tiredPoints < 0:
     tiredPoints = 0
+  setPriorites = playerShip.crew[crewIndex].orders
 
 proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -632,12 +634,17 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         label(str = "Level")
         const
           priorityLevels: array[3, string] = ["None", "Normal", "Highest"]
-          prioritesNames: array[12, string] = ["Piloting:", "Engineering:",
+          prioritesNames: array[1..12, string] = ["Piloting:", "Engineering:",
               "Operating guns:", "Repair ship:", "Manufacturing:",
               "Upgrading ship:", "Talking in bases:", "Healing wounded:",
               "Cleaning ship:", "Defend ship:", "Board enemy ship", "Train skill:"]
         for index, priority in prioritesNames:
           label(str = priority)
+          var newPriority = comboList(items = priorityLevels,
+              selected = setPriorites[index], itemHeight = 25, x = 200, y = 150)
+          if newPriority != setPriorites[index]:
+            setPriorites[index] = newPriority
+            playerShip.crew[crewIndex].orders[index] = newPriority
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
