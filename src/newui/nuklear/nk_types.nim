@@ -181,6 +181,11 @@ const
   nkChartMaxSlot*: Positive = 4
     ## The max amount of slot in charts
   nkMaxNumberBuffer*: Positive = 64
+    ## The max amount of buffers
+  nkTextEditUndoStateCount*: Positive = 99
+    ## The max amount of text field undo records
+  nkTextEditUndoCharCount*: Positive = 999
+    ## The max length of text filed undo characters
 
 # -------
 # Objects
@@ -690,13 +695,17 @@ type
   nk_str* {.importc: "struct nk_str", completeStruct.} = object
     buffer*: nk_buffer
     len*: cint
-  nk_plugin_filter* = proc (text: nk_text_edit, unicode: nk_rune) {.cdecl.}
+  nk_plugin_filter* = proc (text: nk_text_edit; unicode: nk_rune) {.cdecl.}
   nk_text_edit* {.importc: "struct nk_text_edit", nodecl.} = object
     ## Internal Nuklear type
     clip*: nk_clipboard
     string*: nk_str
     filter*: nk_plugin_filter
     scrollbar*: nk_vec2
+    cursor*, select_start*, select_end*: cint
+    mode*, cursor_at_end_of_line*, initialized*, has_preferred_x*, single_line*,
+      active*, padding1*: uint8
+    preferred_x*: cfloat
   nk_plugin_paste* = proc (handle: nk_handle; edit: ptr nk_text_edit) {.cdecl.}
     ## Internal Nuklear type
   nk_plugin_copy* = proc (handle: nk_handle; text: cstring; len: cint) {.cdecl.}
