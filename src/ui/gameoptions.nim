@@ -16,13 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[config, game, tk, types]
 import coreui, combatui, errordialog, mapsui, themes, utilsui2
 
 proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
-        contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual,
+    ruleOff: "params".} =
   ## Show the selected options tab
   ##
   ## * clientData - the additional data for the Tcl command
