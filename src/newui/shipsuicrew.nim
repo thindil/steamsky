@@ -412,7 +412,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         var tabs: seq[string] = @[]
         if member.skills.len > 0 and member.contractLength != 0:
           setLayoutRowDynamic(height = 30, cols = 4)
-          tabs = @["General", "Attributes", "Skills", "Inventory"]
+          tabs = @["General", "Attributes", "Skills", "Priorites"]
         else:
           setLayoutRowDynamic(height = 30, cols = 1)
           tabs = @["General"]
@@ -625,6 +625,19 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             except:
               dialog = setError(message = "Can't get the skill info")
               return
+      # Order priorites of the selected crew member
+      of 3:
+        setLayoutRowDynamic(height = 35, cols = 2)
+        label(str = "Priority")
+        label(str = "Level")
+        const
+          priorityLevels: array[3, string] = ["None", "Normal", "Highest"]
+          prioritesNames: array[12, string] = ["Piloting:", "Engineering:",
+              "Operating guns:", "Repair ship:", "Manufacturing:",
+              "Upgrading ship:", "Talking in bases:", "Healing wounded:",
+              "Cleaning ship:", "Defend ship:", "Board enemy ship", "Train skill:"]
+        for index, priority in prioritesNames:
+          label(str = priority)
       else:
         discard
     setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
