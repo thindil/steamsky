@@ -20,13 +20,13 @@
 import std/[colors, os, math, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, config, crewinventory, game, game2, maps,
-    messages, shipscargo, shipscrew, shipscrew2, types, trades]
-import coreui, errordialog, themes
+    messages, shipscargo, shipscrew, shipscrew2, types, trades, utils]
+import coreui, errordialog, setui, themes
 
 type
   QuestionType* = enum
     ## Types of questions, used to set actions to the player's response
-    deleteSave, showDeadStats, quitGame, resignGame, homeBase, finishGame
+    deleteSave, showDeadStats, quitGame, resignGame, homeBase, finishGame, dismissMember
   QuestionData = object
     question, data: string
     qType: QuestionType
@@ -213,6 +213,33 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
           except:
             dialog = setError(message = "Can't kill the player.")
             return
+        of dismissMember:
+          closePopup()
+          dialog = none
+          let
+            baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+                playerShip.skyY].baseIndex
+            memberIndex: int = try:
+                questionData.data.parseInt
+              except:
+                dialog = setError(message = "Can't get the member index.")
+                return
+          addMessage(message = "You dismissed " & playerShip.crew[
+              memberIndex].name & ".", mType = orderMessage)
+          try:
+            deleteMember(memberIndex = memberIndex, ship = playerShip)
+          except:
+            dialog = setError(message = "Can't delete the member.")
+            return
+          skyBases[baseIndex].population.inc
+          for index, _ in playerShip.crew:
+            try:
+              updateMorale(ship = playerShip, memberIndex = index,
+                  value = getRandom(min = -5, max = -1))
+            except:
+              dialog = setError(message = "Can't update the crew's morale.")
+              return
+          refreshCrewList()
         of showDeadStats:
           discard
       labelButton(title = "No"):
