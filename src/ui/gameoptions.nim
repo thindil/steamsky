@@ -1280,12 +1280,12 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
           accel.entryName & " get")
     accel.shortcut = tclEval2(script = rootName & accel.entryName & " get")
   let keyFile: File = try:
-        open(saveDirectory & "keys.cfg", fmWrite)
+        open(filename = saveDirectory & "keys.cfg", mode = fmWrite)
       except:
         return showError(message = "Can't open keys configuration file.")
   for accel in accels:
     try:
-      keyFile.writeLine(accel.configName & " = " & accel.shortcut)
+      keyFile.writeLine(x = accel.configName & " = " & accel.shortcut)
     except:
       return showError(message = "Can't save keyboard accelerator.")
   keyFile.close
@@ -1434,11 +1434,11 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Adds Tcl commands related to the crew UI
   try:
-    addCommand("ShowOptionsTab", showOptionsTabCommand)
-    addCommand("ShowOptions", showOptionsCommand)
-    addCommand("SetFonts", setFontsCommand)
-    addCommand("SetDefaultFonts", setDefaultFontsCommand)
-    addCommand("CloseOptions", closeOptionsCommand)
-    addCommand("ResetKeys", resetKeysCommand)
+    addCommand(name = "ShowOptionsTab", nimProc = showOptionsTabCommand)
+    addCommand(name = "ShowOptions", nimProc = showOptionsCommand)
+    addCommand(name = "SetFonts", nimProc = setFontsCommand)
+    addCommand(name = "SetDefaultFonts", nimProc = setDefaultFontsCommand)
+    addCommand(name = "CloseOptions", nimProc = closeOptionsCommand)
+    addCommand(name = "ResetKeys", nimProc = resetKeysCommand)
   except:
     showError(message = "Can't add a Tcl command.")
