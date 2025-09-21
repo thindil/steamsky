@@ -696,6 +696,16 @@ type
     buffer*: nk_buffer
     len*: cint
   nk_plugin_filter* = proc (text: nk_text_edit; unicode: nk_rune) {.cdecl.}
+  nk_text_undo_record* {.importc: "struct nk_text_undo_record",
+      completeStruct.} = object
+    ## Internal Nuklear type
+    where*: cint
+    insert_length*, delete_length*, char_storage*: cshort
+  nk_text_undo_state* {.importc: "struct nk_text_undo_state",
+      completeStruct.} = object
+    ## Internal Nuklear type
+    undo_rec*: pointer
+    undo_point*, redo_point*, undo_char_point*, redo_char_point*: cshort
   nk_text_edit* {.importc: "struct nk_text_edit", nodecl.} = object
     ## Internal Nuklear type
     clip*: nk_clipboard
@@ -706,6 +716,7 @@ type
     mode*, cursor_at_end_of_line*, initialized*, has_preferred_x*, single_line*,
       active*, padding1*: uint8
     preferred_x*: cfloat
+    undo*: nk_text_undo_state
   nk_plugin_paste* = proc (handle: nk_handle; edit: ptr nk_text_edit) {.cdecl.}
     ## Internal Nuklear type
   nk_plugin_copy* = proc (handle: nk_handle; text: cstring; len: cint) {.cdecl.}
