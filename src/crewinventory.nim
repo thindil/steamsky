@@ -77,28 +77,6 @@ proc moneyAmount*(inventory: seq[InventoryData]): Natural {.raises: [], tags: [
     if item.protoIndex == moneyIndex:
       result += item.amount
 
-proc updateMoney*(inventory: seq[InventoryData]; amount: int;
-    quality: ObjectQuality) {.raises: [], tags: [], contractual.} =
-  ## Update the amount of money in the selected inventory
-  ##
-  ## * inventory - the inventory in which money will be updated
-  ## * amount    - the amount about which the money should be updated
-  ## * quality   - the quality of money which should be updated. If any, update
-  ##               the lowest quality of money
-  var mIndex: int = -1
-  if quality == any:
-    var newQuality: ObjectQuality = ObjectQuality.high
-    for index, item in inventory:
-      if item.protoIndex == moneyIndex and item.quality < newQuality:
-        mIndex = index
-        newQuality = item.quality
-  else:
-    for index, item in inventory:
-      if item.protoIndex == moneyIndex and item.quality == quality:
-        mIndex = index
-        break
-  #TODO: updating inventory
-
 proc freeInventory*(memberIndex: Natural; amount: int): int {.raises: [],
     tags: [], contractual.} =
   ## Get the amount of free space in the selected player ship's crew member's
@@ -209,6 +187,39 @@ proc updateInventory*(memberIndex: Natural; amount: int;
         {.warning[UnsafeSetLen]: on.}
       else:
         ship.crew[memberIndex].inventory[itemIndex].amount = newAmount
+
+proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
+    CrewNoSpaceError, KeyError], tags: [], contractual.} =
+  ## Update the amount of money in the selected inventory
+  ##
+  ## * memberIndex - the index of the player's ship's crew member in which
+  ##                 inventory money will be upgraded. If -1, upgrade the
+  ##                 player's ship cargo instead.
+  ## * amount      - the amount about which the money should be updated
+  ## * quality     - the quality of money which should be updated. If any, update
+  ##                 the lowest quality of money
+  var inventory: seq[InventoryData] = (if memberIndex > -1: playerShip.crew[
+      memberIndex].inventory else: playerShip.cargo)
+  var mIndex: int = -1
+  if quality == any:
+    var newQuality: ObjectQuality = ObjectQuality.high
+    for index, item in inventory:
+      if item.protoIndex == moneyIndex and item.quality < newQuality:
+        mIndex = index
+        newQuality = item.quality
+  else:
+    for index, item in inventory:
+      if item.protoIndex == moneyIndex and item.quality == quality:
+        mIndex = index
+        break
+  let newQuality: ObjectQuality = (if quality == any: normal else: quality)
+  if memberIndex > -1:
+    updateInventory(memberIndex = memberIndex, amount = amount,
+        protoIndex = moneyIndex, inventoryIndex = mIndex, ship = playerShip,
+        quality = newQuality)
+  else:
+    updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = amount,
+        cargoIndex = mIndex, quality = newQuality)
 
 proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     skillLevel: Natural = 0; memberIndex: int = -1;
