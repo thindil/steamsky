@@ -20,7 +20,7 @@
 
 import std/[algorithm, sequtils, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crew, game, messages, shipscrew, shipscrew2, types]
+import ../[config, crew, crewinventory, game, messages, shipscrew, shipscrew2, types]
 import coreui, dialogs, errordialog, setui, table, themes, utilsui2
 
 type
@@ -373,6 +373,10 @@ var
   currentTab: cint = 0
   tiredPoints: int = 0
   setPriorites: array[1..12, Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  freeSpace*: Natural = 0
+    ## The amount of free space in the member's inventory in kilograms
+  inventoryDataList*: seq[CrewData] = @[]
+    ## The list of data related to the player's ship's crew members inventory
 
 proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -386,11 +390,15 @@ proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   crewIndex = crewDataList[data].index
   dialog = memberDialog
   currentTab = 0
-  tiredPoints = playerShip.crew[crewIndex].tired - playerShip.crew[
-      crewIndex].attributes[conditionIndex].level
+  let member: MemberData = playerShip.crew[crewIndex]
+  tiredPoints = member.tired - member.attributes[conditionIndex].level
   if tiredPoints < 0:
     tiredPoints = 0
-  setPriorites = playerShip.crew[crewIndex].orders
+  setPriorites = member.orders
+  freeSpace = freeInventory(memberIndex = crewIndex, amount = 0)
+  inventoryDataList = @[]
+  for index in member.inventory.low..member.inventory.high:
+    inventoryDataList.add(y = CrewData(index: index, checked: false))
 
 proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
