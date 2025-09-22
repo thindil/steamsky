@@ -378,6 +378,14 @@ var
   inventoryDataList*: seq[CrewData] = @[]
     ## The list of data related to the player's ship's crew members inventory
 
+proc setInventoryInfo*() {.raises: [], tags: [], contractual.} =
+  ## Set the dialog with information about the selected member's inventory
+  let member: MemberData = playerShip.crew[crewIndex]
+  freeSpace = freeInventory(memberIndex = crewIndex, amount = 0)
+  inventoryDataList = @[]
+  for index in member.inventory.low..member.inventory.high:
+    inventoryDataList.add(y = CrewData(index: index, checked: false))
+
 proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Set the dialog with information about the selected member
@@ -395,10 +403,7 @@ proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   if tiredPoints < 0:
     tiredPoints = 0
   setPriorites = member.orders
-  freeSpace = freeInventory(memberIndex = crewIndex, amount = 0)
-  inventoryDataList = @[]
-  for index in member.inventory.low..member.inventory.high:
-    inventoryDataList.add(y = CrewData(index: index, checked: false))
+  setInventoryInfo()
 
 proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -678,6 +683,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     imageLabelButton(image = images[inventoryIcon], text = "Inventory",
         alignment = right):
       dialog = inventoryDialog
+      setDialog(x = windowWidth / 6, y = windowHeight / 8)
     addCloseButton(dialog = dialog, isPopup = false)
     if playerShip.speed == docked and crewIndex > 0:
       if gameSettings.showTooltips:
