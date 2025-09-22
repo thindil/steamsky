@@ -19,7 +19,7 @@
 ## members's inventory, like listing them, showing information, move items, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[game, types]
+import ../[config, game, types]
 import coreui, dialogs, setui, shipsuicrew, themes
 
 proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
@@ -40,9 +40,21 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     ## Show information about free inventory space
-    setLayoutRowDynamic(height = 30, cols = 2)
-    label(str = "Free inventory space:")
-    colorLabel(str = $freeSpace & " kg", color = theme.colors[goldenColor])
+    setLayoutRowStatic(height = 30, cols = 2, ratio = spaceWidth)
+    label(str = spaceText[0])
+    colorLabel(str = spaceText[1], color = theme.colors[goldenColor])
+    ## Show select/unselect all items buttons
+    setLayoutRowStatic(height = 35, cols = 2, width = 35)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Select all items")
+    imageButton(image = images[selectAllIcon]):
+      for data in inventoryDataList.mitems:
+        data.checked = true
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Unselect all items")
+    imageButton(image = images[unselectAllIcon]):
+      for data in inventoryDataList.mitems:
+        data.checked = false
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
