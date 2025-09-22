@@ -20,7 +20,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[game, types]
-import coreui, dialogs, setui
+import coreui, dialogs, setui, shipsuicrew, themes
 
 proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -30,7 +30,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   const
-    width: float = 400
+    width: float = 600
     height: float = 500
 
   let
@@ -39,6 +39,10 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    ## Show information about free inventory space
+    setLayoutRowDynamic(height = 30, cols = 2)
+    label(str = "Free inventory space:")
+    colorLabel(str = $freeSpace & " kg", color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
