@@ -20,7 +20,47 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, types]
-import coreui, dialogs, setui, shipsuicrew, themes
+import coreui, dialogs, setui, shipsuicrew, table, themes
+
+type
+  InventorySortOrders = enum
+    selectedAsc, selectedDesc, nameAsc, nameDesc, durabilityAsc, durabilityDesc,
+      usedAsc, usedDesc, amountAsc, amountDesc, weightAsc, weightDesc, none
+
+const defaultInventorySortOrder*: InventorySortOrders = none
+
+var  inventorySortOrder: InventorySortOrders = defaultInventorySortOrder
+
+proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort items on the trades list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if inventorySortOrder == sortAsc:
+    inventorySortOrder = sortDesc
+  else:
+    inventorySortOrder = sortAsc
+
+const
+  headers: array[6, HeaderData[InventorySortOrders]] = [
+    HeaderData[InventorySortOrders](label: "", sortAsc: selectedAsc,
+        sortDesc: selectedDesc),
+    HeaderData[InventorySortOrders](label: "Name", sortAsc: nameAsc,
+        sortDesc: nameDesc),
+    HeaderData[InventorySortOrders](label: "Durability", sortAsc: durabilityAsc,
+        sortDesc: durabilityDesc),
+    HeaderData[InventorySortOrders](label: "Used", sortAsc: usedAsc,
+        sortDesc: usedDesc),
+    HeaderData[InventorySortOrders](label: "Amount", sortAsc: amountAsc,
+        sortDesc: amountDesc),
+    HeaderData[InventorySortOrders](label: "Weight", sortAsc: weightAsc,
+        sortDesc: weightDesc)]
+  ratio: array[6, cfloat] = [40.cfloat, 300, 200, 200, 200, 200]
 
 proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -55,6 +95,11 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     imageButton(image = images[unselectAllIcon]):
       for data in inventoryDataList.mitems:
         data.checked = false
+    # Show the list of items in inventory
+    setLayoutRowDynamic(height = height - 200, cols = 1)
+    group(title = "InfoGroup", flags = {windowNoFlags}):
+      addHeader(headers = headers, ratio = ratio, tooltip = "items",
+          code = sortInventory, dialog = dialog)
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
