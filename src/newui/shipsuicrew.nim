@@ -373,15 +373,30 @@ var
   currentTab: cint = 0
   tiredPoints: int = 0
   setPriorites: array[1..12, Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  freeSpace*: Natural = 0
-    ## The amount of free space in the member's inventory in kilograms
   inventoryDataList*: seq[CrewData] = @[]
     ## The list of data related to the player's ship's crew members inventory
+  spaceWidth*: array[2, cfloat] = [0.cfloat, 0]
+    ## The width of the text with info about the crew member free inventory
+    ## space
+  spaceText*: array[2, string] = ["Free inventory space:", ""]
+    ## The text with info about the player's ship's free cargo space
 
-proc setInventoryInfo*() {.raises: [], tags: [], contractual.} =
+proc setInventoryInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the dialog with information about the selected member's inventory
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   let member: MemberData = playerShip.crew[crewIndex]
-  freeSpace = freeInventory(memberIndex = crewIndex, amount = 0)
+  spaceText[1] = $freeInventory(memberIndex = crewIndex, amount = 0) & " kg"
+  for index, text in spaceText:
+    try:
+      spaceWidth[index] = text.getTextWidth
+    except:
+      dialog = setError(message = "Can't get the width of the free space text.")
+      return
   inventoryDataList = @[]
   for index in member.inventory.low..member.inventory.high:
     inventoryDataList.add(y = CrewData(index: index, checked: false))
@@ -403,7 +418,7 @@ proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   if tiredPoints < 0:
     tiredPoints = 0
   setPriorites = member.orders
-  setInventoryInfo()
+  setInventoryInfo(dialog = dialog)
 
 proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
