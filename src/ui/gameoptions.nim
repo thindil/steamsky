@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the game's options, like showing them, setting
+## their values, etc.
+
 import std/[os, strutils, tables]
 import contracts, nimalyzer
 import ../[config, game, tk, types]
@@ -1115,12 +1118,22 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc getCheckboxValue(checkboxName: string): bool {.raises: [], tags: [],
       contractual.} =
+    ## Get the state of the selected checkbox
+    ##
+    ## * checkboxName - the Tcl name of the checkbox
+    ##
+    ## Returns true if the checkbox is checked, otherwise false
     return tclGetVar(varName = rootName & checkboxName) == "1"
 
   gameSettings.autoRest = getCheckboxValue(checkboxName = ".general.autorest")
 
   proc getComboboxValue(comboboxName: string): Natural {.raises: [], tags: [
       RootEffect], contractual.} =
+    ## Get the index of the value of the selected combobox
+    ##
+    ## * comboboxName - the Tcl name of the combobox
+    ##
+    ## Returns the index of the currently selected value in the combobox
     let comboBox = rootName & comboboxName
     try:
       return tclEval2(script = comboBox & " current").parseInt
@@ -1147,6 +1160,11 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc getSpinboxValue(spinboxName: string): Natural {.raises: [], tags: [
       RootEffect], contractual.} =
+    ## Get the the value of the selected spinbox
+    ##
+    ## * spinboxName - the Tcl name of the spinbox
+    ##
+    ## Returns the current value in the spinbox
     let spinBox = rootName & spinboxName
     try:
       return tclEval2(script = spinBox & " get").parseInt
