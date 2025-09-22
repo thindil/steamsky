@@ -191,20 +191,6 @@ const
 # Objects
 # -------
 
-template nkConfigurationStackType(prefix, name, typ: untyped) =
-  ## Used to create stack elements for configuration
-  type
-    nk_config_stack_typ_element* = object
-      address*: ptr prefix_type
-      old_value*: prefix_type
-
-template nkConfigStack(typ, size: untyped) =
-  ## Used to create stacks for configuration
-  type
-    nk_config_stack_typ* = object
-      head*: cint
-      elements*: array[size, nk_config_stack_typ_element]
-
 {.push ruleOff: "namedParams".}
 type
   nk_color* {.importc: "struct nk_color", completeStruct.} = object
@@ -706,7 +692,7 @@ type
     ## Internal Nuklear type
     undo_rec*: pointer
     undo_point*, redo_point*, undo_char_point*, redo_char_point*: cshort
-  nk_text_edit* {.importc: "struct nk_text_edit", nodecl.} = object
+  nk_text_edit* {.importc: "struct nk_text_edit", completeStruct.} = object
     ## Internal Nuklear type
     clip*: nk_clipboard
     string*: nk_str
