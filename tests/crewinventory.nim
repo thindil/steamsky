@@ -90,3 +90,13 @@ suite "Unit tests for crewinventory module":
   test "Getting money amount from inventory":
     check:
       moneyAmount(playerShip.crew[0].inventory) == 1
+
+  test "Add money to an inventory":
+    updateMoney(0, 10, any)
+    check:
+      moneyAmount(playerShip.crew[0].inventory) == 11
+
+  test "Removing money from an inventory":
+    updateMoney(0, -10, any)
+    check:
+      moneyAmount(playerShip.crew[0].inventory) == 1
