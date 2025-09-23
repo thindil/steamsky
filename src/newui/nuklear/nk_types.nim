@@ -711,6 +711,34 @@ type
     userdata*: nk_handle
     copy*: nk_plugin_copy
     paste*: nk_plugin_paste
+  nk_config_stack_style_item_element* {.importc: "struct nk_config_stack_style_item_element",
+      completeStruct.} = object
+    address*: ptr nk_style_item
+    old_value: nk_style_item
+  nk_config_stack_float_element* {.importc: "struct nk_config_stack_float_element",
+      completeStruct.} = object
+    address*: ptr cfloat
+    old_value: cfloat
+  nk_config_stack_vec2_element* {.importc: "struct nk_config_stack_vec2_element",
+      completeStruct.} = object
+    address*: ptr nk_vec2
+    old_value: nk_vec2
+  nk_config_stack_flags_element* {.importc: "struct nk_config_stack_flags_element",
+      completeStruct.} = object
+    address*: ptr nk_flags
+    old_value: nk_flags
+  nk_config_stack_color_element* {.importc: "struct nk_config_stack_color_element",
+      completeStruct.} = object
+    address*: ptr nk_color
+    old_value: nk_color
+  nk_config_stack_user_font_element* {.importc: "struct nk_config_stack_user_font_element",
+      completeStruct.} = object
+    address*: ptr nk_user_font
+    old_value: nk_user_font
+  nk_config_stack_button_behavior_element * {.importc: "struct nk_config_stack_button_behavior_element",
+      completeStruct.} = object
+    address*: ptr ButtonBehavior
+    old_value: ButtonBehavior
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
