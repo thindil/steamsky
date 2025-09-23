@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file.
 - Information about items' quality in the player's ship's info and bases' loot
   screen
 
+### Fixed
+- Tooltips for select and unselect buttons in the player's ship's crew member's
+  inventory dialog
+
 ## [11.5] - 2025-09-07
 
 ### Added
