@@ -190,7 +190,7 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & selectAllButton & " -sticky w")
   let unselectAllButton: string = buttonsBox & ".unselectallbutton"
   tclEval(script = "ttk::button " & unselectAllButton & " -image unselectallicon -command {ToggleAllInventory unselect} -style Small.TButton")
-  tclEval(script = "tooltip::tooltip " & selectAllButton & " \"Unselect all items.\"")
+  tclEval(script = "tooltip::tooltip " & unselectAllButton & " \"Unselect all items.\"")
   tclEval(script = "grid " & unselectAllButton & " -sticky w -row 0 -column 1")
   height = try:
       height + tclEval2(script = "winfo reqheight " &
