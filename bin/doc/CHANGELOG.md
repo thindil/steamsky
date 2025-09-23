@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Tooltips for select and unselect buttons in the player's ship's crew member's
+  inventory dialog
+
 ## [11.0.5] - 2025-09-14
 
 ### Fixed
