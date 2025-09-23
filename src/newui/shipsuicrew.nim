@@ -161,7 +161,7 @@ proc getHighestSkill(memberIndex: Natural;
 
 proc sortCrew(sortAsc, sortDesc: CrewSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
-  ## Sort items on the trades list
+  ## Sort the crew members on the list
   ##
   ## * sortAsc  - the sorting value for ascending sort
   ## * sortDesc - the sorting value for descending sort
