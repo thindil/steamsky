@@ -19,7 +19,7 @@
 ## members's inventory, like listing them, showing information, move items, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, types]
+import ../[config, game, items, types]
 import coreui, dialogs, errordialog, setui, shipsuicrew, table, themes
 
 type
@@ -45,6 +45,17 @@ proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
     inventorySortOrder = sortDesc
   else:
     inventorySortOrder = sortAsc
+
+proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Set the dialog with information about the selected item
+  ##
+  ## * data   - the index of the selected item
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
 
 const
   headers: array[6, HeaderData[InventorySortOrders]] = [
@@ -119,6 +130,14 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
           continue
         addCheckButton(tooltip = "Select the item to move or equip it.",
             checked = data.checked)
+        addButton(label = getItemName(item = member.inventory[data.index],
+            damageInfo = false, toLower = false),
+            tooltip = "Show the selected item's info.", data = data.index,
+            code = setItemInfo, dialog = dialog)
+        addProgressBar(tooltip = "The current durability level of the selected item.",
+            value = member.inventory[data.index].durability,
+            maxValue = defaultItemDurability, data = data.index,
+            code = setItemInfo, dialog = dialog)
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
