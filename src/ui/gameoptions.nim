@@ -38,11 +38,11 @@ proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowOptionsTab
   let
-    optionsCanvas = mainPaned & ".optionsframe.canvas"
-    optionsFrame = optionsCanvas & ".options"
-    oldFrame = tclEval2(script = "grid slaves " & optionsFrame & " -row 1")
+    optionsCanvas: string = mainPaned & ".optionsframe.canvas"
+    optionsFrame: string = optionsCanvas & ".options"
+    oldFrame: string = tclEval2(script = "grid slaves " & optionsFrame & " -row 1")
   tclEval(script = "grid remove " & oldFrame)
-  let frame = optionsFrame & "." & tclGetVar(varName = "newtab")
+  let frame: string = optionsFrame & "." & tclGetVar(varName = "newtab")
   tclEval(script = "grid " & frame & " -sticky nwes -padx 10")
   tclEval(script = "update")
   tclEval(script = optionsCanvas & " configure -scrollregion [list " & tclEval2(
@@ -148,8 +148,8 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowOptions
   tclSetVar(varName = "newtab", newValue = "general")
-  var optionsFrame = mainPaned & ".optionsframe"
-  let optionsCanvas = optionsFrame & ".canvas"
+  var optionsFrame: string = mainPaned & ".optionsframe"
+  let optionsCanvas: string = optionsFrame & ".canvas"
   type WidgetData = object
     name, value: string
   if tclEval2(script = "winfo exists " & optionsCanvas) == "0":
@@ -934,12 +934,12 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
         WidgetData(name: "docs", value: docDirectory), WidgetData(name: "mods",
         value: modsDirectory)]
     for label in labelsArray:
-      let labelName = optionsCanvas & ".options.info." & label.name
+      let labelName: string = optionsCanvas & ".options.info." & label.name
       tclEval(script = labelName & " configure -text {" & label.value & " }")
-    var themesNames = ""
+    var themesNames: string = ""
     for theme in themesList.values:
       themesNames &= " {" & theme.name & "}"
-    let comboBox = optionsFrame & ".canvas.options.interface.theme"
+    let comboBox: string = optionsFrame & ".canvas.options.interface.theme"
     tclEval(script = comboBox & " configure -values [list" & themesNames & "]")
   elif tclEval2(script = "winfo ismapped " & optionsCanvas) == "1":
     tclEval(script = "grid remove " & closeButton)
@@ -1004,8 +1004,8 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   for comboBox in comboboxArray:
     tclEval(script = comboBox.name & " current " & comboBox.value)
   optionsFrame = optionsCanvas & ".options.interface"
-  var comboBox = optionsFrame & ".theme"
-  let theme = try:
+  var comboBox: string = optionsFrame & ".theme"
+  let theme: ThemeRecord = try:
         themesList[gameSettings.interfaceTheme]
       except:
         return showError(message = "Can't find theme '" &
@@ -1020,7 +1020,7 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   for i in 0 .. 3:
     accels[i + 11 + 37 + 1].shortcut = generalAccelerators[i]
   for accel in accels:
-    let keyEntry = optionsFrame & accel.entryName
+    let keyEntry: string = optionsFrame & accel.entryName
     tclEval(script = keyEntry & " delete 0 end")
     tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
   if tclEval2(script = closeButton & " cget -command") == "ShowCombatUI":
@@ -1056,9 +1056,9 @@ proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## SetFonts fontfield
   ## Fontfield is the name of the spinbox which value changed.
   let
-    frameName = ".gameframe.paned.optionsframe.canvas.options.interface"
-    spinBox = $argv[1]
-    newSize = try:
+    frameName: string = ".gameframe.paned.optionsframe.canvas.options.interface"
+    spinBox: string = $argv[1]
+    newSize: Positive = try:
         tclEval2(script = spinBox & " get").parseInt
       except:
         return showError(message = "Can't get the new size.")
@@ -1089,7 +1089,7 @@ proc setDefaultFontsCommand(clientData: cint; interp: PInterp; argc: cint;
     spinboxNames: array[3, string] = ["map", "interface", "help"]
     fontTypesNames: array[3, FontTypes] = [mapFont, interfaceFont, helpFont]
   for index, name in spinboxNames:
-    let spinbox = ".gameframe.paned.optionsframe.canvas.options.interface." &
+    let spinbox: string = ".gameframe.paned.optionsframe.canvas.options.interface." &
         name & "font"
     tclEval(script = spinbox & " set " & $defaultFontSizes[index])
     setFonts(newSize = defaultFontSizes[index], fontType = fontTypesNames[index])
@@ -1114,7 +1114,7 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Can be 'map' or 'combat'.
   tclEval(script = closeButton & " configure -command ShowSkyMap")
   tclEval(script = "grid remove " & closeButton)
-  const rootName = ".gameframe.paned.optionsframe.canvas.options"
+  const rootName: string = ".gameframe.paned.optionsframe.canvas.options"
 
   proc getCheckboxValue(checkboxName: string): bool {.raises: [], tags: [],
       contractual.} =
@@ -1134,7 +1134,7 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     ## * comboboxName - the Tcl name of the combobox
     ##
     ## Returns the index of the currently selected value in the combobox
-    let comboBox = rootName & comboboxName
+    let comboBox: string = rootName & comboboxName
     try:
       return tclEval2(script = comboBox & " current").parseInt
     except:
@@ -1165,7 +1165,7 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     ## * spinboxName - the Tcl name of the spinbox
     ##
     ## Returns the current value in the spinbox
-    let spinBox = rootName & spinboxName
+    let spinBox: string = rootName & spinboxName
     try:
       return tclEval2(script = spinBox & " get").parseInt
     except:
@@ -1209,15 +1209,15 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't get auto save.")
   let
-    themeCombobox = rootName & ".interface.theme"
-    themeName = tclEval2(script = themeCombobox & " get")
+    themeCombobox: string = rootName & ".interface.theme"
+    themeName: string = tclEval2(script = themeCombobox & " get")
   for index, theme in themesList.pairs:
     if theme.name == $themeName:
       gameSettings.interfaceTheme = index
       break
   tclEval(script = "ttk::style theme use " & gameSettings.interfaceTheme)
   setTheme()
-  let mapView = ".gameframe.paned.mapframe.map"
+  let mapView: string = ".gameframe.paned.mapframe.map"
   if tclGetVar(varName = rootName & ".interface.rightbutton") == "1":
     gameSettings.rightButton = true
     tclEval(script = "bind " & mapView & " <Button-3> {ShowDestinationMenu %X %Y}")
@@ -1268,8 +1268,8 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't save configuration file.")
   for index, accel in accels.mpairs:
     var
-      pos = accel.shortcut.rfind(sub = '-')
-      keyName = ""
+      pos: int = accel.shortcut.rfind(sub = '-')
+      keyName: string = ""
     if pos > -1:
       keyName = accel.shortcut[0 .. pos] & "KeyPress-" & accel.shortcut[pos +
           1 .. ^1]
@@ -1359,7 +1359,7 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
         shortcut: "Control-d", entryName: ".movement.fullspeed",
         configName: "")]
     for accel in defaultMovementAccels:
-      let keyEntry = ".gameframe.paned.optionsframe.canvas.options" &
+      let keyEntry: string = ".gameframe.paned.optionsframe.canvas.options" &
           accel.entryName
       tclEval(script = keyEntry & " delete 0 end")
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
@@ -1378,7 +1378,7 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
         shortcut: "x", entryName: ".menu.resign", configName: ""), AccelData(
         shortcut: "e", entryName: ".menu.menu", configName: "")]
     for accel in defaultMenuAccels:
-      let keyEntry = ".gameframe.paned.optionsframe.canvas.options" &
+      let keyEntry: string = ".gameframe.paned.optionsframe.canvas.options" &
           accel.entryName
       tclEval(script = keyEntry & " delete 0 end")
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
@@ -1430,7 +1430,7 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
         shortcut: "Control-d", entryName: ".movement.fullspeed",
         configName: "")]
     for accel in defaultMapAccels:
-      let keyEntry = ".gameframe.paned.optionsframe.canvas.options" &
+      let keyEntry: string = ".gameframe.paned.optionsframe.canvas.options" &
           accel.entryName
       tclEval(script = keyEntry & " delete 0 end")
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
@@ -1442,7 +1442,7 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
         entryName: ".ui.resizethird", configName: ""), AccelData(
         shortcut: "Alt-d", entryName: ".ui.resizefourth", configName: "")]
     for accel in defaultGeneralAccels:
-      let keyEntry = ".gameframe.paned.optionsframe.canvas.options" &
+      let keyEntry: string = ".gameframe.paned.optionsframe.canvas.options" &
           accel.entryName
       tclEval(script = keyEntry & " delete 0 end")
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
