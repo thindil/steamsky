@@ -29,20 +29,17 @@ type
   CantHealError* = object of CatchableError
     ## Raised when the selected player's ship's crew member can't be healed
 
-proc checkMoney(price: Positive; message: string = ""): int {.raises: [
+proc checkMoney(price: Positive; message: string = "") {.raises: [
     NoMoneyError, NotEnoughMoneyError], tags: [], contractual.} =
   ## Check if there is enough money on the player's ship
   ##
   ## * price   - the amount of money to compare
   ## * message - the message shown when there is no or not enough money
-  ##
-  ## Returns the index of the money in the player's ship's cargo
   body:
-    result = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex,
-        itemQuality = normal)
-    if result == -1:
+    let amount = moneyAmount(inventory = playerShip.cargo)
+    if amount == 0:
       raise newException(exceptn = NoMoneyError, message = message)
-    if playerShip.cargo[result].amount < price:
+    if amount < price:
       raise newException(exceptn = NotEnoughMoneyError, message = message)
 
 proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
@@ -85,9 +82,8 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
             2: tradePayment],
         contractLength: contractLength, morale: [1: morale, 2: 0],
         loyalty: morale, homeBase: recruit.homeBase, faction: recruit.faction))
-    let moneyIndex2: int = checkMoney(price = price, message = recruit.name)
-    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price,
-        quality = normal)
+    checkMoney(price = price, message = recruit.name)
+    updateMoney(memberIndex = -1, amount = -price, quality = any)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = baseIndex, points = 1)
     addMessage(message = "You hired " & recruit.name & " for " & $price & " " &
@@ -131,9 +127,8 @@ proc buyRecipe*(recipeIndex: string) {.raises: [CantBuyError,
     countPrice(price = cost, traderIndex = traderIndex)
     let
       recipeName: string = itemsList[recipesList[recipeIndex].resultIndex].name
-      moneyIndex2: int = checkMoney(price = cost, message = recipeName)
-    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost,
-        quality = normal)
+    checkMoney(price = cost, message = recipeName)
+    updateMoney(memberIndex = -1, amount = -cost, quality = any)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
     knownRecipes.add(y = recipeIndex)
     addMessage(message = "You bought the recipe for " & recipeName & " for " &
@@ -212,9 +207,8 @@ proc healWounded*(memberIndex: int) {.raises: [CantHealError,
               moduleIndex = -1, checkPriorities = false)
       addMessage(message = "You paid for healing all wounded crew members for " &
           $cost & " " & moneyName & ".", mType = tradeMessage)
-    var moneyIndex2: int = checkMoney(price = cost)
-    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost,
-        quality = normal)
+    checkMoney(price = cost)
+    updateMoney(memberIndex = -1, amount = -cost, quality = any)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     let baseIndex: BasesRange = skyMap[playerShip.skyX][
