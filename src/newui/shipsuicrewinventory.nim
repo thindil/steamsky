@@ -20,7 +20,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, types]
-import coreui, dialogs, setui, shipsuicrew, table, themes
+import coreui, dialogs, errordialog, setui, shipsuicrew, table, themes
 
 type
   InventorySortOrders = enum
@@ -29,7 +29,7 @@ type
 
 const defaultInventorySortOrder*: InventorySortOrders = none
 
-var  inventorySortOrder: InventorySortOrders = defaultInventorySortOrder
+var inventorySortOrder: InventorySortOrders = defaultInventorySortOrder
 
 proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -96,10 +96,29 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
       for data in inventoryDataList.mitems:
         data.checked = false
     # Show the list of items in inventory
-    setLayoutRowDynamic(height = height - 200, cols = 1)
+    setLayoutRowDynamic(height = height - 170, cols = 1)
     group(title = "InfoGroup", flags = {windowNoFlags}):
       addHeader(headers = headers, ratio = ratio, tooltip = "items",
           code = sortInventory, dialog = dialog)
+      var currentRow: Positive = 1
+      saveButtonStyle()
+      setButtonStyle(field = borderColor, a = 0)
+      try:
+        setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+        setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+      except:
+        dialog = setError(message = "Can't set table color")
+        return
+      setButtonStyle(field = rounding, value = 0)
+      setButtonStyle(field = border, value = 0)
+      let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+      var row: Positive = 1
+      for index, data in inventoryDataList.mpairs:
+        if currentRow < startRow:
+          currentRow.inc
+          continue
+        addCheckButton(tooltip = "Select the item to move or equip it.",
+            checked = data.checked)
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
