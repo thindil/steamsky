@@ -19,7 +19,7 @@
 ## members's inventory, like listing them, showing information, move items, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, items, types]
+import ../[config, crewinventory, game, items, types]
 import coreui, dialogs, errordialog, setui, shipsuicrew, table, themes
 
 type
@@ -138,6 +138,20 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
             value = member.inventory[data.index].durability,
             maxValue = defaultItemDurability, data = data.index,
             code = setItemInfo, dialog = dialog)
+        var
+          checked: bool = false
+          tooltip: string = ""
+        if itemIsUsed(memberIndex = crewIndex, itemIndex = data.index):
+          checked = true
+          tooltip = "The item is used by the crew member"
+        else:
+          checked = false
+          tooltip = "The item isn't used by the crew member"
+        addCheckButton(tooltip = tooltip, checked = checked)
+        row.inc
+        if row == gameSettings.listsLimit + 1:
+          break
+    restoreButtonStyle()
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
