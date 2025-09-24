@@ -1055,8 +1055,8 @@ proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SetFonts fontfield
   ## Fontfield is the name of the spinbox which value changed.
+  const frameName: string = ".gameframe.paned.optionsframe.canvas.options.interface"
   let
-    frameName: string = ".gameframe.paned.optionsframe.canvas.options.interface"
     spinBox: string = $argv[1]
     newSize: Positive = try:
         tclEval2(script = spinBox & " get").parseInt
@@ -1211,13 +1211,13 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     themeCombobox: string = rootName & ".interface.theme"
     themeName: string = tclEval2(script = themeCombobox & " get")
-  for index, theme in themesList.pairs:
+  for index, theme in themesList:
     if theme.name == $themeName:
       gameSettings.interfaceTheme = index
       break
   tclEval(script = "ttk::style theme use " & gameSettings.interfaceTheme)
   setTheme()
-  let mapView: string = ".gameframe.paned.mapframe.map"
+  const mapView: string = ".gameframe.paned.mapframe.map"
   if tclGetVar(varName = rootName & ".interface.rightbutton") == "1":
     gameSettings.rightButton = true
     tclEval(script = "bind " & mapView & " <Button-3> {ShowDestinationMenu %X %Y}")
@@ -1364,7 +1364,7 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = keyEntry & " delete 0 end")
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
   elif argv[1] == "menu":
-    let defaultMenuAccels: array[12, AccelData] = [AccelData(shortcut: "s",
+    const defaultMenuAccels: array[12, AccelData] = [AccelData(shortcut: "s",
         entryName: ".menu.shipinfo", configName: ""), AccelData(shortcut: "o",
         entryName: ".menu.orders", configName: ""), AccelData(shortcut: "r",
         entryName: ".menu.crafts", configName: ""), AccelData(shortcut: "m",
@@ -1435,7 +1435,7 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = keyEntry & " delete 0 end")
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
   elif argv[1] == "general":
-    let defaultGeneralAccels: array[4, AccelData] = [AccelData(
+    const defaultGeneralAccels: array[4, AccelData] = [AccelData(
         shortcut: "Alt-a", entryName: ".ui.resizefirst", configName: ""),
         AccelData(shortcut: "Alt-b", entryName: ".ui.resizesecond",
         configName: ""), AccelData(shortcut: "Alt-c",
