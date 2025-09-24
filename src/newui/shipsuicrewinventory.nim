@@ -18,6 +18,7 @@
 ## Provides code related to the information about the player's ship's crew
 ## members's inventory, like listing them, showing information, move items, etc.
 
+import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, crewinventory, game, items, types]
 import coreui, dialogs, errordialog, setui, shipsuicrew, table, themes
@@ -71,7 +72,7 @@ const
         sortDesc: amountDesc),
     HeaderData[InventorySortOrders](label: "Weight", sortAsc: weightAsc,
         sortDesc: weightDesc)]
-  ratio: array[6, cfloat] = [40.cfloat, 300, 200, 200, 200, 200]
+  ratio: array[6, cfloat] = [40.cfloat, 300, 200, 40, 200, 200]
 
 proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -148,6 +149,17 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
           checked = false
           tooltip = "The item isn't used by the crew member"
         addCheckButton(tooltip = tooltip, checked = checked)
+        addButton(label = $member.inventory[data.index].amount,
+            tooltip = "The amount of the item owned by the crew member.",
+            data = data.index, code = setItemInfo, dialog = dialog)
+        try:
+          addButton(label = $(member.inventory[data.index].amount * itemsList[
+              member.inventory[data.index].protoIndex].weight) & " kg",
+              tooltip = "The total weight of the items", data = data.index,
+              code = setItemInfo, dialog = dialog)
+        except:
+          dialog = setError(message = "Can't count the total weight of the item.")
+          return
         row.inc
         if row == gameSettings.listsLimit + 1:
           break
