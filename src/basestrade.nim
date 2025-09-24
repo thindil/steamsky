@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -295,3 +295,5 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
           " training session(s) in " & skillsList[skillIndex].name & " for " &
           playerShip.crew[memberIndex].name & " for " & $overallCost & " " &
           moneyName & ".", mType = tradeMessage)
+    else:
+      updateOrders(ship = playerShip)
