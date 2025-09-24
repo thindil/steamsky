@@ -186,6 +186,16 @@ const
     ## The max amount of text field undo records
   nkTextEditUndoCharCount*: Positive = 999
     ## The max length of text filed undo characters
+  nkStyleItemStackSize*: Positive = 16
+    ## The size of the stack of style items
+  nkFloatStackSize*: Positive = 32
+    ## The size of the stack of floats
+  nkVectorStackSize*: Positive = 16
+    ## The size of the stack of vectors
+  nkFlagsStackSize*: Positive = 32
+    ## The size of the stack of flags
+  nkColorStackSize*: Positive = 32
+    ## The size of the stack of colors
 
 # -------
 # Objects
@@ -739,6 +749,10 @@ type
       completeStruct.} = object
     address*: ptr ButtonBehavior
     old_value: ButtonBehavior
+  nk_config_stack_style_item* {.importc: "struct nk_config_stack_style_item",
+      completeStruct.} = object
+    head*: cint
+    elements*: array[nkStyleItemStackSize, nk_config_stack_style_item_element]
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
