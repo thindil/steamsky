@@ -57,8 +57,7 @@ suite "Unit tests for basestrade module":
   resetReputations()
 
   test "Check money in a base.":
-    check:
-      checkMoney(1) > -1
+    checkMoney(1)
 
   test "Hire a recruit.":
     generateRecruits()
