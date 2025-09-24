@@ -21,7 +21,7 @@
 import std/tables
 import contracts
 import bases, basescargo, basestypes, config, game, game2, crewinventory, items,
-    maps, messages, shipscargo, shipscrew, types, utils
+    maps, messages, shipscrew, types, utils
 
 type
   AlreadyKnownError* = object of CatchableError
@@ -36,7 +36,7 @@ proc checkMoney(price: Positive; message: string = "") {.raises: [
   ## * price   - the amount of money to compare
   ## * message - the message shown when there is no or not enough money
   body:
-    let amount = moneyAmount(inventory = playerShip.cargo)
+    let amount: Natural = moneyAmount(inventory = playerShip.cargo)
     if amount == 0:
       raise newException(exceptn = NoMoneyError, message = message)
     if amount < price:
@@ -268,10 +268,8 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
       let
         cost: Natural = trainCost(memberIndex = memberIndex,
             skillIndex = skillIndex)
-        moneyIndex2: int = findItem(inventory = playerShip.cargo,
-            protoIndex = moneyIndex, itemQuality = normal)
-      if cost == 0 or playerShip.cargo[moneyIndex2].amount < cost or (
-          not isAmount and maxAmount < cost):
+        mAmount: Natural = moneyAmount(playerShip.cargo)
+      if cost == 0 or mAmount < cost or (not isAmount and maxAmount < cost):
         break
       var gainedExp: Positive = getRandom(min = 10, max = 60) + playerShip.crew[
           memberIndex].attributes[skillsList[skillIndex].attribute].level
@@ -279,8 +277,7 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
         gainedExp = 100
       gainExp(amount = gainedExp, skillNumber = skillIndex,
           crewIndex = memberIndex)
-      updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost,
-          quality = normal)
+      updateMoney(memberIndex = -1, amount = -cost, quality = any)
       updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
       let traderIndex: int = findMember(order = talk)
       if traderIndex > 0:
