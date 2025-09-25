@@ -117,6 +117,20 @@ proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
     inventorySortOrder = sortDesc
   else:
     inventorySortOrder = sortAsc
+  var localInventory: seq[LocalItemData] = @[]
+  for index, data in inventoryDataList:
+    try:
+      let item: InventoryData = playerShip.crew[crewIndex].inventory[data.index]
+      localInventory.add(y = LocalItemData(selected: data.checked,
+          name: getItemName(item = item, damageInfo = false, toLower = false),
+          damage: item.durability.float / defaultItemDurability.float,
+          itemType: (if itemsList[item.protoIndex].showType.len > 0: itemsList[
+          item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
+          amount: item.amount, weight: item.amount * itemsList[
+          item.protoIndex].weight, used: itemIsUsed(memberIndex = crewIndex,
+          itemIndex = data.index), id: data.index))
+    except:
+      dialog = setError(message = "Can't add item to local inventory.")
 
 proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
