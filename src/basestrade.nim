@@ -280,7 +280,7 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
       updateMoney(memberIndex = -1, amount = -cost, quality = any)
       updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
       let traderIndex: int = findMember(order = talk)
-      if traderIndex > 0:
+      if traderIndex > -1:
         gainExp(amount = 5, skillNumber = talkingSkill, crewIndex = traderIndex)
       gainRep(baseIndex = baseIndex, points = 5)
       updateGame(minutes = 60)
