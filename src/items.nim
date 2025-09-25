@@ -468,3 +468,16 @@ proc countItemBonus*(value: int; quality: ObjectQuality): int {.raises: [],
     return (value.float * 0.1).floor.int
   of excellent:
     return (value.float * 0.2).floor.int
+
+proc moneyAmount*(inventory: seq[InventoryData]): Natural {.raises: [], tags: [
+    ], contractual.} =
+  ## Get the summarized amount of money from the selected inventory
+  ##
+  ## * inventory - the inventory in which money will be looked for
+  ##
+  ## Returns the amount of money in the selected inventory
+  result = 0
+  for item in inventory:
+    if item.protoIndex == moneyIndex:
+      result += (item.amount + countItemBonus(value = item.amount,
+          quality = item.quality))
