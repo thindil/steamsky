@@ -268,7 +268,7 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
       let
         cost: Natural = trainCost(memberIndex = memberIndex,
             skillIndex = skillIndex)
-        mAmount: Natural = moneyAmount(playerShip.cargo)
+        mAmount: Natural = moneyAmount(inventory = playerShip.cargo)
       if cost == 0 or mAmount < cost or (not isAmount and maxAmount < cost):
         break
       var gainedExp: Positive = getRandom(min = 10, max = 60) + playerShip.crew[
