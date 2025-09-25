@@ -1276,7 +1276,8 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       keyName = "KeyPress-" & accel.shortcut
     tclEval(script = "bind . <" & keyName & "> {}")
-    if index < 11:
+    case index
+    of 0..10:
       menuAccelerators[index + 1] = tclEval2(script = rootName &
           accel.entryName & " get")
       pos = menuAccelerators[index + 1].rfind(sub = '-')
@@ -1288,10 +1289,10 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
         keyName = "KeyPress-" & menuAccelerators[index + 1]
       tclEval(script = "bind . <" & keyName & "> {InvokeMenu " &
           menuAccelerators[index + 1] & "}")
-    elif index < 48:
+    of 11..47:
       mapAccelerators[index - 10] = tclEval2(script = rootName &
           accel.entryName & " get")
-    elif index == 48:
+    of 48:
       fullScreenAccel = tclEval2(script = rootName & accels[48].entryName & " get")
     else:
       generalAccelerators[index - 49] = tclEval2(script = rootName &
@@ -1330,7 +1331,8 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ResetKeys group
   ## Group is the group of keys which will be resetted. Possible values are
   ## movement, map, menu
-  if argv[1] == "movement":
+  case argv[1]
+  of "movement":
     let defaultMovementAccels: array[14, AccelData] = [AccelData(
         shortcut: if DirSep == '\\': "Home" else: "KP_Home",
         entryName: ".movement.upleft", configName: ""), AccelData(
@@ -1363,7 +1365,7 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
           accel.entryName
       tclEval(script = keyEntry & " delete 0 end")
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
-  elif argv[1] == "menu":
+  of "menu":
     const defaultMenuAccels: array[12, AccelData] = [AccelData(shortcut: "s",
         entryName: ".menu.shipinfo", configName: ""), AccelData(shortcut: "o",
         entryName: ".menu.orders", configName: ""), AccelData(shortcut: "r",
@@ -1382,7 +1384,7 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
           accel.entryName
       tclEval(script = keyEntry & " delete 0 end")
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
-  elif argv[1] == "map":
+  of "map":
     let defaultMapAccels: array[23, AccelData] = [AccelData(
         shortcut: "Shift-Return", entryName: ".map.center", configName: ""),
         AccelData(shortcut: "Shift-h", entryName: ".map.centerhomebase",
@@ -1434,7 +1436,7 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
           accel.entryName
       tclEval(script = keyEntry & " delete 0 end")
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
-  elif argv[1] == "general":
+  of "general":
     const defaultGeneralAccels: array[4, AccelData] = [AccelData(
         shortcut: "Alt-a", entryName: ".ui.resizefirst", configName: ""),
         AccelData(shortcut: "Alt-b", entryName: ".ui.resizesecond",
@@ -1446,6 +1448,8 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
           accel.entryName
       tclEval(script = keyEntry & " delete 0 end")
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
+  else:
+    discard
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
