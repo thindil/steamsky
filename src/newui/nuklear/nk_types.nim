@@ -718,41 +718,80 @@ type
   nk_plugin_copy* = proc (handle: nk_handle; text: cstring; len: cint) {.cdecl.}
     ## Internal Nuklear type
   nk_clipboard* {.importc: "struct nk_clipboard", completeStruct.} = object
+    ## Internal Nuklear type
     userdata*: nk_handle
     copy*: nk_plugin_copy
     paste*: nk_plugin_paste
   nk_config_stack_style_item_element* {.importc: "struct nk_config_stack_style_item_element",
       completeStruct.} = object
+    ## Internal Nuklear type
     address*: ptr nk_style_item
     old_value: nk_style_item
   nk_config_stack_float_element* {.importc: "struct nk_config_stack_float_element",
       completeStruct.} = object
+    ## Internal Nuklear type
     address*: ptr cfloat
     old_value: cfloat
   nk_config_stack_vec2_element* {.importc: "struct nk_config_stack_vec2_element",
       completeStruct.} = object
+    ## Internal Nuklear type
     address*: ptr nk_vec2
     old_value: nk_vec2
   nk_config_stack_flags_element* {.importc: "struct nk_config_stack_flags_element",
       completeStruct.} = object
+    ## Internal Nuklear type
     address*: ptr nk_flags
     old_value: nk_flags
   nk_config_stack_color_element* {.importc: "struct nk_config_stack_color_element",
       completeStruct.} = object
+    ## Internal Nuklear type
     address*: ptr nk_color
     old_value: nk_color
   nk_config_stack_user_font_element* {.importc: "struct nk_config_stack_user_font_element",
       completeStruct.} = object
+    ## Internal Nuklear type
     address*: ptr nk_user_font
     old_value: nk_user_font
   nk_config_stack_button_behavior_element * {.importc: "struct nk_config_stack_button_behavior_element",
       completeStruct.} = object
+    ## Internal Nuklear type
     address*: ptr ButtonBehavior
     old_value: ButtonBehavior
   nk_config_stack_style_item* {.importc: "struct nk_config_stack_style_item",
       completeStruct.} = object
+    ## Internal Nuklear type
     head*: cint
     elements*: array[nkStyleItemStackSize, nk_config_stack_style_item_element]
+  nk_config_stack_float* {.importc: "struct nk_config_stack_float",
+      completeStruct.} = object
+    ## Internal Nuklear type
+    head*: cint
+    elements*: array[nkStyleItemStackSize, nk_config_stack_float_element]
+  nk_config_stack_vec2* {.importc: "struct nk_config_stack_vec2",
+      completeStruct.} = object
+    ## Internal Nuklear type
+    head*: cint
+    elements*: array[nkStyleItemStackSize, nk_config_stack_vec2_element]
+  nk_config_stack_flags* {.importc: "struct nk_config_stack_flags",
+      completeStruct.} = object
+    ## Internal Nuklear type
+    head*: cint
+    elements*: array[nkStyleItemStackSize, nk_config_stack_flags_element]
+  nk_config_stack_color* {.importc: "struct nk_config_stack_color",
+      completeStruct.} = object
+    ## Internal Nuklear type
+    head*: cint
+    elements*: array[nkStyleItemStackSize, nk_config_stack_color_element]
+  nk_config_stack_user_font* {.importc: "struct nk_config_stack_user_font",
+      completeStruct.} = object
+    ## Internal Nuklear type
+    head*: cint
+    elements*: array[nkStyleItemStackSize, nk_config_stack_user_font_element]
+  nk_config_stack_button_behavior* {.importc: "struct nk_config_stack_button_behavior",
+      completeStruct.} = object
+    ## Internal Nuklear type
+    head*: cint
+    elements*: array[nkStyleItemStackSize, nk_config_stack_button_behavior_element]
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
