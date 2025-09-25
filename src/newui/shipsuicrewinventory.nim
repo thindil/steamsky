@@ -27,10 +27,81 @@ type
   InventorySortOrders = enum
     selectedAsc, selectedDesc, nameAsc, nameDesc, durabilityAsc, durabilityDesc,
       usedAsc, usedDesc, amountAsc, amountDesc, weightAsc, weightDesc, none
+  LocalItemData = object
+    selected: bool = false
+    name: string = ""
+    damage: float = 0.0
+    itemType: string = ""
+    amount: Positive = 1
+    weight: Positive = 1
+    used: bool = false
+    id: Natural = 0
 
 const defaultInventorySortOrder*: InventorySortOrders = none
 
 var inventorySortOrder: InventorySortOrders = defaultInventorySortOrder
+
+proc sortItems(x, y: LocalItemData): int {.raises: [], tags: [],
+    contractual.} =
+  ## Compare two items and return which should go first, based on the sort
+  ## order of the items
+  ##
+  ## * x - the first item to compare
+  ## * y - the second item to compare
+  ##
+  ## Returns 1 if the first item should go first, -1 if the second item
+  ## should go first.
+  case inventorySortOrder
+  of selectedAsc:
+    if x.selected < y.selected:
+      return 1
+    return -1
+  of selectedDesc:
+    if x.selected > y.selected:
+      return 1
+    return -1
+  of nameAsc:
+    if x.name < y.name:
+      return 1
+    return -1
+  of nameDesc:
+    if x.name > y.name:
+      return 1
+    return -1
+  of durabilityAsc:
+    if x.damage < y.damage:
+      return 1
+    return -1
+  of durabilityDesc:
+    if x.damage > y.damage:
+      return 1
+    return -1
+  of amountAsc:
+    if x.amount < y.amount:
+      return 1
+    return -1
+  of amountDesc:
+    if x.amount > y.amount:
+      return 1
+    return -1
+  of weightAsc:
+    if x.weight < y.weight:
+      return 1
+    return -1
+  of weightDesc:
+    if x.weight > y.weight:
+      return 1
+    return -1
+  of usedAsc:
+    if x.used < y.used:
+      return 1
+    return -1
+  of usedDesc:
+    if x.used > y.used:
+      return 1
+    return -1
+  of none:
+    return -1
 
 proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
