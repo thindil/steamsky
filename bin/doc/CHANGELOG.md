@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   inventory dialog
 - The player's ship's crew members don't back to work after finished training
   in bases
+- Gaining experience by trader when training skills in schools
 
 ## [11.0.5] - 2025-09-14
 
