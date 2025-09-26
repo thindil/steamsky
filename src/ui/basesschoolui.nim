@@ -21,7 +21,7 @@
 
 import std/[strutils, tables]
 import contracts, nimalyzer
-import ../[basestrade, crew, crewinventory, game, tk, types]
+import ../[basestrade, crew, crewinventory, game, shipscrew, tk, types]
 import coreui, dialogs, errordialog, mapsui, updateheader, utilsui2
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -310,7 +310,8 @@ proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
   elif amount > 100:
     amount = 100
   var cost: Natural = try:
-      trainCost(memberIndex = getMemberIndex(), skillIndex = getSkillIndex()) * amount
+      trainCost(memberIndex = getMemberIndex(), skillIndex = getSkillIndex(),
+          traderindex = findMember(order = talk)) * amount
     except:
       tclSetResult(value = "1")
       return showError(message = "Can't count cost of training.")
@@ -339,7 +340,8 @@ proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
     moneyIndex2: int = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex, itemQuality = normal)
     cost: Natural = try:
-        trainCost(memberIndex = getMemberIndex(), skillIndex = getSkillIndex())
+        trainCost(memberIndex = getMemberIndex(), skillIndex = getSkillIndex(),
+            traderIndex = findMember(order = talk))
       except:
         return showError(message = "Can't get the training cost.")
     amountBox: string = mainPaned & ".schoolframe.canvas.school.costbox.amount"

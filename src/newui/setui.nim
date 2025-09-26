@@ -107,7 +107,8 @@ proc setTrainingCost*(dialog: var GameDialog){.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   oneTrainCost = try:
-      trainCost(memberIndex = crewIndex, skillIndex = skillsIndexes[skillIndex])
+      trainCost(memberIndex = crewIndex, skillIndex = skillsIndexes[skillIndex],
+          traderIndex = findMember(order = talk))
     except:
       dialog = setError(message = "Can't count the training cost.")
       return
