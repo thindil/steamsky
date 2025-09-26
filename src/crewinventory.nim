@@ -190,24 +190,38 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
       memberIndex].inventory else: playerShip.cargo)
   var mIndex: int = -1
   if quality == any:
-    var newQuality: ObjectQuality = ObjectQuality.high
-    for index, item in inventory:
-      if item.protoIndex == moneyIndex and item.quality < newQuality:
-        mIndex = index
-        newQuality = item.quality
+    var
+      newQuality: ObjectQuality = ObjectQuality.high
+      allAmount: int = amount
+    while allAmount != 0:
+      for index, item in inventory:
+        if item.protoIndex == moneyIndex and item.quality < newQuality:
+          mIndex = index
+          newQuality = item.quality
+      var newAmount: int = allAmount
+      if newAmount < 0:
+        if inventory[mIndex].amount < newAmount.abs:
+          newAmount = -inventory[mIndex].amount
+      allAmount -= newAmount
+      if memberIndex > -1:
+        updateInventory(memberIndex = memberIndex, amount = newAmount,
+            protoIndex = moneyIndex, inventoryIndex = mIndex, ship = playerShip,
+            quality = newQuality)
+      else:
+        updateCargo(ship = playerShip, protoIndex = moneyIndex,
+            amount = newAmount, cargoIndex = mIndex, quality = newQuality)
   else:
     for index, item in inventory:
       if item.protoIndex == moneyIndex and item.quality == quality:
         mIndex = index
         break
-  let newQuality: ObjectQuality = (if quality == any: normal else: quality)
-  if memberIndex > -1:
-    updateInventory(memberIndex = memberIndex, amount = amount,
-        protoIndex = moneyIndex, inventoryIndex = mIndex, ship = playerShip,
-        quality = newQuality)
-  else:
-    updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = amount,
-        cargoIndex = mIndex, quality = newQuality)
+    if memberIndex > -1:
+      updateInventory(memberIndex = memberIndex, amount = amount,
+          protoIndex = moneyIndex, inventoryIndex = mIndex, ship = playerShip,
+          quality = quality)
+    else:
+      updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = amount,
+          cargoIndex = mIndex, quality = quality)
 
 proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     skillLevel: Natural = 0; memberIndex: int = -1;
