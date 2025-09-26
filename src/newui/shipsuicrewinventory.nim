@@ -19,7 +19,7 @@
 ## members's inventory, like listing them, showing information, move items, etc.
 
 import std/[algorithm, tables]
-import contracts, nuklear/nuklear_sdl_renderer
+import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[config, crewinventory, game, items, types]
 import coreui, dialogs, errordialog, setui, shipsuicrew, table, themes
 
@@ -161,7 +161,7 @@ const
         sortDesc: amountDesc),
     HeaderData[InventorySortOrders](label: "Weight", sortAsc: weightAsc,
         sortDesc: weightDesc)]
-  ratio: array[6, cfloat] = [40.cfloat, 300, 200, 40, 200, 200]
+  ratio: array[6, cfloat] = [40.cfloat, 300, 200, 50, 150, 150]
 
 proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -171,7 +171,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   const
-    width: float = 600
+    width: float = 700
     height: float = 500
 
   let
@@ -231,7 +231,8 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
         var
           checked: bool = false
           tooltip: string = ""
-        let used: bool = itemIsUsed(memberIndex = crewIndex, itemIndex = data.index)
+        let used: bool = itemIsUsed(memberIndex = crewIndex,
+            itemIndex = data.index)
         if used:
           checked = true
           tooltip = "The item is used by the crew member"
@@ -244,45 +245,46 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
             takeOffItem(memberIndex = crewIndex, itemIndex = data.index)
           else:
             let itemType: string = try:
-                itemsList[playerShip.crew[memberIndex].inventory[
-                    itemIndex].protoIndex].itemType
+                itemsList[member.inventory[data.index].protoIndex].itemType
               except:
-                return showError(message = "Can't get the item type.")
+                dialog = setError(message = "Can't get the item type.")
+                return
             {.ruleOff: "ifStatements".}
             if itemType == weaponType:
               try:
-                if itemsList[playerShip.crew[memberIndex].inventory[
-                    itemIndex].protoIndex].value[4] == 2 and playerShip.crew[
-                    memberIndex].equipment[shield] > -1:
-                  showMessage(text = playerShip.crew[memberIndex].name &
+                if itemsList[member.inventory[data.index].protoIndex].value[
+                    4] == 2 and member.equipment[shield] > -1:
+                  dialog = setMessage(message = member.name &
                       " can't use this weapon because have shield equiped. Take off shield first.",
                       title = "Shield in use")
-                  return tclOk
+                  return
               except:
-                return showError(message = "Can't do check for shield.")
-              playerShip.crew[memberIndex].equipment[weapon] = itemIndex
+                dialog = setError(message = "Can't do check for shield.")
+                return
+              playerShip.crew[crewIndex].equipment[weapon] = data.index
             elif itemType == shieldType:
-              if playerShip.crew[memberIndex].equipment[weapon] > -1:
+              if member.equipment[weapon] > -1:
                 try:
-                  if itemsList[playerShip.crew[memberIndex].inventory[playerShip.crew[
-                      memberIndex].equipment[weapon]].protoIndex].value[4] == 2:
-                    showMessage(text = playerShip.crew[memberIndex].name &
+                  if itemsList[member.inventory[member.equipment[
+                      weapon]].protoIndex].value[4] == 2:
+                    dialog = setMessage(message = member.name &
                         " can't use shield because have equiped two-hand weapon. Take off weapon first.",
                         title = "Two handed weapon in use")
-                    return tclOk
+                    return
                 except:
-                  return showError(message = "Can't do check for two handed weapon.")
-              playerShip.crew[memberIndex].equipment[shield] = itemIndex
+                  dialog = setError(message = "Can't do check for two handed weapon.")
+                  return
+              playerShip.crew[crewIndex].equipment[shield] = data.index
             elif itemType == headArmor:
-              playerShip.crew[memberIndex].equipment[helmet] = itemIndex
+              playerShip.crew[crewIndex].equipment[helmet] = data.index
             elif itemType == chestArmor:
-              playerShip.crew[memberIndex].equipment[torso] = itemIndex
+              playerShip.crew[crewIndex].equipment[torso] = data.index
             elif itemType == armsArmor:
-              playerShip.crew[memberIndex].equipment[arms] = itemIndex
+              playerShip.crew[crewIndex].equipment[arms] = data.index
             elif itemType == legsArmor:
-              playerShip.crew[memberIndex].equipment[legs] = itemIndex
+              playerShip.crew[crewIndex].equipment[legs] = data.index
             elif itemType in toolsList:
-              playerShip.crew[memberIndex].equipment[tool] = itemIndex
+              playerShip.crew[crewIndex].equipment[tool] = data.index
             {.ruleOn: "ifStatements".}
         addButton(label = $member.inventory[data.index].amount,
             tooltip = "The amount of the item owned by the crew member.",
