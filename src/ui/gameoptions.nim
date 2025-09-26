@@ -1012,12 +1012,12 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
             gameSettings.interfaceTheme & "'")
   tclEval(script = comboBox & " set {" & theme.name & "}")
   optionsFrame = optionsCanvas & ".options"
-  for i in 0 .. 10:
+  for i in 0..10:
     accels[i].shortcut = menuAccelerators[i + 1]
-  for i in 0 .. 36:
+  for i in 0..36:
     accels[i + 11].shortcut = mapAccelerators[i + 1]
   accels[11 + 37].shortcut = fullScreenAccel
-  for i in 0 .. 3:
+  for i in 0..3:
     accels[i + 11 + 37 + 1].shortcut = generalAccelerators[i]
   for accel in accels:
     let keyEntry: string = optionsFrame & accel.entryName
@@ -1271,8 +1271,8 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       pos: int = accel.shortcut.rfind(sub = '-')
       keyName: string = ""
     if pos > -1:
-      keyName = accel.shortcut[0 .. pos] & "KeyPress-" & accel.shortcut[pos +
-          1 .. ^1]
+      keyName = accel.shortcut[0..pos] & "KeyPress-" & accel.shortcut[pos +
+          1..^1]
     else:
       keyName = "KeyPress-" & accel.shortcut
     tclEval(script = "bind . <" & keyName & "> {}")
@@ -1284,7 +1284,7 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       keyName = ""
       if pos > -1:
         keyName = menuAccelerators[index + 1][0 .. pos] & "KeyPress-" &
-            menuAccelerators[index + 1][pos + 1 .. ^1]
+            menuAccelerators[index + 1][pos + 1..^1]
       else:
         keyName = "KeyPress-" & menuAccelerators[index + 1]
       tclEval(script = "bind . <" & keyName & "> {InvokeMenu " &
