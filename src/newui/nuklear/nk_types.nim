@@ -792,6 +792,16 @@ type
     ## Internal Nuklear type
     head*: cint
     elements*: array[nkStyleItemStackSize, nk_config_stack_button_behavior_element]
+  nk_configuration_stacks* {.importc: "struct nk_configuration_stacks",
+      completeStruct.} = object
+    ## Internal Nuklear type
+    style_items*: nk_config_stack_style_item
+    floats*: nk_config_stack_float
+    vectors*: nk_config_stack_vec2
+    flags*: nk_config_stack_flags
+    colors*: nk_config_stack_color
+    fonts*: nk_config_stack_user_font
+    button_behaviors*: nk_config_stack_button_behavior
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
