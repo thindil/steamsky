@@ -231,13 +231,59 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
         var
           checked: bool = false
           tooltip: string = ""
-        if itemIsUsed(memberIndex = crewIndex, itemIndex = data.index):
+        let used: bool = itemIsUsed(memberIndex = crewIndex, itemIndex = data.index)
+        if used:
           checked = true
           tooltip = "The item is used by the crew member"
         else:
           checked = false
           tooltip = "The item isn't used by the crew member"
         addCheckButton(tooltip = tooltip, checked = checked)
+        if checked != used:
+          if used:
+            takeOffItem(memberIndex = crewIndex, itemIndex = data.index)
+          else:
+            let itemType: string = try:
+                itemsList[playerShip.crew[memberIndex].inventory[
+                    itemIndex].protoIndex].itemType
+              except:
+                return showError(message = "Can't get the item type.")
+            {.ruleOff: "ifStatements".}
+            if itemType == weaponType:
+              try:
+                if itemsList[playerShip.crew[memberIndex].inventory[
+                    itemIndex].protoIndex].value[4] == 2 and playerShip.crew[
+                    memberIndex].equipment[shield] > -1:
+                  showMessage(text = playerShip.crew[memberIndex].name &
+                      " can't use this weapon because have shield equiped. Take off shield first.",
+                      title = "Shield in use")
+                  return tclOk
+              except:
+                return showError(message = "Can't do check for shield.")
+              playerShip.crew[memberIndex].equipment[weapon] = itemIndex
+            elif itemType == shieldType:
+              if playerShip.crew[memberIndex].equipment[weapon] > -1:
+                try:
+                  if itemsList[playerShip.crew[memberIndex].inventory[playerShip.crew[
+                      memberIndex].equipment[weapon]].protoIndex].value[4] == 2:
+                    showMessage(text = playerShip.crew[memberIndex].name &
+                        " can't use shield because have equiped two-hand weapon. Take off weapon first.",
+                        title = "Two handed weapon in use")
+                    return tclOk
+                except:
+                  return showError(message = "Can't do check for two handed weapon.")
+              playerShip.crew[memberIndex].equipment[shield] = itemIndex
+            elif itemType == headArmor:
+              playerShip.crew[memberIndex].equipment[helmet] = itemIndex
+            elif itemType == chestArmor:
+              playerShip.crew[memberIndex].equipment[torso] = itemIndex
+            elif itemType == armsArmor:
+              playerShip.crew[memberIndex].equipment[arms] = itemIndex
+            elif itemType == legsArmor:
+              playerShip.crew[memberIndex].equipment[legs] = itemIndex
+            elif itemType in toolsList:
+              playerShip.crew[memberIndex].equipment[tool] = itemIndex
+            {.ruleOn: "ifStatements".}
         addButton(label = $member.inventory[data.index].amount,
             tooltip = "The amount of the item owned by the crew member.",
             data = data.index, code = setItemInfo, dialog = dialog)
