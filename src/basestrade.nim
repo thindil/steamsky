@@ -217,13 +217,14 @@ proc healWounded*(memberIndex: int) {.raises: [CantHealError,
     gainRep(baseIndex = baseIndex, points = 1)
     updateGame(minutes = time)
 
-proc trainCost*(memberIndex, skillIndex: Natural): Natural {.raises: [KeyError],
+proc trainCost*(memberIndex, skillIndex: Natural; traderIndex: int): Natural {.raises: [KeyError],
     tags: [], contractual.} =
   ## Count the cost needed to train the selected skill of the selected
   ## player's ship's crew's member.
   ##
   ## * memberIndex - the index of the member in the player's ship's crew
   ## * skillIndex  - the index of the skill to train
+  ## * traderIndex - the index of the trader in the player's ship's crew
   ##
   ## Returns the amount of money needed to train the skill or 0 if the
   ## skill reached maximum level and can't be trained.
@@ -240,7 +241,7 @@ proc trainCost*(memberIndex, skillIndex: Natural): Natural {.raises: [KeyError],
         if result == 0:
           result = 1
         break
-    countPrice(price = result, traderIndex = findMember(order = talk))
+    countPrice(price = result, traderIndex = traderIndex)
 
 proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
     isAmount: bool = true) {.raises: [KeyError, IOError, Exception],
@@ -258,6 +259,7 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
     memberIndex < playerShip.crew.len
     skillIndex < skillsList.len
   body:
+    let traderIndex: int = findMember(order = talk)
     giveOrders(ship = playerShip, memberIndex = memberIndex, givenOrder = rest,
         moduleIndex = 0, checkPriorities = false)
     let baseIndex: BasesRange = skyMap[playerShip.skyX][
@@ -268,7 +270,7 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
     while maxAmount > 0:
       let
         cost: Natural = trainCost(memberIndex = memberIndex,
-            skillIndex = skillIndex)
+            skillIndex = skillIndex, traderIndex = traderIndex)
         moneyIndex2: int = findItem(inventory = playerShip.cargo,
             protoIndex = moneyIndex)
       if cost == 0 or playerShip.cargo[moneyIndex2].amount < cost or (
@@ -282,7 +284,6 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
           crewIndex = memberIndex)
       updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
       updateBaseCargo(protoIndex = moneyIndex, amount = cost)
-      let traderIndex: int = findMember(order = talk)
       if traderIndex > -1:
         gainExp(amount = 5, skillNumber = talkingSkill, crewIndex = traderIndex)
       gainRep(baseIndex = baseIndex, points = 5)
