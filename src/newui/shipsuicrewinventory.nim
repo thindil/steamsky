@@ -18,7 +18,7 @@
 ## Provides code related to the information about the player's ship's crew
 ## members's inventory, like listing them, showing information, move items, etc.
 
-import std/tables
+import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, crewinventory, game, items, types]
 import coreui, dialogs, errordialog, setui, shipsuicrew, table, themes
@@ -131,6 +131,10 @@ proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
           itemIndex = data.index), id: data.index))
     except:
       dialog = setError(message = "Can't add item to local inventory.")
+  localInventory.sort(cmp = sortItems)
+  inventoryDataList = @[]
+  for item in localInventory:
+    inventoryDataList.add(y = CrewData(index: item.id, checked: item.selected))
 
 proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
