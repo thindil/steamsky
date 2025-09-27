@@ -98,7 +98,7 @@ type
   Buttons* = enum
     ## Types of buttoons
     left, middle, right, double, max
-  nk_anti_aliasing* = enum
+  AntiAliasing* = enum
     ## Antialiasing state
     antiAliasingOff, antiAliasingOn
   WindowFlags* = enum
@@ -761,37 +761,37 @@ type
       completeStruct.} = object
     ## Internal Nuklear type
     head*: cint
-    elements*: array[nkStyleItemStackSize, nk_config_stack_style_item_element]
+    elements*: pointer
   nk_config_stack_float* {.importc: "struct nk_config_stack_float",
       completeStruct.} = object
     ## Internal Nuklear type
     head*: cint
-    elements*: array[nkStyleItemStackSize, nk_config_stack_float_element]
+    elements*: pointer
   nk_config_stack_vec2* {.importc: "struct nk_config_stack_vec2",
       completeStruct.} = object
     ## Internal Nuklear type
     head*: cint
-    elements*: array[nkStyleItemStackSize, nk_config_stack_vec2_element]
+    elements*: pointer
   nk_config_stack_flags* {.importc: "struct nk_config_stack_flags",
       completeStruct.} = object
     ## Internal Nuklear type
     head*: cint
-    elements*: array[nkStyleItemStackSize, nk_config_stack_flags_element]
+    elements*: pointer
   nk_config_stack_color* {.importc: "struct nk_config_stack_color",
       completeStruct.} = object
     ## Internal Nuklear type
     head*: cint
-    elements*: array[nkStyleItemStackSize, nk_config_stack_color_element]
+    elements*: pointer
   nk_config_stack_user_font* {.importc: "struct nk_config_stack_user_font",
       completeStruct.} = object
     ## Internal Nuklear type
     head*: cint
-    elements*: array[nkStyleItemStackSize, nk_config_stack_user_font_element]
+    elements*: pointer
   nk_config_stack_button_behavior* {.importc: "struct nk_config_stack_button_behavior",
       completeStruct.} = object
     ## Internal Nuklear type
     head*: cint
-    elements*: array[nkStyleItemStackSize, nk_config_stack_button_behavior_element]
+    elements*: pointer
   nk_configuration_stacks* {.importc: "struct nk_configuration_stacks",
       completeStruct.} = object
     ## Internal Nuklear type
@@ -802,6 +802,13 @@ type
     colors*: nk_config_stack_color
     fonts*: nk_config_stack_user_font
     button_behaviors*: nk_config_stack_button_behavior
+  nk_convert_config* {.importc: "struct nk_convert_config", nodecl.} = object
+    global_alpha*: cfloat
+  nk_draw_list* {.importc: "struct nk_draw_list", nodecl.} = object
+    ## Internal Nuklear type
+    clip_rect*: nk_rect
+    circle_vtx: array[12, nk_vec2]
+    config*: nk_convert_config
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
@@ -814,6 +821,7 @@ type
     clip*: nk_clipboard
     last_widget_state*: nk_flags
     button_behavior*: ButtonBehavior
+    stacks*: nk_configuration_stacks
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle ## Interna Nuklear data
   nk_font* {.importc: "struct nk_font", nodecl.} = object

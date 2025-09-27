@@ -152,7 +152,7 @@ proc nk_sdl_init(win: WindowPtr; renderer: RendererPtr): PContext {.importc, nod
 proc nk_sdl_font_stash_begin(atlas: ptr ptr nk_font_atlas) {.importc, nodecl.}
 proc nk_sdl_font_stash_end() {.importc, nodecl.}
 proc nk_sdl_handle_event(evt: var SDL_Event): cint {.importc, nodecl.}
-proc nk_sdl_render(aa: nk_anti_aliasing) {.importc, nodecl.}
+proc nk_sdl_render(aa: AntiAliasing) {.importc, nodecl.}
 proc nk_sdl_shutdown() {.importc, nodecl.}
 
 # High level bindings
