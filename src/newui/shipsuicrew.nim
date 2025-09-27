@@ -698,7 +698,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     imageLabelButton(image = images[inventoryIcon], text = "Inventory",
         alignment = right):
       dialog = inventoryDialog
-      setDialog(x = windowWidth / 6, y = windowHeight / 8)
+      setDialog(x = windowWidth / 9, y = windowHeight / 8)
     addCloseButton(dialog = dialog, isPopup = false)
     if playerShip.speed == docked and crewIndex > 0:
       if gameSettings.showTooltips:
