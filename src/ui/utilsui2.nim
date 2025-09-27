@@ -269,14 +269,14 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
     KeyError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show info about selected item in ship cargo or crew member inventory
   ##
-  ## * Parent       - The name of the parent widget
-  ## * Item_Index   - Index of item (can be inventory or ship cargo)
-  ## * Member_Index - If item is in crew member inventory, crew index of member,
-  ##                  otherwise 0
-  ## * Button_1     - The settings for the first optional button. If empty, the
-  ##                  button will not show. Default value is empty.
-  ## * Button_2     - The setting for the second optional button. If empty,
-  ##                  the button will not show. Default value is empty.
+  ## * parent      - The name of the parent widget
+  ## * itemIndex   - Index of item (can be inventory or ship cargo)
+  ## * memberIndex - If item is in crew member inventory, crew index of member,
+  ##                 otherwise 0
+  ## * button1     - The settings for the first optional button. If empty, the
+  ##                 button will not show. Default value is empty.
+  ## * button2     - The setting for the second optional button. If empty,
+  ##                 the button will not show. Default value is empty.
   var
     protoIndex: Natural = 0
     itemInfo, quality: string = ""
