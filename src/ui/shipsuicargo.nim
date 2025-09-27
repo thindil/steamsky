@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
+import contracts
 import ../[config, crewinventory, game, items, messages, missions, shipscargo,
     stories, tk, types]
 import coreui, dialogs, dialogs2, errordialog, table, updateheader, utilsui2
@@ -28,7 +29,7 @@ var
 
 proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show the cargo of the player ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -147,7 +148,7 @@ var cargoSortOrder = defaultCargoSortOrder
 
 proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Sort the player's ship's cargo list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -294,7 +295,7 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl.} =
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show UI to give the selected item from the ship cargo to the selected
   ## crew member
   ##
@@ -368,7 +369,7 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Give selected amount of the selected item from the ship's cargo to the
   ## selected crew member
   ##
@@ -426,7 +427,7 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl.} =
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show UI to drop the selected item from the ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -450,7 +451,7 @@ proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Drop selected amount of the selected item from the ship's cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -505,7 +506,7 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl.} =
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show information about the selected item in the player's ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -535,7 +536,7 @@ proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl.} =
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Update max give amount after selecting the crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -579,7 +580,7 @@ proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("ShowCargo", showCargoCommand)
