@@ -20,8 +20,8 @@
 
 import std/tables
 import contracts
-import bases, basescargo, basestypes, config, game, game2, crewinventory, items,
-    maps, messages, shipscrew, types, utils
+import bases, basescargo, basestypes, config, game, game2, items, maps,
+    messages, shipscrew, types, utils
 
 type
   AlreadyKnownError* = object of CatchableError
