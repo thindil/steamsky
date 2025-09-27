@@ -145,7 +145,10 @@ proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  try:
+    dialog = showInventoryItemInfo(itemIndex = data, memberIndex = crewIndex)
+  except:
+    dialog = setError(message = "Can't show information about the item.")
 
 const
   headers: array[6, HeaderData[InventorySortOrders]] = [
