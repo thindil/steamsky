@@ -24,6 +24,11 @@ suite "Unit tests for items module":
   member.equipment[weapon] = 1
   playerShip.crew.add(member)
   var item = InventoryData(protoIndex: 2, amount: 1, name: "", durability: 80, price: 0)
+  var inventory: seq[InventoryData]
+  inventory.add(InventoryData(protoIndex: 66, amount: 1, name: "",
+      durability: defaultItemDurability, price: 0))
+  inventory.add(InventoryData(protoIndex: 67, amount: 1, name: "",
+      durability: defaultItemDurability, price: 0))
 
 
   test "Find an existing item":
@@ -89,3 +94,21 @@ suite "Unit tests for items module":
     let itemIndex = getRandomItem(weaponsList, weapon, 20, 20, "POLEIS")
     check:
       itemIndex > 0 and itemsList.hasKey(itemIndex)
+
+  test "Finding no money in inventory":
+    check:
+      moneyAmount(inventory) == 0
+
+  test "Getting money amount from inventory":
+    check:
+      moneyAmount(playerShip.crew[0].inventory) == 1
+
+  test "Add money to an inventory":
+    updateMoney(0, 10, any)
+    check:
+      moneyAmount(playerShip.crew[0].inventory) == 11
+
+  test "Removing money from an inventory":
+    updateMoney(0, -10, any)
+    check:
+      moneyAmount(playerShip.crew[0].inventory) == 1
