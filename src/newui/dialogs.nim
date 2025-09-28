@@ -52,7 +52,7 @@ type
     widgetsAmount: seq[Positive]
   ManipulateType* = enum
     ## Types of action, used to manipulate items, like selling or buying items
-    sellAction, buyAction, takeAction, dropAction
+    sellAction, buyAction, takeAction, dropAction, moveAction
   ManipulateData = object
     itemIndex: int
     maxAmount: Natural
@@ -460,17 +460,22 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
   except:
     dialog = setError(message = "Can't show the info")
 
-proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
-    ], tags: [RootEffect], contractual.} =
+proc setManipulate*(action: ManipulateType; iIndex: int;
+    mIndex: Natural = 0): GameDialog {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the data related to the current in-game manipulate item dialog
   ##
   ## * action - the action used to manipulate items, like selling or buying
   ## * iIndex - the index of the item to manipulate, in the player's ship's
   ##            cargo (if positive) or in a trader's cargo (if negative)
+  ## * mIndex - the index of the player's ship's crew member in which inventory
+  ##            the item is stored. Used for moving items from or to the ship's
+  ##            cargo
   ##
   ## Returns the type of dialog if the dialog was set, otherwise errorDialog
   setDialog(x = windowWidth / 5.0)
-  if action in [buyAction, sellAction]:
+  case action
+  of buyAction, sellAction:
     let (protoIndex, maxSellAmount, maxBuyAmount, price, _) = try:
         getTradeData(iIndex = iIndex)
       except:
@@ -486,7 +491,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
       return buyDialog
     else:
       return sellDialog
-  else:
+  of takeAction, dropAction:
     let (protoIndex, maxAmount, cargoMaxAmount, _) = try:
         getLootData(itemIndex = iIndex)
       except:
@@ -502,6 +507,12 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
       return takeDialog
     else:
       return dropDialog
+  of moveAction:
+    manipulateData = ManipulateData(itemIndex: iIndex,
+        maxAmount: playerShip.crew[mIndex].inventory[iIndex].amount,
+        title: "Move " & getItemName(item = playerShip.crew[mIndex].inventory[
+        iIndex], damageInfo = false, toLower = false), warning: "", allCost: 0)
+    return moveDialog
 
 proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
     KeyError], tags: [], contractual.} =
