@@ -802,8 +802,15 @@ type
     colors*: nk_config_stack_color
     fonts*: nk_config_stack_user_font
     button_behaviors*: nk_config_stack_button_behavior
+  nk_draw_null_texture* {.importc: "struct nk_draw_null_texture", completeStruct.} = object
+    texture*: nk_handle
+    uv*: nk_vec2
   nk_convert_config* {.importc: "struct nk_convert_config", nodecl.} = object
+    ## Internal Nuklear type
     global_alpha*: cfloat
+    line_AA*, shape_AA*: AntiAliasing
+    circle_segment_count*, arc_segment_count*, curve_segment_count*: cuint
+    tex_null*: nk_draw_null_texture
   nk_draw_list* {.importc: "struct nk_draw_list", nodecl.} = object
     ## Internal Nuklear type
     clip_rect*: nk_rect
