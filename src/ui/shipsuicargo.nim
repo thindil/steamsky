@@ -140,7 +140,8 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 type cargoSortOrders = enum
-  nameAsc, nameDesc, durabilityAsc, durabilityDesc, qualityAsc, qualityDesc, typeAsc, typeDesc, amountAsc, amountDesc, weightAsc, weightDesc, none
+  nameAsc, nameDesc, durabilityAsc, durabilityDesc, qualityAsc, qualityDesc,
+    typeAsc, typeDesc, amountAsc, amountDesc, weightAsc, weightDesc, none
 
 const defaultCargoSortOrder = none
 
@@ -222,7 +223,9 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
           item.protoIndex].weight, quality: item.quality, id: index))
     except:
       return showError(message = "Can't add local item to cargo.")
-  proc sortCargo(x, y: LocalCargoData): int =
+
+  proc sortCargo(x, y: LocalCargoData): int {.raises: [], tags: [],
+      contractual.} =
     case cargoSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -286,6 +289,7 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of none:
       return -1
+
   localCargo.sort(cmp = sortCargo)
   cargoIndexes = @[]
   for item in localCargo:
