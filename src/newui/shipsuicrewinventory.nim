@@ -136,6 +136,18 @@ proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
   for item in localInventory:
     inventoryDataList.add(y = CrewData(index: item.id, checked: item.selected))
 
+var itemIndex: Natural = 0
+
+proc setMoveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the dialog for move items to the player's ship cargo
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  dialog = setManipulate(action = takeAction, iIndex = itemIndex)
+
 proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Set the dialog with information about the selected item
@@ -146,7 +158,10 @@ proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   try:
-    dialog = showInventoryItemInfo(itemIndex = data, memberIndex = crewIndex)
+    itemIndex = data
+    dialog = showInventoryItemInfo(itemIndex = data, memberIndex = crewIndex,
+        ButtonSettings(tooltip: "Move the selected item to the ship's cargo",
+        code: setMoveDialog, icon: cargoIcon.ord, text: "Move", color: ""))
   except:
     dialog = setError(message = "Can't show information about the item.")
 
