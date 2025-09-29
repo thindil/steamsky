@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[config, crewinventory, game, items, messages, missions, shipscargo,
     stories, tk, types]
 import coreui, dialogs, dialogs2, errordialog, table, updateheader, utilsui2
@@ -29,7 +29,7 @@ var
 
 proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl, contractual.} =
+    RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Show the cargo of the player ship
   ##
   ## * clientData - the additional data for the Tcl command
