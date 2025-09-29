@@ -157,6 +157,16 @@ type
   ButtonBehavior* = enum
     ## The types of buttons behavior
     default, repeater
+  DrawVertexLayoutAttribute* = enum
+    ## The drawing vertex layout attributes
+    vertexPosition, vertexColor, vertexTextCoord, vertexAttributeCount
+  DrawVertexLayoutFormat* = enum
+    ## The drawing vertext layout formates
+    formatSChar, formatSShort, formatSInt, formatUChar, formatUShort,
+      formatUInt, formatFloat, formatDouble, formatColorBegin, formatR16G15B16,
+      formatR32B32, formatR8G8B8A8, formatB8G8R8A8, formatR16G15B16A16,
+      formatR32G32B32A32, formtR32G32B32A32Float, formatR32G32B32A32Double,
+      formatRGB32, formatRGBA32, formatCount
 
 # ---------
 # Constants
@@ -802,7 +812,8 @@ type
     colors*: nk_config_stack_color
     fonts*: nk_config_stack_user_font
     button_behaviors*: nk_config_stack_button_behavior
-  nk_draw_null_texture* {.importc: "struct nk_draw_null_texture", completeStruct.} = object
+  nk_draw_null_texture* {.importc: "struct nk_draw_null_texture",
+      completeStruct.} = object
     texture*: nk_handle
     uv*: nk_vec2
   nk_convert_config* {.importc: "struct nk_convert_config", nodecl.} = object
