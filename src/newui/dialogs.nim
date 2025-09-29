@@ -511,7 +511,8 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
     manipulateData = ManipulateData(itemIndex: iIndex,
         maxAmount: playerShip.crew[mIndex].inventory[iIndex].amount,
         title: "Move " & getItemName(item = playerShip.crew[mIndex].inventory[
-        iIndex], damageInfo = false, toLower = false), warning: "", allCost: 0)
+        iIndex], damageInfo = false, toLower = false) & " to ship cargo",
+        warning: "", allCost: 0, amount: 1)
     return moveDialog
 
 proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
@@ -561,7 +562,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
   ##
   ## Returns the parameter dialog. It is modified only when the player closed
   ## the dialog. Returns true if an item was sold or bought, otherwise false
-  if dialog notin buyDialog..dropDialog:
+  if dialog notin buyDialog..moveDialog:
     return false
   result = false
   try:
@@ -588,7 +589,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           cargoIndex.dec
       if cargoIndex > -1:
         protoIndex = playerShip.cargo[cargoIndex].protoIndex
-        if baseCargoIndex == -1:
+        if baseCargoIndex == -1 and dialog != moveDialog:
           baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
               quality = playerShip.cargo[cargoIndex].quality)
       setLayoutRowDynamic(height = 30, cols = 2)
