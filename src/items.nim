@@ -307,7 +307,8 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
             result].durability, quality = playerShip.crew[
             memberIndex].inventory[result].quality)
         updateInventory(memberIndex = memberIndex, amount = -1,
-            inventoryIndex = result, ship = playerShip, quality = playerShip.crew[
+            inventoryIndex = result, ship = playerShip,
+            quality = playerShip.crew[
             memberIndex].inventory[result].quality)
         result = -1
     result = findItem(inventory = playerShip.crew[memberIndex].inventory,
@@ -508,7 +509,12 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
       if newAmount < 0:
         if inventory[mIndex].amount < newAmount.abs:
           newAmount = -inventory[mIndex].amount
-      allAmount -= newAmount
+      allAmount -= (newAmount + countItemBonus(value = newAmount,
+          quality = newQuality))
+      newAmount -= countItemBonus(value = newAmount, quality = newQuality)
+      if newAmount < 0:
+        if inventory[mIndex].amount < newAmount.abs:
+          newAmount = -inventory[mIndex].amount
       if memberIndex > -1:
         updateInventory(memberIndex = memberIndex, amount = newAmount,
             protoIndex = moneyIndex, inventoryIndex = mIndex, ship = playerShip,
