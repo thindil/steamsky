@@ -637,6 +637,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           ActionData(icon: giveIcon, label: "Take")
         of dropDialog:
           ActionData(icon: dropIcon, label: "Drop")
+        of moveDialog:
+          ActionData(icon: moveIcon, label: "Move")
         else:
           ActionData(icon: buyIcon, label: "Invalid")
       setLayoutRowDynamic(height = 30, cols = 2)
@@ -710,6 +712,9 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             except:
               dialog = setError(message = "Can't add message.")
               return
+          of moveDialog:
+            discard
+            # moveItem(itemIndex = manipulateData.itemIndex, amount = manipulateData.amount)
           else:
             return false
           dialog = none
