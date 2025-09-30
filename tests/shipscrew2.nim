@@ -1,4 +1,4 @@
-import ../src/[careers, factions, items, maps]
+import ../src/[careers, factions, maps, shipmodules]
 import unittest2
 include ../src/shipscrew2
 
@@ -9,6 +9,7 @@ suite "Unit tests for shipscrew2 module":
   loadItems("bin/data/items.dat")
   loadCareers("bin/data/careers.dat")
   loadFactions("bin/data/factions.dat")
+  loadModules("bin/data/shipmodules.dat")
 
   playerShip.skyX = 1
   playerShip.skyY = 1
@@ -22,6 +23,16 @@ suite "Unit tests for shipscrew2 module":
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
       1, 0, 0], order: gunner, loyalty: 100))
+  playerShip.crew[0].inventory.add(InventoryData(amount: 1, protoIndex: 1, durability: 100))
+  playerShip.crew[0].inventory.add(InventoryData(amount: 1, protoIndex: 2, durability: 100))
+  playerShip.modules = @[]
+  playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
+      durability: 100, maxDurability: 100))
+  playerShip.cargo = @[]
+  playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
+      durability: 100))
+  playerShip.cargo.add(InventoryData(protoIndex: 3, amount: 200,
+      durability: 100))
   skyMap[1][1].baseIndex = 1
 
   test "Deleting a crew member.":
@@ -47,3 +58,9 @@ suite "Unit tests for shipscrew2 module":
   test "Getting the current order of a crew member.":
     check:
       getCurrentOrder(0) == "Talking with others"
+
+  test "Moving items from crew member inventory to the ship cargo.":
+    let oldLength = playerShip.crew[0].inventory.len
+    moveItem(itemIndex = 0, amount = 1, memberIndex = 0)
+    check:
+      playerShip.crew[0].inventory.len == (oldLength - 1)
