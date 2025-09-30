@@ -55,9 +55,7 @@ type
     sellAction, buyAction, takeAction, dropAction, moveAction
   ManipulateData = object
     itemIndex: int
-    maxAmount: Natural
-    amount: Natural
-    cost, allCost: Natural
+    amount, maxAmount, cost, allCost, data: Natural
     title, warning: string
 
 const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "", code: nil,
@@ -512,7 +510,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
         maxAmount: playerShip.crew[mIndex].inventory[iIndex].amount,
         title: "Move " & getItemName(item = playerShip.crew[mIndex].inventory[
         iIndex], damageInfo = false, toLower = false) & " to ship cargo",
-        warning: "", allCost: 0, amount: 1)
+        warning: "", allCost: 0, amount: 1, data: mIndex)
     return moveDialog
 
 proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
@@ -713,8 +711,24 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
               dialog = setError(message = "Can't add message.")
               return
           of moveDialog:
-            discard
-            # moveItem(itemIndex = manipulateData.itemIndex, amount = manipulateData.amount)
+            try:
+              moveItem(itemIndex = manipulateData.itemIndex,
+                  amount = manipulateData.amount,
+                  memberIndex = manipulateData.data)
+            except NoFreeCargoError:
+              dialog = setMessage(message = getCurrentExceptionMsg(),
+                  title = "No free space in cargo")
+              return
+            except CrewNoSpaceError:
+              dialog = setError(message = "Can't update the member's inventory.")
+              return
+            except CrewOrderError:
+              dialog = setMessage(message = getCurrentExceptionMsg(),
+                  title = "Can't give an order.")
+              return
+            except:
+              dialog = setError(message = "Can't move item to the ship cargo.")
+              return
           else:
             return false
           dialog = none
