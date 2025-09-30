@@ -587,13 +587,14 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Adds Tcl commands related to the crew UI
   try:
-    addCommand("ShowCargo", showCargoCommand)
-    addCommand("SortShipCargo", sortCargoCommand)
-    addCommand("ShowGiveItem", showGiveItemCommand)
-    addCommand("GiveItem", giveItemCommand)
-    addCommand("ShowDropItem", showDropItemCommand)
-    addCommand("DropItem", dropItemCommand)
-    addCommand("ShowCargoItemInfo", showCargoItemInfoCommand)
-    addCommand("UpdateMaxGiveAmount", updateMaxGiveAmountCommand)
+    addCommand(name = "ShowCargo", nimProc = showCargoCommand)
+    addCommand(name = "SortShipCargo", nimProc = sortCargoCommand)
+    addCommand(name = "ShowGiveItem", nimProc = showGiveItemCommand)
+    addCommand(name = "GiveItem", nimProc = giveItemCommand)
+    addCommand(name = "ShowDropItem", nimProc = showDropItemCommand)
+    addCommand(name = "DropItem", nimProc = dropItemCommand)
+    addCommand(name = "ShowCargoItemInfo", nimProc = showCargoItemInfoCommand)
+    addCommand(name = "UpdateMaxGiveAmount",
+        nimProc = updateMaxGiveAmountCommand)
   except:
     showError(message = "Can't add a Tcl command.")
