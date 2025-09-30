@@ -512,12 +512,14 @@ type
     header*: nk_command
     x*, y*: cshort
     w*, h*: cushort
+  PNkBuffer* = ptr nk_buffer
+    ## Pointer to nk_buffer type
   nk_command_buffer* {.importc: "struct nk_command_buffer",
       completeStruct.} = object
     ## Internal Nuklear type
     begin*, `end`*, last*: nk_size
     clip*: nk_rect
-    base*: ptr nk_buffer
+    base*: PNkBuffer
     use_clipping*: cint
     userdata*: nk_handle
   PNkCommandBuffer* = ptr nk_command_buffer
@@ -816,17 +818,26 @@ type
       completeStruct.} = object
     texture*: nk_handle
     uv*: nk_vec2
-  nk_convert_config* {.importc: "struct nk_convert_config", nodecl.} = object
+  nk_draw_vertex_layout_element* {.importc: "struct nk_draw_vertex_layout_element",
+      completeStruct.} = object
+    attribute*: DrawVertexLayoutAttribute
+    format*: DrawVertexLayoutFormat
+    offset*: nk_size
+  nk_convert_config* {.importc: "struct nk_convert_config",
+      completeStruct.} = object
     ## Internal Nuklear type
     global_alpha*: cfloat
     line_AA*, shape_AA*: AntiAliasing
     circle_segment_count*, arc_segment_count*, curve_segment_count*: cuint
     tex_null*: nk_draw_null_texture
+    vertex_layout*: nk_draw_vertex_layout_element
+    vertex_size*, vertex_alignment*: nk_size
   nk_draw_list* {.importc: "struct nk_draw_list", nodecl.} = object
     ## Internal Nuklear type
     clip_rect*: nk_rect
     circle_vtx: array[12, nk_vec2]
     config*: nk_convert_config
+    buffer*, vertices*, elements*: PNkBuffer
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
