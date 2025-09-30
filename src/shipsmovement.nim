@@ -20,8 +20,8 @@
 
 import std/[strutils, tables]
 import contracts
-import bases, bases2, config, crewinventory, game, game2, gamesaveload, maps,
-    messages, ships, shipscargo, shipscrew, shipscrew2, types, utils
+import bases, bases2, config, crewinventory, game, game2, gamesaveload, items,
+    maps, messages, ships, shipscargo, shipscrew, shipscrew2, types, utils
 
 proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError,
     ReputationError], tags: [WriteIOEffect], contractual.} =
@@ -223,9 +223,8 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
         addMessage(message = "Ship undocked from base " & skyBases[
             baseIndex].name & ".", mType = orderMessage)
       else:
-        let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-            protoIndex = moneyIndex, itemQuality = normal)
-        if moneyIndex2 == -1:
+        let moneyAmount = moneyAmount(inventory = playerShip.cargo)
+        if moneyAmount == 0:
           return "You can't undock from this base because you don't have any " &
               moneyName & " to pay for docking."
         var dockingCost: Natural = 0
@@ -238,11 +237,10 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
           dockingCost = 1
         let traderIndex: int = findMember(order = talk)
         countPrice(price = dockingCost, traderIndex = traderIndex)
-        if dockingCost > playerShip.cargo[moneyIndex2].amount:
+        if dockingCost > moneyAmount:
           return "You can't undock to this base because you don't have enough " &
               moneyName & " to pay for docking."
-        updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -(
-            dockingCost), quality = normal)
+        updateMoney(memberIndex = -1, amount = -(dockingCost), quality = any)
         if traderIndex > -1:
           gainExp(amount = 1, skillNumber = talkingSkill,
               crewIndex = traderIndex)
