@@ -149,6 +149,23 @@ proc setMoveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   closePopup()
   dialog = setManipulate(action = moveAction, iIndex = itemIndex)
 
+proc showItemMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the menu for the selected saved game
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * bounds - the rectangle in which the player should click the mouse's
+  ##            button to show the menu
+  ##
+  ## Returns the parameter dialog. It is modified only when the player start
+  ## loading the game.
+  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
+      triggerBounds = bounds, button = (
+      if gameSettings.rightButton: Buttons.right else: Buttons.left)):
+    setLayoutRowDynamic(25, 1)
+    contextualItemLabel(label = "Close", align = centered):
+      discard
+
 proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Set the dialog with information about the selected item
