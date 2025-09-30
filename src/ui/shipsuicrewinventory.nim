@@ -20,7 +20,7 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
-import ../[config, crewinventory, game, items, shipscargo, shipscrew, tk, types]
+import ../[config, crewinventory, game, items, shipscrew2, tk, types]
 import coreui, dialogs, errordialog, table, utilsui2
 
 {.push ruleOff: "varDeclared".}
@@ -561,56 +561,6 @@ proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   return sortCrewInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SortCrewInventory", "-1"].allocCStringArray)
 
-proc moveItem(itemIndex: Natural; amount: Positive) {.raises: [],
-    tags: [RootEffect], contractual.} =
-  ## Move the selected item to the player's ship's cargo
-  ##
-  ## * itemIndex - the index in the crew member's inventory of item to move
-  ## * amount    - the amount of the item to move
-  try:
-    if freeCargo(amount = 0 - (itemsList[playerShip.crew[memberIndex].inventory[
-        itemIndex].protoIndex].weight * amount)) < 0:
-      showMessage(text = "No free space in ship cargo for tha amout of " &
-          getItemName(item = playerShip.crew[memberIndex].inventory[itemIndex]),
-          title = "No free space in cargo")
-      return
-  except:
-    showError(message = "Can't check free cargo space.")
-    return
-  updateCargo(ship = playerShip, protoIndex = playerShip.crew[
-      memberIndex].inventory[itemIndex].protoIndex, amount = amount,
-      durability = playerShip.crew[memberIndex].inventory[itemIndex].durability,
-      price = playerShip.crew[memberIndex].inventory[itemIndex].price,
-      quality = playerShip.crew[memberIndex].inventory[itemIndex].quality)
-  try:
-    updateInventory(memberIndex = memberIndex, amount = -amount,
-        inventoryIndex = itemIndex, ship = playerShip,
-        quality = playerShip.crew[memberIndex].inventory[itemIndex].quality)
-  except:
-    showError(message = "Can't update the crew member inventory.")
-    return
-  if (playerShip.crew[memberIndex].order == clean and findItem(
-      inventory = playerShip.crew[memberIndex].inventory,
-      itemType = cleaningTools, itemQuality = playerShip.crew[
-          memberIndex].inventory[itemIndex].quality) == -1) or (playerShip.crew[
-          memberIndex].order in
-      {upgrading, repair} and findItem(inventory = playerShip.crew[
-      memberIndex].inventory, itemType = repairTools,
-      itemQuality = playerShip.crew[memberIndex].inventory[
-          itemIndex].quality) == -1):
-    try:
-      giveOrders(ship = playerShip, memberIndex = memberIndex,
-          givenOrder = rest)
-    except CrewOrderError:
-      showMessage(text = getCurrentExceptionMsg(),
-          title = "Can't give an order.")
-      return
-    except:
-      showError(message = "Can't give order to the crew member.")
-      return
-  let typeBox: string = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
-  tclEval(script = "event generate " & typeBox & " <<ComboboxSelected>>")
-
 proc moveItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
     RootEffect], cdecl, contractual.} =
@@ -637,7 +587,22 @@ proc moveItemCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval2(script = amountBox & " get").parseInt
       except:
         return showError(message = "Can't get the amount of item to move.")
-  moveItem(itemIndex = itemIndex, amount = amount)
+  try:
+    moveItem(itemIndex = itemIndex, amount = amount, memberIndex = memberIndex)
+  except NoFreeCargoError:
+    showMessage(text = getCurrentExceptionMsg(), title = "No free space in cargo")
+    return
+  except CrewNoSpaceError:
+    showError(message = "Can't update the member's inventory.")
+    return
+  except CrewOrderError:
+    showMessage(text = getCurrentExceptionMsg(), title = "Can't give an order.")
+    return
+  except:
+    showError(message = "Can't move item to the ship cargo.")
+    return
+  let typeBox: string = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
+  tclEval(script = "event generate " & typeBox & " <<ComboboxSelected>>")
   tclEval(script = itemDialog & " destroy")
   tclEval(script = "CloseDialog " & itemDialog & " .memberdialog")
   if playerShip.crew[memberIndex].inventory.len == 0:
@@ -663,8 +628,23 @@ proc moveItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   for index in countdown(a = playerShip.crew[memberIndex].inventory.high,
       b = playerShip.crew[memberIndex].inventory.low):
     if tclGetVar(varName = "invindex" & $(index + 1)) == "1":
-      moveItem(itemIndex = index, amount = playerShip.crew[
-          memberIndex].inventory[index].amount)
+      try:
+        moveItem(itemIndex = index, amount = playerShip.crew[
+            memberIndex].inventory[index].amount, memberIndex = memberIndex)
+      except NoFreeCargoError:
+        showMessage(text = getCurrentExceptionMsg(), title = "No free space in cargo")
+        return
+      except CrewNoSpaceError:
+        showError(message = "Can't update the member's inventory.")
+        return
+      except CrewOrderError:
+        showMessage(text = getCurrentExceptionMsg(), title = "Can't give an order.")
+        return
+      except:
+        showError(message = "Can't move item to the ship cargo.")
+        return
+  let typeBox: string = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
+  tclEval(script = "event generate " & typeBox & " <<ComboboxSelected>>")
   if playerShip.crew[memberIndex].inventory.len == 0:
     tclEval(script = "CloseDialog .memberdialog")
     return tclOk
