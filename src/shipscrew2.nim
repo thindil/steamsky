@@ -21,9 +21,11 @@
 
 import std/tables
 import contracts
-import crafts, game, halloffame, messages, missions, shipscrew, types, utils
+import crafts, crewinventory, game, halloffame, items, messages, missions,
+    shipscargo, shipscrew, types, utils
 
-proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.raises: [KeyError, ReputationError], tags: [], contractual.} =
+proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.raises: [
+    KeyError, ReputationError], tags: [], contractual.} =
   ## Delete the selected member from the selected ship crew list, update
   ## the ship modules with the new crew list and delete accepted missions
   ## if neccessary.
@@ -56,7 +58,8 @@ proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.raises: [KeyErr
           owner.dec
 
 proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
-    createBody: bool = true) {.raises: [KeyError, IOError, ReputationError], tags: [
+    createBody: bool = true) {.raises: [KeyError, IOError, ReputationError],
+        tags: [
     WriteIOEffect], contractual.} =
   ## Handle the death of a crew member in ships
   ##
@@ -157,3 +160,41 @@ proc getCurrentOrder*(memberIndex: Natural): string {.raises: [
                 result = "Training " & skillsList[module.trainedSkill].name &
                     " in " & module.name
                 break findTrainingRoom
+
+proc moveItem*(itemIndex: Natural; amount: Positive;
+    memberIndex: Natural) {.raises: [NoFreeCargoError, KeyError,
+    CrewNoSpaceError, CrewOrderError, Exception], tags: [RootEffect],
+    contractual.} =
+  ## Move the selected item to the player's ship's cargo
+  ##
+  ## * itemIndex   - the index in the crew member's inventory of item to move
+  ## * amount      - the amount of the item to move
+  ## * memberIndex - the index of the crew member from which inventory item
+  ##                 will be moved
+  require:
+    memberIndex in playerShip.crew.low..playerShip.crew.high
+  body:
+    if freeCargo(amount = 0 - (itemsList[playerShip.crew[memberIndex].inventory[
+        itemIndex].protoIndex].weight * amount)) < 0:
+      raise newException(exceptn = NoFreeCargoError,
+          message = "No free space in ship cargo for tha amout of " &
+          getItemName(item = playerShip.crew[memberIndex].inventory[itemIndex]))
+    updateCargo(ship = playerShip, protoIndex = playerShip.crew[
+        memberIndex].inventory[itemIndex].protoIndex, amount = amount,
+        durability = playerShip.crew[memberIndex].inventory[
+        itemIndex].durability, price = playerShip.crew[memberIndex].inventory[
+        itemIndex].price, quality = playerShip.crew[memberIndex].inventory[
+        itemIndex].quality)
+    updateInventory(memberIndex = memberIndex, amount = -amount,
+        inventoryIndex = itemIndex, ship = playerShip,
+        quality = playerShip.crew[memberIndex].inventory[itemIndex].quality)
+    if (playerShip.crew[memberIndex].order == clean and findItem(
+        inventory = playerShip.crew[memberIndex].inventory,
+        itemType = cleaningTools, itemQuality = playerShip.crew[
+        memberIndex].inventory[itemIndex].quality) == -1) or (playerShip.crew[
+        memberIndex].order in {upgrading, repair} and findItem(
+        inventory = playerShip.crew[memberIndex].inventory,
+        itemType = repairTools, itemQuality = playerShip.crew[
+        memberIndex].inventory[itemIndex].quality) == -1):
+      giveOrders(ship = playerShip, memberIndex = memberIndex,
+          givenOrder = rest)
