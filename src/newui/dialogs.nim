@@ -154,6 +154,7 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
       setLayoutRowDynamic(height = 30, cols = 2)
       labelButton(title = "Yes"):
         closePopup()
+        dialog = none
         case questionData.qType
         of deleteSave:
           try:
@@ -210,8 +211,6 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
             dialog = setError(message = "Can't kill the player.")
             return
         of dismissMember:
-          closePopup()
-          dialog = none
           let
             baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
                 playerShip.skyY].baseIndex
