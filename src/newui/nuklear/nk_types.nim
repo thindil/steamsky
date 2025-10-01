@@ -832,12 +832,17 @@ type
     tex_null*: nk_draw_null_texture
     vertex_layout*: nk_draw_vertex_layout_element
     vertex_size*, vertex_alignment*: nk_size
-  nk_draw_list* {.importc: "struct nk_draw_list", nodecl.} = object
+  nk_draw_list* {.importc: "struct nk_draw_list", completeStruct.} = object
     ## Internal Nuklear type
     clip_rect*: nk_rect
     circle_vtx: array[12, nk_vec2]
     config*: nk_convert_config
     buffer*, vertices*, elements*: PNkBuffer
+    element_count*, vertex_count*, cmd_count*, path_count*, path_offset*: cuint
+    cmd_offset*: nk_size
+    line_AA, shape_AA: AntiAliasing
+    when defined(nkIncludeCommandUserData):
+      userdata*: nk_handle
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
@@ -853,6 +858,10 @@ type
     stacks*: nk_configuration_stacks
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle ## Interna Nuklear data
+    when defined(nkIncludeVertexBufferOutput):
+      draw_list*: nk_draw_list
+    text_edit*: nk_text_edit
+    overlay*: nk_command_buffer
   nk_font* {.importc: "struct nk_font", nodecl.} = object
     ## Internal Nuklear type
     handle*: PNkUserFont
