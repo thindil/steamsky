@@ -223,7 +223,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
         addMessage(message = "Ship undocked from base " & skyBases[
             baseIndex].name & ".", mType = orderMessage)
       else:
-        let moneyAmount = moneyAmount(inventory = playerShip.cargo)
+        let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
         if moneyAmount == 0:
           return "You can't undock from this base because you don't have any " &
               moneyName & " to pay for docking."
