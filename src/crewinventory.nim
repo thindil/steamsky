@@ -173,6 +173,9 @@ proc updateInventory*(memberIndex: Natural; amount: int;
         {.warning[UnsafeSetLen]: off.}
         ship.crew[memberIndex].inventory.delete(i = itemIndex)
         {.warning[UnsafeSetLen]: on.}
+        for item in playerShip.crew[memberIndex].equipment.mitems:
+          if item > itemIndex:
+            item.dec
       else:
         ship.crew[memberIndex].inventory[itemIndex].amount = newAmount
 
