@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -164,6 +164,9 @@ proc updateInventory*(memberIndex: Natural; amount: int;
         {.warning[UnsafeSetLen]: off.}
         ship.crew[memberIndex].inventory.delete(i = itemIndex)
         {.warning[UnsafeSetLen]: on.}
+        for item in playerShip.crew[memberIndex].equipment.mitems:
+          if item > itemIndex:
+            item.dec
       else:
         ship.crew[memberIndex].inventory[itemIndex].amount = newAmount
 
