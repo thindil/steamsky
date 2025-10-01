@@ -176,21 +176,19 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
           except:
             dialog = setError(message = "Can't kill the player.")
         of homeBase:
-          let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-              protoIndex = moneyIndex, itemQuality = normal)
-          if moneyIndex2 == -1:
+          let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
+          if moneyAmount == 0:
             dialog = setMessage(message = "You don't have any " & moneyName &
                 " for change ship home base.", title = "No money")
             return
           let price: Natural = questionData.data.parseInt
-          if playerShip.cargo[moneyIndex2].amount < price:
+          if moneyAmount < price:
             dialog = setMessage(message = "You don't have enough " & moneyName &
                 " for change ship home base.", title = "No money")
             return
           playerShip.homeBase = skyMap[playerShip.skyX][
               playerShip.skyY].baseIndex
-          updateCargo(ship = playerShip, cargoIndex = moneyIndex2,
-              amount = -price, quality = normal)
+          updateMoney(memberIndex = -1, amount = -price, quality = any)
           addMessage(message = "You changed your ship home base to: " &
               skyBases[playerShip.homeBase].name, mType = otherMessage)
           let traderIndex: int = findMember(order = talk)
