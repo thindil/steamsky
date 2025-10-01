@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
   in bases
 - Gaining experience by trader when training skills in schools
 - Training skills in schools by the player's ship's traders
+- Moving an item from the player's ship's crew members' inventory to the ship's
+  cargo unequip another item in the inventory
 
 ## [11.5] - 2025-09-07
 
