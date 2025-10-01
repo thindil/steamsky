@@ -18,7 +18,7 @@
 ## Provides code related to the information about the player's ship's crew
 ## members's inventory, like listing them, showing information, move items, etc.
 
-import std/[algorithm, tables]
+import std/[algorithm, sequtils, tables]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[config, crewinventory, game, items, types]
 import coreui, dialogs, errordialog, setui, shipsuicrew, table, themes
@@ -136,7 +136,9 @@ proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
   for item in localInventory:
     inventoryDataList.add(y = CrewData(index: item.id, checked: item.selected))
 
-var itemIndex: Natural = 0
+var
+  itemIndex: Natural = 0
+  bounds: NimRect = NimRect(x: 0, y: 0, w: 0, h: 0)
 
 proc setMoveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -160,8 +162,7 @@ proc showItemMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
   ## Returns the parameter dialog. It is modified only when the player start
   ## loading the game.
   contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
-      triggerBounds = bounds, button = (
-      if gameSettings.rightButton: Buttons.right else: Buttons.left)):
+      triggerBounds = bounds, button = Buttons.left):
     setLayoutRowDynamic(25, 1)
     contextualItemLabel(label = "Close", align = centered):
       discard
@@ -177,9 +178,12 @@ proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   try:
     itemIndex = data
-    dialog = showInventoryItemInfo(itemIndex = data, memberIndex = crewIndex,
-        ButtonSettings(tooltip: "Move the selected item to the ship's cargo",
-        code: setMoveDialog, icon: cargoIcon.ord, text: "Move", color: ""))
+    if inventoryDataList.any(pred = proc (x: CrewData): bool = x.checked):
+      showItemMenu(dialog = dialog, bounds = bounds)
+    else:
+      dialog = showInventoryItemInfo(itemIndex = data, memberIndex = crewIndex,
+          ButtonSettings(tooltip: "Move the selected item to the ship's cargo",
+          code: setMoveDialog, icon: cargoIcon.ord, text: "Move", color: ""))
   except:
     dialog = setError(message = "Can't show information about the item.")
 
@@ -234,6 +238,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
         data.checked = false
     # Show the list of items in inventory
     setLayoutRowDynamic(height = height - 170, cols = 1)
+    bounds = getWidgetBounds()
     group(title = "InfoGroup", flags = {windowNoFlags}):
       addHeader(headers = headers, ratio = ratio, tooltip = "items",
           code = sortInventory, dialog = dialog)
