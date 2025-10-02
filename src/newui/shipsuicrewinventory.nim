@@ -136,9 +136,7 @@ proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
   for item in localInventory:
     inventoryDataList.add(y = CrewData(index: item.id, checked: item.selected))
 
-var
-  itemIndex: Natural = 0
-  bounds: NimRect = NimRect(x: 0, y: 0, w: 0, h: 0)
+var itemIndex: Natural = 0
 
 proc setMoveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -151,21 +149,14 @@ proc setMoveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   closePopup()
   dialog = setManipulate(action = moveAction, iIndex = itemIndex)
 
-proc showItemMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
-    RootEffect], contractual.} =
+proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## Show the menu for the selected saved game
   ##
   ## * dialog - the current in-game dialog displayed on the screen
-  ## * bounds - the rectangle in which the player should click the mouse's
-  ##            button to show the menu
   ##
   ## Returns the parameter dialog. It is modified only when the player start
   ## loading the game.
-  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
-      triggerBounds = bounds, button = Buttons.left):
-    setLayoutRowDynamic(25, 1)
-    contextualItemLabel(label = "Close", align = centered):
-      discard
+  discard
 
 proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -179,7 +170,7 @@ proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   try:
     itemIndex = data
     if inventoryDataList.any(pred = proc (x: CrewData): bool = x.checked):
-      showItemMenu(dialog = dialog, bounds = bounds)
+      showItemMenu(dialog = dialog)
     else:
       dialog = showInventoryItemInfo(itemIndex = data, memberIndex = crewIndex,
           ButtonSettings(tooltip: "Move the selected item to the ship's cargo",
@@ -238,7 +229,6 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
         data.checked = false
     # Show the list of items in inventory
     setLayoutRowDynamic(height = height - 170, cols = 1)
-    bounds = getWidgetBounds()
     group(title = "InfoGroup", flags = {windowNoFlags}):
       addHeader(headers = headers, ratio = ratio, tooltip = "items",
           code = sortInventory, dialog = dialog)
