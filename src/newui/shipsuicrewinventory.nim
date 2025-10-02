@@ -138,6 +138,7 @@ proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
 
 var
   itemIndex: Natural = 0
+  bounds: NimRect = NimRect(x: 0, y: 0, w: 700, h: 500)
   showItemsMenu: bool = false
 
 proc setMoveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -151,23 +152,20 @@ proc setMoveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   closePopup()
   dialog = setManipulate(action = moveAction, iIndex = itemIndex)
 
-proc showItemMenu(dialog: var GameDialog; windowName: var string) {.raises: [],
-    tags: [], contractual.} =
+proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [],
+    contractual.} =
   ## Show the menu for the selected saved game
   ##
-  ## * dialog     - the current in-game dialog displayed on the screen
-  ## * windowName - the name of the currently active window
+  ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the parameters dialog and windowName.
-  const
-    width: float = 200
-    height: float = 300
-
-  windowName = "ItemsMenu"
-  updateDialog(width = width, height = height)
-  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = 25, cols = 1)
+  ## Returns the parameter dialog. It is modified only when the player start
+  ## loading the game.
+  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
+      triggerBounds = bounds, button = Buttons.left):
+    echo "here"
+    setLayoutRowDynamic(25, 1)
+    contextualItemLabel(label = "Close", align = centered):
+      showItemsMenu = false
 
 proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -181,6 +179,7 @@ proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   try:
     itemIndex = data
     if inventoryDataList.any(pred = proc (x: CrewData): bool = x.checked):
+      showItemMenu(dialog = dialog)
       showItemsMenu = true
     else:
       dialog = showInventoryItemInfo(itemIndex = data, memberIndex = crewIndex,
@@ -216,8 +215,9 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     width: float = 700
     height: float = 500
 
-  let member: MemberData = playerShip.crew[crewIndex]
-  var windowName: string = "Inventory of " & member.name
+  let
+    member: MemberData = playerShip.crew[crewIndex]
+    windowName: string = "Inventory of " & member.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
@@ -345,7 +345,4 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
-  # Show menu for items if any of them is selected
-  if showItemsMenu:
-    showItemMenu(dialog = dialog, windowName = windowName)
   windowSetFocus(name = windowName)
