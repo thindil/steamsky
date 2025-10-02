@@ -843,6 +843,19 @@ type
     line_AA, shape_AA: AntiAliasing
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle
+  nk_page* {.importc: "struct nk_pool", completeStruct.} = object
+    ## Internal Nuklear type
+    size*: cuint
+    next*: ptr nk_page
+    win*: pointer
+  nk_pool* {.importc: "struct nk_pool", completeStruct.} = object
+    ## Internal Nuklear type
+    alloc: nk_allocator
+    `type`: AllocationType
+    page_count*, capacity*: cuint
+    pages*: ptr nk_page
+    freelist*: pointer
+    size*, cap*: nk_size
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
@@ -862,6 +875,8 @@ type
       draw_list*: nk_draw_list
     text_edit*: nk_text_edit
     overlay*: nk_command_buffer
+    build*: cint
+    pool*: nk_pool
   nk_font* {.importc: "struct nk_font", nodecl.} = object
     ## Internal Nuklear type
     handle*: PNkUserFont
