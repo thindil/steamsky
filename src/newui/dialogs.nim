@@ -85,7 +85,7 @@ proc setQuestion*(question: string; qType: QuestionType;
   ## errorDialog
   setDialog()
   try:
-    var needLines: float = ceil(x = getTextWidth(text = question) / 250)
+    var needLines: float = ceil(x = getTextWidth(text = question) / 350)
     if needLines < 1.0:
       needLines = 1.0
     questionData = QuestionData(question: question, data: data,
@@ -127,7 +127,7 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     return
   try:
     const
-      width: float = 250
+      width: float = 350
       height: float = 150
 
     proc setMainMenu(dialog: var GameDialog; state: var GameState) {.raises: [],
