@@ -25,11 +25,13 @@ import ../[config, crewinventory, game, items, messages, missions, shipscargo,
     stories, tk, types]
 import coreui, dialogs, dialogs2, errordialog, table, updateheader, utilsui2
 
+{.push ruleOff: "varDeclared".}
 var
   cargoTable: TableWidget
     ## The UI table with all items of the player's ship's cargo
-  cargoIndexes: seq[Natural]
+  cargoIndexes: seq[Natural] = @[]
     ## The list of indexes of the items in the cargo
+{.pop ruleOn: "varDeclared".}
 
 proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -47,10 +49,10 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowCargo ?page?
   ## Optional paramater page is the number of the page of cargo list to show
   let
-    shipCanvas = mainPaned & ".shipinfoframe.cargo.canvas"
-    cargoInfoFrame = shipCanvas & ".frame"
-    res = tclEval2(script = "grid size " & cargoInfoFrame).split
-    rows = try:
+    shipCanvas: string = mainPaned & ".shipinfoframe.cargo.canvas"
+    cargoInfoFrame: string = shipCanvas & ".frame"
+    res: seq[string] = tclEval2(script = "grid size " & cargoInfoFrame).split
+    rows: int = try:
         res[1].parseInt
       except:
         return showError(message = "Can't get the amount of rows")
@@ -64,45 +66,45 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     cargoIndexes = @[]
     for index, _ in playerShip.cargo:
       cargoIndexes.add(y = index)
-  let freeSpaceLabel = cargoInfoFrame & ".freeframe.freespace2"
+  let freeSpaceLabel: string = cargoInfoFrame & ".freeframe.freespace2"
   try:
     tclEval(script = freeSpaceLabel & " configure -text {" &
         $freeCargo(amount = 0) & " kg}")
   except:
     return showError(message = "Can't show the amount of free space.")
-  var itemsTypes = "All"
+  var itemsTypes: string = "All"
   for index in cargoIndexes:
     let
-      item = playerShip.cargo[index]
-      protoItem = try:
+      item: InventoryData = playerShip.cargo[index]
+      protoItem: ObjectData = try:
           itemsList[item.protoIndex]
         except:
           return showError(message = "Can't get proto item")
-      itemType = (if protoItem.showType.len >
+      itemType: string = (if protoItem.showType.len >
           0: protoItem.showType else: protoItem.itemType)
     if "{" & itemType & "}" notin itemsTypes:
       itemsTypes.add(y = " {" & itemType & "}")
   let
-    page = try:
+    page: Positive = try:
         (if argc == 2: ($argv[1]).parseInt else: 1)
       except:
         return showError(message = "Can't get the number of page.")
-    startRow = ((page - 1) * gameSettings.listsLimit) + 1
-    typeBox = cargoInfoFrame & ".selecttype.combo"
-    itemsType = tclEval2(script = typeBox & " get")
+    startRow: Positive = ((page - 1) * gameSettings.listsLimit) + 1
+    typeBox: string = cargoInfoFrame & ".selecttype.combo"
+    itemsType: string = tclEval2(script = typeBox & " get")
   tclEval(script = "grid configure " & cargoTable.canvas & " -row 3")
-  var currentRow = 1
+  var currentRow: Positive = 1
   for index in cargoIndexes:
     if currentRow < startRow:
       currentRow.inc
       continue
     let
-      item = playerShip.cargo[index]
-      protoItem = try:
+      item: InventoryData = playerShip.cargo[index]
+      protoItem: ObjectData = try:
           itemsList[item.protoIndex]
         except:
           return showError(message = "Can't get the proto item.")
-      itemType = (if protoItem.showType.len >
+      itemType: string = (if protoItem.showType.len >
           0: protoItem.showType else: protoItem.itemType)
     if itemsType != "All" and itemType != itemsType:
       continue
@@ -147,9 +149,9 @@ type cargoSortOrders = enum
   nameAsc, nameDesc, durabilityAsc, durabilityDesc, qualityAsc, qualityDesc,
     typeAsc, typeDesc, amountAsc, amountDesc, weightAsc, weightDesc, none
 
-const defaultCargoSortOrder = none
+const defaultCargoSortOrder: cargoSortOrders = none
 
-var cargoSortOrder = defaultCargoSortOrder
+var cargoSortOrder: cargoSortOrders = defaultCargoSortOrder
 
 proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -215,7 +217,7 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     weight: Positive = 1
     quality: ObjectQuality
     id: Natural
-  var localCargo: seq[LocalCargoData]
+  var localCargo: seq[LocalCargoData] = @[]
   for index, item in playerShip.cargo:
     try:
       localCargo.add(y = LocalCargoData(name: getItemName(item = item,
@@ -326,20 +328,20 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowGiveItem itemindex
   ## Itemindex is the index of the item which will be set
   let
-    itemIndex = try:
+    itemIndex: Natural = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the item's index.")
-    itemDialog = createDialog(name = ".itemdialog", title = "Give " &
+    itemDialog: string = createDialog(name = ".itemdialog", title = "Give " &
         getItemName(item = playerShip.cargo[itemIndex]) &
         " from the ship's cargo to the selected crew member", titleWidth = 370, columns = 3)
-  var label = itemDialog & ".memberlbl"
+  var label: string = itemDialog & ".memberlbl"
   tclEval(script = "ttk::label " & label & " -text {To:}")
   tclEval(script = "grid " & label)
-  var membersNames = ""
+  var membersNames: string = ""
   for member in playerShip.crew:
     membersNames.add(y = " " & member.name)
-  let crewBox = itemDialog & ".member"
+  let crewBox: string = itemDialog & ".member"
   tclEval(script = "ttk::combobox " & crewBox & " -state readonly -width 14")
   tclEval(script = crewBox & " configure -values [list " & membersNames & "]")
   tclEval(script = crewBox & " current 0")
@@ -347,12 +349,12 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & crewBox & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
   tclEval(script = "bind " & crewBox & " <<ComboboxSelected>> {UpdateMaxGiveAmount " &
       $argv[1] & "}")
-  var button = itemDialog & ".maxbutton"
+  var button: string = itemDialog & ".maxbutton"
   tclEval(script = "ttk::button " & button)
   tclEval(script = "grid " & button & " -row 2 -pady {0 5}")
   tclEval(script = "bind " & button & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
   tclEval(script = "tooltip::tooltip " & button & " \"Set the max amount as amount to give for the selected crew member.\"")
-  let amountBox = itemDialog & ".giveamount"
+  let amountBox: string = itemDialog & ".giveamount"
   tclEval(script = "ttk::spinbox " & amountBox & " -width 14 -from 1 -to " &
       $playerShip.cargo[itemIndex].amount &
       " -validate key -validatecommand {CheckAmount %W " & $(itemIndex + 1) &
@@ -399,22 +401,22 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## GiveItem
   let
-    itemDialog = ".itemdialog"
-    spinBox = itemDialog & ".giveamount"
-    amount = try:
+    itemDialog: string = ".itemdialog"
+    spinBox: string = itemDialog & ".giveamount"
+    amount: Natural = try:
         tclEval2(script = spinBox & " get").parseInt
       except:
         return showError(message = "Can't get the amount.")
-    comboBox = itemDialog & ".member"
-    memberIndex = try:
+    comboBox: string = itemDialog & ".member"
+    memberIndex: Natural = try:
         tclEval2(script = comboBox & " current").parseInt
       except:
         return showError(message = "Can't ge the member's index.")
-    itemIndex = try:
+    itemIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the item's index.")
-    item = playerShip.cargo[itemIndex]
+    item: InventoryData = playerShip.cargo[itemIndex]
   try:
     if freeInventory(memberIndex = memberIndex, amount = -(itemsList[
         item.protoIndex].weight * amount)) < 0:
