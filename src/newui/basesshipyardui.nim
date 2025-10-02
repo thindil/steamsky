@@ -792,7 +792,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
       countPrice(price = cost, traderIndex = findMember(order = talk))
     except:
       dialog = setError(message = "Can't count the cost.")
-    if moneyIndex2 > -1 and cost <= playerShip.cargo[moneyIndex2].amount:
+    if cost <= moneyAmount:
       colorLabel(str = $cost & " " & moneyName, color = theme.colors[goldenColor])
     else:
       colorLabel(str = $cost & " " & moneyName, color = theme.colors[redColor])
@@ -835,13 +835,13 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't check unique module.")
     var btnAmount: Positive = 2
     setLayoutRowDynamic(height = 60, cols = 1)
-    if moneyIndex2 == -1:
+    if moneyAmount == 0:
       colorWrapLabel(str = "You don't have any money to buy the module.",
           color = theme.colors[redColor])
       btnAmount = 1
     else:
       try:
-        if playerShip.cargo[moneyIndex2].amount < cost:
+        if moneyAmount < cost:
           colorWrapLabel(str = "You don't have enough money to buy the module.",
               color = theme.colors[redColor])
           btnAmount = 1
@@ -1159,10 +1159,9 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
         except:
           dialog = setError(message = "Can't count price.")
         addButton(label = $cost, tooltip = "Show the module's info",
-            data = index, code = setInstallInfo, color = (if moneyIndex2 >
-            -1 and cost <= playerShip.cargo[
-            moneyIndex2].amount: tableTextColor else: redColor),
-            dialog = dialog)
+          data = index, code = setInstallInfo, color =
+          (if cost <= moneyAmount: tableTextColor else: redColor),
+          dialog = dialog)
       # Show modules to remove
       else:
         try:

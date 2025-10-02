@@ -21,12 +21,12 @@
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
-    crew, crewinventory, game, maps, missions, shipscargo, shipscrew, types]
+    crew, game, items, maps, missions, shipscargo, shipscrew, types]
 import coreui, errordialog, utilsui2
 
 var
-  moneyIndex2*: int = -1
-    ## Index of money in the player's ship's cargo
+  moneyAmount*: Natural = 0
+    ## The amount of money in the player's ship's cargo
   moneyText*: seq[string] = @[]
     ## The text with information about money in player's ship's cargo and trader
   moneyWidth*: seq[cfloat] = @[]
@@ -41,15 +41,14 @@ proc setMoneyText(action: string; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex,
-      itemQuality = normal)
+  moneyAmount = moneyAmount(inventory = playerShip.cargo)
   moneyText = @[]
   moneyWidth = @[]
-  if moneyIndex == -1:
+  if moneyAmount == 0:
     moneyText.add(y = "You don't have " & moneyName & action)
   else:
     moneyText.add(y = "You have ")
-    moneyText.add(y = $playerShip.cargo[moneyIndex2].amount & " " & moneyName)
+    moneyText.add(y = $moneyAmount & " " & moneyName)
   for text in moneyText:
     try:
       moneyWidth.add(y = text.getTextWidth)
@@ -114,11 +113,11 @@ proc setTrainingCost*(dialog: var GameDialog){.raises: [], tags: [RootEffect],
       return
   timesCost = oneTrainCost * amount
   minCost = oneTrainCost
-  if moneyIndex2 < 0:
+  if moneyAmount < 1:
     minCost = 0
     maxCost = 0
   else:
-    maxCost = playerShip.cargo[moneyIndex2].amount
+    maxCost = moneyAmount
 
 proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -339,15 +338,14 @@ proc refreshItemsList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     except:
       dialog = setError(message = "Can't check if item is buyable.")
       return
-  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex,
-      itemQuality = normal)
+  moneyAmount = moneyAmount(inventory = playerShip.cargo)
   moneyText = @[]
   moneyWidth = @[]
-  if moneyIndex == -1:
+  if moneyAmount == 0:
     moneyText.add(y = "You don't have " & moneyName & " to buy anything")
   else:
     moneyText.add(y = "You have ")
-    moneyText.add(y = $playerShip.cargo[moneyIndex2].amount & " " & moneyName)
+    moneyText.add(y = $moneyAmount & " " & moneyName)
   if baseCargo[0].amount == 0:
     moneyText.add(y = " " & location & " doesn't have any " & moneyName & " to buy anything")
   else:
@@ -787,8 +785,7 @@ proc refreshLootList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           return
     if typesList.find(item = itemType) == -1:
       typesList.add(y = itemType)
-  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex,
-      itemQuality = normal)
+  moneyAmount = moneyAmount(inventory = playerShip.cargo)
   var freeSpace = try:
       freeCargo(amount = 0)
     except:
