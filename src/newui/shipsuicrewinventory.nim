@@ -162,8 +162,13 @@ proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [],
   ## loading the game.
   contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
       triggerBounds = bounds, button = Buttons.left):
-    echo "here"
     setLayoutRowDynamic(25, 1)
+    contextualItemLabel(label = "Equip items", align = centered):
+      showItemsMenu = false
+    contextualItemLabel(label = "Unequip items", align = centered):
+      showItemsMenu = false
+    contextualItemLabel(label = "Move items to the ship's cargo", align = centered):
+      showItemsMenu = false
     contextualItemLabel(label = "Close", align = centered):
       showItemsMenu = false
 
@@ -179,7 +184,6 @@ proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   try:
     itemIndex = data
     if inventoryDataList.any(pred = proc (x: CrewData): bool = x.checked):
-      showItemMenu(dialog = dialog)
       showItemsMenu = true
     else:
       dialog = showInventoryItemInfo(itemIndex = data, memberIndex = crewIndex,
@@ -344,5 +348,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     restoreButtonStyle()
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
+    if showItemsMenu:
+      showItemMenu(dialog = dialog)
 
   windowSetFocus(name = windowName)
