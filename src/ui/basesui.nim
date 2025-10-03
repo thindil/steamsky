@@ -21,23 +21,23 @@
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[bases, basesship, basesship2, basestrade, basestypes, config,
-    crewinventory, game, maps, shipscrew, tk, types]
+    game, maps, items, shipscrew, tk, types]
 import coreui, dialogs, errordialog, mapsui, table, updateheader, utilsui2
 
 var
   baseTable: TableWidget = TableWidget()
   itemsIndexes: seq[string] = @[]
 
-proc getColor(actionCost: Natural; moneyIndex2: int): string {.raises: [],
+proc getColor(actionCost, moneyAmount: Natural): string {.raises: [],
     tags: [], contractual.} =
   ## Get the color used to show the cost of action on the list
   ##
   ## * actionCost  - the amount of money needed for the action
-  ## * moneyIndex2 - the index of money in the player's ship's cargo
+  ## * moneyAmount - the amount of money in the player's ship's cargo
   ##
   ## Returns red if the player doesn't have enough money, otherwise returns
   ## empty string.
-  if moneyIndex2 == -1 or playerShip.cargo[moneyIndex2].amount < actionCost:
+  if moneyAmount < actionCost:
     return "red"
   return ""
 
@@ -63,7 +63,8 @@ proc formatTime(time: Natural): string {.raises: [], tags: [], contractual.} =
 
 proc setRecipesTable(baseIndex: BasesRange; argc: cint; argv: cstringArray;
     firstIndex: var string; startRow: Positive;
-    moneyIndex2: int): bool {.raises: [], tags: [RootEffect], contractual.} =
+    moneyAmount: Natural): bool {.raises: [], tags: [RootEffect],
+        contractual.} =
   ## Set the recipes' list table
   ##
   ## * baseIndex   - the index of the base in which recipes will be show
@@ -71,7 +72,7 @@ proc setRecipesTable(baseIndex: BasesRange; argc: cint; argv: cstringArray;
   ## * argv        - the list of the command's arguments
   ## * firstIndex  - the first index in the table
   ## * startRow    - the number of the first row to show
-  ## * moneyIndex2 - the index of money in the player's ship's cargo
+  ## * moneyAmount - the amount of money in the player's ship's cargo
   ##
   ## Returns true if the list was properly set, otherwise show error and
   ## returns false.
@@ -133,7 +134,7 @@ proc setRecipesTable(baseIndex: BasesRange; argc: cint; argv: cstringArray;
         tooltip = "Show available options",
         command = "ShowBaseMenu recipes " &
         index, column = 2, color = getColor(actionCost = cost,
-            moneyIndex2 = moneyIndex2), newRow = true)
+            moneyAmount = moneyAmount), newRow = true)
     if baseTable.row == gameSettings.listsLimit + 1:
       break
   return true
@@ -234,15 +235,13 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       itemsIndexes.add(y = (if population >
           BasePopulation.medium: "-2" else: "-3"))
   tclEval(script = "grid configure " & baseTable.canvas & " -row 2")
-  let
-    moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = normal)
+  let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
   var moneyLabel: string = baseCanvas & ".base.moneyframe.lblmoney"
-  if moneyIndex2 > -1:
+  if moneyAmount > 0:
     tclEval(script = moneyLabel & " configure -text {You have } -style TLabel")
     moneyLabel = baseCanvas & ".base.moneyframe.lblmoney2"
-    tclEval(script = moneyLabel & " configure -text {" & $playerShip.cargo[
-        moneyIndex2].amount & " " & moneyName & "}")
+    tclEval(script = moneyLabel & " configure -text {" & $moneyAmount & " " &
+        moneyName & "}")
     tclEval(script = "grid " & moneyLabel & " -column 1 -row 0")
   else:
     tclEval(script = moneyLabel & " configure -text {You don't have any " &
@@ -288,7 +287,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       addButton(table = baseTable, text = $cost & " " & moneyName,
           tooltip = "Show available options", command = "ShowBaseMenu heal " &
           index, column = 2, color = getColor(actionCost = cost,
-              moneyIndex2 = moneyIndex2))
+              moneyAmount = moneyAmount))
       formattedTime = formatTime(time = time)
       addButton(table = baseTable, text = formattedTime,
           tooltip = "Show available options", command = "ShowBaseMenu heal " &
@@ -336,7 +335,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       addButton(table = baseTable, text = $cost & " " & moneyName,
           tooltip = "Show available options", command = "ShowBaseMenu repair " &
           index, column = 2, color = getColor(actionCost = cost,
-              moneyIndex2 = moneyIndex2))
+              moneyAmount = moneyAmount))
       formattedTime = formatTime(time = time)
       addButton(table = baseTable, text = formattedTime,
           tooltip = "Show available options", command = "ShowBaseMenu repair " &
@@ -346,7 +345,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   elif argv[1] == "recipes":
     if not setRecipesTable(baseIndex = baseIndex, argc = argc, argv = argv,
         firstIndex = firstIndex, startRow = startRow,
-        moneyIndex2 = moneyIndex2):
+        moneyAmount = moneyAmount):
       return tclOk
   let arguments: string = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
       "}" else: "{" & $argv[1] & "} {}")
@@ -482,8 +481,7 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't count the recipe's price")
   let
-    moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = normal)
+    moneyAmount: int = moneyAmount(inventory = playerShip.cargo)
     baseMenu: string = createDialog(name = ".basemenu", title = "Actions",
         parentName = ".")
 
@@ -504,7 +502,7 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "bind " & button & " <Tab> {focus " & baseMenu & ".action;break}")
       tclEval(script = "focus " & button)
 
-  if moneyIndex2 == -1 or playerShip.cargo[moneyIndex2].amount < cost:
+  if moneyAmount < cost:
     addButton(name = ".action", label = "You don't have money for this", command = "")
   else:
     addButton(name = ".action", label = (if action ==

@@ -20,8 +20,8 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
-import ../[bases, basestrade, config, crew, crewinventory, game, maps,
-    shipscrew, tk, types]
+import ../[bases, basestrade, config, crew, game, items, maps, shipscrew, tk,
+  types]
 import coreui, dialogs, errordialog, mapsui, table, updateheader, utilsui2
 
 proc getHighestAttribute(baseIndex: BasesRange;
@@ -417,10 +417,9 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = moneyInfo & " insert end { " & moneyName & "}")
   tclEval(script = moneyInfo & " configure -state disabled")
   let
-    moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = normal)
+    moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
     hireButton: string = dialogName & ".buttonbox.hirebutton"
-  if moneyIndex > -1 and playerShip.cargo[moneyIndex2].amount < cost:
+  if moneyAmount < cost:
     tclEval(script = hireButton & " configure -state disabled")
   else:
     tclEval(script = hireButton & " configure -state !disabled")
@@ -613,14 +612,12 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = moneyInfo & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-goldenyellow)"))
-  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex, itemQuality = normal)
-  if moneyIndex2 > -1:
+  let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
+  if moneyAmount > 0:
     tclEval(script = moneyInfo & " insert end {You have }")
-    tclEval(script = moneyInfo & " insert end {" & $playerShip.cargo[
-        moneyIndex2].amount & "} [list gold]")
+    tclEval(script = moneyInfo & " insert end {" & $moneyAmount & "} [list gold]")
     tclEval(script = moneyInfo & " insert end { " & moneyName & "}")
-    if playerShip.cargo[moneyIndex2].amount < cost:
+    if moneyAmount < cost:
       tclEval(script = hireButton & " configure -state disabled")
     else:
       tclEval(script = hireButton & " configure -state !disabled")
