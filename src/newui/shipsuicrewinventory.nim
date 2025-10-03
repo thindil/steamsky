@@ -160,14 +160,21 @@ proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [],
   ##
   ## Returns the parameter dialog. It is modified only when the player start
   ## loading the game.
-  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
+  contextualMenu(flags = {windowNoFlags}, x = 300, y = 150,
       triggerBounds = bounds, button = Buttons.left):
     setLayoutRowDynamic(25, 1)
     contextualItemLabel(label = "Equip items", align = centered):
+      for item in inventoryDataList:
+        if item.checked:
+          let isUsed = itemIsUsed(memberIndex = crewIndex,
+              itemIndex = item.index)
+          if not isUsed:
+            discard
       showItemsMenu = false
     contextualItemLabel(label = "Unequip items", align = centered):
       showItemsMenu = false
-    contextualItemLabel(label = "Move items to the ship's cargo", align = centered):
+    contextualItemLabel(label = "Move items to the ship's cargo",
+        align = centered):
       showItemsMenu = false
     contextualItemLabel(label = "Close", align = centered):
       showItemsMenu = false
