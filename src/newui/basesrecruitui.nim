@@ -20,8 +20,7 @@
 
 import std/[algorithm, tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, basestrade, config, crew, crewinventory, game, maps,
-    shipscrew, types]
+import ../[bases, basestrade, config, crew, game, items, maps, shipscrew, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 type
@@ -199,9 +198,9 @@ const
 
 var
   currentTab: cint = 0
-  recruitIndex, moneyIndex2: int = -1
+  recruitIndex: int = -1
   currentDaily, maxDaily: Positive = 1
-  currentProfit, currentContract, cost: Natural = 0
+  currentProfit, currentContract, cost, moneyAmount: Natural = 0
   moneyText: seq[string] = @[]
   moneyWidth: seq[cfloat] = @[]
   hireText: array[3, string] = ["Hire for ", "0", " " & moneyName]
@@ -319,15 +318,14 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       maxDaily = recruit.payment * 2
       currentProfit = 0
       currentContract = 0
-      moneyIndex2 = findItem(inventory = playerShip.cargo,
-          protoIndex = moneyIndex, itemQuality = normal)
+      moneyAmount = moneyAmount(inventory = playerShip.cargo)
       moneyText = @[]
       moneyWidth = @[]
-      if moneyIndex2 == -1:
+      if moneyAmount == 0:
         moneyText.add(y = "You don't have enough money to recruit anyone")
       else:
         moneyText.add(y = "You have ")
-        moneyText.add(y = $playerShip.cargo[moneyIndex2].amount)
+        moneyText.add(y = $moneyAmount)
         moneyText.add(y = " " & moneyName)
       for text in moneyText:
         try:
@@ -427,7 +425,7 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
       label(str = moneyText[0])
       colorLabel(str = moneyText[1], color = theme.colors[goldenColor])
       label(str = moneyText[2])
-      if playerShip.cargo[moneyIndex2].amount >= cost:
+      if moneyAmount >= cost:
         canHire = true
     setLayoutRowStatic(height = 30, cols = 3, ratio = hireWidth)
     label(str = hireText[0])

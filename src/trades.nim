@@ -215,13 +215,12 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
   countPrice(price = cost, traderIndex = traderIndex)
   if freeCargo(amount = cost - (itemsList[itemIndex].weight * buyAmount)) < 0:
     raise newException(exceptn = NoFreeCargoError, message = "")
-  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex, itemQuality = normal)
-  if moneyIndex2 == -1:
+  let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
+  if moneyAmount == 0:
     raise newException(exceptn = NoMoneyError, message = itemName)
-  if cost > playerShip.cargo[moneyIndex2].amount:
+  if cost > moneyAmount:
     raise newException(exceptn = NotEnoughMoneyError, message = itemName)
-  updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost, quality = normal)
+  updateMoney(memberIndex = -1, amount = -cost, quality = any)
   if baseIndex > 0:
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
   else:
@@ -333,12 +332,11 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
       weight = freeCargo(amount = (itemsList[result.protoIndex].weight * result.maxSellAmount) - maxPrice)
     if baseIndex > 0 and countFreeCargo(baseIndex = baseIndex) == 0 and baseCargoIndex == -1:
       result.maxSellAmount = 0
-  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex, itemQuality = normal)
-  if baseCargoIndex > -1 and moneyIndex2 > -1 and ((baseIndex > -1 and
+  let moneyAmount = moneyAmount(inventory = playerShip.cargo)
+  if baseCargoIndex > -1 and moneyAmount > 0 and ((baseIndex > -1 and
       isBuyable(baseType = baseType, itemIndex = result.protoIndex)) or
           baseIndex == 0):
-    result.maxBuyAmount = (playerShip.cargo[moneyIndex2].amount / result.price).int
+    result.maxBuyAmount = (moneyAmount / result.price).int
     var maxPrice: Natural = result.maxBuyAmount * result.price
     if result.maxBuyAmount > 0:
       countPrice(price = maxPrice, traderIndex = findMember(order = talk))
