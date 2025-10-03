@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Information about items' quality in the player's ship's info and bases' loot
   screen
+- Crafting recipe for Medical Herbs Seeds
 
 ### Fixed
 - Tooltips for select and unselect buttons in the player's ship's crew member's
