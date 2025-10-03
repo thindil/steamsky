@@ -1208,5 +1208,8 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" index="357" result="379" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75" toolquality="1">
   <material amount="4" type="Adamantium"/>
  </recipe>
+ <recipe crafted="3" index="358" result="29" skill="Farming" tool="AlchemySet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Herbs"/>
+ </recipe>
 </recipes>
 
