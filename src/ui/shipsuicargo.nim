@@ -458,7 +458,7 @@ proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowDropItem itemindex
   ## Itemindex is the index of the item which will be set
-  let itemIndex = try:
+  let itemIndex: Natural = try:
       ($argv[1]).parseInt - 1
     except:
       return showError(message = "Can't get the item's index.")
@@ -482,13 +482,13 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## DropItem
   let
-    itemDialog = ".itemdialog"
-    spinBox = itemDialog & ".amount"
-  var dropAmount, dropAmount2 = try:
+    itemDialog: string = ".itemdialog"
+    spinBox: string = itemDialog & ".amount"
+  var dropAmount, dropAmount2: Natural = try:
       tclEval2(script = spinBox & " get").parseInt
     except:
       return showError(message = "Can't get the drop amount.")
-  let itemIndex = try:
+  let itemIndex: Natural = try:
       ($argv[1]).parseInt - 1
     except:
       return showError(message = "Can't get the item's index.")
@@ -537,7 +537,7 @@ proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowCargoItemInfo itemindex
   ## Itemindex is the index of the item which information will be show
-  let itemIndex = try:
+  let itemIndex: Natural = try:
       ($argv[1]).parseInt - 1
     except:
       return showError(message = "Can't get the item's index.")
@@ -568,31 +568,31 @@ proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   ## UpdateMaxGiveAmount itemindex
   ## ItemIndex is the index of the item to give
   let
-    itemIndex = try:
+    itemIndex: Natural = try:
         ($argv[1]).parseInt
       except:
         return showError(message = "Can't get the item's index.")
-    item = playerShip.cargo[itemIndex]
-    crewBox = ".itemdialog.member"
-    memberIndex = try:
+    item: InventoryData = playerShip.cargo[itemIndex]
+    crewBox: string = ".itemdialog.member"
+    memberIndex: Natural = try:
         tclEval2(script = crewBox & " current").parseInt
       except:
         return showError(message = "Can't get the member's index.")
-  var maxAmount = try:
+  var maxAmount: Natural = try:
         (freeInventory(memberIndex = memberIndex, amount = 0).float / itemsList[
             item.protoIndex].weight.float).Natural
       except:
         return showError(message = "Can't count the max amount.")
   if item.amount < maxAmount:
     maxAmount = item.amount
-  let amountBox = ".itemdialog.giveamount"
+  let amountBox: string = ".itemdialog.giveamount"
   try:
     if tclEval2(script = amountBox & " get").parseInt > maxAmount:
       tclEval(script = amountBox & " set " & $maxAmount)
   except:
     showError(message = "Can't set the max amount.")
   tclEval(script = amountBox & " configure -to " & $maxAmount)
-  let maxButton = ".itemdialog.maxbutton"
+  let maxButton: string = ".itemdialog.maxbutton"
   tclEval(script = maxButton & " configure -text {Amount (max: " & $maxAmount &
       "):} -command {" & amountBox & " set " & $maxAmount & ";" & amountBox & " validate}")
   return tclOk
