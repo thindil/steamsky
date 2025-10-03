@@ -419,6 +419,7 @@ proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     tiredPoints = 0
   setPriorites = member.orders
   setInventoryInfo(dialog = dialog)
+  setDialog(x = windowWidth / 5, y = windowHeight / 7)
 
 proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
