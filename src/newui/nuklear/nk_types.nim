@@ -856,12 +856,12 @@ type
     pages*: ptr nk_page
     freelist*: pointer
     size*, cap*: nk_size
-  nk_context* {.importc: "struct nk_context", nodecl.} = object
+  nk_context* {.importc: "struct nk_context", completeStruct.} = object
     ## Internal Nuklear type
     style*: nk_style
     input*: nk_input
-    current*, active*: PNkWindow
-    seq*: cuint
+    begin*, `end`*, current*, active*: PNkWindow
+    seq*, count*: cuint
     memory*: nk_buffer
     use_pool*: bool
     freelist*: pointer
@@ -879,7 +879,10 @@ type
     pool*: nk_pool
   nk_font* {.importc: "struct nk_font", nodecl.} = object
     ## Internal Nuklear type
-    handle*: PNkUserFont
+    handle*, texture*: PNkUserFont
+    next*: ptr nk_font
+    scale*: cfloat
+    config*: ptr nk_font_config
   nk_font_atlas* {.importc: "struct nk_font_atlas", nodecl.} = object
     ## Internal Nuklear type
   nk_font_config* {.importc: "struct nk_font_config", nodecl.} = object
