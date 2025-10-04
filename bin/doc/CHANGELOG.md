@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Information about items' quality in the player's ship's info and bases' loot
   screen
 - Crafting recipe for Medical Herbs Seeds
+- Ability to buy the new recipe in Agricultural bases
 
 ### Fixed
 - Tooltips for select and unselect buttons in the player's ship's crew member's
