@@ -20,8 +20,8 @@
 
 import std/[os, strutils, tables]
 import contracts, nimalyzer
-import ../[bases, config, crew2, crewinventory, events2, game, game2, maps,
-    messages, missions2, shipscargo, shipscrew, shipscrew2, tk, types, utils]
+import ../[bases, config, crew2, events2, game, game2, items, maps, messages,
+    missions2, shipscargo, shipscrew, shipscrew2, tk, types, utils]
 import combatui, coreui, dialogs, errordialog, mapsui, shipsuicrew,
     shipsuimodules2, showmainmenu, statisticsui, updateheader, utilsui2
 
@@ -271,9 +271,8 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     tclUnsetVar(varName = "deletesave")
     tclEval(script = "ShowLoadGame")
   of "sethomebase":
-    let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = normal)
-    if moneyIndex2 == -1:
+    let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
+    if moneyAmount == 0:
       showMessage(text = "You don't have any " & moneyName &
           " for change ship home base.", title = "No money")
       return tclOk
@@ -283,13 +282,15 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
       countPrice(price = price, traderIndex = traderIndex)
     except:
       return showError(message = "Can't count price.")
-    if playerShip.cargo[moneyIndex2].amount < price:
+    if moneyAmount < price:
       showMessage(text = "You don't have enough " & moneyName &
           " for change ship home base.", title = "No money")
       return tclOk
     playerShip.homeBase = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price,
-        quality = normal)
+    try:
+      updateMoney(memberIndex = -1, amount = -price, quality = any)
+    except:
+      return showError(message = "Can't update the player's money.")
     addMessage(message = "You changed your ship home base to: " & skyBases[
         playerShip.homeBase].name, mType = otherMessage)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
