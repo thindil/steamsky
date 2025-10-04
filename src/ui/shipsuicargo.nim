@@ -400,14 +400,15 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## GiveItem
-  let
+  const
     itemDialog: string = ".itemdialog"
     spinBox: string = itemDialog & ".giveamount"
+    comboBox: string = itemDialog & ".member"
+  let
     amount: Natural = try:
         tclEval2(script = spinBox & " get").parseInt
       except:
         return showError(message = "Can't get the amount.")
-    comboBox: string = itemDialog & ".member"
     memberIndex: Natural = try:
         tclEval2(script = comboBox & " current").parseInt
       except:
@@ -481,7 +482,7 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DropItem
-  let
+  const
     itemDialog: string = ".itemdialog"
     spinBox: string = itemDialog & ".amount"
   var dropAmount, dropAmount2: Natural = try:
@@ -567,13 +568,13 @@ proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## UpdateMaxGiveAmount itemindex
   ## ItemIndex is the index of the item to give
+  const crewBox: string = ".itemdialog.member"
   let
     itemIndex: Natural = try:
         ($argv[1]).parseInt
       except:
         return showError(message = "Can't get the item's index.")
     item: InventoryData = playerShip.cargo[itemIndex]
-    crewBox: string = ".itemdialog.member"
     memberIndex: Natural = try:
         tclEval2(script = crewBox & " current").parseInt
       except:
@@ -585,14 +586,14 @@ proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't count the max amount.")
   if item.amount < maxAmount:
     maxAmount = item.amount
-  let amountBox: string = ".itemdialog.giveamount"
+  const amountBox: string = ".itemdialog.giveamount"
   try:
     if tclEval2(script = amountBox & " get").parseInt > maxAmount:
       tclEval(script = amountBox & " set " & $maxAmount)
   except:
     showError(message = "Can't set the max amount.")
   tclEval(script = amountBox & " configure -to " & $maxAmount)
-  let maxButton: string = ".itemdialog.maxbutton"
+  const maxButton: string = ".itemdialog.maxbutton"
   tclEval(script = maxButton & " configure -text {Amount (max: " & $maxAmount &
       "):} -command {" & amountBox & " set " & $maxAmount & ";" & amountBox & " validate}")
   return tclOk
