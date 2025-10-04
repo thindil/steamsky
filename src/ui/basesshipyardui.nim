@@ -20,8 +20,8 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
-import ../[bases, basesship2, config, crewinventory, game, maps, shipscrew,
-    shipmodules, tk, types]
+import ../[bases, basesship2, config, game, items, maps, shipscrew, shipmodules,
+    tk, types]
 import coreui, dialogs, errordialog, mapsui, table, utilsui2
 
 {.push ruleOff:"varDeclared".}
@@ -154,15 +154,13 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
       allSpace = module.maxModules
       break
   shipyardFrame = shipyardCanvas & ".shipyard"
-  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex, itemQuality = normal)
+  let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
   var moneyLabel: string = shipyardCanvas & ".shipyard.moneyinfo.lblmoney"
   tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
-  if moneyIndex2 > -1:
+  if moneyAmount > 0:
     tclEval(script = moneyLabel & " configure -text {You have } -style TLabel")
     moneyLabel = shipyardCanvas & ".shipyard.moneyinfo.lblmoney2"
-    tclEval(script = moneyLabel & " configure -text {" & $playerShip.cargo[
-        moneyIndex2].amount & " " & moneyName & "}")
+    tclEval(script = moneyLabel & " configure -text {" & $moneyAmount & " " & moneyName & "}")
     tclEval(script = "grid " & moneyLabel & " -column 1 -row 0")
     tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
   else:
@@ -270,9 +268,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't count price.")
     addButton(table = installTable, text = $cost,
         tooltip = "Show the module's info", command = "ShowInstallInfo {" &
-        $index & "}", column = 5, newRow = true, color = (if moneyIndex2 >
-            -1 and cost <= playerShip.cargo[
-            moneyIndex2].amount: "" else: "red"))
+        $index & "}", column = 5, newRow = true, color = (if cost <= moneyAmount: "" else: "red"))
     if installTable.row == gameSettings.listsLimit + 1:
       break
   addPagination(table = installTable, previousCommand = (if page >
@@ -815,9 +811,9 @@ proc setModuleInfo(installing: bool; row: var Positive;
   row.inc
   var
     mType: ModuleType = ModuleType.any
-    maxValue, value, weight, maxOwners, cost: Natural = 0
+    maxValue, value, weight, maxOwners, cost, moneyAmount: Natural = 0
     size: Positive = 1
-    speed, moneyIndex2, shipModuleIndex: int = -1
+    speed, shipModuleIndex: int = -1
     moduleLabel: string = ""
   if installing:
     mType = try:
@@ -884,11 +880,9 @@ proc setModuleInfo(installing: bool; row: var Positive;
     except:
       showError(message = "Can't count protomodule cost")
       return
-    moneyIndex2 = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = normal)
+    moneyAmount = moneyAmount(inventory = playerShip.cargo)
     tclEval(script = moduleLabel & " configure -text {" & $cost & " " &
-        moneyName & "} " & (if moneyIndex == -1 or playerShip.cargo[
-        moneyIndex2].amount <
+        moneyName & "} " & (if moneyAmount <
         cost: "-style Headerred.TLabel" else: "-style Golden.TLabel"))
     moduleLabel = ".moduledialog.time"
     try:
@@ -1201,8 +1195,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       " -sticky w -padx {0 5} -pady {5 0} -row " & $row & " -column 1")
   setModuleInfo(installing = true, row = row)
   let
-    moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = normal)
+    moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
     errorLabel: string = moduleDialog & ".errorLabel"
     frame: string = moduleDialog & ".buttonbox"
   tclEval(script = "ttk::frame " & frame)
@@ -1211,12 +1204,12 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       " -text Install -image buyicon -style Dialoggreen.TButton -command {CloseDialog " &
       moduleDialog & ";ManipulateModule install}")
 
-  proc setInstallButton(eLabel: string; mIndex2, cost2: Natural) {.raises: [
+  proc setInstallButton(eLabel: string; mAmount, cost2: Natural) {.raises: [
       KeyError], tags: [], contractual.} =
     ## Set text on the button for install the module
     ##
     ## * eLabel  - the text to show on the button
-    ## * mIndex2 - the index of the money in the player's ship's cargo
+    ## * mAmount - the amount of the money in the player's ship's cargo
     ## * cost2   - the cost of installing the module
     var
       maxSize, usedSpace, allSpace: Natural = 0
@@ -1239,10 +1232,10 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           moduleIndex].mType and modulesList[moduleIndex].unique:
         hasUnique = true
         break
-    if mIndex2 == -1:
+    if mAmount == 0:
       tclEval(script = eLabel & " configure -text {You don't have any money to buy the module.}")
     else:
-      if playerShip.cargo[mIndex2].amount < cost2:
+      if moneyAmount < cost2:
         tclEval(script = eLabel & " configure -text {You don't have enough money to buy the module.}")
       elif hasUnique:
         tclEval(script = eLabel & " configure -text {Only one module of that type can be installed on the ship.}")
@@ -1261,7 +1254,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   tclEval(script = "ttk::label " & errorLabel & " -style Headerred.TLabel -wraplength 450 -text {}")
   try:
-    setInstallButton(eLabel = errorLabel, mIndex2 = moneyIndex2, cost2 = cost)
+    setInstallButton(eLabel = errorLabel, mAmount = moneyAmount, cost2 = cost)
   except:
     return showError(message = "Can't set install button.")
   if tclEval2(script = errorLabel & " cget -text") == "":
