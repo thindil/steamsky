@@ -332,7 +332,7 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
       weight = freeCargo(amount = (itemsList[result.protoIndex].weight * result.maxSellAmount) - maxPrice)
     if baseIndex > 0 and countFreeCargo(baseIndex = baseIndex) == 0 and baseCargoIndex == -1:
       result.maxSellAmount = 0
-  let moneyAmount = moneyAmount(inventory = playerShip.cargo)
+  let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
   if baseCargoIndex > -1 and moneyAmount > 0 and ((baseIndex > -1 and
       isBuyable(baseType = baseType, itemIndex = result.protoIndex)) or
           baseIndex == 0):
