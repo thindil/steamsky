@@ -152,6 +152,64 @@ proc setMoveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   closePopup()
   dialog = setManipulate(action = moveAction, iIndex = itemIndex)
 
+proc setUseItem(dialog: var GameDialog; data: CrewData; used: bool) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Equip or unequip the selected item
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * data   - the information about the selected item
+  ## * used   - if true, the item is used, otherwise false
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if used:
+    takeOffItem(memberIndex = crewIndex, itemIndex = data.index)
+  else:
+    let
+      member: MemberData = playerShip.crew[crewIndex]
+      itemType: string = try:
+         itemsList[member.inventory[data.index].protoIndex].itemType
+        except:
+          dialog = setError(message = "Can't get the item type.")
+          return
+    {.ruleOff: "ifStatements".}
+    if itemType == weaponType:
+      try:
+        if itemsList[member.inventory[data.index].protoIndex].value[
+            4] == 2 and member.equipment[shield] > -1:
+          dialog = setMessage(message = member.name &
+              " can't use this weapon because have shield equiped. Take off shield first.",
+              title = "Shield in use")
+          return
+      except:
+        dialog = setError(message = "Can't do check for shield.")
+        return
+      playerShip.crew[crewIndex].equipment[weapon] = data.index
+    elif itemType == shieldType:
+      if member.equipment[weapon] > -1:
+        try:
+          if itemsList[member.inventory[member.equipment[
+              weapon]].protoIndex].value[4] == 2:
+            dialog = setMessage(message = member.name &
+                " can't use shield because have equiped two-hand weapon. Take off weapon first.",
+                title = "Two handed weapon in use")
+            return
+        except:
+          dialog = setError(message = "Can't do check for two handed weapon.")
+          return
+      playerShip.crew[crewIndex].equipment[shield] = data.index
+    elif itemType == headArmor:
+      playerShip.crew[crewIndex].equipment[helmet] = data.index
+    elif itemType == chestArmor:
+      playerShip.crew[crewIndex].equipment[torso] = data.index
+    elif itemType == armsArmor:
+      playerShip.crew[crewIndex].equipment[arms] = data.index
+    elif itemType == legsArmor:
+      playerShip.crew[crewIndex].equipment[legs] = data.index
+    elif itemType in toolsList:
+      playerShip.crew[crewIndex].equipment[tool] = data.index
+    {.ruleOn: "ifStatements".}
+
 proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [],
     contractual.} =
   ## Show the menu for the selected saved game
@@ -293,51 +351,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
           tooltip = "The item isn't used by the crew member"
         addCheckButton(tooltip = tooltip, checked = checked)
         if checked != used:
-          if used:
-            takeOffItem(memberIndex = crewIndex, itemIndex = data.index)
-          else:
-            let itemType: string = try:
-                itemsList[member.inventory[data.index].protoIndex].itemType
-              except:
-                dialog = setError(message = "Can't get the item type.")
-                return
-            {.ruleOff: "ifStatements".}
-            if itemType == weaponType:
-              try:
-                if itemsList[member.inventory[data.index].protoIndex].value[
-                    4] == 2 and member.equipment[shield] > -1:
-                  dialog = setMessage(message = member.name &
-                      " can't use this weapon because have shield equiped. Take off shield first.",
-                      title = "Shield in use")
-                  return
-              except:
-                dialog = setError(message = "Can't do check for shield.")
-                return
-              playerShip.crew[crewIndex].equipment[weapon] = data.index
-            elif itemType == shieldType:
-              if member.equipment[weapon] > -1:
-                try:
-                  if itemsList[member.inventory[member.equipment[
-                      weapon]].protoIndex].value[4] == 2:
-                    dialog = setMessage(message = member.name &
-                        " can't use shield because have equiped two-hand weapon. Take off weapon first.",
-                        title = "Two handed weapon in use")
-                    return
-                except:
-                  dialog = setError(message = "Can't do check for two handed weapon.")
-                  return
-              playerShip.crew[crewIndex].equipment[shield] = data.index
-            elif itemType == headArmor:
-              playerShip.crew[crewIndex].equipment[helmet] = data.index
-            elif itemType == chestArmor:
-              playerShip.crew[crewIndex].equipment[torso] = data.index
-            elif itemType == armsArmor:
-              playerShip.crew[crewIndex].equipment[arms] = data.index
-            elif itemType == legsArmor:
-              playerShip.crew[crewIndex].equipment[legs] = data.index
-            elif itemType in toolsList:
-              playerShip.crew[crewIndex].equipment[tool] = data.index
-            {.ruleOn: "ifStatements".}
+          setUseItem(dialog = dialog, data = data, used = used)
         addButton(label = $member.inventory[data.index].amount,
             tooltip = "The amount of the item owned by the crew member.",
             data = data.index, code = setItemInfo, dialog = dialog)
