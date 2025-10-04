@@ -887,7 +887,13 @@ type
     ## Internal Nuklear type
   nk_font_config* {.importc: "struct nk_font_config", nodecl.} = object
     ## Internal Nuklear type
-    `range`*: pointer
+    `range`*, ttf_blob: pointer
+    next*: ptr nk_font_config
+    ttf_size*: nk_size
+    ttf_data_owned_by_atlas*, merge_mode*, pixel_snap*, oversample_v*,
+      oversample_h*: uint8
+    padding*: array[3, uint8]
+    size*: cfloat
   nk_text* {.importc: "struct nk_text", nodecl.} = object
     ## Internal Nuklear type
     padding*: nk_vec2
