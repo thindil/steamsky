@@ -407,6 +407,7 @@ presented to the player during selection of starting base in main menu.
   <recipe index="33" />
   <recipe index="34" />
   <recipe index="35" />
+  <recipe index="358" />
   <description>Agricultural bases provide food, drinks and the raw materials to create them. It's the easiest starting point.</description>
  </base>
  <base index="2" name="Refinery" color="#ffff00">
