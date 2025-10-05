@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Training skills in schools by the player's ship's traders
 - Moving an item from the player's ship's crew members' inventory to the ship's
   cargo unequip another item in the inventory
+- Crash during cleaning the player's ship
 
 ## [11.5] - 2025-09-07
 
