@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [11.6] - 2025-10-05
 
 ### Added
 - Information about items' quality in the player's ship's info and bases' loot
