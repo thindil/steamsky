@@ -21,7 +21,7 @@
 
 import std/[strutils, tables]
 import contracts, nimalyzer
-import ../[basestrade, crew, crewinventory, game, shipscrew, tk, types]
+import ../[basestrade, crew, game, items, shipscrew, tk, types]
 import coreui, dialogs, errordialog, mapsui, updateheader, utilsui2
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -177,14 +177,13 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
     showSkyMap(clear = true)
     return tclOk
   tclSetVar(varName = "gamestate", newValue = "crew")
-  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex, itemQuality = normal)
+  let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
   var moneyLabel: string = schoolCanvas & ".school.money.moneylbl"
-  if moneyIndex2 > -1:
+  if moneyAmount > 0:
     tclEval(script = moneyLabel & " configure -text {You have } -style TLabel")
     moneyLabel = schoolCanvas & ".school.money.money"
-    tclEval(script = moneyLabel & " configure -text {" & $playerShip.cargo[
-        moneyIndex2].amount & " " & moneyName & "}")
+    tclEval(script = moneyLabel & " configure -text {" & $moneyAmount & " " &
+        moneyName & "}")
     tclEval(script = "grid " & moneyLabel & " -column 1 -row 0")
   else:
     tclEval(script = moneyLabel & " configure -text {You don't have any " &
@@ -337,17 +336,15 @@ proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
   ## Tcl:
   ## UpdateSchoolSelectedCost
   let
-    moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = normal)
+    moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
     cost: Natural = try:
         trainCost(memberIndex = getMemberIndex(), skillIndex = getSkillIndex(),
             traderIndex = findMember(order = talk))
       except:
         return showError(message = "Can't get the training cost.")
     amountBox: string = mainPaned & ".schoolframe.canvas.school.costbox.amount"
-  if moneyIndex2 > -1 and cost <= playerShip.cargo[moneyIndex2].amount:
-    tclEval(script = amountBox & " configure -from " & $cost & " -to " &
-        $playerShip.cargo[moneyIndex2].amount)
+  if cost <= moneyAmount:
+    tclEval(script = amountBox & " configure -from " & $cost & " -to " & $moneyAmount)
     tclEval(script = "bind " & amountBox & " <<Increment>> {" & amountBox &
         " set [expr [" & amountBox & " get] + " & $cost & " - 1]}")
     tclEval(script = "bind " & amountBox & " <<Decrement>> {" & amountBox &

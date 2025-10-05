@@ -20,8 +20,8 @@
 
 import std/[algorithm, math, strutils, tables]
 import contracts, nimalyzer
-import ../[basestypes, basescargo, config, crewinventory, events, game, items,
-    maps, shipscargo, tk, trades, types]
+import ../[basestypes, basescargo, config, events, game, items, maps,
+    shipscargo, tk, trades, types]
 import coreui, dialogs, dialogs2, errordialog, mapsui, table, updateheader, utilsui2
 
 type ItemsSortOrders = enum
@@ -492,14 +492,13 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = comboBox & " configure -values [list " & itemsTypes & "]")
   if argc == 1:
     tclEval(script = comboBox & " current 0")
-  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex, itemQuality = normal)
+  let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
   var tradeInfo: string = ""
-  if moneyIndex2 > -1:
+  if moneyAmount > 0:
     tradeInfo = "You have"
     label = tradeFrame & ".options.playerinfo.moneyinfo2"
-    tclEval(script = label & " configure -text {" & $playerShip.cargo[
-        moneyIndex2].amount & " " & moneyName & "}")
+    tclEval(script = label & " configure -text {" & $moneyAmount & " " &
+        moneyName & "}")
     tclEval(script = "grid " & label & " -row 0 -column 1 -sticky w")
   else:
     tradeInfo = "You don't have any " & moneyName & " to buy anything"
