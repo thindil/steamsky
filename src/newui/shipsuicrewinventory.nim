@@ -152,8 +152,8 @@ proc setMoveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   closePopup()
   dialog = setManipulate(action = moveAction, iIndex = itemIndex)
 
-proc setUseItem(dialog: var GameDialog; data: CrewData; used: bool) {.raises: [], tags: [
-    RootEffect], contractual.} =
+proc setUseItem(dialog: var GameDialog; data: CrewData; used: bool) {.raises: [
+    ], tags: [RootEffect], contractual.} =
   ## Equip or unequip the selected item
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -210,7 +210,7 @@ proc setUseItem(dialog: var GameDialog; data: CrewData; used: bool) {.raises: []
       playerShip.crew[crewIndex].equipment[tool] = data.index
     {.ruleOn: "ifStatements".}
 
-proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [],
+proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the menu for the selected saved game
   ##
@@ -227,13 +227,22 @@ proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [],
           let isUsed = itemIsUsed(memberIndex = crewIndex,
               itemIndex = item.index)
           if not isUsed:
-            discard
+            setUseItem(dialog = dialog, data = item, used = isUsed)
       showItemsMenu = false
+      inventoryDataList.apply(op = proc (x: var CrewData) = x.checked = false)
     contextualItemLabel(label = "Unequip items", align = centered):
+      for item in inventoryDataList:
+        if item.checked:
+          let isUsed = itemIsUsed(memberIndex = crewIndex,
+              itemIndex = item.index)
+          if isUsed:
+            setUseItem(dialog = dialog, data = item, used = isUsed)
       showItemsMenu = false
+      inventoryDataList.apply(op = proc (x: var CrewData) = x.checked = false)
     contextualItemLabel(label = "Move items to the ship's cargo",
         align = centered):
       showItemsMenu = false
+      inventoryDataList.apply(op = proc (x: var CrewData) = x.checked = false)
     contextualItemLabel(label = "Close", align = centered):
       showItemsMenu = false
 
