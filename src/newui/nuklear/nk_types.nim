@@ -167,6 +167,9 @@ type
       formatR32B32, formatR8G8B8A8, formatB8G8R8A8, formatR16G15B16A16,
       formatR32G32B32A32, formtR32G32B32A32Float, formatR32G32B32A32Double,
       formatRGB32, formatRGBA32, formatCount
+  FontCoordType* = enum
+    ## The types of fonts coordinates
+    coordUv, coordPixel
 
 # ---------
 # Constants
@@ -885,6 +888,11 @@ type
     config*: ptr nk_font_config
   nk_font_atlas* {.importc: "struct nk_font_atlas", nodecl.} = object
     ## Internal Nuklear type
+  nk_baked_font* {.importc: "struct nk_baked_font", completeStruct.} = object
+    ## Internal Nuklear type
+    height*: cfloat
+    glyph_offset*, glyph_count*: nk_rune
+    ranges*: pointer
   nk_font_config* {.importc: "struct nk_font_config", nodecl.} = object
     ## Internal Nuklear type
     `range`*, ttf_blob: pointer
@@ -894,6 +902,9 @@ type
       oversample_h*: uint8
     padding*: array[3, uint8]
     size*: cfloat
+    coord_type*: FontCoordType
+    spacing*: nk_vec2
+    font*: ptr nk_baked_font
   nk_text* {.importc: "struct nk_text", nodecl.} = object
     ## Internal Nuklear type
     padding*: nk_vec2
