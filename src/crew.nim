@@ -28,26 +28,23 @@ proc dailyPayment*() {.raises: [KeyError, Exception], tags: [
     RootEffect], contractual.} =
   ## Pay daily payments to the player's ship crew members and update the lenght
   ## of their contracts
-  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex, itemQuality = normal)
+  var moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
   for index, member in playerShip.crew:
     if member.payment[1] > 0:
       var haveMoney: bool = true
-      if moneyIndex2 < playerShip.cargo.low:
+      if moneyAmount == 0:
         addMessage(message = "You don't have any " & moneyName &
             " to pay your crew members.", mType = tradeMessage, color = red)
         haveMoney = false
       if haveMoney:
-        if playerShip.cargo[moneyIndex2].amount < member.payment[1]:
-          let moneyNeeded: Natural = playerShip.cargo[moneyIndex2].amount
-          updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = (0 -
-              moneyNeeded), quality = normal)
+        if moneyAmount < member.payment[1]:
+          let moneyNeeded: Natural = moneyAmount
+          updateMoney(memberIndex = -1, amount = -(moneyNeeded), quality = any)
           addMessage(message = "You don't have enough " & moneyName &
               " to pay your crew members.", mType = tradeMessage, color = red)
           haveMoney = false
         if haveMoney:
-          updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = (0 -
-              member.payment[1]), quality = normal)
+          updateMoney(memberIndex = -1, amount = -(member.payment[1]), quality = any)
           var payMessage: string = "You pay " & member.name
           if member.gender == 'M':
             payMessage.add(y = " his ")
@@ -57,6 +54,7 @@ proc dailyPayment*() {.raises: [KeyError, Exception], tags: [
           addMessage(message = payMessage, mType = tradeMessage)
           updateMorale(ship = playerShip, memberIndex = index,
               value = getRandom(min = 1, max = 5))
+        moneyAmount = moneyAmount(inventory = playerShip.cargo)
       if not haveMoney:
         updateMorale(ship = playerShip, memberIndex = index,
             value = getRandom(min = -50, max = -10))

@@ -20,7 +20,7 @@
 
 import std/tables
 import contracts
-import bases, basescargo, basesship, crewinventory, game, game2, maps, messages,
+import bases, basescargo, basesship, game, game2, items, maps, messages,
     shipscargo, shipscrew, types
 
 type
@@ -52,9 +52,8 @@ proc repairShip*(moduleIndex: int) {.raises: [NothingToRepairError,
       raise newException(exceptn = NothingToRepairError, message = "")
     let traderIndex: int = findMember(order = talk)
     countPrice(price = cost, traderIndex = traderIndex)
-    let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = normal)
-    if playerShip.cargo[moneyIndex2].amount < cost:
+    let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
+    if moneyAmount < cost:
       raise newException(exceptn = NotEnoughMoneyError, message = "")
     for index, member in playerShip.crew:
       if member.order == repair:
@@ -71,14 +70,13 @@ proc repairShip*(moduleIndex: int) {.raises: [NothingToRepairError,
           module.durability = module.maxDurability
       addMessage(message = "You bought an entire ship repair for " & $cost &
           " " & moneyName & ".", mType = tradeMessage)
-    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost,
-        quality = normal)
+    updateMoney(memberIndex = -1, amount = -cost, quality = any)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 1)
     updateGame(minutes = time)
 
-proc installModule(moduleIndex, traderIndex, moneyIndex2, hullIndex: int;
+proc installModule(moduleIndex, traderIndex, moneyAmount, hullIndex: int;
     modulesAmount, freeTurretIndex: var int; baseIndex: ExtendedBasesRange;
     price: var Natural) {.raises: [KeyError, NotEnoughMoneyError,
     UniqueModuleError, InstallationError, IOError, Exception], tags: [
@@ -87,7 +85,7 @@ proc installModule(moduleIndex, traderIndex, moneyIndex2, hullIndex: int;
   ##
   ## * moduleIndex     - the index of the proto module to install
   ## * traderIndex     - the index of the trader in the player's ship's crew
-  ## * moneyIndex2     - the index of the money in the player's ship's cargo
+  ## * moneyAmount     - the amount of the money in the player's ship's cargo
   ## * hullIndex       - the index of the hull in the player's ship modules' list
   ## * modulesAmount   - the amount of modules installed on the player's ship
   ## * freeTurretIndex - the index of the free turret in the player's ship
@@ -98,7 +96,7 @@ proc installModule(moduleIndex, traderIndex, moneyIndex2, hullIndex: int;
   body:
     price = modulesList[moduleIndex].price
     countPrice(price = price, traderIndex = traderIndex)
-    if playerShip.cargo[moneyIndex2].amount < price:
+    if moneyAmount < price:
       raise newException(exceptn = NotEnoughMoneyError, message = modulesList[
           moduleIndex].name)
     for module in playerShip.modules:
@@ -130,8 +128,7 @@ proc installModule(moduleIndex, traderIndex, moneyIndex2, hullIndex: int;
           freeTurretIndex == -1:
         raise newException(exceptn = InstallationError,
             message = "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.")
-    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price,
-        quality = normal)
+    updateMoney(memberIndex = -1, amount = -price, quality = any)
     updateBaseCargo(protoIndex = moneyIndex, amount = price, quality = normal)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = baseIndex, points = 1)
@@ -257,9 +254,8 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
   ## * moduleIndex - the prototype index of the module to install or index of
   ##                 module in the player's ship to remove
   body:
-    let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex, itemQuality = normal)
-    if moneyIndex2 == -1:
+    let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
+    if moneyAmount == 0:
       raise newException(exceptn = NoMoneyError, message = "")
     var hullIndex, modulesAmount, freeTurretIndex: int = 0
     for index, module in playerShip.modules:
@@ -280,7 +276,7 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
     var price: Natural = 0
     if install:
       installModule(moduleIndex = moduleIndex, traderIndex = traderIndex,
-          moneyIndex2 = moneyIndex2, hullIndex = hullIndex,
+          moneyAmount = moneyAmount, hullIndex = hullIndex,
           modulesAmount = modulesAmount, baseIndex = baseIndex,
           freeTurretIndex = freeTurretIndex, price = price)
     else:
@@ -331,8 +327,7 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
           if owner > -1:
             giveOrders(ship = playerShip, memberIndex = owner,
                 givenOrder = rest, checkPriorities = false)
-      updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = price,
-          quality = normal)
+      updateMoney(memberIndex = -1, amount = price, quality = any)
       updateBaseCargo(protoIndex = moneyIndex, amount = price, quality = normal)
       gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
       gainRep(baseIndex = baseIndex, points = 1)

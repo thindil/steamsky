@@ -20,8 +20,7 @@
 
 import std/tables
 import contracts
-import bases, basescargo, basestypes, config, crewinventory, game, items, maps,
-    messages, shipscargo, shipscrew, types
+import bases, basescargo, basestypes, config, game, items, maps, messages, shipscrew, types
 
 proc payForDock*() {.raises: [KeyError, ReputationError, NoFreeSpaceError],
     tags: [], contractual.} =
@@ -30,9 +29,8 @@ proc payForDock*() {.raises: [KeyError, ReputationError, NoFreeSpaceError],
   let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if getBasePopulation(baseIndex = baseIndex) == empty:
     return
-  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex, itemQuality = normal)
-  if moneyIndex2 == -1:
+  let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
+  if moneyAmount == 0:
     gainRep(baseIndex = baseIndex, points = -10)
     addMessage(message = "You don't have " & moneyName &
         " for pay for docking!", mType = otherMessage, color = red)
@@ -47,10 +45,12 @@ proc payForDock*() {.raises: [KeyError, ReputationError, NoFreeSpaceError],
     dockingCost = 1
   let traderIndex: int = findMember(order = talk)
   countPrice(price = dockingCost, traderIndex = traderIndex)
-  if dockingCost > playerShip.cargo[moneyIndex2].amount:
-    dockingCost = playerShip.cargo[moneyIndex].amount
-  updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -(
-      dockingCost), quality = normal)
+  if dockingCost > moneyAmount:
+    dockingCost = moneyAmount
+  try:
+    updateMoney(memberIndex = -1, amount = -(dockingCost), quality = any)
+  except CrewNoSpaceError:
+    discard
   updateBaseCargo(protoIndex = moneyIndex, amount = dockingCost,
       quality = normal)
   addMessage(message = "You pay " & $dockingCost & " " & moneyName &
