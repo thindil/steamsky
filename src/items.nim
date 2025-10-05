@@ -323,7 +323,7 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
               durability = playerShip.cargo[result].durability,
                   ship = playerShip, quality = playerShip.cargo[result].quality)
           updateCargo(ship = playerShip, amount = -1, cargoIndex = result,
-              quality = playerShip.crew[memberIndex].inventory[result].quality)
+              quality = playerShip.cargo[result].quality)
           result = findItem(inventory = playerShip.crew[memberIndex].inventory,
               itemType = itemType, quality = toolQuality, itemQuality = any)
         except CrewNoSpaceError:
