@@ -244,63 +244,51 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of durabilityAsc:
       if x.damage < y.damage:
         return 1
-      else:
-        return -1
+      return -1
     of durabilityDesc:
       if x.damage > y.damage:
         return 1
-      else:
-        return -1
+      return -1
     of qualityAsc:
       if x.quality < y.quality:
         return 1
-      else:
-        return -1
+      return -1
     of qualityDesc:
       if x.quality > y.quality:
         return 1
-      else:
-        return -1
+      return -1
     of typeAsc:
       if x.itemType < y.itemType:
         return 1
-      else:
-        return -1
+      return -1
     of typeDesc:
       if x.itemType > y.itemType:
         return 1
-      else:
-        return -1
+      return -1
     of amountAsc:
       if x.amount < y.amount:
         return 1
-      else:
-        return -1
+      return -1
     of amountDesc:
       if x.amount > y.amount:
         return 1
-      else:
-        return -1
+      return -1
     of weightAsc:
       if x.weight < y.weight:
         return 1
-      else:
-        return -1
+      return -1
     of weightDesc:
       if x.weight > y.weight:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
 
