@@ -20,7 +20,39 @@
 ## etc.
 
 import contracts
-import coreui
+import coreui, table
+
+type ModulesSortOrders = enum
+  nameAsc, nameDesc, damageAsc, damageDesc, infoAsc, infoDesc, none
+
+const defaultModulesSortOrder: ModulesSortOrders = none
+
+var modulesSortOrder: ModulesSortOrders = defaultModulesSortOrder
+
+proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort the modules on the list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if modulesSortOrder == sortAsc:
+    modulesSortOrder = sortDesc
+  else:
+    modulesSortOrder = sortAsc
+
+const
+  headers: array[3, HeaderData[ModulesSortOrders]] = [
+    HeaderData[ModulesSortOrders](label: "Name", sortAsc: nameAsc,
+        sortDesc: nameDesc),
+    HeaderData[ModulesSortOrders](label: "Durability", sortAsc: damageAsc,
+        sortDesc: damageDesc),
+    HeaderData[ModulesSortOrders](label: "Additional info", sortAsc: infoAsc,
+        sortDesc: infoDesc)]
+  ratio: array[3, cfloat] = [300.cfloat, 200, 500]
 
 proc showModulesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -30,4 +62,6 @@ proc showModulesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  # Show the list of crew members
+  addHeader(headers = headers, ratio = ratio, tooltip = "modules",
+      code = sortModules, dialog = dialog)
