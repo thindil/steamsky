@@ -796,7 +796,7 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       for data in crewDataList.mitems:
         data.checked = false
   # Show the list of crew members
-  addHeader(headers = headers, ratio = ratio, tooltip = "items",
+  addHeader(headers = headers, ratio = ratio, tooltip = "crew members",
       code = sortCrew, dialog = dialog)
   var currentRow: Positive = 1
   saveButtonStyle()
