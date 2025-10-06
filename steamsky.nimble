@@ -2,7 +2,7 @@ import os
 
 # Package
 
-version = "11.6"
+version = "11.7"
 author = "Bartek thindil Jasicki"
 description = "A roguelike game with steampunk setting"
 license = "GPL-3"
