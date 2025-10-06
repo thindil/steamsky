@@ -20,7 +20,7 @@
 
 import std/[algorithm, sequtils, tables]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
-import ../[config, crewinventory, game, items, types]
+import ../[config, crewinventory, game, items, shipscrew2, types]
 import coreui, dialogs, errordialog, setui, shipsuicrew, table, themes
 
 type
@@ -241,8 +241,28 @@ proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       inventoryDataList.apply(op = proc (x: var CrewData) = x.checked = false)
     contextualItemLabel(label = "Move items to the ship's cargo",
         align = centered):
+      for item in inventoryDataList:
+        if item.checked:
+          try:
+            moveItem(itemIndex = item.index, amount = playerShip.crew[
+                crewIndex].inventory[item.index].amount,
+                memberIndex = crewIndex)
+          except NoFreeCargoError:
+            dialog = setMessage(message = getCurrentExceptionMsg(),
+                title = "No free space in cargo")
+            break
+          except CrewNoSpaceError:
+            dialog = setError(message = "Can't update the member's inventory.")
+            break
+          except CrewOrderError:
+            dialog = setMessage(message = getCurrentExceptionMsg(),
+                title = "Can't give an order.")
+            break
+          except:
+            dialog = setError(message = "Can't move item to the ship cargo.")
+            break
       showItemsMenu = false
-      inventoryDataList.apply(op = proc (x: var CrewData) = x.checked = false)
+      setInventoryInfo(dialog = dialog)
     contextualItemLabel(label = "Close", align = centered):
       showItemsMenu = false
 
