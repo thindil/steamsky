@@ -434,7 +434,7 @@ proc moveShipOnMap(dialog: var GameDialog): Natural {.raises: [],
         return
     if playerShip.destinationX == playerShip.skyX and
         playerShip.destinationY == playerShip.skyY:
-      addMessage("You reached your travel destination.", mType = orderMessage)
+      addMessage(message = "You reached your travel destination.", mType = orderMessage)
       playerShip.destinationX = 0
       playerShip.destinationY = 0
       if gameSettings.autoFinish:
@@ -648,7 +648,7 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
     popup(pType = staticPopup, title = "Set destination", x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
-      setLayoutRowDynamic(30, 1)
+      setLayoutRowDynamic(height = 30, cols = 1)
       labelButton(title = "Set destination"):
         setDestination(dialog = dialog)
       if playerShip.speed != docked:
@@ -893,7 +893,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       fontSize = gameSettings.interfaceFontSize + 10)
   layoutDynamic(height = windowHeight - mapHeight - 75, cols = 2):
     # Draw last messages
-    row(0.75):
+    row(width = 0.75):
       showLastMessages(theme = theme, dialog = dialog, withButtons = false, height = 0)
-    row(0.25):
+    row(width = 0.25):
       showButtons(dialog = dialog)
