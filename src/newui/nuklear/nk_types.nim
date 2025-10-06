@@ -880,12 +880,16 @@ type
     overlay*: nk_command_buffer
     build*: cint
     pool*: nk_pool
+  nk_font_glyph* {.importc: "struct nk_font_glyph", completeStruct.} = object
+    codepoint*: nk_rune
+    xadvance, x0, y0, x1, y1, w, h, u0, v0, u1, v1: cfloat
   nk_font* {.importc: "struct nk_font", nodecl.} = object
     ## Internal Nuklear type
     handle*, texture*: PNkUserFont
     next*: ptr nk_font
     scale*: cfloat
     config*: ptr nk_font_config
+    glyphs*: ptr nk_font_glyph
   nk_font_atlas* {.importc: "struct nk_font_atlas", nodecl.} = object
     ## Internal Nuklear type
   nk_baked_font* {.importc: "struct nk_baked_font", completeStruct.} = object
@@ -893,10 +897,10 @@ type
     height*: cfloat
     glyph_offset*, glyph_count*: nk_rune
     ranges*: pointer
-  nk_font_config* {.importc: "struct nk_font_config", nodecl.} = object
+  nk_font_config* {.importc: "struct nk_font_config".} = object
     ## Internal Nuklear type
     `range`*, ttf_blob: pointer
-    next*: ptr nk_font_config
+    next*, n*, p*: ptr nk_font_config
     ttf_size*: nk_size
     ttf_data_owned_by_atlas*, merge_mode*, pixel_snap*, oversample_v*,
       oversample_h*: uint8
@@ -905,6 +909,7 @@ type
     coord_type*: FontCoordType
     spacing*: nk_vec2
     font*: ptr nk_baked_font
+    fallback_glyph*: nk_rune
   nk_text* {.importc: "struct nk_text", nodecl.} = object
     ## Internal Nuklear type
     padding*: nk_vec2
