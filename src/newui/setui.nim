@@ -864,4 +864,6 @@ proc setShipInfo*() {.raises: [], tags: [], contractual.} =
     for skill in skillsList.values:
       crewSkillsList.add(y = skill.name)
   refreshCrewList()
-
+  modulesIndexes = @[]
+  for index in playerShip.modules.low..playerShip.modules.high:
+    modulesIndexes.add(y = index)
