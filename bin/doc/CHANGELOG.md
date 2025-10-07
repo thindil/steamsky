@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Training skills in schools by the player's ship's traders
 - Moving an item from the player's ship's crew members' inventory to the ship's
   cargo unequip another item in the inventory
+- Updating the game's header after installing or removing modules in a shipyard
 
 ## [11.0.5] - 2025-09-14
 
