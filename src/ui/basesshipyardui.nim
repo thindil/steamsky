@@ -18,7 +18,7 @@
 import std/[algorithm, strutils, tables]
 import ../[bases, basesship2, config, crewinventory, game, maps, shipscrew,
     shipmodules, tk, types]
-import coreui, dialogs, errordialog, mapsui, table, utilsui2
+import coreui, dialogs, errordialog, mapsui, table, updateheader, utilsui2
 
 var
   installTable, removeTable: TableWidget
@@ -1176,6 +1176,7 @@ proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
       upgradeShip(install = false, moduleIndex = moduleIndex - 1)
       tclEval(script = "SortShipyardModules remove 0 {} 10")
     updateMessages()
+    updateHeader()
     return showShipyardCommand(clientData = clientData, interp = interp,
         argc = 2, argv = @["ShowShipyard", "0"].allocCStringArray)
   except NoMoneyError:
