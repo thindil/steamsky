@@ -132,13 +132,13 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
         setLayoutRowDynamic(height = 25, cols = 1)
         if getBasePopulation(baseIndex = baseIndex) > empty:
           case skyBases[baseIndex].reputation.level
-          of -100 .. -75:
+          of -100.. -75:
             colorLabel(str = "You are hated here", color = theme.mapColors[mapRedColor])
-          of -74 .. -50:
+          of -74.. -50:
             colorLabel(str = "You are outlawed here", color = theme.mapColors[mapRedColor])
-          of -49 .. -25:
+          of -49.. -25:
             colorLabel(str = "You are disliked here", color = theme.mapColors[mapRedColor])
-          of -24 .. -1:
+          of -24.. -1:
             colorLabel(str = "They are unfriendly to you",
                 color = theme.mapColors[mapRedColor])
           of 0:
@@ -396,7 +396,7 @@ proc moveShipOnMap(dialog: var GameDialog): Natural {.raises: [],
         break
     if gameSettings.autoMoveStop != never and skyMap[playerShip.skyX][
         playerShip.skyY].eventIndex > -1:
-      let eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+      let eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
       case gameSettings.autoMoveStop
       of any:
         if eventsList[eventIndex].eType in {enemyShip, trader, friendlyShip, enemyPatrol}:
