@@ -883,13 +883,15 @@ type
   nk_font_glyph* {.importc: "struct nk_font_glyph", completeStruct.} = object
     codepoint*: nk_rune
     xadvance, x0, y0, x1, y1, w, h, u0, v0, u1, v1: cfloat
-  nk_font* {.importc: "struct nk_font", nodecl.} = object
+  nk_font* {.importc: "struct nk_font", completeStruct.} = object
     ## Internal Nuklear type
-    handle*, texture*: PNkUserFont
+    handle*: PNkUserFont
     next*: ptr nk_font
     scale*: cfloat
     config*: ptr nk_font_config
-    glyphs*: ptr nk_font_glyph
+    glyphs*, fallback*: ptr nk_font_glyph
+    fallback_codepoint*: nk_rune
+    texture*: nk_handle
   nk_font_atlas* {.importc: "struct nk_font_atlas", nodecl.} = object
     ## Internal Nuklear type
   nk_baked_font* {.importc: "struct nk_baked_font", completeStruct.} = object
