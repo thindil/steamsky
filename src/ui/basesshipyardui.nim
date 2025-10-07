@@ -22,7 +22,7 @@ import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[bases, basesship2, config, game, items, maps, shipscrew, shipmodules,
     tk, types]
-import coreui, dialogs, errordialog, mapsui, table, utilsui2
+import coreui, dialogs, errordialog, mapsui, table, updateheader, utilsui2
 
 {.push ruleOff:"varDeclared".}
 var
@@ -1294,6 +1294,7 @@ proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       upgradeShip(install = false, moduleIndex = moduleIndex - 1)
       tclEval(script = "SortShipyardModules remove 0 {} 10")
+    updateHeader()
     updateMessages()
     return showShipyardCommand(clientData = clientData, interp = interp,
         argc = 2, argv = @["ShowShipyard", "0"].allocCStringArray)
