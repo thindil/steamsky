@@ -19,8 +19,9 @@
 ## members, like listing them, showing information, changing their settings,
 ## etc.
 
-import contracts
-import coreui, table
+import contracts, nuklear/nuklear_sdl_renderer
+import ../config
+import coreui, errordialog, setui, table, themes
 
 type ModulesSortOrders = enum
   nameAsc, nameDesc, damageAsc, damageDesc, infoAsc, infoDesc, none
@@ -62,6 +63,21 @@ proc showModulesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  # Show the list of crew members
+  # Show the list of modules
   addHeader(headers = headers, ratio = ratio, tooltip = "modules",
       code = sortModules, dialog = dialog)
+  var currentRow: Positive = 1
+  saveButtonStyle()
+  setButtonStyle(field = borderColor, a = 0)
+  try:
+    setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+  except:
+    dialog = setError(message = "Can't set table color")
+    return
+  setButtonStyle(field = rounding, value = 0)
+  setButtonStyle(field = border, value = 0)
+  let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+  var row: Positive = 1
+  restoreButtonStyle()
+  addPagination(page = currentPage, row = row)
