@@ -170,7 +170,10 @@ proc refreshCargoCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get the item index.")
     amountBox: string = frameName & ".updateamount"
+    qualityBox: string = frameName & ".updatequality"
   tclEval(script = amountBox & " set " & $playerShip.cargo[itemIndex].amount)
+  tclEval(script = qualityBox & " current " & $(playerShip.cargo[
+      itemIndex].quality.ord))
   return tclOk
 
 proc refreshEventsCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -553,6 +556,7 @@ proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
     frameName: string = ".debugdialog.main.cargo"
     itemEntry: string = frameName & ".add"
     itemBox: string = frameName & ".amount"
+    itemCombo: string = frameName & ".addquality"
   let itemName: string = tclEval2(script = itemEntry & " get")
   var itemIndex: int = -1
   for index, item in itemsList:
@@ -563,7 +567,8 @@ proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   try:
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = tclEval2(
-        script = itemBox & " get").parseInt, quality = normal)
+        script = itemBox & " get").parseInt, quality = tclEval2(
+        script = itemCombo & " current").parseInt.ObjectQuality)
   except:
     return showError(message = "Can't update the cargo.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
@@ -586,12 +591,15 @@ proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
     frameName: string = ".debugdialog.main.cargo"
     itemCombo: string = frameName & ".update"
     itemBox: string = frameName & ".updateamount"
+    itemCombo2: string = frameName & ".updatequality"
   let
     itemIndex: int = try:
         tclEval2(script = itemCombo & " current").parseInt
       except:
         return showError(message = "Can't geet item index.")
   try:
+    playerShip.cargo[itemIndex].quality = tclEval2(script = itemCombo2 &
+        " current").parseInt.ObjectQuality
     updateCargo(ship = playerShip, amount = tclEval2(script = itemBox &
         " get").parseInt, cargoIndex = itemIndex, quality = playerShip.cargo[
             itemIndex].quality)
