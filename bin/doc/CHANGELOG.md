@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Updating the game's header after installing or removing modules in a shipyard
+
 ## [11.6] - 2025-10-05
 
 ### Added
