@@ -126,7 +126,16 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
         module.durability / module.maxDurability).float, id: index,
         info: getModuleInfo(moduleIndex = index)))
 
-  proc sortModules(x, y: LocalModuleData): int {.raises: [], tags: [], contractual.} =
+  proc sortModules(x, y: LocalModuleData): int {.raises: [], tags: [],
+      contractual.} =
+    ## Compare two modules and return which should go first, based on the sort
+    ## order of the modules
+    ##
+    ## * x - the first member to compare
+    ## * y - the second member to compare
+    ##
+    ## Returns 1 if the first module should go first, -1 if the second module
+    ## should go first.
     case modulesSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -210,6 +219,13 @@ proc showModulesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       currentRow.inc
       continue
     addButton(label = playerShip.modules[index].name,
+        tooltip = "Show the module's info", data = index, code = setModuleInfo,
+        dialog = dialog)
+    addProgressBar(tooltip = "Show the module's info",
+        value = playerShip.modules[index].durability,
+        maxValue = playerShip.modules[index].maxDurability, data = index,
+        code = setModuleInfo, dialog = dialog)
+    addButton(label = getModuleInfo(moduleIndex = index),
         tooltip = "Show the module's info", data = index, code = setModuleInfo,
         dialog = dialog)
     row.inc
