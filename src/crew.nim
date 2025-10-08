@@ -377,35 +377,30 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
   ##
   ## Returns amount of bonus from the used consumable or 0 if nothing was
   ## consumed
-  var
-    itemIndex: int = findItem(inventory = playerShip.cargo,
-        itemType = itemType, itemQuality = any)
-    consumeValue: Natural = 0
+  var itemIndex: int = findItem(inventory = playerShip.cargo,
+      itemType = itemType, itemQuality = any)
   if itemIndex > -1:
-    consumeValue = itemsList[playerShip.cargo[itemIndex].protoIndex].value[1]
-    if itemsList[playerShip.cargo[itemIndex].protoIndex].value.len > 1 and
-        itemsList[playerShip.cargo[itemIndex].protoIndex].value[2] != 0:
+    let item: InventoryData = playerShip.cargo[itemIndex]
+    result = itemsList[item.protoIndex].value[1]
+    if itemsList[item.protoIndex].value.len > 1 and itemsList[
+        item.protoIndex].value[2] != 0:
       updateMorale(ship = playerShip, memberIndex = memberIndex,
-          value = itemsList[playerShip.cargo[itemIndex].protoIndex].value[2])
-    updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-        itemIndex].protoIndex, amount = -1, quality = playerShip.cargo[
-        itemIndex].quality)
-    return consumeValue
+          value = itemsList[item.protoIndex].value[2])
+    updateCargo(ship = playerShip, protoIndex = item.protoIndex, amount = -1,
+        quality = item.quality)
+    return
   itemIndex = findItem(inventory = playerShip.crew[memberIndex].inventory,
       itemType = itemType, itemQuality = any)
   if itemIndex > -1:
-    consumeValue = itemsList[playerShip.crew[memberIndex].inventory[
-        itemIndex].protoIndex].value[1]
-    if itemsList[playerShip.crew[memberIndex].inventory[
-        itemIndex].protoIndex].value.len > 1 and itemsList[playerShip.crew[
-        memberIndex].inventory[itemIndex].protoIndex].value[2] != 0:
+    let item: InventoryData = playerShip.crew[memberIndex].inventory[itemIndex]
+    result = itemsList[item.protoIndex].value[1]
+    if itemsList[item.protoIndex].value.len > 1 and itemsList[
+        item.protoIndex].value[2] != 0:
       updateMorale(ship = playerShip, memberIndex = memberIndex,
-          value = itemsList[playerShip.crew[memberIndex].inventory[
-              itemIndex].protoIndex].value[2])
+          value = itemsList[item.protoIndex].value[2])
     updateInventory(memberIndex = memberIndex, amount = -1,
-        inventoryIndex = itemIndex, ship = playerShip, quality = playerShip.crew[memberIndex].inventory[
-              itemIndex].quality)
-    return consumeValue
+        inventoryIndex = itemIndex, ship = playerShip, quality = item.quality)
+    return
   return 0
 
 proc memberSendRest(member: var MemberData; memberIndex: int) {.raises: [
