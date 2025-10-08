@@ -111,49 +111,64 @@ type
   SDL_Mouse_Buttons = enum
     SDL_BUTTON_LEFT = 1, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT
 
-proc SDL_SetHint(name, value: cstring) {.importc, nodecl.}
-proc SDL_Init(flags: cint): cint {.importc, nodecl.}
+proc SDL_SetHint(name, value: cstring) {.importc, nodecl, raises: [], tags: [], contractual.}
+proc SDL_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
 proc SDL_CreateWindow(title: cstring; x, y, w, h: cint;
-    flags: cuint): WindowPtr {.importc, nodecl.}
-proc SDL_Log(fmt: cstring) {.importc, varargs, nodecl.}
-proc SDL_GetError(): cstring {.importc, nodecl.}
+    flags: cuint): WindowPtr {.importc, nodecl, raises: [], tags: [], contractual.}
+proc SDL_Log(fmt: cstring) {.importc, varargs, nodecl, raises: [], tags: [], contractual.}
+proc SDL_GetError(): cstring {.importc, nodecl, raises: [], tags: [], contractual.}
 proc SDL_CreateRenderer(window: WindowPtr; index,
-    flags: cint): RendererPtr {.importc, nodecl.}
-proc SDL_GetRendererOutputSize(renderer: RendererPtr; w, h: var cint) {.importc, nodecl.}
-proc SDL_GetWindowSize(window: WindowPtr; w, h: var cint) {.importc, nodecl.}
+    flags: cint): RendererPtr {.importc, nodecl, raises: [], tags: [], contractual.}
+proc SDL_GetRendererOutputSize(renderer: RendererPtr; w, h: var cint) {.importc,
+    nodecl, raises: [], tags: [], contractual.}
+proc SDL_GetWindowSize(window: WindowPtr; w, h: var cint) {.importc, nodecl,
+    raises: [], tags: [], contractual.}
 proc SDL_RenderSetScale(renderer: RendererPtr; scaleX,
-    scaleY: cfloat) {.importc, nodecl.}
-proc SDL_PollEvent(event: var SDL_Event): cint {.importc, nodecl.}
+    scaleY: cfloat) {.importc, nodecl, raises: [], tags: [], contractual.}
+proc SDL_PollEvent(event: var SDL_Event): cint {.importc, nodecl, raises: [],
+    tags: [], contractual.}
 proc SDL_SetRenderDrawColor(renderer: RendererPtr; r, g, b,
-    a: uint8): cint {.importc, nodecl.}
-proc SDL_RenderClear(renderer: RendererPtr): cint {.importc, nodecl.}
-proc SDL_RenderPresent(renderer: RendererPtr) {.importc, nodecl.}
-proc SDL_DestroyRenderer(renderer: RendererPtr) {.importc, nodecl.}
-proc SDL_DestroyWindow(window: WindowPtr) {.importc, nodecl.}
-proc SDL_Quit() {.importc, nodecl.}
-proc SDL_SetWindowIcon(window: WindowPtr; icon: SurfacePtr) {.importc, nodecl.}
+    a: uint8): cint {.importc, nodecl, raises: [], tags: [], contractual.}
+proc SDL_RenderClear(renderer: RendererPtr): cint {.importc, nodecl, raises: [],
+    tags: [], contractual.}
+proc SDL_RenderPresent(renderer: RendererPtr) {.importc, nodecl, raises: [],
+    tags: [], contractual.}
+proc SDL_DestroyRenderer(renderer: RendererPtr) {.importc, nodecl, raises: [],
+    tags: [], contractual.}
+proc SDL_DestroyWindow(window: WindowPtr) {.importc, nodecl, raises: [], tags: [], contractual.}
+proc SDL_Quit() {.importc, nodecl, raises: [], tags: [], contractual.}
+proc SDL_SetWindowIcon(window: WindowPtr; icon: SurfacePtr) {.importc, nodecl,
+    raises: [], tags: [], contractual.}
 proc SDL_CreateTextureFromSurface(renderer: RendererPtr;
-    surface: SurfacePtr): TexturePtr {.importc, nodecl.}
-proc SDL_FreeSurface(surface: SurfacePtr) {.importc, nodecl.}
-proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl.}
-proc SDL_SetWindowSize(window: WindowPtr; w, h: cint) {.importc, nodecl.}
-proc SDL_SetWindowPosition(window: WindowPtr; x, y: cint) {.importc, nodecl.}
-proc SDL_SetWindowResizable(window: WindowPtr; resizable: cint) {.importc, nodecl.}
+    surface: SurfacePtr): TexturePtr {.importc, nodecl, raises: [], tags: [], contractual.}
+proc SDL_FreeSurface(surface: SurfacePtr) {.importc, nodecl, raises: [], tags: [], contractual.}
+proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl, raises: [],
+    tags: [], contractual.}
+proc SDL_SetWindowSize(window: WindowPtr; w, h: cint) {.importc, nodecl,
+    raises: [], tags: [], contractual.}
+proc SDL_SetWindowPosition(window: WindowPtr; x, y: cint) {.importc, nodecl,
+    raises: [], tags: [], contractual.}
+proc SDL_SetWindowResizable(window: WindowPtr; resizable: cint) {.importc,
+    nodecl, raises: [], tags: [], contractual.}
 proc SDL_GetKeyboardState(numkeys: ptr int = nil): ptr array[512,
-    uint8] {.importc, nodecl.}
-proc IMG_Init(flags: cint): cint {.importc, nodecl.}
-proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl.}
-proc IMG_LoadSizedSVG_RW(src: RWPtr; width, height: cint): SurfacePtr {.importc, nodecl.}
-proc IMG_Quit() {.importc, nodecl.}
+    uint8] {.importc, nodecl, raises: [], tags: [], contractual.}
+proc IMG_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
+proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl, raises: [], tags: [], contractual.}
+proc IMG_LoadSizedSVG_RW(src: RWPtr; width, height: cint): SurfacePtr {.importc,
+    nodecl, raises: [], tags: [], contractual.}
+proc IMG_Quit() {.importc, nodecl, raises: [], tags: [], contractual.}
 
 # Nuklear SDL2 backend bindings
 
-proc nk_sdl_init(win: WindowPtr; renderer: RendererPtr): PContext {.importc, nodecl.}
-proc nk_sdl_font_stash_begin(atlas: ptr ptr nk_font_atlas) {.importc, nodecl.}
-proc nk_sdl_font_stash_end() {.importc, nodecl.}
-proc nk_sdl_handle_event(evt: var SDL_Event): cint {.importc, nodecl.}
-proc nk_sdl_render(aa: AntiAliasing) {.importc, nodecl.}
-proc nk_sdl_shutdown() {.importc, nodecl.}
+proc nk_sdl_init(win: WindowPtr; renderer: RendererPtr): PContext {.importc,
+    nodecl, raises: [], tags: [], contractual.}
+proc nk_sdl_font_stash_begin(atlas: ptr ptr nk_font_atlas) {.importc, nodecl,
+    raises: [], tags: [], contractual.}
+proc nk_sdl_font_stash_end() {.importc, nodecl, raises: [], tags: [], contractual.}
+proc nk_sdl_handle_event(evt: var SDL_Event): cint {.importc, nodecl, raises: [
+    ], tags: [], contractual.}
+proc nk_sdl_render(aa: AntiAliasing) {.importc, nodecl, raises: [], tags: [], contractual.}
+proc nk_sdl_shutdown() {.importc, nodecl, raises: [], tags: [], contractual.}
 
 # High level bindings
 
@@ -169,7 +184,8 @@ var
   fontScale: cfloat     ## The scale used to resize a font
 
 proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
-    iconPath: string = ""): PContext {.discardable.} =
+    iconPath: string = ""): PContext {.discardable, raises: [], tags: [],
+        contractual.} =
   ## Initialize Nuklear library, create the main program's window with the
   ## selected parameters.
   ##
@@ -202,7 +218,7 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   setContext(nk_sdl_init(win, renderer))
   return getContext()
 
-proc nuklearInput*(): UserEvents =
+proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
   ## Handle the user input
   ##
   ## Returns true if user requested to close the window, otherwise false
@@ -294,7 +310,7 @@ proc nuklearInput*(): UserEvents =
       case mEvnt.button:
       of SDL_BUTTON_LEFT.uint8:
         if mEvnt.clicks > 1:
-            nk_input_button(ctx, double, x, y, down)
+          nk_input_button(ctx, double, x, y, down)
         nk_input_button(ctx, left, x, y, down)
       of SDL_BUTTON_MIDDLE.uint8:
         nk_input_button(ctx, middle, x, y, down)
@@ -307,7 +323,7 @@ proc nuklearInput*(): UserEvents =
       result = anyEvent
   nk_input_end(ctx)
 
-proc nuklearDraw*() =
+proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
   ## Draw the main window content
   discard SDL_SetRenderDrawColor(renderer, (0.10 * 255).uint8, (0.18 *
       255).uint8, (0.24 * 255).uint8, 255)
@@ -315,7 +331,7 @@ proc nuklearDraw*() =
   nk_sdl_render(antiAliasingOn)
   SDL_RenderPresent(renderer)
 
-proc nuklearClose*() =
+proc nuklearClose*() {.raises: [], tags: [], contractual.} =
   ## Release all resources related to Xlib and Nuklear
   nk_sdl_shutdown()
   SDL_DestroyRenderer(renderer)
@@ -323,7 +339,8 @@ proc nuklearClose*() =
   IMG_Quit()
   SDL_Quit()
 
-proc nuklearLoadSVGImage*(filePath: string; width, height: int): PImage =
+proc nuklearLoadSVGImage*(filePath: string; width,
+    height: int): PImage {.raises: [NuklearException], tags: [], contractual.} =
   ## Load the selected SVG image from a file
   ##
   ## * filePath - the full path to the file from which the image will be loaded
@@ -343,7 +360,8 @@ proc nuklearLoadSVGImage*(filePath: string; width, height: int): PImage =
   SDL_FreeSurface(surface = surface)
   return image
 
-proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = []): ptr nk_font =
+proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
+    ]): ptr nk_font {.raises: [], tags: [], contractual.} =
   ## Load a font from file with the selected size
   ##
   ## * font         - the font to load. Its path and size
@@ -362,7 +380,7 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = []): pt
   nk_sdl_font_stash_end()
 
 proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil;
-    fontSize: int = 14) =
+    fontSize: int = 14) {.raises: [], tags: [], contractual.} =
   ## Set the default font for an application
   ##
   ## * defaultFont - the pointer to the nk_font which will be used as default
@@ -381,14 +399,15 @@ proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil;
   nk_sdl_font_stash_end()
   nk_style_set_font(getContext(), font.handle.unsafeAddr)
 
-proc nuklearResizeWin*(width, height: int) =
+proc nuklearResizeWin*(width, height: int) {.raises: [], tags: [],
+    contractual.} =
   ## Resize the main window of the application
   ##
   ## * width  - the new width of the main window
   ## * height - the new height of the main window
   SDL_SetWindowSize(window = win, w = width.cint, h = height.cint)
 
-proc nuklearSetWindowPos*(x, y: int) =
+proc nuklearSetWindowPos*(x, y: int) {.raises: [], tags: [], contractual.} =
   ## Set the window position on the screen, related to the upper left corner
   ## of the screen
   ##
@@ -398,13 +417,15 @@ proc nuklearSetWindowPos*(x, y: int) =
   ##       windowCentered
   SDL_SetWindowPosition(window = win, x = x.cint, y = y.cint)
 
-proc nuklearSetWindowResizable*(resizable: bool = true) =
+proc nuklearSetWindowResizable*(resizable: bool = true) {.raises: [], tags: [],
+    contractual.} =
   ## Set the main window of application resizable, or not
   ##
   ## * resizable - if true, the window will be resizable, otherwise not
   SDL_SetWindowResizable(window = win, resizable = resizable.ord.cint)
 
-proc nuklearGetWindowSize*(): tuple[w: float; h: float] =
+proc nuklearGetWindowSize*(): tuple[w: float; h: float] {.raises: [], tags: [],
+    contractual.} =
   ## Get the current size of the main window of the application
   ##
   ## Returns a tuple with width and height of the window.
