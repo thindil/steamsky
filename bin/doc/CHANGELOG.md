@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- The quality of food and drinks affects their effectiveness and the impact on
+  morale of the player's ship's crew members when consumed
+
 ### Fixed
 - Updating the game's header after installing or removing modules in a shipyard
 
