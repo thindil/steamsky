@@ -169,6 +169,8 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
   for module in localModules:
     modulesIndexes.add(y = module.id)
 
+var moduleIndex: Natural = 0
+
 proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Set the dialog with information about the selected module
@@ -178,7 +180,7 @@ proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  moduleIndex = data
 
 const
   headers: array[3, HeaderData[ModulesSortOrders]] = [
