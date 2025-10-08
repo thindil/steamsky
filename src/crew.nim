@@ -20,7 +20,7 @@
 ## avoid circular dependencies.
 
 import std/[tables]
-import contracts
+import contracts, nimalyzer
 import config, crewinventory, game, items, maps, messages, utils,
     shipscargo, shipscrew, shipscrew2, types
 
@@ -382,10 +382,14 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
   if itemIndex > -1:
     let item: InventoryData = playerShip.cargo[itemIndex]
     result = itemsList[item.protoIndex].value[1]
+    {.ruleOff: "assignments".}
+    result = result + countItemBonus(value = result, quality = item.quality)
+    {.ruleOn: "assignments".}
     if itemsList[item.protoIndex].value.len > 1 and itemsList[
         item.protoIndex].value[2] != 0:
-      updateMorale(ship = playerShip, memberIndex = memberIndex,
-          value = itemsList[item.protoIndex].value[2])
+      updateMorale(ship = playerShip, memberIndex = memberIndex, value = (
+          itemsList[item.protoIndex].value[2] + countItemBonus(
+          value = itemsList[item.protoIndex].value[2], quality = item.quality)))
     updateCargo(ship = playerShip, protoIndex = item.protoIndex, amount = -1,
         quality = item.quality)
     return
@@ -394,10 +398,14 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
   if itemIndex > -1:
     let item: InventoryData = playerShip.crew[memberIndex].inventory[itemIndex]
     result = itemsList[item.protoIndex].value[1]
+    {.ruleOff: "assignments".}
+    result = result + countItemBonus(value = result, quality = item.quality)
+    {.ruleOn: "assignments".}
     if itemsList[item.protoIndex].value.len > 1 and itemsList[
         item.protoIndex].value[2] != 0:
-      updateMorale(ship = playerShip, memberIndex = memberIndex,
-          value = itemsList[item.protoIndex].value[2])
+      updateMorale(ship = playerShip, memberIndex = memberIndex, value = (
+          itemsList[item.protoIndex].value[2] + countItemBonus(
+          value = itemsList[item.protoIndex].value[2], quality = item.quality)))
     updateInventory(memberIndex = memberIndex, amount = -1,
         inventoryIndex = itemIndex, ship = playerShip, quality = item.quality)
     return
