@@ -34,7 +34,7 @@ type LocalItemData = object
   quality: ObjectQuality
   id: Natural
 
-proc sortItems(x, y: LocalItemData): int =
+proc sortItems(x, y: LocalItemData): int {.raises: [], tags: [], contractual.} =
   ## Check how to sort the selected items on the list
   ##
   ## * x - the first item to sort
