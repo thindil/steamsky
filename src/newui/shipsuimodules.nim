@@ -22,7 +22,7 @@
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, crafts, game, types]
-import coreui, errordialog, setui, table, themes
+import coreui, dialogs, errordialog, setui, table, themes
 
 type ModulesSortOrders = enum
   nameAsc, nameDesc, damageAsc, damageDesc, infoAsc, infoDesc, none
@@ -181,6 +181,30 @@ proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   moduleIndex = data
+  dialog = moduleInfoDialog
+  setDialog(x = windowWidth / 10, y = windowHeight / 10)
+
+proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the dialog with information about the selected module
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  const
+    width: float = 700
+    height: float = 500
+
+  let
+    module: ModuleData = playerShip.modules[moduleIndex]
+    windowName: string = module.name
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 1)
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = windowName)
 
 const
   headers: array[3, HeaderData[ModulesSortOrders]] = [
