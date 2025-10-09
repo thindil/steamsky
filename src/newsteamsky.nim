@@ -23,8 +23,8 @@ import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
 import newui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
     basesui, combatui, coreui, errordialog, goalsui, header, mainmenu, mapsui,
-    missionsui, shipsui, shipsuicrew, shipsuicrewinventory, themes, tradesui,
-    waitmenu]
+    missionsui, shipsui, shipsuicrew, shipsuicrewinventory, shipsuimodules,
+    themes, tradesui, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -142,16 +142,18 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         healWounded: showWounded, repairShip: showRepairs,
         buyRecipes: showRecipes, shipyard: showShipyard,
         baseMissions: showMissions, loot: showLoot, shipInfo: showShipInfo]
-    showDialog: array[GameDialog.errorDialog..GameDialog.inventoryDialog,
-        proc(dialog: var GameDialog){.nimcall, raises: [].}] = [
+    showDialog: array[GameDialog.errorDialog..GameDialog.moduleInfoDialog, proc(
+        dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
         newGoalDialog: showGoals, boardingDialog: showPartyMenu,
         defendingDialog: showPartyMenu, recruitDialog: showRecruitInfo,
-        negotiateDialog: showNegotiate, moduleDialog: showModuleInfo,
+        negotiateDialog: showNegotiate,
+        moduleDialog: basesshipyardui.showModuleInfo,
         missionDialog: showMissionInfo, acceptMissionDialog: showAcceptMission,
         renameDialog: showRenameDialog, giveOrderDialog: showGiveOrder,
         memberDialog: showMemberInfo, renameMemberDialog: showRenameDialog,
-        inventoryDialog: showMemberInventory]
+        inventoryDialog: showMemberInventory,
+        moduleInfoDialog: shipsuimodules.showModuleInfo]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
@@ -164,7 +166,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         resetTooltips()
 
       # Show dialogs if needed
-      if dialog in GameDialog.errorDialog..GameDialog.inventoryDialog:
+      if dialog in GameDialog.errorDialog..GameDialog.moduleInfoDialog:
         showDialog[dialog](dialog = dialog)
       elif dialog == gameMenuDialog:
         showGameMenu(dialog = dialog, state = state)
