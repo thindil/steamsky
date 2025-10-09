@@ -193,29 +193,34 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   ## * windowHeight - the default main window height
   ## * name         - the title of the main window
   ## * iconPath     - the full path to the window's icon. Default value is empty.
-  SDL_SetHint("SDL_HINT_VIDEO_HIGHDPI_DISABLED", "0")
-  discard SDL_Init(SDL_INIT_VIDEO)
-  discard IMG_Init(IMG_INIT_PNG)
-  win = SDL_CreateWindow(name.cstring, SDL_WINDOWPOS_CENTERED,
-      SDL_WINDOWPOS_CENTERED, windowWidth.cint, windowHeight.cint,
-          SDL_WINDOW_SHOWN or SDL_WINDOW_ALLOW_HIGHDPI)
+  SDL_SetHint(name = "SDL_HINT_VIDEO_HIGHDPI_DISABLED", value = "0")
+  discard SDL_Init(flags = SDL_INIT_VIDEO)
+  discard IMG_Init(flags = IMG_INIT_PNG)
+  win = SDL_CreateWindow(title = name.cstring, x = SDL_WINDOWPOS_CENTERED,
+      y = SDL_WINDOWPOS_CENTERED, w = windowWidth.cint, h = windowHeight.cint,
+          flags = SDL_WINDOW_SHOWN or SDL_WINDOW_ALLOW_HIGHDPI)
   if win == nil:
+    {.ruleOff: "namedparams".}
     SDL_Log("Error SDL_CreateWindow %s", SDL_GetError())
+    {.ruleOn: "namedparams".}
     quit QuitFailure
-  renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC)
+  renderer = SDL_CreateRenderer(window = win, index = -1,
+      flags = SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC)
   if renderer == nil:
+    {.ruleOff: "namedparams".}
     SDL_Log("Error SDL_CreateRenderer %s", SDL_GetError())
+    {.ruleOn: "namedparams".}
     quit QuitFailure
   var renderW, renderH, windowW, windowH: cint
-  SDL_GetRendererOutputSize(renderer, renderW, renderH)
-  SDL_GetWindowSize(win, windowW, windowH)
+  SDL_GetRendererOutputSize(renderer = renderer, w = renderW, h = renderH)
+  SDL_GetWindowSize(window = win, w = windowW, h = windowH)
   if iconPath.len > 0:
-    SDL_SetWindowIcon(win, IMG_Load(file = iconPath.cstring))
+    SDL_SetWindowIcon(window = win, icon = IMG_Load(file = iconPath.cstring))
   let scaleX: cfloat = renderW.cfloat / windowW.cfloat
   let scaleY: cfloat = renderH.cfloat / windowH.cfloat
-  SDL_RenderSetScale(renderer, scaleX, scaleY)
+  SDL_RenderSetScale(renderer = renderer, scaleX = scaleX, scaleY = scaleY)
   fontScale = scaleY
-  setContext(nk_sdl_init(win, renderer))
+  setContext(context = nk_sdl_init(win = win, renderer = renderer))
   return getContext()
 
 proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
