@@ -243,11 +243,16 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
           toolIndex = findItem(inventory = playerShip.cargo,
               itemType = faction.healingTools, itemQuality = any)
           if toolIndex > -1:
-            if playerShip.cargo[toolIndex].amount < healAmount.abs:
-              healAmount = playerShip.cargo[toolIndex].amount
+            let item: InventoryData = playerShip.cargo[toolIndex]
+            var needAmount: Natural = healAmount.abs - countItemBonus(
+                value = healAmount.abs, quality = item.quality)
+            if item.amount < needAmount:
+              healAmount = item.amount + countItemBonus(value = item.amount,
+                  quality = item.quality)
+              needAmount = item.amount
             else:
-              healAmount = healAmount.abs
-            updateCargo(ship = playerShip, amount = -(healAmount),
+              healAmount = needAmount
+            updateCargo(ship = playerShip, amount = -(needAmount),
                 cargoIndex = toolIndex, quality = playerShip.cargo[
                 toolIndex].quality)
           else:
@@ -255,13 +260,16 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
                 memberIndex].inventory, itemType = faction.healingTools,
                 itemQuality = any)
             if toolIndex > -1:
-              if playerShip.crew[memberIndex].inventory[toolIndex].amount <
-                  healAmount.abs:
-                healAmount = playerShip.crew[memberIndex].inventory[
-                    toolIndex].amount
+              let item: InventoryData = playerShip.crew[memberIndex].inventory[toolIndex]
+              var needAmount: Natural = healAmount.abs - countItemBonus(
+                  value = healAmount.abs, quality = item.quality)
+              if item.amount < needAmount:
+                healAmount = item.amount + countItemBonus(value = item.amount,
+                    quality = item.quality)
+                needAmount = item.amount
               else:
-                healAmount = healAmount.abs
-              updateInventory(memberIndex = memberIndex, amount = -(healAmount),
+                healAmount = needAmount
+              updateInventory(memberIndex = memberIndex, amount = -(needAmount),
                   inventoryIndex = toolIndex, ship = playerShip,
                       quality = playerShip.crew[memberIndex].inventory[
                       toolIndex].quality)
