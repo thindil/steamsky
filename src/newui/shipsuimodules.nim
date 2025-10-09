@@ -192,7 +192,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   const
-    width: float = 700
+    width: float = 600
     height: float = 500
 
   let
@@ -201,6 +201,14 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+    label(str = "Name:")
+    colorLabel(str = module.name, color = theme.colors[goldenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Set a new name for the module")
+    imageButton(image = images[editIcon]):
+      dialog = renameMemberDialog
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
