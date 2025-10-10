@@ -184,15 +184,17 @@ proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   dialog = moduleInfoDialog
   setDialog(x = windowWidth / 10, y = windowHeight / 10)
 
-proc showModuleDamage(module: ModuleData) {.raises: [], tags: [], contractual.} =
+proc showModuleDamage(module: ModuleData) {.raises: [], tags: [],
+    contractual.} =
   ## Show information about the selected module's damage
   ##
   ## * module - the currently selected module
   setLayoutRowDynamic(height = 35, cols = 4, ratio = [0.4.cfloat, 0.44, 0.08, 0.08])
   label(str = "Status:")
   let
-    damagePercent: float = (module.durability.float / module.maxDurability.float)
-    statusTooltip: string =  if damagePercent < 1.0 and damagePercent > 0.79:
+    damagePercent: float = (module.durability.float /
+        module.maxDurability.float)
+    statusTooltip: string = if damagePercent < 1.0 and damagePercent > 0.79:
         "Slightly damaged"
       elif damagePercent < 0.8 and damagePercent > 0.49:
         "Damaged"
@@ -204,6 +206,20 @@ proc showModuleDamage(module: ModuleData) {.raises: [], tags: [], contractual.} 
         "Destroyed"
       else:
         "Not damaged"
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = statusTooltip)
+  var value: int = module.durability
+  if damagePercent < 0.8 and damagePercent > 0.19:
+    changeStyle(field = progressbar, color = theme.colors[yellowColor]):
+      progressBar(value = value, maxValue = module.maxDurability,
+          modifyable = false)
+  elif damagePercent < 0.2:
+    changeStyle(field = progressbar, color = theme.colors[redColor]):
+      progressBar(value = value, maxValue = module.maxDurability,
+          modifyable = false)
+  else:
+    progressBar(value = value, maxValue = module.maxDurability,
+        modifyable = false)
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
