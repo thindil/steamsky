@@ -21,7 +21,7 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crafts, game, types]
+import ../[config, crafts, game, messages, types]
 import coreui, dialogs, errordialog, setui, table, themes
 
 type ModulesSortOrders = enum
@@ -220,6 +220,11 @@ proc showModuleDamage(module: ModuleData) {.raises: [], tags: [],
   else:
     progressBar(value = value, maxValue = module.maxDurability,
         modifyable = false)
+  if playerShip.repairModule == moduleIndex:
+    imageButton(image = images[cancelIcon]):
+      playerShip.repairModule = -1
+      addMessage(message = "You removed the repair's priority.",
+          mType = orderMessage)
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
