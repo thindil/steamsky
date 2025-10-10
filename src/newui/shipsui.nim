@@ -40,14 +40,28 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
     width: float = 400
     height: float = 200
 
-  let windowName: string = "Rename the " & (if dialog ==
-      renameDialog: "ship" else: "crew member")
+  let windowName: string = "Rename the " & (case dialog
+      of renameDialog:
+        "ship"
+      of renameMemberDialog:
+        "crew member"
+      of renameModuleDialog:
+        "module"
+      else:
+        "")
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 1)
-    label(str = "Enter a new name" & (if dialog == renameMemberDialog: " for " &
-        playerShip.crew[crewIndex].name else: "") & ":")
+    label(str = "Enter a new name" & (case dialog
+        of renameDialog:
+          ""
+        of renameMemberDialog:
+          " for " & playerShip.crew[crewIndex].name
+        of renameModuleDialog:
+          " for " & playerShip.modules[moduleIndex].name
+        else:
+          "") & ":")
     editString(text = newName, maxLen = 64)
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
@@ -59,10 +73,15 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
     else:
       imageLabelButton(image = images[editColoredIcon], text = "Rename",
           alignment = right):
-        if dialog == renameDialog:
+        case dialog
+        of renameDialog:
           playerShip.name = newName
-        else:
+        of renameMemberDialog:
           playerShip.crew[crewIndex].name = newName
+        of renameModuleDialog:
+          playerShip.modules[moduleIndex].name = newName
+        else:
+          discard
         newName = ""
         dialog = none
     restoreButtonStyle()
