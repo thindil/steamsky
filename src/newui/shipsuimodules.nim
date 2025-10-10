@@ -169,7 +169,7 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
   for module in localModules:
     modulesIndexes.add(y = module.id)
 
-var moduleIndex: Natural = 0
+var moduleIndex*: Natural = 0 ## The index of currently selected module
 
 proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -208,7 +208,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       addTooltip(bounds = getWidgetBounds(),
           text = "Set a new name for the module")
     imageButton(image = images[editIcon]):
-      dialog = renameMemberDialog
+      dialog = renameModuleDialog
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
