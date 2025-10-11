@@ -42,7 +42,8 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
     upgradeTools = findTools(memberIndex = workerIndex, itemType = repairTools,
         order = upgrading)
     upgradeMaterial = findItem(inventory = playerShip.cargo,
-        itemType = modulesList[upgradedModule.protoIndex].repairMaterial, itemQuality = any)
+        itemType = modulesList[upgradedModule.protoIndex].repairMaterial,
+            itemQuality = any)
 
   proc maxUpgradeReached(messageText: string) {.raises: [KeyError,
       Exception], tags: [RootEffect], contractual.} =
@@ -93,9 +94,6 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
           upgradedModule.protoIndex].repairSkill) /
       10).int * times) + times
   while upgradePoints > 0 and upgradedModule.upgradeProgress > 0:
-    var resultAmount: Natural = upgradePoints
-    if resultAmount > upgradedModule.upgradeProgress:
-      resultAmount = upgradedModule.upgradeProgress
     findMatsAndTools()
     if upgradeMaterial == -1:
       addMessage(message = "You don't have enough materials to upgrade " &
@@ -109,6 +107,14 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
       giveOrders(ship = playerShip, memberIndex = workerIndex,
           givenOrder = rest)
       break
+    let
+      toolsQuality: ObjectQuality = playerShip.crew[workerIndex].inventory[upgradeTools].quality
+      materialsQuality: ObjectQuality = playerShip.cargo[upgradeMaterial].quality
+    var resultAmount: Natural = upgradePoints + countItemBonus(
+        value = upgradePoints, quality = toolsQuality) + countItemBonus(
+        value = upgradePoints, quality = materialsQuality)
+    if resultAmount > upgradedModule.upgradeProgress:
+      resultAmount = upgradedModule.upgradeProgress
     var materialCost: Natural = 0
     case upgradedModule.upgradeAction
     of maxValue:
@@ -141,6 +147,9 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
       if resultAmount > playerShip.cargo[upgradeMaterial].amount:
         resultAmount = playerShip.cargo[upgradeMaterial].amount
       materialCost = resultAmount
+    materialCost = materialCost - countItemBonus(value = upgradePoints,
+        quality = toolsQuality) - countItemBonus(value = upgradePoints,
+        quality = materialsQuality)
     if materialCost < times:
       materialCost = times
     if materialCost > playerShip.cargo[upgradeMaterial].amount:
