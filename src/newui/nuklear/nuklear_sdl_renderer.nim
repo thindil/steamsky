@@ -330,17 +330,17 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
 
 proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
   ## Draw the main window content
-  discard SDL_SetRenderDrawColor(renderer, (0.10 * 255).uint8, (0.18 *
-      255).uint8, (0.24 * 255).uint8, 255)
-  discard SDL_RenderClear(renderer)
-  nk_sdl_render(antiAliasingOn)
-  SDL_RenderPresent(renderer)
+  discard SDL_SetRenderDrawColor(renderer = renderer, r = (0.10 * 255).uint8,
+      g = (0.18 * 255).uint8, b = (0.24 * 255).uint8, a = 255)
+  discard SDL_RenderClear(renderer = renderer)
+  nk_sdl_render(aa = antiAliasingOn)
+  SDL_RenderPresent(renderer = renderer)
 
 proc nuklearClose*() {.raises: [], tags: [], contractual.} =
   ## Release all resources related to Xlib and Nuklear
   nk_sdl_shutdown()
-  SDL_DestroyRenderer(renderer)
-  SDL_DestroyWindow(win)
+  SDL_DestroyRenderer(renderer = renderer)
+  SDL_DestroyWindow(window = win)
   IMG_Quit()
   SDL_Quit()
 
@@ -353,15 +353,15 @@ proc nuklearLoadSVGImage*(filePath: string; width,
   ## Returns the nk_image structure
   let img: RWPtr = SDL_RWFromFile(file = filePath.cstring, mode = "r")
   if img == nil:
-    raise newException(NuklearException, $(SDL_GetError()))
+    raise newException(exceptn = NuklearException, message = $(SDL_GetError()))
   let surface: SurfacePtr = IMG_LoadSizedSVG_RW(src = img, width = width.cint,
       height = height.cint)
   if surface == nil:
-    raise newException(NuklearException, $(SDL_GetError()))
+    raise newException(exceptn = NuklearException, message = $(SDL_GetError()))
   let image: TexturePtr = SDL_CreateTextureFromSurface(renderer = renderer,
       surface = surface)
   if image == nil:
-    raise newException(NuklearException, $(SDL_GetError()))
+    raise newException(exceptn = NuklearException, message = $(SDL_GetError()))
   SDL_FreeSurface(surface = surface)
   return image
 
@@ -376,12 +376,14 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   ## Returns the pointer for the font
   var
     atlas: ptr nk_font_atlas
-    config = new_nk_font_config(0)
+    config = new_nk_font_config(pixelHeight = 0)
   if glyphsRanges.len > 0:
     config.`range` = glyphsRanges.addr
-  nk_sdl_font_stash_begin(atlas.unsafeAddr)
-  result = nk_font_atlas_add_from_file(atlas, font.path.cstring,
-      font.size.cfloat * fontScale, config.addr)
+  nk_sdl_font_stash_begin(atlas = atlas.unsafeAddr)
+  {.ruleOff: "namedParams".}
+  result = nk_font_atlas_add_from_file(atlas = atlas,
+      filePath = font.path.cstring, height = font.size.cfloat * fontScale, config.addr)
+  {.ruleOn: "namedParams".}
   nk_sdl_font_stash_end()
 
 proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil;
@@ -393,16 +395,16 @@ proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil;
   ## * fontSize    - the size of the font used in the UI. Default values is 14.
   var
     atlas: ptr nk_font_atlas
-    config = new_nk_font_config(0)
+    config = new_nk_font_config(pixelHeight = 0)
     font: ptr nk_font
-  nk_sdl_font_stash_begin(atlas.unsafeAddr)
+  nk_sdl_font_stash_begin(atlas = atlas.unsafeAddr)
   if defaultFont == nil:
-    font = nk_font_atlas_add_default(atlas, fontSize.cfloat * fontScale,
-        config.unsafeAddr)
+    font = nk_font_atlas_add_default(atlas = atlas, height = fontSize.cfloat *
+        fontScale, config = config.unsafeAddr)
   else:
     font = defaultFont
   nk_sdl_font_stash_end()
-  nk_style_set_font(getContext(), font.handle.unsafeAddr)
+  nk_style_set_font(ctx = getContext(), font = font.handle.unsafeAddr)
 
 proc nuklearResizeWin*(width, height: int) {.raises: [], tags: [],
     contractual.} =
