@@ -184,17 +184,28 @@ proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   dialog = moduleInfoDialog
   setDialog(x = windowWidth / 10, y = windowHeight / 10)
 
-proc showModuleDamage(module: ModuleData) {.raises: [], tags: [],
-    contractual.} =
+proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show information about the selected module's damage
   ##
   ## * module - the currently selected module
-  setLayoutRowDynamic(height = 35, cols = 4, ratio = [0.4.cfloat, 0.44, 0.08, 0.08])
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  let moduleMaxValue: Positive = try:
+      (modulesList[module.protoIndex].durability.float * 1.5).Positive
+    except:
+      dialog = setError(message = "Can't count the module's max value.")
+      return
+  if module.maxDurability < moduleMaxValue:
+    setLayoutRowDynamic(height = 35, cols = 4, ratio = [0.4.cfloat, 0.44, 0.08, 0.08])
+  else:
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
   label(str = "Status:")
-  let
-    damagePercent: float = (module.durability.float /
+  let damagePercent: float = (module.durability.float /
         module.maxDurability.float)
-    statusTooltip: string = if damagePercent < 1.0 and damagePercent > 0.79:
+  var statusTooltip: string = if damagePercent < 1.0 and damagePercent > 0.79:
         "Slightly damaged"
       elif damagePercent < 0.8 and damagePercent > 0.49:
         "Damaged"
@@ -206,6 +217,8 @@ proc showModuleDamage(module: ModuleData) {.raises: [], tags: [],
         "Destroyed"
       else:
         "Not damaged"
+  if module.maxDurability == moduleMaxValue:
+    statusTooltip.add(y = " (max upgrade)")
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = statusTooltip)
   var value: int = module.durability
@@ -236,6 +249,8 @@ proc showModuleDamage(module: ModuleData) {.raises: [], tags: [],
       playerShip.repairModule = moduleIndex
       addMessage(message = "You assigned " & module.name &
           " as the repair's priority.", mType = orderMessage)
+  if module.maxDurability < moduleMaxValue:
+    discard
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -262,7 +277,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           text = "Set a new name for the module")
     imageButton(image = images[editIcon]):
       dialog = renameModuleDialog
-    showModuleDamage(module = module)
+    showModuleDamage(module = module, dialog = dialog)
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
