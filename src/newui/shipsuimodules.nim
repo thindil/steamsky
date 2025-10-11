@@ -221,10 +221,21 @@ proc showModuleDamage(module: ModuleData) {.raises: [], tags: [],
     progressBar(value = value, maxValue = module.maxDurability,
         modifyable = false)
   if playerShip.repairModule == moduleIndex:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Remove the repair priority")
     imageButton(image = images[cancelIcon]):
       playerShip.repairModule = -1
       addMessage(message = "You removed the repair's priority.",
           mType = orderMessage)
+  else:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Repair the selected module as first when damaged")
+    imageButton(image = images[repairPriorityIcon]):
+      playerShip.repairModule = moduleIndex
+      addMessage(message = "You assigned " & module.name &
+          " as the repair's priority.", mType = orderMessage)
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
