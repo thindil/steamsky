@@ -104,7 +104,7 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   window(name = windowName, x = windowWidth / 4, y = windowHeight / 4,
       w = 320, h = height, flags = {windowBorder, windowTitle,
       windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(30, 1)
+    setLayoutRowDynamic(height = 30, cols = 1)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Wait in place for 1 minute")
@@ -135,7 +135,7 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           text = "Wait in place for 1 hour")
     labelButton(title = "Wait 1 hour"):
       dialog = wait(minutes = 60)
-    setLayoutRowDynamic(30, 3)
+    setLayoutRowDynamic(height = 30, cols = 3)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Wait in place for the selected amount of minutes: from 1 to 1440 (the whole day)")
@@ -160,7 +160,7 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         selected = waitInterval, itemHeight = 25, x = 100, y = 180)
     if newInterval != waitInterval:
       waitInterval = newInterval
-    setLayoutRowDynamic(30, 1)
+    setLayoutRowDynamic(height = 30, cols = 1)
     if needRest:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
