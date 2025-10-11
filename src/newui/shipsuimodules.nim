@@ -184,6 +184,21 @@ proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   dialog = moduleInfoDialog
   setDialog(x = windowWidth / 10, y = windowHeight / 10)
 
+proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
+    module: ModuleData; dialog: var GameDialog) {.raises: [], tags: [],
+    contractual.} =
+  ## Add button related to upgrading the mdule
+  ##
+  ## * upgradeType   - the type of the upgrade to start after clicking the
+  ##                   button
+  ## * buttonTooltip - the tooltip to show on the button
+  ## * module        - the currently selected module
+  ## * dialog        - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
+
 proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show information about the selected module's damage
@@ -250,7 +265,8 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
       addMessage(message = "You assigned " & module.name &
           " as the repair's priority.", mType = orderMessage)
   if module.maxDurability < moduleMaxValue:
-    discard
+    addUpgradeButton(upgradeType = durability,
+        buttonTooltip = "module's durability", module = module, dialog = dialog)
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
