@@ -345,10 +345,28 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     # Show the module's size
     label(str = "Size:")
     try:
-      colorLabel(str = $modulesList[module.protoIndex].size, color = theme.colors[goldenColor])
+      colorLabel(str = $modulesList[module.protoIndex].size,
+          color = theme.colors[goldenColor])
     except:
       dialog = setError(message = "Can't show the module's size")
       return
+    # Show the module's repair info
+    type RepairInfo = object
+      text: string
+      color: ColorsNames
+    var repairLabels: seq[RepairInfo] = @[]
+    for item in itemsList.values:
+      try:
+        if item.itemType == modulesList[module.protoIndex].repairMaterial:
+          if repairLabels.len > 0:
+            repairLabels.add(y = RepairInfo(text: " or ",
+                color: foregroundColor))
+          repairLabels.add(y = RepairInfo(text: itme.name, color: (if findItem(
+              inventory = playerShip.cargo, itemTtype = item.itemType,
+              itemQuality = any) == "-1": redColor else: goldenColor)))
+      except:
+        dialog = showError(message = "Can't count repair material.")
+        return
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
