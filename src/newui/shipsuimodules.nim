@@ -311,6 +311,32 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
     addUpgradeButton(upgradeType = durability,
         buttonTooltip = "module's durability", module = module, dialog = dialog)
 
+proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show information about the selected engine
+  ##
+  ## * module - the currently selected module
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  # Show engine power
+  var moduleMaxValue2: Natural = try:
+      (modulesList[module.protoIndex].maxValue.float * 1.5).int
+    except:
+      dialog = setError(message = "Can't count the module max value.")
+      return
+  if module.maxDurability < moduleMaxValue2:
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.44, 0.08])
+  else:
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+  label(str = "Max power:")
+  colorLabel(str = $module.power & (if module.power ==
+      moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
+  if module.power < moduleMaxValue2:
+    addUpgradeButton(upgradeType = maxValue, buttonTooltip = "engine's power",
+        module = module, dialog = dialog)
+
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the dialog with information about the selected module
@@ -377,6 +403,15 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           color = theme.colors[goldenColor])
     except:
       dialog = setError(message = "Can't show repair skill.")
+      return
+    # Show information specific to the module's type
+    case module.mType
+    # Show information about engine
+    of engine:
+      showEngineInfo(module = module, dialog = dialog)
+    else:
+      discard
+    if dialog != moduleInfoDialog:
       return
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
