@@ -21,7 +21,8 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crafts, game, messages, shipscrew, shipsupgrade, types]
+import ../[config, crafts, crewinventory, game, messages, shipscrew,
+    shipsupgrade, types]
 import coreui, dialogs, errordialog, setui, table, themes
 
 type ModulesSortOrders = enum
@@ -350,23 +351,33 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't show the module's size")
       return
-    # Show the module's repair info
-    type RepairInfo = object
-      text: string
-      color: ColorsNames
-    var repairLabels: seq[RepairInfo] = @[]
+    # Show the module's repair material
+    setLayoutRowDynamic(height = 35, cols = 4, ratio = [0.4.cfloat, 0.2, 0.2, 0.2])
+    label(str = "Repair material:")
+    var manyMaterials: bool = false
     for item in itemsList.values:
       try:
         if item.itemType == modulesList[module.protoIndex].repairMaterial:
-          if repairLabels.len > 0:
-            repairLabels.add(y = RepairInfo(text: " or ",
-                color: foregroundColor))
-          repairLabels.add(y = RepairInfo(text: itme.name, color: (if findItem(
-              inventory = playerShip.cargo, itemTtype = item.itemType,
-              itemQuality = any) == "-1": redColor else: goldenColor)))
+          if manyMaterials:
+            label(str = " or ")
+          colorLabel(str = item.name, color = theme.colors[(if findItem(
+              inventory = playerShip.cargo, itemType = item.itemType,
+              itemQuality = any) == -1: redColor else: goldenColor)])
+          manyMaterials = true
       except:
-        dialog = showError(message = "Can't count repair material.")
+        dialog = setError(message = "Can't count repair material.")
         return
+    # Show the module's upgrade skill
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+    label(str = "Repair skill:")
+    try:
+      colorLabel(str = skillsList[modulesList[
+          module.protoIndex].repairSkill].name & "/" & attributesList[skillsList[
+          modulesList[module.protoIndex].repairSkill].attribute].name,
+          color = theme.colors[goldenColor])
+    except:
+      dialog = setError(message = "Can't show repair skill.")
+      return
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
