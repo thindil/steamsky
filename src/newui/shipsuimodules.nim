@@ -328,6 +328,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+    # Show the module's name
     label(str = "Name:")
     colorLabel(str = module.name, color = theme.colors[goldenColor])
     if gameSettings.showTooltips:
@@ -335,7 +336,19 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           text = "Set a new name for the module")
     imageButton(image = images[editIcon]):
       dialog = renameModuleDialog
+    # Show the module's status
     showModuleDamage(module = module, dialog = dialog)
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+    # Show the module's weight
+    label(str = "Weight:")
+    colorLabel(str = $module.weight & " kg", color = theme.colors[goldenColor])
+    # Show the module's size
+    label(str = "Size:")
+    try:
+      colorLabel(str = $modulesList[module.protoIndex].size, color = theme.colors[goldenColor])
+    except:
+      dialog = setError(message = "Can't show the module's size")
+      return
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
