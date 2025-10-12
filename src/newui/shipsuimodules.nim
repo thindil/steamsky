@@ -21,7 +21,7 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crafts, game, messages, types]
+import ../[config, crafts, game, messages, shipscrew, shipsupgrade, types]
 import coreui, dialogs, errordialog, setui, table, themes
 
 type ModulesSortOrders = enum
@@ -185,8 +185,8 @@ proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   setDialog(x = windowWidth / 10, y = windowHeight / 10)
 
 proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
-    module: ModuleData; dialog: var GameDialog) {.raises: [], tags: [],
-    contractual.} =
+    module: ModuleData; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Add button related to upgrading the mdule
   ##
   ## * upgradeType   - the type of the upgrade to start after clicking the
@@ -197,7 +197,47 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  if module.upgradeAction == upgradeType and playerShip.upgradeModule == moduleIndex:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Stop upgrading the " & buttonTooltip)
+    imageButton(image = images[cancelIcon]):
+      playerShip.upgradeModule = -1
+      for index, member in playerShip.crew:
+        if member.order == upgrading:
+          try:
+            giveOrders(ship = playerShip, memberIndex = index,
+                givenOrder = rest)
+          except CrewOrderError:
+            dialog = setMessage(message = getCurrentExceptionMsg(),
+                title = "Can't give orders")
+          except:
+            dialog = setError(message = "Can't give orders to a crew member.")
+          break
+      addMessage(message = "You stopped current upgrade.", mType = orderMessage)
+      dialog = none
+  else:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Stop upgrading the " & buttonTooltip)
+    imageButton(image = images[upgradeButtonIcon]):
+      dialog = none
+      let upgradeNumber: Positive = case upgradeType
+        of maxValue:
+          2
+        of value:
+          3
+        else:
+          1
+      try:
+        startUpgrading(moduleIndex = moduleIndex, upgradeType = upgradeNumber)
+      except:
+        dialog = setError(message = "Can't set upgrade for the module.")
+        return
+      try:
+        updateOrders(ship = playerShip)
+      except:
+        dialog = setError(message = "Can't update crew orders.")
 
 proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -256,6 +296,7 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
       playerShip.repairModule = -1
       addMessage(message = "You removed the repair's priority.",
           mType = orderMessage)
+      dialog = none
   else:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
@@ -264,6 +305,7 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
       playerShip.repairModule = moduleIndex
       addMessage(message = "You assigned " & module.name &
           " as the repair's priority.", mType = orderMessage)
+      dialog = none
   if module.maxDurability < moduleMaxValue:
     addUpgradeButton(upgradeType = durability,
         buttonTooltip = "module's durability", module = module, dialog = dialog)
