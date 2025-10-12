@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
   morale of the player's ship's crew members when consumed
 - The quality of medicines affects their effectiveness during healing wounded
   crew members on the player's ship
+- The quality of tools and materials affects effectiveness of upgrading
+  progress of the player's ship's modules
 
 ### Fixed
 - Updating the game's header after installing or removing modules in a shipyard
