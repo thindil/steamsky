@@ -430,6 +430,15 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     # Show information about engine
     of engine:
       showEngineInfo(module = module, dialog = dialog)
+    # Show information about cargo room
+    of cargoRoom:
+      label(str = "Max cargo:")
+      try:
+        colorLabel(str = $modulesList[module.protoIndex].maxValue & " kg",
+            color = theme.colors[goldenColor])
+      except:
+        dialog = setError(message = "Can't show the max cargo.")
+        return
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
