@@ -148,14 +148,15 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
     itemsSortOrder = sortDesc
   else:
     itemsSortOrder = sortAsc
-  var localItems: seq[LocalItemData]
-  var indexesList: seq[Natural]
+  var
+    localItems: seq[LocalItemData] = @[]
+    indexesList: seq[Natural] = @[]
   for index, item in playerShip.cargo:
     let
-      protoIndex = item.protoIndex
-      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+      protoIndex: Natural = item.protoIndex
+      baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
           durability = item.durability, quality = item.quality)
-    var price: int
+    var price: int = 0
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
       price = baseCargo[baseCargoIndex].price
@@ -191,8 +192,8 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
   for index, item in baseCargo:
     if index in indexesList:
       continue
-    let protoIndex = item.protoIndex
-    var price = item.price
+    let protoIndex: Natural = item.protoIndex
+    var price: int = item.price
     if eventIndex > -1:
       if eventsList[eventIndex].eType == doublePrice and eventsList[
           eventIndex].itemIndex == protoIndex:
@@ -260,7 +261,7 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't get the trade's data.")
       return
-  var itemInfo = ""
+  var itemInfo: string = ""
   try:
     if itemsList[protoIndex].itemType == weaponType:
       itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[
@@ -383,7 +384,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show only items of the selected type")
-    let newType = comboList(items = typesList,
+    let newType: Natural = comboList(items = typesList,
         selected = typeIndex, itemHeight = 25, x = 200, y = 150)
     if newType != typeIndex:
       typeIndex = newType
@@ -415,10 +416,10 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortTrades, dialog = dialog)
     var
-      currentItemIndex = 0
-      indexesList: seq[Natural]
-      currentRow = 1
-    let startRow = ((currentPage - 1) * gameSettings.listsLimit) + 1
+      currentItemIndex: Natural = 0
+      indexesList: seq[Natural] = @[]
+      currentRow: Positive = 1
+    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
     try:
@@ -444,12 +445,12 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         break
       let
         protoIndex: Natural = playerShip.cargo[i].protoIndex
-        baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+        baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
             durability = playerShip.cargo[i].durability,
             quality = playerShip.cargo[i].quality)
       if baseCargoIndex > -1:
         indexesList.add(y = baseCargoIndex)
-      let itemType = try:
+      let itemType: string = try:
             if itemsList[protoIndex].showType.len == 0:
               itemsList[protoIndex].itemType
             else:
@@ -459,15 +460,15 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
             return
       if typeIndex > 0 and itemType != typesList[typeIndex]:
         continue
-      let itemName = getItemName(item = playerShip.cargo[i], damageInfo = false,
-          toLower = false)
+      let itemName: string = getItemName(item = playerShip.cargo[i],
+          damageInfo = false, toLower = false)
       if nameSearch.len > 0 and itemName.toLowerAscii.find(
           sub = nameSearch.toLowerAscii) == -1:
         continue
       if currentRow < startRow:
         currentRow.inc
         continue
-      var price = 0
+      var price: int = 0
       if baseCargoIndex == -1:
         try:
           price = getPrice(baseType = baseType, itemIndex = protoIndex,
@@ -484,8 +485,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if eventsList[eventIndex].eType == doublePrice and eventsList[
             eventIndex].itemIndex == protoIndex:
           price = price * 2
-      let profit = price - playerShip.cargo[i].price
-      var baseAmount = 0
+      let profit: int = price - playerShip.cargo[i].price
+      var baseAmount: Natural = 0
       if baseIndex > 0:
         try:
           if baseCargoIndex > -1 and isBuyable(baseType = baseType,
@@ -545,8 +546,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't check if item is buyable2.")
         return
       let
-        protoIndex = baseCargo[itemsIndexes[i]].protoIndex
-        itemType = try:
+        protoIndex: Natural = baseCargo[itemsIndexes[i]].protoIndex
+        itemType: string = try:
             if itemsList[protoIndex].showType.len == 0:
               itemsList[protoIndex].itemType
             else:
@@ -556,7 +557,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
             return
       if typeIndex > 0 and itemType != typesList[typeIndex]:
         continue
-      let itemName = try:
+      let itemName: string = try:
             itemsList[protoIndex].name
           except:
             dialog = setError(message = "Can't get item name2.")
@@ -567,7 +568,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if currentRow < startRow:
         currentRow.inc
         continue
-      var price = if baseIndex > 0:
+      var price: Natural = if baseIndex > 0:
           skyBases[baseIndex].cargo[itemsIndexes[i]].price
         else:
           traderCargo[itemsIndexes[i]].price
@@ -575,7 +576,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if eventsList[eventIndex].eType == doublePrice and eventsList[
             eventIndex].itemIndex == protoIndex:
           price = price * 2
-      let baseAmount = (if baseIndex == 0: traderCargo[itemsIndexes[
+      let baseAmount: Natural = (if baseIndex == 0: traderCargo[itemsIndexes[
           i]].amount else: skyBases[baseIndex].cargo[itemsIndexes[i]].amount)
       addButton(label = itemName, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
