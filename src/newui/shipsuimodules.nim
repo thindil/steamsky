@@ -432,6 +432,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       showEngineInfo(module = module, dialog = dialog)
     # Show information about cargo room
     of cargoRoom:
+      setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
       label(str = "Max cargo:")
       try:
         colorLabel(str = $modulesList[module.protoIndex].maxValue & " kg",
@@ -439,6 +440,25 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       except:
         dialog = setError(message = "Can't show the max cargo.")
         return
+    # Show information about hull
+    of hull:
+      let moduleMaxValue2: int = try:
+          (modulesList[module.protoIndex].maxValue.float * 1.5).int
+        except:
+          dialog = setError(message = "Can't count the module's max value (3).")
+          return
+      if module.maxModules < moduleMaxValue2:
+        setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+      else:
+        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+      label(str = "Modules installed:")
+      colorLabel(str = $module.installedModules & " / " & $module.maxModules & (
+          if module.maxModules == moduleMaxValue2: " (max upgrade)" else: ""),
+          color = theme.colors[goldenColor])
+      if module.maxModules < moduleMaxValue2:
+        addUpgradeButton(upgradeType = maxValue,
+            buttonTooltip = "hull's size so it can have more modules installed",
+            module = module, dialog = dialog)
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
