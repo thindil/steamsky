@@ -88,11 +88,29 @@ proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
                 repairNeeded = false
               else:
                 repairValue = repairPoints
+              let
+                toolsQuality: ObjectQuality = playerShip.crew[index].inventory[
+                    toolsIndex].quality
+                materialsQuality: ObjectQuality = playerShip.cargo[
+                    repairMaterial].quality
+              repairValue = repairValue + countItemBonus(value = repairValue,
+                  quality = toolsQuality) + countItemBonus(value = repairValue,
+                  quality = materialsQuality)
+              if playerShip.modules[moduleIndex].durability + repairValue >
+                  playerShip.modules[moduleIndex].maxDurability:
+                repairValue = playerShip.modules[moduleIndex].maxDurability -
+                    playerShip.modules[moduleIndex].durability
+                repairNeeded = false
+              if repairValue >= playerShip.cargo[repairMaterial].amount:
+                repairValue = playerShip.cargo[repairMaterial].amount
               if repairValue == playerShip.cargo[repairMaterial].amount and
                   toolsIndex > repairMaterial:
                 toolsIndex.dec
+              let materialCost: Natural = repairValue - countItemBonus(
+                  value = repairValue, quality = toolsQuality) - countItemBonus(
+                  value = repairValue, quality = materialsQuality)
               updateCargo(ship = playerShip, cargoIndex = repairMaterial,
-                  amount = -(repairValue), quality = playerShip.cargo[
+                  amount = -(materialCost), quality = playerShip.cargo[
                       repairMaterial].quality)
               playerShip.modules[moduleIndex].durability += repairValue
               if repairValue > crewRepairPoints[pointsIndex]:
