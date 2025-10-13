@@ -352,6 +352,11 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   if module.fuelUsage > moduleMaxValue2:
     addUpgradeButton(upgradeType = value, buttonTooltip = "engine's fuel usage",
         module = module, dialog = dialog)
+  # Show engine state
+  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+  label(str = "State:")
+  colorLabel(str = (if module.disabled: "Disabled" else: "Enabled"),
+      color = theme.colors[goldenColor])
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
