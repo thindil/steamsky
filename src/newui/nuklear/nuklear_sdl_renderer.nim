@@ -73,7 +73,7 @@ const
   SDLK_RIGHT: uint = 0x4000004fu
   SDLK_ESCAPE: uint = 0x0000001bu
   IMG_INIT_PNG: cint = 0x00000002
-  windowCentered* = SDL_WINDOWPOS_CENTERED
+  windowCentered*: cint = SDL_WINDOWPOS_CENTERED ## The centered position of a window
 
 type
   SDL_EventType = enum
@@ -112,63 +112,97 @@ type
     SDL_BUTTON_LEFT = 1, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT
 
 proc SDL_SetHint(name, value: cstring) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_CreateWindow(title: cstring; x, y, w, h: cint;
     flags: cuint): WindowPtr {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_Log(fmt: cstring) {.importc, varargs, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_GetError(): cstring {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_CreateRenderer(window: WindowPtr; index,
     flags: cint): RendererPtr {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_GetRendererOutputSize(renderer: RendererPtr; w, h: var cint) {.importc,
     nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_GetWindowSize(window: WindowPtr; w, h: var cint) {.importc, nodecl,
     raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_RenderSetScale(renderer: RendererPtr; scaleX,
     scaleY: cfloat) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_PollEvent(event: var SDL_Event): cint {.importc, nodecl, raises: [],
     tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_SetRenderDrawColor(renderer: RendererPtr; r, g, b,
     a: uint8): cint {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_RenderClear(renderer: RendererPtr): cint {.importc, nodecl, raises: [],
     tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_RenderPresent(renderer: RendererPtr) {.importc, nodecl, raises: [],
     tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_DestroyRenderer(renderer: RendererPtr) {.importc, nodecl, raises: [],
     tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_DestroyWindow(window: WindowPtr) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_Quit() {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_SetWindowIcon(window: WindowPtr; icon: SurfacePtr) {.importc, nodecl,
     raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_CreateTextureFromSurface(renderer: RendererPtr;
     surface: SurfacePtr): TexturePtr {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_FreeSurface(surface: SurfacePtr) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl, raises: [],
     tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_SetWindowSize(window: WindowPtr; w, h: cint) {.importc, nodecl,
     raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_SetWindowPosition(window: WindowPtr; x, y: cint) {.importc, nodecl,
     raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_SetWindowResizable(window: WindowPtr; resizable: cint) {.importc,
     nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
 proc SDL_GetKeyboardState(numkeys: ptr int = nil): ptr array[512,
     uint8] {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL Image binding
 proc IMG_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL Image binding
 proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL Image binding
 proc IMG_LoadSizedSVG_RW(src: RWPtr; width, height: cint): SurfacePtr {.importc,
     nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL Image binding
 proc IMG_Quit() {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL Image binding
 
 # Nuklear SDL2 backend bindings
 
 proc nk_sdl_init(win: WindowPtr; renderer: RendererPtr): PContext {.importc,
     nodecl, raises: [], tags: [], contractual.}
+  ## Internal Nuklear binding
 proc nk_sdl_font_stash_begin(atlas: ptr ptr nk_font_atlas) {.importc, nodecl,
     raises: [], tags: [], contractual.}
+  ## Internal Nuklear binding
 proc nk_sdl_font_stash_end() {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal Nuklear binding
 proc nk_sdl_handle_event(evt: var SDL_Event): cint {.importc, nodecl, raises: [
     ], tags: [], contractual.}
+  ## Internal Nuklear binding
 proc nk_sdl_render(aa: AntiAliasing) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal Nuklear binding
 proc nk_sdl_shutdown() {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal Nuklear binding
 
 # High level bindings
 
