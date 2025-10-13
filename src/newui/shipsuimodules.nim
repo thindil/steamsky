@@ -220,7 +220,7 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
   else:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
-          text = "Stop upgrading the " & buttonTooltip)
+          text = "Start upgrading the " & buttonTooltip)
     imageButton(image = images[upgradeButtonIcon]):
       dialog = none
       let upgradeNumber: Positive = case upgradeType
@@ -320,14 +320,14 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  # Show engine power
+  # Show the engine's power
   var moduleMaxValue2: Natural = try:
       (modulesList[module.protoIndex].maxValue.float * 1.5).int
     except:
       dialog = setError(message = "Can't count the module max value.")
       return
   if module.maxDurability < moduleMaxValue2:
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.44, 0.08])
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
   else:
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
   label(str = "Max power:")
@@ -335,6 +335,22 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
   if module.power < moduleMaxValue2:
     addUpgradeButton(upgradeType = maxValue, buttonTooltip = "engine's power",
+        module = module, dialog = dialog)
+  # Show the engine's fuel usage
+  moduleMaxValue2 = try:
+        (modulesList[module.protoIndex].value.float / 2.0).int
+    except:
+      dialog = setError(message = "Can't count the module's max value (2).")
+      return
+  if module.maxDurability > moduleMaxValue2:
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+  else:
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+  label(str = "Fuel usage:")
+  colorLabel(str = $module.fuelUsage & (if moduleMaxValue2 ==
+      module.fuelUsage: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
+  if module.fuelUsage > moduleMaxValue2:
+    addUpgradeButton(upgradeType = value, buttonTooltip = "engine's fuel usage",
         module = module, dialog = dialog)
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
@@ -411,8 +427,6 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       showEngineInfo(module = module, dialog = dialog)
     else:
       discard
-    if dialog != moduleInfoDialog:
-      return
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
