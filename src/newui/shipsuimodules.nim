@@ -367,7 +367,10 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
   maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
   if maxUpgrade == 0:
     maxUpgrade = 1
-  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+  if playerShip.upgradeModule == moduleIndex:
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+  else:
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
   label(str = "Upgrade progress:")
   var upgradePercent: int = 100 - ((module.upgradeProgress.float /
       maxUpgrade.float) * 100.0).int
@@ -379,6 +382,10 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
   else:
     changeStyle(field = progressbar, color = theme.colors[redColor]):
       progressBar(value = upgradePercent, maxValue = 100, modifyable = false)
+  if playerShip.upgradeModule == moduleIndex:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Stop upgrading the module")
 
 proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
