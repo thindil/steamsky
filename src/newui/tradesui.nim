@@ -44,93 +44,75 @@ proc sortItems(x, y: LocalItemData): int {.raises: [], tags: [], contractual.} =
   of nameAsc:
     if x.name < y.name:
       return 1
-    else:
-      return -1
+    return -1
   of nameDesc:
     if x.name > y.name:
       return 1
-    else:
-      return -1
+    return -1
   of typeAsc:
     if x.iType < y.iType:
       return 1
-    else:
-      return -1
+    return -1
   of typeDesc:
     if x.iType > y.iType:
       return 1
-    else:
-      return -1
+    return -1
   of durabilityAsc:
     if x.damage < y.damage:
       return 1
-    else:
-      return -1
+    return -1
   of durabilityDesc:
     if x.damage > y.damage:
       return 1
-    else:
-      return -1
+    return -1
   of qualityAsc:
     if x.quality < y.quality:
       return 1
-    else:
-      return -1
+    return -1
   of qualityDesc:
     if x.quality > y.quality:
       return 1
-    else:
-      return -1
+    return -1
   of priceAsc:
     if x.price < y.price:
       return 1
-    else:
-      return -1
+    return -1
   of priceDesc:
     if x.price > y.price:
       return 1
-    else:
-      return -1
+    return -1
   of profitAsc:
     if x.profit < y.profit:
       return 1
-    else:
-      return -1
+    return -1
   of profitDesc:
     if x.profit > y.profit:
       return 1
-    else:
-      return -1
+    return -1
   of weightAsc:
     if x.weight < y.weight:
       return 1
-    else:
-      return -1
+    return -1
   of weightDesc:
     if x.weight > y.weight:
       return 1
-    else:
-      return -1
+    return -1
   of ownedAsc:
     if x.owned < y.owned:
       return 1
-    else:
-      return -1
+    return -1
   of ownedDesc:
     if x.owned > y.owned:
       return 1
-    else:
-      return -1
+    return -1
   of availableAsc:
     if x.available < y.available:
       return 1
-    else:
-      return -1
+    return -1
   of availableDesc:
     if x.available > y.available:
       return 1
-    else:
-      return -1
+    return -1
   of none:
     return -1
 
