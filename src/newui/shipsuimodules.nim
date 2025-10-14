@@ -311,6 +311,63 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
     addUpgradeButton(upgradeType = durability,
         buttonTooltip = "module's durability", module = module, dialog = dialog)
 
+proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show information about the current upgrade of the module
+  ##
+  ## * module - the currently selected module
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  var
+    moduleInfo: string = ""
+    maxUpgrade: Natural = 0
+  case module.upgradeAction
+  of durability:
+    moduleInfo.add(y = "Durability")
+    maxUpgrade = try:
+        modulesList[module.protoIndex].durability
+    except:
+      dialog = setError(message = "Can't get max upgrade.")
+      return
+  of maxValue:
+    try:
+      case modulesList[module.protoIndex].mType
+      of engine:
+        moduleInfo.add(y = "Power")
+        maxUpgrade = (modulesList[module.protoIndex].maxValue / 20).int
+      of cabin:
+        moduleInfo.add(y = "Quality")
+        maxUpgrade = modulesList[module.protoIndex].maxValue
+      of gun, batteringRam:
+        moduleInfo.add(y = "Damage")
+        maxUpgrade = modulesList[module.protoIndex].maxValue * 2
+      of hull:
+        moduleInfo.add(y = "Enlarge")
+        maxUpgrade = modulesList[module.protoIndex].maxValue * 40
+      of harpoonGun:
+        moduleInfo.add(y = "Strength")
+        maxUpgrade = modulesList[module.protoIndex].maxValue * 10
+      else:
+        discard
+    except:
+      dialog = setError(message = "Can't show info about upgrade.")
+      return
+  of value:
+    try:
+      if modulesList[module.protoIndex].mType == engine:
+        moduleInfo.add(y = "Fuel usage")
+        maxUpgrade = modulesList[module.protoIndex].value * 20
+    except:
+      dialog = setError(message = "Can't show info about fuel usage ugprade.")
+      return
+  else:
+    discard
+  maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
+  if maxUpgrade == 0:
+    maxUpgrade = 1
+
 proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show information about the selected engine
@@ -425,6 +482,9 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't show repair skill.")
       return
+    # Show the module's upgrade action
+    if module.upgradeAction != none:
+      showModuleUpgrade(module = module, dialog = dialog)
     # Show information specific to the module's type
     case module.mType
     # Show information about engine
