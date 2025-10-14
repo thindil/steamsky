@@ -367,6 +367,18 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
   maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
   if maxUpgrade == 0:
     maxUpgrade = 1
+  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+  label(str = "Upgrade progress:")
+  var upgradePercent: int = 100 - ((module.upgradeProgress.float /
+      maxUpgrade.float) * 100.0).int
+  if upgradePercent > 74:
+    progressBar(value = upgradePercent, maxValue = 100, modifyable = false)
+  elif upgradePercent > 24:
+    changeStyle(field = progressbar, color = theme.colors[yellowColor]):
+      progressBar(value = upgradePercent, maxValue = 100, modifyable = false)
+  else:
+    changeStyle(field = progressbar, color = theme.colors[redColor]):
+      progressBar(value = upgradePercent, maxValue = 100, modifyable = false)
 
 proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
