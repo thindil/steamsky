@@ -213,9 +213,9 @@ type
     size*: Positive = 14
 
 var
-  win: WindowPtr        ## The main X window of the program
-  renderer: RendererPtr ## The SDL renderer
-  fontScale: cfloat     ## The scale used to resize a font
+  win: WindowPtr = nil        ## The main X window of the program
+  renderer: RendererPtr = nil ## The SDL renderer
+  fontScale: cfloat = 0.0     ## The scale used to resize a font
 
 proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
     iconPath: string = ""): PContext {.discardable, raises: [], tags: [],
@@ -245,7 +245,7 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
     SDL_Log("Error SDL_CreateRenderer %s", SDL_GetError())
     {.ruleOn: "namedparams".}
     quit QuitFailure
-  var renderW, renderH, windowW, windowH: cint
+  var renderW, renderH, windowW, windowH: cint = 0
   SDL_GetRendererOutputSize(renderer = renderer, w = renderW, h = renderH)
   SDL_GetWindowSize(window = win, w = windowW, h = windowH)
   if iconPath.len > 0:
@@ -261,8 +261,8 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
   ## Handle the user input
   ##
   ## Returns true if user requested to close the window, otherwise false
-  let ctx = getContext()
-  var evt: SDL_Event
+  let ctx: PContext = getContext()
+  var evt: SDL_Event = SDL_Event()
   nk_input_begin(ctx = ctx)
   result = noEvent
   while SDL_PollEvent(event = evt) != 0:
@@ -409,8 +409,8 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   ##
   ## Returns the pointer for the font
   var
-    atlas: ptr nk_font_atlas
-    config = new_nk_font_config(pixelHeight = 0)
+    atlas: ptr nk_font_atlas = nil
+    config: nk_font_config = new_nk_font_config(pixelHeight = 0)
   if glyphsRanges.len > 0:
     config.`range` = glyphsRanges.addr
   nk_sdl_font_stash_begin(atlas = atlas.unsafeAddr)
@@ -428,9 +428,9 @@ proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil;
   ##                 font. If nil, the default Nuklear font will be used.
   ## * fontSize    - the size of the font used in the UI. Default values is 14.
   var
-    atlas: ptr nk_font_atlas
-    config = new_nk_font_config(pixelHeight = 0)
-    font: ptr nk_font
+    atlas: ptr nk_font_atlas = nil
+    config: nk_font_config = new_nk_font_config(pixelHeight = 0)
+    font: ptr nk_font = nil
   nk_sdl_font_stash_begin(atlas = atlas.unsafeAddr)
   if defaultFont == nil:
     font = nk_font_atlas_add_default(atlas = atlas, height = fontSize.cfloat *
