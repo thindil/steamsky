@@ -108,8 +108,10 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
           givenOrder = rest)
       break
     let
-      toolsQuality: ObjectQuality = playerShip.crew[workerIndex].inventory[upgradeTools].quality
-      materialsQuality: ObjectQuality = playerShip.cargo[upgradeMaterial].quality
+      toolsQuality: ObjectQuality = playerShip.crew[workerIndex].inventory[
+          upgradeTools].quality
+      materialsQuality: ObjectQuality = playerShip.cargo[
+          upgradeMaterial].quality
     var resultAmount: Natural = upgradePoints + countItemBonus(
         value = upgradePoints, quality = toolsQuality) + countItemBonus(
         value = upgradePoints, quality = materialsQuality)
@@ -377,3 +379,13 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.raises: [
     playerShip.modules[moduleIndex].upgradeAction = upgradeAction
   addMessage(message = "You set the " & playerShip.modules[moduleIndex].name &
       " to upgrade.", mType = orderMessage)
+
+proc stopUpgrade*() {.raises: [KeyError, CrewOrderError, CrewNoSpaceError,
+    Exception], tags: [RootEffect], contractual.} =
+  ## Stop the current upgrade of the player's ship
+  playerShip.upgradeModule = -1
+  for index, member in playerShip.crew:
+    if member.order == upgrading:
+      giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
+      break
+  addMessage(message = "You stopped current upgrade.", mType = orderMessage)
