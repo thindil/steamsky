@@ -203,19 +203,13 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
       addTooltip(bounds = getWidgetBounds(),
           text = "Stop upgrading the " & buttonTooltip)
     imageButton(image = images[cancelIcon]):
-      playerShip.upgradeModule = -1
-      for index, member in playerShip.crew:
-        if member.order == upgrading:
-          try:
-            giveOrders(ship = playerShip, memberIndex = index,
-                givenOrder = rest)
-          except CrewOrderError:
-            dialog = setMessage(message = getCurrentExceptionMsg(),
-                title = "Can't give orders")
-          except:
-            dialog = setError(message = "Can't give orders to a crew member.")
-          break
-      addMessage(message = "You stopped current upgrade.", mType = orderMessage)
+      try:
+        stopUpgrade()
+      except CrewOrderError:
+        dialog = setMessage(message = getCurrentExceptionMsg(),
+            title = "Can't give orders")
+      except:
+        dialog = setError(message = "Can't give orders to a crew member.")
       dialog = none
   else:
     if gameSettings.showTooltips:
@@ -386,6 +380,14 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Stop upgrading the module")
+    imageButton(image = images[cancelIcon]):
+      try:
+        stopUpgrade()
+      except CrewOrderError:
+        dialog = setMessage(message = getCurrentExceptionMsg(),
+            title = "Can't give orders")
+      except:
+        dialog = setError(message = "Can't give orders to a crew member.")
 
 proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =

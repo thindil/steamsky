@@ -1735,19 +1735,14 @@ proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
-  playerShip.upgradeModule = -1
-  for index, member in playerShip.crew:
-    if member.order == upgrading:
-      try:
-        giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
-      except CrewOrderError:
-        showMessage(text = getCurrentExceptionMsg(),
-            title = "Can't give orders")
-        return tclOk
-      except:
-        return showError(message = "Can't give orders to a crew member.")
-      break
-  addMessage(message = "You stopped current upgrade.", mType = orderMessage)
+  try:
+    stopUpgrade()
+  except CrewOrderError:
+    showMessage(text = getCurrentExceptionMsg(),
+        title = "Can't give orders")
+    return tclOk
+  except:
+    return showError(message = "Can't give orders to a crew member.")
   updateMessages()
   updateHeader()
   return showShipInfoCommand(clientData = clientData, interp = interp,
