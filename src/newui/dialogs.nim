@@ -286,8 +286,8 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
     return
   try:
     const
-      width: float = 250
-      height: float = 150
+      width: float = 350
+      height: float = 200
 
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = messageData.title, x = dialogX,
