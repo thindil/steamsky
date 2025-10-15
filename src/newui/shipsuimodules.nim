@@ -21,7 +21,7 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crafts, crewinventory, game, messages, shipscrew,
+import ../[config, crafts, crewinventory, game, messages, missions, shipscrew,
     shipsupgrade, types]
 import coreui, dialogs, errordialog, setui, table, themes
 
@@ -461,6 +461,37 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       addMessage(message = "You disabled " & playerShip.modules[
           moduleIndex].name & ".", mType = orderMessage)
 
+proc addOwnersInfo(module: ModuleData; ownersName: string) {.raises: [], tags: [], contractual.} =
+  ## Show information about the selected module's owners
+  ##
+  ## * module     - the currently selected module
+  ## * ownersName - the text to display on the label for owners
+  var ownersText: string = ownersName
+  if module.owner.len > 1:
+    ownersText.add(y = "s")
+  ownersText.add(y = " (max " & $module.owner.len & "):")
+  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+  label(str = ownersText)
+
+proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show information about the selected cabin
+  ##
+  ## * module - the currently selected module
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  var isPassenger: bool = false
+  block missionLoop:
+    for mission in acceptedMissions:
+      if mission.mType == passenger:
+        for owner in module.owner:
+          if mission.data == owner:
+            isPassenger = true
+            break missionLoop
+  addOwnersInfo(module = module, ownersName = "Owners")
+
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the dialog with information about the selected module
@@ -565,6 +596,9 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         addUpgradeButton(upgradeType = maxValue,
             buttonTooltip = "hull's size so it can have more modules installed",
             module = module, dialog = dialog)
+    # Show information about cabin
+    of cabin:
+      showCabinInfo(module = module, dialog = dialog)
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
