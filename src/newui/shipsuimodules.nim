@@ -438,6 +438,28 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   label(str = "State:")
   colorLabel(str = (if module.disabled: "Disabled" else: "Enabled"),
       color = theme.colors[goldenColor])
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = "Turn " & (
+        if module.disabled: "on " else: "off ") & " the engine")
+  imageButton(image = images[powerIcon]):
+    if playerShip.modules[moduleIndex].disabled:
+      playerShip.modules[moduleIndex].disabled = false
+      addMessage(message = "You enabled " & playerShip.modules[
+          moduleIndex].name & ".", mType = orderMessage)
+    else:
+      var canDisable: bool = false
+      for index, module in playerShip.modules:
+        if module.mType == ModuleType2.engine and (not module.disabled and
+            index != moduleIndex):
+          canDisable = true
+          break
+      if not canDisable:
+        dialog = setMessage(message = "You can't disable this engine because it is your last working engine.",
+            title = "Can't disable engine")
+        return
+      playerShip.modules[moduleIndex].disabled = true
+      addMessage(message = "You disabled " & playerShip.modules[
+          moduleIndex].name & ".", mType = orderMessage)
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
