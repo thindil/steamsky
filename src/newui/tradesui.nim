@@ -152,7 +152,7 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
     if eventIndex > -1:
       if eventsList[eventIndex].eType == doublePrice and eventsList[
           eventIndex].itemIndex == protoIndex:
-        price = price * 2
+        price *= 2
     try:
       localItems.add(y = LocalItemData(name: getItemName(item = item),
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
@@ -179,7 +179,7 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
     if eventIndex > -1:
       if eventsList[eventIndex].eType == doublePrice and eventsList[
           eventIndex].itemIndex == protoIndex:
-        price = price * 2
+        price *= 2
     try:
       localItems.add(y = LocalItemData(name: itemsList[protoIndex].name,
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
@@ -466,7 +466,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if eventIndex > -1:
         if eventsList[eventIndex].eType == doublePrice and eventsList[
             eventIndex].itemIndex == protoIndex:
-          price = price * 2
+          price *= 2
       let profit: int = price - playerShip.cargo[i].price
       var baseAmount: Natural = 0
       if baseIndex > 0:
@@ -557,7 +557,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if eventIndex > -1:
         if eventsList[eventIndex].eType == doublePrice and eventsList[
             eventIndex].itemIndex == protoIndex:
-          price = price * 2
+          price *= 2
       let baseAmount: Natural = (if baseIndex == 0: traderCargo[itemsIndexes[
           i]].amount else: skyBases[baseIndex].cargo[itemsIndexes[i]].amount)
       addButton(label = itemName, tooltip = "Show available options of item.",
