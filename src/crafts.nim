@@ -21,7 +21,7 @@
 import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts
 import crewinventory, game, goals, items, log, messages, shipscargo, shipscrew,
-    statistics, types
+    statistics, types, utils
 
 type
   CraftingNoWorkshopError* = object of CatchableError
@@ -425,8 +425,8 @@ proc finishCrafting(recipe: CraftData; module: ModuleData; crafterIndex: int;
 
 proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
     recipeName: string; module: var ModuleData; owner, toolIndex,
-    crafterIndex: int): bool {.raises: [KeyError, Exception],
-    tags: [RootEffect], contractual.} =
+    crafterIndex: int; quality: ObjectQuality): bool {.raises: [KeyError,
+    Exception], tags: [RootEffect], contractual.} =
   ## Craft or deconstruct the selected item
   ##
   ## * amount       - the amount of space needed for new items
@@ -437,6 +437,7 @@ proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
   ## * owner        - the index of the crafter in the player's ship's module
   ## * toolIndex    - the index of the tool used for crafting
   ## * crafterIndex - the index of the crew member who crafts currently
+  ## * quality      - the quality of the crafted item
   ##
   ## Returns the modified parameter amount. Additionally, returns true if the
   ## crafting should stop otherwise false
@@ -449,11 +450,11 @@ proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
     return true
   if module.craftingIndex.len > 11 and module.craftingIndex[0..10] == "Deconstruct":
     updateCargo(ship = playerShip, protoIndex = recipe.resultIndex,
-        amount = resultAmount, quality = normal)
+        amount = resultAmount, quality = quality)
   else:
     updateCargo(ship = playerShip, protoIndex = recipesList[
         module.craftingIndex].resultIndex, amount = resultAmount,
-        quality = normal)
+        quality = quality)
   for key, protoRecipe in recipesList:
     if protoRecipe.resultIndex == recipe.resultIndex:
       updateCraftingOrders(index = key)
@@ -598,9 +599,10 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
         for j in 0..materialIndexes.high:
           amount += (itemsList[materialIndexes[j]].weight *
               recipe.materialAmounts[j])
+        let skillLevel: Natural = getSkillLevel(member = playerShip.crew[
+            crafterIndex], skillIndex = recipe.skill)
         var resultAmount: Natural = recipe.resultAmount + (
-            recipe.resultAmount.float * (getSkillLevel(member = playerShip.crew[
-            crafterIndex], skillIndex = recipe.skill).float / 100.0)).int
+            recipe.resultAmount.float * (skillLevel.float / 100.0)).int
         let damage: float = 1.0 - (module.durability.float /
             module.maxDurability.float)
         resultAmount -= (resultAmount.float * damage).int
@@ -619,10 +621,24 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
               ship = playerShip)
         if module.craftingIndex.len < 6 or (module.craftingIndex.len > 6 and
             module.craftingIndex[0..4] != "Study"):
+          let
+            roll: int = getRandom(min = 1, max = 100) + skillLevel -
+                recipe.difficulty
+            quality: ObjectQuality = case roll
+              of -1000..1:
+                poor
+              of 2..5:
+                low
+              of 6..94:
+                normal
+              of 95..99:
+                good
+              else:
+                excellent
           if craftItem(amount = amount, recipe = recipe,
               resultAmount = resultAmount, recipeName = recipeName,
               module = module, owner = owner, toolIndex = toolIndex,
-              crafterIndex = crafterIndex):
+              crafterIndex = crafterIndex, quality = quality):
             break
         else:
           for key, recipe in recipesList:
