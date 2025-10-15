@@ -368,6 +368,9 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
   label(str = "Upgrade progress:")
   var upgradePercent: int = 100 - ((module.upgradeProgress.float /
       maxUpgrade.float) * 100.0).int
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = moduleInfo)
   if upgradePercent > 74:
     progressBar(value = upgradePercent, maxValue = 100, modifyable = false)
   elif upgradePercent > 24:
@@ -452,7 +455,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     windowName: string = module.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+      flags = {windowBorder, windowTitle, windowMovable}):
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
     # Show the module's name
     label(str = "Name:")
