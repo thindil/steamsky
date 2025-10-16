@@ -70,7 +70,7 @@ var
       button1: emptyButtonSettings, button2: emptyButtonSettings)
   manipulateData: ManipulateData = ManipulateData(itemIndex: 0, maxAmount: 0,
       cost: 0, title: "")
-  timer: Natural = gameSettings.autoCloseMessagesTime
+  timer: float = gameSettings.autoCloseMessagesTime.float
 
 proc setQuestion*(question: string; qType: QuestionType;
     data: string = ""): GameDialog {.raises: [], tags: [RootEffect],
@@ -112,7 +112,7 @@ proc setMessage*(message, title: string): GameDialog {.raises: [],
       needLines = 1.0
     messageData = MessageData(text: message, title: title, lines: needLines,
         started: cpuTime())
-    timer = gameSettings.autoCloseMessagesTime
+    timer = gameSettings.autoCloseMessagesTime.float
     result = messageDialog
   except:
     result = setError(message = "Can't set the message.")
@@ -299,7 +299,7 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
       setLayoutRowDynamic(height = 30 * messageData.lines, cols = 1)
       wrapLabel(str = messageData.text)
       setLayoutRowDynamic(height = 30, cols = 1)
-      addCloseButton(dialog = dialog, label = "Close " & $timer)
+      addCloseButton(dialog = dialog, label = "Close " & $(timer.ceil.int))
   except:
     dialog = setError(message = "Can't show the message")
 
