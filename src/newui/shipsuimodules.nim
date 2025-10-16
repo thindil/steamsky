@@ -461,17 +461,36 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       addMessage(message = "You disabled " & playerShip.modules[
           moduleIndex].name & ".", mType = orderMessage)
 
-proc addOwnersInfo(module: ModuleData; ownersName: string) {.raises: [], tags: [], contractual.} =
+proc addOwnersInfo(module: ModuleData; ownersName: string;
+    addButton: bool = false) {.raises: [], tags: [], contractual.} =
   ## Show information about the selected module's owners
   ##
   ## * module     - the currently selected module
   ## * ownersName - the text to display on the label for owners
+  ## * addButton  - if true, add the button to manipulate the owners
   var ownersText: string = ownersName
   if module.owner.len > 1:
     ownersText.add(y = "s")
   ownersText.add(y = " (max " & $module.owner.len & "):")
   setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
   label(str = ownersText)
+  ownersText = ""
+  var haveOwner: bool = false
+  for owner in module.owner:
+    if owner > -1:
+      if haveOwner:
+        ownersText.add(y = ", ")
+      haveOwner = true
+      ownersText.add(y = playerShip.crew[owner].name)
+  if not haveOwner:
+    ownersText.add(y = "none")
+  colorLabel(str = ownersText, color = theme.colors[goldenColor])
+  if addButton:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Assign crew members to the module.")
+    imageButton(image = images[assignCrewIcon]):
+      discard
 
 proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -490,7 +509,7 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
           if mission.data == owner:
             isPassenger = true
             break missionLoop
-  addOwnersInfo(module = module, ownersName = "Owners")
+  addOwnersInfo(module = module, ownersName = "Owners", addButton = true)
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
