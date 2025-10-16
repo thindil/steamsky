@@ -1708,7 +1708,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
 proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   let moduleIndex: int = try:
-      ($argv[1]).parseInt - 1
+      ($argv[1]).parseInt
     except:
       return showError(message = "Can't set module index.")
   if playerShip.modules[moduleIndex].disabled:
