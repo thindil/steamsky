@@ -41,27 +41,27 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
     height: float = 200
 
   let windowName: string = "Rename the " & (case dialog
-      of renameDialog:
-        "ship"
-      of renameMemberDialog:
-        "crew member"
-      of renameModuleDialog:
-        "module"
-      else:
-        "")
+    of renameDialog:
+      "ship"
+    of renameMemberDialog:
+      "crew member"
+    of renameModuleDialog:
+      "module"
+    else:
+      "")
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 1)
     label(str = "Enter a new name" & (case dialog
-        of renameDialog:
-          ""
-        of renameMemberDialog:
-          " for " & playerShip.crew[crewIndex].name
-        of renameModuleDialog:
-          " for " & playerShip.modules[moduleIndex].name
-        else:
-          "") & ":")
+      of renameDialog:
+        ""
+      of renameMemberDialog:
+        " for " & playerShip.crew[crewIndex].name
+      of renameModuleDialog:
+        " for " & playerShip.modules[moduleIndex].name
+      else:
+        "") & ":")
     editString(text = newName, maxLen = 64)
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
@@ -395,5 +395,5 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 4
-  showLastMessages(theme = theme, dialog = dialog, inCombat = true,
-    height = windowHeight - height - 75)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+      height - 75)
