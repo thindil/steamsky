@@ -17,7 +17,7 @@
 
 ## Provides code related to the game's dialogs, like showing questions, etc.
 
-import std/[colors, os, math, strutils, tables]
+import std/[colors, os, math, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, config, crewinventory, game, game2, items, maps,
     messages, shipscargo, shipscrew, shipscrew2, types, trades, utils]
@@ -33,7 +33,7 @@ type
     lines: float
   MessageData = object
     text, title: string
-    lines: float
+    lines, started: float
   ButtonSettings* = object
     ## Used to store information about a button in a dialog
     text*: string    ## Text to show on the button
@@ -70,6 +70,7 @@ var
       button1: emptyButtonSettings, button2: emptyButtonSettings)
   manipulateData: ManipulateData = ManipulateData(itemIndex: 0, maxAmount: 0,
       cost: 0, title: "")
+  timer: Natural = gameSettings.autoCloseMessagesTime
 
 proc setQuestion*(question: string; qType: QuestionType;
     data: string = ""): GameDialog {.raises: [], tags: [RootEffect],
@@ -109,7 +110,9 @@ proc setMessage*(message, title: string): GameDialog {.raises: [],
     var needLines: float = ceil(x = getTextWidth(text = message) / 250)
     if needLines < 1.0:
       needLines = 1.0
-    messageData = MessageData(text: message, title: title, lines: needLines)
+    messageData = MessageData(text: message, title: title, lines: needLines,
+        started: cpuTime())
+    timer = gameSettings.autoCloseMessagesTime
     result = messageDialog
   except:
     result = setError(message = "Can't set the message.")
@@ -296,7 +299,7 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
       setLayoutRowDynamic(height = 30 * messageData.lines, cols = 1)
       wrapLabel(str = messageData.text)
       setLayoutRowDynamic(height = 30, cols = 1)
-      addCloseButton(dialog = dialog)
+      addCloseButton(dialog = dialog, label = "Close " & $timer)
   except:
     dialog = setError(message = "Can't show the message")
 
