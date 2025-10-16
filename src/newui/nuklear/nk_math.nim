@@ -35,8 +35,8 @@ proc nkShrinkRect*(r: NimRect; amount: cfloat): NimRect {.raises: [], tags: [],
   ##
   ## Returns the shrinked rectangle
   let
-    w = max(r.w, 2 * amount)
-    h = max(r.h, 2 * amount)
+    w = max(x = r.w, y = 2 * amount)
+    h = max(x = r.h, y = 2 * amount)
   result.x = r.x + amount
   result.y = r.y + amount
   result.w = w - 2 * amount
@@ -65,8 +65,8 @@ proc nkTriangleFromDirection*(`result`: var array[3, NimRect]; r: NimRect;
   ## * padY
   ## * direction
   var rect: NimRect = NimRect()
-  rect.w = max(2 * padX, r.w)
-  rect.h = max(2 * padY, r.h)
+  rect.w = max(x = 2 * padX, y = r.w)
+  rect.h = max(x = 2 * padY, y = r.h)
   rect.w = rect.w - 2 * padX
   rect.h = rect.h - 2 * padY
 
@@ -109,8 +109,8 @@ proc nkInbox*(px, py, x, y, w, h: cfloat): bool {.raises: [], tags: [],
   ## Returns true if the point is in the box, otherwise false
   return ((px >= x and px < x + w) and (py >= y and py < y + h))
 
-proc nkUnify*(clip: var NimRect; a: NimRect; x0, y0, x1, y1: cfloat) {.raises: [],
-    tags: [], contractual.} =
+proc nkUnify*(clip: var NimRect; a: NimRect; x0, y0, x1, y1: cfloat) {.raises: [
+    ], tags: [], contractual.} =
   ## Unify two rectangles
   ##
   ## * clip - the unified rectangle
@@ -121,9 +121,9 @@ proc nkUnify*(clip: var NimRect; a: NimRect; x0, y0, x1, y1: cfloat) {.raises: [
   ## * y1   - the X coordinate of bottom right point of the second rectangle
   ##
   ## Returns modified parameter clip
-  clip.x = max(a.x, x0)
-  clip.y = max(a.y, y0)
-  clip.w = min(a.x + a.w, x1) - clip.x
-  clip.h = min(a.y + a.h, y1) - clip.y
-  clip.w = max(0, clip.w)
-  clip.h = max(0, clip.h)
+  clip.x = max(x = a.x, y = x0)
+  clip.y = max(x = a.y, y = y0)
+  clip.w = min(x = a.x + a.w, y = x1) - clip.x
+  clip.h = min(x = a.y + a.h, y = y1) - clip.y
+  clip.w = max(x = 0, y = clip.w)
+  clip.h = max(x = 0, y = clip.h)
