@@ -330,11 +330,13 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
     imageLabelButton(image = images[negotiateColoredIcon], text = "Accept",
         alignment = right):
       dialog = none
-      skyBases[baseIndex].missions[missionIndex].multiplier = (missionPercent.float / 100.0)
+      skyBases[baseIndex].missions[missionIndex].multiplier = (
+        missionPercent.float / 100.0)
       try:
         acceptMission(missionIndex = missionIndex)
       except MissionAcceptingError:
-        dialog = setMessage(message = getCurrentExceptionMsg(), title = "Can't accept mission")
+        dialog = setMessage(message = getCurrentExceptionMsg(),
+            title = "Can't accept mission")
         return
       except:
         dialog = setError(message = "Can't accept mission.")
@@ -384,8 +386,8 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     # Show the list of missions
     addHeader(headers = headers, ratio = ratio, tooltip = "missions",
       code = sortMissions, dialog = dialog)
-    var currentRow = 1
-    let startRow = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    var currentRow: Positive = 1
+    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
     try:
