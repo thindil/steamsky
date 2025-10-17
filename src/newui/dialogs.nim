@@ -70,7 +70,7 @@ var
       button1: emptyButtonSettings, button2: emptyButtonSettings)
   manipulateData: ManipulateData = ManipulateData(itemIndex: 0, maxAmount: 0,
       cost: 0, title: "")
-  timer: float = gameSettings.autoCloseMessagesTime.float
+  timer: float = gameSettings.autoCloseMessagesTime.float * 1000.0
 
 proc setQuestion*(question: string; qType: QuestionType;
     data: string = ""): GameDialog {.raises: [], tags: [RootEffect],
@@ -112,7 +112,7 @@ proc setMessage*(message, title: string): GameDialog {.raises: [],
       needLines = 1.0
     messageData = MessageData(text: message, title: title, lines: needLines,
         started: cpuTime())
-    timer = gameSettings.autoCloseMessagesTime.float
+    timer = gameSettings.autoCloseMessagesTime.float * 1000.0
     result = messageDialog
   except:
     result = setError(message = "Can't set the message.")
@@ -287,6 +287,9 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
   ## the dialog.
   if dialog != messageDialog:
     return
+  if timer == 0.0 and dialog == messageDialog:
+    dialog = none
+    return
   try:
     const
       width: float = 350
@@ -299,7 +302,8 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
       setLayoutRowDynamic(height = 30 * messageData.lines, cols = 1)
       wrapLabel(str = messageData.text)
       setLayoutRowDynamic(height = 30, cols = 1)
-      addCloseButton(dialog = dialog, label = "Close " & $(timer.ceil.int))
+      addCloseButton(dialog = dialog, label = "Close " & $((timer /
+          1000.0).ceil.int))
   except:
     dialog = setError(message = "Can't show the message")
 
@@ -843,3 +847,11 @@ proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
       itemIndex], damageInfo = false, toLower = false) else: getItemName(
       item = playerShip.cargo[itemIndex], damageInfo = false,
       toLower = false)), button1 = button1, button2 = button2)
+
+proc updateTimer*(timeDiff: float) {.raises: [], tags: [], contractual.} =
+  ## Update the dialogs' timer
+  ##
+  ## * timeDiff - the amount of time passed
+  timer -= timeDiff
+  if timer < 0.0:
+    timer = 0.0

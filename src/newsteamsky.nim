@@ -22,9 +22,9 @@ import std/[os, parseopt, strutils, tables, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
 import newui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
-    basesui, combatui, coreui, errordialog, goalsui, header, mainmenu, mapsui,
-    missionsui, shipsui, shipsuicrew, shipsuicrewinventory, shipsuimodules,
-    themes, tradesui, waitmenu]
+    basesui, combatui, coreui, dialogs, errordialog, goalsui, header, mainmenu,
+    mapsui, missionsui, shipsui, shipsuicrew, shipsuicrewinventory,
+    shipsuimodules, themes, tradesui, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -142,7 +142,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         healWounded: showWounded, repairShip: showRepairs,
         buyRecipes: showRecipes, shipyard: showShipyard,
         baseMissions: showMissions, loot: showLoot, shipInfo: showShipInfo]
-    showDialog: array[GameDialog.errorDialog..GameDialog.renameModuleDialog,
+    showDialog: array[GameDialog.errorDialog..GameDialog.assignCrewDialog,
         proc(dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
         newGoalDialog: showGoals, boardingDialog: showPartyMenu,
@@ -154,7 +154,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         memberDialog: showMemberInfo, renameMemberDialog: showRenameDialog,
         inventoryDialog: showMemberInventory,
         moduleInfoDialog: shipsuimodules.showModuleInfo,
-      renameModuleDialog: showRenameDialog]
+        renameModuleDialog: showRenameDialog,
+        assignCrewDialog: showAssignCrewDialog]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
@@ -167,7 +168,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         resetTooltips()
 
       # Show dialogs if needed
-      if dialog in GameDialog.errorDialog..GameDialog.renameModuleDialog:
+      if dialog in GameDialog.errorDialog..GameDialog.assignCrewDialog:
         showDialog[dialog](dialog = dialog)
       elif dialog == gameMenuDialog:
         showGameMenu(dialog = dialog, state = state)
@@ -219,6 +220,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     let dt: float = cpuTime() - started
     if (dt < dtime):
       sleep(milsecs = (dtime - dt).int)
+    updateTimer(timeDiff = dtime)
 
     # Force to redraw every 1 sec
     if not redraw:
