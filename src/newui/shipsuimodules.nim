@@ -462,7 +462,8 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
           moduleIndex].name & ".", mType = orderMessage)
 
 proc addOwnersInfo(module: ModuleData; ownersName: string;
-    addButton: bool = false; dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+    addButton: bool = false; dialog: var GameDialog) {.raises: [], tags: [],
+        contractual.} =
   ## Show information about the selected module's owners
   ##
   ## * module     - the currently selected module
@@ -494,9 +495,11 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
       addTooltip(bounds = getWidgetBounds(),
           text = "Assign crew members to the module.")
     imageButton(image = images[assignCrewIcon]):
+      setDialog(y = windowHeight / 10)
       dialog = assignCrewDialog
 
-proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [],
+    contractual.} =
   ## Show assign the crew member UI
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -505,7 +508,7 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [], contr
   ## happened.
   const
     width: float = 300
-    height: float = 500
+    height: float = 400
 
   let
     module: ModuleData = playerShip.modules[moduleIndex]
@@ -514,6 +517,13 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [], contr
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
     setLayoutRowDynamic(height = 35, cols = 1)
+    var assigned: Natural = 0
+    for index, member in playerShip.crew:
+      var checked = index in module.owner
+      checkbox(label = member.name, checked = checked)
+      if checked:
+        assigned.inc
+    label(str = "Available: " & $(module.owner.len - assigned))
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -534,7 +544,8 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
           if mission.data == owner:
             isPassenger = true
             break missionLoop
-  addOwnersInfo(module = module, ownersName = "Owners", addButton = true, dialog = dialog)
+  addOwnersInfo(module = module, ownersName = "Owners", addButton = true,
+      dialog = dialog)
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
