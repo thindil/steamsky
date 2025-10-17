@@ -10,10 +10,12 @@ All notable changes to this project will be documented in this file.
   crew members on the player's ship
 - The quality of tools and materials affects effectiveness of upgrading and
   repairing progress of the player's ship's modules
-- Crash when trying to disable an engine on the player's ship
+- The crafter's skill and the recipe's difficulty affects quality of the
+  result's items during crafting
 
 ### Fixed
 - Updating the game's header after installing or removing modules in a shipyard
+- Crash when trying to disable an engine on the player's ship
 
 ## [11.6] - 2025-10-05
 
