@@ -462,12 +462,16 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
           moduleIndex].name & ".", mType = orderMessage)
 
 proc addOwnersInfo(module: ModuleData; ownersName: string;
-    addButton: bool = false) {.raises: [], tags: [], contractual.} =
+    addButton: bool = false; dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## Show information about the selected module's owners
   ##
   ## * module     - the currently selected module
   ## * ownersName - the text to display on the label for owners
   ## * addButton  - if true, add the button to manipulate the owners
+  ## * dialog     - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified when the player
+  ## wants to assign crew members to the module.
   var ownersText: string = ownersName
   if module.owner.len > 1:
     ownersText.add(y = "s")
@@ -490,7 +494,16 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
       addTooltip(bounds = getWidgetBounds(),
           text = "Assign crew members to the module.")
     imageButton(image = images[assignCrewIcon]):
-      discard
+      dialog = assignCrewDialog
+
+proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+  ## Show assign the crew member UI
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
 
 proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -499,8 +512,7 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   ## * module - the currently selected module
   ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
+  ## Returns the modified parameter dialog.
   var isPassenger: bool = false
   block missionLoop:
     for mission in acceptedMissions:
@@ -509,7 +521,7 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
           if mission.data == owner:
             isPassenger = true
             break missionLoop
-  addOwnersInfo(module = module, ownersName = "Owners", addButton = true)
+  addOwnersInfo(module = module, ownersName = "Owners", addButton = true, dialog = dialog)
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
