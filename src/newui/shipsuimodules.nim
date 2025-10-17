@@ -503,7 +503,20 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [], contr
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  const
+    width: float = 300
+    height: float = 500
+
+  let
+    module: ModuleData = playerShip.modules[moduleIndex]
+    windowName: string = "Assign a crew member to " & module.name
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowMovable}):
+    setLayoutRowDynamic(height = 35, cols = 1)
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = windowName)
 
 proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
