@@ -498,8 +498,8 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
       setDialog(y = windowHeight / 10)
       dialog = assignCrewDialog
 
-proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [],
-    contractual.} =
+proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Show assign the crew member UI
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -520,7 +520,27 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [],
     var assigned: Natural = 0
     for index, member in playerShip.crew:
       var checked = index in module.owner
-      checkbox(label = member.name, checked = checked)
+      if checkbox(label = member.name, checked = checked):
+        if checked and assigned == module.owner.len:
+          checked = false
+        if checked:
+          discard
+        else:
+          for owner in playerShip.modules[moduleIndex].owner.mitems:
+            if owner == index:
+              owner = -1
+              break
+          try:
+            if modulesList[module.protoIndex].mType != ModuleType.cabin:
+              giveOrders(ship = playerShip, memberIndex = crewIndex,
+                  givenOrder = rest, moduleIndex = -1, checkPriorities = false)
+          except CrewOrderError, CrewNoSpaceError:
+            dialog = setMessage(message = getCurrentExceptionMsg(),
+                title = "Can't give a order")
+            return
+          except:
+            dialog = setError(message = "Can't give order to a crew member.")
+            return
       if checked:
         assigned.inc
     label(str = "Available: " & $(module.owner.len - assigned))
