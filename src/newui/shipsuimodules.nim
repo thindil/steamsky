@@ -25,8 +25,11 @@ import ../[config, crafts, crewinventory, game, messages, missions, shipscrew,
     shipsupgrade, types]
 import coreui, dialogs, errordialog, setui, table, themes
 
-type ModulesSortOrders = enum
-  nameAsc, nameDesc, damageAsc, damageDesc, infoAsc, infoDesc, none
+type
+  ModulesSortOrders = enum
+    nameAsc, nameDesc, damageAsc, damageDesc, infoAsc, infoDesc, none
+  AssignType = enum
+    crew, ammo, skill
 
 const defaultModulesSortOrder: ModulesSortOrders = none
 
@@ -497,6 +500,73 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
     imageButton(image = images[assignCrewIcon]):
       setDialog(y = windowHeight / 10)
       dialog = assignCrewDialog
+
+proc assignModule(assignAction: AssignType; assignIndex: Natural) {.raises: [], tags: [], contractual.} =
+  case assignAction
+  of crew:
+    try:
+      case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
+      of cabin:
+        block modulesLoop:
+          for module in playerShip.modules.mitems:
+            if module.mType == ModuleType2.cabin:
+              for owner in module.owner.mitems:
+                if owner == assignIndex:
+                  owner = -1
+                  break modulesLoop
+        var assigned: bool = false
+        for owner in playerShip.modules[moduleIndex].owner.mitems:
+          if owner == -1:
+            owner = assignIndex
+            assigned = true
+            break
+        if not assigned:
+          playerShip.modules[moduleIndex].owner[0] = assignIndex
+        addMessage(message = "You assigned " & playerShip.modules[
+            moduleIndex].name & " to " & playerShip.crew[assignIndex].name &
+                ".",
+            mType = orderMessage)
+      of gun, harpoonGun:
+        giveOrders(ship = playerShip, memberIndex = assignIndex,
+            givenOrder = gunner, moduleIndex = moduleIndex)
+      of alchemyLab..greenhouse:
+        giveOrders(ship = playerShip, memberIndex = memberIndex,
+            givenOrder = craft, moduleIndex = moduleIndex)
+      of medicalRoom:
+        giveOrders(ship = playerShip, memberIndex = memberIndex,
+            givenOrder = heal, moduleIndex = moduleIndex)
+      of trainingRoom:
+        giveOrders(ship = playerShip, memberIndex = memberIndex,
+            givenOrder = train, moduleIndex = moduleIndex)
+      else:
+        discard
+    except CrewNoSpaceError, CrewOrderError:
+      dialog = setMessage(message = getCurrentExceptionMsg(), title = "Can't assign crew")
+      return
+    except:
+      dialog = setError(message = "Can't assign crew member to the module.")
+      return
+  elif argv[1] == "ammo":
+    if playerShip.modules[moduleIndex].mType == ModuleType2.gun:
+      playerShip.modules[moduleIndex].ammoIndex = assignIndex
+    else:
+      playerShip.modules[moduleIndex].harpoonIndex = assignIndex
+    try:
+      addMessage(message = "You assigned " & itemsList[playerShip.cargo[
+          assignIndex].protoIndex].name & " to " & playerShip.modules[
+          moduleIndex].name & ".", mType = orderMessage)
+    except:
+      return showError(message = "Can't show message about assigned ammo.")
+  elif argv[1] == "skill":
+    if playerShip.modules[moduleIndex].trainedSkill == assignIndex:
+      return tclOk
+    playerShip.modules[moduleIndex].trainedSkill = assignIndex
+    try:
+      addMessage(message = "You prepared " & playerShip.modules[
+          moduleIndex].name & " for training " & skillsList[assignIndex].name &
+          ".", mType = orderMessage)
+    except:
+      return showError(message = "Can't show message about assigned skill.")
 
 proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
