@@ -605,7 +605,8 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
         if checked and assigned == module.owner.len:
           checked = false
         if checked:
-          assignModule(assignAction = crew, assignIndex = index, dialog = dialog)
+          assignModule(assignAction = crew, assignIndex = index,
+              dialog = dialog)
         else:
           for owner in playerShip.modules[moduleIndex].owner.mitems:
             if owner == index:
