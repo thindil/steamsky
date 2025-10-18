@@ -37,8 +37,8 @@ proc nkShrinkRect*(r: NimRect; amount: cfloat): NimRect {.raises: [], tags: [],
   ##
   ## Returns the shrinked rectangle
   let
-    w = max(x = r.w, y = 2 * amount)
-    h = max(x = r.h, y = 2 * amount)
+    w: cfloat = max(x = r.w, y = 2 * amount)
+    h: cfloat = max(x = r.h, y = 2 * amount)
   result.x = r.x + amount
   result.y = r.y + amount
   result.w = w - 2 * amount
