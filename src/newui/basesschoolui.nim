@@ -71,7 +71,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Select the crew member which skills will be trained")
-    let newMember = comboList(items = crewList,
+    let newMember: Natural = comboList(items = crewList,
         selected = crewIndex, itemHeight = 25, x = 200, y = 150)
     if newMember != crewIndex:
       crewIndex = newMember
@@ -81,7 +81,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Select the skill which will be trained")
-    let newSkill = comboList(items = schoolSkillsList,
+    let newSkill: Natural = comboList(items = schoolSkillsList,
         selected = skillIndex, itemHeight = 25, x = 300, y = 150)
     if newSkill != skillIndex:
       skillIndex = newSkill
