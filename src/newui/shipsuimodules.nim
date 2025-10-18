@@ -501,7 +501,16 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
       setDialog(y = windowHeight / 10)
       dialog = assignCrewDialog
 
-proc assignModule(assignAction: AssignType; assignIndex: Natural) {.raises: [], tags: [], contractual.} =
+proc assignModule(assignAction: AssignType; assignIndex: Natural;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Assign member, ammo or skill to module
+  ##
+  ## * assignAction - the type of assignment
+  ## * assignIndex  - the index of the thing to assign
+  ## * dialog       - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   case assignAction
   of crew:
     try:
@@ -530,23 +539,24 @@ proc assignModule(assignAction: AssignType; assignIndex: Natural) {.raises: [], 
         giveOrders(ship = playerShip, memberIndex = assignIndex,
             givenOrder = gunner, moduleIndex = moduleIndex)
       of alchemyLab..greenhouse:
-        giveOrders(ship = playerShip, memberIndex = memberIndex,
+        giveOrders(ship = playerShip, memberIndex = assignIndex,
             givenOrder = craft, moduleIndex = moduleIndex)
       of medicalRoom:
-        giveOrders(ship = playerShip, memberIndex = memberIndex,
+        giveOrders(ship = playerShip, memberIndex = assignIndex,
             givenOrder = heal, moduleIndex = moduleIndex)
       of trainingRoom:
-        giveOrders(ship = playerShip, memberIndex = memberIndex,
+        giveOrders(ship = playerShip, memberIndex = assignIndex,
             givenOrder = train, moduleIndex = moduleIndex)
       else:
         discard
     except CrewNoSpaceError, CrewOrderError:
-      dialog = setMessage(message = getCurrentExceptionMsg(), title = "Can't assign crew")
+      dialog = setMessage(message = getCurrentExceptionMsg(),
+          title = "Can't assign crew")
       return
     except:
       dialog = setError(message = "Can't assign crew member to the module.")
       return
-  elif argv[1] == "ammo":
+  of ammo:
     if playerShip.modules[moduleIndex].mType == ModuleType2.gun:
       playerShip.modules[moduleIndex].ammoIndex = assignIndex
     else:
@@ -556,17 +566,18 @@ proc assignModule(assignAction: AssignType; assignIndex: Natural) {.raises: [], 
           assignIndex].protoIndex].name & " to " & playerShip.modules[
           moduleIndex].name & ".", mType = orderMessage)
     except:
-      return showError(message = "Can't show message about assigned ammo.")
-  elif argv[1] == "skill":
+      dialog = setError(message = "Can't show message about assigned ammo.")
+      return
+  of skill:
     if playerShip.modules[moduleIndex].trainedSkill == assignIndex:
-      return tclOk
+      return
     playerShip.modules[moduleIndex].trainedSkill = assignIndex
     try:
       addMessage(message = "You prepared " & playerShip.modules[
           moduleIndex].name & " for training " & skillsList[assignIndex].name &
           ".", mType = orderMessage)
     except:
-      return showError(message = "Can't show message about assigned skill.")
+      dialog = setError(message = "Can't show message about assigned skill.")
 
 proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -594,7 +605,7 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
         if checked and assigned == module.owner.len:
           checked = false
         if checked:
-          discard
+          assignModule(assignAction = crew, assignIndex = index, dialog = dialog)
         else:
           for owner in playerShip.modules[moduleIndex].owner.mitems:
             if owner == index:
