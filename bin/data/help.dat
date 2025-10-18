@@ -273,6 +273,7 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 {b}*{/b} Crafting skills and level of damage to workplace determine amount of manufactured items. More damaged modules causes less crafted items.
 {b}*{/b} Each crafting module have separated crafting order. It means, you can produce few types of items (or few times this same item) in this same time, if you have few crafting modules installed on ship and all have assigned work orders and workers.
 {b}*{/b} Better crafting recipes may require better crafting tools.
+{b}*{/b} The quality of crafted item depends on the crafting skill of the assigned crew member and the difficulty of the crafting recipe.
 </entry>
 <entry index="repair" title=" 8. Repair/Upgrade ship">{u}Self repair of ship{/u}
 
