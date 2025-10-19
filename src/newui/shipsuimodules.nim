@@ -652,7 +652,7 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
   label(str = "Cleanliness:")
   var damagePercent2: Natural = ((module.cleanliness.float /
-      module.quality.float) * 100.0).int
+      module.quality.float) * 100.0).Natural
   case damagePercent2
   of 0:
     if gameSettings.showTooltips:
@@ -682,6 +682,12 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Clean")
     progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
+  # Show information about cabin's quality
+  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+  label(str = "Quality:")
+  var quality: Natural = ((module.quality.float / 100.0) * 100.0).Natural
+  changeStyle(field = progressbar, color = theme.colors[blueColor]):
+    progressBar(value = quality, maxValue = 100, modifyable = false)
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
