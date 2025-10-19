@@ -846,7 +846,16 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       addOwnersInfo(module = module, ownersName = "Gunner", addButton = true,
           dialog = dialog)
       # Show information about gun's ammunition
+      setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
       label(str = "Ammunition:")
+      group(title = "ammoInfo", flags = {windowNoFlags}):
+        setLayoutRowDynamic(height = 30, cols = 3)
+        label(str = "test")
+        label(str = "test")
+        label(str = "test")
+        label(str = "test")
+        label(str = "test")
+        label(str = "test")
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
