@@ -683,13 +683,16 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       addTooltip(bounds = getWidgetBounds(), text = "Clean")
     progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
   # Show information about cabin's quality
-  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
-  label(str = "Quality:")
   let moduleMaxValue2: Positive = try:
         (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
     except:
       dialog = setError(message = "Can't count the cabin's max value.")
       return
+  if module.quality < moduleMaxValue2:
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+  else:
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5])
+  label(str = "Quality:")
   var quality: Natural = ((module.quality.float / 100.0) * 100.0).Natural
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = getCabinQuality(
@@ -808,6 +811,42 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     # Show information about cabin
     of cabin:
       showCabinInfo(module = module, dialog = dialog)
+    # Show information about guns and harpoon guns
+    of gun, harpoonGun:
+      # Show information about gun's strength
+      let
+        moduleStrength: int = try:
+            (if modulesList[module.protoIndex].mType ==
+              ModuleType.gun: module.damage else: module.duration)
+          except:
+            dialog = setError(message = "Can't count the module's strength.")
+            return
+        moduleMaxValue2: Positive = try:
+              (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
+          except:
+            dialog = setError(message = "Can't count the gun's max value.")
+            return
+      if moduleStrength < moduleMaxValue2:
+        setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+      else:
+        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+      label(str = "Strength:")
+      colorLabel(str = $moduleStrength & (if moduleStrength ==
+          moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
+      if moduleStrength < moduleMaxValue2:
+        try:
+          addUpgradeButton(upgradeType = maxValue, buttonTooltip = (
+              if modulesList[module.protoIndex].mType ==
+              ModuleType.gun: "damage" else: "strength") & " of gun",
+              module = module, dialog = dialog)
+        except:
+          dialog = setError(message = "Can't show the gun's upgrade button.")
+          return
+      # Show information about gun's owners
+      addOwnersInfo(module = module, ownersName = "Gunner", addButton = true,
+          dialog = dialog)
+      # Show information about gun's ammunition
+      label(str = "Ammunition:")
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
