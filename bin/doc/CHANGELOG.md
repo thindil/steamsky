@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file.
 - The crafter's skill and the recipe's difficulty affects quality of the
   result's items during crafting
 
+### Changed
+- Updated help
+
 ### Fixed
 - Updating the game's header after installing or removing modules in a shipyard
 - Crash when trying to disable an engine on the player's ship
