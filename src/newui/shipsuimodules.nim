@@ -21,8 +21,8 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crafts, crewinventory, game, messages, missions, shipscrew,
-    shipsupgrade, types]
+import ../[config, crafts, crewinventory, game, messages, missions, ships,
+    shipscrew, shipsupgrade, types]
 import coreui, dialogs, errordialog, setui, table, themes
 
 type
@@ -685,9 +685,21 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   # Show information about cabin's quality
   setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
   label(str = "Quality:")
+  let moduleMaxValue2: Positive = try:
+        (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
+    except:
+      dialog = setError(message = "Can't count the cabin's max value.")
+      return
   var quality: Natural = ((module.quality.float / 100.0) * 100.0).Natural
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = getCabinQuality(
+        quality = module.quality) & (if module.quality ==
+        moduleMaxValue2: " (max upgrade)" else: ""))
   changeStyle(field = progressbar, color = theme.colors[blueColor]):
     progressBar(value = quality, maxValue = 100, modifyable = false)
+  if module.quality < moduleMaxValue2:
+    addUpgradeButton(upgradeType = maxValue, buttonTooltip = "cabin's quality",
+        module = module, dialog = dialog)
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
