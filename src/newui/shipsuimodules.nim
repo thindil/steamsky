@@ -651,37 +651,37 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   # Show information about cabin's cleanliness
   setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
   label(str = "Cleanliness:")
-  var damagePercent2: int = ((1.0 - (module.cleanliness.float /
-      module.quality.float)) * 100.0).int
+  var damagePercent2: Natural = ((module.cleanliness.float /
+      module.quality.float) * 100.0).int
   case damagePercent2
   of 0:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Clean")
-    progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
-  of 1..19:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Bit dusty")
-    progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
-  of 20..49:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Dusty")
-    changeStyle(field = progressbar, color = theme.colors[yellowColor]):
-      progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
-  of 50..79:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Dirty")
-    changeStyle(field = progressbar, color = theme.colors[yellowColor]):
-      progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
-  of 80..99:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Very dirty")
-    changeStyle(field = progressbar, color = theme.colors[redColor]):
-      progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
-  else:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Ruined")
     changeStyle(field = progressbar, color = theme.colors[redColor]):
       progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
+  of 1..19:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Very dirty")
+    changeStyle(field = progressbar, color = theme.colors[redColor]):
+      progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
+  of 20..49:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Dirty")
+    changeStyle(field = progressbar, color = theme.colors[yellowColor]):
+      progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
+  of 50..79:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Dusty")
+    changeStyle(field = progressbar, color = theme.colors[yellowColor]):
+      progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
+  of 80..99:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Bit dusty")
+    progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
+  else:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Clean")
+    progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
 
 proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
