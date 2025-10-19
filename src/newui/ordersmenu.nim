@@ -631,7 +631,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
     popup(pType = staticPopup, title = "Ship orders", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
-      setLayoutRowDynamic(30, 1)
+      setLayoutRowDynamic(height = 30, cols = 1)
       if currentStory.index.len > 0:
         let step: StepData = try:
             (if currentStory.currentStep == -1: storiesList[
