@@ -69,8 +69,8 @@ proc nkTriangleFromDirection*(`result`: var array[3, NimRect]; r: NimRect;
   var rect: NimRect = NimRect()
   rect.w = max(x = 2 * padX, y = r.w)
   rect.h = max(x = 2 * padY, y = r.h)
-  rect.w = rect.w - 2 * padX
-  rect.h = rect.h - 2 * padY
+  rect.w -= 2 * padX
+  rect.h -= 2 * padY
 
   rect.x = r.x + padX
   rect.y = r.y + padY
