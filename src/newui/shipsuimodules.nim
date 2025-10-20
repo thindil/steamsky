@@ -877,6 +877,16 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             except:
               dialog = setError(message = "Can't find ammo.")
               return
+      for index, item in playerShip.cargo:
+        try:
+          if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
+              module.protoIndex].value - 1] and index != ammoIndex:
+            imageButton(image = images[assignAmmoIcon]):
+              discard
+            break
+        except:
+          dialog = setError(message = "Can't set gun's ammo button.")
+          return
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
