@@ -686,7 +686,7 @@ proc nkStrokeRect(b: PNkCommandBuffer, rect: NimRect, rounding,
       x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
       return
   var cmd: ptr nk_command_rect
-  cmd = cast[ptr nk_command_rect](nkCommandBufferPush(b = b, t = commandRect, cmd.sizeof))
+  cmd = cast[ptr nk_command_rect](nkCommandBufferPush(b = b, t = commandRect, size = cmd.sizeof))
   if cmd == nil:
     return
   cmd.rounding = rounding.cushort
@@ -750,14 +750,14 @@ proc nkFillRect(b: PNkCommandBuffer; rect: NimRect; rounding: float;
 
   var cmd: ptr nk_command_rect_filled
   cmd = cast[ptr nk_command_rect_filled](nkCommandBufferPush(b = b,
-    t = commandRectFilled, cmd.sizeof))
+    t = commandRectFilled, size = cmd.sizeof))
   if cmd == nil:
     return
   cmd.rounding = rounding.cushort
   cmd.x = rect.x.cshort
   cmd.y = rect.y.cshort
-  cmd.w = max(0, rect.w).cushort
-  cmd.h = max(0, rect.h).cushort
+  cmd.w = max(x = 0, y = rect.w).cushort
+  cmd.h = max(x = 0, y = rect.h).cushort
   cmd.color = c
 
 proc nkFillCircle(b: PNkCommandBuffer; rect: NimRect; c: nk_color)
@@ -777,13 +777,13 @@ proc nkFillCircle(b: PNkCommandBuffer; rect: NimRect; c: nk_color)
 
   var cmd: ptr nk_command_circle_filled
   cmd = cast[ptr nk_command_circle_filled](nkCommandBufferPush(b = b,
-    t = commandCircleFilled, cmd.sizeof))
+    t = commandCircleFilled, size = cmd.sizeof))
   if cmd == nil:
     return
   cmd.x = rect.x.cshort
   cmd.y = rect.y.cshort
-  cmd.w = max(0, rect.w).cushort
-  cmd.h = max(0, rect.h).cushort
+  cmd.w = max(x = 0, y = rect.w).cushort
+  cmd.h = max(x = 0, y = rect.h).cushort
   cmd.color = c
 
 proc nkFillTriangle(b: PNkCommandBuffer, x0, y0, x1, y1, x2, y2: cfloat,
@@ -810,7 +810,7 @@ proc nkFillTriangle(b: PNkCommandBuffer, x0, y0, x1, y1, x2, y2: cfloat,
 
   var cmd: ptr nk_command_triangle_filled
   cmd = cast[ptr nk_command_triangle_filled](nkCommandBufferPush(b = b,
-    t = commandTriangleFilled, cmd.sizeof))
+    t = commandTriangleFilled, size = cmd.sizeof))
   if cmd == nil:
     return
   cmd.a.x = x0.cshort
@@ -838,7 +838,8 @@ proc nkDrawImage(b: PNkCommandBuffer; r: NimRect; img: PImage; col: nk_color)
       return
 
   var cmd: ptr nk_command_image
-  cmd = cast[ptr nk_command_image](nkCommandBufferPush(b = b, t = commandImage, cmd.sizeof))
+  cmd = cast[ptr nk_command_image](nkCommandBufferPush(b = b, t = commandImage,
+    size = cmd.sizeof))
   if cmd == nil:
     return
   cmd.x = r.x.cshort
@@ -1141,15 +1142,16 @@ proc nkWidgetText(o: PNkCommandBuffer; b: var NimRect; str: string; len: var int
   body:
     if o == nil or t == nil:
       return
-    b.h = max(b.h, 2 * t.padding.y)
+    b.h = max(x = b.h, y = 2 * t.padding.y)
     var label: NimRect = NimRect()
     label.x = 0
     label.w = 0
     label.y = b.y + t.padding.y
-    label.h = min(f.height, b.h - 2 * t.padding.y)
+    label.h = min(x = f.height, y = b.h - 2 * t.padding.y)
     var textWidth: float = 0.0
     textWidth = try:
-        f.width(f.userdata, f.height, str.cstring, len.cint)
+        f.width(arg1 = f.userdata, h = f.height, arg3 = str.cstring,
+          len = len.cint)
       except:
         return
     textWidth += (2.0 * t.padding.x)
@@ -1157,16 +1159,16 @@ proc nkWidgetText(o: PNkCommandBuffer; b: var NimRect; str: string; len: var int
     # align in x-axis
     if (a and textLeft.ord).bool:
       label.x = b.x + t.padding.x
-      label.w = max(0, b.w - 2 * t.padding.x)
+      label.w = max(x = 0, y = b.w - 2 * t.padding.x)
     elif (a and textCentered.ord).bool:
-      label.w = max(1, 2 * t.padding.x + textWidth.float)
+      label.w = max(x = 1, y = 2 * t.padding.x + textWidth.float)
       label.x = (b.x + t.padding.x + ((b.w - 2 * t.padding.x) - label.w) / 2)
-      label.x = max(b.x + t.padding.x, label.x)
-      label.w = min(b.x + b.w, label.x + label.w)
+      label.x = max(x = b.x + t.padding.x, y = label.x)
+      label.w = min(x = b.x + b.w, y = label.x + label.w)
       if label.w >= label.x:
         label.w -= label.x
     elif (a and textRight.ord).bool:
-      label.x = max(b.x + t.padding.x, (b.x + b.w) - (2 * t.padding.x + textWidth.float))
+      label.x = max(x = b.x + t.padding.x, y = (b.x + b.w) - (2 * t.padding.x + textWidth.float))
       label.w = textWidth.float + 2 * t.padding.x
     else:
       return
@@ -1174,7 +1176,7 @@ proc nkWidgetText(o: PNkCommandBuffer; b: var NimRect; str: string; len: var int
     # align in y-axis
     if (a and textMiddle.ord).bool:
       label.y = b.y + b.h / 2.0 - f.height.float / 2.0
-      label.h = max(b.h / 2.0, b.h - (b.h / 2.0 + f.height / 2.0))
+      label.h = max(x = b.h / 2.0, y = b.h - (b.h / 2.0 + f.height / 2.0))
     elif (a and textBottom.ord).bool:
       label.y = b.y + b.h - f.height
       label.h = f.height
@@ -1532,7 +1534,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       layout.bounds.h -= layout.footer_height
 
     # panel header
-    if nkPanelHasHeader(flags = win.flags, title):
+    if nkPanelHasHeader(flags = win.flags, title = title):
       var
         header: NimRect
         background: nk_style_item
@@ -2658,7 +2660,7 @@ proc stylePushStyleItem(fld: StyleStyleTypes; col: Color): bool {.raises: [], ta
   let (r, g, b) = col.extractRGB()
   if fld == progressbar:
     return nk_style_push_style_item(ctx = ctx, dest = ctx.style.progress.cursor_normal,
-      source = nk_style_item_color(nk_rgb(r = r.cint, g = g.cint, b = b.cint)))
+      source = nk_style_item_color(col = nk_rgb(r = r.cint, g = g.cint, b = b.cint)))
 
 proc styleFromTable*(table: openArray[NimColor]) {.raises: [], tags: [],
     contractual.} =
