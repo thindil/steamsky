@@ -25,6 +25,36 @@ import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
     shipsmovement, statistics, stories, stories2, trades, types, utils]
 import coreui, dialogs, errordialog, setui, waitmenu
 
+proc countMissionHeight(baseIndex: ExtendedBasesRange;
+    height: var Positive) {.raises: [], tags: [], contractual.} =
+  ## Count the height of the orders menu, missions button
+  ##
+  ## * baseIndex  - the index of the base to which the player's ship is docked
+  ##
+  ## Returns the modified parameter height.
+  if skyBases[baseIndex].missions.len > 0:
+    var missionsLimit: int = case skyBases[baseIndex].reputation.level
+      of 0..25:
+        1
+      of 26..50:
+        3
+      of 51..75:
+        5
+      of 76..100:
+        10
+      else:
+        0
+    for mission in acceptedMissions:
+      if (mission.finished and mission.startBase == baseIndex) or (
+          mission.targetX == playerShip.skyX and mission.targetY ==
+          playerShip.skyY):
+        if mission.mType == deliver or mission.finished:
+          height += 35
+      if mission.startBase == baseIndex:
+        missionsLimit.dec
+    if missionsLimit > 0:
+      height += 35
+
 proc countHeight(baseIndex: ExtendedBasesRange;
     haveTrader: bool; dialog: var GameDialog): Positive {.raises: [], tags: [
         RootEffect], contractual.} =
@@ -80,28 +110,7 @@ proc countHeight(baseIndex: ExtendedBasesRange;
         except:
           dialog = setError(message = "Can't check if base has recipes for sale.")
           return
-      if skyBases[baseIndex].missions.len > 0:
-        var missionsLimit: int = case skyBases[baseIndex].reputation.level
-          of 0..25:
-            1
-          of 26..50:
-            3
-          of 51..75:
-            5
-          of 76..100:
-            10
-          else:
-            0
-        for mission in acceptedMissions:
-          if (mission.finished and mission.startBase == baseIndex) or (
-              mission.targetX == playerShip.skyX and mission.targetY ==
-              playerShip.skyY):
-            if mission.mType == deliver or mission.finished:
-              result += 35
-          if mission.startBase == baseIndex:
-            missionsLimit.dec
-        if missionsLimit > 0:
-          result += 35
+      countMissionHeight(baseIndex = baseIndex, height = result)
       if playerShip.homeBase != baseIndex:
         result += 35
   else:
@@ -121,7 +130,8 @@ proc countHeight(baseIndex: ExtendedBasesRange;
       if haveTrader:
         let itemIndex: int = try:
             findItem(inventory = playerShip.cargo,
-              itemType = factionsList[skyBases[baseIndex].owner].healingTools, itemQuality = any)
+              itemType = factionsList[skyBases[baseIndex].owner].healingTools,
+                  itemQuality = any)
           except:
             dialog = setError(message = "Can't find medicine in the ship cargo.")
             return
