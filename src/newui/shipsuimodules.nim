@@ -848,14 +848,35 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       # Show information about gun's ammunition
       setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
       label(str = "Ammunition:")
+      var haveAmmo: bool = false
+      let ammoIndex: int = (if module.mType ==
+          ModuleType2.gun: module.ammoIndex else: module.harpoonIndex)
       group(title = "ammoInfo", flags = {windowNoFlags}):
-        setLayoutRowDynamic(height = 30, cols = 3)
-        label(str = "test")
-        label(str = "test")
-        label(str = "test")
-        label(str = "test")
-        label(str = "test")
-        label(str = "test")
+        setLayoutRowDynamic(height = 30, cols = 1)
+        try:
+          if ammoIndex in playerShip.cargo.low..playerShip.cargo.high and
+              itemsList[playerShip.cargo[ammoIndex].protoIndex].itemType ==
+                  itemsTypesList[
+              modulesList[module.protoIndex].value - 1]:
+            colorLabel(str = itemsList[playerShip.cargo[
+                ammoIndex].protoIndex].name, color = theme.colors[goldenColor])
+            haveAmmo = true
+        except:
+          dialog = setError(message = "Can't check for the ammo.")
+          return
+        if not haveAmmo:
+          var mAmount: Natural = 0
+          for index, item in itemsList:
+            try:
+              if item.itemType == itemsTypesList[modulesList[
+                  module.protoIndex].value - 1]:
+                colorLabel(str = item.name, color = theme.colors[(if findItem(
+                    inventory = playerShip.cargo, protoIndex = index,
+                    itemQuality = any) > -1: goldenColor else: redColor)])
+                mAmount.inc
+            except:
+              dialog = setError(message = "Can't find ammo.")
+              return
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
