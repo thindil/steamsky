@@ -1041,6 +1041,8 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         recipe.skill].attribute].name & "} [list gold]")
   except:
     return showError(message = "Can't show recipe skill.")
+  if recipeType == "Craft":
+    tclEval(script = recipeText & " insert end {\nDifficulty: }")
   tclEval(script = recipeText & " insert end {\nTime needed: }")
   tclEval(script = recipeText & " insert end {" & $recipe.time & " minutes} [list gold]")
   tclEval(script = recipeText & " configure -state disabled")
