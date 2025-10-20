@@ -20,8 +20,8 @@
 
 import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts
-import crewinventory, game, goals, items, log, messages, shipscargo, shipscrew,
-    statistics, types, utils
+import config, crewinventory, game, goals, items, log, messages, shipscargo,
+    shipscrew, statistics, types, utils
 
 type
   CraftingNoWorkshopError* = object of CatchableError
@@ -734,3 +734,17 @@ proc cancelCraftOrder*(moduleIndex: Natural) {.raises: [CrewOrderError,
       giveOrders(ship = playerShip, memberIndex = owner, givenOrder = rest)
   addMessage(message = "You cancelled crafting order in " & playerShip.modules[
       moduleIndex].name & ".", mType = craftMessage, color = red)
+
+proc getRecipeDifficultyName*(difficulty: Positive): string {.raises: [],
+    tags: [], contractual.} =
+  ## Get the difficulty level name for the selected difficulty or its numerical
+  ## value if the player set it in the configuration.
+  ##
+  ## * difficulty - the level of a difficilty which value will be get
+  ##
+  ## Returns the string representation of the selected level of a skill.
+  ensure:
+    result.len > 0
+  body:
+    if gameSettings.showNumbers:
+      return $difficulty
