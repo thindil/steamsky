@@ -925,6 +925,17 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         except:
           dialog = setError(message = "Can't set gun's ammo button.")
           return
+      # Show information about gun's fire rate
+      if module.mType == ModuleType2.gun:
+        label(str = "Max fire rate:")
+        try:
+          colorLabel(str = (if modulesList[module.protoIndex].speed >
+              0: $modulesList[module.protoIndex].speed &
+              " each turn" else: "1 every " & $(modulesList[
+              module.protoIndex].speed.abs) & " turns"), color = theme.colors[goldenColor])
+        except:
+          dialog = setError(message = "Can't show the info about fire rate.")
+          return
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
