@@ -748,3 +748,24 @@ proc getRecipeDifficultyName*(difficulty: Positive): string {.raises: [],
   body:
     if gameSettings.showNumbers:
       return $difficulty
+    case difficulty
+    of 0..5:
+      return "Trivial"
+    of 6..10:
+      return "Very easy"
+    of 11..15:
+      return "Easy"
+    of 16..20:
+      return "Normal"
+    of 21..25:
+      return "Advanced"
+    of 26..30:
+      return "Complicated"
+    of 31..35:
+      return "Very complicated"
+    of 36..40:
+      return "Hard"
+    of 41..45:
+      return "Very hard"
+    else:
+      return "Extremely hard"
