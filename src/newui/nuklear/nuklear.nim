@@ -685,7 +685,7 @@ proc nkStrokeRect(b: PNkCommandBuffer, rect: NimRect, rounding,
     if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h,
       x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
       return
-  var cmd: ptr nk_command_rect
+  var cmd: ptr nk_command_rect = nil
   cmd = cast[ptr nk_command_rect](nkCommandBufferPush(b = b, t = commandRect, size = cmd.sizeof))
   if cmd == nil:
     return
@@ -720,7 +720,7 @@ proc nkStrokeTriangle(b: PNkCommandBuffer; x0, y0, x1, y1, x2, y2,
       y = clip.y, w = clip.w, h = clip.h):
       return
 
-  var cmd: ptr nk_command_triangle
+  var cmd: ptr nk_command_triangle = nil
   if cmd == nil:
     return
   cmd.line_thickness = lineThickness.cshort
@@ -748,7 +748,7 @@ proc nkFillRect(b: PNkCommandBuffer; rect: NimRect; rounding: float;
       x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
       return
 
-  var cmd: ptr nk_command_rect_filled
+  var cmd: ptr nk_command_rect_filled = nil
   cmd = cast[ptr nk_command_rect_filled](nkCommandBufferPush(b = b,
     t = commandRectFilled, size = cmd.sizeof))
   if cmd == nil:
@@ -775,7 +775,7 @@ proc nkFillCircle(b: PNkCommandBuffer; rect: NimRect; c: nk_color)
       x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
       return
 
-  var cmd: ptr nk_command_circle_filled
+  var cmd: ptr nk_command_circle_filled = nil
   cmd = cast[ptr nk_command_circle_filled](nkCommandBufferPush(b = b,
     t = commandCircleFilled, size = cmd.sizeof))
   if cmd == nil:
@@ -808,7 +808,7 @@ proc nkFillTriangle(b: PNkCommandBuffer, x0, y0, x1, y1, x2, y2: cfloat,
       y = clip.y, w = clip.w, h = clip.h):
       return
 
-  var cmd: ptr nk_command_triangle_filled
+  var cmd: ptr nk_command_triangle_filled = nil
   cmd = cast[ptr nk_command_triangle_filled](nkCommandBufferPush(b = b,
     t = commandTriangleFilled, size = cmd.sizeof))
   if cmd == nil:
@@ -837,7 +837,7 @@ proc nkDrawImage(b: PNkCommandBuffer; r: NimRect; img: PImage; col: nk_color)
       h0 = r.h, x1 = c.x, y1 = c.y, w1 = c.w, h1 = c.h):
       return
 
-  var cmd: ptr nk_command_image
+  var cmd: ptr nk_command_image = nil
   cmd = cast[ptr nk_command_image](nkCommandBufferPush(b = b, t = commandImage,
     size = cmd.sizeof))
   if cmd == nil:
@@ -858,13 +858,13 @@ proc nkDrawNineSlice(b: PNkCommandBuffer; r: NimRect; slc: ptr nk_nine_slice; co
   ## * slc - the image's slice to draw
   ## * col - the color used as a background for the slice
   let slcImg: ptr nk_image = cast[ptr nk_image](slc)
-  var rgnX, rgnY, rgnW, rgnH: nk_ushort;
+  var rgnX, rgnY, rgnW, rgnH: nk_ushort = 0
   rgnX = slcImg.region[0]
   rgnY = slcImg.region[1]
   rgnW = slcImg.region[2]
   rgnH = slcImg.region[3]
 
-  var img: nk_image;
+  var img: nk_image = nk_image()
 
   # top-left
   img.handle = slcImg.handle
@@ -1312,7 +1312,7 @@ proc nkDrawSymbol(`out`: PNkCommandBuffer; `type`: SymbolType;
         '-'
       else:
         ' '
-    var text: nk_text
+    var text: nk_text = nk_text()
     text.padding = nk_vec2(x: 0, y: 0)
     text.background = background
     text.text = foreground
@@ -1333,7 +1333,7 @@ proc nkDrawSymbol(`out`: PNkCommandBuffer; `type`: SymbolType;
         nkFillCircle(b = `out`, rect = drawRect, c = background)
   of triangleUp, triangleDown, triangleLeft, triangleRight:
     var heading: Heading = right
-    var points: array[3, NimRect]
+    var points: array[3, NimRect] = [NimRect(), NimRect(), NimRect()]
     case `type`
       of triangleRight:
         heading = right
@@ -1351,7 +1351,7 @@ proc nkDrawSymbol(`out`: PNkCommandBuffer; `type`: SymbolType;
   of triangleUpOutline, triangleDownOutline, triangleLeftOutline,
     triangleRightOutline:
     var heading: Heading = right
-    var points: array[3, NimRect]
+    var points: array[3, NimRect] = [NimRect(), NimRect(), NimRect()]
     case `type`
       of triangleRightOutline:
         heading = right
@@ -1536,9 +1536,9 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     # panel header
     if nkPanelHasHeader(flags = win.flags, title = title):
       var
-        header: NimRect
-        background: nk_style_item
-        text: nk_text
+        header: NimRect = NimRect()
+        background: nk_style_item = nk_style_item()
+        text: nk_text = nk_text()
 
       # calculate header bounds
       header.x = win.bounds.x
@@ -1654,7 +1654,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     # draw window background
     if not (layout.flags and windowMinimized.cint).nk_bool and not
       (layout.flags and windowDynamic.cint).nk_bool:
-      var body: NimRect
+      var body: NimRect = NimRect()
       body.x = win.bounds.x
       body.w = win.bounds.w
       body.y = (win.bounds.y + layout.header_height)
