@@ -630,6 +630,27 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
+proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show assign the ammo member UI
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  const
+    width: float = 300
+    height: float = 400
+
+  let windowName: string = "Available ammo"
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowMovable}):
+    setLayoutRowDynamic(height = 35, cols = 1)
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = windowName)
+
 proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show information about the selected cabin
@@ -882,7 +903,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
               module.protoIndex].value - 1] and index != ammoIndex:
             imageButton(image = images[assignAmmoIcon]):
-              discard
+              setDialog(y = windowHeight / 10)
+              dialog = assignAmmoDialog
             break
         except:
           dialog = setError(message = "Can't set gun's ammo button.")
