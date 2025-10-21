@@ -569,7 +569,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
   result = false
   try:
     let
-      width = windowWidth / 1.5
+      width: float = windowWidth / 1.5
       height: float = 220
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = manipulateData.title, x = dialogX,
@@ -649,8 +649,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           text = actionButton.label, alignment = right):
         closePopup()
         let
-          baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-          trader = (if baseIndex > 0: "base" else: "ship")
+          baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+          trader: string = (if baseIndex > 0: "base" else: "ship")
         try:
           case dialog
           of buyDialog:
