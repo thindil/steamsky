@@ -977,6 +977,21 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5])
         label(str = "Order:")
         colorLabel(str = "not set", color = theme.colors[goldenColor])
+    # Show information about medical rooms
+    of medicalRoom:
+      var hasHealingTool: bool = false
+      for member in playerShip.crew:
+        try:
+          if member.health < 100 and findItem(inventory = playerShip.cargo,
+              itemType = factionsList[playerShip.crew[0].faction].healingTools,
+                  itemQuality = any) > -1:
+            hasHealingTool = true
+            break
+        except:
+          dialog = setError(message = "Can't find wounded crew members.")
+          return
+      addOwnersInfo(module = module, ownersName = "Medic",
+          addButton = hasHealingTool, dialog = dialog)
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
