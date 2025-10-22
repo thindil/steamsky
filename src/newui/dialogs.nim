@@ -568,9 +568,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
     return false
   result = false
   try:
-    let
-      width: float = windowWidth / 1.5
-      height: float = 220
+    const height: float = 220
+    let width: float = windowWidth / 1.5
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = manipulateData.title, x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
