@@ -927,6 +927,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           return
       # Show information about gun's fire rate
       if module.mType == ModuleType2.gun:
+        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
         label(str = "Max fire rate:")
         try:
           colorLabel(str = (if modulesList[module.protoIndex].speed >
@@ -936,6 +937,11 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         except:
           dialog = setError(message = "Can't show the info about fire rate.")
           return
+    # Show information about turrets
+    of turret:
+      label(str = "Weapon:")
+      colorLabel(str = (if module.gunIndex > -1: playerShip.modules[
+          module.gunIndex].name else: "none"), color = theme.colors[goldenColor])
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
