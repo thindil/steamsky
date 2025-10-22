@@ -942,6 +942,34 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       label(str = "Weapon:")
       colorLabel(str = (if module.gunIndex > -1: playerShip.modules[
           module.gunIndex].name else: "none"), color = theme.colors[goldenColor])
+    # Show information about workshops
+    of workshop:
+      # Show information about workshop owners
+      addOwnersInfo(module = module, ownersName = "Worker",
+          addButton = module.craftingIndex.len > 0, dialog = dialog)
+      # Show information about workshop order
+      let recipeName: string = try:
+          getWorkshopRecipeName(workshop = moduleIndex)
+        except:
+          dialog = setError(message = "Can't get the recipe name.")
+          return
+      if recipeName.len > 0:
+        setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+        label(str = "Order:")
+        colorLabel(str = recipeName, color = theme.colors[goldenColor])
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Cancel the current crafting order")
+          imageButton(image = images[cancelIcon]):
+            try:
+              cancelCraftOrder(moduleIndex = moduleIndex)
+            except CrewOrderError, CrewNoSpaceError:
+              dialog = setMessage(message = getCurrentExceptionMsg(),
+                  title = "Can't cancel the order")
+              return
+            except:
+              dialog = setError(message = "Can't cancel the order.")
+              return
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
