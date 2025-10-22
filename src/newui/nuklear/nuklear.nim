@@ -960,10 +960,9 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
     glyphs = g
     textWidth = lastWidth
     return len
-  else:
-    glyphs = sepG
-    textWidth = sepWidth
-    return if sepLen == 0: len else: sepLen
+  glyphs = sepG
+  textWidth = sepWidth
+  return if sepLen == 0: len else: sepLen
 
 proc nkDrawText(b: PNkCommandBuffer; r: NimRect; str: string; length: var int;
   font: ptr nk_user_font; bg, fg: nk_color) {.raises: [], tags: [RootEffect],
@@ -1206,13 +1205,13 @@ proc nkButtonBehavior(state: var nk_flags; r: NimRect; i: ptr nk_input;
     if isMouseDown(id = left):
       state = widgetStateActive.nk_flags
       if hasMouseClickDownInRect(id = left, rect = r, down = nkTrue):
-        if behavior != default:
-          result = isMouseDown(id = left)
-        else:
+        if behavior == default:
           when defined(nkButtonTriggerOnRelease):
             result = isMouseReleased(id = left)
           else:
             result = isMousePressed(id = left)
+        else:
+          result = isMouseDown(id = left)
   if (state and widgetStateHover.ord).nk_bool and not isMousePrevHovering(rect = r):
     state = state or widgetStateEntered.ord
   elif isMousePrevHovering(rect = r):
@@ -1773,8 +1772,8 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[PanelFlags];
     var allocated: nk_size = ctx.memory.allocated
     nkPushScissor(b = popup.buffer.addr, r = nkNullRect)
 
+    # popup is running therefore invalidate parent panels
     if nkPanelBegin(ctx = ctx, title = title, panelType = panelPopup):
-      # popup is running therefore invalidate parent panels
       var root: PNkPanel = win.layout
       while root != nil:
         root.flags = root.flags or windowRom.cint
@@ -1785,19 +1784,19 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[PanelFlags];
       popup.layout.offset_y = popup.scrollbar.y
       popup.layout.parent = win.layout
       return true
-    else:
-      # popup was closed/is invalid so cleanup
-      var root: PNkPanel = win.layout
-      while root != nil:
-        root.flags = root.flags or windowRemoveRom.cint
-        root = root.parent
-      win.popup.buf.active = nkFalse
-      win.popup.active = nkFalse
-      ctx.memory.allocated = allocated
-      ctx.current = win
-      nkFreePanel(ctx = ctx, pan = popup.layout)
-      popup.layout = nil
-      return false
+
+    # popup was closed/is invalid so cleanup
+    var root: PNkPanel = win.layout
+    while root != nil:
+      root.flags = root.flags or windowRemoveRom.cint
+      root = root.parent
+    win.popup.buf.active = nkFalse
+    win.popup.active = nkFalse
+    ctx.memory.allocated = allocated
+    ctx.current = win
+    nkFreePanel(ctx = ctx, pan = popup.layout)
+    popup.layout = nil
+    return false
 
 proc createPopup(pType2: PopupType; title2: cstring;
     flags2: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises: [], tags: [],
