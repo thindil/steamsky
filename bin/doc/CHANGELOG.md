@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
   repairing progress of the player's ship's modules
 - The crafter's skill and the recipe's difficulty affects quality of the
   result's items during crafting
+- Information about the crafting recipe's difficulty to the recipe's
+  information dialog
 
 ### Changed
 - Updated help
