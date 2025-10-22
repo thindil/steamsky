@@ -960,16 +960,16 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "Cancel the current crafting order")
-          imageButton(image = images[cancelIcon]):
-            try:
-              cancelCraftOrder(moduleIndex = moduleIndex)
-            except CrewOrderError, CrewNoSpaceError:
-              dialog = setMessage(message = getCurrentExceptionMsg(),
-                  title = "Can't cancel the order")
-              return
-            except:
-              dialog = setError(message = "Can't cancel the order.")
-              return
+        imageButton(image = images[cancelIcon]):
+          try:
+            cancelCraftOrder(moduleIndex = moduleIndex)
+          except CrewOrderError, CrewNoSpaceError:
+            dialog = setMessage(message = getCurrentExceptionMsg(),
+                title = "Can't cancel the order")
+            return
+          except:
+            dialog = setError(message = "Can't cancel the order.")
+            return
         setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5])
         label(str = "Finish order in:")
         colorLabel(str = $module.craftingTime & " mins", color = theme.colors[goldenColor])
@@ -992,6 +992,26 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           return
       addOwnersInfo(module = module, ownersName = "Medic",
           addButton = hasHealingTool, dialog = dialog)
+    # Show information about training rooms
+    of trainingRoom:
+      # Show information about trainees
+      addOwnersInfo(module = module, ownersName = "Trainee",
+          addButton = module.trainedSkill > 0, dialog = dialog)
+      # Show information about trained skill
+      let trainText: string = try:
+          (if module.trainedSkill > 0: skillsList[
+            module.trainedSkill].name else: "not set")
+        except:
+          dialog = setError(message = "Can't set trainText.")
+          return
+      setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+      label(str = "Trained skill:")
+      colorLabel(str = trainText, color = theme.colors[goldenColor])
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Assign a skill which will be trained in the training room.")
+      imageButton(image = images[assignCrewIcon]):
+        setDialog(y = windowHeight / 10)
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
