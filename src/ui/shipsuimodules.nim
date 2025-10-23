@@ -975,7 +975,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   of trainingRoom:
     # Show information about trainees
     currentRow.inc
-    addOwnersInfo(ownersName = "Medic", moduleFrame = moduleFrame,
+    addOwnersInfo(ownersName = "Trainee", moduleFrame = moduleFrame,
         yScroll = yScroll, closeDialogButton = closeDialogButton,
         module = module, label = label, infoButton = infoButton,
         height = height, moduleIndex = moduleIndex,
