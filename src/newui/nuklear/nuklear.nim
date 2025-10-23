@@ -1156,6 +1156,7 @@ proc nkWidgetText(o: PNkCommandBuffer; b: var NimRect; str: string; len: var int
     textWidth += (2.0 * t.padding.x)
 
     # align in x-axis
+    {.ruleOff: "ifStatements".}
     if (a and textLeft.ord).bool:
       label.x = b.x + t.padding.x
       label.w = max(x = 0, y = b.w - 2 * t.padding.x)
@@ -1171,6 +1172,7 @@ proc nkWidgetText(o: PNkCommandBuffer; b: var NimRect; str: string; len: var int
       label.w = textWidth.float + 2 * t.padding.x
     else:
       return
+    {.ruleOn: "ifStatements".}
 
     # align in y-axis
     if (a and textMiddle.ord).bool:
