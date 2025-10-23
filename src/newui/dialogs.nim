@@ -491,8 +491,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
       return setError(message = "Can't set the manipulate data.")
     if action == buyAction:
       return buyDialog
-    else:
-      return sellDialog
+    return sellDialog
   of takeAction, dropAction:
     let (protoIndex, maxAmount, cargoMaxAmount, _) = try:
         getLootData(itemIndex = iIndex)
@@ -507,8 +506,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
       return setError(message = "Can't set the manipulate data.")
     if action == takeAction:
       return takeDialog
-    else:
-      return dropDialog
+    return dropDialog
   of moveAction:
     manipulateData = ManipulateData(itemIndex: iIndex,
         maxAmount: playerShip.crew[mIndex].inventory[iIndex].amount,
