@@ -632,7 +632,7 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
 
 proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
-  ## Show assign the ammo member UI
+  ## Show assign the ammo UI
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
@@ -663,6 +663,29 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
       except:
         dialog = setError(message = "Can't add button.")
         return
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = windowName)
+
+proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show assign the skill to train UI
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  const
+    width: float = 300
+    height: float = 400
+
+  let
+    module: ModuleData = playerShip.modules[moduleIndex]
+    windowName: string = "Assign a skill to " & module.name
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowMovable}):
+    setLayoutRowDynamic(height = 35, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
