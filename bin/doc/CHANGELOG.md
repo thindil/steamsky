@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
   cargo unequip another item in the inventory
 - Updating the game's header after installing or removing modules in a shipyard
 - Crash when trying to disable an engine on the player's ship
+- Information about trainees in a training room in the player's ship
 
 ## [11.0.5] - 2025-09-14
 
