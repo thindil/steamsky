@@ -667,6 +667,18 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
+proc sortSkills(sortAsc, sortDesc: ModulesSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort the skills on the list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
+
 proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show assign the skill to train UI
@@ -678,6 +690,11 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
   const
     width: float = 300
     height: float = 400
+    skillHeaders: array[2, HeaderData[ModulesSortOrders]] = [HeaderData[
+        ModulesSortOrders](label: "Skill", sortAsc: none, sortDesc: none),
+        HeaderData[ModulesSortOrders](label: "Training tool", sortAsc: none,
+        sortDesc: none)]
+    skillRatio: array[2, cfloat] = [150.cfloat, 150]
 
   let
     module: ModuleData = playerShip.modules[moduleIndex]
@@ -686,6 +703,8 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
     setLayoutRowDynamic(height = 35, cols = 1)
+    addHeader(headers = skillHeaders, ratio = skillRatio, tooltip = "",
+        code = sortSkills, dialog = dialog)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
