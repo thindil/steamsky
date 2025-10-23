@@ -142,7 +142,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         healWounded: showWounded, repairShip: showRepairs,
         buyRecipes: showRecipes, shipyard: showShipyard,
         baseMissions: showMissions, loot: showLoot, shipInfo: showShipInfo]
-    showDialog: array[GameDialog.errorDialog..GameDialog.assignAmmoDialog,
+    showDialog: array[GameDialog.errorDialog..GameDialog.assignSkillDialog,
         proc(dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
         newGoalDialog: showGoals, boardingDialog: showPartyMenu,
@@ -156,7 +156,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         moduleInfoDialog: shipsuimodules.showModuleInfo,
         renameModuleDialog: showRenameDialog,
         assignCrewDialog: showAssignCrewDialog,
-        assignAmmoDialog: showAssignAmmoDialog]
+        assignAmmoDialog: showAssignAmmoDialog,
+        assignSkillDialog: showAssignSkillDialog]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
@@ -169,7 +170,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         resetTooltips()
 
       # Show dialogs if needed
-      if dialog in GameDialog.errorDialog..GameDialog.assignAmmoDialog:
+      if dialog in GameDialog.errorDialog..GameDialog.assignSkillDialog:
         showDialog[dialog](dialog = dialog)
       elif dialog == gameMenuDialog:
         showGameMenu(dialog = dialog, state = state)
