@@ -21,8 +21,8 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crafts, crewinventory, game, messages, missions, ships,
-    shipscrew, shipsupgrade, types]
+import ../[config, crafts, crewinventory, game, items, messages, missions,
+    ships, shipscargo, shipscrew, shipsupgrade, types]
 import coreui, dialogs, errordialog, setui, table, themes
 
 type
@@ -705,6 +705,39 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = 35, cols = 1)
     addHeader(headers = skillHeaders, ratio = skillRatio, tooltip = "",
         code = sortSkills, dialog = dialog)
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    for index, skill in skillsList:
+      var
+        protoIndex: int = -1
+        toolName: string = ""
+      if skill.tool.len > 0:
+        protoIndex = findProtoItem(itemType = skill.tool)
+        toolName = try:
+            (if itemsList[protoIndex].showType.len > 0: itemsList[
+                protoIndex].showType else: itemsList[protoIndex].itemType)
+          except:
+            dialog = setError(message = "Can't get the tool name.")
+            return
+      var
+        skillName: string = skill.name
+        toolColor: string = "green"
+      try:
+        if getItemAmount(itemType = itemsList[protoIndex].itemType) == 0:
+          skillName.add(y = " (no tool)")
+          toolColor = "red"
+      except:
+        dialog = setError(message = "Can't check item amount.")
+        return
+    restoreButtonStyle()
     setLayoutRowDynamic(height = 35, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
