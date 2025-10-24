@@ -1669,6 +1669,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
       else:
         discard
     except CrewNoSpaceError, CrewOrderError:
+      tclEval(script = "destroy .moduledialog")
       showMessage(text = getCurrentExceptionMsg(), title = "Can't assign crew")
       return tclOk
     except:
