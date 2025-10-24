@@ -22,6 +22,8 @@ All notable changes to this project will be documented in this file.
 - Updating the game's header after installing or removing modules in a shipyard
 - Crash when trying to disable an engine on the player's ship
 - Information about trainees in a training room in the player's ship
+- Showing information about failed assigning the player's ship's crew member to
+  a module
 
 ## [11.6] - 2025-10-05
 
