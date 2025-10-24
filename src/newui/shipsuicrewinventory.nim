@@ -220,7 +220,7 @@ proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## loading the game.
   contextualMenu(flags = {windowNoFlags}, x = 300, y = 150,
       triggerBounds = bounds, button = Buttons.left):
-    setLayoutRowDynamic(25, 1)
+    setLayoutRowDynamic(height = 25, cols = 1)
     contextualItemLabel(label = "Equip items", align = centered):
       for item in inventoryDataList:
         if item.checked:
@@ -281,7 +281,8 @@ proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
       showItemsMenu = true
     else:
       dialog = showInventoryItemInfo(itemIndex = data, memberIndex = crewIndex,
-          ButtonSettings(tooltip: "Move the selected item to the ship's cargo",
+          button1 = ButtonSettings(
+          tooltip: "Move the selected item to the ship's cargo",
           code: setMoveDialog, icon: cargoIcon.ord, text: "Move", color: ""))
   except:
     dialog = setError(message = "Can't show information about the item.")
