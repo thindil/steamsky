@@ -688,13 +688,13 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   const
-    width: float = 300
+    width: float = 500
     height: float = 400
     skillHeaders: array[2, HeaderData[ModulesSortOrders]] = [HeaderData[
         ModulesSortOrders](label: "Skill", sortAsc: none, sortDesc: none),
         HeaderData[ModulesSortOrders](label: "Training tool", sortAsc: none,
         sortDesc: none)]
-    skillRatio: array[2, cfloat] = [150.cfloat, 150]
+    skillRatio: array[2, cfloat] = [235.cfloat, 235]
 
   let
     module: ModuleData = playerShip.modules[moduleIndex]
@@ -705,6 +705,7 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = 35, cols = 1)
     addHeader(headers = skillHeaders, ratio = skillRatio, tooltip = "",
         code = sortSkills, dialog = dialog)
+    setLayoutRowDynamic(height = 35, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -1053,7 +1054,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         addTooltip(bounds = getWidgetBounds(),
             text = "Assign a skill which will be trained in the training room.")
       imageButton(image = images[assignCrewIcon]):
-        setDialog(y = windowHeight / 10)
+        setDialog(y = windowHeight / 10, x = windowWidth / 10)
+        dialog = assignSkillDialog
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
