@@ -82,14 +82,15 @@ proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
   ## * headers    - the list of headers to add
   ## * ratio      - the list of width for each column in the table
   ## * tooltip    - the name of things to sort, like items, etc. Will be added to
-  ##                the headers' tooltips
+  ##                the headers' tooltips. If empty, disables tooltips for the
+  ##                header.
   ## * headerCode - the code executed when a header was clicked
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   setLayoutRowStatic(height = 30, cols = headers.len, ratio = ratio)
   for header in headers:
-    if gameSettings.showTooltips:
+    if gameSettings.showTooltips and tooltip.len > 0:
       addTooltip(bounds = getWidgetBounds(),
           text = "Press mouse button to sort the " & tooltip & ".")
     labelButton(title = header.label):
