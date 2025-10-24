@@ -19,7 +19,7 @@
 ## members, like listing them, showing information, changing their settings,
 ## etc.
 
-import std/[algorithm, tables]
+import std/[algorithm, colors, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, crafts, crewinventory, game, items, messages, missions,
     ships, shipscargo, shipscrew, shipsupgrade, types]
@@ -679,6 +679,17 @@ proc sortSkills(sortAsc, sortDesc: ModulesSortOrders;
   ## happened.
   discard
 
+proc assignSkill(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Assign the selected skill to the selected training room
+  ##
+  ## * data   - the index of the selected skill
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
+
 proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show assign the skill to train UI
@@ -729,14 +740,24 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
             return
       var
         skillName: string = skill.name
-        toolColor: string = "green"
+        toolColor: Color = theme.colors[greenColor]
       try:
         if getItemAmount(itemType = itemsList[protoIndex].itemType) == 0:
           skillName.add(y = " (no tool)")
-          toolColor = "red"
+          toolColor = theme.colors[redColor]
       except:
         dialog = setError(message = "Can't check item amount.")
         return
+      addButton(label = skillName, tooltip = "Press mouse " & (
+          if gameSettings.rightButton: "right" else: "left") &
+          " button to set as trained skill", data = index, code = assignSkill,
+          dialog = dialog)
+      setButtonStyle(field = textNormal, color = toolColor)
+      addButton(label = toolName, tooltip = "Press mouse " & (
+          if gameSettings.rightButton: "right" else: "left") &
+          " button to set as trained skill", data = index, code = assignSkill,
+          dialog = dialog)
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
     restoreButtonStyle()
     setLayoutRowDynamic(height = 35, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
