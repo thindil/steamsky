@@ -37,7 +37,7 @@ type
     used: bool = false
     id: Natural = 0
 
-const defaultInventorySortOrder*: InventorySortOrders = none
+const defaultInventorySortOrder: InventorySortOrders = none
 
 var inventorySortOrder: InventorySortOrders = defaultInventorySortOrder
 
