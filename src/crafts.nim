@@ -569,9 +569,11 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
         workTime = workTime - currentMinutes - recipeTime
         currentMinutes = 0 - recipeTime
         recipeTime = recipe.time
-        var materialIndexes: seq[Positive] = getMaterialIndexes(module = module,
-            recipe = recipe)
-        var craftingMaterial: int = -1
+        var
+          materialIndexes: seq[Positive] = getMaterialIndexes(module = module,
+              recipe = recipe)
+          craftingMaterial: int = -1
+          toolQuality, materialQuality: ObjectQuality = normal
         for materialIndex in materialIndexes.mitems:
           craftingMaterial = findItem(inventory = playerShip.cargo,
               itemType = itemsList[materialIndex].itemType, itemQuality = any)
@@ -585,6 +587,7 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
             materialIndex = playerShip.cargo[craftingMaterial].protoIndex
         if craftingMaterial == -1:
           break
+        materialQuality = playerShip.cargo[craftingMaterial].quality
         if recipe.tool == "None":
           toolIndex = -1
         else:
@@ -595,6 +598,8 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
             addMessage(message = "You don't have the tool for " & recipeName &
                 ".", mType = craftMessage, color = red)
             break
+          toolQuality = playerShip.crew[crafterIndex].inventory[
+              toolIndex].quality
         var amount: Natural = 0
         for j in 0..materialIndexes.high:
           amount += (itemsList[materialIndexes[j]].weight *
@@ -621,20 +626,41 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
               ship = playerShip)
         if module.craftingIndex.len < 6 or (module.craftingIndex.len > 6 and
             module.craftingIndex[0..4] != "Study"):
-          let
-            roll: int = getRandom(min = 1, max = 100) + skillLevel -
-                recipe.difficulty
-            quality: ObjectQuality = case roll
-              of -1000..1:
-                poor
-              of 2..5:
-                low
-              of 6..94:
-                normal
-              of 95..99:
-                good
-              else:
-                excellent
+          var roll: int = getRandom(min = 1, max = 100) + skillLevel -
+              recipe.difficulty
+          case materialQuality
+          of poor:
+            roll -= 50
+          of low:
+            roll -= 25
+          of good:
+            roll += 25
+          of excellent:
+            roll += 50
+          else:
+            discard
+          case toolQuality
+          of poor:
+            roll -= 20
+          of low:
+            roll -= 10
+          of good:
+            roll += 10
+          of excellent:
+            roll += 20
+          else:
+            discard
+          let quality: ObjectQuality = case roll
+            of -1000..1:
+              poor
+            of 2..5:
+              low
+            of 6..94:
+              normal
+            of 95..99:
+              good
+            else:
+              excellent
           if craftItem(amount = amount, recipe = recipe,
               resultAmount = resultAmount, recipeName = recipeName,
               module = module, owner = owner, toolIndex = toolIndex,
