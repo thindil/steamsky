@@ -1006,7 +1006,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           infoButton).parseInt
       except:
         return showError(message = "Can't count the height of the train button.")
-  # Show information about training battering rams
+  # Show information about battering rams
   of batteringRam:
     currentRow.inc
     label = addLabel(name = moduleFrame & ".strengthlbl",

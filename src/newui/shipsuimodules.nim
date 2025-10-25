@@ -1110,7 +1110,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       imageButton(image = images[assignCrewIcon]):
         setDialog(y = windowHeight / 10, x = windowWidth / 10)
         dialog = assignSkillDialog
-    # Show information about training battering rams
+    # Show information about battering rams
     of batteringRam:
       let moduleMaxValue2: int = try:
           (modulesList[module.protoIndex].maxValue.float * 1.5).int
