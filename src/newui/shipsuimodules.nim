@@ -688,7 +688,7 @@ proc assignSkill(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  assignModule(assignAction = skill, assignIndex = data, dialog = dialog)
 
 proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
