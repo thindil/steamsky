@@ -1130,6 +1130,13 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = dialog)
     else:
       discard
+    setLayoutRowDynamic(height = 120, cols = 1)
+    try:
+      if modulesList[module.protoIndex].description.len > 0:
+        wrapLabel(str = "\n" & modulesList[module.protoIndex].description)
+    except:
+      dialog = setError(message = "Can't show the description.")
+      return
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
