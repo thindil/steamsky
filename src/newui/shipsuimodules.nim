@@ -1110,6 +1110,24 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       imageButton(image = images[assignCrewIcon]):
         setDialog(y = windowHeight / 10, x = windowWidth / 10)
         dialog = assignSkillDialog
+    # Show information about training battering rams
+    of batteringRam:
+      let moduleMaxValue2: int = try:
+          (modulesList[module.protoIndex].maxValue.float * 1.5).int
+        except:
+          dialog = setError(message = "Can't count the battering ram max value.")
+          return
+      if module.damage2 < moduleMaxValue2:
+        setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+      else:
+        setLayoutRowDynamic(height = 100, cols = 2, ratio = [0.4.cfloat, 0.5])
+      label(str = "Strength:")
+      colorLabel(str = $module.damage2 & (if module.damage2 ==
+          moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
+      if module.damage2 < moduleMaxValue2:
+        addUpgradeButton(upgradeType = maxValue,
+            buttonTooltip = "damage of battering ram", module = module,
+            dialog = dialog)
     else:
       discard
     setLayoutRowDynamic(height = 30, cols = 1)
