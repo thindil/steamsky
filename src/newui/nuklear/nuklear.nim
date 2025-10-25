@@ -518,7 +518,7 @@ proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
     let temp: pointer = try:
         b.pool.alloc(handle = b.pool.userdata, old = b.memory.`ptr`,
             size = capacity)
-      except:
+      except Exception:
         return nil
 
     size = capacity
@@ -527,7 +527,7 @@ proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
       copyMem(dest = temp, source = b.memory.`ptr`, size = bufferSize)
       try:
         b.pool.free(handle = b.pool.userdata, old = b.memory.`ptr`)
-      except:
+      except Exception:
         discard
 
     if b.size == bufferSize:
@@ -937,7 +937,7 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
     let s: float = try:
         font.width(arg1 = font.userdata, h = font.height, arg3 = text.cstring,
           len = len.cint)
-      except:
+      except Exception:
         return
     var i: Natural = 0
     for sep in sepList:
@@ -990,7 +990,7 @@ proc nkDrawText(b: PNkCommandBuffer; r: NimRect; str: string; length: var int;
     # make sure text fits inside bounds
     let textWidth: float = try:
         font.width(arg1 = font.userdata, h = font.height, arg3 = str.cstring, len = length.cint)
-      except:
+      except Exception:
         return
     if textWidth > r.w:
       var
@@ -1151,7 +1151,7 @@ proc nkWidgetText(o: PNkCommandBuffer; b: var NimRect; str: string; len: var int
     textWidth = try:
         f.width(arg1 = f.userdata, h = f.height, arg3 = str.cstring,
           len = len.cint)
-      except:
+      except Exception:
         return
     textWidth += (2.0 * t.padding.x)
 
@@ -1551,7 +1551,7 @@ proc panelHeader(win: ptr nkWindow; title: string; style: nk_style;
     let t: float = try:
         font.width(arg1 = font.userdata, h = font.height,
           arg3 = title.cstring, len = textLen.cint)
-      except:
+      except Exception:
         return false
     text.padding = new_nk_vec2(x = 0, y = 0)
     var label: NimRect = NimRect(x: 0, y: 0, w: 0, h: 0)
