@@ -24,7 +24,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import std/unicode
-import contracts
+import contracts, nimalyzer
 import nk_types
 
 proc nkUtfValidate(u: var nk_rune; i: int): int {.raises: [], tags: [],
@@ -85,7 +85,7 @@ proc nk_utf_validate(u: var nk_rune; i: cint): cint {.raises: [], tags: [],
   return nkUtfValidate(u = u, i = i.int).cint
 
 proc nk_utf_decode(c: pointer; u: var nk_rune; clen: cint): cint {.raises: [],
-  tags: [], contractual, exportc.} =
+  tags: [], contractual, exportc, ruleOff: "params".} =
   ## Temporary C binding. Internal use only
   ##
   ## * c    - the text to decode
