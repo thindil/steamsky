@@ -27,6 +27,10 @@ type CargoSortOrders = enum
   nameAsc, nameDesc, durabilityAsc, durabilityDesc, qualityAsc, qualityDesc,
     typeAsc, typeDesc, amountAsc, amountDesc, weightAsc, weightDesc, none
 
+var
+  showCargoOptions*: bool = false
+    ## Show additonal options for managing the player's ship's cargo
+
 const
   headers: array[6, HeaderData[CargoSortOrders]] = [
     HeaderData[CargoSortOrders](label: "Name", sortAsc: nameAsc,
