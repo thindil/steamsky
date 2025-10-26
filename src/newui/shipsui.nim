@@ -22,7 +22,7 @@ import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, messages, reputation, ships, shipscrew, types]
 import coreui, dialogs, errordialog, header, mapsui, messagesui, setui,
-    shipsuicrew, shipsuimodules, themes
+    shipsuicargo, shipsuicrew, shipsuimodules, themes
 
 var
   expandedSection: Natural = 0
@@ -395,5 +395,6 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 4
+      showCargoInfo(dialog = dialog)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       height - 75)
