@@ -433,7 +433,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
     labelButton(title = "Ship information"):
       if state != shipInfo:
         previousState = state
-        setShipInfo()
+        setShipInfo(dialog = dialog)
         state = shipInfo
       else:
         state = previousState
