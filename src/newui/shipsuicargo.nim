@@ -19,8 +19,29 @@
 ## like shoing its list, moving to crew members' inventory, dropping items
 ## from it, etc.
 
-import contracts
-import coreui
+import contracts, nuklear/nuklear_sdl_renderer
+import ../config
+import coreui, errordialog, table, themes
+
+type CargoSortOrders = enum
+  nameAsc, nameDesc, durabilityAsc, durabilityDesc, qualityAsc, qualityDesc,
+    typeAsc, typeDesc, amountAsc, amountDesc, weightAsc, weightDesc, none
+
+const
+  headers: array[6, HeaderData[CargoSortOrders]] = [
+    HeaderData[CargoSortOrders](label: "Name", sortAsc: nameAsc,
+        sortDesc: nameDesc),
+    HeaderData[CargoSortOrders](label: "Durability", sortAsc: durabilityAsc,
+        sortDesc: durabilityDesc),
+    HeaderData[CargoSortOrders](label: "Quality", sortAsc: qualityAsc,
+        sortDesc: qualityDesc),
+    HeaderData[CargoSortOrders](label: "Type", sortAsc: typeAsc,
+        sortDesc: typeDesc),
+    HeaderData[CargoSortOrders](label: "Amount", sortAsc: amountAsc,
+        sortDesc: amountDesc),
+    HeaderData[CargoSortOrders](label: "Weight", sortAsc: weightAsc,
+        sortDesc: weightDesc)]
+  ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
 proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
