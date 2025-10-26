@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [11.0.6] - 2025-10-26
 
 ### Fixed
 - Tooltips for select and unselect buttons in the player's ship's crew member's
