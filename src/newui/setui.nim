@@ -862,8 +862,14 @@ proc refreshCrewList*() {.raises: [], tags: [], contractual.} =
   for index in playerShip.crew.low..playerShip.crew.high:
     crewDataList.add(y = CrewData(index: index, checked: false))
 
-proc setShipInfo*() {.raises: [], tags: [], contractual.} =
+proc setShipInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the data for the player's ship's info screen
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   for module in playerShip.modules:
     if module.durability < module.maxDurability:
       needRepair = true
@@ -879,3 +885,4 @@ proc setShipInfo*() {.raises: [], tags: [], contractual.} =
   modulesIndexes = @[]
   for index in playerShip.modules.low..playerShip.modules.high:
     modulesIndexes.add(y = index)
+  setCargoText(baseIndex = 0, dialog = dialog)
