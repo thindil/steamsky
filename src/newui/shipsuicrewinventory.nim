@@ -224,7 +224,7 @@ proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contextualItemLabel(label = "Equip items", align = centered):
       for item in inventoryDataList:
         if item.checked:
-          let isUsed = itemIsUsed(memberIndex = crewIndex,
+          let isUsed: bool = itemIsUsed(memberIndex = crewIndex,
               itemIndex = item.index)
           if not isUsed:
             setUseItem(dialog = dialog, data = item, used = isUsed)
@@ -233,7 +233,7 @@ proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contextualItemLabel(label = "Unequip items", align = centered):
       for item in inventoryDataList:
         if item.checked:
-          let isUsed = itemIsUsed(memberIndex = crewIndex,
+          let isUsed: bool = itemIsUsed(memberIndex = crewIndex,
               itemIndex = item.index)
           if isUsed:
             setUseItem(dialog = dialog, data = item, used = isUsed)
