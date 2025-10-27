@@ -123,7 +123,7 @@ template showActionMenu(button: string; action: untyped) =
     popup(pType = staticPopup, title = windowName, x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar, windowMovable}):
-      setLayoutRowDynamic(30, 1)
+      setLayoutRowDynamic(height = 30, cols = 1)
       labelButton(title = button):
         dialog = none
         closePopup()
