@@ -33,6 +33,7 @@ var
   showCargoOptions*: bool = false
     ## Show additonal options for managing the player's ship's cargo
   cargoSortOrder: CargoSortOrders = defaultCargoSortOrder
+  itemIndex: Natural = 0
 
 proc sortCargo(sortAsc, sortDesc: CargoSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -78,9 +79,15 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   if showCargoOptions:
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.2.cfloat, 0.4])
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.2.cfloat, 0.6])
     label(str = "Type:")
-    label(str = "temp")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show only items with the selected type")
+    let newItem = comboList(items = typesList, selected = itemIndex,
+        itemHeight = 25, x = 200, y = 150)
+    if newItem != itemIndex:
+      itemIndex = newItem
   # Show the list of crew members
   addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
       code = sortCargo, dialog = dialog)
