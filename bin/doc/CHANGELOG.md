@@ -10,8 +10,8 @@ All notable changes to this project will be documented in this file.
   crew members on the player's ship
 - The quality of tools and materials affects effectiveness of upgrading and
   repairing progress of the player's ship's modules
-- The crafter's skill and the recipe's difficulty affects quality of the
-  result's items during crafting
+- The crafter's skill, the recipe's difficulty, used crafting tools and
+  materials affects quality of the result's items during crafting
 - Information about the crafting recipe's difficulty to the recipe's
   information dialog
 
