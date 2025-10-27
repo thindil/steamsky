@@ -21,15 +21,33 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
-import coreui, errordialog, table, themes
+import coreui, errordialog, setui, table, themes
 
 type CargoSortOrders = enum
   nameAsc, nameDesc, durabilityAsc, durabilityDesc, qualityAsc, qualityDesc,
     typeAsc, typeDesc, amountAsc, amountDesc, weightAsc, weightDesc, none
 
+const defaultCargoSortOrder: CargoSortOrders = none
+
 var
   showCargoOptions*: bool = false
     ## Show additonal options for managing the player's ship's cargo
+  cargoSortOrder: CargoSortOrders = defaultCargoSortOrder
+
+proc sortCargo(sortAsc, sortDesc: CargoSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort the items on the list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if cargoSortOrder == sortAsc:
+    cargoSortOrder = sortDesc
+  else:
+    cargoSortOrder = sortAsc
 
 const
   headers: array[6, HeaderData[CargoSortOrders]] = [
@@ -55,4 +73,27 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  # Show information about free cargo space in the player's ship
+  setLayoutRowStatic(height = 30, cols = 2, ratio = cargoWidth)
+  label(str = cargoText[0])
+  colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
+  if showCargoOptions:
+    discard
+  # Show the list of crew members
+  addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
+      code = sortCargo, dialog = dialog)
+  var currentRow: Positive = 1
+  saveButtonStyle()
+  setButtonStyle(field = borderColor, a = 0)
+  try:
+    setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+  except:
+    dialog = setError(message = "Can't set table color")
+    return
+  setButtonStyle(field = rounding, value = 0)
+  setButtonStyle(field = border, value = 0)
+  let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+  var row: Positive = 1
+  restoreButtonStyle()
+  addPagination(page = currentPage, row = row)
