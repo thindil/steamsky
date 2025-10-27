@@ -385,7 +385,7 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Cargo info:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      setLayoutRowStatic(height = 35, cols = 2, width = 35)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Maximize/minimize the ship cargo info")
@@ -395,6 +395,11 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 4
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show/Hide additional options related to managing the cargo")
+      imageButton(image = images[moreOptionsIcon]):
+        showCargoOptions = not showCargoOptions
       showCargoInfo(dialog = dialog)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       height - 75)
