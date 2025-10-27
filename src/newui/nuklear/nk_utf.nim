@@ -51,7 +51,7 @@ proc nkUtfDecodeByte(c: Rune; i: var int): nk_rune {.raises: [], tags: [],
   ## Returns modified parameter i and UTF code of the rune
   let
     s = c.toUTF8
-    a = @(s.toOpenArrayByte(0, s.high))
+    a = @(s.toOpenArrayByte(first = 0, last = s.high))
   i = a.len
   return c.nk_rune
 
