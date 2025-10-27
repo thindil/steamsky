@@ -78,7 +78,9 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   if showCargoOptions:
-    discard
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.2.cfloat, 0.4])
+    label(str = "Type:")
+    label(str = "temp")
   # Show the list of crew members
   addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
       code = sortCargo, dialog = dialog)
