@@ -862,6 +862,42 @@ proc refreshCrewList*() {.raises: [], tags: [], contractual.} =
   for index in playerShip.crew.low..playerShip.crew.high:
     crewDataList.add(y = CrewData(index: index, checked: false))
 
+proc refreshCargoList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the list of items in the player's ship's cargo
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  # Set cargo info text
+  setCargoText(baseIndex = 0, dialog = dialog)
+  typesList = @["All"]
+  # Set indexes of items in the cargo
+  if itemsSortOrder == defaultItemsSortOrder:
+    itemsIndexes = @[]
+    for index in playerShip.cargo.low .. playerShip.cargo.high:
+      itemsIndexes.add(y = index)
+  # Set the list of types of items in the cargo
+  for i in itemsIndexes:
+    let
+      protoIndex = playerShip.cargo[i].protoIndex
+      itemType = try:
+          if itemsList[protoIndex].showType.len == 0:
+            itemsList[protoIndex].itemType
+          else:
+            itemsList[protoIndex].showType
+        except:
+          dialog = setError(message = "Can't get item type.")
+          return
+    try:
+      if typesList.find(item = itemType) == -1 and itemsList[
+          protoIndex].price > 0:
+        typesList.add(y = itemType)
+    except:
+      dialog = setError(message = "Can't add item type.")
+      return
+
 proc setShipInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Set the data for the player's ship's info screen
@@ -885,4 +921,4 @@ proc setShipInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   modulesIndexes = @[]
   for index in playerShip.modules.low..playerShip.modules.high:
     modulesIndexes.add(y = index)
-  setCargoText(baseIndex = 0, dialog = dialog)
+  refreshCargoList(dialog = dialog)
