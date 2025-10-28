@@ -757,7 +757,7 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     label(str = "Orders for all:")
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Go rest " &
-        (if crewDataList.any(proc (x: CrewData): bool = x.checked):
+        (if crewDataList.any(pred = proc (x: CrewData): bool = x.checked):
           "selected crew members" else: "everyone"))
     imageButton(image = images[goRestIcon]):
       ordersForAll(order = rest, dialog = dialog)
