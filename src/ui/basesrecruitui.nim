@@ -334,7 +334,7 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           $index).capitalizeAscii & ": }")
       try:
         tclEval(script = recruitText & " insert end {" & itemsList[
-            recruit.inventory[item]].name & "\n} [list gold]")
+            recruit.inventory[item].index].name & "\n} [list gold]")
       except:
         return showError(message = "Can't get the recruit's equipment.")
   tclEval(script = recruitText & " configure -state disabled")

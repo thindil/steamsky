@@ -78,7 +78,7 @@ proc saveBases*(saveData: var XmlNode) {.raises: [], tags: [],
             recruitNode.add(son = attrElement)
           for item in recruit.inventory:
             var itemElement: XmlNode = newElement(tag = "item")
-            itemElement.attrs = {"index": $item}.toXmlAttributes
+            itemElement.attrs = {"index": $item.index}.toXmlAttributes
             recruitNode.add(son = itemElement)
           for index, item in recruit.equipment:
             if item > -1:
@@ -198,7 +198,8 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
           recruit.attributes.add(y = MobAttributeRecord(level: recruitAttr.attr(
               name = "level").parseInt, experience: 0))
         for item in baseRecruit.findAll(tag = "item"):
-          recruit.inventory.add(y = item.attr(name = "index").parseInt)
+          recruit.inventory.add(y = RecruitItem(index: item.attr(
+              name = "index").parseInt))
         for item in recruit.equipment.mitems:
           item = -1
         for equipment in baseRecruit.findAll(tag = "equipment"):

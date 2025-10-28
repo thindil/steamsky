@@ -64,8 +64,9 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
       recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
     var inventory: seq[InventoryData] = @[]
     for item in recruit.inventory:
-      inventory.add(y = InventoryData(protoIndex: item, amount: 1, name: "",
-          durability: defaultItemDurability, price: 0))
+      inventory.add(y = InventoryData(protoIndex: item.index, amount: 1,
+          name: "", durability: defaultItemDurability, price: 0,
+          quality: item.quality))
     var morale: Natural = 0
     if "nomorale" in factionsList[skyBases[baseIndex].owner].flags:
       morale = 50

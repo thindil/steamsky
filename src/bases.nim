@@ -135,7 +135,7 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
     highestLevel: SkillRange = 0
     skills: seq[SkillInfo] = @[]
     recruitFaction: string = ""
-    inventory: seq[Positive] = @[]
+    inventory: seq[RecruitItem] = @[]
     equipment: EquipmentArray = [weapon: -1, shield: -1, helmet: -1, torso: -1,
         arms: -1, legs: -1, tool: -1]
     price, payment: Natural = 0
@@ -156,7 +156,7 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
         weaponSkillLevel = skills[0].level, factionIndex = recruitFaction)
     if itemIndex == 0:
       return
-    inventory.add(y = itemIndex)
+    inventory.add(y = RecruitItem(index : itemIndex))
     equipment[equipIndex] = inventory.high
     price += getPrice(baseType = skyBases[baseIndex].baseType,
         itemIndex = itemIndex, quality = normal)
