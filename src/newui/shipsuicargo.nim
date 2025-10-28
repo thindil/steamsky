@@ -19,8 +19,9 @@
 ## like shoing its list, moving to crew members' inventory, dropping items
 ## from it, etc.
 
+import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
+import ../[config, game, items, types]
 import coreui, errordialog, setui, table, themes
 
 type CargoSortOrders = enum
@@ -33,7 +34,7 @@ var
   showCargoOptions*: bool = false
     ## Show additonal options for managing the player's ship's cargo
   cargoSortOrder: CargoSortOrders = defaultCargoSortOrder
-  itemIndex: Natural = 0
+  typeIndex: Natural = 0
 
 proc sortCargo(sortAsc, sortDesc: CargoSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -49,6 +50,17 @@ proc sortCargo(sortAsc, sortDesc: CargoSortOrders;
     cargoSortOrder = sortDesc
   else:
     cargoSortOrder = sortAsc
+
+proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected item information
+  ##
+  ## * data   - the index of the selected item
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
 
 const
   headers: array[6, HeaderData[CargoSortOrders]] = [
@@ -84,10 +96,10 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show only items with the selected type")
-    let newItem = comboList(items = typesList, selected = itemIndex,
+    let newType: Natural = comboList(items = typesList, selected = typeIndex,
         itemHeight = 25, x = 200, y = 150)
-    if newItem != itemIndex:
-      itemIndex = newItem
+    if newType != typeIndex:
+      typeIndex = newType
   # Show the list of crew members
   addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
       code = sortCargo, dialog = dialog)
@@ -104,5 +116,23 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   setButtonStyle(field = border, value = 0)
   let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
   var row: Positive = 1
+  for index in itemsIndexes:
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    let
+      item: InventoryData = playerShip.cargo[index]
+      protoItem: ObjectData = try:
+          itemsList[item.protoIndex]
+        except:
+          dialog = setError(message = "Can't get the proto item.")
+          return
+      itemType: string = (if protoItem.showType.len >
+          0: protoItem.showType else: protoItem.itemType)
+    if typesList[typeIndex] != "All" and itemType != typesList[typeIndex]:
+      continue
+    addButton(label = getItemName(item = item),
+        tooltip = "Show item's description and actions", data = index,
+        code = showItemInfo, dialog = dialog)
   restoreButtonStyle()
   addPagination(page = currentPage, row = row)
