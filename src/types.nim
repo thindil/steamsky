@@ -401,6 +401,14 @@ type
     description*: string
     reputation*: ReputationRange
 
+  RecruitItem* = object
+    ## Used to store information about a recruit's inventory
+    ##
+    ## * index   - the index of the item's prototype
+    ## * quality - the quality of the item
+    index*: Positive = 1
+    quality*: ObjectQuality = normal
+
   RecruitData* = object
     ## Used to store information about the recruit in bases
     ##
@@ -419,7 +427,7 @@ type
     name*: string
     gender*: char
     price*: Positive = 1
-    inventory*: seq[Positive]
+    inventory*: seq[RecruitItem]
     equipment*: EquipmentArray
     payment*: Positive = 1
     homeBase*: BasesRange = 1
