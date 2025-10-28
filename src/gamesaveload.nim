@@ -22,7 +22,7 @@ import contracts
 import basessaveload, config, game, goals, log, maps, messages, missions,
     reputation, shipssaveload, statistics, stories, types, utils
 
-const saveVersion: Positive = 5 ## The current version of the game saves files
+const saveVersion: Positive = 6 ## The current version of the game saves files
 
 type SaveGameInvalidData* = object of CatchableError
   ## Raised when there is an invalid data in the saved game file.
