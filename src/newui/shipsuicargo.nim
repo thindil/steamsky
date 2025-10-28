@@ -19,7 +19,7 @@
 ## like shoing its list, moving to crew members' inventory, dropping items
 ## from it, etc.
 
-import std/tables
+import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, items, types]
 import coreui, errordialog, setui, table, themes
@@ -134,5 +134,21 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     addButton(label = getItemName(item = item),
         tooltip = "Show item's description and actions", data = index,
         code = showItemInfo, dialog = dialog)
+    addProgressBar(tooltip = "The current durability of the selected item",
+        value = item.durability, maxValue = defaultItemDurability, data = index,
+        code = showItemInfo, dialog = dialog)
+    addButton(label = ($item.quality).capitalizeAscii,
+        tooltip = "The quality of the selected item", data = index,
+        code = showItemInfo, dialog = dialog)
+    addButton(label = itemType, tooltip = "The type of the selected item",
+        data = index, code = showItemInfo, dialog = dialog)
+    addButton(label = $item.amount, tooltip = "The amount of the selected item",
+        data = index, code = showItemInfo, dialog = dialog)
+    addButton(label = $(item.amount * protoItem.weight) & " kg",
+        tooltip = "The total weight of the selected item", data = index,
+        code = showItemInfo, dialog = dialog)
+    row.inc
+    if row == gameSettings.listsLimit + 1:
+      break
   restoreButtonStyle()
   addPagination(page = currentPage, row = row)
