@@ -40,7 +40,7 @@ type
     morale: SkillRange
     id: Natural
 
-const defaultCrewSortOrder*: CrewSortOrders = none
+const defaultCrewSortOrder: CrewSortOrders = none
 
 var
   showCrewOptions*: bool = false
