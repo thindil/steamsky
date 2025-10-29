@@ -140,6 +140,17 @@ proc sortCargo(sortAsc, sortDesc: CargoSortOrders;
   for item in localCargo:
     itemsIndexes.add(y = item.id)
 
+proc showGiveDialog*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Show the dialog to give items from the player's ship's cargo to crew
+  ## members
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
+
 proc setGiveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Set the dialog for give items from the player's ship's cargo to crew
