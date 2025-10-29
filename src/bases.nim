@@ -156,12 +156,23 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
         weaponSkillLevel = skills[0].level, factionIndex = recruitFaction)
     if itemIndex == 0:
       return
-    inventory.add(y = RecruitItem(index : itemIndex))
+    let quality: ObjectQuality = case getRandom(min = 1, max = 100)
+          of 1:
+            poor
+          of 2..5:
+            low
+          of 6..94:
+            normal
+          of 95..99:
+            good
+          else:
+            excellent
+    inventory.add(y = RecruitItem(index : itemIndex, quality: quality))
     equipment[equipIndex] = inventory.high
     price += getPrice(baseType = skyBases[baseIndex].baseType,
-        itemIndex = itemIndex, quality = normal)
+        itemIndex = itemIndex, quality = quality)
     payment += (getPrice(baseType = skyBases[baseIndex].baseType,
-        itemIndex = itemIndex, quality = normal) / 10).int
+        itemIndex = itemIndex, quality = quality) / 10).int
 
   if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30:
     return
