@@ -19,7 +19,7 @@
 ## like shoing its list, moving to crew members' inventory, dropping items
 ## from it, etc.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, items, types]
 import coreui, errordialog, setui, table, themes
@@ -50,6 +50,94 @@ proc sortCargo(sortAsc, sortDesc: CargoSortOrders;
     cargoSortOrder = sortDesc
   else:
     cargoSortOrder = sortAsc
+  type LocalCargoData = object
+    name: string
+    damage: float
+    itemType: string
+    amount: Positive = 1
+    weight: Positive = 1
+    quality: ObjectQuality
+    id: Natural
+  var localCargo: seq[LocalCargoData] = @[]
+  for index, item in playerShip.cargo:
+    try:
+      localCargo.add(y = LocalCargoData(name: getItemName(item = item,
+          damageInfo = false, toLower = false), damage: (item.durability.float /
+          defaultItemDurability.float), itemType: (if itemsList[
+          item.protoIndex].showType.len > 0: itemsList[
+          item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
+          amount: item.amount, weight: item.amount * itemsList[
+          item.protoIndex].weight, quality: item.quality, id: index))
+    except:
+      dialog = setError(message = "Can't add local item to cargo.")
+      return
+
+  proc sortCargo(x, y: LocalCargoData): int {.raises: [], tags: [],
+      contractual.} =
+    ## Compare two items and return which should go first, based on the sort
+    ## order of the items
+    ##
+    ## * x - the first item to compare
+    ## * y - the second item to compare
+    ##
+    ## Returns 1 if the first item should go first, -1 if the second item
+    ## should go first.
+    case cargoSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      return -1
+    of durabilityAsc:
+      if x.damage < y.damage:
+        return 1
+      return -1
+    of durabilityDesc:
+      if x.damage > y.damage:
+        return 1
+      return -1
+    of qualityAsc:
+      if x.quality < y.quality:
+        return 1
+      return -1
+    of qualityDesc:
+      if x.quality > y.quality:
+        return 1
+      return -1
+    of typeAsc:
+      if x.itemType < y.itemType:
+        return 1
+      return -1
+    of typeDesc:
+      if x.itemType > y.itemType:
+        return 1
+      return -1
+    of amountAsc:
+      if x.amount < y.amount:
+        return 1
+      return -1
+    of amountDesc:
+      if x.amount > y.amount:
+        return 1
+      return -1
+    of weightAsc:
+      if x.weight < y.weight:
+        return 1
+      return -1
+    of weightDesc:
+      if x.weight > y.weight:
+        return 1
+      return -1
+    of none:
+      return -1
+
+  localCargo.sort(cmp = sortCargo)
+  itemsIndexes = @[]
+  for item in localCargo:
+    itemsIndexes.add(y = item.id)
 
 proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
