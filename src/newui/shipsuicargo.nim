@@ -22,7 +22,7 @@
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, items, types]
-import coreui, errordialog, setui, table, themes
+import coreui, dialogs, errordialog, setui, table, themes
 
 type CargoSortOrders = enum
   nameAsc, nameDesc, durabilityAsc, durabilityDesc, qualityAsc, qualityDesc,
@@ -35,6 +35,7 @@ var
     ## Show additonal options for managing the player's ship's cargo
   cargoSortOrder: CargoSortOrders = defaultCargoSortOrder
   typeIndex: Natural = 0
+  itemIndex: int = -1
 
 proc sortCargo(sortAsc, sortDesc: CargoSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -139,6 +140,27 @@ proc sortCargo(sortAsc, sortDesc: CargoSortOrders;
   for item in localCargo:
     itemsIndexes.add(y = item.id)
 
+proc setGiveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the dialog for give items from the player's ship's cargo to crew
+  ## members
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  closePopup()
+
+proc setDropDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the dialog for drop items from the player's ship's cargo
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  closePopup()
+
 proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected item information
@@ -148,7 +170,17 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  itemIndex = itemsIndexes[data]
+  try:
+    dialog = showInventoryItemInfo(itemIndex = data, memberIndex = -1,
+        button1 = ButtonSettings(
+        tooltip: "Give item to a crew member",
+        code: setGiveDialog, icon: giveIcon.ord, text: "Give", color: ""),
+        button2 = ButtonSettings(
+        tooltip: "Drop item from the ship cargo",
+        code: setDropDialog, icon: dropIcon.ord, text: "Drop", color: ""))
+  except:
+    dialog = setError(message = "Can't show the item's info.")
 
 const
   headers: array[6, HeaderData[CargoSortOrders]] = [
