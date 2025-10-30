@@ -859,7 +859,9 @@ var
 proc refreshCrewList*() {.raises: [], tags: [], contractual.} =
   ## Set the list of crew members in the player's ship
   crewDataList = @[]
-  for index in playerShip.crew.low..playerShip.crew.high:
+  crewList = @[]
+  for index, member in playerShip.crew:
+    crewList.add(y = member.name)
     crewDataList.add(y = CrewData(index: index, checked: false))
 
 proc refreshCargoList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
