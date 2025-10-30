@@ -149,7 +149,20 @@ proc showGiveDialog*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  const
+    width: float = 400
+    height: float = 400
+
+  let
+    item: InventoryData = playerShip.cargo[itemIndex]
+    windowName: string = "Give " & getItemName(item = item) & " to a crew member"
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
+    setLayoutRowDynamic(height = 35, cols = 1)
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = windowName)
 
 proc setGiveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -161,6 +174,7 @@ proc setGiveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   closePopup()
+  dialog = giveDialog
 
 proc setDropDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
