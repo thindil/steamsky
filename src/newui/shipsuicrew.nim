@@ -348,7 +348,7 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't get the current order.")
     label(str = "New order:")
-    let newOrder = comboList(items = availableOrdersText,
+    let newOrder: Natural = comboList(items = availableOrdersText,
         selected = currentOrder, itemHeight = 25, x = 200, y = 150)
     if newOrder != currentOrder:
       currentOrder = newOrder
@@ -669,7 +669,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               "Cleaning ship:", "Defend ship:", "Board enemy ship", "Train skill:"]
         for index, priority in prioritesNames:
           label(str = priority)
-          var newPriority = comboList(items = priorityLevels,
+          var newPriority: Natural = comboList(items = priorityLevels,
               selected = setPriorites[index], itemHeight = 25, x = 200, y = 150)
           if newPriority != setPriorites[index]:
             if newPriority == 2:
@@ -780,7 +780,7 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
-    let newSkill = comboList(items = crewSkillsList,
+    let newSkill: Natural = comboList(items = crewSkillsList,
         selected = skillIndex, itemHeight = 25, x = 200, y = 150)
     if newSkill != skillIndex:
       skillIndex = newSkill
