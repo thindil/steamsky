@@ -160,6 +160,14 @@ proc showGiveDialog*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     setLayoutRowDynamic(height = 35, cols = 2)
+    # Give button
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Give the item")
+    imageLabelButton(image = images[giveColoredIcon], text = "Give",
+        alignment = right):
+      discard
+    restoreButtonStyle()
     # Close button
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
         isPopup = false, label = "Cancel")
