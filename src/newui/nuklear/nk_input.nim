@@ -23,6 +23,8 @@
 # OR TORT *(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+## Provides code related to the user's input in nuklear library
+
 import contracts
 import nk_context, nk_math, nk_types
 

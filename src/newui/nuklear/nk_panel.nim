@@ -23,6 +23,8 @@
 # OR TORT *(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+## Provides code related to the panel widget in nuklear library
+
 import contracts
 import nk_alignment, nk_context, nk_page, nk_types
 
