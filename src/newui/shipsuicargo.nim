@@ -159,8 +159,10 @@ proc showGiveDialog*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
-    setLayoutRowDynamic(height = 35, cols = 1)
-    addCloseButton(dialog = dialog, isPopup = false)
+    setLayoutRowDynamic(height = 35, cols = 2)
+    # Close button
+    addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
+        isPopup = false, label = "Cancel")
 
   windowSetFocus(name = windowName)
 
