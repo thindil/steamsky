@@ -59,7 +59,7 @@ type
       dropIcon, editIcon, editColoredIcon, showIcon, goRestIcon, cleanOrderIcon,
       repairOrderIcon, giveOrderColoredIcon, inventoryIcon, dismissIcon,
       giveOrderIcon, cargoIcon, moveIcon, repairPriorityIcon, upgradeButtonIcon,
-      powerIcon, assignAmmoIcon
+      powerIcon, assignAmmoIcon, giveColoredIcon
   MapIconsNames* = enum
     ## Names of icons used in the game's map
     playerShipIcon, emptyMapIcon, targetIcon, storyIcon, deliverIcon,
@@ -130,7 +130,8 @@ let
       "cargo.svg", defaultThemeIconPath & "cargo2.svg",
       defaultThemeIconPath & "repair-priority.svg", defaultThemeIconPath &
       "upgrade-button.svg", defaultThemeIconPath & "power.svg",
-      defaultThemeIconPath & "assignammo.svg"],
+      defaultThemeIconPath & "assignammo.svg", defaultThemeIconPath &
+      "give2.svg"],
       colors: ["#1a130c".parseColor, "#eee8aa".parseColor,
       "#4e9a06".parseColor, "#372412".parseColor, "#291913".parseColor,
       "#500000".parseColor, "#120d0d".parseColor, "#ffdf00".parseColor,
