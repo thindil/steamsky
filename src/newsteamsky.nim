@@ -23,8 +23,8 @@ import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
 import newui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
     basesui, combatui, coreui, dialogs, errordialog, goalsui, header, mainmenu,
-    mapsui, missionsui, shipsui, shipsuicargo, shipsuicrew,
-    shipsuicrewinventory, shipsuimodules, themes, tradesui, waitmenu]
+    mapsui, missionsui, shipsui, shipsuicrew, shipsuicrewinventory,
+    shipsuimodules, themes, tradesui, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -142,7 +142,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         healWounded: showWounded, repairShip: showRepairs,
         buyRecipes: showRecipes, shipyard: showShipyard,
         baseMissions: showMissions, loot: showLoot, shipInfo: showShipInfo]
-    showDialog: array[GameDialog.errorDialog..GameDialog.giveDialog,
+    showDialog: array[GameDialog.errorDialog..GameDialog.assignSkillDialog,
         proc(dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
         newGoalDialog: showGoals, boardingDialog: showPartyMenu,
@@ -157,7 +157,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         renameModuleDialog: showRenameDialog,
         assignCrewDialog: showAssignCrewDialog,
         assignAmmoDialog: showAssignAmmoDialog,
-        assignSkillDialog: showAssignSkillDialog, giveDialog: showGiveDialog]
+        assignSkillDialog: showAssignSkillDialog]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
@@ -170,7 +170,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         resetTooltips()
 
       # Show dialogs if needed
-      if dialog in GameDialog.errorDialog..GameDialog.giveDialog:
+      if dialog in GameDialog.errorDialog..GameDialog.assignSkillDialog:
         showDialog[dialog](dialog = dialog)
       elif dialog == gameMenuDialog:
         showGameMenu(dialog = dialog, state = state)
