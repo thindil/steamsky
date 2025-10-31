@@ -140,45 +140,6 @@ proc sortCargo(sortAsc, sortDesc: CargoSortOrders;
   for item in localCargo:
     itemsIndexes.add(y = item.id)
 
-proc showGiveDialog*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
-  ## Show the dialog to give items from the player's ship's cargo to crew
-  ## members
-  ##
-  ## * dialog - the current in-game dialog displayed on the screen
-  ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
-  const
-    width: float = 400
-    height: float = 400
-
-  let
-    item: InventoryData = playerShip.cargo[itemIndex]
-    windowName: string = "Give " & getItemName(item = item) & " to a crew member"
-  updateDialog(width = width, height = height)
-  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
-    setLayoutRowDynamic(height = 35, cols = 2)
-    label(str = "To:")
-    let newMember: Natural = comboList(items = crewList, selected = crewIndex,
-        itemHeight = 25, x = 200, y = 150)
-    if newMember != crewIndex:
-      crewIndex = newMember
-    # Give button
-    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Give the item")
-    imageLabelButton(image = images[giveColoredIcon], text = "Give",
-        alignment = right):
-      discard
-    restoreButtonStyle()
-    # Close button
-    addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
-        isPopup = false, label = "Cancel")
-
-  windowSetFocus(name = windowName)
-
 proc setGiveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Set the dialog for give items from the player's ship's cargo to crew
