@@ -160,6 +160,11 @@ proc showGiveDialog*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     setLayoutRowDynamic(height = 35, cols = 2)
+    label(str = "To:")
+    let newMember: Natural = comboList(items = crewList, selected = crewIndex,
+        itemHeight = 25, x = 200, y = 150)
+    if newMember != crewIndex:
+      crewIndex = newMember
     # Give button
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     if gameSettings.showTooltips:
