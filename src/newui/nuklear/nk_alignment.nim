@@ -41,5 +41,5 @@ proc nkContainerOf*[T](`ptr`: pointer; `type`: typedesc[T];
   let obj: `type` = cast[`type`](`ptr`)
   for objField, objVal in obj.fieldPairs:
     if objField == member:
-      let res = cast[`type`](objVal)
+      let res: `type` = cast[`type`](objVal)
       return res.addr
