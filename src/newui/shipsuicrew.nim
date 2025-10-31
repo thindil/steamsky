@@ -746,14 +746,14 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if showCrewOptions:
     var
       cols: Positive = 2
-      ratio: seq[cfloat] = @[0.4.cfloat, 0.1]
+      ratio2: seq[cfloat] = @[0.4.cfloat, 0.1]
     if needClean:
       cols.inc
-      ratio.add(y = 0.1.cfloat)
+      ratio2.add(y = 0.1.cfloat)
     if needRepair:
       cols.inc
-      ratio.add(y = 0.1.cfloat)
-    setLayoutRowDynamic(height = 35, cols = cols, ratio = ratio)
+      ratio2.add(y = 0.1.cfloat)
+    setLayoutRowDynamic(height = 35, cols = cols, ratio = ratio2)
     label(str = "Orders for all:")
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Go rest " &
