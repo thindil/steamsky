@@ -924,3 +924,4 @@ proc setShipInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for index in playerShip.modules.low..playerShip.modules.high:
     modulesIndexes.add(y = index)
   refreshCargoList(dialog = dialog)
+  crewIndex = 0
