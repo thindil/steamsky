@@ -333,8 +333,10 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = recruitText & " insert end {" & (
           $index).capitalizeAscii & ": }")
       try:
+        let rItem: RecruitItem = recruit.inventory[item]
         tclEval(script = recruitText & " insert end {" & itemsList[
-            recruit.inventory[item].index].name & "\n} [list gold]")
+            rItem.index].name & (if rItem.quality == normal: "" else: " (" &
+            $rItem.quality & ")") & "\n} [list gold]")
       except:
         return showError(message = "Can't get the recruit's equipment.")
   tclEval(script = recruitText & " configure -state disabled")

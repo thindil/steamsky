@@ -302,8 +302,10 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
             setLayoutRowDynamic(height = 35, cols = 2)
             label(str = ($index).capitalizeAscii & ":")
             try:
-              colorLabel(str = itemsList[recruit.inventory[item].index].name,
-                  color = theme.colors[goldenColor])
+              let rItem: RecruitItem = recruit.inventory[item]
+              colorLabel(str = itemsList[rItem.index].name & (
+                  if rItem.quality == normal: "" else: " (" & $rItem.quality &
+                  ")"), color = theme.colors[goldenColor])
             except:
               dialog = setError(message = "Can't show the recruit's equipment")
               break
