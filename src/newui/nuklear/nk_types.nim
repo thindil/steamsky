@@ -300,6 +300,7 @@ type
     texture*: nk_handle
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle
+        ## Internal Nuklear type
   nk_style_progress* {.importc: "struct nk_style_progress",
       completeStruct.} = object
     ## Internal Nuklear type
@@ -332,7 +333,9 @@ type
     width*: nk_text_width_f
     when defined(nkIncludeVertexBufferOutput):
       query*: nk_query_font_glyph_f
+        ## Internal Nuklear type
       texture*: nk_handle
+        ## Internal Nuklear type
   PNkUserFont* = ptr nk_user_font
     ## Pointer to nk_user_font structure
   nk_style_text* {.importc: "struct nk_style_text", completeStruct.} = object
@@ -474,6 +477,7 @@ type
     grab*, grabbed*, ungrab*: uint8
     when defined(nkButtonTriggerOnRelease):
       down_pos*: nk_vec2
+        ## Internal Nuklear type
   nk_key* {.importc: "struct nk_key", completeStruct.} = object
     ## Internal Nuklear type
     down*: nk_bool
@@ -526,6 +530,7 @@ type
     use_clipping*: cint
     userdata*: nk_handle
   PNkCommandBuffer* = ptr nk_command_buffer
+    ## Pointer to nk_command_buffer type
   nk_command_image* {.importc: "struct nk_command_image",
       completeStruct.} = object
     ## Internal Nuklear type
@@ -589,9 +594,11 @@ type
     ## Internal Nuklear type
     x*, y*: cuint
   nk_menu_state* {.importc: "struct nk_menu_state", completeStruct.} = object
+    ## Internal Nuklear type
     x*, y*, w*, h*: cfloat
     offset*: nk_scroll
   nk_chart_slot* {.importc: "struct nk_chart_slot", completeStruct.} = object
+    ## Internal Nuklear type
     `type`*: ChartType
     color*, highlight*: nk_color
     min*, max*, range*: cfloat
@@ -704,9 +711,11 @@ type
     data*: nk_page_data
     next*, prev*: pointer
   nk_str* {.importc: "struct nk_str", completeStruct.} = object
+    ## Internal Nuklear type
     buffer*: nk_buffer
     len*: cint
   nk_plugin_filter* = proc (text: nk_text_edit; unicode: nk_rune) {.cdecl.}
+    ## Internal Nuklear type
   nk_text_undo_record* {.importc: "struct nk_text_undo_record",
       completeStruct.} = object
     ## Internal Nuklear type
@@ -819,10 +828,12 @@ type
     button_behaviors*: nk_config_stack_button_behavior
   nk_draw_null_texture* {.importc: "struct nk_draw_null_texture",
       completeStruct.} = object
+    ## Internal Nuklear type
     texture*: nk_handle
     uv*: nk_vec2
   nk_draw_vertex_layout_element* {.importc: "struct nk_draw_vertex_layout_element",
       completeStruct.} = object
+    ## Internal Nuklear type
     attribute*: DrawVertexLayoutAttribute
     format*: DrawVertexLayoutFormat
     offset*: nk_size
@@ -846,6 +857,7 @@ type
     line_AA, shape_AA: AntiAliasing
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle
+        ## Internal Nuklear type
   nk_page* {.importc: "struct nk_pool", completeStruct.} = object
     ## Internal Nuklear type
     size*: cuint
@@ -876,11 +888,13 @@ type
       userdata*: nk_handle ## Interna Nuklear data
     when defined(nkIncludeVertexBufferOutput):
       draw_list*: nk_draw_list
+        ## Internal Nuklear type
     text_edit*: nk_text_edit
     overlay*: nk_command_buffer
     build*: cint
     pool*: nk_pool
   nk_font_glyph* {.importc: "struct nk_font_glyph", completeStruct.} = object
+    ## Internal Nuklear type
     codepoint*: nk_rune
     xadvance, x0, y0, x1, y1, w, h, u0, v0, u1, v1: cfloat
   nk_font* {.importc: "struct nk_font", completeStruct.} = object
