@@ -52,7 +52,7 @@ type
     widgetsAmount: seq[Positive]
   ManipulateType* = enum
     ## Types of action, used to manipulate items, like selling or buying items
-    sellAction, buyAction, takeAction, dropAction, moveAction
+    sellAction, buyAction, takeAction, dropAction, moveAction, giveAction
   ManipulateData = object
     itemIndex: int
     amount, maxAmount, cost, allCost, data: Natural
@@ -514,6 +514,12 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
         iIndex], damageInfo = false, toLower = false) & " to ship cargo",
         warning: "", allCost: 0, amount: 1, data: mIndex)
     return moveDialog
+  of giveAction:
+    manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: 1,
+        title: "Give " & getItemName(item = playerShip.cargo[iIndex],
+        damageInfo = false, toLower = false) & " to a crew member", warning: "",
+        allCost: 0, amount: 1, data: 0)
+    return giveDialog
 
 proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
     KeyError], tags: [], contractual.} =
@@ -646,7 +652,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           text = actionButton.label, alignment = right):
         closePopup()
         let
-          baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+          baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+              playerShip.skyY].baseIndex
           trader: string = (if baseIndex > 0: "base" else: "ship")
         try:
           case dialog
