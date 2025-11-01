@@ -462,7 +462,14 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
   except:
     dialog = setError(message = "Can't show the info")
 
-proc updateMaxAmount(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc updateMaxAmount(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Update max allowed amount of items to give
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   let
     item: InventoryData = playerShip.cargo[manipulateData.itemIndex]
     memberIndex: Natural = manipulateData.data
@@ -532,7 +539,8 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
         title: "Give " & getItemName(item = playerShip.cargo[iIndex],
         damageInfo = false, toLower = false) & " to a crew member", warning: "",
         allCost: 0, amount: 1, data: 0)
-    return giveDialog
+    result = giveDialog
+    updateMaxAmount(dialog = result)
 
 proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
     KeyError], tags: [], contractual.} =
