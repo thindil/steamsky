@@ -589,16 +589,16 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
   ##
   ## Returns the parameter dialog. It is modified only when the player closed
   ## the dialog. Returns true if an item was sold or bought, otherwise false
-  if dialog notin buyDialog..moveDialog:
+  if dialog notin buyDialog..giveDialog:
     return false
   result = false
   try:
     const height: float = 220
     let width: float = windowWidth / 1.5
     updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = manipulateData.title, x = dialogX,
-        y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
-        windowNoScrollbar, windowMovable}):
+    window(name = manipulateData.title, x = dialogX, y = dialogY, w = width,
+        h = height, flags = {windowBorder, windowTitle, windowNoScrollbar,
+        windowMovable}):
       var baseCargoIndex, cargoIndex, protoIndex: int = -1
       if manipulateData.itemIndex < 0:
         baseCargoIndex = manipulateData.itemIndex.abs
@@ -619,6 +619,15 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
               quality = playerShip.cargo[cargoIndex].quality)
       setLayoutRowDynamic(height = 30, cols = 2)
+      # Set target (give dialog only)
+      if dialog == giveDialog:
+        label(str = "To:")
+        let newMember: Natural = comboList(items = crewList,
+            selected = manipulateData.data, itemHeight = 25, x = 200, y = 150)
+        if newMember != manipulateData.data:
+          manipulateData.data = newMember
+          updateMaxAmount(dialog = dialog)
+      # Set amount
       label(str = "Amount (max: " & $manipulateData.maxAmount & "):")
       let newValue: int = property2(name = "#", min = 1,
           val = manipulateData.amount, max = manipulateData.maxAmount, step = 1,
@@ -665,6 +674,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           ActionData(icon: dropIcon, label: "Drop")
         of moveDialog:
           ActionData(icon: moveIcon, label: "Move")
+        of giveDialog:
+          ActionData(icon: giveColoredIcon, label: "Give")
         else:
           ActionData(icon: buyIcon, label: "Invalid")
       setLayoutRowDynamic(height = 30, cols = 2)
@@ -795,9 +806,11 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       restoreButtonStyle()
       # Close button
       addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
-          label = "Cancel")
+          label = "Cancel", isPopup = false)
   except:
     dialog = setError(message = "Can't show the info")
+
+  windowSetFocus(name = manipulateData.title)
 
 proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
     button1: ButtonSettings = emptyButtonSettings;
