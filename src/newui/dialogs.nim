@@ -462,6 +462,19 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
   except:
     dialog = setError(message = "Can't show the info")
 
+proc updateMaxAmount(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  let
+    item: InventoryData = playerShip.cargo[manipulateData.itemIndex]
+    memberIndex: Natural = manipulateData.data
+  manipulateData.maxAmount = try:
+        (freeInventory(memberIndex = memberIndex, amount = 0).float / itemsList[
+            item.protoIndex].weight.float).Natural
+      except:
+        dialog = setError(message = "Can't count the max amount.")
+        return
+  if item.amount < manipulateData.maxAmount:
+    manipulateData.maxAmount = item.amount
+
 proc setManipulate*(action: ManipulateType; iIndex: int;
     mIndex: Natural = 0): GameDialog {.raises: [], tags: [RootEffect],
     contractual.} =
