@@ -205,7 +205,7 @@ proc ordersForAll(order: CrewOrders; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  for i in playerShip.crew.low .. playerShip.crew.high:
+  for i in playerShip.crew.low..playerShip.crew.high:
     try:
       giveOrders(ship = playerShip, memberIndex = i, givenOrder = order)
     except CrewOrderError:
@@ -265,14 +265,14 @@ proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog)
           if not isWorking(owners = module.owner, mIndex = memberIndex) and
               module.craftingIndex.len > 0:
             try:
-              availableOrdersText.add(y = (if module.craftingIndex.len >
-                  6 and module.craftingIndex[0 .. 4] == "Study": "Study " &
-                  itemsList[module.craftingIndex[6 ..
-                  ^1].strip.parseInt].name elif module.craftingIndex.len >
-                  12 and module.craftingIndex[0 .. 10] ==
+              availableOrdersText.add(y = (if module.craftingIndex.len > 6 and
+                  module.craftingIndex[0..4] == "Study": "Study " & itemsList[
+                  module.craftingIndex[
+                  6..^1].strip.parseInt].name elif module.craftingIndex.len >
+                  12 and module.craftingIndex[0..10] ==
                   "Deconstruct": "Deconstruct " & itemsList[
-                  module.craftingIndex[12 ..
-                  ^1].strip.parseInt].name else: "Manufacture " &
+                  module.craftingIndex[
+                  12..^1].strip.parseInt].name else: "Manufacture " &
                   $module.craftingAmount & "x " & itemsList[recipesList[
                   module.craftingIndex].resultIndex].name))
               availableOrders.add(y = craft)
@@ -478,11 +478,11 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             colorLabel(str = $member.health & "%", color = theme.colors[goldenColor])
           else:
             case member.health:
-            of 81 .. 99:
+            of 81..99:
               colorLabel(str = "Slightly wounded", color = theme.colors[goldenColor])
-            of 51 .. 80:
+            of 51..80:
               colorLabel(str = "Wounded", color = theme.colors[goldenColor])
-            of 1 .. 50:
+            of 1..50:
               colorLabel(str = "Heavily wounded", color = theme.colors[goldenColor])
             else:
               discard
@@ -493,11 +493,11 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             colorLabel(str = $tiredPoints & "%", color = theme.colors[goldenColor])
           else:
             case tiredPoints:
-            of 1 .. 40:
+            of 1..40:
               colorLabel(str = "Bit tired", color = theme.colors[goldenColor])
-            of 41 .. 80:
+            of 41..80:
               colorLabel(str = "Tired", color = theme.colors[goldenColor])
-            of 81 .. 99:
+            of 81..99:
               colorLabel(str = "Very tired", color = theme.colors[goldenColor])
             of 100:
               colorLabel(str = "Unconscious", color = theme.colors[goldenColor])
@@ -510,11 +510,11 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             colorLabel(str = $member.thirst & "%", color = theme.colors[goldenColor])
           else:
             case member.thirst:
-            of 1 .. 40:
+            of 1..40:
               colorLabel(str = "Bit thirsty", color = theme.colors[goldenColor])
-            of 41 .. 80:
+            of 41..80:
               colorLabel(str = "Thirsty", color = theme.colors[goldenColor])
-            of 81 .. 99:
+            of 81..99:
               colorLabel(str = "Very thirsty", color = theme.colors[goldenColor])
             of 100:
               colorLabel(str = "Dehydrated", color = theme.colors[goldenColor])
@@ -527,11 +527,11 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             colorLabel(str = $member.hunger & "%", color = theme.colors[goldenColor])
           else:
             case member.hunger:
-            of 1 .. 40:
+            of 1..40:
               colorLabel(str = "Bit hungry", color = theme.colors[goldenColor])
-            of 41 .. 80:
+            of 41..80:
               colorLabel(str = "Hungry", color = theme.colors[goldenColor])
-            of 81 .. 99:
+            of 81..99:
               colorLabel(str = "Very hungry", color = theme.colors[goldenColor])
             of 100:
               colorLabel(str = "Starving", color = theme.colors[goldenColor])
@@ -544,13 +544,13 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             colorLabel(str = $member.morale[1] & "%", color = theme.colors[goldenColor])
           else:
             case member.morale[1]
-            of 0 .. 24:
+            of 0..24:
               colorLabel(str = "Upset", color = theme.colors[goldenColor])
-            of 25 .. 49:
+            of 25..49:
               colorLabel(str = "Unhappy", color = theme.colors[goldenColor])
-            of 51 .. 74:
+            of 51..74:
               colorLabel(str = "Happy", color = theme.colors[goldenColor])
-            of 75 .. 100:
+            of 75..100:
               colorLabel(str = "Excited", color = theme.colors[goldenColor])
             else:
               discard
