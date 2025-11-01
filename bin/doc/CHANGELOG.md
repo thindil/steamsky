@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated help
+- Recruits in bases can have now equipment with random quality
 
 ### Fixed
 - Updating the game's header after installing or removing modules in a shipyard
