@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
   materials affects quality of the result's items during crafting
 - Information about the crafting recipe's difficulty to the recipe's
   information dialog
+- Information about the quality of owned items to the information about a
+  recruit available to hire
 
 ### Changed
 - Updated help
