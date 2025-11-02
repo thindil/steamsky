@@ -1076,7 +1076,6 @@ type
   ShowStates* = enum
     ## When to change the state of a window
     hidden, shown
-  # TODO: test code
   MouseButton* = object
     ## Used to store information about a mouse button.
     down*, clicked*: bool
