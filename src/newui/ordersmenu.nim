@@ -305,7 +305,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
           state = recruits
           dialog = none
           closePopup()
-          setRecruits(dialog = dialog)
+          setRecruits()
     if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
       labelButton(title = "Ask for events"):
         askForEvents(dialog = dialog)
