@@ -589,8 +589,6 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
   ##
   ## Returns the parameter dialog. It is modified only when the player closed
   ## the dialog. Returns true if an item was sold or bought, otherwise false
-  if dialog notin buyDialog..giveDialog:
-    return false
   result = false
   try:
     const height: float = 220
@@ -682,7 +680,6 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       imageLabelButton(image = images[actionButton.icon],
           text = actionButton.label, alignment = right):
-        closePopup()
         let
           baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
               playerShip.skyY].baseIndex
