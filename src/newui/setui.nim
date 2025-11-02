@@ -180,14 +180,8 @@ var
   baseIndex*: ExtendedBasesRange = 0
     ## The index of the base
 
-proc setRecruits*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc setRecruits*() {.raises: [], tags: [RootEffect], contractual.} =
   ## Set the data for recruits UI
-  ##
-  ## * dialog - the current in-game dialog displayed on the screen
-  ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
   baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if recruitsIndexes.len != skyBases[baseIndex].recruits.len:
     recruitsIndexes = @[]
