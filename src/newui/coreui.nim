@@ -58,6 +58,7 @@ var
   showOptions*: bool = false       ## If true, show more options in the selected screen
   mapPreview*: bool = false        ## If true, the map is in the preview mode
   previousState*: GameState = map  ## The previous screen in the game
+  updateData*: bool = false        ## If true, update the data needed for the selected screen
 
 proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
         4) {.raises: [], tags: [], contractual.} =
