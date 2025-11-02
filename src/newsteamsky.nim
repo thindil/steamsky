@@ -172,6 +172,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       # Show dialogs if needed
       if dialog in GameDialog.errorDialog..GameDialog.assignSkillDialog:
         showDialog[dialog](dialog = dialog)
+      elif dialog in buyDialog..giveDialog:
+        updateData = showManipulateItem(dialog = dialog)
       elif dialog == gameMenuDialog:
         showGameMenu(dialog = dialog, state = state)
 
