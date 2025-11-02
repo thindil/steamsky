@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [11.7] - 2025-11-02
 
 ### Added
 - The quality of food and drinks affects their effectiveness and the impact on
