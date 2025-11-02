@@ -321,7 +321,8 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = previous, state = state):
     return
-  discard showManipulateItem(dialog = dialog)
+  if updateData:
+    refreshCargoList(dialog = dialog)
   let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
   if expandedSection == 0:
     setLayoutRowDynamic(height = height / 2, cols = 2)

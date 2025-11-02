@@ -471,7 +471,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state,
     options = true):
     return
-  if showManipulateItem(dialog = dialog):
+  if updateData:
     refreshItemsList(dialog = dialog)
     baseCargo = skyBases[baseIndex].cargo
   # Show advanced options if needed

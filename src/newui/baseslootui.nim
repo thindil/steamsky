@@ -304,7 +304,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
-  if showManipulateItem(dialog = dialog):
+  if updateData:
     refreshLootList(dialog = dialog)
     baseCargo = skyBases[baseIndex].cargo
   setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.1.cfloat, 0.3])
