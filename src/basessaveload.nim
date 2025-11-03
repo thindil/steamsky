@@ -127,11 +127,14 @@ proc saveBases*(saveData: var XmlNode) {.raises: [], tags: [],
           repElement.attrs = {"level": $skyBase.reputation.level}.toXmlAttributes
         baseTree.add(son = repElement)
       for item in skyBase.cargo:
-        var itemElement: XmlNode = newElement(tag = "item")
-        itemElement.attrs = {"index": $item.protoIndex, "amount": $item.amount,
-            "durability": $item.durability,
-            "price": $item.price,
-            "quality": $item.quality}.toXmlAttributes
+        var
+          itemElement: XmlNode = newElement(tag = "item")
+          attrs: seq[tuple[key, val: string]] = @[("index", $item.protoIndex), (
+              "amount", $item.amount), ("durability", $item.durability), (
+              "price", $item.price)]
+        if item.quality != normal:
+          attrs.add(y = ("quality", $item.quality))
+        itemElement.attrs = attrs.toXmlAttributes
         baseTree.add(son = itemElement)
       saveData.add(son = baseTree)
 
