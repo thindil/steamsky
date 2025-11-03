@@ -264,8 +264,7 @@ type
     alignment*: nk_flags
     # TODO: should be nk_handle, nk_draw_f
     userdata*: cint
-    draw_begin*: cint
-    draw_end*: cint
+    draw_begin*, draw_end*: cint
   nk_style_window_header* {.importc: "struct nk_style_window_header",
       completeStruct.} = object
     ## Internal Nuklear type
