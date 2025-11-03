@@ -70,7 +70,7 @@ proc setCargoText(baseIndex: ExtendedBasesRange;
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  var freeSpace = try:
+  var freeSpace: int = try:
       freeCargo(amount = 0)
     except:
       dialog = setError(message = "Can't get free space.")
@@ -119,7 +119,7 @@ proc setSchoolSkills*(){.raises: [], tags: [], contractual.} =
   ## Set the skills list for the selected crew member
   schoolSkillsList = @[]
   for index, skill in skillsList:
-    var skillLevel = 0
+    var skillLevel: SkillRange = 0
     for skill2 in playerShip.crew[crewIndex].skills:
       if skill2.index == index:
         skillLevel = skill2.level
@@ -252,7 +252,7 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and
         enemyName != protoShipsList[eventsList[skyMap[playerShip.skyX][
         playerShip.skyY].eventIndex].shipIndex].name:
-      let combatStarted = startCombat(enemyIndex = eventsList[skyMap[
+      let combatStarted: bool = startCombat(enemyIndex = eventsList[skyMap[
           playerShip.skyX][playerShip.skyY].eventIndex].shipIndex,
           newCombat = false)
       if not combatStarted:
@@ -325,8 +325,8 @@ proc refreshItemsList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if i == -1:
       break
     let
-      protoIndex = playerShip.cargo[i].protoIndex
-      itemType = try:
+      protoIndex: Natural = playerShip.cargo[i].protoIndex
+      itemType: string = try:
           if itemsList[protoIndex].showType.len == 0:
             itemsList[protoIndex].itemType
           else:
@@ -344,8 +344,8 @@ proc refreshItemsList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   let currentItemIndex: Positive = playerShip.cargo.len + 1
   for i in currentItemIndex..itemsIndexes.high:
     let
-      protoIndex = baseCargo[itemsIndexes[i]].protoIndex
-      itemType = try:
+      protoIndex: Natural = baseCargo[itemsIndexes[i]].protoIndex
+      itemType: string = try:
           if itemsList[protoIndex].showType.len == 0:
             itemsList[protoIndex].itemType
           else:
@@ -715,7 +715,7 @@ proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  var missionsLimit = (case skyBases[baseIndex].reputation.level
+  var missionsLimit: Natural = (case skyBases[baseIndex].reputation.level
     of 0..25:
       1
     of 26..50:
@@ -766,8 +766,8 @@ proc refreshLootList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if i == -1:
       break
     let
-      protoIndex = playerShip.cargo[i].protoIndex
-      itemType = try:
+      protoIndex: Natural = playerShip.cargo[i].protoIndex
+      itemType: string = try:
           if itemsList[protoIndex].showType.len == 0:
             itemsList[protoIndex].itemType
           else:
@@ -780,8 +780,8 @@ proc refreshLootList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   let currentItemIndex: Positive = playerShip.cargo.len + 1
   for i in currentItemIndex..itemsIndexes.high:
     let
-      protoIndex = baseCargo[itemsIndexes[i]].protoIndex
-      itemType = try:
+      protoIndex: Natural = baseCargo[itemsIndexes[i]].protoIndex
+      itemType: string = try:
           if itemsList[protoIndex].showType.len == 0:
             itemsList[protoIndex].itemType
           else:
@@ -792,7 +792,7 @@ proc refreshLootList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if typesList.find(item = itemType) == -1:
       typesList.add(y = itemType)
   moneyAmount = moneyAmount(inventory = playerShip.cargo)
-  var freeSpace = try:
+  var freeSpace: int = try:
       freeCargo(amount = 0)
     except:
       dialog = setError(message = "Can't get free space.")
@@ -877,8 +877,8 @@ proc refreshCargoList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   # Set the list of types of items in the cargo
   for i in itemsIndexes:
     let
-      protoIndex = playerShip.cargo[i].protoIndex
-      itemType = try:
+      protoIndex: Natural = playerShip.cargo[i].protoIndex
+      itemType: string = try:
           if itemsList[protoIndex].showType.len == 0:
             itemsList[protoIndex].itemType
           else:
