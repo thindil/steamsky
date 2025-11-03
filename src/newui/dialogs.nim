@@ -52,7 +52,7 @@ type
     widgetsAmount: seq[Positive]
   ManipulateType* = enum
     ## Types of action, used to manipulate items, like selling or buying items
-    sellAction, buyAction, takeAction, dropAction, moveAction, giveAction
+    sellAction, buyAction, takeAction, dropAction, moveAction, giveAction, dropCargoAction
   ManipulateData = object
     itemIndex: int
     amount, maxAmount, cost, allCost, data: Natural
@@ -541,6 +541,12 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
         allCost: 0, amount: 1, data: 0)
     result = giveDialog
     updateMaxAmount(dialog = result)
+  of dropCargoAction:
+    manipulateData = ManipulateData(itemIndex: iIndex,
+        maxAmount: playerShip.cargo[iIndex].amount, title: "Drop " &
+        getItemName(item = playerShip.cargo[iIndex], damageInfo = false,
+        toLower = false) & " from ship cargo", warning: "", allCost: 0, amount: 1)
+    return dropCargoDialog
 
 proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
     KeyError], tags: [], contractual.} =
