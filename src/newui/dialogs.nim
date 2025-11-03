@@ -766,6 +766,33 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             except:
               dialog = setError(message = "Can't move item to the ship cargo.")
               return
+          of giveDialog:
+            let item: InventoryData = playerShip.cargo[manipulateData.itemIndex]
+            try:
+              if freeInventory(memberIndex = manipulateData.data, amount = -(
+                  itemsList[item.protoIndex].weight * manipulateData.amount)) < 0:
+                dialog = setMessage(message = "No free space in " &
+                    playerShip.crew[manipulateData.data].name &
+                    "'s inventory for that amount of " & getItemName(
+                    item = item), title = "Can't give item")
+                return false
+            except:
+              dialog = setError(message = "Can't get the item.")
+              return false
+            addMessage(message = "You gave " & $amount & " " & getItemName(
+                item = item) & " to " & playerShip.crew[
+                manipulateData.data].name & ".", mType = otherMessage)
+            try:
+              updateInventory(memberIndex = manipulateData.data,
+                  amount = manipulateData.amount, protoIndex = item.protoIndex,
+                  durability = item.durability, price = item.price,
+                  ship = playerShip, quality = item.quality)
+            except:
+              dialog = setError(message = "Can't update the member's inventory.")
+              return
+            updateCargo(ship = playerShip, amount = -manipulateData.amount,
+                cargoIndex = manipulateData.itemIndex, price = item.price,
+                quality = item.quality)
           else:
             return false
           dialog = none
