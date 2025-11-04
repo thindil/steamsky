@@ -20,7 +20,8 @@
 import std/[colors, os, math, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, config, crewinventory, game, game2, items, maps,
-    messages, shipscargo, shipscrew, shipscrew2, types, trades, utils]
+    messages, missions, shipscargo, shipscrew, shipscrew2, stories, types,
+    trades, utils]
 import coreui, errordialog, setui, themes
 
 type
@@ -680,6 +681,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           ActionData(icon: moveIcon, label: "Move")
         of giveDialog:
           ActionData(icon: giveColoredIcon, label: "Give")
+        of dropCargoDialog:
+          ActionData(icon: dropColoredIcon, label: "Drop")
         else:
           ActionData(icon: buyIcon, label: "Invalid")
       setLayoutRowDynamic(height = 30, cols = 2)
@@ -799,6 +802,34 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             updateCargo(ship = playerShip, amount = -manipulateData.amount,
                 cargoIndex = manipulateData.itemIndex, price = item.price,
                 quality = item.quality)
+          of dropCargoDialog:
+            var dropAmount, dropAmount2: Natural = manipulateData.amount
+            let itemIndex: Natural = manipulateData.itemIndex
+            try:
+              if itemsList[playerShip.cargo[itemIndex].protoIndex].itemType == missionItemsType:
+                for j in 1..dropAmount2:
+                  for index, mission in acceptedMissions:
+                    if mission.mType == deliver and mission.itemIndex ==
+                        playerShip.cargo[itemIndex].protoIndex:
+                      deleteMission(missionIndex = index)
+                      dropAmount.dec
+                      break
+              elif currentStory.index.len > 0 and storiesList[
+                  currentStory.index].startData[0].parseInt == playerShip.cargo[
+                      itemIndex].protoIndex:
+                clearCurrentStory()
+            except:
+              dialog = setError(message = "Can't check the drop amount.")
+              return false
+            if dropAmount > 0:
+              addMessage(message = "You dropped " & $dropAmount & " " &
+                  getItemName(item = playerShip.cargo[itemIndex]) & ".",
+                      mtype = otherMessage)
+              updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
+                  itemIndex].protoIndex, amount = -dropAmount,
+                  durability = playerShip.cargo[itemIndex].durability,
+                  price = playerShip.cargo[itemIndex].price,
+                  quality = playerShip.cargo[itemIndex].quality)
           else:
             return false
           dialog = none
