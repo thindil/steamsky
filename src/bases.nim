@@ -159,11 +159,11 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
     let quality: ObjectQuality = case getRandom(min = 1, max = 100)
           of 1:
             poor
-          of 2..5:
+          of 2..3:
             low
-          of 6..94:
+          of 4..97:
             normal
-          of 95..99:
+          of 98..99:
             good
           else:
             excellent
