@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to table widget, like creating it, configuring, adding
+## rows and columns, etc.
+
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
 import coreui, themes
