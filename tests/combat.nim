@@ -1,4 +1,4 @@
-import ../src/[basestypes, careers, crafts, factions, items, mobs, shipmodules]
+import ../src/[basestypes, careers, crafts, factions, mobs, shipmodules]
 import unittest2
 include ../src/combat
 
