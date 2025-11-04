@@ -252,6 +252,8 @@ type
     data*: pointer
   nk_draw_f* = proc(b: ptr nk_command_buffer; userData: nk_handle) {.cdecl.}
     ## Internal Nuklear type
+  PNkDrawF* = ptr nk_draw_f
+    ## Pointer to nk_draw_f procedure
   nk_style_button* {.importc: "struct nk_style_button",
       completeStruct.} = object
     ## Internal Nuklear type
@@ -310,8 +312,8 @@ type
       disabled_factor*: cfloat
     padding*: nk_vec2
     userdata*: nk_handle
-    draw_begin*: ptr nk_draw_f
-    draw_end*: ptr nk_draw_f
+    draw_begin*: PNkDrawF
+    draw_end*: PNkDrawF
     ## Internal Nuklear type
   nk_text_width_f* = proc (arg1: nk_handle; h: cfloat; arg3: cstring;
       len: cint): cfloat {.cdecl.}
@@ -368,8 +370,8 @@ type
     rounding*, color_factor*, disabled_factor*: cfloat
     padding*, touch_padding, image_padding*: nk_vec2
     userdata*: nk_handle
-    draw_begin*: ptr nk_draw_f
-    draw_end*: ptr nk_draw_f
+    draw_begin*: PNkDrawF
+    draw_end*: PNkDrawF
   nk_style_slider* {.importc: "struct nk_style_slider",
       completeStruct.} = object
     ## Internal Nuklear type
@@ -382,8 +384,8 @@ type
     inc_button*, dec_button*: nk_style_button
     inc_symbol*, dec_symbol*: SymbolType
     userdata*: nk_handle
-    draw_begin*: ptr nk_draw_f
-    draw_end*: ptr nk_draw_f
+    draw_begin*: PNkDrawF
+    draw_end*: PNkDrawF
   nk_style_knob* {.importc: "struct nk_style_knob", completeStruct.} = object
     ## Internal Nuklear type
     normal*, hover*, active*: nk_style_item
@@ -404,8 +406,8 @@ type
     inc_button*, dec_button*: nk_style_button
     inc_symbol, dec_symbol*: SymbolType
     userdata*: nk_handle
-    draw_begin*: ptr nk_draw_f
-    draw_end*: ptr nk_draw_f
+    draw_begin*: PNkDrawF
+    draw_end*: PNkDrawF
   nk_style_edit* {.importc: "struct nk_style_edit", completeStruct.} = object
     ## Internal Nuklear type
     normal*, hover*, active*: nk_style_item
@@ -773,7 +775,7 @@ type
   nk_config_stack_user_font_element* {.importc: "struct nk_config_stack_user_font_element",
       completeStruct.} = object
     ## Internal Nuklear type
-    address*: ptr nk_user_font
+    address*: PNkUserFont
     old_value: nk_user_font
   nk_config_stack_button_behavior_element * {.importc: "struct nk_config_stack_button_behavior_element",
       completeStruct.} = object
