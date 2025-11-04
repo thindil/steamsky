@@ -161,7 +161,7 @@ proc setDropDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   closePopup()
-  dialog = none
+  dialog = setManipulate(action = dropCargoAction, iIndex = itemIndex)
 
 proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
