@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Reduced chance for different than normal quality items for recruits in bases
+
 ## [11.7] - 2025-11-02
 
 ### Added
