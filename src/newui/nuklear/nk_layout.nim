@@ -56,6 +56,36 @@ proc nk_layout_space_end(ctx) {.importc, cdecl, raises: [], tags: [], contractua
 # -------------------
 # High level bindings
 # -------------------
+
+proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [],
+    tags: [], contractual.} =
+  ## Set the panel layout
+  ##
+  ## * ctx    - the Nuklear context
+  ## * height - the height in pixels of each row
+  ## * cols   - the amount of columns in each row
+  discard
+
+proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
+    width: int) {.raises: [], tags: [], contractual.} =
+  ## Set the current row layout
+  ##
+  ## * ctx    - the Nuklear context
+  ## * fmt    - the layout format
+  ## * height - the height in pixels of each row
+  ## * width  - the width in pixels of each column
+  ## * cols   - the amount of columns in each row
+  require:
+    ctx != nil
+    ctx.current != nil
+    ctx.current.layout != nil
+  body:
+    if ctx == nil or ctx.current == nil or ctx.current.layout == nil:
+      return
+
+    let win: PNkWindow = ctx.current
+    nkPanelLayout(ctx = ctx, win = win, height = height, cols = cols)
+
 proc setLayoutRowDynamic*(height: float; cols: int) {.raises: [], tags: [],
     contractual.} =
   ## Set the current widgets layout to divide it into selected amount of
