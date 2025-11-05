@@ -443,7 +443,12 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
         setDialog()
         dialog = ordersDialog
       labelButton(title = "Crafting"):
-        discard
+        if state != crafting:
+          previousState = state
+          state = crafting
+        else:
+          state = previousState
+        dialog = none
     labelButton(title = "Last messages"):
       discard
     labelButton(title = "Knowledge lists"):
