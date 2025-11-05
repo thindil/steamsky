@@ -567,8 +567,14 @@ proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
     if getItemAmount(itemType = fuelType) - manipulateData.allCost <=
         gameSettings.lowFuel:
       manipulateData.warning = "You will spend " & moneyName & " below low level of fuel."
-  elif dialog in {sellDialog, dropDialog}:
-    let action: string = (if dialog == sellDialog: "sell" else: "drop")
+  elif dialog in {sellDialog, dropDialog, giveDialog, dropCargoDialog}:
+    let action: string = case dialog
+          of sellDialog:
+            "sell"
+          of giveDialog:
+            "give"
+          else:
+            "drop"
     if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
       let amount: int = getItemAmount(itemType = fuelType) - amount
       if amount <= gameSettings.lowFuel:
