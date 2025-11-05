@@ -401,7 +401,7 @@ proc showLoadMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
   contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
       triggerBounds = bounds, button = (
       if gameSettings.rightButton: Buttons.right else: Buttons.left)):
-    setLayoutRowDynamic(25, 1)
+    setLayoutRowDynamic(height = 25, cols = 1)
     contextualItemLabel(label = "Load game", align = centered):
       dialog = loading
     contextualItemLabel(label = "Delete game", align = centered):
