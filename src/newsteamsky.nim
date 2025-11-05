@@ -22,8 +22,8 @@ import std/[os, parseopt, strutils, tables, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
 import newui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
-    basesui, combatui, coreui, dialogs, errordialog, goalsui, header, mainmenu,
-    mapsui, missionsui, shipsui, shipsuicrew, shipsuicrewinventory,
+    basesui, combatui, coreui, craftsui, dialogs, errordialog, goalsui, header,
+    mainmenu, mapsui, missionsui, shipsui, shipsuicrew, shipsuicrewinventory,
     shipsuimodules, themes, tradesui, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -130,7 +130,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = 200)
   const
-    showGame: array[GameState.mainMenu..GameState.shipInfo, proc (
+    showGame: array[GameState.mainMenu..GameState.crafting, proc (
         state: var GameState; dialog: var GameDialog){.nimcall, raises: [
             ].}] = [
       GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
@@ -141,7 +141,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         trade: showTrade, school: showSchool, recruits: showRecruits,
         healWounded: showWounded, repairShip: showRepairs,
         buyRecipes: showRecipes, shipyard: showShipyard,
-        baseMissions: showMissions, loot: showLoot, shipInfo: showShipInfo]
+        baseMissions: showMissions, loot: showLoot, shipInfo: showShipInfo,
+        crafting: showCrafting]
     showDialog: array[GameDialog.errorDialog..GameDialog.assignSkillDialog,
         proc(dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
@@ -186,7 +187,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         let
           oldState: GameState = state
           oldDialog: GameDialog = dialog
-        if state in GameState.mainMenu..GameState.shipInfo:
+        if state in GameState.mainMenu..GameState.crafting:
           # Show the proper window
           showGame[state](state = state, dialog = dialog)
         # Add the tooltips, if enabled
