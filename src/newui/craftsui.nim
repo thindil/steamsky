@@ -19,6 +19,7 @@
 ## recipes, starting crafting, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
+import ../config
 import coreui, errordialog, header, setui
 
 var
@@ -56,3 +57,11 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 hasOptions = false
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
+  # Show advanced options if needed
+  if showOptions and hasOptions:
+    setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.2.cfloat, 0.6])
+    label(str = "Name:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Search for the selected recipe.")
+    editString(text = nameSearch, maxLen = 64)
