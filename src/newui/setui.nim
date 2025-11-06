@@ -919,3 +919,23 @@ proc setShipInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     modulesIndexes.add(y = index)
   refreshCargoList(dialog = dialog)
   crewIndex = 0
+
+#########################
+# Setting the crafting UI
+#########################
+
+var
+  workshopsList*: seq[string] = @[]
+    ## The list of names of workshops installed on the player's ship
+  workshopsIndexes*: seq[int] = @[]
+    ## The list of indexes of workshops installed on the player's ship
+
+proc setCrafting*() {.raises: [], tags: [], contractual.} =
+  ## Set the data for the crafting info screen
+  nameSearch = ""
+  workshopsList = @["All"]
+  workshopsIndexes = @[-1]
+  for index, module in playerShip.modules:
+    if module.mType == workshop:
+      workshopsList.add(y = module.name)
+      workshopsIndexes.add(y = index)
