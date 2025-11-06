@@ -445,6 +445,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
       labelButton(title = "Crafting"):
         if state != crafting:
           previousState = state
+          setCrafting()
           state = crafting
         else:
           state = previousState
