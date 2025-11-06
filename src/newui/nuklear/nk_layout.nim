@@ -64,7 +64,16 @@ proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [],
   ## * ctx    - the Nuklear context
   ## * height - the height in pixels of each row
   ## * cols   - the amount of columns in each row
-  discard
+  let
+    layout: PNkPanel = win.layout
+    style: nk_style = ctx.style
+  var color: nk_color = if layout.type == panelTooltip:
+        style.window.tooltip_background
+      elif layout.type == panelPopup:
+        style.window.popup_background
+      else:
+        style.window.background
+  let itemSpacing: nk_vec2 = style.window.spacing
 
 proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
     width: int) {.raises: [], tags: [], contractual.} =
