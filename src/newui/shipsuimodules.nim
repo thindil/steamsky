@@ -20,7 +20,7 @@
 ## etc.
 
 import std/[algorithm, colors, tables]
-import contracts, nuklear/nuklear_sdl_renderer
+import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[config, crafts, crewinventory, game, items, messages, missions,
     ships, shipscargo, shipscrew, shipsupgrade, types]
 import coreui, dialogs, errordialog, setui, table, themes
@@ -106,7 +106,8 @@ proc getModuleInfo(moduleIndex: Natural): string {.raises: [],
     discard
 
 proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
-    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual,
+    ruleOff: "params".} =
   ## Sort the modules on the list
   ##
   ## * sortAsc  - the sorting value for ascending sort
@@ -131,7 +132,7 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
         info: getModuleInfo(moduleIndex = index)))
 
   proc sortModules(x, y: LocalModuleData): int {.raises: [], tags: [],
-      contractual.} =
+      contractual, ruleOn: "params".} =
     ## Compare two modules and return which should go first, based on the sort
     ## order of the modules
     ##
@@ -668,7 +669,8 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
   windowSetFocus(name = windowName)
 
 proc sortSkills(sortAsc, sortDesc: ModulesSortOrders;
-    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual,
+    ruleOff: "params".} =
   ## Sort the skills on the list
   ##
   ## * sortAsc  - the sorting value for ascending sort
@@ -680,7 +682,7 @@ proc sortSkills(sortAsc, sortDesc: ModulesSortOrders;
   discard
 
 proc assignSkill(data: int; dialog: var GameDialog) {.raises: [], tags: [
-    RootEffect], contractual.} =
+    RootEffect], contractual, ruleOn: "params".} =
   ## Assign the selected skill to the selected training room
   ##
   ## * data   - the index of the selected skill
