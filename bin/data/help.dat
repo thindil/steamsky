@@ -60,11 +60,12 @@
 {b}7.{/b} Crafting: Setting crafting orders, discovering or buying new crafting recipes, some specific to crafting tips.
 {b}8.{/b} Repairing/Upgrading your ship: Self repairing and repairing in bases ship modules, upgrading ship modules, installing or removing ship modules.
 {b}9.{/b} Ship crew: Hunger, thirst, morale, tiredness and health effects on your ship crew members, training their skills, setting order priorities and some specific crew member tips.
-{b}10.{/b} Missions: Starting and finishing missions, some detailed information about each type of mission and specific mission tips.
-{b}11.{/b} Hiring crew members: Detailed information about hiring new crew members in sky bases.
-{b}12.{/b} Knowledge screen: General information about the knowledge screen.
-{b}13.{/b} Factions: General information about how factions works.
-{b}14.{/b} Tips: General tips for playing the game.
+{b}10.{/b} Items: quality, durability and the effect of the materials used to create them. 
+{b}11.{/b} Missions: Starting and finishing missions, some detailed information about each type of mission and specific mission tips.
+{b}12.{/b} Hiring crew members: Detailed information about hiring new crew members in sky bases.
+{b}13.{/b} Knowledge screen: General information about the knowledge screen.
+{b}14.{/b} Factions: General information about how factions works.
+{b}15.{/b} Tips: General tips for playing the game.
 
     Some game modifications can show help topics as well. If it is your first time here, it is recommended to look at {b}First steps{/b}, {b}Ship movement{/b}, {b}Trading{/b}, {b}Combat{/b} and {b}Tips{/b} topics for basic information about the game.</entry>
  <entry index="firststeps" title=" 2. First steps">    {i}These steps are only suggestions on how to start a new game. After some time, you will probably find a better way which will suit your needs.{/i}
@@ -340,7 +341,17 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 {b}*{/b} Crew members attributes levels, starting from lowest: {i}Very low, Low, Below average, Average, Above average, High, Very high, Outstanding{/i}.
 {b}*{/b} Each skill is associated with one attribute. It means that real skill level is sum of skill level and associated attribute level. Gaining experience in skill cause gaining experience in associated attribute too. Attributes level grows much slower than skills levels. Additionally, if you gain experience in any skill, you gain experience in {ConditionName} too.
 {b}*{/b} If contract of crew member will end, he/she will be treated like passenger (you can't give orders to that crew member anymore) and will leave your ship in next not abandoned base to which you dock. Until this, you must still feed him/her with food and drinks.</entry>
- <entry index="missions" title="10. Missions">{u}Starting missions{/u}
+ <entry index="missions" title="10. Items">{u}Items quality{/u}
+
+   All items in the game such as tools, food, drinks, repair materials, etc. have their own quality. This quality affects the performance of things. Additionally, the quality of items affects the chance of damage to an item during use.
+
+ {b}* Tools{/b}: Their quality affects the quality of items created during crafting and reduces the number of materials needed when repairing or upgrading the player's ship.
+ {b}* Crafting materials{/b}: Their quality greatly affects the quality of items created during crafting.
+ {b}* Repair materials{/b}: Their quality reduces or increases the time needed to repair or improve the player's ship.
+ {b}* Food, drinks{/b}: Their quality means that the player's ship crew members need to eat and drink less or more often.
+ {b}* Weapons, ammunition{/b}: Their quality affects the damage dealt.
+ </entry>
+ <entry index="missions" title="11. Missions">{u}Starting missions{/u}
 
     You can ask for missions in bases where you have reputation level Unknown or above. Each base offers different missions: they amount depends on base size (in bigger bases you can get more missions) and on player reputation in that base (better reputation, more missions available). To see what missions are available in selected base, first you must dock to it then select option {b}Missions{/b} from {b}Orders{/b} menu (key {GameKey 12}). How many missions you can accept in base, depends on your reputation: with higher level, you can get more missions. You may reduce amount of money for reward for selected mission in exchange to earn more reputation in base. But one warning: if you fail that missions, you will lose more reputation either. To do this, move slider in the {b}Accept Mission{/b} dialog to the left. If you want more money but less reputation for mission, move slider to the right.
    {b}Note:{/b} Information about estimated time to achievement (ETA) and approximately fuel usage is based on your ship full speed and fuel consumption by your engines. It may be different from final usage and time spend on the mission.
@@ -364,7 +375,7 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 {b}*{/b} Red color of the mission name in {i}Transport passengers{/i} missions in the {b}Available Missions{/b} list means you don't have installed cabin with that quality or higher on ship. Yellow means you have cabin with that quality or higher, but it is taken by someone else.
 {b}*{/b} Each mission have time limit: if you don't finish mission in that time, mission will fail. {i}Delivery{/i} mission will fail too if you drop mission item from your cargo. {i}Transport passengers{/i} mission will fail if you dismiss passenger from your ship. If you fail mission, you lose some reputation with the starting base.
 {b}*{/b} You can see all accepted missions in {b}Knowledge{/b} menu (key {GameKey 15}). There you can set mission target map cell as destination for your ship.</entry>
- <entry index="recruit" title="11. Hiring crew members">{u}General info{/u}
+ <entry index="recruit" title="12. Hiring crew members">{u}General info{/u}
 
     You can hire new crew members in bases. First you must dock to base, then you choose {b}Recruit{/b} option from {b}Orders{/b} menu. Amount of available recruits depends on size of base, but in some bases ({barracks}) there are more recruits, and they are cheaper. They hire cost and future payment, depends on amount of knowledge (amount of skills and attributes and levels of skills and attributes) and equipment. Skills, amount of skills, attributes and equipment quality of recruits depends on your reputation in selected base, but from time to time, you can find very experienced recruits in bases too.
 
@@ -377,7 +388,7 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 {b}*{/b} Here no limit how many crew members you can have on ship, just remember, all of them needs food, drinks, place to rest and payment.
 {b}*{/b} Hiring new crew members reduce population of base. New recruits are available every 30 days between visits of base.
 {b}*{/b} Starting morale of recruit depends on player reputation in selected base, except members of {nomorale} factions.</entry>
- <entry index="knowledge" title="12. Knowledge screen">{u}General info{/u}
+ <entry index="knowledge" title="13. Knowledge screen">{u}General info{/u}
 
     On the knowledge screen you can find important information about the world which your character found during the game. By clicking with the mouse on any entry there, like base, event or mission, you can bring more information about the selected entry with buttons for actions related to that entry. If the entry in a list is colored on yellow (with default the game settings), the entry is your ship destination.
 
@@ -396,7 +407,7 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
  {u}Known stories{/u}
 
     The list presents all information about stories known to your character. The stories are series of randomly generated missions, connected to themselves. You can see the details of each step in a story by selecting the story and then selecting the step on the list. Finding stories is the hardest part of the game. One tip: during combat with an undead ships, it is good to send the boarding party on the enemy ship. After combat, they may find an interesting thing which will start something interesting.</entry>
- <entry index="reputation" title="13. Reputation with factions">{u}General info{/u}
+ <entry index="reputation" title="14. Reputation with factions">{u}General info{/u}
 
   The game progress is measured by your reputation with factions. Depending on how you deal with them, your reputation will grow or decline. Additionally, each faction has friends and enemies. When you gain a reputation in some faction, you also gain a reputation among its friends but lose among its enemies. You gain reputation with factions in the same way as you gain reputation among bases. When you gain or lose reputation in a base, your reputation also changes with the faction to which the base belongs. Reputation with factions grows much slower than reputation with bases. You can check your current reputation levels in the {i}ship info{/i} screen.
 
@@ -404,7 +415,7 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 
   The level of reputation with factions determines which NPC ships you encounter along the way. The lower your reputation, the more powerful opponents you will encounter. With a higher reputation, you have a chance to meet better traders of a given faction.
  </entry>
- <entry index="tips" title="14. Tips">{b}*{/b} All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 19} key on sky map (no need to press {GameKey 22} first to show menu).
+ <entry index="tips" title="15. Tips">{b}*{/b} All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 19} key on sky map (no need to press {GameKey 22} first to show menu).
 {b}*{/b} If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to ship information screen, select desired item and select proper option from item options' menu.
 {b}*{/b} Each crew member need proper module for work. If that module is destroyed, member cannot start selected work, for example, can't start piloting when cockpit was destroyed.
 {b}*{/b} You can assign crew members to selected module (cabins, guns, workplaces) on ship info screen. All workplaces first must have set crafting order, before you can assign someone.
