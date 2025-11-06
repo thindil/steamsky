@@ -18,8 +18,11 @@
 ## Provides code related to crafting items, like showing the list of available
 ## recipes, starting crafting, etc.
 
-import contracts
-import coreui, header
+import contracts, nuklear/nuklear_sdl_renderer
+import coreui, errordialog, header, setui
+
+var
+  hasOptions: bool = true
 
 proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -31,5 +34,25 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state,
-    options = true):
+    options = hasOptions):
     return
+  # Show tab buttons
+  changeStyle(field = spacing, x = 0, y = 0):
+    changeStyle(field = buttonRounding, value = 0):
+      setLayoutRowDynamic(height = 30, cols = 2)
+      const tabs: array[2, string] = ["Recipes", "Workshops"]
+      for index, tab in tabs:
+        try:
+          if currentTab == index:
+            changeStyle(src = active, dest = normal):
+              labelButton(title = tab):
+                discard
+          else:
+            labelButton(title = tab):
+              currentTab = index.cint
+              if index == 0:
+                hasOptions = true
+              else:
+                hasOptions = false
+        except:
+          dialog = setError(message = "Can't set the tabs buttons.")
