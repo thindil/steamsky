@@ -1,6 +1,6 @@
 import unittest2
-import ../src/[basestypes, careers, crafts, factions, items, mobs, reputation,
-    ships, shipmodules, utils]
+import ../src/[basestypes, careers, crafts, factions, mobs, reputation, ships,
+    shipmodules, utils]
 include ../src/basesship2
 
 suite "Unit tests for basesship2 module":
