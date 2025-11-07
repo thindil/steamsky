@@ -601,7 +601,7 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = 35, cols = 1)
     var assigned: Natural = 0
     for index, member in playerShip.crew:
-      var checked = index in module.owner
+      var checked: bool = index in module.owner
       if checkbox(label = member.name, checked = checked):
         if checked and assigned == module.owner.len:
           checked = false
@@ -642,10 +642,9 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
   const
     width: float = 300
     height: float = 400
-
-  let
     windowName: string = "Available ammo"
-    ammoIndex: int = (if playerShip.modules[moduleIndex].mType ==
+
+  let ammoIndex: int = (if playerShip.modules[moduleIndex].mType ==
         ModuleType2.gun: playerShip.modules[
         moduleIndex].ammoIndex else: playerShip.modules[
         moduleIndex].harpoonIndex)
