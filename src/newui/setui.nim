@@ -929,12 +929,16 @@ var
     ## The list of names of workshops installed on the player's ship
   workshopsIndexes*: seq[int] = @[]
     ## The list of indexes of workshops installed on the player's ship
+  workshopIndex*: Natural = 0
+    ## The index of the currently selected workshop
 
 proc setCrafting*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the crafting info screen
   nameSearch = ""
   workshopsList = @["All"]
   workshopsIndexes = @[-1]
+  workshopIndex = 0
+  typeIndex = 0
   for index, module in playerShip.modules:
     if module.mType == workshop:
       workshopsList.add(y = module.name)
