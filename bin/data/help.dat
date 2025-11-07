@@ -60,7 +60,7 @@
 {b}7.{/b} Crafting: Setting crafting orders, discovering or buying new crafting recipes, some specific to crafting tips.
 {b}8.{/b} Repairing/Upgrading your ship: Self repairing and repairing in bases ship modules, upgrading ship modules, installing or removing ship modules.
 {b}9.{/b} Ship crew: Hunger, thirst, morale, tiredness and health effects on your ship crew members, training their skills, setting order priorities and some specific crew member tips.
-{b}10.{/b} Items: quality, durability and the effect of the materials used to create them. 
+{b}10.{/b} Items: quality, durability and the effect of the materials used to create them.
 {b}11.{/b} Missions: Starting and finishing missions, some detailed information about each type of mission and specific mission tips.
 {b}12.{/b} Hiring crew members: Detailed information about hiring new crew members in sky bases.
 {b}13.{/b} Knowledge screen: General information about the knowledge screen.
@@ -350,6 +350,10 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
  {b}* Repair materials{/b}: Their quality reduces or increases the time needed to repair or improve the player's ship.
  {b}* Food, drinks{/b}: Their quality means that the player's ship crew members need to eat and drink less or more often.
  {b}* Weapons, ammunition{/b}: Their quality affects the damage dealt.
+
+   {u}Items durability{/u}
+
+   All items in the game have durability. Every time an item is used, it has a chance of being damaged. Items of better quality and made of better materials are damaged much less often. Information about the durability of the item and its susceptibility to damage can be found in the information about this item, in the {i}player's ship cargo info{/i} or the {i}trade{/i} screens. When an item's durability drops to zero, it is destroyed.
  </entry>
  <entry index="missions" title="11. Missions">{u}Starting missions{/u}
 
