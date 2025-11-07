@@ -65,3 +65,12 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addTooltip(bounds = getWidgetBounds(),
           text = "Search for the selected recipe.")
     editString(text = nameSearch, maxLen = 64)
+    label(str = "Show:")
+    const recipesTypes: array[3, string] = ["All", "Craftable only", "Non-craftable only"]
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show only the selected type of recipes.")
+    let newType: Natural = comboList(items = recipesTypes, selected = typeIndex,
+        itemHeight = 25, x = 200, y = 150)
+    if newType != typeIndex:
+      typeIndex = newType
