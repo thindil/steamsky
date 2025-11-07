@@ -57,8 +57,8 @@ proc nk_layout_space_end(ctx) {.importc, cdecl, raises: [], tags: [], contractua
 # High level bindings
 # -------------------
 
-proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [],
-    tags: [], contractual.} =
+proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [
+    NuklearException], tags: [], contractual.} =
   ## Set the panel layout
   ##
   ## * ctx    - the Nuklear context
@@ -67,16 +67,36 @@ proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [],
   let
     layout: PNkPanel = win.layout
     style: nk_style = ctx.style
-  var color: nk_color = if layout.type == panelTooltip:
+
+  if not (layout.flags and windowMinimized.int).bool:
+    raise newException(exceptn = NuklearException,
+        message = "Window is minimized.")
+  if not (layout.flags and windowHidden.int).bool:
+    raise newException(exceptn = NuklearException,
+        message = "Window is hidden.")
+  if not (layout.flags and windowClosed.int).bool:
+    raise newException(exceptn = NuklearException,
+        message = "Window is closed.")
+
+  # Update the current row and set the current row layout
+  layout.row.index = 0
+  layout.at_y += layout.row.height
+  layout.row.columns = cols.cint
+  let itemSpacing: nk_vec2 = style.window.spacing
+  if height == 0:
+    layout.row.height = max(x = height, y = layout.row.min_height) + itemSpacing.y
+  else:
+    layout.row.height = height + itemSpacing.y
+
+  let color: nk_color = if layout.type == panelTooltip:
         style.window.tooltip_background
       elif layout.type == panelPopup:
         style.window.popup_background
       else:
         style.window.background
-  let itemSpacing: nk_vec2 = style.window.spacing
 
 proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
-    width: int) {.raises: [], tags: [], contractual.} =
+    width: int) {.raises: [NuklearException], tags: [], contractual.} =
   ## Set the current row layout
   ##
   ## * ctx    - the Nuklear context
