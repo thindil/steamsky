@@ -21,7 +21,7 @@
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
-    crew, game, items, maps, missions, shipscargo, shipscrew, types]
+    crew, game, items, maps, missions, shipscargo, shipscrew, shipmodules, types]
 import coreui, errordialog, utilsui2
 
 var
@@ -932,8 +932,14 @@ var
   workshopIndex*: Natural = 0
     ## The index of the currently selected workshop
 
-proc setCrafting*() {.raises: [], tags: [], contractual.} =
+proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the data for the crafting info screen
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   nameSearch = ""
   workshopsList = @["All"]
   workshopsIndexes = @[-1]
@@ -942,4 +948,10 @@ proc setCrafting*() {.raises: [], tags: [], contractual.} =
   for index, module in playerShip.modules:
     if module.mType == workshop:
       workshopsList.add(y = module.name)
-      workshopsIndexes.add(y = index)
+      let moduleType: string = try:
+          getModuleType(moduleIndex = module.protoIndex)
+        except:
+          dialog = setError(message = "Can't get module type.")
+          return
+      if moduleType notin workshopsList:
+        workshopsList.add(y = moduleType)
