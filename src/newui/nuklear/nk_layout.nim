@@ -88,12 +88,20 @@ proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [
   else:
     layout.row.height = height + itemSpacing.y
 
-  let color: nk_color = if layout.type == panelTooltip:
-        style.window.tooltip_background
-      elif layout.type == panelPopup:
-        style.window.popup_background
-      else:
-        style.window.background
+  layout.row.item_offset = 0
+  if (layout.flags and windowDynamic.int).bool:
+    # draw background for dynamic panels
+    var background: nk_rect = nk_rect()
+    background.x = win.bounds.x
+    background.w = win.bounds.y
+    background.y = layout.at_y - 1.0
+    background.h = layout.row.height + 1.0
+    let color: nk_color = if layout.type == panelTooltip:
+          style.window.tooltip_background
+        elif layout.type == panelPopup:
+          style.window.popup_background
+        else:
+          style.window.background
 
 proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
     width: int) {.raises: [NuklearException], tags: [], contractual.} =

@@ -25,7 +25,7 @@
 
 import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
-import nk_button, nk_colors, nk_context, nk_input, nk_layout, nk_math,
+import nk_button, nk_colors, nk_context, nk_draw, nk_input, nk_layout, nk_math,
   nk_panel, nk_tooltip, nk_types, nk_utf, nk_widget
 export nk_button, nk_colors, nk_context, nk_input, nk_layout, nk_tooltip,
   nk_types, nk_widget
@@ -344,22 +344,6 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_spacing(ctx = ctx, cols = cols.cint)
 
-proc nkRoundUpPow2(v: nk_uint): nk_uint {.raises: [], tags: [], contractual.} =
-  ## Round up power of 2 in bits. Internal use only
-  ##
-  ## * v - value to count
-  ##
-  ## Returns counted value
-  result = v - 1
-  {.ruleOff: "assignments".}
-  result = result or (v shr 1)
-  result = result or (v shr 2)
-  result = result or (v shr 4)
-  result = result or (v shr 8)
-  result = result or (v shr 16)
-  {.ruleOn: "assignments".}
-  result.inc
-
 template disabled*(content: untyped) =
   ## Create disabled widgets list
   ##
@@ -466,185 +450,6 @@ proc windowShow*(name: string; state: ShowStates) {.raises: [], tags: [], contra
     ## A binding to Nuklear's function. Internal use only
   nk_window_show(ctx = ctx, name = name.cstring, state = state)
 
-# ------
-# Buffer
-# ------
-
-proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
-    `type`: BufferAllocationType): pointer {.raises: [], tags: [],
-    contractual.} =
-  ## Align the sekected buffer. Internal use only
-  ##
-  ## * unaligned - the pointer to unaligned data
-  ## * align     - the size of data to align
-  ## * alignment - the size of data after alignment
-  ## * `type`    - the allocation type
-  ##
-  ## Returns pointer to aligned buffer
-  var memory: pointer = nil
-  if `type` == bufferBack:
-    if align == 0:
-      memory = unaligned
-      alignment = 0
-    else:
-      memory = cast[pointer](cast[nk_size](unaligned) and not(align - 1))
-      alignment = (cast[nk_byte](unaligned) - cast[nk_byte](memory)).nk_size
-  else:
-    if align == 0:
-      memory = unaligned
-      alignment = 0
-    else:
-      memory = cast[pointer]((cast[nk_size](unaligned) + (align - 1)) and not(
-          align - 1))
-      alignment = (cast[nk_byte](memory) - cast[nk_byte](unaligned)).nk_size
-  return memory
-
-proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
-    size: var nk_size): pointer {.raises: [], tags: [RootEffect],
-        contractual.} =
-  ## Reallocate memory for the selected buffer. Internal use only
-  ##
-  ## * b        - the buffer which memory will be reallocated
-  ## * capacity - the new capacity of the buffer
-  ## * size     - the size of the buffer
-  ##
-  ## Returns the new pointer to the reallocated memory
-  require:
-    b != nil
-    size != 0
-  body:
-    if (b == nil or size == 0 or b.pool.alloc == nil or b.pool.free == nil):
-      return nil
-    let temp: pointer = try:
-        b.pool.alloc(handle = b.pool.userdata, old = b.memory.`ptr`,
-            size = capacity)
-      except Exception:
-        return nil
-
-    size = capacity
-    let bufferSize: nk_size = b.memory.size
-    if temp != b.memory.`ptr`:
-      copyMem(dest = temp, source = b.memory.`ptr`, size = bufferSize)
-      try:
-        b.pool.free(handle = b.pool.userdata, old = b.memory.`ptr`)
-      except Exception:
-        discard
-
-    if b.size == bufferSize:
-      # no back buffer so just set correct size
-      b.size = capacity
-      return temp
-
-    # copy back buffer to the end of the new buffer
-    let
-      backSize: nk_size = bufferSize - b.size
-      dst: pointer = cast[pointer](cast[ptr nk_buffer](temp) + (capacity - backSize))
-      src: pointer = cast[pointer](cast[ptr nk_buffer](temp) + b.size)
-    copyMem(dest = dst, source = src, size = backSize)
-    b.size = capacity - backSize
-    return temp
-
-proc nkBufferAlloc(b: ptr nk_buffer; `type`: BufferAllocationType; size,
-    align: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
-  ## Allocate memory for the selected buffer. Internal use only
-  ##
-  ## * b      - the buffer in which the memory will be allocated
-  ## * `type` - the allocation type
-  ## * size   - the size of memory to allocate
-  ## * align  - the align
-  ##
-  ## Returns pointer to allocated memory
-  require:
-    b != nil
-    size != 0
-  body:
-    b.needed += size
-    var unaligned: ptr nk_size = nil
-    # calculate total size with needed alignment + size
-    if `type` == bufferFront:
-      unaligned = b.memory.`ptr` + b.allocated
-    else:
-      unaligned = b.memory.`ptr` + (b.size - size)
-    var alignment: nk_size = 0
-    var memory: pointer = nkBufferAlign(unaligned = unaligned, align = align,
-        alignment = alignment, `type` = `type`)
-
-    var full: bool = false
-    # check if buffer has enough memory
-    if `type` == bufferFront:
-      full = (b.allocated + size + alignment) > b.size
-    else:
-      full = (b.size - min(x = b.size, y = (size + alignment))) <= b.allocated
-
-    if full:
-      if b.`type` != bufferDynamic:
-        return nil
-      if b.`type` != bufferDynamic or b.pool.alloc == nil or b.pool.free == nil:
-        return nil
-
-      # buffer is full so allocate bigger buffer if dynamic
-      var capacity: nk_size = (b.memory.size.cfloat * b.grow_factor).nk_size
-      capacity = max(x = capacity, y = nkRoundUpPow2(v = (b.allocated.nk_uint +
-          size.nk_uint)).nk_size)
-      b.memory.`ptr` = cast[ptr nk_size](nkBufferRealloc(b = b,
-          capacity = capacity, size = b.memory.size))
-      if b.memory.`ptr` == nil:
-        return nil
-
-      # align newly allocated pointer
-      if `type` == bufferFront:
-        unaligned = b.memory.`ptr` + b.allocated
-      else:
-        unaligned = b.memory.`ptr` + (b.size - size)
-      memory = nkBufferAlign(unaligned = unaligned, align = align,
-          alignment = alignment, `type` = `type`)
-
-    if `type` == bufferFront:
-      unaligned = b.memory.`ptr` + b.allocated
-    else:
-      unaligned = b.memory.`ptr` + (b.size - size)
-    b.needed += alignment
-    b.calls.inc
-    return memory
-
-# ----
-# Draw
-# ----
-proc nkCommandBufferPush(b: PNkCommandBuffer; t: CommandType;
-    size: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
-  ## Add a command to the commands buffer. Internal use only
-  ##
-  ## * b    - the buffer to which to command will be added
-  ## * t    - the type of command
-  ## * size - the size of command to add
-  require:
-    b != nil
-    b.base != nil
-  body:
-    if b == nil:
-      return nil
-    const align: nk_size = alignOf(x = nk_command)
-    let cmd: ptr nk_command = cast[ptr nk_command](nkBufferAlloc(b = b.base,
-        `type` = bufferFront, size = size, align = align))
-    if cmd == nil:
-      return nil
-
-    # make sure the offset to the next command is aligned
-    b.last = cast[nk_size](cast[ptr nk_byte](cmd)) - cast[nk_size](cast[
-        ptr nk_byte](b.base.memory.`ptr`))
-    let
-      unaligned: pointer = cast[ptr nk_byte](cmd) + size
-      memory: pointer = cast[pointer]((cast[nk_size](unaligned) + (align -
-          1)) and not(align - 1))
-      alignment: nk_size = cast[nk_size](cast[ptr nk_byte](memory)) - cast[
-          nk_size](cast[ptr nk_byte](unaligned))
-    cmd.`type` = t
-    cmd.next = b.base.allocated + alignment
-    when defined(nkIncludeCommandUserData):
-      cmd.userdata = b.userdata
-    b.`end` = cmd.next
-    return cmd
-
 # ----
 # Misc
 # ----
@@ -730,34 +535,6 @@ proc nkStrokeTriangle(b: PNkCommandBuffer; x0, y0, x1, y1, x2, y2,
   cmd.b.y = y1.cshort
   cmd.c.x = x2.cshort
   cmd.c.y = y2.cshort
-  cmd.color = c
-
-proc nkFillRect(b: PNkCommandBuffer; rect: NimRect; rounding: float;
-  c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
-  ## Fill the rectangle with the selected color
-  ##
-  ## * b        - the command buffer in which the rectangle will be drawn
-  ## * rect     - the rectangle which will be filled with color
-  ## * rounding - if bigger than zero, round the corners of the rectangle
-  ## * c        - the color to fill the rectangle
-  if b == nil or rect.w == 0 or rect.h == 0:
-    return
-  if b.use_clipping == 1:
-    let clip: nk_rect = b.clip
-    if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h,
-      x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
-      return
-
-  var cmd: ptr nk_command_rect_filled = nil
-  cmd = cast[ptr nk_command_rect_filled](nkCommandBufferPush(b = b,
-    t = commandRectFilled, size = cmd.sizeof))
-  if cmd == nil:
-    return
-  cmd.rounding = rounding.cushort
-  cmd.x = rect.x.cshort
-  cmd.y = rect.y.cshort
-  cmd.w = max(x = 0, y = rect.w).cushort
-  cmd.h = max(x = 0, y = rect.h).cushort
   cmd.color = c
 
 proc nkFillCircle(b: PNkCommandBuffer; rect: NimRect; c: nk_color)
