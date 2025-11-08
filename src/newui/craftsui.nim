@@ -74,3 +74,11 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
         itemHeight = 25, x = 200, y = 150)
     if newType != typeIndex:
       typeIndex = newType
+    label(str = "Workshop:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show only recipes for the selected type of workshops.")
+    let newWorkshop: Natural = comboList(items = workshopsList, selected = workshopType,
+        itemHeight = 25, x = 200, y = 150)
+    if newWorkshop != workshopType:
+      workshopType = newWorkshop
