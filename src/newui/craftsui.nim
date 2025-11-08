@@ -20,10 +20,44 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
-import coreui, errordialog, header, setui
+import coreui, errordialog, header, setui, table
+
+type RecipesSortOrders = enum
+  nameAsc, nameDesc, workplaceAsc, workplaceDesc, toolsAsc, toolsDesc,
+    materialsAsc, materialsDesc, none
+
+const defaultRecipesSortOrder: RecipesSortOrders = none
 
 var
+  recipesSortOrder: RecipesSortOrders = defaultRecipesSortOrder
   hasOptions: bool = true
+
+proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort recipes on the list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if recipesSortOrder == sortAsc:
+    recipesSortOrder = sortDesc
+  else:
+    recipesSortOrder = sortAsc
+
+const
+  headers: array[4, HeaderData[RecipesSortOrders]] = [
+    HeaderData[RecipesSortOrders](label: "Name", sortAsc: nameAsc,
+        sortDesc: nameDesc),
+    HeaderData[RecipesSortOrders](label: "Workshop", sortAsc: workplaceAsc,
+        sortDesc: workplaceDesc),
+    HeaderData[RecipesSortOrders](label: "Tools", sortAsc: toolsAsc,
+        sortDesc: toolsDesc),
+    HeaderData[RecipesSortOrders](label: "Materials", sortAsc: materialsAsc,
+        sortDesc: materialsDesc)]
+  ratio: array[4, cfloat] = [300.cfloat, 200, 200, 200]
 
 proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -78,7 +112,16 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show only recipes for the selected type of workshops.")
-    let newWorkshop: Natural = comboList(items = workshopsList, selected = workshopType,
-        itemHeight = 25, x = 200, y = 150)
+    let newWorkshop: Natural = comboList(items = workshopsList,
+        selected = workshopType, itemHeight = 25, x = 200, y = 150)
     if newWorkshop != workshopType:
       workshopType = newWorkshop
+  # Show the list of items for trade
+  let tableHeight: float = windowHeight - 140 - (if showOptions: 135 else: 0) -
+      gameSettings.messagesPosition.float
+  setLayoutRowDynamic(height = tableHeight, cols = 1)
+  group(title = "TradeGroup", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
+    addHeader(headers = headers, ratio = ratio, tooltip = "items",
+      code = sortRecipes, dialog = dialog)
