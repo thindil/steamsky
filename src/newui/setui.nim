@@ -931,6 +931,8 @@ var
     ## The list of indexes of workshops installed on the player's ship
   workshopIndex*: Natural = 0
     ## The index of the currently selected workshop
+  workshopType*: Natural = 0
+    ## The index of the currently selected workshops' type
 
 proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -944,10 +946,11 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   workshopsList = @["All"]
   workshopsIndexes = @[-1]
   workshopIndex = 0
+  workshopType = 0
   typeIndex = 0
   for index, module in playerShip.modules:
     if module.mType == workshop:
-      workshopsList.add(y = module.name)
+      workshopsIndexes.add(y = index)
       let moduleType: string = try:
           getModuleType(moduleIndex = module.protoIndex)
         except:
