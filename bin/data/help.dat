@@ -353,7 +353,7 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 
    {u}Items durability{/u}
 
-   All items in the game have durability. Every time an item is used, it has a chance of being damaged. Items of better quality and made of better materials are damaged much less often. Information about the durability of the item and its susceptibility to damage can be found in the information about this item, in the {i}player's ship cargo info{/i} or the {i}trade{/i} screens. When an item's durability drops to zero, it is destroyed.
+   All items in the game have durability. Every time an item is used, it has a chance of being damaged. Items of better quality and made of better materials are damaged much less often. Additionally, experienced users (e.g. crafters) are usually less likely to damage item. Information about the durability of the item and its susceptibility to damage can be found in the information about this item, in the {i}player's ship cargo info{/i} or the {i}trade{/i} screens. When an item's durability drops to zero, it is destroyed.
  </entry>
  <entry index="missions" title="11. Missions">{u}Starting missions{/u}
 
