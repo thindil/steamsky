@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- The new section in in-game help with information about items
+
 ### Changed
 - Reduced chance for different than normal quality items for recruits in bases
 
