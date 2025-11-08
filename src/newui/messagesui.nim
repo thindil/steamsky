@@ -49,7 +49,7 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
           text = "Make the list of messages smaller.")
     imageButtonCentered(image = images[expand2Icon]):
       gameSettings.messagesPosition -= gameSettings.interfaceFontSize + 10
-  var loopStart = 0 - messagesAmount()
+  var loopStart: int = 0 - messagesAmount()
   if loopStart == 0:
     return
   if loopStart < -10:
@@ -98,7 +98,7 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
   group(title = "LastMessagesGroup", flags = {windowBorder}):
     if gameSettings.messagesOrder == olderFirst:
       for i in loopStart .. -1:
-        showMessage(getMessage(messageIndex = i + 1), dialog = dialog)
+        showMessage(message = getMessage(messageIndex = i + 1), dialog = dialog)
     else:
-      for i in countdown(-1, loopStart):
-        showMessage(getMessage(messageIndex = i + 1), dialog = dialog)
+      for i in countdown(a = -1, b = loopStart):
+        showMessage(message = getMessage(messageIndex = i + 1), dialog = dialog)
