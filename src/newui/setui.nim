@@ -924,6 +924,19 @@ proc setShipInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the crafting UI
 #########################
 
+type
+  RecipeData* = object
+    ## Stores data needed to show information about an available recipe
+    ## members
+    index*: string
+      ## The index of the recipe
+    workshop*: bool
+      ## If true, there is a workshop to craft the recipe
+    tools*: bool
+      ## If true, there are tools to craft the recipe
+    materials*: bool
+      ## If true, there are materials to craft the recipe
+
 var
   workshopsList*: seq[string] = @[]
     ## The list of names of workshops installed on the player's ship
@@ -937,7 +950,7 @@ var
     ## The list of available recipes to study
   deconstructs*: seq[Positive] = @[]
     ## The list of available recipes to deconstruct
-  recipesIndexes*: seq[string] = @[]
+  availableRecipes*: seq[RecipeData] = @[]
     ## The list of available recipes
 
 proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -967,11 +980,11 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           studies.add(y = item.protoIndex)
         if recipe.materialAmounts[0] > 1 and recipe.resultAmount == 1:
           deconstructs.add(y = item.protoIndex)
-  if recipesIndexes.len != knownRecipes.len + studies.len + deconstructs.len:
-    recipesIndexes = @[]
+  if availableRecipes.len != knownRecipes.len + studies.len + deconstructs.len:
+    availableRecipes = @[]
     for recipe in knownRecipes:
-      recipesIndexes.add(y = recipe)
+      availableRecipes.add(y = RecipeData(index: recipe))
     for recipe in studies:
-      recipesIndexes.add(y = $recipe)
+      availableRecipes.add(y = RecipeData(index: $recipe, materials: true))
     for recipe in deconstructs:
-      recipesIndexes.add(y = $recipe)
+      availableRecipes.add(y = RecipeData(index: $recipe, materials: true))
