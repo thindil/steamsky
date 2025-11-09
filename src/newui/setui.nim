@@ -21,7 +21,7 @@
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
-    crew, game, items, maps, missions, shipscargo, shipscrew, shipmodules, types]
+    crew, game, items, maps, missions, shipscargo, shipscrew, types]
 import coreui, errordialog, utilsui2
 
 var
@@ -933,6 +933,12 @@ var
     ## The index of the currently selected workshop
   workshopType*: Natural = 0
     ## The index of the currently selected workshops' type
+  studies*: seq[Positive] = @[]
+    ## The list of available recipes to study
+  deconstructs*: seq[Positive] = @[]
+    ## The list of available recipes to deconstruct
+  recipesIndexes*: seq[string] = @[]
+    ## The list of available recipes
 
 proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -951,10 +957,21 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for index, module in playerShip.modules:
     if module.mType == workshop:
       workshopsIndexes.add(y = index)
-      let moduleType: string = try:
-          getModuleType(moduleIndex = module.protoIndex)
-        except:
-          dialog = setError(message = "Can't get module type.")
-          return
-      if moduleType notin workshopsList:
-        workshopsList.add(y = moduleType)
+      workshopsList.add(y = module.name)
+  studies = @[]
+  deconstructs = @[]
+  for item in playerShip.cargo:
+    for recipeIndex, recipe in recipesList:
+      if recipe.resultIndex == item.protoIndex:
+        if recipeIndex notin knownRecipes and item.protoIndex notin studies:
+          studies.add(y = item.protoIndex)
+        if recipe.materialAmounts[0] > 1 and recipe.resultAmount == 1:
+          deconstructs.add(y = item.protoIndex)
+  if recipesIndexes.len != knownRecipes.len + studies.len + deconstructs.len:
+    recipesIndexes = @[]
+    for recipe in knownRecipes:
+      recipesIndexes.add(y = recipe)
+    for recipe in studies:
+      recipesIndexes.add(y = $recipe)
+    for recipe in deconstructs:
+      recipesIndexes.add(y = $recipe)
