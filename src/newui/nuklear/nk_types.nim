@@ -170,6 +170,11 @@ type
   FontCoordType* = enum
     ## The types of fonts coordinates
     coordUv, coordPixel
+  PanelRowLayoutType* = enum
+    ## The types of panel row layouts
+    layoutDynamicFixed, layoutDynamicRow, layoutDynamicFree, layoutDynamic,
+      layoutStaticFixed, layoutStaticRow, layoutStaticFree, LayoutStatic,
+      layoutTemplate, layoutCount
 
 # ---------
 # Constants
@@ -591,6 +596,7 @@ type
     ratio*, item_width*, item_height*, height*, min_height*, item_offset*,
       filled*: cfloat
     templates: array[nkMaxLayoutRowTemplateColumns, cfloat]
+    `type`*: PanelRowLayoutType
   nk_scroll* {.importc: "struct nk_scroll", completeStruct.} = object
     ## Internal Nuklear type
     x*, y*: cuint

@@ -26,7 +26,7 @@
 ## Provides code related to the widgets' layout in nuklear library
 
 import contracts
-import nk_types, nk_context
+import nk_types, nk_context, nk_draw
 
 # ---------------------
 # Procedures parameters
@@ -58,7 +58,7 @@ proc nk_layout_space_end(ctx) {.importc, cdecl, raises: [], tags: [], contractua
 # -------------------
 
 proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [
-    NuklearException], tags: [], contractual.} =
+    NuklearException], tags: [RootEffect], contractual.} =
   ## Set the panel layout
   ##
   ## * ctx    - the Nuklear context
@@ -91,20 +91,23 @@ proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [
   layout.row.item_offset = 0
   if (layout.flags and windowDynamic.int).bool:
     # draw background for dynamic panels
-    var background: nk_rect = nk_rect()
+    var background: NimRect = NimRect()
     background.x = win.bounds.x
     background.w = win.bounds.y
     background.y = layout.at_y - 1.0
     background.h = layout.row.height + 1.0
-    let color: nk_color = if layout.type == panelTooltip:
+    let
+      color: nk_color = if layout.type == panelTooltip:
           style.window.tooltip_background
         elif layout.type == panelPopup:
           style.window.popup_background
         else:
           style.window.background
+      `out`: PNkCommandBuffer = win.buffer.addr
+    nkFillRect(b = `out`, rect = background, rounding = 0.0, c = color)
 
 proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
-    width: int) {.raises: [NuklearException], tags: [], contractual.} =
+    width: int) {.raises: [NuklearException], tags: [RootEffect], contractual.} =
   ## Set the current row layout
   ##
   ## * ctx    - the Nuklear context
