@@ -57,7 +57,7 @@ const
         sortDesc: toolsDesc),
     HeaderData[RecipesSortOrders](label: "Materials", sortAsc: materialsAsc,
         sortDesc: materialsDesc)]
-  ratio: array[4, cfloat] = [300.cfloat, 200, 200, 200]
+  ratio: array[4, cfloat] = [400.cfloat, 100, 100, 100]
 
 proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -113,7 +113,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addTooltip(bounds = getWidgetBounds(),
           text = "Show only recipes for the selected type of workshops.")
     let newWorkshop: Natural = comboList(items = workshopsList,
-        selected = workshopType, itemHeight = 25, x = 200, y = 150)
+        selected = workshopType, itemHeight = 25, x = 400, y = 150)
     if newWorkshop != workshopType:
       workshopType = newWorkshop
   # Show the list of items for trade
@@ -123,5 +123,5 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "TradeGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
-    addHeader(headers = headers, ratio = ratio, tooltip = "items",
+    addHeader(headers = headers, ratio = ratio, tooltip = "recipes",
       code = sortRecipes, dialog = dialog)
