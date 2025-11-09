@@ -120,7 +120,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
   let tableHeight: float = windowHeight - 140 - (if showOptions: 135 else: 0) -
       gameSettings.messagesPosition.float
   setLayoutRowDynamic(height = tableHeight, cols = 1)
-  group(title = "TradeGroup", flags = {windowNoFlags}):
+  group(title = "RecipesGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
     addHeader(headers = headers, ratio = ratio, tooltip = "recipes",
