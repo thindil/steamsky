@@ -18,7 +18,7 @@
 ## Provides various types and variables for the game's UI, like the game's
 ## state, the main window width and height, etc
 
-import contracts, nuklear/nuklear_sdl_renderer
+import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import themes
 
 type
@@ -53,12 +53,15 @@ var
   dialogY*: float = 0              ## The Y position of a dialog
   redraw*: bool = true             ## If true, redraw the game
   inCombat*: bool = false          ## If true, the player is in combat
-  images*: array[menuIcon..IconsNames.high, PImage] ## The images used in the game
   theme*: ThemeData = defaultTheme ## The current game's theme
   showOptions*: bool = false       ## If true, show more options in the selected screen
   mapPreview*: bool = false        ## If true, the map is in the preview mode
   previousState*: GameState = map  ## The previous screen in the game
   updateData*: bool = false        ## If true, update the data needed for the selected screen
+
+{.push ruleOff: "varDeclared".}
+var images*: array[menuIcon..IconsNames.high, PImage] ## The images used in the game
+{.pop ruleOn: "varDeclared".}
 
 proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
         4) {.raises: [], tags: [], contractual.} =
@@ -79,6 +82,6 @@ proc updateDialog*(width, height: float) {.raises: [], tags: [], contractual.} =
   ## * height - the dialog height
   if isMouseDown(id = left) and isMouseHovering(rect = NimRect(x: dialogX,
       y: dialogY, w: width, h: height)):
-    let delta = getMouseDelta()
+    let delta: NimVec2 = getMouseDelta()
     dialogX += delta.x
     dialogY += delta.y
