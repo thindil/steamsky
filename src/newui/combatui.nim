@@ -1,4 +1,4 @@
-# C opyright 2025 Bartek thindil Jasicki
+# Copyright 2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
