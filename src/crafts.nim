@@ -795,3 +795,79 @@ proc getRecipeDifficultyName*(difficulty: Positive): string {.raises: [],
       return "Very hard"
     else:
       return "Extremely hard"
+
+proc checkTool*(toolNeeded: string): bool {.raises: [], tags: [], contractual.} =
+  ##  Check if the player has needed tool for the crafting recipe
+  ##
+  ##  * toolNeeded - The type of tool needed for the recipe
+  ##
+  ## Returns true if the tool is in the player ship cargo, otherwise false
+  if toolNeeded == "None":
+    return true
+  for index, item in itemsList:
+    if item.itemType == toolNeeded:
+      let cargoIndex: int = findItem(inventory = playerShip.cargo,
+          protoIndex = index, itemQuality = any)
+      if cargoIndex > -1:
+        return true
+  return false
+
+proc isCraftable*(recipe: CraftData; canCraft, hasWorkplace, hasTool,
+    hasMaterials: var bool) {.raises: [KeyError], tags: [], contractual.} =
+  ## Check if the selected recipe can be crafted (has all requirements meet)
+  ##
+  ## * recipe       - The crafting recipe to check
+  ## * canCraft     - If recipe can be crafted, then it will be true, otherwise
+  ##                  false
+  ## * hasWorkplace - If there is workplace for the recipe, will be true,
+  ##                  otherwise false
+  ## * hasTool      - If there is available tool for the recipe, will be true,
+  ##                  otherwise false
+  ## * hasMaterials - If there are available materials for the recipe, will be
+  ##                  true, otherwise false
+  ##
+  ## Returns parameters canCraft, hasWorkplace, hasTool, hasMaterials
+  canCraft = false
+  hasWorkplace = false
+  hasMaterials = false
+  hasTool = false
+  for module in playerShip.modules:
+    if modulesList[module.protoIndex].mType == recipe.workplace and
+        module.durability > 0:
+      hasWorkplace = true
+      break
+  hasTool = checkTool(toolNeeded = recipe.tool)
+  for materialIndex, material in recipe.materialTypes:
+    hasMaterials = false
+    for itemIndex, item in itemsList:
+      if item.itemType == material:
+        var cargoIndex: int = findItem(inventory = playerShip.cargo,
+            protoIndex = itemIndex, itemQuality = any)
+        if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
+            recipe.materialAmounts[materialIndex]:
+          hasMaterials = true
+  if hasTool and hasMaterials and hasWorkplace:
+    canCraft = true
+
+proc checkStudyPrerequisities*(canCraft, hasTool,
+    hasWorkplace: var bool) {.raises: [KeyError], tags: [], contractual.} =
+  ## Check if the study and decontruct recipes can be crafted
+  ##
+  ## * canCraft      - If recipe can be crafter then it will be True, otherwise
+  ##                   False
+  ## * hasTool       - If there is tool for the study and deconstruct recipes
+  ##                   then True, otherwise False
+  ## * hasWorkplace  - If there is workplace for study and deconstruct recipes
+  ##                   then True, otherwise False
+  ##
+  ## Returns parameters canCraft, hasTool and hasWorkplace
+  hasTool = checkTool(toolNeeded = alchemyTools)
+  canCraft = false
+  hasWorkplace = false
+  for module in playerShip.modules:
+    if modulesList[module.protoIndex].mType == alchemyLab and
+        module.durability > 0:
+      hasWorkplace = true
+      break
+  if hasWorkplace:
+    canCraft = true
