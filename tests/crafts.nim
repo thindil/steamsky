@@ -44,3 +44,8 @@ suite "Unit tests for crafts module":
     setRecipe(0, 10, "1")
     check:
       getWorkshopRecipeName(0) == "Manufacturing 10x Basic Ration"
+
+  test "Cancelling crafting order":
+    cancelCraftOrder(moduleIndex = 0)
+    check:
+      playerShip.modules[0].craftingAmount == 0
