@@ -19,7 +19,7 @@
 ## recipes, starting crafting, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
+import ../[config, game]
 import coreui, errordialog, header, setui, table
 
 type RecipesSortOrders = enum
@@ -125,3 +125,6 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
       windowDisable()
     addHeader(headers = headers, ratio = ratio, tooltip = "recipes",
       code = sortRecipes, dialog = dialog)
+    for index, rec in availableRecipes:
+      if index > knownRecipes.high:
+        break
