@@ -107,7 +107,8 @@ proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [
     nkFillRect(b = `out`, rect = background, rounding = 0.0, c = color)
 
 proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
-    width: int) {.raises: [NuklearException], tags: [RootEffect], contractual.} =
+    width: int) {.raises: [NuklearException], tags: [RootEffect],
+        contractual.} =
   ## Set the current row layout
   ##
   ## * ctx    - the Nuklear context
@@ -125,6 +126,24 @@ proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
 
     let win: PNkWindow = ctx.current
     nkPanelLayout(ctx = ctx, win = win, height = height, cols = cols)
+    if fmt == dynamic:
+      win.layout.row.`type` = layoutDynamicFixed
+    else:
+      win.layout.row.`type` = layoutStaticFixed
+
+    win.layout.row.ratio = 0
+    win.layout.row.filled = 0
+    win.layout.row.item_offset = 0
+    win.layout.row.item_width = width.float
+
+proc nkLayoutRowDynamic(ctx; height: float; cols: int) {.raises: [
+    NuklearException], tags: [RootEffect], contractual.} =
+  ## Set the current row layout to dynamic
+  ##
+  ## * ctx    - the Nuklear context
+  ## * height - the height in pixels of each row
+  ## * cols   - the amount of columns in each row
+  nkRowLayout(ctx = ctx, fmt = dynamic, height = height, cols = cols, width = 0)
 
 proc setLayoutRowDynamic*(height: float; cols: int) {.raises: [], tags: [],
     contractual.} =
