@@ -210,19 +210,14 @@ proc setHullInfo(dialog: var GameDialog; installing: bool; shipModuleIndex: int;
       dialog = setError(message = "Can't show module size")
       return
 
-proc setEngineInfo(dialog: var GameDialog; installing: bool;
-  shipModuleIndex: int; value, maxValue: Natural) {.raises: [],
-  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc setEngineInfo(installing: bool; shipModuleIndex: int; value,
+    maxValue: Natural) {.raises: [], tags: [], contractual.} =
   ## Show information about the selected engine module
   ##
-  ## * dialog          - the current in-game dialog displayed on the screen
   ## * installing      - If true, player looking at installing modules list
   ## * shipModuleIndex - The index of the module in the player's ship to show
   ## * value           - The power of the engime
   ## * maxValue        - The fuel usage of the engine
-  ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
   label(str = "Max power:")
   if installing and shipModuleIndex > -1:
     if maxValue < playerShip.modules[shipModuleIndex].power:
@@ -443,21 +438,16 @@ proc setGunInfo(dialog: var GameDialog; installing: bool;
       else:
         colorLabel(str = $(speed.abs) & " rounds", color = theme.colors[goldenColor])
 
-proc setBatteringRamInfo(dialog: var GameDialog; installing: bool;
-  shipModuleIndex: int; maxValue: Natural) {.raises: [],
-  tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc setBatteringRamInfo(installing: bool; shipModuleIndex: int;
+    maxValue: Natural) {.raises: [], tags: [], contractual.} =
   ## Show information about the selected battering ram module
   ##
-  ## * dialog          - the current in-game dialog displayed on the screen
   ## * installing      - If true, player looking at installing modules list
   ## * row             - The current row in the dialog
   ## * newInfo         - If true, create the new UI for the info, otherwise reuse
   ##                     old one. Default value is true.
   ## * shipModuleIndex - The index of the module in the player's ship to show
   ## * maxValue        - The damage done by the battering ram
-  ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
   label(str = "Strength:")
   if installing and shipModuleIndex > -1:
     if playerShip.modules[shipModuleIndex].damage2 > maxValue:
@@ -607,8 +597,8 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     setHullInfo(dialog = dialog, installing = installing,
         shipModuleIndex = shipModuleIndex, value = value, maxValue = maxValue)
   of engine:
-    setEngineInfo(dialog = dialog, installing = installing,
-        shipModuleIndex = shipModuleIndex, value = value, maxValue = maxValue)
+    setEngineInfo(installing = installing, shipModuleIndex = shipModuleIndex,
+      value = value, maxValue = maxValue)
   of cargo:
     setCargoInfo(dialog = dialog, installing = installing,
       shipModuleIndex = shipModuleIndex, maxValue = maxValue)
@@ -624,7 +614,7 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
       shipModuleIndex = shipModuleIndex, speed = speed, value = value,
       maxValue = maxValue, mType = mType)
   of batteringRam:
-    setBatteringRamInfo(dialog = dialog, installing = installing,
+    setBatteringRamInfo(installing = installing,
       shipModuleIndex = shipModuleIndex, maxValue = maxValue)
   else:
     discard
