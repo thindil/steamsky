@@ -23,93 +23,6 @@ import contracts, nimalyzer
 import ../[config, crafts, crewinventory, game, items, shipmodules, shipscrew, tk, types]
 import coreui, dialogs, errordialog, table, updateheader, utilsui2
 
-proc checkTool(toolNeeded: string): bool {.raises: [], tags: [], contractual.} =
-  ##  Check if the player has needed tool for the crafting recipe
-  ##
-  ##  * toolNeeded - The type of tool needed for the recipe
-  ##
-  ## Returns true if the tool is in the player ship cargo, otherwise false
-  result = true
-  if toolNeeded != "None":
-    result = false
-    for index, item in itemsList:
-      if item.itemType == toolNeeded:
-        let cargoIndex: int = findItem(inventory = playerShip.cargo,
-            protoIndex = index, itemQuality = any)
-        if cargoIndex > -1:
-          result = true
-          break
-
-proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
-    hasMaterials: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect,
-        RootEffect], contractual.} =
-  ## Check if the selected recipe can be crafted (has all requirements meet)
-  ##
-  ## * recipe       - The crafting recipe to check
-  ## * canCraft     - If recipe can be crafted, then it will be true, otherwise
-  ##                  false
-  ## * hasWorkplace - If there is workplace for the recipe, will be true,
-  ##                  otherwise false
-  ## * hasTool      - If there is available tool for the recipe, will be true,
-  ##                  otherwise false
-  ## * hasMaterials - If there are available materials for the recipe, will be
-  ##                  true, otherwise false
-  ##
-  ## Returns parameters canCraft, hasWorkplace, hasTool, hasMaterials
-  canCraft = false
-  hasWorkplace = false
-  hasMaterials = false
-  hasTool = false
-  for module in playerShip.modules:
-    try:
-      if modulesList[module.protoIndex].mType == recipe.workplace and
-          module.durability > 0:
-        hasWorkplace = true
-        break
-    except:
-      showError(message = "Can't check workshop.")
-      return
-  hasTool = checkTool(toolNeeded = recipe.tool)
-  for materialIndex, material in recipe.materialTypes:
-    hasMaterials = false
-    for itemIndex, item in itemsList:
-      if item.itemType == material:
-        var cargoIndex: int = findItem(inventory = playerShip.cargo,
-            protoIndex = itemIndex, itemQuality = any)
-        if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
-            recipe.materialAmounts[materialIndex]:
-          hasMaterials = true
-  if hasTool and hasMaterials and hasWorkplace:
-    canCraft = true
-
-proc checkStudyPrerequisities(canCraft, hasTool,
-    hasWorkplace: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect,
-        RootEffect], contractual.} =
-  ## Check if the study and decontruct recipes can be crafted
-  ##
-  ## * canCraft      - If recipe can be crafter then it will be True, otherwise
-  ##                   False
-  ## * hasTool       - If there is tool for the study and deconstruct recipes
-  ##                   then True, otherwise False
-  ## * hasWorkplace  - If there is workplace for study and deconstruct recipes
-  ##                   then True, otherwise False
-  ##
-  ## Returns parameters canCraft, hasTool and hasWorkplace
-  hasTool = checkTool(toolNeeded = alchemyTools)
-  canCraft = false
-  hasWorkplace = false
-  for module in playerShip.modules:
-    try:
-      if modulesList[module.protoIndex].mType == alchemyLab and
-          module.durability > 0:
-        hasWorkplace = true
-        break
-    except:
-      showError(message = "Can't check workshop.")
-      return
-  if hasWorkplace:
-    canCraft = true
-
 {.push ruleOff: "varDeclared".}
 var
   studies: seq[Positive] = @[]
@@ -236,9 +149,13 @@ proc showRecipesTable(craftsCanvas, craftsFrame, recipeName,
     if currentRow < startRow:
       currentRow.inc
       continue
-    isCraftable(recipe = recipe, canCraft = canCraft,
-        hasWorkplace = hasWorkplace, hasTool = hasTool,
-        hasMaterials = hasMaterials)
+    try:
+      isCraftable(recipe = recipe, canCraft = canCraft,
+          hasWorkplace = hasWorkplace, hasTool = hasTool,
+          hasMaterials = hasMaterials)
+    except:
+      showError(message = "Can't check if recipe is craftable.")
+      return
     if (showType == 2 and not canCraft) or (showType == 3 and canCraft):
       continue
     try:
@@ -260,8 +177,12 @@ proc showRecipesTable(craftsCanvas, craftsFrame, recipeName,
         checked = hasMaterials, column = 4, newRow = true)
     if recipesTable.row == gameSettings.listsLimit + 1:
       break
-  checkStudyPrerequisities(canCraft = canCraft, hasTool = hasTool,
-      hasWorkplace = hasWorkplace)
+  try:
+    checkStudyPrerequisities(canCraft = canCraft, hasTool = hasTool,
+        hasWorkplace = hasWorkplace)
+  except:
+    showError(message = "Can't check study prerequisities.")
+    return
   for i in knownRecipes.len..recipesIndexes.high:
     if recipesTable.row == gameSettings.listsLimit + 1 or i > studies.high:
       break
@@ -598,8 +519,11 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   recipesIndexes = @[]
   for recipe in localRecipes:
     recipesIndexes.add(y = recipe.id)
-  checkStudyPrerequisities(canCraft = canCraft, hasTool = hasTool,
-      hasWorkplace = hasWorkplace)
+  try:
+    checkStudyPrerequisities(canCraft = canCraft, hasTool = hasTool,
+        hasWorkplace = hasWorkplace)
+  except:
+    return showError(message = "Can't check study prerequisities.")
   localRecipes = @[]
   for recipe in studies:
     try:
