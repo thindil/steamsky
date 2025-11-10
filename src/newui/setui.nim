@@ -21,7 +21,7 @@
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
-    crew, game, items, maps, missions, shipscargo, shipscrew, types]
+    crafts, crew, game, items, maps, missions, shipscargo, shipscrew, types]
 import coreui, errordialog, utilsui2
 
 var
@@ -930,6 +930,10 @@ type
     ## members
     index*: string
       ## The index of the recipe
+    name*: string
+      ## The name of the recipe
+    craftable*: bool
+      ## If true, the recipe is craftable
     workshop*: bool
       ## If true, there is a workshop to craft the recipe
     tools*: bool
@@ -983,7 +987,16 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if availableRecipes.len != knownRecipes.len + studies.len + deconstructs.len:
     availableRecipes = @[]
     for recipe in knownRecipes:
-      availableRecipes.add(y = RecipeData(index: recipe))
+      try:
+        var rec: RecipeData = RecipeData(index: recipe, name: itemsList[
+            recipesList[recipe].resultIndex].name)
+        isCraftable(recipe = recipesList[recipe], canCraft = rec.craftable,
+            hasWorkplace = rec.workshop, hasTool = rec.tools,
+            hasMaterials = rec.materials)
+        availableRecipes.add(y = rec)
+      except:
+        dialog = setError(message = "Can't add a recipe.")
+        return
     for recipe in studies:
       availableRecipes.add(y = RecipeData(index: $recipe, materials: true))
     for recipe in deconstructs:
