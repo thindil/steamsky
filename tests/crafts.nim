@@ -49,3 +49,18 @@ suite "Unit tests for crafts module":
     cancelCraftOrder(moduleIndex = 0)
     check:
       playerShip.modules[0].craftingAmount == 0
+
+  test "Testing recipe difficulty name for value 5":
+    gameSettings.showNumbers = false
+    check:
+      getRecipeDifficultyName(difficulty = 5) == "Trivial"
+
+  test "Testing recipe difficulty name for value 12":
+    gameSettings.showNumbers = false
+    check:
+      getRecipeDifficultyName(difficulty = 12) == "Easy"
+
+  test "Testing recipe difficulty numeric name for value 20":
+    gameSettings.showNumbers = true
+    check:
+      getRecipeDifficultyName(difficulty = 20) == "20"
