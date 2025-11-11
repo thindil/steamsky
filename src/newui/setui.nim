@@ -934,12 +934,14 @@ type
       ## The name of the recipe
     craftable*: bool
       ## If true, the recipe is craftable
-    workshop*: bool
+    workplace*: bool
       ## If true, there is a workshop to craft the recipe
     tools*: bool
       ## If true, there are tools to craft the recipe
     materials*: bool
       ## If true, there are materials to craft the recipe
+    workshop*: ModuleType
+      ## The module type in which the recipe is crafted
 
 var
   workshopsList*: seq[string] = @[]
@@ -989,9 +991,10 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     for recipe in knownRecipes:
       try:
         var rec: RecipeData = RecipeData(index: recipe, name: itemsList[
-            recipesList[recipe].resultIndex].name)
+            recipesList[recipe].resultIndex].name, workshop: recipesList[
+            recipe].workplace)
         isCraftable(recipe = recipesList[recipe], canCraft = rec.craftable,
-            hasWorkplace = rec.workshop, hasTool = rec.tools,
+            hasWorkplace = rec.workplace, hasTool = rec.tools,
             hasMaterials = rec.materials)
         availableRecipes.add(y = rec)
       except:
