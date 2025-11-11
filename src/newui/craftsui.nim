@@ -18,8 +18,9 @@
 ## Provides code related to crafting items, like showing the list of available
 ## recipes, starting crafting, etc.
 
+import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game]
+import ../[config, game, types]
 import coreui, errordialog, header, setui, table
 
 type RecipesSortOrders = enum
@@ -126,5 +127,13 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     addHeader(headers = headers, ratio = ratio, tooltip = "recipes",
       code = sortRecipes, dialog = dialog)
     for index, rec in availableRecipes:
-      if index > knownRecipes.high:
-        break
+      if nameSearch.len > 0 and rec.name.toLowerAscii.find(
+          sub = nameSearch.toLowerAscii) == -1:
+        continue
+      try:
+        if workshopIndex > 0 and rec.workshop != modulesList[playerShip.modules[
+            workshopIndex - 1].protoIndex].mType:
+          continue
+      except:
+        dialog = setError(message = "Can't check workshop.")
+        return
