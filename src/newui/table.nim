@@ -22,7 +22,7 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../config
 import coreui, themes
 
-proc addPagination*(page: var Positive; row: Positive) {.raises: [], tags: [],
+proc addPagination*(page: var Positive; row: Positive) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Add the buttons previous and next to a table
   ##

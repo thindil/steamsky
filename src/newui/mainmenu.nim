@@ -82,7 +82,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
 
 proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
-    tags: [], contractual.} =
+    tags: [RootEffect], contractual.} =
   ## Show the game's main menu and set the game's state
   ##
   ## * state - the current game's state
