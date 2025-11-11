@@ -971,17 +971,19 @@ type
     ## Used to store information about UI rectangle. Usually later converted to
     ## Nuklear nk_rect
     x*, y*, w*, h*: cfloat
-  NimVec2* = object
-    ## Used to store information about UI vector. Usually later converted to
-    ## Nuklear nk_vec2
-    x*, y*: cfloat
+  Vec2* = object
+    ## Used to store information about UI vector.
+    ##
+    ## * x - the X coordinate of the point
+    ## * y - the Y coordinate of the point
+    x*, y*: float
   ButtonStyle* = object
     ## Used to store information about a button's style.
     borderColor*, textNormal*, textHover*: NimColor
     rounding*: float
-    padding*: NimVec2
-    imagePadding*: NimVec2
-    touchPadding*: NimVec2
+    padding*: Vec2
+    imagePadding*: Vec2
+    touchPadding*: Vec2
   ButtonStyleTypes* = enum
     ## The types of fields in style's settings for UI buttons
     normal, hover, active, borderColor, textBackground, textNormal, textHover,
@@ -1086,10 +1088,10 @@ type
   MouseButton* = object
     ## Used to store information about a mouse button.
     down*, clicked*: bool
-    clickedPos*: NimVec2
+    clickedPos*: Vec2
   Mouse* = object
     ## Used to store information about a mouse
-    delta*, pos*, prev*, scrollDelta*, : NimVec2
+    delta*, pos*, prev*, scrollDelta*, : Vec2
     buttons*: array[Buttons.max, MouseButton]
     grab*, grabbed*, ungrab*: bool
   Input* = object
