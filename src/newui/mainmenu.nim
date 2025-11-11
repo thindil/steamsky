@@ -683,7 +683,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     editString(text = playerName, maxLen = 64)
     bounds[1] = getWidgetBounds()
     saveButtonStyle()
-    setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+    setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
     imageButton(image = menuImages[1]):
       randomName(forPlayer = true)
     restoreButtonStyle()
@@ -694,7 +694,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
       const genders: array[2..3, string] = [2: "Male", 3: "Female"]
       for i in 2..3:
         saveButtonStyle()
-        setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+        setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
         if playerGender == i:
           setButtonStyle2(source = active, destination = normal)
           if gameSettings.showTooltips:
@@ -716,7 +716,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     editString(text = shipName, maxLen = 64)
     bounds[3] = getWidgetBounds()
     saveButtonStyle()
-    setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+    setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
     imageButton(image = menuImages[1]):
       randomName(forPlayer = false)
     restoreButtonStyle()

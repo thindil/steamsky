@@ -53,7 +53,7 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
     tooltipText = "You can't travel anymore, because you don't have any fuel for ship."
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
-  image(image = image, padding = NimVec2(x: 5, y: 5))
+  image(image = image, padding = Vec2(x: 5, y: 5))
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   colorLabel(str = $fuelAmount, color = color)
@@ -71,7 +71,7 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
     tooltipText = "You don't have any food in ship but your crew needs them to live."
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
-  image(image = image, padding = NimVec2(x: 5, y: 5))
+  image(image = image, padding = Vec2(x: 5, y: 5))
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   colorLabel(str = $foodAmount, color = color)
@@ -89,7 +89,7 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
     tooltipText = "You don't have any drinks in ship but your crew needs them to live."
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
-  image(image = image, padding = NimVec2(x: 5, y: 5))
+  image(image = image, padding = Vec2(x: 5, y: 5))
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   colorLabel(str = $drinksAmount, color = color)
@@ -122,7 +122,7 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "You can't fly with your ship, because it is overloaded.")
-    image(image = images[overloadedIcon], padding = NimVec2(x: 5, y: 5))
+    image(image = images[overloadedIcon], padding = Vec2(x: 5, y: 5))
   if not havePilot:
     if "sentientships" in faction.flags:
       image = images[noPilotIcon]
@@ -132,7 +132,7 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
       tooltipText = "No pilot assigned. Ship can't move."
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = tooltipText)
-    image(image = image, padding = NimVec2(x: 5, y: 5))
+    image(image = image, padding = Vec2(x: 5, y: 5))
   if not haveEngineer:
     if "sentientships" in faction.flags:
       image = images[noEngineerIcon]
@@ -142,61 +142,61 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
       tooltipText = "No engineer assigned. Ship can't move."
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = tooltipText)
-    image(image = image, padding = NimVec2(x: 5, y: 5))
+    image(image = image, padding = Vec2(x: 5, y: 5))
   if not haveGunner:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "One or more guns don't have a gunner.")
-    image(image = images[gunnerIcon], padding = NimVec2(x: 5, y: 5))
+    image(image = images[gunnerIcon], padding = Vec2(x: 5, y: 5))
   if not haveTrader:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "No trader assigned. You need one to talk/trade.")
-    image(image = images[traderIcon], padding = NimVec2(x: 5, y: 5))
+    image(image = images[traderIcon], padding = Vec2(x: 5, y: 5))
   if needRepairs:
     if haveRepairman:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "The ship is being repaired.")
-      image(image = images[repairIcon], padding = NimVec2(x: 5, y: 5))
+      image(image = images[repairIcon], padding = Vec2(x: 5, y: 5))
     else:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "The ship needs repairs but no one is working them.")
-      image(image = images[noRepairIcon], padding = NimVec2(x: 5, y: 5))
+      image(image = images[noRepairIcon], padding = Vec2(x: 5, y: 5))
   if needWorker:
     if haveWorker:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "All crafting orders are being executed.")
-      image(image = images[manufactureIcon], padding = NimVec2(x: 5, y: 5))
+      image(image = images[manufactureIcon], padding = Vec2(x: 5, y: 5))
     else:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "You need to assign crew members to begin manufacturing.")
-      image(image = images[noManufactureIcon], padding = NimVec2(x: 5, y: 5))
+      image(image = images[noManufactureIcon], padding = Vec2(x: 5, y: 5))
   if playerShip.upgradeModule > -1:
     if haveUpgrader:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "A ship module upgrade in progress.")
-      image(image = images[upgradeIcon], padding = NimVec2(x: 5, y: 5))
+      image(image = images[upgradeIcon], padding = Vec2(x: 5, y: 5))
     else:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "A ship module upgrade is in progress but no one is working on it.")
-      image(image = images[noUpgradeIcon], padding = NimVec2(x: 5, y: 5))
+      image(image = images[noUpgradeIcon], padding = Vec2(x: 5, y: 5))
   if needCleaning:
     if haveCleaner:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Ship is cleaned.")
-      image(image = images[cleanIcon], padding = NimVec2(x: 5, y: 5))
+      image(image = images[cleanIcon], padding = Vec2(x: 5, y: 5))
     else:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Ship is dirty but no one is cleaning it.")
-      image(image = images[noCleanIcon], padding = NimVec2(x: 5, y: 5))
+      image(image = images[noCleanIcon], padding = Vec2(x: 5, y: 5))
 
 type
   CloseDestination* = enum

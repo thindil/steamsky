@@ -831,11 +831,11 @@ proc isMouseDown*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   return nk_input_is_mouse_down(i = ctx.input.addr, id = id)
 
-proc getMouseDelta*(): NimVec2 {.raises: [], tags: [], contractual.} =
+proc getMouseDelta*(): Vec2 {.raises: [], tags: [], contractual.} =
   ## Get the mouse vector between last check and current position of the mouse
   ##
   ## Returns vector with information about the mouse movement delta
-  return NimVec2(x: ctx.input.mouse.delta.x, y: ctx.input.mouse.delta.y)
+  return Vec2(x: ctx.input.mouse.delta.x, y: ctx.input.mouse.delta.y)
 
 proc mouseClicked*(id: Buttons; rect: NimRect): bool {.raises: [], tags: [],
     contractual.} =
@@ -2332,7 +2332,7 @@ proc setButtonStyle*(field: ButtonStyleTypes; color: Color = colWhite; a: Natura
   else:
     discard
 
-proc setButtonStyle*(field: ButtonStyleTypes; value: NimVec2) {.raises: [],
+proc setButtonStyle*(field: ButtonStyleTypes; value: Vec2) {.raises: [],
     tags: [], contractual.} =
   ## Set the vector for the selected field of the Nuklear buttons style
   ##
@@ -2379,7 +2379,7 @@ proc setButtonStyle2*(source, destination: ButtonStyleTypes) {.raises: [],
     if destination == normal:
       ctx.style.button.normal = ctx.style.button.active
 
-proc getButtonStyle*(field: ButtonStyleTypes): NimVec2 {.raises: [], tags: [],
+proc getButtonStyle*(field: ButtonStyleTypes): Vec2 {.raises: [], tags: [],
     contractual.} =
   ## Get the value of the selected field of Nuklear buttons style
   ##
@@ -2387,7 +2387,7 @@ proc getButtonStyle*(field: ButtonStyleTypes): NimVec2 {.raises: [], tags: [],
   ##
   ## Returns vector with the value of the selected field
   if field == padding:
-    return NimVec2(x: ctx.style.button.padding.x, y: ctx.style.button.padding.y)
+    return Vec2(x: ctx.style.button.padding.x, y: ctx.style.button.padding.y)
 
 proc stylePushVec2(fld: WindowStyleTypes; x1,
     y1: cfloat): bool {.discardable, raises: [], tags: [], contractual.} =
@@ -2983,7 +2983,7 @@ proc selectableSymbolLabel*(sym: SymbolType; title: string; value: var bool;
 # ------
 # Images
 # ------
-proc image*(image: PImage; padding: NimVec2 = NimVec2(x: 0, y: 0)) {.raises: [], tags: [], contractual.} =
+proc image*(image: PImage; padding: Vec2 = Vec2(x: 0, y: 0)) {.raises: [], tags: [], contractual.} =
   ## Draw an image
   ##
   ## * image   - pointer to the image which will be drawn
@@ -2995,7 +2995,7 @@ proc image*(image: PImage; padding: NimVec2 = NimVec2(x: 0, y: 0)) {.raises: [],
     ## A binding to Nuklear's function. Internal use only
   var bounds: nk_rect = nk_rect(x: padding.x, y: 0, w: 0, h: 0)
   discard nk_state_widget(bounds = bounds, ctx = ctx)
-  if padding != NimVec2(x: 0, y: 0):
+  if padding != Vec2(x: 0, y: 0):
     bounds.x += padding.x
     bounds.y += padding.y
     bounds.w -= 2 * padding.x

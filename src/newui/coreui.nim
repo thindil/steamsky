@@ -82,6 +82,6 @@ proc updateDialog*(width, height: float) {.raises: [], tags: [], contractual.} =
   ## * height - the dialog height
   if isMouseDown(id = left) and isMouseHovering(rect = NimRect(x: dialogX,
       y: dialogY, w: width, h: height)):
-    let delta: NimVec2 = getMouseDelta()
+    let delta: Vec2 = getMouseDelta()
     dialogX += delta.x
     dialogY += delta.y
