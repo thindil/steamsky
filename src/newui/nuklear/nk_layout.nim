@@ -137,7 +137,7 @@ proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
     win.layout.row.item_width = width.float
 
 proc nkLayoutRowDynamic(ctx; height: float; cols: int) {.raises: [
-    NuklearException], tags: [RootEffect], contractual.} =
+    NuklearException], tags: [RootEffect], contractual, used.} =
   ## Set the current row layout to dynamic
   ##
   ## * ctx    - the Nuklear context
@@ -145,8 +145,8 @@ proc nkLayoutRowDynamic(ctx; height: float; cols: int) {.raises: [
   ## * cols   - the amount of columns in each row
   nkRowLayout(ctx = ctx, fmt = dynamic, height = height, cols = cols, width = 0)
 
-proc setLayoutRowDynamic*(height: float; cols: int) {.raises: [], tags: [],
-    contractual.} =
+proc setLayoutRowDynamic*(height: float; cols: int) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Set the current widgets layout to divide it into selected amount of
   ## columns with the selected height in rows and grows in width when the
   ## parent window resizes
