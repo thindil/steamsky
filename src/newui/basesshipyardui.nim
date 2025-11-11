@@ -99,7 +99,7 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
     modulesSortOrder = sortDesc
   else:
     modulesSortOrder = sortAsc
-  var localModules: seq[LocalModuleData]
+  var localModules: seq[LocalModuleData] = @[]
   if currentTab == 0:
     for index, module in modulesList:
       if index notin modulesIndexes:
@@ -767,7 +767,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     if compareList.len > 0:
       setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.4.cfloat, 0.6])
       label(str = "Compare with:")
-      let newCompare = comboList(items = compareList,
+      let newCompare: Natural = comboList(items = compareList,
           selected = compareIndex, itemHeight = 25, x = 300, y = 150)
       if newCompare != compareIndex:
         compareIndex = newCompare
@@ -1063,7 +1063,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show only modules of the selected type")
-    let newType = comboList(items = typesList,
+    let newType: Natural = comboList(items = typesList,
         selected = typeIndex, itemHeight = 25, x = 200, y = 150)
     if newType != typeIndex:
       typeIndex = newType
