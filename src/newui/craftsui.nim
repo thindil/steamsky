@@ -33,6 +33,17 @@ var
   recipesSortOrder: RecipesSortOrders = defaultRecipesSortOrder
   hasOptions: bool = true
 
+proc showRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected recipe information
+  ##
+  ## * data   - the index of the selected recipe
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
+
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Sort recipes on the list
@@ -126,9 +137,15 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
       windowDisable()
     addHeader(headers = headers, ratio = ratio, tooltip = "recipes",
       code = sortRecipes, dialog = dialog)
+    var currentRow: Positive = 1
+    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
     for index, rec in availableRecipes:
       if nameSearch.len > 0 and rec.name.toLowerAscii.find(
           sub = nameSearch.toLowerAscii) == -1:
+        continue
+      if typeIndex == 1 and not rec.craftable:
+        continue
+      if typeIndex == 2 and rec.craftable:
         continue
       try:
         if workshopIndex > 0 and rec.workshop != modulesList[playerShip.modules[
@@ -137,3 +154,8 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't check workshop.")
         return
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      addButton(label = rec.name, tooltip = "Show recipe's details.",
+        data = index, code = showRecipeInfo, dialog = dialog)
