@@ -656,6 +656,20 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             except:
               dialog = setError(message = "Can't get the skill info")
               return
+          setLayoutRowDynamic(height = 20, cols = 1)
+          var level: int = skill.level
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "The current level of the skill.")
+          progressBar(value = level, maxValue = SkillRange.high,
+              modifyable = false)
+          setLayoutRowDynamic(height = 5, cols = 1)
+          var exp: int = ((skill.experience.float / (skill.level.float *
+              25.0)) * 100.0).int
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Experience need to reach the next level")
+          progressBar(value = exp, maxValue = 100, modifyable = false)
       # Order priorites of the selected crew member
       of 3:
         setLayoutRowDynamic(height = 35, cols = 2)
