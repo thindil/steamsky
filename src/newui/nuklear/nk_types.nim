@@ -525,8 +525,6 @@ type
     header*: nk_command
     x*, y*: cshort
     w*, h*: cushort
-  PNkBuffer* = ptr nk_buffer
-    ## Pointer to nk_buffer type
   nk_command_buffer* {.importc: "struct nk_command_buffer",
       completeStruct.} = object
     ## Internal Nuklear type
@@ -702,6 +700,8 @@ type
     grow_factor*: cfloat
     calls*: nk_size
     marker*: array[bufferMax, nk_buffer_marker]
+  PNkBuffer* = ptr nk_buffer
+    ## Pointer to nk_buffer type
   nk_table* {.importc: "struct nk_table", completeStruct.} = object
     ## Internal Nuklear type
     `seq`*, size*: cuint
@@ -970,7 +970,7 @@ type
   NimRect* = object
     ## Used to store information about UI rectangle. Usually later converted to
     ## Nuklear nk_rect
-    x*, y*, w*, h*: cfloat
+    x*, y*, w*, h*: float
   Vec2* = object
     ## Used to store information about UI vector.
     ##
@@ -1001,7 +1001,7 @@ type
   WindowStyleTypes* = enum
     ## The types of fields in style's settings for windows
     spacing, padding
-  PanelFlags* {.size: sizeof(cint).} = enum
+  PanelFlags* = enum
     ## The settings for panels
     windowNoFlags = 0,
     windowBorder = 1 shl 0,
@@ -1018,12 +1018,12 @@ type
   PopupType* = enum
     ## The types of popup windows
     staticPopup, dynamicPopup
-  TextAlignment* {.size: sizeof(cint).} = enum
+  TextAlignment* = enum
     ## The alignments of a text
     left = textMiddle.int or textLeft.int,
     centered = textMiddle.int or textCentered.int,
     right = textMiddle.int or textRight.int
-  EditFlags* {.size: sizeof(cint).} = enum
+  EditFlags* = enum
     ## The edit fields' flags
     default = 0,
     readOnly = 1 shl 0,
@@ -1038,7 +1038,7 @@ type
     alwaysInsertMode = 1 shl 9,
     multiline = 1 shl 10,
     gotoEndOnActivate = 1 shl 11
-  EditEvent* {.size: sizeof(cint).} = enum
+  EditEvent* = enum
     ## The events which happen in a text field
     none = 0,
     active = 1 shl 0,
@@ -1046,7 +1046,7 @@ type
     activated = 1 shl 2,
     deactivated = 1 shl 3,
     commited = 1 shl 4
-  EditTypes* {.size: sizeof(cint).} = enum
+  EditTypes* = enum
     ## The types of edit fields
     simple = alwaysInsertMode,
     field = simple.int or selectable.int or clipboard.int,
@@ -1073,7 +1073,7 @@ type
       headerTextColor, groupTextColor, selectActiveTextColor, propertyTextColor,
       popupColor, popupBorderColor, progressbarColor, progressbarBorderColor,
       countColors
-  PanelSet* {.size: sizeof(cint).} = enum
+  PanelSet* = enum
     ## The setting of panels
     panelSetNonBlock = panelContextual.int or panelCombo.int or panelMenu.int or
         panelTooltip.int,
@@ -1097,7 +1097,6 @@ type
   Input* = object
     ## Used to store information about the user's input
     mouse*: Mouse
-{.pop ruleOn: "namedParams".}
 
 # ---------
 # Constants
