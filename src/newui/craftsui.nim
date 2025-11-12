@@ -21,7 +21,7 @@
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, types]
-import coreui, errordialog, header, setui, table
+import coreui, errordialog, header, messagesui, setui, table, themes
 
 type RecipesSortOrders = enum
   nameAsc, nameDesc, workplaceAsc, workplaceDesc, toolsAsc, toolsDesc,
@@ -137,8 +137,19 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
       windowDisable()
     addHeader(headers = headers, ratio = ratio, tooltip = "recipes",
       code = sortRecipes, dialog = dialog)
-    var currentRow: Positive = 1
+    var
+      currentRow, row: Positive = 1
     let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
     for index, rec in availableRecipes:
       if nameSearch.len > 0 and rec.name.toLowerAscii.find(
           sub = nameSearch.toLowerAscii) == -1:
@@ -159,3 +170,14 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
         continue
       addButton(label = rec.name, tooltip = "Show recipe's details.",
         data = index, code = showRecipeInfo, dialog = dialog)
+      var checked: bool = rec.workplace
+      addCheckButton(tooltip = "Show recipe's details.", checked = checked)
+      checked = rec.tools
+      addCheckButton(tooltip = "Show recipe's details.", checked = checked)
+      checked = rec.materials
+      addCheckButton(tooltip = "Show recipe's details.", checked = checked)
+      row.inc
+    restoreButtonStyle()
+    addPagination(page = currentPage, row = row)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+      tableHeight - 20)
