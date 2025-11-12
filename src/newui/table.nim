@@ -22,8 +22,8 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../config
 import coreui, themes
 
-proc addPagination*(page: var Positive; row: Positive) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc addPagination*(page: var Positive; row: Positive) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Add the buttons previous and next to a table
   ##
   ## * page - the current page in the table
@@ -161,7 +161,8 @@ proc addProgressBar*(tooltip: string; value, maxValue, data: int;
       rect = bounds):
     code(data = data, dialog = dialog)
 
-proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [], contractual.} =
+proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [],
+    contractual.} =
   ## Add a check button to the table
   ##
   ## * tooltip  - the text to show as a tooltip for the check button
