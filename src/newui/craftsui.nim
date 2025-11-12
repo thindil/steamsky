@@ -128,7 +128,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
         selected = workshopType, itemHeight = 25, x = 400, y = 150)
     if newWorkshop != workshopType:
       workshopType = newWorkshop
-  # Show the list of items for trade
+  # Show the list of recipes to craft
   let tableHeight: float = windowHeight - 140 - (if showOptions: 135 else: 0) -
       gameSettings.messagesPosition.float
   setLayoutRowDynamic(height = tableHeight, cols = 1)
