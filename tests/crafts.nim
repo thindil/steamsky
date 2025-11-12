@@ -18,6 +18,7 @@ suite "Unit tests for crafts module":
   playerShip.modules.add(ModuleData(mType: ModuleType2.cargoRoom, protoIndex: 7,
       durability: 100))
   updateCargo(playerShip, 6, 10, quality = normal)
+  updateCargo(playerShip, 50, 1, quality = normal)
 
   test "Set the amount for a crafting order.":
     setRecipe(0, 10, "1")
@@ -64,3 +65,11 @@ suite "Unit tests for crafts module":
     gameSettings.showNumbers = true
     check:
       getRecipeDifficultyName(difficulty = 20) == "20"
+
+  test "Testing no tools needed":
+    check:
+      checkTool(toolNeeded = "None")
+
+  test "Testing for required tools":
+    check:
+      checkTool(toolNeeded = "CookingSet")
