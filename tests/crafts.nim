@@ -73,3 +73,11 @@ suite "Unit tests for crafts module":
   test "Testing for required tools":
     check:
       checkTool(toolNeeded = "CookingSet")
+
+  test "Testing craftability of a recipe":
+    var canCraft, hasWorkplace, hasTool, hasMaterials: bool = false
+    isCraftable(recipe = recipesList["1"], canCraft = canCraft,
+        hasWorkplace = hasWorkplace, hasTool = hasTool,
+        hasMaterials = hasMaterials)
+    check:
+      canCraft and hasWorkplace and hasTool and hasMaterials
