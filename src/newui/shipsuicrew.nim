@@ -421,6 +421,40 @@ proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   setInventoryInfo(dialog = dialog)
   setDialog(x = windowWidth / 5, y = windowHeight / 7)
 
+proc showAttributes(member: MemberData; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show information about attributes of the selected crew member
+  ##
+  ## * member - the player's ship's crew member which attributes will be show
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  for index, attrib in member.attributes:
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    label(str = attributesList[index].name & ":")
+    colorLabel(str = getAttributeLevelName(attributeLevel = attrib.level),
+        color = theme.colors[goldenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show detailed information about the selected attribute.")
+    imageButton(image = images[helpIcon]):
+      let attribute: AttributeRecord = attributesList[index]
+      dialog = setInfo(text = attribute.description,
+          title = attribute.name)
+    setLayoutRowDynamic(height = 20, cols = 1)
+    var level: int = (if attrib.level > 2: attrib.level * 2 else: 6)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "The current level of the attribute.")
+    progressBar(value = level, maxValue = SkillRange.high,
+        modifyable = false)
+    setLayoutRowDynamic(height = 5, cols = 1)
+    var exp: int = ((attrib.experience.float / (attrib.level.float *
+        250.0)) * 100.0).int
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Experience need to reach the next level")
+    progressBar(value = exp, maxValue = 100, modifyable = false)
+
 proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the dialog to give an order for the selected crew member
@@ -609,32 +643,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
                 color = theme.colors[goldenColor])
       # Attributes of the selected crew member
       of 1:
-        for index, attrib in member.attributes:
-          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
-          label(str = attributesList[index].name & ":")
-          colorLabel(str = getAttributeLevelName(attributeLevel = attrib.level),
-              color = theme.colors[goldenColor])
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "Show detailed information about the selected attribute.")
-          imageButton(image = images[helpIcon]):
-            let attribute: AttributeRecord = attributesList[index]
-            dialog = setInfo(text = attribute.description,
-                title = attribute.name)
-          setLayoutRowDynamic(height = 20, cols = 1)
-          var level: int = (if attrib.level > 2: attrib.level * 2 else: 6)
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "The current level of the attribute.")
-          progressBar(value = level, maxValue = SkillRange.high,
-              modifyable = false)
-          setLayoutRowDynamic(height = 5, cols = 1)
-          var exp: int = ((attrib.experience.float / (attrib.level.float *
-              250.0)) * 100.0).int
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "Experience need to reach the next level")
-          progressBar(value = exp, maxValue = 100, modifyable = false)
+        showAttributes(member = member, dialog = dialog)
       # Skills of the selected crew member
       of 2:
         for index, skill in member.skills:
