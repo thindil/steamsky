@@ -170,6 +170,6 @@ proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [],
   ##
   ## Returns modified parameter checked. It is modified when the player check
   ## or uncheck the button.
-  if gameSettings.showTooltips:
+  if gameSettings.showTooltips and tooltip.len > 0:
     addTooltip(bounds = getWidgetBounds(), text = tooltip)
   checkbox(label = "", checked = checked)
