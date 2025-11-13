@@ -220,11 +220,11 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = rec.name, tooltip = "Show recipe's details.",
         data = index, code = showRecipeInfo, dialog = dialog)
       var checked: bool = rec.workplace
-      addCheckButton(tooltip = "Show recipe's details.", checked = checked)
+      addCheckButton(tooltip = "", checked = checked)
       checked = rec.tools
-      addCheckButton(tooltip = "Show recipe's details.", checked = checked)
+      addCheckButton(tooltip = "", checked = checked)
       checked = rec.materials
-      addCheckButton(tooltip = "Show recipe's details.", checked = checked)
+      addCheckButton(tooltip = "", checked = checked)
       row.inc
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
