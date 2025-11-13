@@ -18,7 +18,7 @@
 ## Provides code related to crafting items, like showing the list of available
 ## recipes, starting crafting, etc.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, types]
 import coreui, errordialog, header, messagesui, setui, table, themes
@@ -58,6 +58,55 @@ proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     recipesSortOrder = sortDesc
   else:
     recipesSortOrder = sortAsc
+
+  proc sortRecipes(x, y: RecipeData): int {.raises: [], tags: [],
+      contractual.} =
+    ## Compare two recipes and return which should go first, based on the sort
+    ## order of the recipes
+    ##
+    ## * x - the first recipe to compare
+    ## * y - the second recipe to compare
+    ##
+    ## Returns 1 if the first recipe should go first, -1 if the second recipe
+    ## should go first.
+    case recipesSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      return -1
+    of workplaceAsc:
+      if x.workplace < y.workplace:
+        return 1
+      return -1
+    of workplaceDesc:
+      if x.workplace > y.workplace:
+        return 1
+      return -1
+    of toolsAsc:
+      if x.tools < y.tools:
+        return 1
+      return -1
+    of toolsDesc:
+      if x.tools > y.tools:
+        return 1
+      return -1
+    of materialsAsc:
+      if x.materials < y.materials:
+        return 1
+      return -1
+    of materialsDesc:
+      if x.materials > y.materials:
+        return 1
+      return -1
+    of none:
+      return -1
+
+  availableRecipes.sort(cmp = sortRecipes)
+  dialog = none
 
 const
   headers: array[4, HeaderData[RecipesSortOrders]] = [
