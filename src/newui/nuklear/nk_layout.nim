@@ -59,7 +59,7 @@ proc nk_layout_space_end(ctx) {.importc, cdecl, raises: [], tags: [], contractua
 
 proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [
     NuklearException], tags: [RootEffect], contractual.} =
-  ## Set the panel layout
+  ## Set the panel layout.  Internal use only
   ##
   ## * ctx    - the Nuklear context
   ## * height - the height in pixels of each row
@@ -109,7 +109,7 @@ proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [
 proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
     width: int) {.raises: [NuklearException], tags: [RootEffect],
         contractual.} =
-  ## Set the current row layout
+  ## Set the current row layout,  Internal use only
   ##
   ## * ctx    - the Nuklear context
   ## * fmt    - the layout format
@@ -138,7 +138,7 @@ proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
 
 proc nkLayoutRowDynamic(ctx; height: float; cols: int) {.raises: [
     NuklearException], tags: [RootEffect], contractual, used.} =
-  ## Set the current row layout to dynamic
+  ## Set the current row layout to dynamic,  Internal use only
   ##
   ## * ctx    - the Nuklear context
   ## * height - the height in pixels of each row

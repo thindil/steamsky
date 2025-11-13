@@ -1097,6 +1097,18 @@ type
   Input* = object
     ## Used to store information about the user's input
     mouse*: Mouse
+  BufferMarker* = object
+    ## Used to store Nuklear buffer's markers
+    active*: bool
+    offset*: nk_size
+  Memory* = object
+    ## Used to store Nuklear buffer's memory info
+    memPtr*, size*: nk_size
+  Buffer* = object
+    ## Used to store Nuklear buffer data
+    allocated*, needed*, size*: nk_size
+    memory*: Memory
+    allocType*: AllocationType
 
 # ---------
 # Constants
