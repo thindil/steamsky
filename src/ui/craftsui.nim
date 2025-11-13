@@ -449,27 +449,27 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     discard
   if recipesSortOrder == none:
     return tclOk
-  type LocalModuleData = object
+  type LocalRecipeData = object
     name: string
     workplace: bool
     tool: bool
     materials: bool
     id: string
   var
-    localRecipes: seq[LocalModuleData] = @[]
+    localRecipes: seq[LocalRecipeData] = @[]
     canCraft, hasWorkplace, hasTool, hasMaterials: bool = false
   for recipe in knownRecipes:
     try:
       isCraftable(recipe = recipesList[recipe], canCraft = canCraft,
           hasWorkplace = hasWorkplace, hasTool = hasTool,
           hasMaterials = hasMaterials)
-      localRecipes.add(y = LocalModuleData(name: itemsList[recipesList[
+      localRecipes.add(y = LocalRecipeData(name: itemsList[recipesList[
           recipe].resultIndex].name, workplace: hasWorkplace, tool: hasTool,
           materials: hasMaterials, id: recipe))
     except:
       return showError(message = "Can't sort known recipes.")
 
-  proc sortRecipes(x, y: LocalModuleData): int {.raises: [], tags: [],
+  proc sortRecipes(x, y: LocalRecipeData): int {.raises: [], tags: [],
       contractual.} =
     ## Compare two recipes and return which should go first, based on the sort
     ## order of the recipes
@@ -527,7 +527,7 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   localRecipes = @[]
   for recipe in studies:
     try:
-      localRecipes.add(y = LocalModuleData(name: itemsList[recipe].name,
+      localRecipes.add(y = LocalRecipeData(name: itemsList[recipe].name,
           workplace: hasWorkplace, tool: hasTool, materials: true, id: $recipe))
     except:
       return showError(message = "Can't sort studies.")
@@ -537,7 +537,7 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   localRecipes = @[]
   for recipe in deconstructs:
     try:
-      localRecipes.add(y = LocalModuleData(name: itemsList[recipe].name,
+      localRecipes.add(y = LocalRecipeData(name: itemsList[recipe].name,
           workplace: hasWorkplace, tool: hasTool, materials: true, id: $recipe))
     except:
       return showError(message = "Can't sort deconstructs.")
