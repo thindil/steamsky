@@ -21,7 +21,7 @@
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, types]
-import coreui, errordialog, header, messagesui, setui, table, themes
+import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 type RecipesSortOrders = enum
   nameAsc, nameDesc, workplaceAsc, workplaceDesc, toolsAsc, toolsDesc,
@@ -32,17 +32,37 @@ const defaultRecipesSortOrder: RecipesSortOrders = none
 var
   recipesSortOrder: RecipesSortOrders = defaultRecipesSortOrder
   hasOptions: bool = true
+  recipe: RecipeData = RecipeData()
 
-proc showRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected recipe information
   ##
-  ## * data   - the index of the selected recipe
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  const
+    width: float = 400
+    height: float = 400
+
+  let windowName: string = recipe.name
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = windowName)
+
+proc setRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Set the selected recipe information
+  ##
+  ## * data   - the index of the selected recipe
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  recipe = availableRecipes[data]
 
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -218,7 +238,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
         currentRow.inc
         continue
       addButton(label = rec.name, tooltip = "Show recipe's details.",
-        data = index, code = showRecipeInfo, dialog = dialog)
+        data = index, code = setRecipeInfo, dialog = dialog)
       var checked: bool = rec.workplace
       addCheckButton(tooltip = "", checked = checked)
       checked = rec.tools
