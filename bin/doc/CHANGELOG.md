@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Items can be studies or deconstructed without a proper tool
+
 ## [11.0.6] - 2025-10-26
 
 ### Fixed
