@@ -81,3 +81,9 @@ suite "Unit tests for crafts module":
         hasMaterials = hasMaterials)
     check:
       canCraft and hasWorkplace and hasTool and hasMaterials
+
+  test "Testing study recipe prerequisities":
+    var canCraft, hasWorkplace, hasTool: bool = false
+    checkStudyPrerequisities(canCraft = canCraft, hasTool = hasTool, hasWorkplace = hasWorkplace)
+    check:
+      not canCraft and not hasTool and hasWorkplace
