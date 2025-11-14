@@ -862,12 +862,10 @@ proc checkStudyPrerequisities*(canCraft, hasTool,
   ##
   ## Returns parameters canCraft, hasTool and hasWorkplace
   hasTool = checkTool(toolNeeded = alchemyTools)
-  canCraft = false
   hasWorkplace = false
   for module in playerShip.modules:
     if modulesList[module.protoIndex].mType == alchemyLab and
         module.durability > 0:
       hasWorkplace = true
       break
-  if hasWorkplace:
-    canCraft = true
+  canCraft = hasWorkplace and hasTool
