@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Reduced chance for different than normal quality items for recruits in bases
 
+### Fixed
+- Items can be studies or deconstructed without a proper tool
+
 ## [11.7] - 2025-11-02
 
 ### Added
