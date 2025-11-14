@@ -289,7 +289,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 let ammoIndex: int = findItem(inventory = playerShip.cargo,
                     protoIndex = itemIndex, itemQuality = any)
                 if ammoIndex > -1:
-                  ammoAmount = ammoAmount + playerShip.cargo[ammoIndex].amount
+                  ammoAmount += playerShip.cargo[ammoIndex].amount
             except:
               dialog = setError(message = "Can't show the gun's ammo information. No proto module with index: " &
                   $playerShip.modules[gun[1]].protoIndex, e = nil)
@@ -397,46 +397,46 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       var enemyInfo: string = ""
       if game.enemy.distance < 15_000:
         if game.enemy.ship.modules[0].durability == 0:
-          enemyInfo = enemyInfo & "Destroyed"
+          enemyInfo &= "Destroyed"
         else:
           var enemyStatus: string = "Ok"
           for module in game.enemy.ship.modules:
             if module.durability < module.maxDurability:
               enemyStatus = "Damaged"
               break
-          enemyInfo = enemyInfo & enemyStatus
+          enemyInfo &= enemyStatus
         for module in game.enemy.ship.modules:
           if module.durability > 0:
             try:
               case modulesList[module.protoIndex].mType
               of armor:
-                enemyInfo = enemyInfo & " (armored)"
+                enemyInfo &= " (armored)"
               of gun:
-                enemyInfo = enemyInfo & " (gun)"
+                enemyInfo &= " (gun)"
               of batteringRam:
-                enemyInfo = enemyInfo & " (battering ram)"
+                enemyInfo &= " (battering ram)"
               of harpoonGun:
-                enemyInfo = enemyInfo & " (harpoon gun)"
+                enemyInfo &= " (harpoon gun)"
               else:
                 discard
             except:
               dialog = setError(message = "Can't show information about the enemy's ship. No proto module with index:" &
                   $module.protoIndex, e = nil)
       else:
-        enemyInfo = enemyInfo & "Unknown"
+        enemyInfo &= "Unknown"
       colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
       label(str = "Speed:")
       enemyInfo = ""
       if game.enemy.distance < 15_000:
         case game.enemy.ship.speed
         of fullStop:
-          enemyInfo = enemyInfo & "Stopped"
+          enemyInfo &= "Stopped"
         of quarterSpeed:
-          enemyInfo = enemyInfo & "Slow"
+          enemyInfo &= "Slow"
         of halfSpeed:
-          enemyInfo = enemyInfo & "Medium"
+          enemyInfo &= "Medium"
         of fullSpeed:
-          enemyInfo = enemyInfo & "Fast"
+          enemyInfo &= "Fast"
         else:
           discard
         if game.enemy.ship.speed != fullStop:
@@ -446,17 +446,17 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
               dialog = setError(message = "Can't count the speed difference.")
               return
           if speedDiff > 250:
-            enemyInfo = enemyInfo & " (much faster)"
+            enemyInfo &= " (much faster)"
           elif speedDiff > 0:
-            enemyInfo = enemyInfo & " (faster)"
+            enemyInfo &= " (faster)"
           elif speedDiff == 0:
-            enemyInfo = enemyInfo & " (equal)"
+            enemyInfo &= " (equal)"
           elif speedDiff > -250:
-            enemyInfo = enemyInfo & " (slower)"
+            enemyInfo &= " (slower)"
           else:
-            enemyInfo = enemyInfo & " (much slower)"
+            enemyInfo &= " (much slower)"
       else:
-        enemyInfo = enemyInfo & "Unknown"
+        enemyInfo &= "Unknown"
       colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
   # The player's ship's status
   if expandedSection in {0, 3}:
