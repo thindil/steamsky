@@ -36,9 +36,9 @@ type
       negotiateDialog, moduleDialog, missionDialog, acceptMissionDialog,
       renameDialog, giveOrderDialog, memberDialog, renameMemberDialog,
       inventoryDialog, moduleInfoDialog, renameModuleDialog, assignCrewDialog,
-      assignAmmoDialog, assignSkillDialog, baseActionDialog, ordersDialog,
-      destinationDialog, messageDialog, infoDialog, buyDialog, sellDialog,
-      takeDialog, dropDialog, moveDialog, giveDialog, dropCargoDialog
+      assignAmmoDialog, assignSkillDialog, recipeDialog, baseActionDialog,
+      ordersDialog, destinationDialog, messageDialog, infoDialog, buyDialog,
+      sellDialog, takeDialog, dropDialog, moveDialog, giveDialog, dropCargoDialog
 
 const
   dtime*: float = 20.0        ## The length in miliseconds of one game's frame
@@ -60,7 +60,8 @@ var
   updateData*: bool = false        ## If true, update the data needed for the selected screen
 
 {.push ruleOff: "varDeclared".}
-var images*: array[menuIcon..IconsNames.high, PImage] ## The images used in the game
+var images*: array[menuIcon..IconsNames.high,
+    PImage] ## The images used in the game
 {.pop ruleOn: "varDeclared".}
 
 proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
@@ -80,7 +81,7 @@ proc updateDialog*(width, height: float) {.raises: [], tags: [], contractual.} =
   ##
   ## * width  - the dialog width
   ## * height - the dialog height
-  if isMouseDown(id = left) and isMouseHovering(rect = NimRect(x: dialogX,
+  if isMouseDown(id = left) and isMouseHovering(rect = Rect(x: dialogX,
       y: dialogY, w: width, h: height)):
     let delta: Vec2 = getMouseDelta()
     dialogX += delta.x
