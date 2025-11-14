@@ -28,7 +28,7 @@
 import contracts
 import nk_types
 
-proc nkShrinkRect*(r: NimRect; amount: cfloat): NimRect {.raises: [], tags: [],
+proc nkShrinkRect*(r: Rect; amount: cfloat): Rect {.raises: [], tags: [],
     contractual.} =
   ## Shrink the selected rectangle. Internal use only
   ##
@@ -56,7 +56,7 @@ proc nkIntersect*(x0, y0, w0, h0, x1, y1, w1, h1: cfloat): bool {.raises: [],
   return ((x1 < (x0 + w0)) and (x0 < (x1 + w1)) and (y1 < (y0 + h0)) and (y0 < (
       y1 + h1)))
 
-proc nkTriangleFromDirection*(`result`: var array[3, NimRect]; r: NimRect;
+proc nkTriangleFromDirection*(`result`: var array[3, Rect]; r: Rect;
     padX: cfloat; padY: cfloat; direction: Heading) {.raises: [], tags: [],
     contractual.} =
   ## Get the coordinates of a triangle based on its direction
@@ -66,7 +66,7 @@ proc nkTriangleFromDirection*(`result`: var array[3, NimRect]; r: NimRect;
   ## * padX
   ## * padY
   ## * direction
-  var rect: NimRect = NimRect()
+  var rect: Rect = Rect()
   rect.w = max(x = 2 * padX, y = r.w)
   rect.h = max(x = 2 * padY, y = r.h)
   rect.w -= 2 * padX
@@ -81,21 +81,21 @@ proc nkTriangleFromDirection*(`result`: var array[3, NimRect]; r: NimRect;
 
   case direction
   of up:
-    `result`[0] = NimRect(x: rect.x + wHalf, y: rect.y)
-    `result`[1] = NimRect(x: rect.x + rect.w, y: rect.y + rect.h)
-    `result`[2] = NimRect(x: rect.x, y: rect.y + rect.h)
+    `result`[0] = Rect(x: rect.x + wHalf, y: rect.y)
+    `result`[1] = Rect(x: rect.x + rect.w, y: rect.y + rect.h)
+    `result`[2] = Rect(x: rect.x, y: rect.y + rect.h)
   of right:
-    `result`[0] = NimRect(x: rect.x, y: rect.y)
-    `result`[1] = NimRect(x: rect.x + rect.w, y: rect.y + hHalf)
-    `result`[2] = NimRect(x: rect.x, y: rect.y + rect.h)
+    `result`[0] = Rect(x: rect.x, y: rect.y)
+    `result`[1] = Rect(x: rect.x + rect.w, y: rect.y + hHalf)
+    `result`[2] = Rect(x: rect.x, y: rect.y + rect.h)
   of down:
-    `result`[0] = NimRect(x: rect.x, y: rect.y)
-    `result`[1] = NimRect(x: rect.x + rect.w, y: rect.y)
-    `result`[2] = NimRect(x: rect.x + wHalf, y: rect.y + rect.h)
+    `result`[0] = Rect(x: rect.x, y: rect.y)
+    `result`[1] = Rect(x: rect.x + rect.w, y: rect.y)
+    `result`[2] = Rect(x: rect.x + wHalf, y: rect.y + rect.h)
   of left:
-    `result`[0] = NimRect(x: rect.x, y: rect.y + hHalf)
-    `result`[1] = NimRect(x: rect.x + rect.w, y: rect.y)
-    `result`[2] = NimRect(x: rect.x + rect.w, y: rect.y + rect.h)
+    `result`[0] = Rect(x: rect.x, y: rect.y + hHalf)
+    `result`[1] = Rect(x: rect.x + rect.w, y: rect.y)
+    `result`[2] = Rect(x: rect.x + rect.w, y: rect.y + rect.h)
 
 proc nkInbox*(px, py, x, y, w, h: cfloat): bool {.raises: [], tags: [],
     contractual.} =
@@ -111,7 +111,7 @@ proc nkInbox*(px, py, x, y, w, h: cfloat): bool {.raises: [], tags: [],
   ## Returns true if the point is in the box, otherwise false
   return ((px >= x and px < x + w) and (py >= y and py < y + h))
 
-proc nkUnify*(clip: var NimRect; a: NimRect; x0, y0, x1, y1: cfloat) {.raises: [
+proc nkUnify*(clip: var Rect; a: Rect; x0, y0, x1, y1: cfloat) {.raises: [
     ], tags: [], contractual.} =
   ## Unify two rectangles
   ##

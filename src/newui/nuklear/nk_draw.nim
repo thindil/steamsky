@@ -63,7 +63,7 @@ proc nkCommandBufferPush*(b: PNkCommandBuffer; t: CommandType;
     b.`end` = cmd.next
     return cmd
 
-proc nkFillRect*(b: PNkCommandBuffer; rect: NimRect; rounding: float;
+proc nkFillRect*(b: PNkCommandBuffer; rect: Rect; rounding: float;
   c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the rectangle with the selected color
   ##

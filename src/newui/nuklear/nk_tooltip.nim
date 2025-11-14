@@ -58,7 +58,7 @@ proc tooltip*(text: string; x, y: float) {.raises: [], tags: [], contractual.} =
 
 type
   TooltipData = object
-    bounds*: NimRect
+    bounds*: Rect
     text*: string
 
 var
@@ -85,7 +85,7 @@ proc resetTooltips*() {.raises: [], tags: [], contractual.} =
   ## at the begining of a Nuklear window declaration.
   tooltips = @[]
 
-proc addTooltip*(bounds: NimRect; text: string) {.raises: [], tags: [],
+proc addTooltip*(bounds: Rect; text: string) {.raises: [], tags: [],
     contractual.} =
   ## Add a tooltip to the list of tooltips. The procedure should be called
   ## before the widget declaration, because it also needs bounds in which the

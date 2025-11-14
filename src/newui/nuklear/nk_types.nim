@@ -960,16 +960,14 @@ template `+`*[T](p: ptr T; off: nk_size): ptr T =
 # -----
 type
   NimColor* = object
-    ## Used to store information about the selected color. Usually later
-    ## converted to Nuklear structure nk_color
+    ## Used to store information about the selected color.
     r*, g*, b*, a*: int
   NimColorF* = object
     ## Also used to store information about the selected color, but as a float
     ## values.
     r*, g*, b*, a*: float
-  NimRect* = object
-    ## Used to store information about UI rectangle. Usually later converted to
-    ## Nuklear nk_rect
+  Rect* = object
+    ## Used to store information about UI rectangle.
     x*, y*, w*, h*: float
   Vec2* = object
     ## Used to store information about UI vector.
@@ -1114,7 +1112,7 @@ type
 # Constants
 # ---------
 const
-  nkNullRect*: NimRect = NimRect(x: -8192.0, y: -8192.0, w: -8192.0, h: -8192.0)
+  nkNullRect*: Rect = Rect(x: -8192.0, y: -8192.0, w: -8192.0, h: -8192.0)
     ## An empty rectangle
 
 # ----------
