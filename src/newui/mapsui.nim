@@ -243,7 +243,7 @@ var
   moveY: MapYRange = 1
   rows, cols: Positive = 1
 
-proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect],
+proc showMapMenu(bounds: Rect) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the map's menu
   ##
@@ -863,7 +863,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   restoreButtonStyle()
   # Draw the map's buttons
   setLayoutRowDynamic(height = 20, cols = 5)
-  let bounds: NimRect = getWidgetBounds()
+  let bounds: Rect = getWidgetBounds()
   if gameSettings.showTooltips:
     addTooltip(bounds = bounds, text = "Show the map movement menu.")
   showMapMenu(bounds = bounds)

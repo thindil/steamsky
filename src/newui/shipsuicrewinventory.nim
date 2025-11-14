@@ -138,7 +138,7 @@ proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
 
 var
   itemIndex: Natural = 0
-  bounds: NimRect = NimRect(x: 0, y: 0, w: 700, h: 500)
+  bounds: Rect = Rect(x: 0, y: 0, w: 700, h: 500)
   showItemsMenu: bool = false
 
 proc setMoveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],

@@ -144,7 +144,7 @@ proc addProgressBar*(tooltip: string; value, maxValue, data: int;
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  let bounds: NimRect = getWidgetBounds()
+  let bounds: Rect = getWidgetBounds()
   if gameSettings.showTooltips:
     addTooltip(bounds = bounds, text = tooltip)
   var

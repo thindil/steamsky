@@ -388,7 +388,7 @@ var
   saveClicked: string = ""
   saves: seq[SaveData] = @[]
 
-proc showLoadMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
+proc showLoadMenu(dialog: var GameDialog; bounds: Rect) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the menu for the selected saved game
   ##
@@ -524,7 +524,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           labelButton(title = save.saveTime):
             saveClicked = save.path
   restoreButtonStyle()
-  let bounds: NimRect = NimRect(x: 0, y: 35, w: 580, h: (saves.len * 35).float)
+  let bounds: Rect = Rect(x: 0, y: 35, w: 580, h: (saves.len * 35).float)
   if gameSettings.showTooltips:
     addTooltip(bounds = bounds, text = "Press mouse " & (
         if gameSettings.rightButton: "right" else: "left") & " button to show available option")
@@ -671,7 +671,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
   ## happened.
   {.ruleOff: "varDeclared".}
   var
-    bounds: array[8, NimRect]
+    bounds: array[8, Rect]
   {.ruleOn: "varDeclared".}
   group(title = "groupSetting", flags = {windowNoFlags}):
     # Character's name
@@ -818,7 +818,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the difficulty settings for starting a new game
   {.ruleOff: "varDeclared".}
   var
-    bounds: array[11, NimRect]
+    bounds: array[11, Rect]
   {.ruleOn: "varDeclared".}
   group(title = "groupSetting", flags = {windowNoFlags}):
     # Difficulty level
