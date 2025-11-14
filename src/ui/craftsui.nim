@@ -92,7 +92,6 @@ proc checkStudyPrerequisities(canCraft, hasTool,
   ##
   ## Returns parameters canCraft, hasTool and hasWorkplace
   hasTool = checkTool(toolNeeded = alchemyTools)
-  canCraft = false
   hasWorkplace = false
   for module in playerShip.modules:
     try:
@@ -103,8 +102,7 @@ proc checkStudyPrerequisities(canCraft, hasTool,
     except:
       showError(message = "Can't check workshop.")
       return
-  if hasWorkplace:
-    canCraft = true
+  canCraft = hasTool and hasWorkplace
 
 var
   studies: seq[Positive]
