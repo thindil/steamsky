@@ -388,11 +388,17 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = "Home:")
       colorLabel(str = skyBases[game.enemy.ship.homeBase].name, color = theme.colors[goldenColor])
       label(str = "Distance:")
-      colorLabel(str = (if game.enemy.distance >= 15_000: "Escaped" elif game.enemy.distance in
-        10_000 ..
-        15_000: "Long" elif game.enemy.distance in 5_000 ..
-        10_000: "Medium" elif game.enemy.distance in 1_000 ..
-        5_000: "Short" else: "Close"), color = theme.colors[goldenColor])
+      colorLabel(str = (case game.enemy.distance:
+          of 0..999:
+            "Close"
+          of 1_000..4_999:
+            "Short"
+          of 5_000..9_999:
+            "Medium"
+          of 10_000..14_999:
+            "Long"
+          else:
+            "Escaped"), color = theme.colors[goldenColor])
       label(str = "Status:")
       var enemyInfo: string = ""
       if game.enemy.distance < 15_000:
@@ -445,16 +451,17 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
             except:
               dialog = setError(message = "Can't count the speed difference.")
               return
-          if speedDiff > 250:
-            enemyInfo &= " (much faster)"
-          elif speedDiff > 0:
-            enemyInfo &= " (faster)"
-          elif speedDiff == 0:
-            enemyInfo &= " (equal)"
-          elif speedDiff > -250:
-            enemyInfo &= " (slower)"
-          else:
+          case speedDiff
+          of int.low.. -251:
             enemyInfo &= " (much slower)"
+          of -250.. -1:
+            enemyInfo &= " (slower)"
+          of 0:
+            enemyInfo &= " (equal)"
+          of 1..249:
+            enemyInfo &= " (faster)"
+          else:
+            enemyInfo &= " (much faster)"
       else:
         enemyInfo &= "Unknown"
       colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
