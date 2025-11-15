@@ -2460,7 +2460,7 @@ proc stylePushStyleItem(fld: StyleStyleTypes; col: Color): bool {.raises: [], ta
     return nk_style_push_style_item(ctx = ctx, dest = ctx.style.progress.cursor_normal,
       source = nk_style_item_color(col = nk_rgb(r = r.cint, g = g.cint, b = b.cint)))
 
-proc styleFromTable*(table: openArray[NimColor]) {.raises: [], tags: [],
+proc styleFromTable*(table: openArray[NkColor]) {.raises: [], tags: [],
     contractual.} =
   ## Set the Nuklear style colors from the table
   ##
@@ -2598,7 +2598,7 @@ proc comboList*(items: openArray[string]; selected, itemHeight: int; x,
       1, selected = selected.cint, itemHeight = itemHeight.cint,
           size = new_nk_vec2(x = x.cfloat, y = y.cfloat)).int
 
-proc createColorCombo(ctx; color1: NimColor; x1, y1: cfloat): bool {.raises: [],
+proc createColorCombo(ctx; color1: NkColor; x1, y1: cfloat): bool {.raises: [],
     tags: [], contractual.} =
   ## Create a Nuklear combo widget which display color as the value, internal
   ## use only, temporary code
@@ -2612,7 +2612,7 @@ proc createColorCombo(ctx; color1: NimColor; x1, y1: cfloat): bool {.raises: [],
   return nk_combo_begin_color(ctx = ctx, color = nk_rgb(r = color1.r.cint,
       g = color1.g.cint, b = color1.b.cint), size = new_nk_vec2(x = x1, y = y1))
 
-template colorCombo*(color: NimColor; x, y: float; content: untyped) =
+template colorCombo*(color: NkColor; x, y: float; content: untyped) =
   ## Create a Nuklear combo widget which display color as the value, internal
   ## use only, temporary code
   ##
@@ -2624,7 +2624,7 @@ template colorCombo*(color: NimColor; x, y: float; content: untyped) =
     content
     nk_combo_end(ctx = ctx)
 
-proc createColorCombo(ctx; color1: NimColorF; x1, y1: cfloat): bool {.raises: [
+proc createColorCombo(ctx; color1: NkColorF; x1, y1: cfloat): bool {.raises: [
     ], tags: [], contractual.} =
   ## Create a Nuklear combo widget which display color with float values as
   ## the value, internal use only, temporary code
@@ -2640,7 +2640,7 @@ proc createColorCombo(ctx; color1: NimColorF; x1, y1: cfloat): bool {.raises: [
           a: color1.a.cfloat)), size = new_nk_vec2(x = x1, y = y1))
 
 
-template colorCombo*(color: NimColorF; x, y: float; content: untyped) =
+template colorCombo*(color: NkColorF; x, y: float; content: untyped) =
   ## Create a Nuklear combo widget which display color with float values as
   ## the value
   ##
@@ -2691,7 +2691,7 @@ proc comboClose*() {.raises: [], tags: [], contractual.} =
 # Charts
 # ------
 proc createColorChart(ctx; ctype1: ChartType; color1,
-    higlight1: NimColor; count1: cint; minValue1,
+    higlight1: NkColor; count1: cint; minValue1,
         maxValue1: cfloat): bool {.raises: [], tags: [], contractual.} =
   ## Create a colored chart, internal use only, temporary code
   ##
@@ -2715,7 +2715,7 @@ proc createColorChart(ctx; ctype1: ChartType; color1,
       b = higlight1.b.cint), count = count1, minValue = minValue1,
       maxValue = maxValue1)
 
-template colorChart*(cType: ChartType; color, highlight: NimColor; count: int;
+template colorChart*(cType: ChartType; color, highlight: NkColor; count: int;
     minValue, maxValue: float; content: untyped) =
   ## Create a colored chart
   ##
@@ -2733,7 +2733,7 @@ template colorChart*(cType: ChartType; color, highlight: NimColor; count: int;
     nk_chart_end(ctx = ctx)
 
 proc addColorChartSlot*(ctype: ChartType; color,
-    higlight: NimColor; count: cint; minValue, maxValue: cfloat) {.raises: [],
+    higlight: NkColor; count: cint; minValue, maxValue: cfloat) {.raises: [],
         tags: [], contractual.} =
   ## Add another chart to the existing one
   ##
@@ -3044,8 +3044,8 @@ template tooltip*(x, y, width: float; content: untyped) =
 # -------
 # Widgets
 # -------
-proc colorPicker*(color: NimColorF;
-    format: colorFormat): NimColorF {.raises: [], tags: [], contractual.} =
+proc colorPicker*(color: NkColorF;
+    format: colorFormat): NkColorF {.raises: [], tags: [], contractual.} =
   ## Create the color picker widget. Temporary here due to problems with importing nk_colorf.
   ##
   ## * color  - the starting color for the widget
@@ -3057,7 +3057,7 @@ proc colorPicker*(color: NimColorF;
     ## A binding to Nuklear's function. Internal use only
   let newColor: nk_colorf = nk_color_picker(ctx = ctx, color = nk_colorf(
       r: color.r, g: color.g, b: color.b, a: color.a), fmt = format)
-  result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
+  result = NkColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
 
 proc ruleHorizontal*(color: Color, rounding: bool) {.raises: [], tags: [], contractual.} =
   ## Draw a horizontal rule with selected color
@@ -3072,7 +3072,7 @@ proc ruleHorizontal*(color: Color, rounding: bool) {.raises: [], tags: [], contr
 # ------
 # Colors
 # ------
-proc colorfToHsva*(hsva: var array[4, float]; color: NimColorF) {.raises: [],
+proc colorfToHsva*(hsva: var array[4, float]; color: NkColorF) {.raises: [],
     tags: [], contractual.} =
   ## Convert Nim float color object to HSVA values
   ##
@@ -3086,7 +3086,7 @@ proc colorfToHsva*(hsva: var array[4, float]; color: NimColorF) {.raises: [],
   nk_colorf_hsva_fv(hsva = hsva.addr, color = nk_colorf(r: color.r, g: color.g,
       b: color.b, a: color.a))
 
-proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [],
+proc hsvaToColorf*(hsva: array[4, float]): NkColorF {.raises: [], tags: [],
     contractual.} =
   ## Convert HSVA values to Nim color with float values
   ##
@@ -3098,4 +3098,4 @@ proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [],
     ## A binding to Nuklear's function. Internal use only
   let newColor: nk_colorf = nk_hsva_colorf(h = hsva[0], s = hsva[1], v = hsva[
       2], a = hsva[3])
-  result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
+  result = NkColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)

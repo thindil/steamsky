@@ -959,10 +959,10 @@ template `+`*[T](p: ptr T; off: nk_size): ptr T =
 # Types
 # -----
 type
-  NimColor* = object
+  NkColor* = object
     ## Used to store information about the selected color.
     r*, g*, b*, a*: int
-  NimColorF* = object
+  NkColorF* = object
     ## Also used to store information about the selected color, but as a float
     ## values.
     r*, g*, b*, a*: float
@@ -977,7 +977,7 @@ type
     x*, y*: float
   ButtonStyle* = object
     ## Used to store information about a button's style.
-    borderColor*, textNormal*, textHover*: NimColor
+    borderColor*, textNormal*, textHover*: NkColor
     rounding*: float
     padding*: Vec2
     imagePadding*: Vec2
