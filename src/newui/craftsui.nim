@@ -20,7 +20,7 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, types]
+import ../[config, crafts, game, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 type RecipesSortOrders = enum
@@ -46,10 +46,22 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     width: float = 400
     height: float = 400
 
-  let windowName: string = recipe.name
+  let
+    windowName: string = recipe.name
+    craft: CraftData = try:
+        setRecipeData(recipeIndex = recipe.index)
+      except:
+        dialog = setError(message = "Can't get recipe info")
+        return
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    if not recipe.index.startsWith(prefix = "Study") and
+        not recipe.index.startsWith(prefix = "Deconstruct"):
+      setLayoutRowDynamic(height = 30, cols = 2)
+      label(str = "Amount:")
+      colorLabel(str = $craft.resultAmount, color = theme.colors[goldenColor])
+    setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -63,6 +75,7 @@ proc setRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   recipe = availableRecipes[data]
+  dialog = recipeDialog
 
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
