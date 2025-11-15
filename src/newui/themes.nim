@@ -262,7 +262,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   if gameSettings.interfaceTheme notin themesList:
     gameSettings.interfaceTheme = "steamsky"
   {.ruleOff: "varDeclared".}
-  var table: array[countColors, NimColor]
+  var table: array[countColors, NkColor]
   {.ruleOn: "varDeclared".}
 
   proc setColor(colorName: StyleColors; index: ColorsNames) {.raises: [],
@@ -276,7 +276,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
       except:
         echo "Can't set the theme's color."
         return
-    table[colorName] = NimColor(r: r, g: g, b: b, a: 255)
+    table[colorName] = NkColor(r: r, g: g, b: b, a: 255)
 
   setColor(colorName = windowColor, index = backgroundColor)
   setColor(colorName = textColor, index = foregroundColor)
@@ -317,9 +317,9 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   setColor(colorName = sliderCursorHoverColor, index = sliderCursorColor)
   setColor(colorName = sliderCursorActiveColor, index = sliderCursorColor)
   setColor(colorName = progressbarColor, index = progressbarColor)
-  table[chartColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
-  table[colorChartColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
-  table[colorChartHighlightColor] = NimColor(r: 255, g: 0, b: 0, a: 255)
-  table[tabHeaderColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
-  table[progressbarBorderColor] = NimColor(r: 55, g: 36, b: 18, a: 255)
+  table[chartColor] = NkColor(r: 50, g: 58, b: 61, a: 255)
+  table[colorChartColor] = NkColor(r: 48, g: 83, b: 111, a: 255)
+  table[colorChartHighlightColor] = NkColor(r: 255, g: 0, b: 0, a: 255)
+  table[tabHeaderColor] = NkColor(r: 48, g: 83, b: 111, a: 255)
+  table[progressbarBorderColor] = NkColor(r: 55, g: 36, b: 18, a: 255)
   styleFromTable(table = table)
