@@ -20,7 +20,7 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crafts, game, types]
+import ../[config, crafts, crewinventory, game, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 type RecipesSortOrders = enum
@@ -56,11 +56,45 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 2)
     if not recipe.index.startsWith(prefix = "Study") and
         not recipe.index.startsWith(prefix = "Deconstruct"):
-      setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Amount:")
       colorLabel(str = $craft.resultAmount, color = theme.colors[goldenColor])
+    label(str = "Materials needed:")
+    group(title = "materialInfo", flags = {windowNoFlags}):
+      setLayoutRowDynamic(height = 30, cols = 1)
+      for mIndex, material in craft.materialTypes:
+        for iIndex, item in itemsList:
+          var isMaterial: bool = false
+          if recipe.index.startsWith(prefix = "Study"):
+            try:
+              if item.name == itemsList[craft.resultIndex].name:
+                isMaterial = true
+            except:
+              dialog = setError(message = "Can't check study material.")
+              return
+          elif recipe.index.startsWith(prefix = "Deconstruct"):
+            try:
+              if iIndex == recipe.index[12 .. ^1].parseInt:
+                isMaterial = true
+            except:
+              dialog = setError(message = "Can't check deconstruct materials.")
+              return
+          else:
+            if item.itemType == material:
+              isMaterial = true
+          if isMaterial:
+            let cargoIndex: int = findItem(inventory = playerShip.cargo,
+                protoIndex = iIndex, itemQuality = any)
+            if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
+                craft.materialAmounts[mIndex]:
+              colorLabel(str = $craft.materialAmounts[mIndex] & "x" &
+                  item.name & "(owned: " & $playerShip.cargo[
+                  cargoIndex].amount & ")", color = theme.colors[goldenColor])
+            else:
+              colorLabel(str = $craft.materialAmounts[mIndex] & "x" & item.name,
+                  color = theme.colors[redColor])
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
