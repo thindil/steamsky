@@ -1009,8 +1009,8 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       return
     for recipe in studies:
       try:
-        var rec: RecipeData = RecipeData(index: $recipe, name: "Study " &
-            itemsList[recipe].name, craftable: canCraft,
+        var rec: RecipeData = RecipeData(index: "Study " & $recipe,
+            name: "Study " & itemsList[recipe].name, craftable: canCraft,
             workplace: hasWorkplace, tools: hasTool, materials: true)
         availableRecipes.add(y = rec)
       except:
@@ -1018,8 +1018,8 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         return
     for recipe in deconstructs:
       try:
-        var rec: RecipeData = RecipeData(index: $recipe, name: "Deconstruct " &
-            itemsList[recipe].name, craftable: canCraft,
+        var rec: RecipeData = RecipeData(index: "Deconstruct " & $recipe,
+            name: "Deconstruct " & itemsList[recipe].name, craftable: canCraft,
             workplace: hasWorkplace, tools: hasTool, materials: true)
         availableRecipes.add(y = rec)
       except:
