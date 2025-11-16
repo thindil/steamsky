@@ -20,7 +20,7 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crafts, crewinventory, game, types]
+import ../[config, crafts, crewinventory, game, shipmodules, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 type RecipesSortOrders = enum
@@ -58,12 +58,12 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     if not recipe.index.startsWith(prefix = "Study") and
         not recipe.index.startsWith(prefix = "Deconstruct"):
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.3.cfloat, 0.7])
       label(str = "Amount:")
       colorLabel(str = $craft.resultAmount, color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = 30, cols = 1)
     label(str = "Materials needed:")
-    setLayoutRowDynamic(height = 75, cols = 1)
+    setLayoutRowDynamic(height = 85, cols = 1)
     group(title = "materialInfo", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = 30, cols = 1)
       for mIndex, material in craft.materialTypes:
@@ -104,7 +104,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     else:
       setLayoutRowDynamic(height = 30, cols = 1)
       label(str = "Tool needed:")
-      setLayoutRowDynamic(height = 75, cols = 1)
+      setLayoutRowDynamic(height = 85, cols = 1)
       group(title = "toolInfo", flags = {windowNoFlags}):
         setLayoutRowDynamic(height = 30, cols = 1)
         for iIndex, item in itemsList:
@@ -117,6 +117,32 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
               haveTool = true
             colorLabel(str = $item.name, color = theme.colors[
                 if haveTool: goldenColor else: redColor])
+    setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.3.cfloat, 0.7])
+    label(str = "Workplace:")
+    var
+      haveWorkplace: bool = false
+      workplaceName: string = ""
+    for module in playerShip.modules:
+      try:
+        if modulesList[module.protoIndex].mType == craft.workplace:
+          workplaceName = module.name
+          if module.durability > 0:
+            haveWorkplace = true
+            break
+      except:
+        dialog = setError(message = "Can't check workplace.")
+        return
+    if workplaceName.len == 0:
+      for index, module in modulesList:
+        if module.mType == craft.workplace:
+          try:
+            workplaceName = getModuleType(moduleIndex = index)
+          except:
+            dialog = setError(message = "Can't get workplace name.")
+            return
+          break
+    colorLabel(str = workplaceName, color = theme.colors[
+        if haveWorkplace: goldenColor else: redColor])
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
