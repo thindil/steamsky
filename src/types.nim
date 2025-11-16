@@ -159,6 +159,7 @@ type
     ## * craftingIndex    - The index of currently crafted recipe
     ## * craftingTime     - The amount of time needed to finish the order
     ## * craftingAmount   - How many times repeat the crafting order
+    ## * craftingQuality  - The desired quality of crafted item
     ## * trainedSkill     - The index of trained skill
     ## * damage2          - The damage of the battering ram
     ## * coolingDown      - If true, the battering ram can't attack now
@@ -193,6 +194,7 @@ type
       craftingIndex*: string
       craftingTime*: Natural
       craftingAmount*: Natural
+      craftingQuality*: ObjectQuality
     of ModuleType2.trainingRoom:
       trainedSkill*: Natural
     of ModuleType2.batteringRam:
