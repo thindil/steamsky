@@ -175,6 +175,56 @@ type
     layoutDynamicFixed, layoutDynamicRow, layoutDynamicFree, layoutDynamic,
       layoutStaticFixed, layoutStaticRow, layoutStaticFree, LayoutStatic,
       layoutTemplate, layoutCount
+  PanelFlags* = enum
+    ## The settings for panels
+    windowNoFlags = 0,
+    windowBorder = 1 shl 0,
+    windowMovable = 1 shl 1,
+    windowScalable = 1 shl 2,
+    windowClosable = 1 shl 3
+    windowMinimizable = 1 shl 4,
+    windowNoScrollbar = 1 shl 5,
+    windowTitle = 1 shl 6,
+    windowScaleLeft = 1 shl 9
+    windowNoInput = 1 shl 10
+  PopupType* = enum
+    ## The types of popup windows
+    staticPopup, dynamicPopup
+  TextAlignment* = enum
+    ## The alignments of a text
+    left = textMiddle.int or textLeft.int,
+    centered = textMiddle.int or textCentered.int,
+    right = textMiddle.int or textRight.int
+  EditFlags* = enum
+    ## The edit fields' flags
+    default = 0,
+    readOnly = 1 shl 0,
+    autoSelect = 1 shl 1,
+    sigEnter = 1 shl 2,
+    allowTab = 1 shl 3,
+    noCursor = 1 shl 4,
+    selectable = 1 shl 5,
+    clipboard = 1 shl 6,
+    ctrlEnterNewLine = 1 shl 7,
+    noHorizontalScroll = 1 shl 8,
+    alwaysInsertMode = 1 shl 9,
+    multiline = 1 shl 10,
+    gotoEndOnActivate = 1 shl 11
+  EditEvent* = enum
+    ## The events which happen in a text field
+    none = 0,
+    active = 1 shl 0,
+    inactive = 1 shl 1,
+    activated = 1 shl 2,
+    deactivated = 1 shl 3,
+    commited = 1 shl 4
+  EditTypes* = enum
+    ## The types of edit fields
+    simple = alwaysInsertMode,
+    field = simple.int or selectable.int or clipboard.int,
+    editor = allowTab.int or selectable.int or clipboard.int or multiline.int,
+    box = alwaysInsertMode.int or selectable.int or multiline.int or
+        allowTab.int or clipboard.int
 
 # ---------
 # Constants
@@ -999,58 +1049,8 @@ type
   WindowStyleTypes* = enum
     ## The types of fields in style's settings for windows
     spacing, padding
-  PanelFlags* = enum
-    ## The settings for panels
-    windowNoFlags = 0,
-    windowBorder = 1 shl 0,
-    windowMovable = 1 shl 1,
-    windowScalable = 1 shl 2,
-    windowClosable = 1 shl 3
-    windowMinimizable = 1 shl 4,
-    windowNoScrollbar = 1 shl 5,
-    windowTitle = 1 shl 6,
-    windowScaleLeft = 1 shl 9
-    windowNoInput = 1 shl 10
   NuklearException* = object of CatchableError
     ## An exception thrown when there is an issue with Nuklear library
-  PopupType* = enum
-    ## The types of popup windows
-    staticPopup, dynamicPopup
-  TextAlignment* = enum
-    ## The alignments of a text
-    left = textMiddle.int or textLeft.int,
-    centered = textMiddle.int or textCentered.int,
-    right = textMiddle.int or textRight.int
-  EditFlags* = enum
-    ## The edit fields' flags
-    default = 0,
-    readOnly = 1 shl 0,
-    autoSelect = 1 shl 1,
-    sigEnter = 1 shl 2,
-    allowTab = 1 shl 3,
-    noCursor = 1 shl 4,
-    selectable = 1 shl 5,
-    clipboard = 1 shl 6,
-    ctrlEnterNewLine = 1 shl 7,
-    noHorizontalScroll = 1 shl 8,
-    alwaysInsertMode = 1 shl 9,
-    multiline = 1 shl 10,
-    gotoEndOnActivate = 1 shl 11
-  EditEvent* = enum
-    ## The events which happen in a text field
-    none = 0,
-    active = 1 shl 0,
-    inactive = 1 shl 1,
-    activated = 1 shl 2,
-    deactivated = 1 shl 3,
-    commited = 1 shl 4
-  EditTypes* = enum
-    ## The types of edit fields
-    simple = alwaysInsertMode,
-    field = simple.int or selectable.int or clipboard.int,
-    editor = allowTab.int or selectable.int or clipboard.int or multiline.int,
-    box = alwaysInsertMode.int or selectable.int or multiline.int or
-        allowTab.int or clipboard.int
   PluginFilter* = proc (box: ptr nk_text_edit;
       unicode: nk_rune): nk_bool {.cdecl.}
     ## The procedure used to filter input in edit fields
