@@ -63,7 +63,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
       colorLabel(str = $craft.resultAmount, color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = 30, cols = 1)
     label(str = "Materials needed:")
-    setLayoutRowDynamic(height = 60, cols = 1)
+    setLayoutRowDynamic(height = 75, cols = 1)
     group(title = "materialInfo", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = 30, cols = 1)
       for mIndex, material in craft.materialTypes:
@@ -98,6 +98,25 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               colorLabel(str = $craft.materialAmounts[mIndex] & "x" & item.name,
                   color = theme.colors[redColor])
+    var haveTool: bool = false
+    if craft.tool == "None":
+      haveTool = true
+    else:
+      setLayoutRowDynamic(height = 30, cols = 1)
+      label(str = "Tool needed:")
+      setLayoutRowDynamic(height = 75, cols = 1)
+      group(title = "toolInfo", flags = {windowNoFlags}):
+        setLayoutRowDynamic(height = 30, cols = 1)
+        for iIndex, item in itemsList:
+          haveTool = false
+          if item.itemType == craft.tool and item.value[1] <= craft.toolQuality:
+            let cargoIndex: int = findItem(inventory = playerShip.cargo,
+                protoIndex = iIndex, quality = craft.toolQuality,
+                itemQuality = any)
+            if cargoIndex > -1:
+              haveTool = true
+            colorLabel(str = $item.name, color = theme.colors[
+                if haveTool: goldenColor else: redColor])
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
