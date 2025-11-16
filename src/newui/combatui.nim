@@ -130,6 +130,56 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
 
   windowSetFocus(name = windowName)
 
+proc showPilotSettings(dialog: var GameDialog; faction: FactionData) {.raises: [],
+  tags: [RootEffect], contractual.} =
+  ## Show the UI for set the pilot's orders
+  ##
+  ## * dialog  - the current in-game dialog displayed on the screen
+  ## * faction - the player's faction
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if pilotIndex == 0:
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.33.cfloat, 0.33])
+  else:
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
+  label(str = "Pilot:", alignment = left)
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Select the crew member which will be the pilot during the combat. The sign + after name means that this crew member has piloting skill, the sign ++ after name means that his/her piloting skill is the best in the crew")
+  let newPilot: Natural = comboList(items = pilotList,
+      selected = pilotIndex, itemHeight = 25, x = 200, y = 150)
+  if pilotIndex > 0:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Select the order for the pilot")
+    let newOrder: Natural = comboList(items = pilotOrders,
+        selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150)
+    if newOrder != pilotOrder - 1:
+      pilotOrder = newOrder + 1
+      if "sentientships" in faction.flags:
+        addMessage(message = "Order for ship was set on: " & pilotOrders[
+          newOrder], mType = combatMessage)
+      else:
+        addMessage(message = "Order for " & playerShip.crew[findMember(
+            order = pilot)].name & " was set on: " & pilotOrders[newOrder],
+            mType = combatMessage)
+  if newPilot != pilotIndex:
+    if newPilot > 0:
+      try:
+        giveOrders(ship = playerShip, memberIndex = newPilot - 1,
+            givenOrder = pilot)
+      except:
+        dialog = setError(message = "Can't give order to the pilot.")
+    else:
+      try:
+        giveOrders(ship = playerShip, memberIndex = pilotIndex - 1,
+            givenOrder = rest)
+      except:
+        dialog = setError(message = "Can't give rest order to the pilot.")
+    pilotIndex = findMember(order = pilot) + 1
+    engineerIndex = findMember(order = engineer) + 1
+
 proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the combat UI
@@ -175,46 +225,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = "Member", alignment = centered)
       label(str = "Order", alignment = centered)
       # Show pilot settings
-      if pilotIndex == 0:
-        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.33.cfloat, 0.33])
-      else:
-        setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
-      label(str = "Pilot:", alignment = left)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Select the crew member which will be the pilot during the combat. The sign + after name means that this crew member has piloting skill, the sign ++ after name means that his/her piloting skill is the best in the crew")
-      let newPilot: Natural = comboList(items = pilotList,
-          selected = pilotIndex, itemHeight = 25, x = 200, y = 150)
-      if pilotIndex > 0:
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Select the order for the pilot")
-        let newOrder: Natural = comboList(items = pilotOrders,
-            selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150)
-        if newOrder != pilotOrder - 1:
-          pilotOrder = newOrder + 1
-          if "sentientships" in faction.flags:
-            addMessage(message = "Order for ship was set on: " & pilotOrders[
-              newOrder], mType = combatMessage)
-          else:
-            addMessage(message = "Order for " & playerShip.crew[findMember(
-                order = pilot)].name & " was set on: " & pilotOrders[newOrder],
-                mType = combatMessage)
-      if newPilot != pilotIndex:
-        if newPilot > 0:
-          try:
-            giveOrders(ship = playerShip, memberIndex = newPilot - 1,
-                givenOrder = pilot)
-          except:
-            dialog = setError(message = "Can't give order to the pilot.")
-        else:
-          try:
-            giveOrders(ship = playerShip, memberIndex = pilotIndex - 1,
-                givenOrder = rest)
-          except:
-            dialog = setError(message = "Can't give rest order to the pilot.")
-        pilotIndex = findMember(order = pilot) + 1
-        engineerIndex = findMember(order = engineer) + 1
+      showPilotSettings(dialog = dialog, faction = faction)
       # Show engineer settings
       if engineerIndex == 0:
         setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.33.cfloat, 0.33])
