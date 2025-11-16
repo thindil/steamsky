@@ -44,7 +44,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   const
     width: float = 400
-    height: float = 400
+    height: float = 500
 
   let
     windowName: string = recipe.name
@@ -55,7 +55,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
         return
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+      flags = {windowBorder, windowTitle, windowMovable}):
     if not recipe.index.startsWith(prefix = "Study") and
         not recipe.index.startsWith(prefix = "Deconstruct"):
       setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.3.cfloat, 0.7])
@@ -143,6 +143,13 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
           break
     colorLabel(str = workplaceName, color = theme.colors[
         if haveWorkplace: goldenColor else: redColor])
+    label(str = "Skill:")
+    try:
+      colorLabel(str = skillsList[craft.skill].name & "/" & attributesList[
+          skillsList[craft.skill].attribute].name, color = theme.colors[goldenColor])
+    except:
+      dialog = setError(message = "Can't show recipe skill.")
+      return
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
