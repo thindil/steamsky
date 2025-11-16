@@ -56,15 +56,18 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = 30, cols = 2)
     if not recipe.index.startsWith(prefix = "Study") and
         not recipe.index.startsWith(prefix = "Deconstruct"):
+      setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Amount:")
       colorLabel(str = $craft.resultAmount, color = theme.colors[goldenColor])
+    setLayoutRowDynamic(height = 30, cols = 1)
     label(str = "Materials needed:")
+    setLayoutRowDynamic(height = 60, cols = 1)
     group(title = "materialInfo", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = 30, cols = 1)
       for mIndex, material in craft.materialTypes:
+        colorLabel(str = $(mIndex + 1) & ":", color = theme.colors[goldenColor])
         for iIndex, item in itemsList:
           var isMaterial: bool = false
           if recipe.index.startsWith(prefix = "Study"):
