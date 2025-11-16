@@ -13,9 +13,9 @@ binDir = "bin"
 
 # Dependencies
 
-requires "nim >= 2.2.0"
+requires "nim >= 2.2.6"
 requires "contracts >= 0.2.2"
-requires "nimalyzer >= 0.9"
+requires "nimalyzer >= 0.12.2"
 requires "unittest2"
 
 # Tasks
