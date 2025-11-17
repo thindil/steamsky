@@ -680,8 +680,8 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
         crafterGainExp(recipe = recipe, workTime = workTime, module = module,
             owner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
 
-proc setRecipe*(workshop: Natural; amount: Positive;
-    recipeIndex: string) {.raises: [ValueError, CrewOrderError,
+proc setRecipe*(workshop: Natural; amount: Positive; recipeIndex: string;
+    quality: ObjectQuality = normal) {.raises: [ValueError, CrewOrderError,
     CrewNoSpaceError, Exception], tags: [RootEffect], contractual.} =
   ## Set the selected crafting recipe for the selected workshop in the player's
   ## ship
@@ -689,15 +689,17 @@ proc setRecipe*(workshop: Natural; amount: Positive;
   ## * workshop    - the index of the workshop in which the recipe will be set
   ## * amount      - how many times the recipe will be made
   ## * recipeIndex - the index of the crafting recipe to set
+  ## * quality     - the desired quality of the recipe
   require:
     workshop < playerShip.modules.len
     recipeIndex.len > 0
   body:
     playerShip.modules[workshop].craftingAmount = amount
+    playerShip.modules[workshop].craftingQuality = quality
     var
       itemIndex: Natural = 0
       recipeName: string = ""
-    if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
+    if recipeIndex.startsWith(prefix = "Study"):
       itemIndex = recipeIndex[6..^1].strip.parseInt
       for recipe in recipesList.values:
         if recipe.resultIndex == itemIndex:
@@ -705,7 +707,7 @@ proc setRecipe*(workshop: Natural; amount: Positive;
           break
       recipeName = "Studying " & itemsList[itemIndex].name
       playerShip.modules[workshop].craftingIndex = recipeIndex
-    elif recipeIndex.len > 12 and recipeIndex[0..10] == "Deconstruct":
+    elif recipeIndex.startsWith(prefix = "Deconstruct"):
       itemIndex = recipeIndex[12..^1].strip.parseInt
       for recipe in recipesList.values:
         if recipe.resultIndex == itemIndex:
@@ -715,7 +717,8 @@ proc setRecipe*(workshop: Natural; amount: Positive;
       playerShip.modules[workshop].craftingIndex = recipeIndex
     else:
       playerShip.modules[workshop].craftingIndex = recipeIndex.strip
-      playerShip.modules[workshop].craftingTime = recipesList[recipeIndex].time
+      playerShip.modules[workshop].craftingTime = countItemBonus(
+          value = recipesList[recipeIndex].time, quality = quality)
       recipeName = itemsList[recipesList[recipeIndex].resultIndex].name
     addMessage(message = recipeName & " was set as manufacturing order in " &
         playerShip.modules[workshop].name & ".",
@@ -796,7 +799,8 @@ proc getRecipeDifficultyName*(difficulty: Positive): string {.raises: [],
     else:
       return "Extremely hard"
 
-proc checkTool*(toolNeeded: string): bool {.raises: [], tags: [], contractual.} =
+proc checkTool*(toolNeeded: string): bool {.raises: [], tags: [],
+    contractual.} =
   ##  Check if the player has needed tool for the crafting recipe
   ##
   ##  * toolNeeded - The type of tool needed for the recipe
