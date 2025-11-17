@@ -225,6 +225,62 @@ type
     editor = allowTab.int or selectable.int or clipboard.int or multiline.int,
     box = alwaysInsertMode.int or selectable.int or multiline.int or
         allowTab.int or clipboard.int
+  ButtonStyleTypes* = enum
+    ## The types of fields in style's settings for UI buttons
+    normal, hover, active, borderColor, textBackground, textNormal, textHover,
+      textActive, rounding, padding, border, imagePadding, touchPadding,
+      colorFactorBackground, colorFactorText
+  FloatStyleTypes* = enum
+    ## The types of fields in style's settings with float values
+    buttonRounding, popupBorder
+  ColorStyleTypes* = enum
+    ## The types of fields in style's settings for UI colors
+    background
+  StyleStyleTypes* = enum
+    ## The types of fields in style's settings for UI colors
+    progressbar
+  WindowStyleTypes* = enum
+    ## The types of fields in style's settings for windows
+    spacing, padding
+  StyleColors* = enum
+    ## Names of the colors for UI's elements which can be set. The last value
+    ## is special, it defines the amount of available colors' settings.
+    textColor, windowColor, headerColor, borderColor, buttonColor,
+      buttonHoverColor, buttonActiveColor, toggleColor, toggleHoverColor,
+      toggleCursorColor, selectColor, selectActiveColor, sliderColor,
+      sliderCursorColor, sliderCursorHoverColor, sliderCursorActiveColor,
+      propertyColor, editColor, editCursorColor, comboColor, chartColor,
+      colorChartColor, colorChartHighlightColor, scrollbarColor,
+      scrollbarCursorColor, scrollbarCursorHoverColor,
+      scrollbarCursorActiveColor, tabHeaderColor, knobColor, knobCursorColor,
+      knobCursorHoverColor, knobCursorActiveColor, buttonTextColor,
+      buttonHoverTextColor, buttonActiveTextColor, editTextColor,
+      comboTextColor, tooltipColor, tooltipBorderColor, groupBorderColor,
+      headerTextColor, groupTextColor, selectActiveTextColor, propertyTextColor,
+      popupColor, popupBorderColor, progressbarColor, progressbarBorderColor,
+      countColors
+  PanelType* = enum
+    ## The types of panels
+    panelNone = 0,
+    panelWindow = 1 shl 0,
+    panelGroup = 1 shl 1,
+    panelPopup = 1 shl 2,
+    panelContextual = 1 shl 4,
+    panelCombo = 1 shl 5,
+    panelMenu = 1 shl 6,
+    panelTooltip = 1 shl 7
+  PanelSet* = enum
+    ## The setting of panels
+    panelSetNonBlock = panelContextual.int or panelCombo.int or panelMenu.int or
+        panelTooltip.int,
+    panelSetPopup = panelSetNonBlock.int or panelPopup.int,
+    panelSetSub = panelSetPopup.int or panelGroup.int
+  UserEvents* = enum
+    ## The UI events caused by the user
+    noEvent, quitEvent, sizeChangedEvent, keyEvent, mouseButtonEvent, anyEvent
+  ShowStates* = enum
+    ## When to change the state of a window
+    hidden, shown
 
 # ---------
 # Constants
@@ -553,16 +609,6 @@ type
     ## Internal Nuklear type
     begin*, `end`*, parent*, last*: nk_size
     active*: nk_bool
-  PanelType* {.size: sizeof(cint).} = enum
-    ## The types of panels
-    panelNone = 0,
-    panelWindow = 1 shl 0,
-    panelGroup = 1 shl 1,
-    panelPopup = 1 shl 2,
-    panelContextual = 1 shl 4,
-    panelCombo = 1 shl 5,
-    panelMenu = 1 shl 6,
-    panelTooltip = 1 shl 7
   nk_command* {.importc: "struct nk_command", completeStruct.} = object
     ## Internal Nuklear type
     `type`*: CommandType
@@ -1032,57 +1078,11 @@ type
     padding*: Vec2
     imagePadding*: Vec2
     touchPadding*: Vec2
-  ButtonStyleTypes* = enum
-    ## The types of fields in style's settings for UI buttons
-    normal, hover, active, borderColor, textBackground, textNormal, textHover,
-      textActive, rounding, padding, border, imagePadding, touchPadding,
-      colorFactorBackground, colorFactorText
-  FloatStyleTypes* = enum
-    ## The types of fields in style's settings with float values
-    buttonRounding, popupBorder
-  ColorStyleTypes* = enum
-    ## The types of fields in style's settings for UI colors
-    background
-  StyleStyleTypes* = enum
-    ## The types of fields in style's settings for UI colors
-    progressbar
-  WindowStyleTypes* = enum
-    ## The types of fields in style's settings for windows
-    spacing, padding
   NuklearException* = object of CatchableError
     ## An exception thrown when there is an issue with Nuklear library
   PluginFilter* = proc (box: ptr nk_text_edit;
       unicode: nk_rune): nk_bool {.cdecl.}
     ## The procedure used to filter input in edit fields
-  StyleColors* = enum
-    ## Names of the colors for UI's elements which can be set. The last value
-    ## is special, it defines the amount of available colors' settings.
-    textColor, windowColor, headerColor, borderColor, buttonColor,
-      buttonHoverColor, buttonActiveColor, toggleColor, toggleHoverColor,
-      toggleCursorColor, selectColor, selectActiveColor, sliderColor,
-      sliderCursorColor, sliderCursorHoverColor, sliderCursorActiveColor,
-      propertyColor, editColor, editCursorColor, comboColor, chartColor,
-      colorChartColor, colorChartHighlightColor, scrollbarColor,
-      scrollbarCursorColor, scrollbarCursorHoverColor,
-      scrollbarCursorActiveColor, tabHeaderColor, knobColor, knobCursorColor,
-      knobCursorHoverColor, knobCursorActiveColor, buttonTextColor,
-      buttonHoverTextColor, buttonActiveTextColor, editTextColor,
-      comboTextColor, tooltipColor, tooltipBorderColor, groupBorderColor,
-      headerTextColor, groupTextColor, selectActiveTextColor, propertyTextColor,
-      popupColor, popupBorderColor, progressbarColor, progressbarBorderColor,
-      countColors
-  PanelSet* = enum
-    ## The setting of panels
-    panelSetNonBlock = panelContextual.int or panelCombo.int or panelMenu.int or
-        panelTooltip.int,
-    panelSetPopup = panelSetNonBlock.int or panelPopup.int,
-    panelSetSub = panelSetPopup.int or panelGroup.int
-  UserEvents* = enum
-    ## The UI events caused by the user
-    noEvent, quitEvent, sizeChangedEvent, keyEvent, mouseButtonEvent, anyEvent
-  ShowStates* = enum
-    ## When to change the state of a window
-    hidden, shown
   MouseButton* = object
     ## Used to store information about a mouse button.
     down*, clicked*: bool
