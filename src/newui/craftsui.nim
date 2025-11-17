@@ -155,7 +155,11 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
           color = theme.colors[goldenColor])
     label(str = "Time needed:")
     colorLabel(str = $craft.time & " minutes", color = theme.colors[goldenColor])
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = 30, cols = (if recipe.craftable: 2 else: 1))
+    if recipe.craftable:
+      imageLabelButton(image = images[craftIcon], text = "Craft",
+          alignment = right):
+        discard
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
