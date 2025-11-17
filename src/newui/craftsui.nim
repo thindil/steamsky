@@ -56,8 +56,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
-    if not recipe.index.startsWith(prefix = "Study") and
-        not recipe.index.startsWith(prefix = "Deconstruct"):
+    if recipe.recipeType == craftType:
       setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.3.cfloat, 0.7])
       label(str = "Amount:")
       colorLabel(str = $craft.resultAmount, color = theme.colors[goldenColor])
@@ -70,14 +69,14 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
         colorLabel(str = $(mIndex + 1) & ":", color = theme.colors[goldenColor])
         for iIndex, item in itemsList:
           var isMaterial: bool = false
-          if recipe.index.startsWith(prefix = "Study"):
+          if recipe.recipeType == study:
             try:
               if item.name == itemsList[craft.resultIndex].name:
                 isMaterial = true
             except:
               dialog = setError(message = "Can't check study material.")
               return
-          elif recipe.index.startsWith(prefix = "Deconstruct"):
+          elif recipe.recipeType == deconstruct:
             try:
               if iIndex == recipe.index[12 .. ^1].parseInt:
                 isMaterial = true
@@ -150,6 +149,10 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't show recipe skill.")
       return
+    if recipe.recipeType == craftType:
+      label(str = "Difficulty:")
+      colorLabel(str = getRecipeDifficultyName(difficulty = craft.difficulty),
+          color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
