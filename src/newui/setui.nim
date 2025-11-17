@@ -925,6 +925,9 @@ proc setShipInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 #########################
 
 type
+  RecipeType* = enum
+    ## Types of recipes to craft
+    craftType, study, deconstruct
   RecipeData* = object
     ## Stores data needed to show information about an available recipe
     ## members
@@ -942,6 +945,8 @@ type
       ## If true, there are materials to craft the recipe
     workshop*: ModuleType
       ## The module type in which the recipe is crafted
+    recipeType*: RecipeType
+      ## The type of the recipe
 
 var
   workshopsList*: seq[string] = @[]
@@ -992,7 +997,7 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       try:
         var rec: RecipeData = RecipeData(index: recipe, name: itemsList[
             recipesList[recipe].resultIndex].name, workshop: recipesList[
-            recipe].workplace)
+            recipe].workplace, recipeType: craftType)
         isCraftable(recipe = recipesList[recipe], canCraft = rec.craftable,
             hasWorkplace = rec.workplace, hasTool = rec.tools,
             hasMaterials = rec.materials)
@@ -1011,7 +1016,8 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       try:
         var rec: RecipeData = RecipeData(index: "Study " & $recipe,
             name: "Study " & itemsList[recipe].name, craftable: canCraft,
-            workplace: hasWorkplace, tools: hasTool, materials: true)
+            workplace: hasWorkplace, tools: hasTool, materials: true,
+            recipeType: study)
         availableRecipes.add(y = rec)
       except:
         dialog = setError(message = "Can't add a study recipe.")
@@ -1020,7 +1026,8 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       try:
         var rec: RecipeData = RecipeData(index: "Deconstruct " & $recipe,
             name: "Deconstruct " & itemsList[recipe].name, craftable: canCraft,
-            workplace: hasWorkplace, tools: hasTool, materials: true)
+            workplace: hasWorkplace, tools: hasTool, materials: true,
+            recipeType: deconstruct)
         availableRecipes.add(y = rec)
       except:
         dialog = setError(message = "Can't add a study recipe.")
