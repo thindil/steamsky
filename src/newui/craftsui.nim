@@ -153,6 +153,8 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
       label(str = "Difficulty:")
       colorLabel(str = getRecipeDifficultyName(difficulty = craft.difficulty),
           color = theme.colors[goldenColor])
+    label(str = "Time needed:")
+    colorLabel(str = $craft.time & " minutes", color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = 30, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
