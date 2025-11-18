@@ -22,7 +22,7 @@ import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
     crafts, crew, game, items, maps, missions, shipscargo, shipscrew, types]
-import coreui, errordialog, utilsui2
+import coreui, errordialog, utilsui2, themes
 
 var
   moneyAmount*: Natural = 0
@@ -927,7 +927,9 @@ proc setShipInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 type
   RecipeType* = enum
     ## Types of recipes to craft
-    craftType, study, deconstruct
+    craftType = "Craft",
+    study = "Study",
+    deconstruct = "Deconstruct"
   RecipeData* = object
     ## Stores data needed to show information about an available recipe
     ## members
@@ -947,6 +949,8 @@ type
       ## The module type in which the recipe is crafted
     recipeType*: RecipeType
       ## The type of the recipe
+    image*: PImage
+      ## The icon used of the craft button
 
 var
   workshopsList*: seq[string] = @[]
@@ -997,7 +1001,7 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       try:
         var rec: RecipeData = RecipeData(index: recipe, name: itemsList[
             recipesList[recipe].resultIndex].name, workshop: recipesList[
-            recipe].workplace, recipeType: craftType)
+            recipe].workplace, recipeType: craftType, image: images[craftIcon])
         isCraftable(recipe = recipesList[recipe], canCraft = rec.craftable,
             hasWorkplace = rec.workplace, hasTool = rec.tools,
             hasMaterials = rec.materials)
@@ -1017,7 +1021,7 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         var rec: RecipeData = RecipeData(index: "Study " & $recipe,
             name: "Study " & itemsList[recipe].name, craftable: canCraft,
             workplace: hasWorkplace, tools: hasTool, materials: true,
-            recipeType: study)
+            recipeType: study, image: images[studyIcon])
         availableRecipes.add(y = rec)
       except:
         dialog = setError(message = "Can't add a study recipe.")
@@ -1027,7 +1031,7 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         var rec: RecipeData = RecipeData(index: "Deconstruct " & $recipe,
             name: "Deconstruct " & itemsList[recipe].name, craftable: canCraft,
             workplace: hasWorkplace, tools: hasTool, materials: true,
-            recipeType: deconstruct)
+            recipeType: deconstruct, image: images[deconstructIcon])
         availableRecipes.add(y = rec)
       except:
         dialog = setError(message = "Can't add a study recipe.")
