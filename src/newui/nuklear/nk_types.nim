@@ -281,6 +281,9 @@ type
   ShowStates* = enum
     ## When to change the state of a window
     hidden, shown
+#  HandleType* = enum
+#    ## Types of handle
+#    handlePtr, HandleInt
 
 # ---------
 # Constants
@@ -1095,6 +1098,13 @@ type
   Input* = object
     ## Used to store information about the user's input
     mouse*: Mouse
+#  Handle* = object
+#    ## Used to store a handle to various elements
+#    case handleType: HandleType
+#    of nkPointer:
+#      ptrValue*: pointer
+#    of integer:
+#      intValue*: int
   BufferMarker* = object
     ## Used to store Nuklear buffer's markers
     active*: bool
@@ -1104,9 +1114,10 @@ type
     memPtr*, size*: nk_size
   Buffer* = object
     ## Used to store Nuklear buffer data
-    allocated*, needed*, size*: nk_size
+    allocated*, needed*, size*, calls*: nk_size
     memory*: Memory
     allocType*: AllocationType
+    growFactor*: float
 
 # ---------
 # Constants
