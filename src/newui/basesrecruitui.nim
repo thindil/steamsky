@@ -40,7 +40,8 @@ const defaultRecruitsSortOrder: RecruitsSortOrders = none
 
 var recruitsSortOrder: RecruitsSortOrders = defaultRecruitsSortOrder
 
-proc sortRecruits(x, y: LocalRecruitData): int =
+proc sortRecruits(x, y: LocalRecruitData): int {.raises: [], tags: [],
+    contractual.} =
   ## Check how to sort the selected recruits on the list
   ##
   ## * x - the first recruit to sort
