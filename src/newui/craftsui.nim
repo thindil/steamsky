@@ -33,6 +33,7 @@ var
   recipesSortOrder: RecipesSortOrders = defaultRecipesSortOrder
   hasOptions: bool = true
   recipe: RecipeData = RecipeData()
+  craft: CraftData = CraftData()
 
 proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -48,11 +49,6 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
 
   let
     windowName: string = recipe.name
-    craft: CraftData = try:
-        setRecipeData(recipeIndex = recipe.index)
-      except:
-        dialog = setError(message = "Can't get recipe info")
-        return
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
@@ -173,6 +169,11 @@ proc setRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   recipe = availableRecipes[data]
+  craft = try:
+      setRecipeData(recipeIndex = recipe.index)
+    except:
+      dialog = setError(message = "Can't get crafting recipe info")
+      return
   dialog = recipeDialog
 
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
