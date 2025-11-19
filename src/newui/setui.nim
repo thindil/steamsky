@@ -999,9 +999,10 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     availableRecipes = @[]
     for recipe in knownRecipes:
       try:
-        var rec: RecipeData = RecipeData(index: recipe, name: itemsList[
-            recipesList[recipe].resultIndex].name, workshop: recipesList[
-            recipe].workplace, recipeType: craftType, image: images[craftIcon])
+        var rec: RecipeData = RecipeData(index: recipe, name: "Craft " &
+            itemsList[recipesList[recipe].resultIndex].name,
+            workshop: recipesList[recipe].workplace, recipeType: craftType,
+            image: images[craftIcon])
         isCraftable(recipe = recipesList[recipe], canCraft = rec.craftable,
             hasWorkplace = rec.workplace, hasTool = rec.tools,
             hasMaterials = rec.materials)
