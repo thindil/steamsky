@@ -172,7 +172,7 @@ type
     coordUv, coordPixel
   PanelRowLayoutType* = enum
     ## The types of panel row layouts
-    layoutDynamicFixed, layoutDynamicRow, layoutDynamicFree, layoutDynamic,
+    layoutDynamicFixed, layoutDynamicRow, layoutDynamicFree, layoutDynamicType,
       layoutStaticFixed, layoutStaticRow, layoutStaticFree, LayoutStatic,
       layoutTemplate, layoutCount
   PanelFlags* = enum
@@ -281,9 +281,9 @@ type
   ShowStates* = enum
     ## When to change the state of a window
     hidden, shown
-#  HandleType* = enum
-#    ## Types of handle
-#    handlePtr, HandleInt
+  HandleType* = enum
+    ## Types of handle
+    handlePtr, HandleInt
 
 # ---------
 # Constants
@@ -1098,13 +1098,13 @@ type
   Input* = object
     ## Used to store information about the user's input
     mouse*: Mouse
-#  Handle* = object
-#    ## Used to store a handle to various elements
-#    case handleType: HandleType
-#    of nkPointer:
-#      ptrValue*: pointer
-#    of integer:
-#      intValue*: int
+ #  Handle* = object
+ #    ## Used to store a handle to various elements
+ #    case handleType: HandleType
+ #    of nkPointer:
+ #      ptrValue*: pointer
+ #    of integer:
+ #      intValue*: int
   BufferMarker* = object
     ## Used to store Nuklear buffer's markers
     active*: bool
