@@ -717,8 +717,9 @@ proc setRecipe*(workshop: Natural; amount: Positive; recipeIndex: string;
       playerShip.modules[workshop].craftingIndex = recipeIndex
     else:
       playerShip.modules[workshop].craftingIndex = recipeIndex.strip
-      playerShip.modules[workshop].craftingTime = countItemBonus(
-          value = recipesList[recipeIndex].time, quality = quality)
+      playerShip.modules[workshop].craftingTime = recipesList[
+          recipeIndex].time + countItemBonus(value = recipesList[
+          recipeIndex].time, quality = quality)
       recipeName = itemsList[recipesList[recipeIndex].resultIndex].name
     addMessage(message = recipeName & " was set as manufacturing order in " &
         playerShip.modules[workshop].name & ".",
