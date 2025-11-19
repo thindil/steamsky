@@ -161,6 +161,7 @@ proc sortRecruits(sortAsc, sortDesc: RecruitsSortOrders;
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
+  dialog = none
   if recruitsSortOrder == sortAsc:
     recruitsSortOrder = sortDesc
   else:
