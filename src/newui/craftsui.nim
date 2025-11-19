@@ -46,8 +46,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     width: float = 400
     height: float = 500
 
-  let
-    windowName: string = recipe.name
+  let windowName: string = recipe.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
@@ -171,13 +170,14 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
     width: float = 400
     height: float = 500
 
-  let
-    windowName: string = (if recipe.recipeType ==
-        craftType: $recipe.recipeType & " " else: "") & recipe.name
+  let windowName: string = recipe.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = 30, cols = 2)
+    imageLabelButton(image = recipe.image, text = $recipe.recipeType,
+        alignment = right):
+      dialog = none
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
