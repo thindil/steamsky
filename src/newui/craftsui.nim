@@ -41,8 +41,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
+  ## Returns the modified parameter dialog.
   const
     width: float = 400
     height: float = 500
@@ -155,12 +154,12 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     if recipe.craftable:
       imageLabelButton(image = recipe.image, text = $recipe.recipeType,
           alignment = right):
-        discard
+        dialog = setRecipeDialog
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
 
-proc showSetRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
+proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the dialog for setting the selected crafting recipe
   ##
@@ -173,7 +172,8 @@ proc showSetRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     height: float = 500
 
   let
-    windowName: string = $recipe.recipeType & " " & recipe.name
+    windowName: string = (if recipe.recipeType ==
+        craftType: $recipe.recipeType & " " else: "") & recipe.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
