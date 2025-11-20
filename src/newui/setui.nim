@@ -949,8 +949,8 @@ type
       ## The module type in which the recipe is crafted
     recipeType*: RecipeType
       ## The type of the recipe
-    image*: PImage
-      ## The icon used of the craft button
+    image*, setImage*: PImage
+      ## The icons used of the craft buttons
 
 var
   workshopsList*: seq[string] = @[]
@@ -1002,7 +1002,7 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         var rec: RecipeData = RecipeData(index: recipe, name: "Craft " &
             itemsList[recipesList[recipe].resultIndex].name,
             workshop: recipesList[recipe].workplace, recipeType: craftType,
-            image: images[craftIcon])
+            image: images[craftIcon], setImage: images[craftColoredIcon])
         isCraftable(recipe = recipesList[recipe], canCraft = rec.craftable,
             hasWorkplace = rec.workplace, hasTool = rec.tools,
             hasMaterials = rec.materials)
@@ -1022,7 +1022,7 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         var rec: RecipeData = RecipeData(index: "Study " & $recipe,
             name: "Study " & itemsList[recipe].name, craftable: canCraft,
             workplace: hasWorkplace, tools: hasTool, materials: true,
-            recipeType: study, image: images[studyIcon])
+            recipeType: study, image: images[studyIcon], setImage: images[studyColoredIcon])
         availableRecipes.add(y = rec)
       except:
         dialog = setError(message = "Can't add a study recipe.")
@@ -1032,7 +1032,8 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         var rec: RecipeData = RecipeData(index: "Deconstruct " & $recipe,
             name: "Deconstruct " & itemsList[recipe].name, craftable: canCraft,
             workplace: hasWorkplace, tools: hasTool, materials: true,
-            recipeType: deconstruct, image: images[deconstructIcon])
+            recipeType: deconstruct, image: images[deconstructIcon],
+            setImage: images[deconstructColoredIcon])
         availableRecipes.add(y = rec)
       except:
         dialog = setError(message = "Can't add a study recipe.")
