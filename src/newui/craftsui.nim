@@ -34,6 +34,7 @@ var
   hasOptions: bool = true
   recipe: RecipeData = RecipeData()
   craft: CraftData = CraftData()
+  maxAmount: Natural = 0
 
 proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -154,6 +155,27 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
       imageLabelButton(image = recipe.image, text = $recipe.recipeType,
           alignment = right):
         dialog = setRecipeDialog
+        maxAmount = try:
+            checkRecipe(recipeIndex = recipe.index)
+          except ValueError:
+            dialog = setError(message = "Can't get max amount.")
+            return
+          except CraftingNoWorkshopError:
+            dialog = setMessage(message = "You can't start crafting because you don't have a workshop.",
+                title = "Can't start crafting")
+            return
+          except CraftingNoMaterialsError:
+            dialog = setMessage(message = "You can't start crafting because you don't have materials.",
+                title = "Can't start crafting")
+            return
+          except CraftingNoToolsError:
+            dialog = setMessage(message = "You can't start crafting because you don't have a proper tool.",
+                title = "Can't start crafting")
+            return
+          except TradeNoFreeCargoError:
+            dialog = setMessage(message = "You can't start crafting because you don't have free cargo.",
+                title = "Can't start crafting")
+            return
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -175,9 +197,11 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 2)
-    imageLabelButton(image = recipe.image, text = $recipe.recipeType,
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    imageLabelButton(image = recipe.setImage, text = $recipe.recipeType,
         alignment = right):
       dialog = none
+    restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
