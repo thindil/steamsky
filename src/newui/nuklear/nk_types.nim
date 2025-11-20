@@ -283,7 +283,7 @@ type
     hidden, shown
   HandleType* = enum
     ## Types of handle
-    handlePtr, HandleInt
+    handlePtr, handleInt
 
 # ---------
 # Constants
@@ -1098,13 +1098,13 @@ type
   Input* = object
     ## Used to store information about the user's input
     mouse*: Mouse
- #  Handle* = object
- #    ## Used to store a handle to various elements
- #    case handleType: HandleType
- #    of nkPointer:
- #      ptrValue*: pointer
- #    of integer:
- #      intValue*: int
+  Handle* = object
+    ## Used to store a handle to various elements
+    case handleType: HandleType
+    of handlePtr:
+      ptrValue*: pointer
+    of handleInt:
+      intValue*: int
   BufferMarker* = object
     ## Used to store Nuklear buffer's markers
     active*: bool
