@@ -486,11 +486,22 @@ proc checkMaterials(materialIndexes: seq[Positive]; recipe: CraftData;
   for j in 0..materialIndexes.high:
     haveMaterial = false
     for item in playerShip.cargo:
-      if itemsList[item.protoIndex].itemType == itemsList[
-          materialIndexes[j]].itemType and item.amount >=
-              recipe.materialAmounts[j]:
-        haveMaterial = true
-        break
+      if module.craftingQuality == normal:
+        if itemsList[item.protoIndex].itemType == itemsList[
+            materialIndexes[j]].itemType and item.amount >=
+                recipe.materialAmounts[j]:
+          haveMaterial = true
+          break
+      else:
+        if itemsList[item.protoIndex].itemType == itemsList[materialIndexes[
+            j]].itemType and item.amount >= recipe.materialAmounts[j] and
+            item.quality == module.craftingQuality:
+          haveMaterial = true
+          break
+        if itemsList[item.protoIndex].itemType == itemsList[materialIndexes[
+            j]].itemType and item.amount >= recipe.materialAmounts[j]:
+          haveMaterial = true
+          break
     if not haveMaterial:
       break
   if not haveMaterial:
@@ -575,8 +586,17 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
           craftingMaterial: int = -1
           toolQuality, materialQuality: ObjectQuality = normal
         for materialIndex in materialIndexes.mitems:
-          craftingMaterial = findItem(inventory = playerShip.cargo,
-              itemType = itemsList[materialIndex].itemType, itemQuality = any)
+          if module.craftingQuality == normal:
+            craftingMaterial = findItem(inventory = playerShip.cargo,
+                itemType = itemsList[materialIndex].itemType, itemQuality = any)
+          else:
+            craftingMaterial = findItem(inventory = playerShip.cargo,
+                itemType = itemsList[materialIndex].itemType,
+                    itemQuality = module.craftingQuality)
+            if craftingMaterial == -1:
+              craftingMaterial = findItem(inventory = playerShip.cargo,
+                  itemType = itemsList[materialIndex].itemType,
+                      itemQuality = any)
           if craftingMaterial == -1:
             addMessage(message = "You don't have the crafting materials for " &
                 recipeName & ".", mType = craftMessage, color = red)
