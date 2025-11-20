@@ -34,7 +34,7 @@ var
   hasOptions: bool = true
   recipe: RecipeData = RecipeData()
   craft: CraftData = CraftData()
-  maxAmount: Natural = 0
+  maxAmount, craftAmount: Natural = 0
   craftImage, setImage: PImage = nil
 
 proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
@@ -153,9 +153,13 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     colorLabel(str = $craft.time & " minutes", color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = 30, cols = (if recipe.craftable: 2 else: 1))
     if recipe.craftable:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Set crafting order (" & $recipe.recipeType & ")")
       imageLabelButton(image = craftImage, text = $recipe.recipeType,
           alignment = right):
         dialog = setRecipeDialog
+        craftAmount = 1
         maxAmount = try:
             checkRecipe(recipeIndex = recipe.index)
           except ValueError:
@@ -197,6 +201,15 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
+    # Show amount setting, crafting only
+    if recipe.recipeType == craftType:
+      setLayoutRowDynamic(height = 30, cols = 2)
+      label(str = "Amount:")
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Set maximum possible amount of how many times the crafting order should be done.")
+      labelButton(title = "max " & $maxAmount):
+        craftAmount = maxAmount
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = setImage, text = $recipe.recipeType,
