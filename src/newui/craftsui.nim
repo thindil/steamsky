@@ -35,6 +35,7 @@ var
   recipe: RecipeData = RecipeData()
   craft: CraftData = CraftData()
   maxAmount: Natural = 0
+  craftImage, setImage: PImage = nil
 
 proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -152,7 +153,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     colorLabel(str = $craft.time & " minutes", color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = 30, cols = (if recipe.craftable: 2 else: 1))
     if recipe.craftable:
-      imageLabelButton(image = recipe.image, text = $recipe.recipeType,
+      imageLabelButton(image = craftImage, text = $recipe.recipeType,
           alignment = right):
         dialog = setRecipeDialog
         maxAmount = try:
@@ -198,7 +199,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       flags = {windowBorder, windowTitle, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    imageLabelButton(image = recipe.setImage, text = $recipe.recipeType,
+    imageLabelButton(image = setImage, text = $recipe.recipeType,
         alignment = right):
       dialog = none
     restoreButtonStyle()
@@ -221,6 +222,16 @@ proc setRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
       dialog = setError(message = "Can't get crafting recipe info")
       return
   dialog = recipeDialog
+  case recipe.recipeType
+    of craftType:
+      craftImage = images[craftIcon]
+      setImage = images[craftColoredIcon]
+    of study:
+      craftImage = images[studyIcon]
+      setImage = images[studyColoredIcon]
+    of deconstruct:
+      craftImage = images[deconstructIcon]
+      setImage = images[deconstructColoredIcon]
 
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
