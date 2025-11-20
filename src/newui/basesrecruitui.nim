@@ -166,7 +166,7 @@ proc sortRecruits(sortAsc, sortDesc: RecruitsSortOrders;
     recruitsSortOrder = sortDesc
   else:
     recruitsSortOrder = sortAsc
-  var localRecruits: seq[LocalRecruitData]
+  var localRecruits: seq[LocalRecruitData] = @[]
   let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
       playerShip.skyY].baseIndex
   for index, recruit in skyBases[baseIndex].recruits:
@@ -390,7 +390,7 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
     slider(min = 0, val = currentProfit, max = 10, step = 1)
     label(str = "Contract time:", alignment = centered)
     setLayoutRowDynamic(height = 35, cols = 1)
-    let newContract = comboList(items = contractLength,
+    let newContract: Natural = comboList(items = contractLength,
         selected = currentContract, itemHeight = 25, x = 200, y = 150)
     if newContract != currentContract:
       currentContract = newContract
@@ -502,8 +502,8 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
       windowDisable()
     addHeader(headers = headers, ratio = ratio, tooltip = "recruits",
       code = sortRecruits, dialog = dialog)
-    var currentRow = 1
-    let startRow = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    var currentRow: Positive = 1
+    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
     try:
