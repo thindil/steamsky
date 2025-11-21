@@ -268,6 +268,15 @@ proc setRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
       craftImage = images[deconstructIcon]
       setImage = images[deconstructColoredIcon]
   craftQuality = 2
+  var mType: ModuleType = ModuleType.any
+  if recipe.recipeType == craftType:
+    mType = try:
+        recipesList[recipe.index].workplace
+      except:
+        dialog = setError(message = "Can't get a module's type.")
+        return
+  else:
+    mType = alchemyLab
 
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
