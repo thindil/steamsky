@@ -201,8 +201,8 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
-    # Show amount setting, crafting only
     if recipe.recipeType == craftType:
+      # Show amount setting
       setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Amount:")
       if gameSettings.showTooltips:
@@ -210,6 +210,15 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
             text = "Set maximum possible amount of how many times the crafting order should be done.")
       labelButton(title = "max " & $maxAmount):
         craftAmount = maxAmount
+      setLayoutRowDynamic(height = 30, cols = 1)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Set amount of how many times the crafting order should be done.")
+      let newAmount: int = property2(name = "#", min = 1, val = craftAmount,
+          max = maxAmount, step = 1, incPerPixel = 1)
+      if craftAmount != newAmount:
+        craftAmount = newAmount
+      # Show quality setting
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = setImage, text = $recipe.recipeType,
