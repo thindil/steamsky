@@ -35,6 +35,7 @@ var
   recipe: RecipeData = RecipeData()
   craft: CraftData = CraftData()
   maxAmount, craftAmount: Natural = 0
+  craftQuality: Natural = 3
   craftImage, setImage: PImage = nil
 
 proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
@@ -219,6 +220,13 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       if craftAmount != newAmount:
         craftAmount = newAmount
       # Show quality setting
+      setLayoutRowDynamic(height = 30, cols = 2)
+      label(str = "Quality:")
+      const qualities: array[5, string] = ["Poor", "Low", "Normal", "Good", "Excellent"]
+      let newQuality: Natural = comboList(items = qualities, selected = craftQuality,
+          itemHeight = 25, x = 200, y = 150)
+      if newQuality != craftQuality:
+        craftQuality = newQuality
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = setImage, text = $recipe.recipeType,
@@ -254,6 +262,7 @@ proc setRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     of deconstruct:
       craftImage = images[deconstructIcon]
       setImage = images[deconstructColoredIcon]
+  craftQuality = 3
 
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
