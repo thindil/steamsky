@@ -34,9 +34,10 @@ var
   hasOptions: bool = true
   recipe: RecipeData = RecipeData()
   craft: CraftData = CraftData()
-  maxAmount, craftAmount: Natural = 0
+  maxAmount, craftAmount, craftWorkshop: Natural = 0
   craftQuality: Natural = 2
   craftImage, setImage: PImage = nil
+  workshops: seq[string] = @[]
 
 proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -231,7 +232,12 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       if newQuality != craftQuality:
         craftQuality = newQuality
     setLayoutRowDynamic(height = 30, cols = 1)
-    label(str = "Workshop:")
+    if workshops.len > 1:
+      label(str = "Workshop:")
+      let newIndex: Natural = comboList(items = workshops, selected = craftWorkshop,
+          itemHeight = 25, x = 380, y = 150)
+      if newIndex != craftWorkshop:
+        craftWorkshop = newIndex
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = setImage, text = $recipe.recipeType,
@@ -277,6 +283,16 @@ proc setRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
         return
   else:
     mType = alchemyLab
+  workshops = @[]
+  for index, module in playerShip.modules:
+    try:
+      if modulesList[module.protoIndex].mType == mType:
+        workshops.add(y = module.name)
+    except:
+      dialog = setError(message = "Can't create the list of modules.")
+      return
+  if workshopIndex > workshops.len:
+    workshopIndex = 0
 
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
