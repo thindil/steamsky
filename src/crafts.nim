@@ -191,7 +191,7 @@ proc setRecipeData*(recipeIndex: string): CraftData {.raises: [
   body:
     result = CraftData(time: 15, difficulty: 1, toolQuality: 100)
     var itemIndex: int = 0
-    if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
+    if recipeIndex.startsWith(prefix = "Study"):
       itemIndex = recipeIndex[6..^1].strip.parseInt
       result.materialTypes.add(y = itemsList[itemIndex].itemType)
       result.materialAmounts.add(y = 1)
@@ -204,8 +204,7 @@ proc setRecipeData*(recipeIndex: string): CraftData {.raises: [
           result.time = recipe.difficulty * 15
           break
       result.tool = alchemyTools
-      return
-    elif recipeIndex.len > 12 and recipeIndex[0..10] == "Deconstruct":
+    elif recipeIndex.startsWith(prefix = "Deconstruct"):
       itemIndex = recipeIndex[12..^1].strip.parseInt
       result.materialTypes.add(y = itemsList[itemIndex].itemType)
       result.materialAmounts.add(y = 1)
@@ -222,8 +221,8 @@ proc setRecipeData*(recipeIndex: string): CraftData {.raises: [
             result.resultAmount = 1
           break
       result.tool = alchemyTools
-      return
-    return recipesList[recipeIndex]
+    else:
+      result = recipesList[recipeIndex]
 
 proc checkRecipe*(recipeIndex: string): Positive {.raises: [
     ValueError, CraftingNoWorkshopError, CraftingNoMaterialsError,
