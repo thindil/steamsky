@@ -52,63 +52,51 @@ proc sortRecruits(x, y: LocalRecruitData): int {.raises: [], tags: [],
   of nameAsc:
     if x.name < y.name:
       return 1
-    else:
-      return -1
+    return -1
   of nameDesc:
     if x.name > y.name:
       return 1
-    else:
-      return -1
+    return -1
   of genderAsc:
     if x.gender < y.gender:
       return 1
-    else:
-      return -1
+    return -1
   of genderDesc:
     if x.gender > y.gender:
       return 1
-    else:
-      return -1
+    return -1
   of factionAsc:
     if x.faction < y.faction:
       return 1
-    else:
-      return -1
+    return -1
   of factionDesc:
     if x.faction > y.faction:
       return 1
-    else:
-      return -1
+    return -1
   of priceAsc:
     if x.price < y.price:
       return 1
-    else:
-      return -1
+    return -1
   of priceDesc:
     if x.price > y.price:
       return 1
-    else:
-      return -1
+    return -1
   of attributeAsc:
     if x.attribute < y.attribute:
       return 1
-    else:
-      return -1
+    return -1
   of attributeDesc:
     if x.attribute > y.attribute:
       return 1
-    else:
-      return -1
+    return -1
   of skillAsc:
     if x.skill < y.skill:
       return 1
-    else:
-      return -1
+    return -1
   of skillDesc:
     if x.skill > y.skill:
       return 1
-    else:
-      return -1
+    return -1
   of none:
     return -1
 
