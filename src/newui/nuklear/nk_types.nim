@@ -1112,12 +1112,23 @@ type
   Memory* = object
     ## Used to store Nuklear buffer's memory info
     memPtr*, size*: nk_size
+  PluginAlloc* = proc (handle: Handle; old: pointer; size: nk_size): pointer {.cdecl.}
+    ## The procedure executed when plugin is allocated
+  PluginFree* = proc (handle: Handle; old: pointer) {.cdecl.}
+    ## The procedure executed when plugin is removed
+  Allocator* = object
+    ## Used to store data for memory allocation
+    alloc*: PluginAlloc
+    free*: PluginFree
+    userData*: Handle
   Buffer* = object
     ## Used to store Nuklear buffer data
     allocated*, needed*, size*, calls*: nk_size
     memory*: Memory
     allocType*: AllocationType
     growFactor*: float
+    pool*: Allocator
+    marker*: array[bufferMax, BufferMarker]
 
 # ---------
 # Constants
