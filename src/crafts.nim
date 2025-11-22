@@ -178,12 +178,15 @@ proc loadRecipes*(fileName: string) {.raises: [DataLoadingError],
             messageLevel = lvlInfo)
       recipesList[recipeIndex] = recipe
 
-proc setRecipeData*(recipeIndex: string): CraftData {.raises: [
-    KeyError, ValueError], tags: [], contractual.} =
+proc setRecipeData*(recipeIndex: string;
+    quality: ObjectQuality = normal): CraftData {.raises: [KeyError,
+    ValueError], tags: [], contractual.} =
   ## Set the crafting data for the selected recipe
   ##
   ## * recipeIndex - index of the recipe which data will be set or full action
   ##                 name related to the recipe, like "Study 12"
+  ## * quality     - the desired quality of the crafted items. Default is normal,
+  ##                 not affecting the recipe
   ##
   ## Returns CraftData object with information about the crafting recipe
   require:
@@ -223,6 +226,11 @@ proc setRecipeData*(recipeIndex: string): CraftData {.raises: [
       result.tool = alchemyTools
     else:
       result = recipesList[recipeIndex]
+      if quality != normal:
+        result.difficulty = result.difficulty + countItemBonus(
+            value = result.difficulty, quality = quality)
+        result.time = result.time + countItemBonus(value = result.difficulty,
+            quality = quality)
 
 proc checkRecipe*(recipeIndex: string): Positive {.raises: [
     ValueError, CraftingNoWorkshopError, CraftingNoMaterialsError,
@@ -551,7 +559,8 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
         currentMinutes: int = minutes
         recipeTime: int = module.craftingTime
         recipeName: string = ""
-      let recipe: CraftData = setRecipeData(recipeIndex = module.craftingIndex)
+      let recipe: CraftData = setRecipeData(recipeIndex = module.craftingIndex,
+          quality = module.craftingQuality)
       if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
         recipeName = "studying " & itemsList[recipe.resultIndex].name
       elif module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
