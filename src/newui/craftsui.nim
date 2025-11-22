@@ -187,6 +187,27 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setMessage(message = "You can't start crafting because you don't have free cargo.",
                 title = "Can't start crafting")
             return
+        craftQuality = 2
+        var mType: ModuleType = ModuleType.any
+        if recipe.recipeType == craftType:
+          mType = try:
+              recipesList[recipe.index].workplace
+            except:
+              dialog = setError(message = "Can't get a module's type.")
+              return
+        else:
+          mType = alchemyLab
+        workshops = @[]
+        for index, module in playerShip.modules:
+          try:
+            if modulesList[module.protoIndex].mType == mType:
+              workshops.add(y = module.name)
+          except:
+            dialog = setError(message = "Can't create the list of modules.")
+            return
+        if workshopIndex > workshops.len:
+          workshopIndex = 0
+        assign = noone
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -240,6 +261,21 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       craftWorkshop = comboList(items = workshops, selected = craftWorkshop,
           itemHeight = 25, x = 380, y = 150)
     # Show assign crew setting
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Don't assign anyone to the order. You can manually do it later, in ship info screen.")
+    if option(label = "Don't assing anyone", selected = assign == noone):
+      assign = noone
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Assign the crew member with the highest skill needed for the recipe, even if the crew member is busy.")
+    if option(label = "Assign the best worker", selected = assign == best):
+      assign = best
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Assign the crew member from the list. The sign + after name means that this crew member has needed skill, the sign ++ after name means that his/her needed skill is the best in the crew.")
+    if option(label = "Assign selected member", selected = assign == selected):
+      assign = selected
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = setImage, text = $recipe.recipeType,
@@ -275,27 +311,6 @@ proc setRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     of deconstruct:
       craftImage = images[deconstructIcon]
       setImage = images[deconstructColoredIcon]
-  craftQuality = 2
-  var mType: ModuleType = ModuleType.any
-  if recipe.recipeType == craftType:
-    mType = try:
-        recipesList[recipe.index].workplace
-      except:
-        dialog = setError(message = "Can't get a module's type.")
-        return
-  else:
-    mType = alchemyLab
-  workshops = @[]
-  for index, module in playerShip.modules:
-    try:
-      if modulesList[module.protoIndex].mType == mType:
-        workshops.add(y = module.name)
-    except:
-      dialog = setError(message = "Can't create the list of modules.")
-      return
-  if workshopIndex > workshops.len:
-    workshopIndex = 0
-  assign = noone
 
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
