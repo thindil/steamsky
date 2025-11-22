@@ -23,9 +23,12 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, crafts, crewinventory, game, shipmodules, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
-type RecipesSortOrders = enum
-  nameAsc, nameDesc, workplaceAsc, workplaceDesc, toolsAsc, toolsDesc,
-    materialsAsc, materialsDesc, none
+type
+  RecipesSortOrders = enum
+    nameAsc, nameDesc, workplaceAsc, workplaceDesc, toolsAsc, toolsDesc,
+      materialsAsc, materialsDesc, none
+  AssignType = enum
+    noone, best, selected
 
 const defaultRecipesSortOrder: RecipesSortOrders = none
 
@@ -38,6 +41,7 @@ var
   craftQuality: Natural = 2
   craftImage, setImage: PImage = nil
   workshops: seq[string] = @[]
+  assign: AssignType = noone
 
 proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -230,10 +234,12 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       craftQuality = comboList(items = qualities, selected = craftQuality,
           itemHeight = 25, x = 200, y = 150)
     setLayoutRowDynamic(height = 30, cols = 1)
+    # Show workshop setting if needed
     if workshops.len > 1:
       label(str = "Workshop:")
       craftWorkshop = comboList(items = workshops, selected = craftWorkshop,
           itemHeight = 25, x = 380, y = 150)
+    # Show assign crew setting
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = setImage, text = $recipe.recipeType,
@@ -289,6 +295,7 @@ proc setRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
       return
   if workshopIndex > workshops.len:
     workshopIndex = 0
+  assign = noone
 
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
