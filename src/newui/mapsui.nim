@@ -497,7 +497,7 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             text = "Set speed for your ship. The faster you move, the more fuel used. But faster movement has bigger chance to evade enemies.")
       playerShip.speed = (comboList(items = shipSpeeds,
           selected = playerShip.speed.ord - 1, itemHeight = 25, x = 200,
-          y = 150) + 1).ShipSpeed
+          y = 50) + 1).ShipSpeed
       setLayoutRowStatic(height = 30, cols = 3, ratio = [40.cfloat, 40, 40])
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
