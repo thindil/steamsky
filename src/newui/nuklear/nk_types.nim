@@ -1129,6 +1129,13 @@ type
     growFactor*: float
     pool*: Allocator
     marker*: array[bufferMax, BufferMarker]
+  CommandBuffer* = object
+    ## Used to store Nuklear command buffer data
+    begin*, cmdEnd*, last*: nk_size
+    clip*: Rect
+    base*: Buffer
+    useClipping*: bool
+    userData*: Handle
 
 # ---------
 # Constants
