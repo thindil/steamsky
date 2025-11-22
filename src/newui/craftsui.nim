@@ -227,17 +227,13 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Desired quality of crafted item. Better quality raises difficulty of crafting, worse lowers.")
-      let newQuality: Natural = comboList(items = qualities, selected = craftQuality,
+      craftQuality = comboList(items = qualities, selected = craftQuality,
           itemHeight = 25, x = 200, y = 150)
-      if newQuality != craftQuality:
-        craftQuality = newQuality
     setLayoutRowDynamic(height = 30, cols = 1)
     if workshops.len > 1:
       label(str = "Workshop:")
-      let newIndex: Natural = comboList(items = workshops, selected = craftWorkshop,
+      craftWorkshop = comboList(items = workshops, selected = craftWorkshop,
           itemHeight = 25, x = 380, y = 150)
-      if newIndex != craftWorkshop:
-        craftWorkshop = newIndex
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = setImage, text = $recipe.recipeType,
@@ -415,18 +411,14 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show only the selected type of recipes.")
-    let newType: Natural = comboList(items = recipesTypes, selected = typeIndex,
+    typeIndex = comboList(items = recipesTypes, selected = typeIndex,
         itemHeight = 25, x = 200, y = 150)
-    if newType != typeIndex:
-      typeIndex = newType
     label(str = "Workshop:")
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show only recipes for the selected type of workshops.")
-    let newWorkshop: Natural = comboList(items = workshopsList,
-        selected = workshopType, itemHeight = 25, x = 400, y = 150)
-    if newWorkshop != workshopType:
-      workshopType = newWorkshop
+    workshopType = comboList(items = workshopsList, selected = workshopType,
+        itemHeight = 25, x = 400, y = 150)
   # Show the list of recipes to craft
   let tableHeight: float = windowHeight - 140 - (if showOptions: 135 else: 0) -
       gameSettings.messagesPosition.float
