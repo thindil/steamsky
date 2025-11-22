@@ -23,18 +23,13 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, messages, shipscargo, shipsmovement, types]
 import coreui, dialogs, errordialog, ordersmenu, setui, themes, waitmenu
 
-proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
-    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc showResourcesInfo(fuelAmount, foodAmount,
+    drinksAmount: Natural) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show information about food, drinks and fuel in the player's ship's cargo
   ##
   ## * fuelAmount   - the amount of fuel on the player's ship
   ## * foodAmount   - the amount of food on the player's ship
   ## * drinksAmount - the amount of drinks on the player's ship
-  ## * dialog       - the current in-game dialog displayed on the screen
-  ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened or the game's menu is to show.
-  ##
   var
     color: Color = colBlack
     image: PImage = nil
@@ -388,7 +383,7 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       addTooltip(bounds = getWidgetBounds(), text = "Game time.")
     label(str = formattedTime(), alignment = centered)
   showResourcesInfo(fuelAmount = fuelAmount, foodAmount = foodAmount,
-      drinksAmount = drinksAmount, dialog = dialog)
+      drinksAmount = drinksAmount)
   showNotifications(speed = speed, havePilot = havePilot,
       haveEngineer = haveEngineer, haveTrader = haveTrader,
       haveUpgrader = haveUpgrader, haveCleaner = haveCleaner,
