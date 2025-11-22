@@ -312,10 +312,8 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Show only items of the selected type")
-  let newType: Natural = comboList(items = typesList,
-      selected = typeIndex, itemHeight = 25, x = 200, y = 150)
-  if newType != typeIndex:
-    typeIndex = newType
+  typeIndex = comboList(items = typesList, selected = typeIndex,
+      itemHeight = 25, x = 200, y = 150)
   # Show information about free cargo space in the player's ship
   setLayoutRowStatic(height = 30, cols = 2, ratio = [cargoWidth[0], cargoWidth[1]])
   label(str = cargoText[0])
@@ -366,8 +364,8 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
             return
       if typeIndex > 0 and itemType != typesList[typeIndex]:
         continue
-      let itemName: string = getItemName(item = playerShip.cargo[i], damageInfo = false,
-          toLower = false)
+      let itemName: string = getItemName(item = playerShip.cargo[i],
+          damageInfo = false, toLower = false)
       if currentRow < startRow:
         currentRow.inc
         continue
