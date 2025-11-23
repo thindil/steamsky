@@ -227,9 +227,9 @@ proc setRecipeData*(recipeIndex: string;
     else:
       result = recipesList[recipeIndex]
       if quality != normal:
-        result.difficulty = result.difficulty + countItemBonus(
-            value = result.difficulty, quality = quality)
-        result.time = result.time + countItemBonus(value = result.difficulty,
+        result.difficulty += countItemBonus(value = result.difficulty,
+            quality = quality)
+        result.time += countItemBonus(value = result.difficulty,
             quality = quality)
 
 proc checkRecipe*(recipeIndex: string): Positive {.raises: [
