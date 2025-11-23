@@ -20,7 +20,7 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crafts, crewinventory, game, shipmodules, types]
+import ../[config, crafts, crewinventory, game, shipscrew, shipmodules, types]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes, utilsui2
 
 type
@@ -290,6 +290,41 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
     imageLabelButton(image = setImage, text = $recipe.recipeType,
         alignment = right):
       dialog = none
+      let moduleName = workshops[craftWorkshop]
+      for index, module in playerShip.modules:
+        if module.name == moduleName:
+          if craftWorkshop == 0:
+            try:
+              setRecipe(workshop = index, amount = craftAmount, recipeIndex = recipe.index, quality = craftQuality)
+            except:
+              dialog = setError(message = "Can't set the recipe.")
+              return
+            if assign == selected:
+              try:
+                giveOrders(ship = playerShip, memberIndex = worker, givenOrder = craft, moduleIndex = index)
+              except:
+                dialog = setError(message = "Can't give order from list.")
+                return
+            elif assign == best:
+              var workerAssigned: bool = false
+              for mIndex, member in playerShip.crew:
+                if getSkillMarks(skillIndex = craft.skill, memberIndex = mIndex) == " ++":
+                  try:
+                    giveOrders(ship = playerShip, memberIndex = mIndex,
+                        givenOrder = craft, moduleIndex = index)
+                  except:
+                    dialog = setError(message = "Can't give order to best worker.")
+                  workerAssigned = true
+                  break
+              if not workerAssigned:
+                try:
+                  giveOrders(ship = playerShip, memberIndex = 0, givenOrder = craft,
+                      moduleIndex = index)
+                except:
+                  dialog = setError(message = "Can't give order to the player.")
+            break
+          else:
+            craftWorkshop.dec
     restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
 
