@@ -1111,7 +1111,8 @@ type
     offset*: nk_size
   Memory* = object
     ## Used to store Nuklear buffer's memory info
-    memPtr*, size*: nk_size
+    memPtr*: pointer
+    size*: nk_size
   PluginAlloc* = proc (handle: Handle; old: pointer; size: nk_size): pointer {.cdecl.}
     ## The procedure executed when plugin is allocated
   PluginFree* = proc (handle: Handle; old: pointer) {.cdecl.}
