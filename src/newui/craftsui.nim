@@ -290,7 +290,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
     imageLabelButton(image = setImage, text = $recipe.recipeType,
         alignment = right):
       dialog = none
-      let moduleName = workshops[craftWorkshop]
+      let moduleName: string = workshops[craftWorkshop]
       for index, module in playerShip.modules:
         if module.name == moduleName:
           if craftWorkshop == 0:
@@ -327,8 +327,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
                 except:
                   dialog = setError(message = "Can't give order to the player.")
             break
-          else:
-            craftWorkshop.dec
+          craftWorkshop.dec
     restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
 
