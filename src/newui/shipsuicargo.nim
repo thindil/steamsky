@@ -218,10 +218,8 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show only items with the selected type")
-    let newType: Natural = comboList(items = typesList, selected = typeIndex,
+    typeIndex = comboList(items = typesList, selected = typeIndex,
         itemHeight = 25, x = 200, y = 150)
-    if newType != typeIndex:
-      typeIndex = newType
   # Show the list of crew members
   addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
       code = sortCargo, dialog = dialog)
