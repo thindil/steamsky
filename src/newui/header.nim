@@ -424,7 +424,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
   window(name = windowName, x = dialogX, y = dialogY,
       w = width, h = height, flags = {windowBorder, windowTitle,
       windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(30, 1)
+    setLayoutRowDynamic(height = 30, cols = 1)
     labelButton(title = "Ship information"):
       if state != shipInfo:
         previousState = state
