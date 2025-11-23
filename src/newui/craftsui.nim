@@ -21,7 +21,7 @@
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, crafts, crewinventory, game, shipmodules, types]
-import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
+import coreui, dialogs, errordialog, header, messagesui, setui, table, themes, utilsui2
 
 type
   RecipesSortOrders = enum
@@ -40,8 +40,9 @@ var
   maxAmount, craftAmount, craftWorkshop: Natural = 0
   craftQuality: Natural = 2
   craftImage, setImage: PImage = nil
-  workshops: seq[string] = @[]
+  workshops, workers: seq[string] = @[]
   assign: AssignType = noone
+  worker: Natural = 0
 
 proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -208,6 +209,12 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
         if workshopIndex > workshops.len:
           workshopIndex = 0
         assign = noone
+        workers = @[]
+        worker = 0
+        for index, member in playerShip.crew:
+          if member.skills.len > 0:
+            workers.add(y = member.name & getSkillMarks(
+                skillIndex = craft.skill, memberIndex = index))
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -276,6 +283,8 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
           text = "Assign the crew member from the list. The sign + after name means that this crew member has needed skill, the sign ++ after name means that his/her needed skill is the best in the crew.")
     if option(label = "Assign selected member", selected = assign == selected):
       assign = selected
+    worker = comboList(items = workers, selected = worker, itemHeight = 25,
+        x = 380, y = 150)
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = setImage, text = $recipe.recipeType,
