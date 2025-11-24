@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, math, strutils, tables]
+import contracts
 import ../[config, crafts, crewinventory, game, items, shipmodules, shipscrew, tk, types]
 import coreui, dialogs, errordialog, table, updateheader, utilsui2
 
@@ -109,6 +110,7 @@ var
   deconstructs: seq[Positive]
   recipesIndexes: seq[string]
   recipesTable, ordersTable: TableWidget
+  workshopsIndexes: seq[Natural] = @[]
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -222,6 +224,15 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       recipesIndexes.add(y = $recipe)
     for recipe in deconstructs:
       recipesIndexes.add(y = $recipe)
+  var workshopsAmount: Natural = 0
+  for module in playerShip.modules:
+    if module.mType == ModuleType2.workshop:
+      workshopsAmount.inc
+  if workshopsIndexes.len != workshopsAmount:
+    workshopsIndexes = @[]
+    for index, module in playerShip.modules:
+      if module.mType == ModuleType2.workshop:
+        workshopsIndexes.add(y = index)
   if recipesTable.rowHeight == 0:
     recipesTable = createTable(parent = craftsCanvas & ".craft.recipes",
         headers = @["Name", "Workshop", "Tools", "Materials"],
@@ -377,9 +388,8 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
         tooltipText = "Press mouse button to sort the workshops.")
   else:
     ordersTable.clearTable
-  for index, module in playerShip.modules:
-    if module.mType != ModuleType2.workshop:
-      continue
+  for index in workshopsIndexes:
+    let module: ModuleData = playerShip.modules[index]
     var
       recipeName: string = try:
           getWorkshopRecipeName(workshop = index)
@@ -1154,6 +1164,124 @@ proc craftsMoreCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = button & " configure -command {CraftsMore show}")
   return tclOk
 
+type WorkshopsSortOrders = enum
+  nameAsc, nameDesc, orderAsc, orderDesc, workersAsc, workersDesc, none
+
+const defaultWorkshopsSortOrder: WorkshopsSortOrders = none
+
+var workshopsSortOrder: WorkshopsSortOrders = defaultWorkshopsSortOrder
+
+proc sortCrafting2Command(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect], cdecl, contractual.} =
+  ## Sort the list of available workshops
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortCrafting2 x
+  ## X is X axis coordinate where the player clicked the mouse button
+  let column: int = try:
+      getColumnNumber(table = ordersTable, xPosition = ($argv[1]).parseInt)
+    except:
+      return showError(message = "Can't get the column.")
+  case column
+  of 1:
+    if workshopsSortOrder == nameAsc:
+      workshopsSortOrder = nameDesc
+    else:
+      workshopsSortOrder = nameAsc
+  of 2:
+    if workshopsSortOrder == orderAsc:
+      workshopsSortOrder = orderDesc
+    else:
+      workshopsSortOrder = orderAsc
+  of 3:
+    if workshopsSortOrder == workersAsc:
+      workshopsSortOrder = workersDesc
+    else:
+      workshopsSortOrder = workersAsc
+  else:
+    discard
+  if workshopsSortOrder == none:
+    return tclOk
+  type LocalWorkshopData = object
+    name, order, workers: string
+    id: Natural
+  var
+    localWorkshops: seq[LocalWorkshopData] = @[]
+  for index in workshopsIndexes:
+    let module: ModuleData = playerShip.modules[index]
+    var
+      recipeName2: string = try:
+          getWorkshopRecipeName(workshop = index)
+      except:
+        return showError(message = "Can't get the recipe name.")
+    if recipeName2.len == 0:
+      recipeName2 = "Not set"
+    var workers: string = ""
+    var haveWorkers: bool = false
+    for worker in module.owner:
+      if worker > -1:
+        if haveWorkers:
+          workers.add(y = ", ")
+        haveWorkers = true
+        workers.add(y = playerShip.crew[worker].name)
+    if not haveWorkers:
+      workers = "none"
+    localWorkshops.add(y = LocalWorkshopData(name: module.name,
+        order: recipeName2, workers: workers, id: index))
+
+  proc sortWorkshops(x, y: LocalWorkshopData): int {.raises: [], tags: [],
+      contractual.} =
+    ## Compare two workshops and return which should go first, based on the sort
+    ## order of the workshop
+    ##
+    ## * x - the first workshop to compare
+    ## * y - the second workshop to compare
+    ##
+    ## Returns 1 if the first recipe should go first, -1 if the second recipe
+    ## should go first.
+    case workshopsSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      return -1
+    of orderAsc:
+      if x.order < y.order:
+        return 1
+      return -1
+    of orderDesc:
+      if x.order > y.order:
+        return 1
+      return -1
+    of workersAsc:
+      if x.workers < y.workers:
+        return 1
+      return -1
+    of workersDesc:
+      if x.workers > y.workers:
+        return 1
+      return -1
+    of none:
+      return -1
+
+  localWorkshops.sort(cmp = sortWorkshops)
+  workshopsIndexes = @[]
+  for workshop in localWorkshops:
+    workshopsIndexes.add(y = workshop.id)
+  return showCraftingCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["ShowCrafting", "2"].allocCStringArray)
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect].} =
   ## Adds Tcl commands related to the crew UI
@@ -1167,5 +1295,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     addCommand("ChangeCraftOrder", changeCraftOrderCommand)
     addCommand("SetCraftWorkshop", setCraftWorkshopCommand)
     addCommand("CraftsMore", craftsMoreCommand)
+    addCommand(name = "SortCrafting2", nimProc = sortCrafting2Command)
   except:
     showError(message = "Can't add a Tcl command.")
