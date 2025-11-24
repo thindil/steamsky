@@ -1155,6 +1155,117 @@ proc craftsMoreCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = button & " configure -command {CraftsMore show}")
   return tclOk
 
+type WorkshopsSortOrders = enum
+  nameAsc, nameDesc, orderAsc, orderDesc, workersAsc, workersDesc, none
+
+const defaultWorkshopsSortOrder: WorkshopsSortOrders = none
+
+var workshopsSortOrder: WorkshopsSortOrders = defaultWorkshopsSortOrder
+
+proc sortCrafting2Command(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect], cdecl, contractual.} =
+  ## Sort the list of available workshops
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortCrafting2 x
+  ## X is X axis coordinate where the player clicked the mouse button
+  let column: int = try:
+      getColumnNumber(table = recipesTable, xPosition = ($argv[1]).parseInt)
+    except:
+      return showError(message = "Can't get the column.")
+  case column
+  of 1:
+    if workshopsSortOrder == nameAsc:
+      workshopsSortOrder = nameDesc
+    else:
+      workshopsSortOrder = nameAsc
+  of 2:
+    if workshopsSortOrder == orderAsc:
+      workshopsSortOrder = orderDesc
+    else:
+      workshopsSortOrder = orderAsc
+  of 1:
+    if workshopsSortOrder == workersAsc:
+      workshopsSortOrder = workersDesc
+    else:
+      workshopsSortOrder = workersAsc
+  else:
+    discard
+  if workshopsSortOrder == none:
+    return tclOk
+  type LocalRecipeData = object
+    name: string
+    workplace: bool
+    tool: bool
+    materials: bool
+    id: string
+  var
+    localRecipes: seq[LocalRecipeData] = @[]
+    canCraft, hasWorkplace, hasTool, hasMaterials: bool = false
+  for recipe in knownRecipes:
+    try:
+      isCraftable(recipe = recipesList[recipe], canCraft = canCraft,
+          hasWorkplace = hasWorkplace, hasTool = hasTool,
+          hasMaterials = hasMaterials)
+      localRecipes.add(y = LocalRecipeData(name: itemsList[recipesList[
+          recipe].resultIndex].name, workplace: hasWorkplace, tool: hasTool,
+          materials: hasMaterials, id: recipe))
+    except:
+      return showError(message = "Can't sort known recipes.")
+
+  proc sortWorkshops(x, y: LocalRecipeData): int {.raises: [], tags: [],
+      contractual.} =
+    ## Compare two recipes and return which should go first, based on the sort
+    ## order of the recipes
+    ##
+    ## * x - the first recipe to compare
+    ## * y - the second recipe to compare
+    ##
+    ## Returns 1 if the first recipe should go first, -1 if the second recipe
+    ## should go first.
+    case workshopsSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      return -1
+    of orderAsc:
+      if x.order < y.order:
+        return 1
+      return -1
+    of orderDesc:
+      if x.order > y.order:
+        return 1
+      return -1
+    of workersAsc:
+      if x.workers < y.workers:
+        return 1
+      return -1
+    of workersDesc:
+      if x.workers > y.workers:
+        return 1
+      return -1
+    of none:
+      return -1
+
+  localRecipes.sort(cmp = sortRecipes)
+  recipesIndexes = @[]
+  for recipe in localRecipes:
+    recipesIndexes.add(y = recipe.id)
+  return showCraftingCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["ShowCrafting", "2"].allocCStringArray)
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Adds Tcl commands related to the crew UI
@@ -1168,5 +1279,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     addCommand(name = "ChangeCraftOrder", nimProc = changeCraftOrderCommand)
     addCommand(name = "SetCraftWorkshop", nimProc = setCraftWorkshopCommand)
     addCommand(name = "CraftsMore", nimProc = craftsMoreCommand)
+    addCommand(name = "SortCrafting2", nimProc = sortCrafting2Command)
   except:
     showError(message = "Can't add a Tcl command.")
