@@ -156,10 +156,8 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         max = 1440, step = 1, incPerPixel = 1)
     if newValue != waitAmount:
       waitAmount = newValue
-    var newInterval: Natural = comboList(items = ["minutes", "hours", "days"],
+    waitInterval = comboList(items = ["minutes", "hours", "days"],
         selected = waitInterval, itemHeight = 25, x = 100, y = 180)
-    if newInterval != waitInterval:
-      waitInterval = newInterval
     setLayoutRowDynamic(height = 30, cols = 1)
     if needRest:
       if gameSettings.showTooltips:
