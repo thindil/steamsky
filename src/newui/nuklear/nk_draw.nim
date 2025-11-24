@@ -41,8 +41,8 @@ proc nkCommandBufferPush*(b: PNkCommandBuffer; t: CommandType;
   body:
     if b == nil:
       return nil
-    const align: nk_size = alignof(x = nk_command)
-    let cmd: ptr nk_command = cast[ptr nk_command](nkBufferAlloc(b = b.base,
+    const align: nk_size = alignof(x = Command)
+    let cmd: ptr Command = cast[ptr Command](nkBufferAlloc(b = b.base,
         `type` = bufferFront, size = size, align = align))
     if cmd == nil:
       return nil
@@ -56,7 +56,7 @@ proc nkCommandBufferPush*(b: PNkCommandBuffer; t: CommandType;
           1)) and not(align - 1))
       alignment: nk_size = cast[nk_size](cast[ptr nk_byte](memory)) - cast[
           nk_size](cast[ptr nk_byte](unaligned))
-    cmd.`type` = t
+    cmd.cmdType = t
     cmd.next = b.base.allocated + alignment
     when defined(nkIncludeCommandUserData):
       cmd.userdata = b.userdata

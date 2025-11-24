@@ -1137,6 +1137,12 @@ type
     base*: Buffer
     useClipping*: bool
     userData*: Handle
+  Command* = object
+    ## Used to store Nuklear command data
+    cmdType*: CommandType
+    next*: nk_size
+    when defined(nkIncludeCommandUserData):
+      userdata*: Handle ## Interna Nuklear data
 
 # ---------
 # Constants
