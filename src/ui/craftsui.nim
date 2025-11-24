@@ -1201,33 +1201,40 @@ proc sortCrafting2Command(clientData: cint; interp: PInterp; argc: cint;
     discard
   if workshopsSortOrder == none:
     return tclOk
-  type LocalRecipeData = object
-    name: string
-    workplace: bool
-    tool: bool
-    materials: bool
-    id: string
+  type LocalWorkshopData = object
+    name, order, workers: string
+    id: Natural
   var
-    localRecipes: seq[LocalRecipeData] = @[]
-    canCraft, hasWorkplace, hasTool, hasMaterials: bool = false
-  for recipe in knownRecipes:
-    try:
-      isCraftable(recipe = recipesList[recipe], canCraft = canCraft,
-          hasWorkplace = hasWorkplace, hasTool = hasTool,
-          hasMaterials = hasMaterials)
-      localRecipes.add(y = LocalRecipeData(name: itemsList[recipesList[
-          recipe].resultIndex].name, workplace: hasWorkplace, tool: hasTool,
-          materials: hasMaterials, id: recipe))
-    except:
-      return showError(message = "Can't sort known recipes.")
+    localWorkshops: seq[LocalWorkshopData] = @[]
+  for index, module in playerShip.modules:
+    if module.mType != ModuleType2.workshop:
+      continue
+    var
+      recipeName2: string = try:
+          getWorkshopRecipeName(workshop = index)
+      except:
+        return showError(message = "Can't get the recipe name.")
+    if recipeName2.len == 0:
+      recipeName2 = "Not set"
+    var workers: string = ""
+    var haveWorkers: bool = false
+    for worker in module.owner:
+      if worker > -1:
+        if haveWorkers:
+          workers.add(y = ", ")
+        haveWorkers = true
+        workers.add(y = playerShip.crew[worker].name)
+    if not haveWorkers:
+      workers = "none"
+    localWorkshops.add(y = LocalWorkshopData(name: module.name, order: recipeName2, workers: workers, id: index))
 
-  proc sortWorkshops(x, y: LocalRecipeData): int {.raises: [], tags: [],
+  proc sortWorkshops(x, y: LocalWorkshopData): int {.raises: [], tags: [],
       contractual.} =
-    ## Compare two recipes and return which should go first, based on the sort
-    ## order of the recipes
+    ## Compare two workshops and return which should go first, based on the sort
+    ## order of the workshop
     ##
-    ## * x - the first recipe to compare
-    ## * y - the second recipe to compare
+    ## * x - the first workshop to compare
+    ## * y - the second workshop to compare
     ##
     ## Returns 1 if the first recipe should go first, -1 if the second recipe
     ## should go first.
@@ -1259,8 +1266,8 @@ proc sortCrafting2Command(clientData: cint; interp: PInterp; argc: cint;
     of none:
       return -1
 
-  localRecipes.sort(cmp = sortRecipes)
-  recipesIndexes = @[]
+  localWorkshops.sort(cmp = sortWorkshops)
+  workshopsIndexes = @[]
   for recipe in localRecipes:
     recipesIndexes.add(y = recipe.id)
   return showCraftingCommand(clientData = clientData, interp = interp, argc = 2,
