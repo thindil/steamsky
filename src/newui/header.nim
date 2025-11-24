@@ -426,24 +426,24 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
       windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 1)
     labelButton(title = "Ship information"):
-      if state != shipInfo:
+      if state == shipInfo:
+        state = previousState
+      else:
         previousState = state
         setShipInfo(dialog = dialog)
         state = shipInfo
-      else:
-        state = previousState
       dialog = none
     if playerShip.crew[0].health > 0 and not inCombat:
       labelButton(title = "Ship orders"):
         setDialog()
         dialog = ordersDialog
       labelButton(title = "Crafting"):
-        if state != crafting:
+        if state == crafting:
+          state = previousState
+        else:
           previousState = state
           setCrafting(dialog = dialog)
           state = crafting
-        else:
-          state = previousState
         dialog = none
     labelButton(title = "Last messages"):
       discard
