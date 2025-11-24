@@ -1187,7 +1187,7 @@ proc sortCrafting2Command(clientData: cint; interp: PInterp; argc: cint;
   ## SortCrafting2 x
   ## X is X axis coordinate where the player clicked the mouse button
   let column: int = try:
-      getColumnNumber(table = recipesTable, xPosition = ($argv[1]).parseInt)
+      getColumnNumber(table = ordersTable, xPosition = ($argv[1]).parseInt)
     except:
       return showError(message = "Can't get the column.")
   case column
@@ -1215,9 +1215,8 @@ proc sortCrafting2Command(clientData: cint; interp: PInterp; argc: cint;
     id: Natural
   var
     localWorkshops: seq[LocalWorkshopData] = @[]
-  for index, module in playerShip.modules:
-    if module.mType != ModuleType2.workshop:
-      continue
+  for index in workshopsIndexes:
+    let module: ModuleData = playerShip.modules[index]
     var
       recipeName2: string = try:
           getWorkshopRecipeName(workshop = index)
@@ -1235,7 +1234,8 @@ proc sortCrafting2Command(clientData: cint; interp: PInterp; argc: cint;
         workers.add(y = playerShip.crew[worker].name)
     if not haveWorkers:
       workers = "none"
-    localWorkshops.add(y = LocalWorkshopData(name: module.name, order: recipeName2, workers: workers, id: index))
+    localWorkshops.add(y = LocalWorkshopData(name: module.name,
+        order: recipeName2, workers: workers, id: index))
 
   proc sortWorkshops(x, y: LocalWorkshopData): int {.raises: [], tags: [],
       contractual.} =
