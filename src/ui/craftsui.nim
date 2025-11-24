@@ -29,6 +29,7 @@ var
   deconstructs: seq[Positive] = @[]
   recipesIndexes: seq[string] = @[]
   recipesTable, ordersTable: TableWidget
+  workshopsIndexes: seq[Natural] = @[]
 {.pop ruleOn: "varDeclared".}
 
 proc showWorkshopsTable(craftsCanvas, craftsFrame: string): bool {.raises: [],
@@ -46,9 +47,8 @@ proc showWorkshopsTable(craftsCanvas, craftsFrame: string): bool {.raises: [],
         tooltipText = "Press mouse button to sort the workshops.")
   else:
     ordersTable.clearTable
-  for index, module in playerShip.modules:
-    if module.mType != ModuleType2.workshop:
-      continue
+  for index in workshopsIndexes:
+    let module: ModuleData = playerShip.modules[index]
     var
       recipeName2: string = try:
           getWorkshopRecipeName(workshop = index)
@@ -374,6 +374,15 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       recipesIndexes.add(y = $recipe)
     for recipe in deconstructs:
       recipesIndexes.add(y = $recipe)
+  var workshopsAmount: Natural = 0
+  for module in playerShip.modules:
+    if module.mType == ModuleType2.workshop:
+      workshopsAmount.inc
+  if workshopsIndexes.len != workshopsAmount:
+    workshopsIndexes = @[]
+    for index, module in playerShip.modules:
+      if module.mType == ModuleType2.workshop:
+        workshopsIndexes.add(y = index)
   if showRecipesTable(craftsCanvas = craftsCanvas, craftsFrame = craftsFrame,
       recipeName = recipeName, searchEntry = searchEntry, argc = argc, argv = argv):
     return tclOk
@@ -1192,7 +1201,7 @@ proc sortCrafting2Command(clientData: cint; interp: PInterp; argc: cint;
       workshopsSortOrder = orderDesc
     else:
       workshopsSortOrder = orderAsc
-  of 1:
+  of 3:
     if workshopsSortOrder == workersAsc:
       workshopsSortOrder = workersDesc
     else:
@@ -1268,8 +1277,8 @@ proc sortCrafting2Command(clientData: cint; interp: PInterp; argc: cint;
 
   localWorkshops.sort(cmp = sortWorkshops)
   workshopsIndexes = @[]
-  for recipe in localRecipes:
-    recipesIndexes.add(y = recipe.id)
+  for workshop in localWorkshops:
+    workshopsIndexes.add(y = workshop.id)
   return showCraftingCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowCrafting", "2"].allocCStringArray)
 
