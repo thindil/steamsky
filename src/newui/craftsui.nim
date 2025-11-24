@@ -423,18 +423,6 @@ proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
   availableRecipes.sort(cmp = sortRecipes)
   dialog = none
 
-const
-  headers: array[4, HeaderData[RecipesSortOrders]] = [
-    HeaderData[RecipesSortOrders](label: "Name", sortAsc: nameAsc,
-        sortDesc: nameDesc),
-    HeaderData[RecipesSortOrders](label: "Workshop", sortAsc: workplaceAsc,
-        sortDesc: workplaceDesc),
-    HeaderData[RecipesSortOrders](label: "Tools", sortAsc: toolsAsc,
-        sortDesc: toolsDesc),
-    HeaderData[RecipesSortOrders](label: "Materials", sortAsc: materialsAsc,
-        sortDesc: materialsDesc)]
-  ratio: array[4, cfloat] = [400.cfloat, 100, 100, 100]
-
 proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show information about available crafting recipes
@@ -488,56 +476,72 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
           text = "Show only recipes for the selected type of workshops.")
     workshopType = comboList(items = workshopsList, selected = workshopType,
         itemHeight = 25, x = 400, y = 150)
-  # Show the list of recipes to craft
   let tableHeight: float = windowHeight - 140 - (if showOptions: 135 else: 0) -
       gameSettings.messagesPosition.float
   setLayoutRowDynamic(height = tableHeight, cols = 1)
-  group(title = "RecipesGroup", flags = {windowNoFlags}):
+  group(title = "CraftingGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
-    addHeader(headers = headers, ratio = ratio, tooltip = "recipes",
-      code = sortRecipes, dialog = dialog)
-    var
-      currentRow, row: Positive = 1
-    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-    saveButtonStyle()
-    setButtonStyle(field = borderColor, a = 0)
-    try:
-      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    except:
-      dialog = setError(message = "Can't set table color")
-      return
-    setButtonStyle(field = rounding, value = 0)
-    setButtonStyle(field = border, value = 0)
-    for index, rec in availableRecipes:
-      if nameSearch.len > 0 and rec.name.toLowerAscii.find(
-          sub = nameSearch.toLowerAscii) == -1:
-        continue
-      if typeIndex == 1 and not rec.craftable:
-        continue
-      if typeIndex == 2 and rec.craftable:
-        continue
+    # Show the list of recipes to craft
+    if currentTab == 0:
+
+      const
+        headers: array[4, HeaderData[RecipesSortOrders]] = [
+          HeaderData[RecipesSortOrders](label: "Name", sortAsc: nameAsc,
+              sortDesc: nameDesc),
+          HeaderData[RecipesSortOrders](label: "Workshop", sortAsc: workplaceAsc,
+              sortDesc: workplaceDesc),
+          HeaderData[RecipesSortOrders](label: "Tools", sortAsc: toolsAsc,
+              sortDesc: toolsDesc),
+          HeaderData[RecipesSortOrders](label: "Materials", sortAsc: materialsAsc,
+              sortDesc: materialsDesc)]
+        ratio: array[4, cfloat] = [400.cfloat, 100, 100, 100]
+
+      addHeader(headers = headers, ratio = ratio, tooltip = "recipes",
+        code = sortRecipes, dialog = dialog)
+      var
+        currentRow, row: Positive = 1
+      let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+      saveButtonStyle()
+      setButtonStyle(field = borderColor, a = 0)
       try:
-        if workshopIndex > 0 and rec.workshop != modulesList[playerShip.modules[
-            workshopIndex - 1].protoIndex].mType:
-          continue
+        setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+        setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       except:
-        dialog = setError(message = "Can't check workshop.")
+        dialog = setError(message = "Can't set table color")
         return
-      if currentRow < startRow:
-        currentRow.inc
-        continue
-      addButton(label = rec.name, tooltip = "Show recipe's details.",
-        data = index, code = setRecipeInfo, dialog = dialog)
-      var checked: bool = rec.workplace
-      addCheckButton(tooltip = "", checked = checked)
-      checked = rec.tools
-      addCheckButton(tooltip = "", checked = checked)
-      checked = rec.materials
-      addCheckButton(tooltip = "", checked = checked)
-      row.inc
-    restoreButtonStyle()
-    addPagination(page = currentPage, row = row)
+      setButtonStyle(field = rounding, value = 0)
+      setButtonStyle(field = border, value = 0)
+      for index, rec in availableRecipes:
+        if nameSearch.len > 0 and rec.name.toLowerAscii.find(
+            sub = nameSearch.toLowerAscii) == -1:
+          continue
+        if typeIndex == 1 and not rec.craftable:
+          continue
+        if typeIndex == 2 and rec.craftable:
+          continue
+        try:
+          if workshopIndex > 0 and rec.workshop != modulesList[playerShip.modules[
+              workshopIndex - 1].protoIndex].mType:
+            continue
+        except:
+          dialog = setError(message = "Can't check workshop.")
+          return
+        if currentRow < startRow:
+          currentRow.inc
+          continue
+        addButton(label = rec.name, tooltip = "Show recipe's details.",
+          data = index, code = setRecipeInfo, dialog = dialog)
+        var checked: bool = rec.workplace
+        addCheckButton(tooltip = "", checked = checked)
+        checked = rec.tools
+        addCheckButton(tooltip = "", checked = checked)
+        checked = rec.materials
+        addCheckButton(tooltip = "", checked = checked)
+        row.inc
+      restoreButtonStyle()
+      addPagination(page = currentPage, row = row)
+    else:
+      discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - 20)
