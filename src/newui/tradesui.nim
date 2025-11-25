@@ -481,10 +481,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show only items of the selected type")
-    let newType: Natural = comboList(items = typesList,
-        selected = typeIndex, itemHeight = 25, x = 200, y = 150)
-    if newType != typeIndex:
-      typeIndex = newType
+    typeIndex = comboList(items = typesList, selected = typeIndex,
+        itemHeight = 25, x = 200, y = 150)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Enter a name of an item which you looking for")
