@@ -588,6 +588,8 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addHeader(headers = headers, ratio = ratio, tooltip = "workshops",
         code = sortWorkshops, dialog = dialog)
       for index in workshopsIndexes:
+        if index == -1:
+          continue
         let module: ModuleData = playerShip.modules[index]
         var
           recipeName2: string = try:
@@ -599,6 +601,21 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if recipeName2.len == 0:
           recipeName2 = "Not set"
           tooltipText = "Set a new order for the workshop"
-        addButton(label = module.name, tooltip = tooltipText, data = index, code = setChangeOrder, dialog = dialog)
+        addButton(label = module.name, tooltip = tooltipText, data = index,
+            code = setChangeOrder, dialog = dialog)
+        addButton(label = recipeName2, tooltip = tooltipText, data = index,
+            code = setChangeOrder, dialog = dialog)
+        var workers: string = ""
+        var haveWorkers: bool = false
+        for worker in module.owner:
+          if worker > -1:
+            if haveWorkers:
+              workers.add(y = ", ")
+            haveWorkers = true
+            workers.add(y = playerShip.crew[worker].name)
+        if not haveWorkers:
+          workers = "none"
+        addButton(label = workers, tooltip = tooltipText, data = index,
+            code = setChangeOrder, dialog = dialog)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - 20)
