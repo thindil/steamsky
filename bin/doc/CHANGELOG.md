@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Missing option to sorting workshops in the crafting screen
+
 ### Fixed
 - Items can be studies or deconstructed without a proper tool
 
