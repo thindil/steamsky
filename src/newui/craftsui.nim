@@ -364,6 +364,17 @@ proc setRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
       craftImage = images[deconstructIcon]
       setImage = images[deconstructColoredIcon]
 
+proc setChangeOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Set the selected workshop to change its crafting order or to show recipes
+  ## for it
+  ##
+  ## * data   - the index of the selected recipe
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  discard
+
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Sort recipes on the list
@@ -561,6 +572,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
         row.inc
       restoreButtonStyle()
       addPagination(page = currentPage, row = row)
+    # Show the list of installed workshops
     else:
 
       const
@@ -575,5 +587,18 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
 
       addHeader(headers = headers, ratio = ratio, tooltip = "workshops",
         code = sortWorkshops, dialog = dialog)
+      for index in workshopsIndexes:
+        let module: ModuleData = playerShip.modules[index]
+        var
+          recipeName2: string = try:
+              getWorkshopRecipeName(workshop = index)
+          except:
+            dialog = setError(message = "Can't get the recipe name.")
+            return
+          tooltipText: string = "Cancel the selected order"
+        if recipeName2.len == 0:
+          recipeName2 = "Not set"
+          tooltipText = "Set a new order for the workshop"
+        addButton(label = module.name, tooltip = tooltipText, data = index, code = setChangeOrder, dialog = dialog)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - 20)
