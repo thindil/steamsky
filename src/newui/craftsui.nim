@@ -373,7 +373,15 @@ proc setChangeOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  discard
+  let recipeName2: string = try:
+        getWorkshopRecipeName(workshop = data)
+      except:
+        dialog = setError(message = "Can't get the recipe name.")
+        return
+  if recipeName2.len == 0:
+    workshopType = data
+    currentTab = 0
+    hasOptions = true
 
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -504,7 +512,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     label(str = "Workshop:")
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
-          text = "Show only recipes for the selected type of workshops.")
+          text = "Show only recipes craftable in the selected workshop.")
     workshopType = comboList(items = workshopsList, selected = workshopType,
         itemHeight = 25, x = 400, y = 150)
   let tableHeight: float = windowHeight - 140 - (if showOptions: 135 else: 0) -
@@ -587,6 +595,16 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
 
       addHeader(headers = headers, ratio = ratio, tooltip = "workshops",
         code = sortWorkshops, dialog = dialog)
+      saveButtonStyle()
+      setButtonStyle(field = borderColor, a = 0)
+      try:
+        setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+        setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+      except:
+        dialog = setError(message = "Can't set table color")
+        return
+      setButtonStyle(field = rounding, value = 0)
+      setButtonStyle(field = border, value = 0)
       for index in workshopsIndexes:
         if index == -1:
           continue
@@ -617,5 +635,6 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
           workers = "none"
         addButton(label = workers, tooltip = tooltipText, data = index,
             code = setChangeOrder, dialog = dialog)
+      restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - 20)
