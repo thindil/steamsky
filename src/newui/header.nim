@@ -198,6 +198,31 @@ type
     ## Destination for the close button in the header
     none, combat, map, previous
 
+proc showDialogs(dialog: var GameDialog; state: var GameState;
+    oldState: GameState): bool {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show various in-game dialogs
+  ##
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ## * state    - the current state of the game
+  ## * oldState - the previous state of the game UI
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened or the game's menu is to show. Additionally, it returns true if
+  ## the game's state changed, otherwise false.
+  if playerShip.crew[0].health == 0 and dialog == none:
+    dialog = setQuestion(question = "You are dead. Would you like to see your game statistics?",
+        qType = showDeadStats)
+  # Draw dialogs
+  showQuestion(dialog = dialog, state = state)
+  if state != oldState:
+    return true
+  showShipOrders(dialog = dialog, state = state)
+  if state != oldState:
+    return true
+  showMessage(dialog = dialog)
+  showInfo(dialog = dialog)
+  return false
+
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     state: var GameState; options: bool = false): bool {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -390,19 +415,7 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       haveRepairman = haveRepairman, haveGunner = haveGunner,
       needRepairs = needRepairs, needWorker = needWorker,
       haveWorker = haveWorker, needCleaning = needCleaning, faction = faction)
-  if playerShip.crew[0].health == 0 and dialog == none:
-    dialog = setQuestion(question = "You are dead. Would you like to see your game statistics?",
-        qType = showDeadStats)
-  # Draw dialogs
-  showQuestion(dialog = dialog, state = state)
-  if state != oldState:
-    return true
-  showShipOrders(dialog = dialog, state = state)
-  if state != oldState:
-    return true
-  showMessage(dialog = dialog)
-  showInfo(dialog = dialog)
-  return false
+  return showDialogs(dialog = dialog, state = state, oldState = oldState)
 
 proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
     tags: [RootEffect], contractual.} =
