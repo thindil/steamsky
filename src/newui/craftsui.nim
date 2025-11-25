@@ -29,8 +29,12 @@ type
       materialsAsc, materialsDesc, none
   AssignType = enum
     noone, best, selected
+  WorkshopsSortOrders = enum
+    nameAsc, nameDesc, orderAsc, orderDesc, workersAsc, workersDesc, none
 
-const defaultRecipesSortOrder: RecipesSortOrders = none
+const
+  defaultRecipesSortOrder: RecipesSortOrders = none
+  defaultWorkshopsSortOrder: WorkshopsSortOrders = none
 
 var
   recipesSortOrder: RecipesSortOrders = defaultRecipesSortOrder
@@ -43,6 +47,7 @@ var
   workshops, workers: seq[string] = @[]
   assign: AssignType = noone
   worker: Natural = 0
+  workshopsSortOrder: WorkshopsSortOrders = defaultWorkshopsSortOrder
 
 proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -423,6 +428,21 @@ proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
   availableRecipes.sort(cmp = sortRecipes)
   dialog = none
 
+proc sortWorkshops(sortAsc, sortDesc: WorkshopsSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort workshops on the list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if workshopsSortOrder == sortAsc:
+    workshopsSortOrder = sortDesc
+  else:
+    workshopsSortOrder = sortAsc
+
 proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show information about available crafting recipes
@@ -489,12 +509,12 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
         headers: array[4, HeaderData[RecipesSortOrders]] = [
           HeaderData[RecipesSortOrders](label: "Name", sortAsc: nameAsc,
               sortDesc: nameDesc),
-          HeaderData[RecipesSortOrders](label: "Workshop", sortAsc: workplaceAsc,
-              sortDesc: workplaceDesc),
+          HeaderData[RecipesSortOrders](label: "Workshop",
+              sortAsc: workplaceAsc, sortDesc: workplaceDesc),
           HeaderData[RecipesSortOrders](label: "Tools", sortAsc: toolsAsc,
               sortDesc: toolsDesc),
-          HeaderData[RecipesSortOrders](label: "Materials", sortAsc: materialsAsc,
-              sortDesc: materialsDesc)]
+          HeaderData[RecipesSortOrders](label: "Materials",
+              sortAsc: materialsAsc, sortDesc: materialsDesc)]
         ratio: array[4, cfloat] = [400.cfloat, 100, 100, 100]
 
       addHeader(headers = headers, ratio = ratio, tooltip = "recipes",
@@ -521,8 +541,8 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if typeIndex == 2 and rec.craftable:
           continue
         try:
-          if workshopIndex > 0 and rec.workshop != modulesList[playerShip.modules[
-              workshopIndex - 1].protoIndex].mType:
+          if workshopIndex > 0 and rec.workshop != modulesList[
+              playerShip.modules[workshopIndex - 1].protoIndex].mType:
             continue
         except:
           dialog = setError(message = "Can't check workshop.")
@@ -542,6 +562,18 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
       restoreButtonStyle()
       addPagination(page = currentPage, row = row)
     else:
-      discard
+
+      const
+        headers: array[3, HeaderData[WorkshopsSortOrders]] = [
+          HeaderData[WorkshopsSortOrders](label: "Name", sortAsc: nameAsc,
+              sortDesc: nameDesc),
+          HeaderData[WorkshopsSortOrders](label: "Order", sortAsc: orderAsc,
+              sortDesc: orderDesc),
+          HeaderData[WorkshopsSortOrders](label: "Workers", sortAsc: workersAsc,
+              sortDesc: workersDesc)]
+        ratio: array[3, cfloat] = [400.cfloat, 100, 100]
+
+      addHeader(headers = headers, ratio = ratio, tooltip = "workshops",
+        code = sortWorkshops, dialog = dialog)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - 20)
