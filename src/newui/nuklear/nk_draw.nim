@@ -43,7 +43,7 @@ proc nkCommandBufferPush*(b: PNkCommandBuffer; t: CommandType;
       return nil
     const align: nk_size = alignof(x = Command)
     let cmd: ptr Command = cast[ptr Command](nkBufferAlloc(b = b.base,
-        `type` = bufferFront, size = size, align = align))
+        bufferAlloc = bufferFront, size = size, align = align))
     if cmd == nil:
       return nil
 

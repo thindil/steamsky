@@ -45,18 +45,18 @@ proc nkRoundUpPow2(v: nk_uint): nk_uint {.raises: [], tags: [], contractual.} =
   result.inc
 
 proc nkBufferAlign*(unaligned: pointer; align: nk_size; alignment: var nk_size;
-    `type`: BufferAllocationType): pointer {.raises: [], tags: [],
+    bufferAlloc: BufferAllocationType): pointer {.raises: [], tags: [],
     contractual.} =
   ## Align the sekected buffer. Internal use only
   ##
-  ## * unaligned - the pointer to unaligned data
-  ## * align     - the size of data to align
-  ## * alignment - the size of data after alignment
-  ## * `type`    - the allocation type
+  ## * unaligned   - the pointer to unaligned data
+  ## * align       - the size of data to align
+  ## * alignment   - the size of data after alignment
+  ## * bufferAlloc - the allocation type
   ##
   ## Returns pointer to aligned buffer
   var memory: pointer = nil
-  if `type` == bufferBack:
+  if bufferAlloc == bufferBack:
     if align == 0:
       memory = unaligned
       alignment = 0
@@ -118,14 +118,14 @@ proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
     b.size = capacity - backSize
     return temp
 
-proc nkBufferAlloc*(b: ptr nk_buffer; `type`: BufferAllocationType; size,
+proc nkBufferAlloc*(b: ptr nk_buffer; bufferAlloc: BufferAllocationType; size,
     align: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Allocate memory for the selected buffer. Internal use only
   ##
-  ## * b      - the buffer in which the memory will be allocated
-  ## * `type` - the allocation type
-  ## * size   - the size of memory to allocate
-  ## * align  - the align
+  ## * b           - the buffer in which the memory will be allocated
+  ## * bufferAlloc - the allocation type
+  ## * size        - the size of memory to allocate
+  ## * align       - the align
   ##
   ## Returns pointer to allocated memory
   require:
@@ -135,17 +135,17 @@ proc nkBufferAlloc*(b: ptr nk_buffer; `type`: BufferAllocationType; size,
     b.needed += size
     var unaligned: ptr nk_size = nil
     # calculate total size with needed alignment + size
-    if `type` == bufferFront:
+    if bufferAlloc == bufferFront:
       unaligned = b.memory.`ptr` + b.allocated
     else:
       unaligned = b.memory.`ptr` + (b.size - size)
     var alignment: nk_size = 0
     var memory: pointer = nkBufferAlign(unaligned = unaligned, align = align,
-        alignment = alignment, `type` = `type`)
+        alignment = alignment, bufferAlloc = bufferAlloc)
 
     var full: bool = false
     # check if buffer has enough memory
-    if `type` == bufferFront:
+    if bufferAlloc == bufferFront:
       full = (b.allocated + size + alignment) > b.size
     else:
       full = (b.size - min(x = b.size, y = (size + alignment))) <= b.allocated
@@ -166,14 +166,14 @@ proc nkBufferAlloc*(b: ptr nk_buffer; `type`: BufferAllocationType; size,
         return nil
 
       # align newly allocated pointer
-      if `type` == bufferFront:
+      if bufferAlloc == bufferFront:
         unaligned = b.memory.`ptr` + b.allocated
       else:
         unaligned = b.memory.`ptr` + (b.size - size)
       memory = nkBufferAlign(unaligned = unaligned, align = align,
-          alignment = alignment, `type` = `type`)
+          alignment = alignment, bufferAlloc = bufferAlloc)
 
-    if `type` == bufferFront:
+    if bufferAlloc == bufferFront:
       unaligned = b.memory.`ptr` + b.allocated
     else:
       unaligned = b.memory.`ptr` + (b.size - size)
