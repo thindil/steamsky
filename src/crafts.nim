@@ -678,7 +678,9 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
             roll += 20
           else:
             discard
-          let quality: ObjectQuality = case roll
+          if module.craftingQuality != normal:
+            roll += 50
+          var quality: ObjectQuality = case roll
             of -1000..1:
               poor
             of 2..5:
@@ -689,6 +691,9 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
               good
             else:
               excellent
+          if module.craftingQuality != normal and quality >
+              module.craftingQuality:
+            quality = module.craftingQuality
           if craftItem(amount = amount, recipe = recipe,
               resultAmount = resultAmount, recipeName = recipeName,
               module = module, owner = owner, toolIndex = toolIndex,
