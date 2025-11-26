@@ -348,10 +348,8 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't get the current order.")
     label(str = "New order:")
-    let newOrder: Natural = comboList(items = availableOrdersText,
+    currentOrder = comboList(items = availableOrdersText,
         selected = currentOrder, itemHeight = 25, x = 200, y = 150)
-    if newOrder != currentOrder:
-      currentOrder = newOrder
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[giveOrderColoredIcon], text = "Assign",
         alignment = right):
@@ -421,7 +419,8 @@ proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   setInventoryInfo(dialog = dialog)
   setDialog(x = windowWidth / 5, y = windowHeight / 7)
 
-proc showAttributes(member: MemberData; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc showAttributes(member: MemberData; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show information about attributes of the selected crew member
   ##
   ## * member - the player's ship's crew member which attributes will be show
@@ -803,10 +802,8 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
-    let newSkill: Natural = comboList(items = crewSkillsList,
+    skillIndex = comboList(items = crewSkillsList,
         selected = skillIndex, itemHeight = 25, x = 200, y = 150)
-    if newSkill != skillIndex:
-      skillIndex = newSkill
     setLayoutRowStatic(height = 35, cols = 2, width = 35)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Select all crew member")
