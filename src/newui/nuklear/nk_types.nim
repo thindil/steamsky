@@ -1143,6 +1143,12 @@ type
     next*: nk_size
     when defined(nkIncludeCommandUserData):
       userdata*: Handle ## Interna Nuklear data
+  CommandRectFilled* = object
+    ## Used to store Nuklear command data for draw filled rectangles
+    header*: Command
+    rounding*, w*, h*: uint16
+    x*, y*: int16
+    color*: NkColor
 
 # ---------
 # Constants
