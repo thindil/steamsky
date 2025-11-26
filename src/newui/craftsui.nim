@@ -379,7 +379,7 @@ proc setChangeOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't get the recipe name.")
         return
   if recipeName2.len == 0:
-    workshopType = data
+    workshopIndex = data
     currentTab = 0
     hasOptions = true
 
@@ -561,7 +561,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
           continue
         try:
           if workshopIndex > 0 and rec.workshop != modulesList[
-              playerShip.modules[workshopIndex - 1].protoIndex].mType:
+              playerShip.modules[workshopIndex].protoIndex].mType:
             continue
         except:
           dialog = setError(message = "Can't check workshop.")
