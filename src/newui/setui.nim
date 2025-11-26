@@ -1019,7 +1019,7 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         var rec: RecipeData = RecipeData(index: "Study " & $recipe,
             name: "Study " & itemsList[recipe].name, craftable: canCraft,
             workplace: hasWorkplace, tools: hasTool, materials: true,
-            recipeType: study)
+            recipeType: study, workshop: alchemyLab)
         availableRecipes.add(y = rec)
       except:
         dialog = setError(message = "Can't add a study recipe.")
@@ -1029,7 +1029,7 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         var rec: RecipeData = RecipeData(index: "Deconstruct " & $recipe,
             name: "Deconstruct " & itemsList[recipe].name, craftable: canCraft,
             workplace: hasWorkplace, tools: hasTool, materials: true,
-            recipeType: deconstruct)
+            recipeType: deconstruct, workshop: alchemyLab)
         availableRecipes.add(y = rec)
       except:
         dialog = setError(message = "Can't add a study recipe.")
