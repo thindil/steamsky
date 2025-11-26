@@ -932,7 +932,6 @@ type
     deconstruct = "Deconstruct"
   RecipeData* = object
     ## Stores data needed to show information about an available recipe
-    ## members
     index*: string
       ## The index of the recipe
     name*: string
@@ -949,12 +948,24 @@ type
       ## The module type in which the recipe is crafted
     recipeType*: RecipeType
       ## The type of the recipe
+  WorkshopData* = object
+    ## Stores data needed to show information about an installed workshop
+    index*: Natural
+      ## The index of the workshop in the player's ship
+    name*: string
+      ## The name of the workshop
+    order*: string
+      ## Current order of the workshop
+    workers*: string
+      ## The list of current workers in the workshop
+    tooltip*: string
+      ## The tooltip to show to the player
 
 var
   workshopsList*: seq[string] = @[]
     ## The list of names of workshops installed on the player's ship
-  workshopsIndexes*: seq[int] = @[]
-    ## The list of indexes of workshops installed on the player's ship
+  workshopsList2*: seq[WorkshopData] = @[]
+    ## The list of workshops installed on the player's ship
   workshopIndex*: Natural = 0
     ## The index of the currently selected workshop
   workshopType*: Natural = 0
@@ -976,14 +987,35 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   nameSearch = ""
   workshopsList = @["All"]
-  workshopsIndexes = @[-1]
+  workshopsList2 = @[]
   workshopIndex = 0
   workshopType = 0
   typeIndex = 0
   for index, module in playerShip.modules:
     if module.mType == workshop:
-      workshopsIndexes.add(y = index)
       workshopsList.add(y = module.name)
+      var
+        recipeName2: string = try:
+            getWorkshopRecipeName(workshop = index)
+        except:
+          dialog = setError(message = "Can't get the recipe name.")
+          return
+        tooltipText: string = "Cancel the selected order"
+      if recipeName2.len == 0:
+        recipeName2 = "Not set"
+        tooltipText = "Set a new order for the workshop"
+      var workers: string = ""
+      var haveWorkers: bool = false
+      for worker in module.owner:
+        if worker > -1:
+          if haveWorkers:
+            workers.add(y = ", ")
+          haveWorkers = true
+          workers.add(y = playerShip.crew[worker].name)
+      if not haveWorkers:
+        workers = "none"
+      workshopsList2.add(y = WorkshopData(index: index, name: module.name,
+          order: recipeName2, workers: workers, tooltip: tooltipText))
   studies = @[]
   deconstructs = @[]
   for item in playerShip.cargo:
