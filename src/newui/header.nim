@@ -223,6 +223,30 @@ proc showDialogs(dialog: var GameDialog; state: var GameState;
   showInfo(dialog = dialog)
   return false
 
+proc showInfo(dialog: var GameDialog): bool {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Show the game time and the player's ship's speed info
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened or the game's menu is to show. Additionally, it returns true if
+  ## the game's state changed, otherwise false.
+  if gameSettings.showNumbers:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Game time and current ship speed.")
+    try:
+      label(str = formattedTime() & " Speed: " & $((realSpeed(
+          ship = playerShip) * 60) / 1_000) & " km/h", alignment = centered)
+    except:
+      dialog = setError(message = "Can't get the ship's speed")
+      return true
+  else:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Game time.")
+    label(str = formattedTime(), alignment = centered)
+
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     state: var GameState; options: bool = false): bool {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -393,20 +417,8 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
           text = "Show more options")
     imageButton(image = images[moreOptionsIcon]):
       showOptions = not showOptions
-  if gameSettings.showNumbers:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Game time and current ship speed.")
-    try:
-      label(str = formattedTime() & " Speed: " & $((realSpeed(
-          ship = playerShip) * 60) / 1_000) & " km/h", alignment = centered)
-    except:
-      dialog = setError(message = "Can't get the ship's speed")
-      return true
-  else:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Game time.")
-    label(str = formattedTime(), alignment = centered)
+  if showInfo(dialog = dialog):
+    return true
   showResourcesInfo(fuelAmount = fuelAmount, foodAmount = foodAmount,
       drinksAmount = drinksAmount)
   showNotifications(speed = speed, havePilot = havePilot,
