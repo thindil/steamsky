@@ -383,6 +383,15 @@ proc setChangeOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
     workshopIndex = data
     currentTab = 0
     hasOptions = true
+  else:
+    try:
+      cancelCraftOrder(moduleIndex = data)
+    except CrewOrderError, CrewNoSpaceError:
+      dialog = setMessage(message = getCurrentExceptionMsg(),
+          title = "Can't cancel the order")
+    except:
+      dialog = setError(message = "Can't cancel the order.")
+    setWorkshopsList(dialog = dialog)
 
 proc sortRecipes(sortAsc, sortDesc: RecipesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
