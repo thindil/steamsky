@@ -463,6 +463,47 @@ proc sortWorkshops(sortAsc, sortDesc: WorkshopsSortOrders;
   else:
     workshopsSortOrder = sortAsc
 
+  proc sortWorkshops(x, y: WorkshopData): int {.raises: [], tags: [],
+      contractual.} =
+    ## Compare two workshops and return which should go first, based on the sort
+    ## order of the workshops
+    ##
+    ## * x - the first workshop to compare
+    ## * y - the second workshop to compare
+    ##
+    ## Returns 1 if the first workshop should go first, -1 if the second workshop
+    ## should go first.
+    case workshopsSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      return -1
+    of orderAsc:
+      if x.order < y.order:
+        return 1
+      return -1
+    of orderDesc:
+      if x.order > y.order:
+        return 1
+      return -1
+    of workersAsc:
+      if x.workers < y.workers:
+        return 1
+      return -1
+    of workersDesc:
+      if x.workers > y.workers:
+        return 1
+      return -1
+    of none:
+      return -1
+
+  workshopsList2.sort(cmp = sortWorkshops)
+  dialog = none
+
 proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show information about available crafting recipes
