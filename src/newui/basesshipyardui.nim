@@ -767,10 +767,8 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     if compareList.len > 0:
       setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.4.cfloat, 0.6])
       label(str = "Compare with:")
-      let newCompare: Natural = comboList(items = compareList,
-          selected = compareIndex, itemHeight = 25, x = 300, y = 150)
-      if newCompare != compareIndex:
-        compareIndex = newCompare
+      compareIndex = comboList(items = compareList, selected = compareIndex,
+        itemHeight = 25, x = 300, y = 150)
     setLayoutRowDynamic(height = 30, cols = 2)
     label(str = "Install cost:")
     var cost: Natural = try:
