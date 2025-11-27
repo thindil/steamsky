@@ -144,8 +144,8 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
   if travelTime.minutes > 0:
     infoText = infoText & " " & $travelTime.minutes & "mins"
 
-proc getSkillMarks*(skillIndex: Positive;
-    memberIndex: Natural): string {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc getSkillMarks*(skillIndex: Positive; memberIndex: Natural): string
+  {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Get the marks with information about the skill level for the selected
   ## skill for the selected crew member
   ##
