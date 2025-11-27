@@ -61,6 +61,9 @@ proc savePlayerShip*(saveData: var XmlNode) {.raises: [], tags: [],
       dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.craftingAmount}.toXmlAttributes
       moduleTree.add(son = dataElement)
+      dataElement = newElement(tag = "data")
+      dataElement.attrs = {"value": $module.craftingQuality}.toXmlAttributes
+      moduleTree.add(son = dataElement)
     of ModuleType2.trainingRoom:
       var dataElement: XmlNode = newElement(tag = "data")
       dataElement.attrs = {"value": $module.trainedSkill}.toXmlAttributes
@@ -335,6 +338,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
         var
           craftingIndex: string = ""
           craftingTime, craftingAmount: int = 0
+          craftingQuality: ObjectQuality = normal
         for modData in module.findAll(tag = "data"):
           case dataIndex
           of 1:
@@ -345,6 +349,9 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
             craftingTime = modData.attr(name = "value").parseInt
           of 3:
             craftingAmount = modData.attr(name = "value").parseInt
+          of 4:
+            craftingQuality = parseEnum[ObjectQuality](s = modData.attr(
+                name = "value"))
           else:
             discard
           dataIndex.inc
@@ -353,7 +360,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
             maxDurability: maxDur, owner: owners,
             upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
             craftingIndex: craftingIndex, craftingTime: craftingTime,
-            craftingAmount: craftingAmount))
+            craftingAmount: craftingAmount, craftingQuality: craftingQuality))
       of medicalRoom:
         playerShip.modules.add(y = ModuleData(mType: medicalRoom, name: name,
             protoIndex: protoIndex, weight: weight, durability: modDur,
