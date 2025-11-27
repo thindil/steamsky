@@ -42,26 +42,27 @@ proc nkCommandBufferPush*(b: PNkCommandBuffer; t: CommandType;
     if b == nil:
       return nil
     const align: nk_size = alignof(x = Command)
-    let cmd: ptr Command = cast[ptr Command](nkBufferAlloc(b = b.base,
-        bufferAlloc = bufferFront, size = size, align = align))
-    if cmd == nil:
-      return nil
-
-    # make sure the offset to the next command is aligned
-    b.last = cast[nk_size](cast[ptr nk_byte](cmd)) - cast[nk_size](cast[
-        ptr nk_byte](b.base.memory.`ptr`))
-    let
-      unaligned: pointer = cast[ptr nk_byte](cmd) + size
-      memory: pointer = cast[pointer]((cast[nk_size](unaligned) + (align -
-          1)) and not(align - 1))
-      alignment: nk_size = cast[nk_size](cast[ptr nk_byte](memory)) - cast[
-          nk_size](cast[ptr nk_byte](unaligned))
-    cmd.cmdType = t
-    cmd.next = b.base.allocated + alignment
-    when defined(nkIncludeCommandUserData):
-      cmd.userdata = b.userdata
-    b.`end` = cmd.next
-    return cmd
+    return nil
+#    let cmd: ptr Command = cast[ptr Command](nkBufferAlloc(b = b.base,
+#        bufferAlloc = bufferFront, size = size, align = align))
+#    if cmd == nil:
+#      return nil
+#
+#    # make sure the offset to the next command is aligned
+#    b.last = cast[nk_size](cast[ptr nk_byte](cmd)) - cast[nk_size](cast[
+#        ptr nk_byte](b.base.memory.`ptr`))
+#    let
+#      unaligned: pointer = cast[ptr nk_byte](cmd) + size
+#      memory: pointer = cast[pointer]((cast[nk_size](unaligned) + (align -
+#          1)) and not(align - 1))
+#      alignment: nk_size = cast[nk_size](cast[ptr nk_byte](memory)) - cast[
+#          nk_size](cast[ptr nk_byte](unaligned))
+#    cmd.cmdType = t
+#    cmd.next = b.base.allocated + alignment
+#    when defined(nkIncludeCommandUserData):
+#      cmd.userdata = b.userdata
+#    b.`end` = cmd.next
+#    return cmd
 
 proc nkFillRect*(b: PNkCommandBuffer; rect: Rect; rounding: float;
   c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =

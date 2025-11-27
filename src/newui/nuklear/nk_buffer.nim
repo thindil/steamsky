@@ -73,9 +73,9 @@ proc nkBufferAlign*(unaligned: pointer; align: nk_size; alignment: var nk_size;
       alignment = (cast[nk_byte](memory) - cast[nk_byte](unaligned)).nk_size
   return memory
 
-proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
+proc nkBufferRealloc(b: var Buffer; capacity: nk_size;
     size: var nk_size): pointer {.raises: [], tags: [RootEffect],
-        contractual.} =
+    contractual.} =
   ## Reallocate memory for the selected buffer. Internal use only
   ##
   ## * b        - the buffer which memory will be reallocated
@@ -84,23 +84,22 @@ proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
   ##
   ## Returns the new pointer to the reallocated memory
   require:
-    b != nil
     size != 0
   body:
-    if (b == nil or size == 0 or b.pool.alloc == nil or b.pool.free == nil):
+    if (size == 0 or b.pool.alloc == nil or b.pool.free == nil):
       return nil
     let temp: pointer = try:
-        b.pool.alloc(handle = b.pool.userdata, old = b.memory.`ptr`,
+        b.pool.alloc(handle = b.pool.userData, old = b.memory.memPtr,
             size = capacity)
       except Exception:
         return nil
 
     size = capacity
     let bufferSize: nk_size = b.memory.size
-    if temp != b.memory.`ptr`:
-      copyMem(dest = temp, source = b.memory.`ptr`, size = bufferSize)
+    if temp != b.memory.memPtr:
+      copyMem(dest = temp, source = b.memory.memPtr, size = bufferSize)
       try:
-        b.pool.free(handle = b.pool.userdata, old = b.memory.`ptr`)
+        b.pool.free(handle = b.pool.userData, old = b.memory.memPtr)
       except Exception:
         discard
 
@@ -118,7 +117,7 @@ proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
     b.size = capacity - backSize
     return temp
 
-proc nkBufferAlloc*(b: ptr nk_buffer; bufferAlloc: BufferAllocationType; size,
+proc nkBufferAlloc*(b: var Buffer; bufferAlloc: BufferAllocationType; size,
     align: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Allocate memory for the selected buffer. Internal use only
   ##
@@ -129,16 +128,15 @@ proc nkBufferAlloc*(b: ptr nk_buffer; bufferAlloc: BufferAllocationType; size,
   ##
   ## Returns pointer to allocated memory
   require:
-    b != nil
     size != 0
   body:
     b.needed += size
     var unaligned: ptr nk_size = nil
     # calculate total size with needed alignment + size
     if bufferAlloc == bufferFront:
-      unaligned = b.memory.`ptr` + b.allocated
+      unaligned = cast[ptr nk_size](b.memory.memPtr) + b.allocated
     else:
-      unaligned = b.memory.`ptr` + (b.size - size)
+      unaligned = cast[ptr nk_size](b.memory.memPtr) + (b.size - size)
     var alignment: nk_size = 0
     var memory: pointer = nkBufferAlign(unaligned = unaligned, align = align,
         alignment = alignment, bufferAlloc = bufferAlloc)
@@ -151,32 +149,32 @@ proc nkBufferAlloc*(b: ptr nk_buffer; bufferAlloc: BufferAllocationType; size,
       full = (b.size - min(x = b.size, y = (size + alignment))) <= b.allocated
 
     if full:
-      if b.`type` != bufferDynamic:
+      if b.allocType != bufferDynamic:
         return nil
-      if b.`type` != bufferDynamic or b.pool.alloc == nil or b.pool.free == nil:
+      if b.allocType != bufferDynamic or b.pool.alloc == nil or b.pool.free == nil:
         return nil
 
       # buffer is full so allocate bigger buffer if dynamic
-      var capacity: nk_size = (b.memory.size.cfloat * b.grow_factor).nk_size
+      var capacity: nk_size = (b.memory.size.cfloat * b.growFactor).nk_size
       capacity = max(x = capacity, y = nkRoundUpPow2(v = (b.allocated.nk_uint +
           size.nk_uint)).nk_size)
-      b.memory.`ptr` = cast[ptr nk_size](nkBufferRealloc(b = b,
+      b.memory.memPtr = cast[ptr nk_size](nkBufferRealloc(b = b,
           capacity = capacity, size = b.memory.size))
-      if b.memory.`ptr` == nil:
+      if b.memory.memPtr == nil:
         return nil
 
       # align newly allocated pointer
       if bufferAlloc == bufferFront:
-        unaligned = b.memory.`ptr` + b.allocated
+        unaligned = cast[ptr nk_size](b.memory.memPtr) + b.allocated
       else:
-        unaligned = b.memory.`ptr` + (b.size - size)
+        unaligned = cast[ptr nk_size](b.memory.memPtr) + (b.size - size)
       memory = nkBufferAlign(unaligned = unaligned, align = align,
           alignment = alignment, bufferAlloc = bufferAlloc)
 
     if bufferAlloc == bufferFront:
-      unaligned = b.memory.`ptr` + b.allocated
+      unaligned = cast[ptr nk_size](b.memory.memPtr) + b.allocated
     else:
-      unaligned = b.memory.`ptr` + (b.size - size)
+      unaligned = cast[ptr nk_size](b.memory.memPtr) + (b.size - size)
     b.needed += alignment
     b.calls.inc
     return memory
