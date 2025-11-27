@@ -331,6 +331,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
                       givenOrder = CrewOrders.craft, moduleIndex = index)
                 except:
                   dialog = setError(message = "Can't give order to the player.")
+            setWorkshopsList(dialog = dialog)
             break
           craftWorkshop.dec
     restoreButtonStyle()
@@ -591,7 +592,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
               sortDesc: orderDesc),
           HeaderData[WorkshopsSortOrders](label: "Workers", sortAsc: workersAsc,
               sortDesc: workersDesc)]
-        ratio: array[3, cfloat] = [400.cfloat, 100, 100]
+        ratio: array[3, cfloat] = [400.cfloat, 400, 100]
 
       addHeader(headers = headers, ratio = ratio, tooltip = "workshops",
         code = sortWorkshops, dialog = dialog)
