@@ -977,20 +977,16 @@ var
   availableRecipes*: seq[RecipeData] = @[]
     ## The list of available recipes
 
-proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc setWorkshopsList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
-  ## Set the data for the crafting info screen
+  ## Set the list of workshops in the crafting info screen
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  nameSearch = ""
   workshopsList = @["All"]
   workshopsList2 = @[]
-  workshopIndex = 0
-  workshopType = 0
-  typeIndex = 0
   for index, module in playerShip.modules:
     if module.mType == workshop:
       workshopsList.add(y = module.name)
@@ -1016,8 +1012,22 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         workers = "none"
       workshopsList2.add(y = WorkshopData(index: index, name: module.name,
           order: recipeName2, workers: workers, tooltip: tooltipText))
+
+proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for the crafting info screen
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  nameSearch = ""
+  workshopIndex = 0
+  workshopType = 0
+  typeIndex = 0
   studies = @[]
   deconstructs = @[]
+  setWorkshopsList(dialog = dialog)
   for item in playerShip.cargo:
     for recipeIndex, recipe in recipesList:
       if recipe.resultIndex == item.protoIndex:
