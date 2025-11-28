@@ -156,8 +156,8 @@ proc getSkillMarks*(skillIndex: Positive; memberIndex: Natural): string
   ## string with twi "+" sings if the crew member has the highest level in
   ## the skill of the all crew members. Otherwise return an empty string.
   var
-    skillValue = 0
-    crewIndex = -1
+    skillValue: int = 0
+    crewIndex: int = -1
   try:
     for index, member in playerShip.crew:
       if getSkillLevel(member = member, skillIndex = skillIndex) > skillValue:
@@ -169,4 +169,4 @@ proc getSkillMarks*(skillIndex: Positive; memberIndex: Natural): string
   except:
     return ""
   if memberIndex == crewIndex:
-    result = result & "+"
+    result &= "+"
