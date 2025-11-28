@@ -20,7 +20,7 @@
 import std/[colors, math, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, messages, types]
-import coreui, errordialog, themes
+import coreui, errordialog, header, themes
 
 proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
     inCombat: bool = false; withButtons: bool = true;
@@ -102,3 +102,15 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
     else:
       for i in countdown(a = -1, b = loopStart):
         showMessage(message = getMessage(messageIndex = i + 1), dialog = dialog)
+
+proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the last messages screen
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters state and dialog. The latter is modified if
+  ## any error happened.
+  if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
+    return
