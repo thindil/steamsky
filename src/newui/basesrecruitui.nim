@@ -378,10 +378,8 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
     slider(min = 0, val = currentProfit, max = 10, step = 1)
     label(str = "Contract time:", alignment = centered)
     setLayoutRowDynamic(height = 35, cols = 1)
-    let newContract: Natural = comboList(items = contractLength,
+    currentContract = comboList(items = contractLength,
         selected = currentContract, itemHeight = 25, x = 200, y = 150)
-    if newContract != currentContract:
-      currentContract = newContract
     var newCost: int = recruit.price - ((currentDaily - recruit.payment) * 50) -
         (currentProfit * 5_000)
     newCost = case currentContract
