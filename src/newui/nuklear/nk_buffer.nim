@@ -55,23 +55,22 @@ proc nkBufferAlign*(unaligned: pointer; align: nk_size; alignment: var nk_size;
   ## * bufferAlloc - the allocation type
   ##
   ## Returns pointer to aligned buffer
-  var memory: pointer = nil
+  result = nil
   if bufferAlloc == bufferBack:
     if align == 0:
-      memory = unaligned
+      result = unaligned
       alignment = 0
     else:
-      memory = cast[pointer](cast[nk_size](unaligned) and not(align - 1))
-      alignment = (cast[nk_byte](unaligned) - cast[nk_byte](memory)).nk_size
+      result = cast[pointer](cast[nk_size](unaligned) and not(align - 1))
+      alignment = (cast[nk_byte](unaligned) - cast[nk_byte](result)).nk_size
   else:
     if align == 0:
-      memory = unaligned
+      result = unaligned
       alignment = 0
     else:
-      memory = cast[pointer]((cast[nk_size](unaligned) + (align - 1)) and not(
+      result = cast[pointer]((cast[nk_size](unaligned) + (align - 1)) and not(
           align - 1))
-      alignment = (cast[nk_byte](memory) - cast[nk_byte](unaligned)).nk_size
-  return memory
+      alignment = (cast[nk_byte](result) - cast[nk_byte](unaligned)).nk_size
 
 proc nkBufferRealloc(b: var Buffer; capacity: nk_size;
     size: var nk_size): pointer {.raises: [], tags: [RootEffect],
@@ -88,7 +87,7 @@ proc nkBufferRealloc(b: var Buffer; capacity: nk_size;
   body:
     if (size == 0 or b.pool.alloc == nil or b.pool.free == nil):
       return nil
-    let temp: pointer = try:
+    result = try:
         b.pool.alloc(handle = b.pool.userData, old = b.memory.memPtr,
             size = capacity)
       except Exception:
@@ -96,8 +95,8 @@ proc nkBufferRealloc(b: var Buffer; capacity: nk_size;
 
     size = capacity
     let bufferSize: nk_size = b.memory.size
-    if temp != b.memory.memPtr:
-      copyMem(dest = temp, source = b.memory.memPtr, size = bufferSize)
+    if result != b.memory.memPtr:
+      copyMem(dest = result, source = b.memory.memPtr, size = bufferSize)
       try:
         b.pool.free(handle = b.pool.userData, old = b.memory.memPtr)
       except Exception:
@@ -106,16 +105,15 @@ proc nkBufferRealloc(b: var Buffer; capacity: nk_size;
     if b.size == bufferSize:
       # no back buffer so just set correct size
       b.size = capacity
-      return temp
+      return
 
     # copy back buffer to the end of the new buffer
     let
       backSize: nk_size = bufferSize - b.size
-      dst: pointer = cast[pointer](cast[ptr nk_buffer](temp) + (capacity - backSize))
-      src: pointer = cast[pointer](cast[ptr nk_buffer](temp) + b.size)
+      dst: pointer = cast[pointer](cast[ptr nk_buffer](result) + (capacity - backSize))
+      src: pointer = cast[pointer](cast[ptr nk_buffer](result) + b.size)
     copyMem(dest = dst, source = src, size = backSize)
     b.size = capacity - backSize
-    return temp
 
 proc nkBufferAlloc*(b: var Buffer; bufferAlloc: BufferAllocationType; size,
     align: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
@@ -138,7 +136,7 @@ proc nkBufferAlloc*(b: var Buffer; bufferAlloc: BufferAllocationType; size,
     else:
       unaligned = cast[ptr nk_size](b.memory.memPtr) + (b.size - size)
     var alignment: nk_size = 0
-    var memory: pointer = nkBufferAlign(unaligned = unaligned, align = align,
+    result = nkBufferAlign(unaligned = unaligned, align = align,
         alignment = alignment, bufferAlloc = bufferAlloc)
 
     var full: bool = false
@@ -168,7 +166,7 @@ proc nkBufferAlloc*(b: var Buffer; bufferAlloc: BufferAllocationType; size,
         unaligned = cast[ptr nk_size](b.memory.memPtr) + b.allocated
       else:
         unaligned = cast[ptr nk_size](b.memory.memPtr) + (b.size - size)
-      memory = nkBufferAlign(unaligned = unaligned, align = align,
+      result = nkBufferAlign(unaligned = unaligned, align = align,
           alignment = alignment, bufferAlloc = bufferAlloc)
 
     if bufferAlloc == bufferFront:
@@ -177,5 +175,4 @@ proc nkBufferAlloc*(b: var Buffer; bufferAlloc: BufferAllocationType; size,
       unaligned = cast[ptr nk_size](b.memory.memPtr) + (b.size - size)
     b.needed += alignment
     b.calls.inc
-    return memory
 
