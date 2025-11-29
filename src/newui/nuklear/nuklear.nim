@@ -453,7 +453,7 @@ proc windowShow*(name: string; state: ShowStates) {.raises: [], tags: [], contra
 # ----
 # Misc
 # ----
-proc nkPushScissor(b: PNkCommandBuffer; r: Rect) {.raises: [], tags: [
+proc nkPushScissor(b: var CommandBuffer; r: Rect) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Clear the rectangle. Internal use only
   ##
@@ -462,7 +462,7 @@ proc nkPushScissor(b: PNkCommandBuffer; r: Rect) {.raises: [], tags: [
   ##
   ## Returns the modified parameter b
   body:
-    b.clip = new_nk_rect(x = r.x, y = r.y, w = r.w, h = r.h)
+    b.clip = r
     let cmd: ptr nk_command_scissor = cast[ptr nk_command_scissor](
         nkCommandBufferPush(b = b, t = commandScissor,
             size = nk_command_scissor.sizeof))
@@ -473,7 +473,7 @@ proc nkPushScissor(b: PNkCommandBuffer; r: Rect) {.raises: [], tags: [
     cmd.w = max(x = 0.cushort, y = r.w.cushort)
     cmd.h = max(x = 0.cushort, y = r.h.cushort)
 
-proc nkStrokeRect(b: PNkCommandBuffer, rect: Rect, rounding,
+proc nkStrokeRect(b: var CommandBuffer, rect: Rect, rounding,
   lineThickness: float, c: nk_color) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw a rectangle. Internal use only
@@ -483,10 +483,10 @@ proc nkStrokeRect(b: PNkCommandBuffer, rect: Rect, rounding,
   ## * rounding      - the rouding of the rectangle's corners
   ## * lineThickness - the thinckness of the rectangle's border
   ## * c             - the color used to draw the rectangle
-  if b == nil or c.a == 0 or rect.w == 0 or lineThickness <= 0:
+  if c.a == 0 or rect.w == 0 or lineThickness <= 0:
     return
   if b.use_clipping == 1:
-    let clip: nk_rect = b.clip
+    let clip: Rect = b.clip
     if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h,
       x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
       return
@@ -502,7 +502,7 @@ proc nkStrokeRect(b: PNkCommandBuffer, rect: Rect, rounding,
   cmd.h = max(x = 0.cushort, y = rect.h.cushort)
   cmd.color = c
 
-proc nkStrokeTriangle(b: PNkCommandBuffer; x0, y0, x1, y1, x2, y2,
+proc nkStrokeTriangle(b: var CommandBuffer; x0, y0, x1, y1, x2, y2,
   lineThickness: cfloat; c: nk_color) {.raises: [], tags: [], contractual.} =
   ## Draw a triangle. Internal use only
   ##
@@ -515,10 +515,10 @@ proc nkStrokeTriangle(b: PNkCommandBuffer; x0, y0, x1, y1, x2, y2,
   ## * y2            - the Y coordinate of the third the triangle's vertex
   ## * lineThickness - the thinckness of the triangle's border
   ## * c             - the color used to draw the triangle
-  if b == nil or c.a == 0:
+  if c.a == 0:
     return
   if b.use_clipping != 0:
-    let clip: nk_rect = b.clip
+    let clip: Rect = b.clip
     if not nkInbox(px = x0, py = y0, x = clip.x, y = clip.y, w = clip.w,
       h = clip.h) and not nkInbox(px = x1, py = y1, x = clip.x, y = clip.y,
       w = clip.w, h = clip.h) and not nkInbox(px = x2, py = y2, x = clip.x,
@@ -537,17 +537,17 @@ proc nkStrokeTriangle(b: PNkCommandBuffer; x0, y0, x1, y1, x2, y2,
   cmd.c.y = y2.cshort
   cmd.color = c
 
-proc nkFillCircle(b: PNkCommandBuffer; rect: Rect; c: nk_color)
+proc nkFillCircle(b: var CommandBuffer; rect: Rect; c: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the circle with the selected color
   ##
   ## * b        - the command buffer in which the rectangle will be drawn
   ## * rect     - the rectangle for the circle
   ## * c        - the color to fill the circle
-  if b == nil or rect.w == 0 or rect.h == 0:
+  if rect.w == 0 or rect.h == 0:
     return
   if b.use_clipping == 1:
-    let clip: nk_rect = b.clip
+    let clip: Rect = b.clip
     if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h,
       x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
       return
@@ -563,7 +563,7 @@ proc nkFillCircle(b: PNkCommandBuffer; rect: Rect; c: nk_color)
   cmd.h = max(x = 0, y = rect.h).cushort
   cmd.color = c
 
-proc nkFillTriangle(b: PNkCommandBuffer, x0, y0, x1, y1, x2, y2: cfloat,
+proc nkFillTriangle(b: var CommandBuffer, x0, y0, x1, y1, x2, y2: cfloat,
   c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the circle with the selected color
   ##
@@ -575,10 +575,10 @@ proc nkFillTriangle(b: PNkCommandBuffer, x0, y0, x1, y1, x2, y2: cfloat,
   ## * x2 - the X coordinate of the third the triangle's vertex
   ## * y2 - the Y coordinate of the third the triangle's vertex
   ## * c  - the color to fill the triangle
-  if b == nil or c.a == 0:
+  if c.a == 0:
     return
   if b.use_clipping != 0:
-    let clip: nk_rect = b.clip
+    let clip: Rect = b.clip
     if not nkInbox(px = x0, py = y0, x = clip.x, y = clip.y, w = clip.w,
       h = clip.h) and not nkInbox(px = x1, py = y1, x = clip.x, y = clip.y,
       w = clip.w, h = clip.h) and not nkInbox(px = x2, py = y2, x = clip.x,
@@ -598,7 +598,7 @@ proc nkFillTriangle(b: PNkCommandBuffer, x0, y0, x1, y1, x2, y2: cfloat,
   cmd.c.y = y2.cshort
   cmd.color = c
 
-proc nkDrawImage(b: PNkCommandBuffer; r: Rect; img: PImage; col: nk_color)
+proc nkDrawImage(b: var CommandBuffer; r: Rect; img: PImage; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected image
   ##
@@ -606,10 +606,8 @@ proc nkDrawImage(b: PNkCommandBuffer; r: Rect; img: PImage; col: nk_color)
   ## * r   - the rectangle in which the image will be drawn
   ## * img - the image to draw
   ## * col - the color used as a background for the image
-  if b == nil:
-    return
   if b.use_clipping != 0:
-    let c: nk_rect = b.clip
+    let c: Rect = b.clip
     if c.w == 0 or c.h == 0 or not nkIntersect(x0 = r.x, y0 = r.y, w0 = r.w,
       h0 = r.h, x1 = c.x, y1 = c.y, w1 = c.w, h1 = c.h):
       return
@@ -626,7 +624,7 @@ proc nkDrawImage(b: PNkCommandBuffer; r: Rect; img: PImage; col: nk_color)
   cmd.img = cast[nk_image](img)
   cmd.col = col
 
-proc nkDrawNineSlice(b: PNkCommandBuffer; r: Rect; slc: ptr nk_nine_slice; col: nk_color)
+proc nkDrawNineSlice(b: var CommandBuffer; r: Rect; slc: ptr nk_nine_slice; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected fragments of an image
   ##
@@ -741,7 +739,7 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
   textWidth = sepWidth
   return if sepLen == 0: len else: sepLen
 
-proc nkDrawText(b: PNkCommandBuffer; r: Rect; str: string; length: var int;
+proc nkDrawText(b: var CommandBuffer; r: Rect; str: string; length: var int;
   font: ptr nk_user_font; bg, fg: nk_color) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw the selected text
@@ -754,13 +752,12 @@ proc nkDrawText(b: PNkCommandBuffer; r: Rect; str: string; length: var int;
   ## * bg   - the background color of the text
   ## * fg   - the foreground color of the text
   require:
-    b != nil
     font != nil
   body:
-    if b == nil or str == "" or length == 0 or (bg.a == 0 and fg.a == 0):
+    if str == "" or length == 0 or (bg.a == 0 and fg.a == 0):
       return
     if b.use_clipping == 1:
-      let c: nk_rect = b.clip
+      let c: Rect = b.clip
       if (c.w == 0 or c.h == 0 or not nkIntersect(x0 = r.x, y0 = r.y, w0 = r.w, h0 = r.h, x1 = c.x, y1 = c.y, w1 = c.w, h1 = c.h)):
         return
 
@@ -901,7 +898,7 @@ proc isMouseReleased*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
 # ----
 # Text
 # ----
-proc nkWidgetText(o: PNkCommandBuffer; b: var Rect; str: string; len: var int;
+proc nkWidgetText(o: var CommandBuffer; b: var Rect; str: string; len: var int;
   t: ptr nk_text; a: nk_flags; f: ptr nk_user_font) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw a text widget. Internal use only
@@ -914,9 +911,9 @@ proc nkWidgetText(o: PNkCommandBuffer; b: var Rect; str: string; len: var int;
   ## * a   - the flags related to the widget
   ## * f   - the font used to draw the widget
   require:
-    o != nil and t != nil
+    t != nil
   body:
-    if o == nil or t == nil:
+    if t == nil:
       return
     b.h = max(x = b.h, y = 2 * t.padding.y)
     var label: Rect = Rect()
@@ -996,7 +993,7 @@ proc nkButtonBehavior(state: var nk_flags; r: Rect; i: ptr nk_input;
   elif isMousePrevHovering(rect = r):
     state = state or widgetStateLeft.ord
 
-proc nkDoButton(state: var nk_flags; `out`: PNkCommandBuffer; r: Rect;
+proc nkDoButton(state: var nk_flags; `out`: var CommandBuffer; r: Rect;
   style: ptr nk_style_button; `in`: ptr nk_input; behavior: ButtonBehavior;
   content: var Rect): bool {.raises: [], tags: [], contractual.} =
   ## Draw a button. Internal use only
@@ -1013,7 +1010,7 @@ proc nkDoButton(state: var nk_flags; `out`: PNkCommandBuffer; r: Rect;
   require:
     style != nil
   body:
-    if `out` == nil or style == nil:
+    if style == nil:
       return false
 
     # calculate button content space
@@ -1030,7 +1027,7 @@ proc nkDoButton(state: var nk_flags; `out`: PNkCommandBuffer; r: Rect;
     bounds.h = r.h + 2 * style.touch_padding.y
     return nkButtonBehavior(state = state, r = bounds, i = `in`, behavior = behavior)
 
-proc nkDrawButton(`out`: PNkCommandBuffer; bounds: Rect;
+proc nkDrawButton(`out`: var CommandBuffer; bounds: Rect;
   state: nk_flags; style: ptr nk_style_button): nk_style_item {.raises: [],
   tags: [RootEffect], contractual.} =
   ## Draw a button. Internal use only
@@ -1064,7 +1061,7 @@ proc nkDrawButton(`out`: PNkCommandBuffer; bounds: Rect;
       lineThickness = style.border, c = nk_rgb_factor(col = bg.color,
       factor = style.color_factor_background))
 
-proc nkDrawSymbol(`out`: PNkCommandBuffer; `type`: SymbolType;
+proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
   content: var Rect; background, foreground: nk_color; borderWidth: float;
   font: ptr nk_user_font) {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected symbol
@@ -1147,7 +1144,7 @@ proc nkDrawSymbol(`out`: PNkCommandBuffer; `type`: SymbolType;
   else:
     discard
 
-proc nkDrawButtonSymbol(`out`: PNkCommandBuffer; bounds, content: var Rect;
+proc nkDrawButtonSymbol(`out`: var CommandBuffer; bounds, content: var Rect;
   state: nk_flags; style: ptr nk_style_button; `type`: SymbolType;
   font: ptr nk_user_font) {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only
@@ -1173,7 +1170,7 @@ proc nkDrawButtonSymbol(`out`: PNkCommandBuffer; bounds, content: var Rect;
   nkDrawSymbol(`out` = `out`, `type` = `type`, content = content,
     background = bg, foreground = sym, borderWidth = 1, font = font)
 
-proc nkDoButtonSymbol(state: var nk_flags; `out`: PNkCommandBuffer; bounds: var Rect,
+proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer; bounds: var Rect,
   symbol: SymbolType; behavior: ButtonBehavior; style: ptr nk_style_button;
   `in`: ptr nk_input; font: ptr nk_user_font): bool {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only
@@ -1212,7 +1209,7 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: PNkCommandBuffer; bounds: var 
 # Panel
 # -----
 proc panelHeader(win: ptr nkWindow; title: string; style: nk_style;
-  font: ptr nk_user_font; layout: PNkPanel; `out`: nk_command_buffer,
+  font: ptr nk_user_font; layout: PNkPanel; `out`: var CommandBuffer,
   `in`: nk_input): bool {.raises: [], tags: [RootEffect], contractual.} =
   ## Start drawing a Nuklear panel's header if needed. Internal use only
   ##
@@ -1267,18 +1264,18 @@ proc panelHeader(win: ptr nkWindow; title: string; style: nk_style;
     # draw header background
     header.h += 1.0
     let bg: nk_style_item_data = cast[nk_style_item_data](background.data)
-    case background.`type`
-    of itemImage:
-      text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
-      nkDrawImage(b = win.buffer.addr, r = header, img = bg.image.addr,
-        col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
-    of itemNineSlice:
-      text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
-      nkDrawNineSlice(b = win.buffer.addr, r = header, slc = bg.slice.addr,
-        col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
-    of itemColor:
-      text.background = bg.color
-      nkFillRect(b = `out`.addr, rect = header, rounding = 0, c = bg.color)
+#    case background.`type`
+#    of itemImage:
+#      text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
+#      nkDrawImage(b = win.buffer.addr, r = header, img = bg.image.addr,
+#        col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+#    of itemNineSlice:
+#      text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
+#      nkDrawNineSlice(b = win.buffer.addr, r = header, slc = bg.slice.addr,
+#        col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+#    of itemColor:
+#      text.background = bg.color
+#      nkFillRect(b = `out`.addr, rect = header, rounding = 0, c = bg.color)
 
     # window close button
     var button: Rect = Rect()
@@ -1293,12 +1290,12 @@ proc panelHeader(win: ptr nkWindow; title: string; style: nk_style;
       else:
         button.x = header.x + style.window.header.padding.x
         header.x += button.w + style.window.header.spacing.x + style.window.header.padding.x
-      if nkDoButtonSymbol(state = ws, `out` = win.buffer.addr, bounds = button,
-        symbol = style.window.header.close_symbol, behavior = default,
-        style = style.window.header.close_button.addr, `in` = `in`.addr,
-        font = style.font) and not(win.flags and windowRom.cint).nk_bool:
-        layout.flags = layout.flags or windowHidden.cint
-        layout.flags = layout.flags and not windowMinimized.cint
+#      if nkDoButtonSymbol(state = ws, `out` = win.buffer.addr, bounds = button,
+#        symbol = style.window.header.close_symbol, behavior = default,
+#        style = style.window.header.close_button.addr, `in` = `in`.addr,
+#        font = style.font) and not(win.flags and windowRom.cint).nk_bool:
+#        layout.flags = layout.flags or windowHidden.cint
+#        layout.flags = layout.flags and not windowMinimized.cint
 
     # window minimize button
     if (win.flags and windowMinimizable.cint).nk_bool:
@@ -1313,15 +1310,15 @@ proc panelHeader(win: ptr nkWindow; title: string; style: nk_style;
         button.x = header.x
         header.x += button.w + style.window.header.spacing.x +
           style.window.header.padding.x
-      if nkDoButtonSymbol(state = ws, `out` = win.buffer.addr, bounds = button,
-        symbol = if (layout.flags and windowMinimized.cint).nk_bool:
-        style.window.header.maximizeSymbol else:
-        style.window.header.minimizeSymbol, behavior = default,
-        style = style.window.header.minimize_button.addr, `in` = `in`.addr,
-        font = style.font) and not(win.flags and windowRom.cint).nk_bool:
-          layout.flags = if (layout.flags and windowMinimized.cint).nk_bool:
-            layout.flags and not windowMinimized.cint else:
-            layout.flags or windowMinimized.cint
+#      if nkDoButtonSymbol(state = ws, `out` = win.buffer, bounds = button,
+#        symbol = if (layout.flags and windowMinimized.cint).nk_bool:
+#        style.window.header.maximizeSymbol else:
+#        style.window.header.minimizeSymbol, behavior = default,
+#        style = style.window.header.minimize_button.addr, `in` = `in`.addr,
+#        font = style.font) and not(win.flags and windowRom.cint).nk_bool:
+#          layout.flags = if (layout.flags and windowMinimized.cint).nk_bool:
+#            layout.flags and not windowMinimized.cint else:
+#            layout.flags or windowMinimized.cint
 
     # window header title
     var textLen: int = title.len
@@ -1339,7 +1336,7 @@ proc panelHeader(win: ptr nkWindow; title: string; style: nk_style;
     label.h = font.height + 2 * style.window.header.label_padding.y
     label.w = t + 2 * style.window.header.spacing.x
     label.w = (0.float).clamp(a = label.w, b = header.x + header.w - label.x)
-    nkWidgetText(o = `out`.addr, b = label, str = title, len = textLen,
+    nkWidgetText(o = `out`, b = label, str = title, len = textLen,
       t = text.addr, a = TextAlignment.left, f = font)
   return true
 
@@ -1445,9 +1442,9 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       layout.bounds.h -= layout.footer_height
 
     # panel header
-    if not panelHeader(win = win, title = title, style = style, font = font,
-      layout = layout, `out` = `out`, `in` = `in`):
-      return false
+#    if not panelHeader(win = win, title = title, style = style, font = font,
+#      layout = layout, `out` = `out`, `in` = `in`):
+#      return false
 
     # draw window background
     if not (layout.flags and windowMinimized.cint).nk_bool and not
@@ -1459,16 +1456,16 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       body.h = (win.bounds.h - layout.header_height)
 
       let bg: nk_style_item_data = cast[nk_style_item_data](style.window.fixed_background.data)
-      case style.window.fixed_background.`type`
-      of itemImage:
-        nkDrawImage(b = `out`.addr, r = body, img = bg.image.addr,
-          col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
-      of itemNineSlice:
-        nkDrawNineSlice(b = `out`.addr, r = body, slc = bg.slice.addr,
-          col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
-      of itemColor:
-        nkFillRect(b = `out`.addr, rect = body,
-          rounding = style.window.rounding, c = bg.color)
+#      case style.window.fixed_background.`type`
+#      of itemImage:
+#        nkDrawImage(b = `out`.addr, r = body, img = bg.image.addr,
+#          col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+#      of itemNineSlice:
+#        nkDrawNineSlice(b = `out`.addr, r = body, slc = bg.slice.addr,
+#          col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+#      of itemColor:
+#        nkFillRect(b = `out`.addr, rect = body,
+#          rounding = style.window.rounding, c = bg.color)
 
     # set clipping rectangle
     var clip: Rect = Rect(x: 0, y: 0, w: 0, h: 0)
@@ -1478,7 +1475,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     nkUnify(clip = clip, a = aClip, x0 = layout.clip.x,
       y0 = layout.clip.y, x1 = layout.clip.x + layout.clip.w,
       y1 = layout.clip.y + layout.clip.h)
-    nkPushScissor(b = `out`.addr, r = clip)
+#    nkPushScissor(b = `out`.addr, r = clip)
     layout.clip = new_nk_rect(x = clip.x, y = clip.y, w = clip.w, h = clip.h)
     return not (layout.flags and windowHidden.cint).nk_bool and not
       (layout.flags and windowMinimized.cint).nk_bool
@@ -1569,7 +1566,7 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[PanelFlags];
     popup.buffer = win.buffer
     nkStartPopup(ctx = ctx, win = win)
     var allocated: nk_size = ctx.memory.allocated
-    nkPushScissor(b = popup.buffer.addr, r = nkNullRect)
+#    nkPushScissor(b = popup.buffer.addr, r = nkNullRect)
 
     # popup is running therefore invalidate parent panels
     if nkPanelBegin(ctx = ctx, title = title, panelType = panelPopup):

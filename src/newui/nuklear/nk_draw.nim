@@ -28,43 +28,37 @@
 import contracts
 import nk_buffer, nk_math, nk_types
 
-proc nkCommandBufferPush*(b: PNkCommandBuffer; t: CommandType;
+proc nkCommandBufferPush*(b: var CommandBuffer; t: CommandType;
     size: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Add a command to the commands buffer. Internal use only
   ##
   ## * b    - the buffer to which to command will be added
   ## * t    - the type of command
   ## * size - the size of command to add
-  require:
-    b != nil
-    b.base != nil
   body:
-    if b == nil:
-      return nil
     const align: nk_size = alignof(x = Command)
-    return nil
-#    let cmd: ptr Command = cast[ptr Command](nkBufferAlloc(b = b.base,
-#        bufferAlloc = bufferFront, size = size, align = align))
-#    if cmd == nil:
-#      return nil
-#
-#    # make sure the offset to the next command is aligned
-#    b.last = cast[nk_size](cast[ptr nk_byte](cmd)) - cast[nk_size](cast[
-#        ptr nk_byte](b.base.memory.`ptr`))
-#    let
-#      unaligned: pointer = cast[ptr nk_byte](cmd) + size
-#      memory: pointer = cast[pointer]((cast[nk_size](unaligned) + (align -
-#          1)) and not(align - 1))
-#      alignment: nk_size = cast[nk_size](cast[ptr nk_byte](memory)) - cast[
-#          nk_size](cast[ptr nk_byte](unaligned))
-#    cmd.cmdType = t
-#    cmd.next = b.base.allocated + alignment
-#    when defined(nkIncludeCommandUserData):
-#      cmd.userdata = b.userdata
-#    b.`end` = cmd.next
-#    return cmd
+    let cmd: ptr Command = cast[ptr Command](nkBufferAlloc(b = b.base,
+        bufferAlloc = bufferFront, size = size, align = align))
+    if cmd == nil:
+      return nil
 
-proc nkFillRect*(b: PNkCommandBuffer; rect: Rect; rounding: float;
+    # make sure the offset to the next command is aligned
+    b.last = cast[nk_size](cast[ptr nk_byte](cmd)) - cast[nk_size](cast[
+        ptr nk_byte](b.base.memory.memPtr))
+    let
+      unaligned: pointer = cast[ptr nk_byte](cmd) + size
+      memory: pointer = cast[pointer]((cast[nk_size](unaligned) + (align -
+          1)) and not(align - 1))
+      alignment: nk_size = cast[nk_size](cast[ptr nk_byte](memory)) - cast[
+          nk_size](cast[ptr nk_byte](unaligned))
+    cmd.cmdType = t
+    cmd.next = b.base.allocated + alignment
+    when defined(nkIncludeCommandUserData):
+      cmd.userdata = b.userdata
+    b.cmdEnd = cmd.next
+    return cmd
+
+proc nkFillRect*(b: var CommandBuffer; rect: Rect; rounding: float;
   c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the rectangle with the selected color
   ##
@@ -72,10 +66,10 @@ proc nkFillRect*(b: PNkCommandBuffer; rect: Rect; rounding: float;
   ## * rect     - the rectangle which will be filled with color
   ## * rounding - if bigger than zero, round the corners of the rectangle
   ## * c        - the color to fill the rectangle
-  if b == nil or rect.w == 0 or rect.h == 0:
+  if rect.w == 0 or rect.h == 0:
     return
   if b.use_clipping == 1:
-    let clip: nk_rect = b.clip
+    let clip: Rect = b.clip
     if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h,
       x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
       return

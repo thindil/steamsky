@@ -104,7 +104,7 @@ proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [
         else:
           style.window.background
       `out`: PNkCommandBuffer = win.buffer.addr
-    nkFillRect(b = `out`, rect = background, rounding = 0.0, c = color)
+#    nkFillRect(b = `out`, rect = background, rounding = 0.0, c = color)
 
 proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
     width: int) {.raises: [NuklearException], tags: [RootEffect],
