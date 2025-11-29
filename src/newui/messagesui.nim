@@ -20,7 +20,7 @@
 import std/[colors, math, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, messages, types]
-import coreui, errordialog, header, themes
+import coreui, dialogs, errordialog, header, themes
 
 proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
     inCombat: bool = false; withButtons: bool = true;
@@ -125,4 +125,5 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
       itemHeight = 25, x = 150, y = 150)
   editString(text = messageSearch, maxLen = 64)
   labelButton(title = "Delete all messages"):
-    discard
+    dialog = setQuestion(question = "Are you sure you want to clear all messages?",
+        qType = deleteMessages)
