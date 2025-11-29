@@ -118,9 +118,11 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
-  const typesList: array[7, string] = ["All", "Combat", "Trade", "Orders", "Craft", "Others", "Missions"]
-  setLayoutRowDynamic(height = 35, cols = 3)
-  messagesType = comboList(items = typesList, selected = messagesType, itemHeight = 25, x = 400, y = 150)
+  const typesList: array[7, string] = ["All", "Combat", "Trade", "Orders",
+      "Craft", "Others", "Missions"]
+  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.2.cfloat, 0.55, 0.25])
+  messagesType = comboList(items = typesList, selected = messagesType,
+      itemHeight = 25, x = 150, y = 150)
   editString(text = messageSearch, maxLen = 64)
   labelButton(title = "Delete all messages"):
     discard
