@@ -27,7 +27,8 @@ import coreui, errordialog, setui, themes
 type
   QuestionType* = enum
     ## Types of questions, used to set actions to the player's response
-    deleteSave, showDeadStats, quitGame, resignGame, homeBase, finishGame, dismissMember
+    deleteSave, showDeadStats, quitGame, resignGame, homeBase, finishGame,
+      dismissMember, deleteMessages
   QuestionData = object
     question, data: string
     qType: QuestionType
@@ -239,6 +240,8 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
               dialog = setError(message = "Can't update the crew's morale.")
               return
           refreshCrewList()
+        of deleteMessages:
+          discard
         of showDeadStats:
           discard
       labelButton(title = "No"):
@@ -569,12 +572,12 @@ proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
       manipulateData.warning = "You will spend " & moneyName & " below low level of fuel."
   elif dialog in {sellDialog, dropDialog, giveDialog, dropCargoDialog}:
     let action: string = case dialog
-          of sellDialog:
-            "sell"
-          of giveDialog:
-            "give"
-          else:
-            "drop"
+      of sellDialog:
+        "sell"
+      of giveDialog:
+        "give"
+      else:
+        "drop"
     if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
       let amount: int = getItemAmount(itemType = fuelType) - amount
       if amount <= gameSettings.lowFuel:
