@@ -241,7 +241,7 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
               return
           refreshCrewList()
         of deleteMessages:
-          discard
+          clearMessages()
         of showDeadStats:
           discard
       labelButton(title = "No"):
