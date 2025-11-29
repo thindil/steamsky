@@ -191,8 +191,8 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
       pack [text .showfilemenu.text -wrap char \
          -yscrollcommand {.showfilemenu.scroll set} -font HelpFont] -side top \
          -fill both -expand true -pady 2 -padx 2
-      ::autoscroll::autoscroll .showfilemenu.scroll
-
+      ::autoscroll::autoscroll .showfilemenu.scroll""")
+  tclEval(script = """
       # News menu
       ttk::frame .newsmenu -style Main.TFrame
       grid [text .newsmenu.text -wrap word -yscrollcommand {.newsmenu.scroll set} \
@@ -331,7 +331,8 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
             -text "Total gained points: $totalpoints%"
          .newgamemenu.canvas.difficulty.difficultylevel set $difficulty
          return true
-      }
+      }""")
+  tclEval(script = """
       ttk::frame .newgamemenu -style Main.TFrame
       grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 3 -pady {5 2}
       grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player \
@@ -503,7 +504,8 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
             }
          }
          SetPoints $level
-      }
+      }""")
+  tclEval(script = """
       tooltip::tooltip .newgamemenu.canvas.difficulty.difficultylevel \
          [lindex $difficultytooltips 1]
       bind .newgamemenu.canvas.difficulty.difficultylevel <FocusIn> \
