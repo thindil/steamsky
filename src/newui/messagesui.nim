@@ -103,6 +103,10 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
       for i in countdown(a = -1, b = loopStart):
         showMessage(message = getMessage(messageIndex = i + 1), dialog = dialog)
 
+var
+  messagesType: Natural = 0
+  messageSearch: string = ""
+
 proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the last messages screen
@@ -114,3 +118,9 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
+  const typesList: array[7, string] = ["All", "Combat", "Trade", "Orders", "Craft", "Others", "Missions"]
+  setLayoutRowDynamic(height = 35, cols = 3)
+  messagesType = comboList(items = typesList, selected = messagesType, itemHeight = 25, x = 400, y = 150)
+  editString(text = messageSearch, maxLen = 64)
+  labelButton(title = "Delete all messages"):
+    discard
