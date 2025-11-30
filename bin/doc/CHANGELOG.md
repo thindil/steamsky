@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [11.8] - 2025-11-30
 
 ### Added
 - The new section in in-game help with information about items
