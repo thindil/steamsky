@@ -486,9 +486,8 @@ proc nkStrokeRect(b: var CommandBuffer, rect: Rect, rounding,
   if c.a == 0 or rect.w == 0 or lineThickness <= 0:
     return
   if b.use_clipping == 1:
-    let clip: Rect = b.clip
     if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h,
-      x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
+      x1 = b.clip.x, y1 = b.clip.y, w1 = b.clip.w, h1 = b.clip.h):
       return
   var cmd: ptr nk_command_rect = nil
   cmd = cast[ptr nk_command_rect](nkCommandBufferPush(b = b, t = commandRect, size = cmd.sizeof))
@@ -518,11 +517,10 @@ proc nkStrokeTriangle(b: var CommandBuffer; x0, y0, x1, y1, x2, y2,
   if c.a == 0:
     return
   if b.use_clipping != 0:
-    let clip: Rect = b.clip
-    if not nkInbox(px = x0, py = y0, x = clip.x, y = clip.y, w = clip.w,
-      h = clip.h) and not nkInbox(px = x1, py = y1, x = clip.x, y = clip.y,
-      w = clip.w, h = clip.h) and not nkInbox(px = x2, py = y2, x = clip.x,
-      y = clip.y, w = clip.w, h = clip.h):
+    if not nkInbox(px = x0, py = y0, x = b.clip.x, y = b.clip.y, w = b.clip.w,
+      h = b.clip.h) and not nkInbox(px = x1, py = y1, x = b.clip.x, y = b.clip.y,
+      w = b.clip.w, h = b.clip.h) and not nkInbox(px = x2, py = y2, x = b.clip.x,
+      y = b.clip.y, w = b.clip.w, h = b.clip.h):
       return
 
   var cmd: ptr nk_command_triangle = nil
@@ -547,9 +545,8 @@ proc nkFillCircle(b: var CommandBuffer; rect: Rect; c: nk_color)
   if rect.w == 0 or rect.h == 0:
     return
   if b.use_clipping == 1:
-    let clip: Rect = b.clip
     if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h,
-      x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
+      x1 = b.clip.x, y1 = b.clip.y, w1 = b.clip.w, h1 = b.clip.h):
       return
 
   var cmd: ptr nk_command_circle_filled = nil
@@ -578,11 +575,10 @@ proc nkFillTriangle(b: var CommandBuffer, x0, y0, x1, y1, x2, y2: cfloat,
   if c.a == 0:
     return
   if b.use_clipping != 0:
-    let clip: Rect = b.clip
-    if not nkInbox(px = x0, py = y0, x = clip.x, y = clip.y, w = clip.w,
-      h = clip.h) and not nkInbox(px = x1, py = y1, x = clip.x, y = clip.y,
-      w = clip.w, h = clip.h) and not nkInbox(px = x2, py = y2, x = clip.x,
-      y = clip.y, w = clip.w, h = clip.h):
+    if not nkInbox(px = x0, py = y0, x = b.clip.x, y = b.clip.y, w = b.clip.w,
+      h = b.clip.h) and not nkInbox(px = x1, py = y1, x = b.clip.x, y = b.clip.y,
+      w = b.clip.w, h = b.clip.h) and not nkInbox(px = x2, py = y2, x = b.clip.x,
+      y = b.clip.y, w = b.clip.w, h = b.clip.h):
       return
 
   var cmd: ptr nk_command_triangle_filled = nil
@@ -607,9 +603,8 @@ proc nkDrawImage(b: var CommandBuffer; r: Rect; img: PImage; col: nk_color)
   ## * img - the image to draw
   ## * col - the color used as a background for the image
   if b.use_clipping != 0:
-    let c: Rect = b.clip
-    if c.w == 0 or c.h == 0 or not nkIntersect(x0 = r.x, y0 = r.y, w0 = r.w,
-      h0 = r.h, x1 = c.x, y1 = c.y, w1 = c.w, h1 = c.h):
+    if b.clip.w == 0 or b.clip.h == 0 or not nkIntersect(x0 = r.x, y0 = r.y, w0 = r.w,
+      h0 = r.h, x1 = b.clip.x, y1 = b.clip.y, w1 = b.clip.w, h1 = b.clip.h):
       return
 
   var cmd: ptr nk_command_image = nil
@@ -757,8 +752,9 @@ proc nkDrawText(b: var CommandBuffer; r: Rect; str: string; length: var int;
     if str == "" or length == 0 or (bg.a == 0 and fg.a == 0):
       return
     if b.use_clipping == 1:
-      let c: Rect = b.clip
-      if (c.w == 0 or c.h == 0 or not nkIntersect(x0 = r.x, y0 = r.y, w0 = r.w, h0 = r.h, x1 = c.x, y1 = c.y, w1 = c.w, h1 = c.h)):
+      if (b.clip.w == 0 or b.clip.h == 0 or not nkIntersect(x0 = r.x, y0 = r.y,
+        w0 = r.w, h0 = r.h, x1 = b.clip.x, y1 = b.clip.y, w1 = b.clip.w,
+        h1 = b.clip.h)):
         return
 
     # make sure text fits inside bounds

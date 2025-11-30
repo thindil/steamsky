@@ -68,10 +68,9 @@ proc nkFillRect*(b: var CommandBuffer; rect: Rect; rounding: float;
   ## * c        - the color to fill the rectangle
   if rect.w == 0 or rect.h == 0:
     return
-  if b.use_clipping == 1:
-    let clip: Rect = b.clip
+  if b.useClipping:
     if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h,
-      x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
+      x1 = b.clip.x, y1 = b.clip.y, w1 = b.clip.w, h1 = b.clip.h):
       return
 
   var cmd: ptr nk_command_rect_filled = nil
