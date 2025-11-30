@@ -134,11 +134,12 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
     let msgType: MessageType = if messagesType ==
         0: default else: messagesType.MessageType
     if messagesAmount(kind = msgType) == 0:
+      setLayoutRowDynamic(height = 25, cols = 1)
       label(str = "There are no messages of that type.")
     else:
 
-      proc showOneMessage(message: MessageData;
-          messagesType: MessageType) {.raises: [], tags: [], cdecl,
+      proc showOneMessage(message: MessageData; messagesType: MessageType;
+          dialog: var GameDialog) {.raises: [], tags: [RootEffect], cdecl,
           contractual.} =
         ## Show the selected message to a player
         ##
@@ -146,16 +147,24 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
         ## * messagesType - the selected type of messages to show
         if message.kind != messagesType and messagesType != default:
           return
+        var needLines: float = try:
+              ceil(x = getTextWidth(text = message.message) / windowWidth.float)
+            except:
+              dialog = setError(message = "Can't count the message lenght.")
+              return
+        if needLines < 1.0:
+          needLines = 1.0
+        setLayoutRowDynamic(height = 25 * needLines, cols = 1)
         if message.color == white:
-          discard
+          wrapLabel(str = message.message)
         else:
           discard
 
       if gameSettings.messagesOrder == olderFirst:
         for i in 1..messagesAmount():
           showOneMessage(message = getMessage(messageIndex = i),
-              messagesType = msgType)
+              messagesType = msgType, dialog = dialog)
       else:
         for i in countdown(a = messagesAmount(), b = 1):
           showOneMessage(message = getMessage(messageIndex = i),
-              messagesType = msgType)
+              messagesType = msgType, dialog = dialog)
