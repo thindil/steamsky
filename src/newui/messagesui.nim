@@ -127,3 +127,35 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
   labelButton(title = "Delete all messages"):
     dialog = setQuestion(question = "Are you sure you want to clear all messages?",
         qType = deleteMessages)
+  setLayoutRowDynamic(height = windowHeight - 55, cols = 1)
+  group(title = "MessagesGroup", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
+    let msgType: MessageType = if messagesType ==
+        0: default else: messagesType.MessageType
+    if messagesAmount(kind = msgType) == 0:
+      label(str = "There are no messages of that type.")
+    else:
+
+      proc showOneMessage(message: MessageData;
+          messagesType: MessageType) {.raises: [], tags: [], cdecl,
+          contractual.} =
+        ## Show the selected message to a player
+        ##
+        ## * message      - the message to show
+        ## * messagesType - the selected type of messages to show
+        if message.kind != messagesType and messagesType != default:
+          return
+        if message.color == white:
+          discard
+        else:
+          discard
+
+      if gameSettings.messagesOrder == olderFirst:
+        for i in 1..messagesAmount():
+          showOneMessage(message = getMessage(messageIndex = i),
+              messagesType = msgType)
+      else:
+        for i in countdown(a = messagesAmount(), b = 1):
+          showOneMessage(message = getMessage(messageIndex = i),
+              messagesType = msgType)
