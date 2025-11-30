@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Reduced chance for different than normal quality items for recruits in bases
+- Updated help
 
 ### Fixed
 - Items can be studies or deconstructed without a proper tool
