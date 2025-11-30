@@ -158,7 +158,19 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if message.color == white:
           wrapLabel(str = message.message)
         else:
-          discard
+          case message.color
+          of yellow:
+            colorWrapLabel(str = message.message, color = theme.colors[yellowColor])
+          of green:
+            colorWrapLabel(str = message.message, color = theme.colors[greenColor])
+          of red:
+            colorWrapLabel(str = message.message, color = theme.colors[redColor])
+          of blue:
+            colorWrapLabel(str = message.message, color = theme.colors[blueColor])
+          of cyan:
+            colorWrapLabel(str = message.message, color = theme.colors[cyanColor])
+          of white:
+            discard
 
       if gameSettings.messagesOrder == olderFirst:
         for i in 1..messagesAmount():
