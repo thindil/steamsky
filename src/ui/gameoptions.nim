@@ -336,7 +336,8 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       SetScrollbarBindings $goptions .gameframe.paned.optionsframe.scrolly
       for {set i 1} {$i < 18} {incr i} {
          SetScrollbarBindings $goptions.lbl$i .gameframe.paned.optionsframe.scrolly
-      }
+      }""")
+    tclEval(script = """
       # Movement keys options
       set specialkey {}
       # Set proper shortcut, validate it and check if it is not set somewhere
@@ -496,7 +497,8 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       for {set i 1} {$i < 15} {incr i} {
          SetScrollbarBindings $moveoptions.lbl$i \
             .gameframe.paned.optionsframe.scrolly
-      }
+      }""")
+    tclEval(script = """
       # Menu keys options
       set menuoptions [ttk::frame $optionsframe.menu]
       grid [ttk::label $menuoptions.lbl1 -text {Ship information:}] -sticky w
@@ -591,7 +593,8 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       for {set i 1} {$i < 13} {incr i} {
          SetScrollbarBindings $menuoptions.lbl$i \
             .gameframe.paned.optionsframe.scrolly
-      }
+      }""")
+    tclEval(script = """
       # Map keys options
       set mapoptions [ttk::frame $optionsframe.map]
       grid [ttk::label $mapoptions.lbl1 -text {Center map on player ship:}] \
@@ -762,7 +765,8 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       SetScrollbarBindings $mapoptions .gameframe.paned.optionsframe.scrolly
       for {set i 1} {$i < 23} {incr i} {
          SetScrollbarBindings $mapoptions.lbl$i .gameframe.paned.optionsframe.scrolly
-      }
+      }""")
+    tclEval(script = """
       # General keys options
       set uioptions [ttk::frame $optionsframe.ui]
       grid [ttk::label $uioptions.lbl1 -text {Resize first section:}] -sticky w
@@ -891,7 +895,8 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       SetScrollbarBindings $ioptions .gameframe.paned.optionsframe.scrolly
       for {set i 1} {$i < 13} {incr i} {
          SetScrollbarBindings $ioptions.lbl$i .gameframe.paned.optionsframe.scrolly
-      }
+      }""")
+    tclEval(script = """
       # Info options
       set infooptions [ttk::frame $optionsframe.info]
       grid [ttk::label $infooptions.lbl1 -text {Data directory path:}] -sticky w
