@@ -23,7 +23,7 @@ import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
 import newui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
     basesui, combatui, coreui, craftsui, dialogs, errordialog, goalsui, header,
-    mainmenu, mapsui, messagesui, missionsui, shipsui, shipsuicrew,
+    knowledge, mainmenu, mapsui, messagesui, missionsui, shipsui, shipsuicrew,
     shipsuicrewinventory, shipsuimodules, themes, tradesui, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -130,7 +130,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = 200)
   const
-    showGame: array[GameState.mainMenu..GameState.lastMessages, proc (
+    showGame: array[GameState.mainMenu..GameState.knowledgeLists, proc (
         state: var GameState; dialog: var GameDialog){.nimcall, raises: [
             ].}] = [
       GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
@@ -142,7 +142,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         healWounded: showWounded, repairShip: showRepairs,
         buyRecipes: showRecipes, shipyard: showShipyard,
         baseMissions: showMissions, loot: showLoot, shipInfo: showShipInfo,
-        crafting: showCrafting, lastMessages: showMessages]
+        crafting: showCrafting, lastMessages: showMessages,
+        knowledgeLists: showKnowledge]
     showDialog: array[GameDialog.errorDialog..GameDialog.setRecipeDialog,
         proc(dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
@@ -188,7 +189,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         let
           oldState: GameState = state
           oldDialog: GameDialog = dialog
-        if state in GameState.mainMenu..GameState.lastMessages:
+        if state in GameState.mainMenu..GameState.knowledgeLists:
           # Show the proper window
           showGame[state](state = state, dialog = dialog)
         # Add the tooltips, if enabled
