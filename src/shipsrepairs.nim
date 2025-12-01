@@ -30,7 +30,7 @@ proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
   body:
     var
       crewRepairPoints: seq[Natural] = @[]
-      repairPoints: int = 0
+      repairPoints: Natural = 0
       repairStopped: bool = false
       repairNeeded: bool = true
 
