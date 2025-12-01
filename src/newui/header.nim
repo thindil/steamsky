@@ -478,7 +478,12 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
         state = lastMessages
       dialog = none
     labelButton(title = "Knowledge lists"):
-      discard
+      if state == knowledgeLists:
+        state = previousState
+      else:
+        previousState = state
+        state = knowledgeLists
+      dialog = none
     if playerShip.crew[0].health > 0 and not inCombat:
       labelButton(title = "Wait orders"):
         setDialog()
