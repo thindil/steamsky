@@ -20,7 +20,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config]
-import coreui, header, messagesui, themes
+import coreui, header, knowledgebases, messagesui, themes
 
 var expandedSection: Natural = 0
 
@@ -46,7 +46,7 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Known bases:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      setLayoutRowStatic(height = 35, cols = 2, width = 35)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Maximize/minimize the list of known bases")
@@ -56,6 +56,12 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 1
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show/Hide additional options related to managing the list of known bases")
+      imageButton(image = images[moreOptionsIcon]):
+        showBasesOptions = not showBasesOptions
+      showBasesInfo(dialog = dialog)
   # The list of known events
   if expandedSection in {0, 2}:
     group(title = "Known events:", flags = {windowBorder, windowTitle}):
