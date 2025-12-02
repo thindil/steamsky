@@ -43,8 +43,8 @@ proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
         moduleIndex < playerShip.modules.len
       body:
         var
-          pointsIndex: int = -1
-          pointsBonus: int = 0
+          pointsIndex: ExtendedNatural = -1
+          pointsBonus: Natural = 0
         repairStopped = false
         for index, member in playerShip.crew.mpairs:
           if member.order == repair:
@@ -55,7 +55,7 @@ proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
                   moduleIndex].protoIndex].repairSkill) / 10).int *
                   crewRepairPoints[pointsIndex]
               repairPoints = crewRepairPoints[pointsIndex] + pointsBonus
-              var toolsIndex: int = findTools(memberIndex = index,
+              var toolsIndex: ExtendedNatural = findTools(memberIndex = index,
                   itemType = repairTools, order = repair)
               if toolsIndex == -1:
                 if pointsIndex == 0:
@@ -68,7 +68,7 @@ proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
                       mType = orderMessage, color = red)
                 repairStopped = true
                 return
-              var repairMaterial: int = findItem(inventory = playerShip.cargo,
+              var repairMaterial: ExtendedNatural = findItem(inventory = playerShip.cargo,
                   itemType = modulesList[playerShip.modules[
                   moduleIndex].protoIndex].repairMaterial, itemQuality = any)
               if repairMaterial > -1 and playerShip.cargo[
@@ -130,7 +130,7 @@ proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
               if not repairNeeded:
                 break
 
-    var currentMinutes, orderTime: int = 0
+    var currentMinutes, orderTime: range[-1_000..1_000] = 0
     for member in playerShip.crew.mitems:
       if member.order == repair:
         currentMinutes = minutes
