@@ -278,7 +278,7 @@ proc setToolsList*() {.raises: [], tags: [], contractual.} =
         toolsList.add(y = skill.tool)
 
 proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
-    toolQuality: Positive = 100): int {.raises: [KeyError,
+    toolQuality: Positive = 100): ExtendedNatural {.raises: [KeyError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [RootEffect],
     contractual.} =
   ## Search for specified tools in the crew member and the ship cargo
