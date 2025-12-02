@@ -1150,12 +1150,23 @@ type
     rounding*, w*, h*: uint16
     x*, y*: int16
     color*: NkColor
+  RowLayout* = object
+    ## Used to store Nuklear row layout data
+    index*, columns*, treeDepth*: int
+    ratio*, itemWidth*, itemHeight*, height*, minHeight*, itemOffset*,
+      filled*: float
+    templates*: array[nkMaxLayoutRowTemplateColumns, float]
+    rlType*: PanelRowLayoutType
   Panel* = object
     ## Used to store Nuklear panel data
     pType*: PanelType
     clip*, bounds*: Rect
     flags*: int
     border*, atY*, atX*, maxX*, headerHeight*, footerHeight*: float
+    row*: RowLayout
+    parent*: ref Panel
+    hasScrolling*: bool
+    offsetX*, offsetY*: uint
 
 # ---------
 # Constants
