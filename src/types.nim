@@ -133,6 +133,7 @@ type
   ReputationRange* = range[-100..100] ## The range of possible reputation levels
   RewardMultiplier* = range[0.0..2.0] ## The range of multiplier for missions reward
   EquipmentArray* = array[EquipmentLocations, int] ## The equipment of mobs
+  ExtendedNatural* = range[-1..Natural.high] ## Extended Natural range, with -1
 
   ModuleData* = object
     ## Used to store information about ships' modules
