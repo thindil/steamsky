@@ -24,7 +24,7 @@ import game, shipscargo, types, utils
 
 proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
     itemType: string = ""; durability: ItemsDurability = ItemsDurability.high;
-    quality: Positive = 100; itemQuality: ObjectQuality): int {.raises: [],
+    quality: Positive = 100; itemQuality: ObjectQuality): ExtendedNatural {.raises: [],
     tags: [], contractual.} =
   ## Find the index of the selected item in the selected inventory
   ##
