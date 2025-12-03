@@ -1076,3 +1076,23 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       except:
         dialog = setError(message = "Can't add a study recipe.")
         return
+
+##########################
+# Setting the knowledge UI
+##########################
+
+var
+  basesTList*: seq[string] = @[]
+    ## The list of names of types of all bases in the game
+
+proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for the knowledge info screen
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  basesTList = @["Any"]
+  for baseType in basesTypesList.values:
+    basesTList.add(y = baseType.name)
