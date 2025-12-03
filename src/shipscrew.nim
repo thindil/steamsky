@@ -743,7 +743,7 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.raises: [
     updateOrders(ship = ship)
 
 proc findMember*(order: CrewOrders; shipCrew: seq[
-    MemberData] = playerShip.crew): int {.raises: [], tags: [],
+    MemberData] = playerShip.crew): ExtendedNatural {.raises: [], tags: [],
     contractual.} =
   ## Find the first member of the selected crew with the selected order
   ##
