@@ -1150,6 +1150,13 @@ type
     rounding*, w*, h*: uint16
     x*, y*: int16
     color*: NkColor
+  Scroll* = object
+    ## Used to store Nuklear scroll widget data
+    x*, y*: uint
+  MenuState* = object
+    ## Used to store Nuklear menu widget data
+    x*, y*, w*, h*: float
+    offset*: Scroll
   RowLayout* = object
     ## Used to store Nuklear row layout data
     index*, columns*, treeDepth*: int
@@ -1167,6 +1174,7 @@ type
     parent*: ref Panel
     hasScrolling*: bool
     offsetX*, offsetY*: uint
+    menu*: MenuState
 
 # ---------
 # Constants
