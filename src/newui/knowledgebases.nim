@@ -19,11 +19,12 @@
 ## lists of known bases, events missions, finished stories, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import coreui
+import coreui, setui
 
 var
   showBasesOptions*: bool = false
     ## Show additonal options for managing the list of known bases
+  basesType: Natural = 0
 
 proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -35,7 +36,10 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   # Show options related to managing the list
   if showBasesOptions:
-    setLayoutRowDynamic(height = 35, cols = 6)
+    setLayoutRowStatic(height = 25, cols = 6, ratio = [50.cfloat, 150, 100,
+        100, 100, 100])
     label(str = "Type:")
+    basesType = comboList(items = basesTList, selected = basesType,
+        itemHeight = 25, x = 150, y = 150)
     label(str = "Status:")
     label(str = "Owner:")
