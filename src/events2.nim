@@ -50,7 +50,7 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
     case roll
     # Engine damaged
     of 1..5:
-      let engineerIndex: int = findMember(order = engineer)
+      let engineerIndex: ExtendedNatural = findMember(order = engineer)
       if engineerIndex > -1 and playerShip.speed != fullStop:
         var roll2: Positive = getRandom(min = 1, max = 100)
         case playerShip.speed
@@ -79,11 +79,11 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
             crewIndex = engineerIndex)
     # Bad weather
     of 6..20:
-      let pilotIndex: int = findMember(order = pilot)
+      let pilotIndex: ExtendedNatural = findMember(order = pilot)
       if pilotIndex > 0:
         addMessage(message = "Sudden bad weather causes your travel to take longer.",
             mType = otherMessage, color = red)
-        var timePassed: int = 60 - getSkillLevel(member = playerShip.crew[
+        var timePassed: range[-1_000..100] = 60 - getSkillLevel(member = playerShip.crew[
             pilotIndex], skillIndex = pilotingSkill)
         if timePassed < 1:
           timePassed = 1
@@ -192,7 +192,7 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
       of 22..30:
         var newItemIndex: Natural = 0
         while true:
-          var itemIndex: int = getRandom(min = 1, max = itemsList.len)
+          var itemIndex: Natural = getRandom(min = 1, max = itemsList.len)
           for j in 1 .. itemsList.len:
             itemIndex.dec
             if itemIndex == 0 and getPrice(baseType = skyBases[skyMap[
