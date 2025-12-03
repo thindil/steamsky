@@ -1081,6 +1081,10 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the knowledge UI
 ##########################
 
+const
+  basesStatus*: array[3, string] = ["Any", "Not visited", "Visited"]
+    ## The list of bases statuses to show
+
 var
   basesTList*: seq[string] = @[]
     ## The list of names of types of all bases in the game
