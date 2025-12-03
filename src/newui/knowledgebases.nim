@@ -18,7 +18,7 @@
 ## Provides code related to the information about the player's knowledge, like
 ## lists of known bases, events missions, finished stories, etc.
 
-import contracts
+import contracts, nuklear/nuklear_sdl_renderer
 import coreui
 
 var
@@ -35,4 +35,7 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   # Show options related to managing the list
   if showBasesOptions:
-    discard
+    setLayoutRowDynamic(height = 35, cols = 6)
+    label(str = "Type:")
+    label(str = "Status:")
+    label(str = "Owner:")
