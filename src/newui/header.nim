@@ -482,6 +482,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
         state = previousState
       else:
         previousState = state
+        setKnowledge(dialog = dialog)
         state = knowledgeLists
       dialog = none
     if playerShip.crew[0].health > 0 and not inCombat:
