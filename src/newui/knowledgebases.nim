@@ -19,12 +19,36 @@
 ## lists of known bases, events missions, finished stories, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import coreui, setui
+import coreui, setui, table
+
+type BasesSortOrders = enum
+  none, nameAsc, nameDesc, distanceAsc, distanceDesc, populationAsc,
+    populationDesc, sizeAsc, sizeDesc, ownerAsc, ownerDesc, typeAsc, typeDesc,
+    reputationAsc, reputationDesc, coordAsc, coordDesc
+
+const
+  defaultBasesSortOrder: BasesSortOrders = none
 
 var
   showBasesOptions*: bool = false
     ## Show additonal options for managing the list of known bases
   basesType, basesStatus, basesOwner: Natural = 0
+  basesSortOrder: BasesSortOrders = defaultBasesSortOrder
+
+proc sortBases(sortAsc, sortDesc: BasesSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort recipes on the list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if basesSortOrder == sortAsc:
+    basesSortOrder = sortDesc
+  else:
+    basesSortOrder = sortAsc
 
 proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -47,3 +71,13 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     label(str = "Owner:")
     basesOwner = comboList(items = basesOwners, selected = basesOwner,
         itemHeight = 25, x = 150, y = 150)
+  const
+    headers: array[4, HeaderData[BasesSortOrders]] = [
+      HeaderData[BasesSortOrders](label: "Name", sortAsc: nameAsc,
+          sortDesc: nameDesc),
+      HeaderData[BasesSortOrders](label: "Distance",
+          sortAsc: distanceAsc, sortDesc: distanceDesc),
+      HeaderData[BasesSortOrders](label: "Coordinates", sortAsc: coordAsc,
+          sortDesc: coordDesc),
+      HeaderData[BasesSortOrders](label: "Population",
+          sortAsc: populationAsc, sortDesc: populationDesc)]
