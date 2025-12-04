@@ -1082,12 +1082,14 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 ##########################
 
 const
-  basesStatus*: array[3, string] = ["Any", "Not visited", "Visited"]
+  basesStatuses*: array[3, string] = ["Any", "Not visited", "Visited"]
     ## The list of bases statuses to show
 
 var
   basesTList*: seq[string] = @[]
     ## The list of names of types of all bases in the game
+  basesOwners*: seq[string] = @[]
+    ## The list of owners of all bases in the game
 
 proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -1100,3 +1102,6 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   basesTList = @["Any"]
   for baseType in basesTypesList.values:
     basesTList.add(y = baseType.name)
+  basesOwners = @["Any"]
+  for faction in factionsList.values:
+    basesOwners.add(y = faction.name)
