@@ -1150,13 +1150,6 @@ type
     rounding*, w*, h*: uint16
     x*, y*: int16
     color*: NkColor
-  Scroll* = object
-    ## Used to store Nuklear scroll widget data
-    x*, y*: uint
-  MenuState* = object
-    ## Used to store Nuklear menu widget data
-    x*, y*, w*, h*: float
-    offset*: Scroll
   RowLayout* = object
     ## Used to store Nuklear row layout data
     index*, columns*, treeDepth*: int
@@ -1164,6 +1157,24 @@ type
       filled*: float
     templates*: array[nkMaxLayoutRowTemplateColumns, float]
     rlType*: PanelRowLayoutType
+  Scroll* = object
+    ## Used to store Nuklear scroll widget data
+    x*, y*: uint
+  MenuState* = object
+    ## Used to store Nuklear menu widget data
+    x*, y*, w*, h*: float
+    offset*: Scroll
+  ChartSlot* = object
+    ## Used to store Nuklear charts' slots data
+    cType*: ChartType
+    color*, higlight*: NkColor
+    last*: Vec2
+    showMarkers*: bool
+  Chart* = object
+    ## Used to store Nuklear charts data
+    slot*: int
+    x*, y*, w*, h*: float
+    slots: seq[ChartSlot]
   Panel* = object
     ## Used to store Nuklear panel data
     pType*: PanelType
@@ -1175,6 +1186,11 @@ type
     hasScrolling*: bool
     offsetX*, offsetY*: uint
     menu*: MenuState
+    chart*: Chart
+    buffer*: CommandBuffer
+  Window* = object
+    ## Used to store Nuklear window data
+    layout*: Panel
 
 # ---------
 # Constants
