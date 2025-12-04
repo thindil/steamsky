@@ -646,6 +646,15 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "tooltip::tooltip " & qualityBox & " \"Desired quality of crafted item. Better quality\nraises difficulty of crafting, worse lowers.\"")
     tclEval(script = "bind " & qualityBox & " <Escape> {" & craftDialog & ".cancel invoke;break}")
     buttonRow += 1
+    label = craftDialog & ".speciallabel"
+    tclEval(script = "ttk::label " & label & " -text {Special:}")
+    tclEval(script = "grid " & label & " -columnspan 2 -padx 5")
+    var specialBox: string = craftDialog & ".special1"
+    tclEval(script = "ttk::combobox " & specialBox & " -state readonly -width 10")
+    tclEval(script = specialBox & " configure -values [list None {Lighter} {More durable}]")
+    tclEval(script = specialBox & " current 0")
+    tclEval(script = "grid " & specialBox & " -padx 5")
+    buttonRow += 2
   var mType: ModuleType = ModuleType.any
   if recipeType in ["Study", "Deconstruct"]:
     mType = alchemyLab
@@ -735,7 +744,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & button & " <Tab> {focus " & craftDialog &
       firstFocus & ";break}")
   tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
-  showDialog(dialog = craftDialog)
+  showDialog(dialog = craftDialog, relativeY = 0.1)
   tclEval(script = "focus " & button)
   return tclOk
 
