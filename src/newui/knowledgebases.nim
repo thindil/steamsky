@@ -24,7 +24,7 @@ import coreui, setui
 var
   showBasesOptions*: bool = false
     ## Show additonal options for managing the list of known bases
-  basesType, basesStatus: Natural = 0
+  basesType, basesStatus, basesOwner: Natural = 0
 
 proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -37,7 +37,7 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   # Show options related to managing the list
   if showBasesOptions:
     setLayoutRowStatic(height = 25, cols = 6, ratio = [50.cfloat, 150, 75,
-        150, 100, 100])
+        150, 75, 150])
     label(str = "Type:")
     basesType = comboList(items = basesTList, selected = basesType,
         itemHeight = 25, x = 150, y = 150)
@@ -45,3 +45,5 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     basesStatus = comboList(items = basesStatuses, selected = basesStatus,
         itemHeight = 25, x = 150, y = 150)
     label(str = "Owner:")
+    basesOwner = comboList(items = basesOwners, selected = basesOwner,
+        itemHeight = 25, x = 150, y = 150)
