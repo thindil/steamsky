@@ -97,7 +97,7 @@ proc loadItems*(fileName: string) {.raises: [DataLoadingError],
             ObjectData(weight: 1, reputation: -100)
         else:
           ObjectData(weight: 1, reputation: -100)
-      var attribute: string = itemNode.attr(name = "name")
+      var attribute: XmlAttribute = itemNode.attr(name = "name")
       if attribute.len() > 0:
         item.name = attribute
       attribute = itemNode.attr(name = "weight")
@@ -495,8 +495,9 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
   ##                 the lowest quality of money
   var inventory: seq[InventoryData] = (if memberIndex > -1: playerShip.crew[
       memberIndex].inventory else: playerShip.cargo)
-  var mIndex: int = -1
+  var mIndex: ExtendedNatural = -1
   if quality == any:
+    {.ruleOff: "varDeclared".}
     var
       newQuality: ObjectQuality = ObjectQuality.high
       allAmount: int = amount
@@ -534,4 +535,5 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
     else:
       updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = amount,
           cargoIndex = mIndex, quality = quality)
+  {.ruleOn: "varDeclared".}
 
