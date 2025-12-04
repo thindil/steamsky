@@ -134,6 +134,7 @@ type
   RewardMultiplier* = range[0.0..2.0] ## The range of multiplier for missions reward
   EquipmentArray* = array[EquipmentLocations, int] ## The equipment of mobs
   ExtendedNatural* = range[-1..Natural.high] ## Extended Natural range, with -1
+  XmlAttribute* = string ## Used to read the game data from XML files
 
   ModuleData* = object
     ## Used to store information about ships' modules
