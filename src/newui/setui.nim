@@ -1092,7 +1092,7 @@ type
       ## The distance to the bese from the current player's position
     coords*: string
       ## The coordinates of the base
-    population*: Natural
+    population*: BasePopulation
       ## The population of the base
     size*: BasesSize
       ## The side of the base
@@ -1102,6 +1102,8 @@ type
       ## The type of the base
     reputation*: int
       ## The player's reputaion in the base
+    visited*: bool
+      ## If true, the base was visited by the player
 
 const
   basesStatuses*: array[3, string] = ["Any", "Not visited", "Visited"]
@@ -1132,4 +1134,11 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   knownBasesList = @[]
   for index, base in skyBases:
     if base.known:
-      knownBasesList.add(BaseData(index: index, name: base.name))
+      try:
+        knownBasesList.add(BaseData(index: index, name: base.name,
+            distance: countDistance(destinationX = base.skyX,
+            destinationY = base.skyY), coords: "X: " & $base.skyX & " Y: " &
+            $base.skyY, population: getBasePopulation(baseIndex = index),
+            size: base.size, owner: factionsList[skyBases[index].owner].name))
+      except:
+        dialog = setError(message = "Can't get a base info")
