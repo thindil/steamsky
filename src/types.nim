@@ -123,6 +123,18 @@ type
     ## The quality of an item
     poor, low, normal, good, excellent, any
 
+  CraftBonuses* = enum
+    ## Special bonuses set during crafting items
+    none = "None",
+    lighter = "Lighter",
+    moreDurable = "More durable"
+
+  CraftMaluses* = enum
+    ## Special maluses set during crafting items
+    none = "None",
+    heavier = "Heavier",
+    lessDurable = "Less durable"
+
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ItemsDurability* = range[0..101] ## The range of the items durability
