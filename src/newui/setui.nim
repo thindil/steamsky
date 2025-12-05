@@ -21,7 +21,8 @@
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
-    crafts, crew, game, items, maps, missions, shipscargo, shipscrew, types]
+    crafts, crew, game, items, maps, missions, reputation, shipscargo,
+    shipscrew, types]
 import coreui, errordialog, utilsui2
 
 var
@@ -1100,7 +1101,7 @@ type
       ## The owner of the base
     baseType*: string
       ## The type of the base
-    reputation*: int
+    reputation*: string
       ## The player's reputaion in the base
     visited*: bool
       ## If true, the base was visited by the player
@@ -1139,6 +1140,10 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             distance: countDistance(destinationX = base.skyX,
             destinationY = base.skyY), coords: "X: " & $base.skyX & " Y: " &
             $base.skyY, population: getBasePopulation(baseIndex = index),
-            size: base.size, owner: factionsList[skyBases[index].owner].name))
+            size: base.size, owner: factionsList[base.owner].name,
+            baseType: basesTypesList[base.baseType].name,
+            reputation: getReputationText(
+            reputationLevel = base.reputation.level),
+            visited: base.visited.year > 0))
       except:
         dialog = setError(message = "Can't get a base info")
