@@ -1188,9 +1188,23 @@ type
     menu*: MenuState
     chart*: Chart
     buffer*: CommandBuffer
+  PopupBuffer* = object
+    ## Used to store Nuklear popup buffer data
+    begin*, buffEnd*, parent*, last*: int
+    active*: bool
+  PopupState* = object
+    ## Used to store Nuklear popup data
+    win*: Window
+    active*: bool
+    pType*: PanelType
+    name*: uint
+    buf*: PopupBuffer
+    comboCount*, conCount*, colOld*, activeCon*: uint
+    header*: Rect
   Window* = object
     ## Used to store Nuklear window data
     layout*: Panel
+    popup*: ref PopupState
 
 # ---------
 # Constants
