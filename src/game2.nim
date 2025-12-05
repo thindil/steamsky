@@ -19,7 +19,7 @@
 ## finishing the game or load the game's data. Split from game module to
 ## avoid circular dependencies.
 
-import std/[logging, os, strutils, tables, xmlparser, xmltree]
+import std/[logging, os, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
     events, factions, game, gamesaveload, goals, help, items, log, maps,
@@ -117,7 +117,7 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
     return
 
   {.hint[XCannotRaiseY]: off.}
-  proc loadSelectedData(dataName, fileName: string): string {.raises: [
+  proc loadSelectedData(dataName: string; fileName: Path): string {.raises: [
       DataLoadingError, KeyError, OSError], tags: [WriteIOEffect, RootEffect],
       contractual.} =
     ## Load the selected game's data from the file
@@ -129,7 +129,7 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
     ## message with information what was wrong.
     require:
       dataName.len > 0
-      fileName.len > 0
+      ($fileName).len > 0
     body:
       var localFileName: string = ""
       proc loadDataFile(localDataName: string): string {.raises: [
@@ -182,33 +182,35 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
             else:
               return "Can't load the game data. Unknown type of data: " & dataType
 
-      if fileName.len == 0:
+      if ($fileName).len == 0:
         for file in walkFiles(pattern = dataName & DirSep & "*.dat"):
           localFileName = file
           result = loadDataFile(localDataName = "")
           if result.len > 0:
             return
       else:
-        localFileName = dataDirectory & fileName
+        localFileName = dataDirectory & $fileName
         result = loadDataFile(localDataName = dataName)
   {.hint[XCannotRaiseY]: on.}
 
-  type DataTypeRecord = object
-    name: string
-    fileName: string
+  type
+    DataName = string
+    DataTypeRecord = object
+      name: DataName
+      fileName: Path
   const dataTypes: array[1..12, DataTypeRecord] = [DataTypeRecord(name: "data",
-      fileName: "game.dat"), DataTypeRecord(name: "items",
-      fileName: "items.dat"), DataTypeRecord(name: "modules",
-      fileName: "shipmodules.dat"), DataTypeRecord(name: "recipes",
-      fileName: "recipes.dat"), DataTypeRecord(name: "bases",
-      fileName: "bases.dat"), DataTypeRecord(name: "mobiles",
-      fileName: "mobs.dat"), DataTypeRecord(name: "careers",
-      fileName: "careers.dat"), DataTypeRecord(name: "factions",
-      fileName: "factions.dat"), DataTypeRecord(name: "help",
-      fileName: "help.dat"), DataTypeRecord(name: "ships",
-      fileName: "ships.dat"), DataTypeRecord(name: "goals",
-      fileName: "goals.dat"), DataTypeRecord(name: "stories",
-      fileName: "stories.dat")]
+      fileName: "game.dat".Path), DataTypeRecord(name: "items",
+      fileName: "items.dat".Path), DataTypeRecord(name: "modules",
+      fileName: "shipmodules.dat".Path), DataTypeRecord(name: "recipes",
+      fileName: "recipes.dat".Path), DataTypeRecord(name: "bases",
+      fileName: "bases.dat".Path), DataTypeRecord(name: "mobiles",
+      fileName: "mobs.dat".Path), DataTypeRecord(name: "careers",
+      fileName: "careers.dat".Path), DataTypeRecord(name: "factions",
+      fileName: "factions.dat".Path), DataTypeRecord(name: "help",
+      fileName: "help.dat".Path), DataTypeRecord(name: "ships",
+      fileName: "ships.dat".Path), DataTypeRecord(name: "goals",
+      fileName: "goals.dat".Path), DataTypeRecord(name: "stories",
+      fileName: "stories.dat".Path)]
   # Load the standard game data
   for dataType in dataTypes:
     result = loadSelectedData(dataName = dataType.name,
@@ -217,7 +219,7 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
       return
   # Load the modifications
   for modDirectory in walkDirs(pattern = modsDirectory & "*"):
-    result = loadSelectedData(dataName = modDirectory, fileName = "")
+    result = loadSelectedData(dataName = modDirectory, fileName = "".Path)
     if result.len > 0:
       return
   setToolsList()
