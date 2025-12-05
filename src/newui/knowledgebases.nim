@@ -72,7 +72,7 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     basesOwner = comboList(items = basesOwners, selected = basesOwner,
         itemHeight = 25, x = 150, y = 150)
   const
-    headers: array[4, HeaderData[BasesSortOrders]] = [
+    headers: array[8, HeaderData[BasesSortOrders]] = [
       HeaderData[BasesSortOrders](label: "Name", sortAsc: nameAsc,
           sortDesc: nameDesc),
       HeaderData[BasesSortOrders](label: "Distance",
@@ -80,4 +80,17 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       HeaderData[BasesSortOrders](label: "Coordinates", sortAsc: coordAsc,
           sortDesc: coordDesc),
       HeaderData[BasesSortOrders](label: "Population",
-          sortAsc: populationAsc, sortDesc: populationDesc)]
+          sortAsc: populationAsc, sortDesc: populationDesc),
+      HeaderData[BasesSortOrders](label: "Size",
+          sortAsc: sizeAsc, sortDesc: sizeDesc),
+      HeaderData[BasesSortOrders](label: "Owner",
+          sortAsc: ownerAsc, sortDesc: ownerDesc),
+      HeaderData[BasesSortOrders](label: "Type",
+          sortAsc: typeAsc, sortDesc: typeDesc),
+      HeaderData[BasesSortOrders](label: "Reputation",
+          sortAsc: reputationAsc, sortDesc: reputationDesc)]
+    ratio: array[8, cfloat] = [200.cfloat, 100, 100, 100, 100, 100, 100, 100]
+
+
+  addHeader(headers = headers, ratio = ratio, tooltip = "bases",
+      code = sortBases, dialog = dialog)
