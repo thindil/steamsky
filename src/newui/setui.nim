@@ -1081,6 +1081,28 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the knowledge UI
 ##########################
 
+type
+  BaseData* = object
+    ## Stores data needed to show information about a base
+    index*: Natural
+      ## The index of the base
+    name*: string
+      ## The name of the base
+    distance*: Natural
+      ## The distance to the bese from the current player's position
+    coords*: string
+      ## The coordinates of the base
+    population*: Natural
+      ## The population of the base
+    size*: BasesSize
+      ## The side of the base
+    owner*: string
+      ## The owner of the base
+    baseType*: string
+      ## The type of the base
+    reputation*: int
+      ## The player's reputaion in the base
+
 const
   basesStatuses*: array[3, string] = ["Any", "Not visited", "Visited"]
     ## The list of bases statuses to show
@@ -1090,6 +1112,8 @@ var
     ## The list of names of types of all bases in the game
   basesOwners*: seq[string] = @[]
     ## The list of owners of all bases in the game
+  knownBasesList*: seq[BaseData] = @[]
+    ## The list of known bases
 
 proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -1105,3 +1129,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   basesOwners = @["Any"]
   for faction in factionsList.values:
     basesOwners.add(y = faction.name)
+  knownBasesList = @[]
+  for index, base in skyBases:
+    if base.known:
+      knownBasesList.add(BaseData(index: index, name: base.name))
