@@ -19,7 +19,8 @@
 ## lists of known bases, events missions, finished stories, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import coreui, setui, table
+import ../config
+import coreui, errordialog, setui, table, themes
 
 type BasesSortOrders = enum
   none, nameAsc, nameDesc, distanceAsc, distanceDesc, populationAsc,
@@ -34,6 +35,17 @@ var
     ## Show additonal options for managing the list of known bases
   basesType, basesStatus, basesOwner: Natural = 0
   basesSortOrder: BasesSortOrders = defaultBasesSortOrder
+
+proc showBaseInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show information about the selected base
+  ##
+  ## * data   - the index of the selected item
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  discard
 
 proc sortBases(sortAsc, sortDesc: BasesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -94,3 +106,26 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 
   addHeader(headers = headers, ratio = ratio, tooltip = "bases",
       code = sortBases, dialog = dialog)
+  let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+  saveButtonStyle()
+  setButtonStyle(field = borderColor, a = 0)
+  try:
+    setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+  except:
+    dialog = setError(message = "Can't set table color")
+    return
+  setButtonStyle(field = rounding, value = 0)
+  setButtonStyle(field = border, value = 0)
+  var row: Positive = 1
+  # Show the list of known bases
+  for base in knownBasesList:
+    if row == gameSettings.listsLimit + 1:
+      break
+    addButton(label = base.name, tooltip = "Show the base's details",
+      data = base.index, code = showBaseInfo, dialog = dialog)
+    row.inc
+    if row == gameSettings.listsLimit + 1:
+      break
+  restoreButtonStyle()
+  addPagination(page = currentPage, row = row)
