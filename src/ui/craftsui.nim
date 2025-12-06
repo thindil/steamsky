@@ -649,11 +649,14 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     label = craftDialog & ".speciallabel"
     tclEval(script = "ttk::label " & label & " -text {Special:}")
     tclEval(script = "grid " & label & " -columnspan 2 -padx 5")
-    var specialBox: string = craftDialog & ".special1"
+    let specialFrame: string = craftDialog & ".special"
+    tclEval(script = "ttk::frame " & specialFrame)
+    var specialBox: string = specialFrame & ".special1"
     tclEval(script = "ttk::combobox " & specialBox & " -state readonly -width 10")
     tclEval(script = specialBox & " configure -values [list None {Lighter} {More durable}]")
     tclEval(script = specialBox & " current 0")
     tclEval(script = "grid " & specialBox & " -padx 5")
+    tclEval(script = "grid " & specialFrame & " -padx 5")
     buttonRow += 2
   var mType: ModuleType = ModuleType.any
   if recipeType in ["Study", "Deconstruct"]:
