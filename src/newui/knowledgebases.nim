@@ -18,9 +18,9 @@
 ## Provides code related to the information about the player's knowledge, like
 ## lists of known bases, events missions, finished stories, etc.
 
-import std/algorithm
+import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, types]
+import ../[basestypes, config, game, types]
 import coreui, errordialog, setui, table, themes
 
 type BasesSortOrders = enum
@@ -78,9 +78,13 @@ proc sortBases(sortAsc, sortDesc: BasesSortOrders;
     localBases.add(y = LocalBaseData(name: base.name, distance: base.distance,
         coords: base.coords, population: (if base.visited: skyBases[
         base.index].population.int else: -1), size: (
-        if base.visited: base.size else: unknown)))
+        if base.visited: base.size else: unknown), owner: (
+        if base.visited: base.owner else: ""), baseType: (
+        if base.visited: base.baseType else: ""), reputation: (
+        if base.visited: skyBases[base.index].reputation.level.int else: 200),
+        id: base.index))
 
-  proc sortBases(x, y: BaseData): int {.raises: [], tags: [],
+  proc sortBases(x, y: LocalBaseData): int {.raises: [], tags: [],
       contractual.} =
     ## Compare two bases and return which should go first, based on the sort
     ## order of the bases
@@ -158,7 +162,18 @@ proc sortBases(sortAsc, sortDesc: BasesSortOrders;
     of none:
       return -1
 
-  knownBasesList.sort(cmp = sortBases)
+  localBases.sort(cmp = sortBases)
+  for base in localBases.mitems:
+    if base.population == -1:
+      base.population = skyBases[base.id].population
+      base.size = skyBases[base.id].size
+      try:
+        base.owner = factionsList[skyBases[base.id].owner].name
+        base.baseType = basesTypesList[skyBases[base.id].baseType].name
+      except:
+        dialog = setError(message = "Can't get a base's data")
+        return
+      base.reputation = skyBases[base.id].reputation.level
 
 proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
