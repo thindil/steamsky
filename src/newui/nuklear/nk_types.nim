@@ -1197,14 +1197,27 @@ type
     win*: Window
     active*: bool
     pType*: PanelType
-    name*: uint
+    name*: nk_hash
     buf*: PopupBuffer
     comboCount*, conCount*, colOld*, activeCon*: uint
     header*: Rect
+    seq*, old*: uint
+    scrollbar*: Scroll
+    mode*, singleLine*: uint8
+  EditState* = object
+    ## Used to store Nuklear edit data
+    active*, prev*, cursor*, selStart*, selEnd*: int
+    name*: nk_hash
   Window* = object
     ## Used to store Nuklear window data
     layout*: Panel
     popup*: ref PopupState
+    parent*, next*, prev*: ref Window
+    bounds*: Rect
+    seq*, scrolled*, tableCount: uint
+    flags*: nk_flags
+    buffer*: CommandBuffer
+    edit*: EditState
 
 # ---------
 # Constants
