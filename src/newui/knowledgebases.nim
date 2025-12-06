@@ -18,6 +18,7 @@
 ## Provides code related to the information about the player's knowledge, like
 ## lists of known bases, events missions, finished stories, etc.
 
+import std/algorithm
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
 import coreui, errordialog, setui, table, themes
@@ -61,6 +62,91 @@ proc sortBases(sortAsc, sortDesc: BasesSortOrders;
     basesSortOrder = sortDesc
   else:
     basesSortOrder = sortAsc
+
+  var localBases: seq[BaseData] = knownBasesList
+  for base in localBases.mitems:
+    if not base.visited:
+      discard
+
+  proc sortBases(x, y: BaseData): int {.raises: [], tags: [],
+      contractual.} =
+    ## Compare two bases and return which should go first, based on the sort
+    ## order of the bases
+    ##
+    ## * x - the first base to compare
+    ## * y - the second base to compare
+    ##
+    ## Returns 1 if the first base should go first, -1 if the second base
+    ## should go first.
+    case basesSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      return -1
+    of distanceAsc:
+      if x.distance < y.distance:
+        return 1
+      return -1
+    of distanceDesc:
+      if x.distance > y.distance:
+        return 1
+      return -1
+    of coordAsc:
+      if x.coords < y.coords:
+        return 1
+      return -1
+    of coordDesc:
+      if x.coords > y.coords:
+        return 1
+      return -1
+    of populationAsc:
+      if x.population < y.population:
+        return 1
+      return -1
+    of populationDesc:
+      if x.population > y.population:
+        return 1
+      return -1
+    of sizeAsc:
+      if x.size < y.size:
+        return 1
+      return -1
+    of sizeDesc:
+      if x.size > y.size:
+        return 1
+      return -1
+    of ownerAsc:
+      if x.owner < y.owner:
+        return 1
+      return -1
+    of ownerDesc:
+      if x.owner > y.owner:
+        return 1
+      return -1
+    of typeAsc:
+      if x.baseType < y.baseType:
+        return 1
+      return -1
+    of typeDesc:
+      if x.baseType > y.baseType:
+        return 1
+      return -1
+    of reputationAsc:
+      if x.reputation < y.reputation:
+        return 1
+      return -1
+    of reputationDesc:
+      if x.reputation > y.reputation:
+        return 1
+      return -1
+    of none:
+      return -1
+
+  knownBasesList.sort(cmp = sortBases)
 
 proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
