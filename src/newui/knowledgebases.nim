@@ -20,7 +20,7 @@
 
 import std/algorithm
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
+import ../[config, game, types]
 import coreui, errordialog, setui, table, themes
 
 type BasesSortOrders = enum
@@ -63,10 +63,22 @@ proc sortBases(sortAsc, sortDesc: BasesSortOrders;
   else:
     basesSortOrder = sortAsc
 
-  var localBases: seq[BaseData] = knownBasesList
-  for base in localBases.mitems:
-    if not base.visited:
-      discard
+  type LocalBaseData = object
+    name: string
+    distance: Natural
+    coords: string
+    population: int
+    size: BasesSize
+    owner: string
+    baseType: string
+    reputation: int
+    id: BasesRange = 1
+  var localBases: seq[LocalBaseData] = @[]
+  for base in knownBasesList:
+    localBases.add(y = LocalBaseData(name: base.name, distance: base.distance,
+        coords: base.coords, population: (if base.visited: skyBases[
+        base.index].population.int else: -1), size: (
+        if base.visited: base.size else: unknown)))
 
   proc sortBases(x, y: BaseData): int {.raises: [], tags: [],
       contractual.} =
