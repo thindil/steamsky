@@ -143,6 +143,17 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       addButton(label = base.reputation,
         tooltip = "Your reputation in the base",
         data = base.index, code = showBaseInfo, dialog = dialog)
+    else:
+      addButton(label = "not", tooltip = "Show the base's details",
+          data = base.index, code = showBaseInfo, dialog = dialog)
+      addButton(label = "", tooltip = "Show the base's details",
+          data = base.index, code = showBaseInfo, dialog = dialog)
+      addButton(label = "visited", tooltip = "Show the base's details",
+          data = base.index, code = showBaseInfo, dialog = dialog)
+      addButton(label = "", tooltip = "Show the base's details",
+          data = base.index, code = showBaseInfo, dialog = dialog)
+      addButton(label = "yet", tooltip = "Show the base's details",
+          data = base.index, code = showBaseInfo, dialog = dialog)
     row.inc
     if row == gameSettings.listsLimit + 1:
       break
