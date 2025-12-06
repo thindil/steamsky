@@ -117,13 +117,32 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     return
   setButtonStyle(field = rounding, value = 0)
   setButtonStyle(field = border, value = 0)
-  var row: Positive = 1
+  var
+    row, currentRow: Positive = 1
   # Show the list of known bases
   for base in knownBasesList:
-    if row == gameSettings.listsLimit + 1:
-      break
+    if currentRow < startRow:
+      currentRow.inc
+      continue
     addButton(label = base.name, tooltip = "Show the base's details",
       data = base.index, code = showBaseInfo, dialog = dialog)
+    addButton(label = $base.distance, tooltip = "The distance to the base",
+      data = base.index, code = showBaseInfo, dialog = dialog)
+    addButton(label = base.coords, tooltip = "The coordinates of the base",
+      data = base.index, code = showBaseInfo, dialog = dialog)
+    if base.visited:
+      addButton(label = $base.population,
+        tooltip = "The population size of the base",
+        data = base.index, code = showBaseInfo, dialog = dialog)
+      addButton(label = $base.size, tooltip = "The size of the base",
+        data = base.index, code = showBaseInfo, dialog = dialog)
+      addButton(label = base.owner, tooltip = "The faction which own the base",
+        data = base.index, code = showBaseInfo, dialog = dialog)
+      addButton(label = base.baseType, tooltip = "The type of the base",
+        data = base.index, code = showBaseInfo, dialog = dialog)
+      addButton(label = base.reputation,
+        tooltip = "Your reputation in the base",
+        data = base.index, code = showBaseInfo, dialog = dialog)
     row.inc
     if row == gameSettings.listsLimit + 1:
       break
