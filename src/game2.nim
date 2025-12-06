@@ -198,19 +198,30 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
     DataTypeRecord = object
       name: DataName
       fileName: Path
-  const dataTypes: array[1..12, DataTypeRecord] = [DataTypeRecord(name: "data",
-      fileName: "game.dat".Path), DataTypeRecord(name: "items",
-      fileName: "items.dat".Path), DataTypeRecord(name: "modules",
-      fileName: "shipmodules.dat".Path), DataTypeRecord(name: "recipes",
-      fileName: "recipes.dat".Path), DataTypeRecord(name: "bases",
-      fileName: "bases.dat".Path), DataTypeRecord(name: "mobiles",
-      fileName: "mobs.dat".Path), DataTypeRecord(name: "careers",
-      fileName: "careers.dat".Path), DataTypeRecord(name: "factions",
-      fileName: "factions.dat".Path), DataTypeRecord(name: "help",
-      fileName: "help.dat".Path), DataTypeRecord(name: "ships",
-      fileName: "ships.dat".Path), DataTypeRecord(name: "goals",
-      fileName: "goals.dat".Path), DataTypeRecord(name: "stories",
-      fileName: "stories.dat".Path)]
+
+  proc newDataTypeRecord(name, fileName: string): DataTypeRecord {.raises: [], tags: [],
+      contractual.} =
+    ## Create a new data structure for the game data to read from a file
+    ##
+    ## * name     - the name of the data
+    ## * fileName - the name of the file from which the data will be read
+    ##
+    ## Returns the new structure with information about the selected data
+    return DataTypeRecord(name: name, fileName: fileName.Path)
+
+  const dataTypes: array[1..12, DataTypeRecord] = [newDataTypeRecord(name = "data",
+      fileName = "game.dat"), newDataTypeRecord(name = "items",
+      fileName = "items.dat"), newDataTypeRecord(name = "modules",
+      fileName = "shipmodules.dat"), newDataTypeRecord(name = "recipes",
+      fileName = "recipes.dat"), newDataTypeRecord(name = "bases",
+      fileName = "bases.dat"), newDataTypeRecord(name = "mobiles",
+      fileName = "mobs.dat"), newDataTypeRecord(name = "careers",
+      fileName = "careers.dat"), newDataTypeRecord(name = "factions",
+      fileName = "factions.dat"), newDataTypeRecord(name = "help",
+      fileName = "help.dat"), newDataTypeRecord(name = "ships",
+      fileName = "ships.dat"), newDataTypeRecord(name = "goals",
+      fileName = "goals.dat"), newDataTypeRecord(name = "stories",
+      fileName = "stories.dat")]
   # Load the standard game data
   for dataType in dataTypes:
     result = loadSelectedData(dataName = dataType.name,
