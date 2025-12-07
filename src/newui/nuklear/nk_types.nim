@@ -1208,6 +1208,12 @@ type
     ## Used to store Nuklear edit data
     active*, prev*, cursor*, selStart*, selEnd*: int
     name*: nk_hash
+  PropertyState* = object
+    ## Used to store Nuklear property widget data
+    active*, prev*, length*, cursor*, selectStart*, selectEnd*, state*: int
+    buffer*: array[nkMaxNumberBuffer, char]
+    name*: nk_hash
+    seq*, old*: uint
   Window* = object
     ## Used to store Nuklear window data
     layout*: Panel
@@ -1218,6 +1224,12 @@ type
     flags*: nk_flags
     buffer*: CommandBuffer
     edit*: EditState
+    property*: PropertyState
+    scrollbar*: Scroll
+    name*: nk_hash
+    nameString*: array[nkWindowMaxName, char]
+    scrollbarHidingTimer*: float
+    widgetsDisabled*: bool
 
 # ---------
 # Constants
