@@ -656,7 +656,15 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = specialBox & " configure -values [list None {Lighter} {More durable}]")
     tclEval(script = specialBox & " current 0")
     tclEval(script = "grid " & specialBox & " -padx 5")
-    tclEval(script = "grid " & specialFrame & " -padx 5")
+    label = specialFrame & ".specialsymbol"
+    tclEval(script = "ttk::label " & label & " -text {<=>}")
+    tclEval(script = "grid " & label & " -padx 5 -row 0 -column 1")
+    specialBox = specialFrame & ".special2"
+    tclEval(script = "ttk::combobox " & specialBox & " -state readonly -width 10")
+    tclEval(script = specialBox & " configure -values [list None {Heavier} {Less durable}]")
+    tclEval(script = specialBox & " current 0")
+    tclEval(script = "grid " & specialBox & " -padx 5 -row 0 -column 2")
+    tclEval(script = "grid " & specialFrame & " -padx 5 -columnspan 2")
     buttonRow += 2
   var mType: ModuleType = ModuleType.any
   if recipeType in ["Study", "Deconstruct"]:
