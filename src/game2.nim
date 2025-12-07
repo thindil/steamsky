@@ -131,7 +131,7 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
       dataName.len > 0
       ($fileName).len > 0
     body:
-      var localFileName: string = ""
+      var localFileName: Path = "".Path
       proc loadDataFile(localDataName: string): string {.raises: [
           DataLoadingError, KeyError], tags: [WriteIOEffect, RootEffect],
               contractual.} =
@@ -146,50 +146,50 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
           localDataName.len > 0
         body:
           let dataXml: XmlNode = try:
-              loadXml(path = localFileName)
+              loadXml(path = $localFileName)
             except XmlError, ValueError, IOError, OSError, Exception:
               return getCurrentExceptionMsg()
           var dataType: string = ""
           dataType = dataXml.tag
           if dataType == localDataName or localDataName.len == 0:
             logMessage(message = "Loading " & dataType & " file: " &
-                localFileName, messageLevel = lvlInfo)
+                $localFileName, messageLevel = lvlInfo)
             case dataType
             of "factions":
               loadFactions(fileName = localFileName)
             of "goals":
               loadGoals(fileName = localFileName)
             of "help":
-              loadHelp(fileName = localFileName)
+              loadHelp(fileName = $localFileName)
             of "items":
-              loadItems(fileName = localFileName)
+              loadItems(fileName = $localFileName)
             of "mobiles":
-              loadMobs(fileName = localFileName)
+              loadMobs(fileName = $localFileName)
             of "recipes":
-              loadRecipes(fileName = localFileName)
+              loadRecipes(fileName = $localFileName)
             of "bases":
-              loadBasesTypes(fileName = localFileName)
+              loadBasesTypes(fileName = $localFileName)
             of "modules":
-              loadModules(fileName = localFileName)
+              loadModules(fileName = $localFileName)
             of "ships":
-              loadShips(fileName = localFileName)
+              loadShips(fileName = $localFileName)
             of "stories":
-              loadStories(fileName = localFileName)
+              loadStories(fileName = $localFileName)
             of "data":
-              loadData(fileName = localFileName)
+              loadData(fileName = $localFileName)
             of "careers":
-              loadCareers(fileName = localFileName)
+              loadCareers(fileName = $localFileName)
             else:
               return "Can't load the game data. Unknown type of data: " & dataType
 
       if ($fileName).len == 0:
         for file in walkFiles(pattern = dataName & DirSep & "*.dat"):
-          localFileName = file
+          localFileName = file.Path
           result = loadDataFile(localDataName = "")
           if result.len > 0:
             return
       else:
-        localFileName = dataDirectory & $fileName
+        localFileName = (dataDirectory & $fileName).Path
         result = loadDataFile(localDataName = dataName)
   {.hint[XCannotRaiseY]: on.}
 
