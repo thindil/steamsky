@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [11.0.7] - 2025-12-07
 
 ### Added
 - Missing option to sorting workshops in the crafting screen
