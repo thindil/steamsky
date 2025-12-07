@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -19,7 +19,7 @@
 ## files, getting their reputation, checking do they are friendly or
 ## getting a random faction.
 
-import std/[logging, strutils, tables, xmlparser, xmltree]
+import std/[logging, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import basestypes, careers, game, items, log, types, utils
 
@@ -161,16 +161,16 @@ proc loadFactionData(factionNode: XmlNode; factionAction: DataAction;
         else:
           faction.flags.add(y = factionFlag)
 
-proc loadFactions*(fileName: string) {.raises: [DataLoadingError],
+proc loadFactions*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load available factions from the data file
   ##
   ## * fileName - the path to the file with factions data which will be loaded
   require:
-    fileName.len > 0
+    ($fileName).len > 0
   body:
     let factionsXml: XmlNode = try:
-        loadXml(path = fileName)
+        loadXml(path = $fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
             message = "Can't load factions data file. Reason: " &
