@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -18,22 +18,22 @@
 ## Provides code related to the player's in-game goals, like loading them
 ## from files, clearing, updating or getting their text.
 
-import std/[logging, strutils, tables, xmlparser, xmltree]
+import std/[logging, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, messages, statistics, types, utils
 
 var currentGoal*: GoalData = GoalData(multiplier: 1) ## The player's current goal
 
-proc loadGoals*(fileName: string) {.raises: [DataLoadingError],
+proc loadGoals*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the goals data from the file
   ##
   ## * fileName - the name of the file to load
   require:
-    fileName.len > 0
+    ($fileName).len > 0
   body:
     let goalsXml: XmlNode = try:
-        loadXml(path = fileName)
+        loadXml(path = $fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
             message = "Can't load goals data file. Reason: " &
