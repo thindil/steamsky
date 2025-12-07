@@ -165,17 +165,16 @@ proc sortBases(sortAsc, sortDesc: BasesSortOrders;
   localBases.sort(cmp = sortBases)
   knownBasesList = @[]
   for base in localBases:
-    if base.population == -1:
-      try:
-        knownBasesList.add(y = BaseData(index: base.id, name: base.name,
-            distance: base.distance, coords: base.coords,
-            population: getBasePopulation(baseIndex = base.id), size: skyBases[
-            base.id].size, owner: factionsList[skyBases[base.id].owner].name,
-            baseType: basesTypesList[skyBases[base.id].baseType].name,
-            reputation: getReputationText(reputationLevel = skyBases[
-            base.id].reputation.level), visited: base.population > -1))
-      except:
-        dialog = setError(message = "Can't set the list of known bases")
+    try:
+      knownBasesList.add(y = BaseData(index: base.id, name: base.name,
+          distance: base.distance, coords: base.coords,
+          population: getBasePopulation(baseIndex = base.id), size: skyBases[
+          base.id].size, owner: factionsList[skyBases[base.id].owner].name,
+          baseType: basesTypesList[skyBases[base.id].baseType].name,
+          reputation: getReputationText(reputationLevel = skyBases[
+          base.id].reputation.level), visited: base.population > -1))
+    except:
+      dialog = setError(message = "Can't set the list of known bases")
 
 proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
