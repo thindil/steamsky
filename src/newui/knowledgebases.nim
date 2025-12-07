@@ -20,7 +20,7 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestypes, config, game, types]
+import ../[bases, basestypes, config, game, reputation, types]
 import coreui, errordialog, setui, table, themes
 
 type BasesSortOrders = enum
@@ -163,17 +163,28 @@ proc sortBases(sortAsc, sortDesc: BasesSortOrders;
       return -1
 
   localBases.sort(cmp = sortBases)
-  for base in localBases.mitems:
+  knownBasesList = @[]
+  for base in localBases:
+    var localBase: LocalBaseData = base
     if base.population == -1:
-      base.population = skyBases[base.id].population
-      base.size = skyBases[base.id].size
+      localBase.population = skyBases[base.id].population
+      localBase.size = skyBases[base.id].size
       try:
-        base.owner = factionsList[skyBases[base.id].owner].name
-        base.baseType = basesTypesList[skyBases[base.id].baseType].name
+        localBase.owner = factionsList[skyBases[base.id].owner].name
+        localBase.baseType = basesTypesList[skyBases[base.id].baseType].name
       except:
         dialog = setError(message = "Can't get a base's data")
         return
-      base.reputation = skyBases[base.id].reputation.level
+      localBase.reputation = skyBases[base.id].reputation.level
+    try:
+      knownBasesList.add(y = BaseData(index: base.id, name: base.name,
+          distance: base.distance, coords: localBase.coords,
+          population: getBasePopulation(baseIndex = localBase.id),
+          size: localBase.size, owner: localBase.owner,
+          baseType: localBase.baseType, reputation: getReputationText(
+          reputationLevel = localBase.reputation), visited: base.population > -1))
+    except:
+      dialog = setError(message = "Can't set the list of known bases")
 
 proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
