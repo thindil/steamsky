@@ -37,16 +37,15 @@ var
   basesType, basesStatus, basesOwner: Natural = 0
   basesSortOrder: BasesSortOrders = defaultBasesSortOrder
 
-proc showBaseInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+proc setBaseInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
-  ## Show information about the selected base
+  ## Set the information about the selected base
   ##
   ## * data   - the index of the selected item
   ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
-  discard
+  ## Returns the modified parameter dialog.
+  baseIndex = data
 
 proc sortBases(sortAsc, sortDesc: BasesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -244,35 +243,35 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         base.index].skyY == playerShip.destinationY:
       setButtonStyle(field = textNormal, color = theme.colors[yellowColor])
     addButton(label = base.name, tooltip = "Show the base's details",
-      data = base.index, code = showBaseInfo, dialog = dialog)
+      data = base.index, code = setBaseInfo, dialog = dialog)
     addButton(label = $base.distance, tooltip = "The distance to the base",
-      data = base.index, code = showBaseInfo, dialog = dialog)
+      data = base.index, code = setBaseInfo, dialog = dialog)
     addButton(label = base.coords, tooltip = "The coordinates of the base",
-      data = base.index, code = showBaseInfo, dialog = dialog)
+      data = base.index, code = setBaseInfo, dialog = dialog)
     if base.visited:
       addButton(label = $base.population,
         tooltip = "The population size of the base",
-        data = base.index, code = showBaseInfo, dialog = dialog)
+        data = base.index, code = setBaseInfo, dialog = dialog)
       addButton(label = $base.size, tooltip = "The size of the base",
-        data = base.index, code = showBaseInfo, dialog = dialog)
+        data = base.index, code = setBaseInfo, dialog = dialog)
       addButton(label = base.owner, tooltip = "The faction which own the base",
-        data = base.index, code = showBaseInfo, dialog = dialog)
+        data = base.index, code = setBaseInfo, dialog = dialog)
       addButton(label = base.baseType, tooltip = "The type of the base",
-        data = base.index, code = showBaseInfo, dialog = dialog)
+        data = base.index, code = setBaseInfo, dialog = dialog)
       addButton(label = base.reputation,
         tooltip = "Your reputation in the base",
-        data = base.index, code = showBaseInfo, dialog = dialog)
+        data = base.index, code = setBaseInfo, dialog = dialog)
     else:
       addButton(label = "not", tooltip = "Show the base's details",
-          data = base.index, code = showBaseInfo, dialog = dialog)
+          data = base.index, code = setBaseInfo, dialog = dialog)
       addButton(label = "", tooltip = "Show the base's details",
-          data = base.index, code = showBaseInfo, dialog = dialog)
+          data = base.index, code = setBaseInfo, dialog = dialog)
       addButton(label = "visited", tooltip = "Show the base's details",
-          data = base.index, code = showBaseInfo, dialog = dialog)
+          data = base.index, code = setBaseInfo, dialog = dialog)
       addButton(label = "", tooltip = "Show the base's details",
-          data = base.index, code = showBaseInfo, dialog = dialog)
+          data = base.index, code = setBaseInfo, dialog = dialog)
       addButton(label = "yet", tooltip = "Show the base's details",
-          data = base.index, code = showBaseInfo, dialog = dialog)
+          data = base.index, code = setBaseInfo, dialog = dialog)
     setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
     row.inc
     if row == gameSettings.listsLimit + 1:
