@@ -1214,6 +1214,11 @@ type
     buffer*: array[nkMaxNumberBuffer, char]
     name*: nk_hash
     seq*, old*: uint
+  NkTable* = object
+    ## Used to store Nuklear table widget data
+    seq*, size*: uint
+    keys*, values*: pointer
+    next*, prev*: ref NkTable
   Window* = object
     ## Used to store Nuklear window data
     layout*: Panel
@@ -1230,6 +1235,7 @@ type
     nameString*: array[nkWindowMaxName, char]
     scrollbarHidingTimer*: float
     widgetsDisabled*: bool
+    tables*: NkTable
 
 # ---------
 # Constants

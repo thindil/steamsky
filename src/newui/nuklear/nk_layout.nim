@@ -57,16 +57,15 @@ proc nk_layout_space_end(ctx) {.importc, cdecl, raises: [], tags: [], contractua
 # High level bindings
 # -------------------
 
-proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [
+proc nkPanelLayout(ctx; win: Window; height: float; cols: int) {.raises: [
     NuklearException], tags: [RootEffect], contractual.} =
   ## Set the panel layout.  Internal use only
   ##
   ## * ctx    - the Nuklear context
   ## * height - the height in pixels of each row
   ## * cols   - the amount of columns in each row
-  let
-    layout: PNkPanel = win.layout
-    style: nk_style = ctx.style
+  var layout: Panel = win.layout
+  let  style: nk_style = ctx.style
 
   if not (layout.flags and windowMinimized.int).bool:
     raise newException(exceptn = NuklearException,
@@ -80,31 +79,31 @@ proc nkPanelLayout(ctx; win: PNkWindow; height: float; cols: int) {.raises: [
 
   # Update the current row and set the current row layout
   layout.row.index = 0
-  layout.at_y += layout.row.height
+  layout.atY += layout.row.height
   layout.row.columns = cols.cint
   let itemSpacing: nk_vec2 = style.window.spacing
   if height == 0:
-    layout.row.height = max(x = height, y = layout.row.min_height) + itemSpacing.y
+    layout.row.height = max(x = height, y = layout.row.minHeight) + itemSpacing.y
   else:
     layout.row.height = height + itemSpacing.y
 
-  layout.row.item_offset = 0
+  layout.row.itemOffset = 0
   if (layout.flags and windowDynamic.int).bool:
     # draw background for dynamic panels
     var background: Rect = Rect()
     background.x = win.bounds.x
     background.w = win.bounds.y
-    background.y = layout.at_y - 1.0
+    background.y = layout.atY - 1.0
     background.h = layout.row.height + 1.0
     let
-      color: nk_color = if layout.type == panelTooltip:
+      color: nk_color = if layout.pType == panelTooltip:
           style.window.tooltip_background
-        elif layout.type == panelPopup:
+        elif layout.pType == panelPopup:
           style.window.popup_background
         else:
           style.window.background
-      `out`: PNkCommandBuffer = win.buffer.addr
-#    nkFillRect(b = `out`, rect = background, rounding = 0.0, c = color)
+    var commBuff: CommandBuffer = win.buffer
+    nkFillRect(b = commBuff, rect = background, rounding = 0.0, c = color)
 
 proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
     width: int) {.raises: [NuklearException], tags: [RootEffect],
@@ -125,7 +124,7 @@ proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
       return
 
     let win: PNkWindow = ctx.current
-    nkPanelLayout(ctx = ctx, win = win, height = height, cols = cols)
+#    nkPanelLayout(ctx = ctx, win = win, height = height, cols = cols)
     if fmt == dynamic:
       win.layout.row.`type` = layoutDynamicFixed
     else:
