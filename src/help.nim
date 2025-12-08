@@ -17,7 +17,7 @@
 
 ## Provides code related to in-game help system, like load it from files.
 
-import std/[logging, strutils, tables, xmlparser, xmltree]
+import std/[logging, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import basestypes, careers, game, log, types
 
@@ -28,19 +28,19 @@ type HelpData = object
 var helpList*: OrderedTable[string, HelpData] = initOrderedTable[string,
     HelpData]() ## The whole in-game help
 
-proc loadHelp*(fileName: string) {.raises: [DataLoadingError,
+proc loadHelp*(fileName: Path) {.raises: [DataLoadingError,
     KeyError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the help data from the file
   ##
   ## * fileName - the name of the file to load
   require:
-    fileName.len > 0
+    ($fileName).len > 0
   body:
     var
       helpTitle: string = ""
       helpEntry: HelpData = HelpData()
     let helpXml: XmlNode = try:
-        loadXml(path = fileName)
+        loadXml(path = $fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
             message = "Can't load help data file. Reason: " &
