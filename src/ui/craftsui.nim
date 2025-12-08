@@ -653,7 +653,10 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ttk::frame " & specialFrame)
     var specialBox: string = specialFrame & ".special1"
     tclEval(script = "ttk::combobox " & specialBox & " -state readonly -width 10")
-    tclEval(script = specialBox & " configure -values [list None {Lighter} {More durable}]")
+    var specialValues: string = ""
+    for bonus in CraftBonuses:
+      specialValues &= " {" & $bonus & "}"
+    tclEval(script = specialBox & " configure -values [list" & specialValues & "]")
     tclEval(script = specialBox & " current 0")
     tclEval(script = "grid " & specialBox & " -padx 5")
     label = specialFrame & ".specialsymbol"
@@ -661,7 +664,10 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid " & label & " -padx 5 -row 0 -column 1")
     specialBox = specialFrame & ".special2"
     tclEval(script = "ttk::combobox " & specialBox & " -state readonly -width 10")
-    tclEval(script = specialBox & " configure -values [list None {Heavier} {Less durable}]")
+    specialValues = ""
+    for malus in CraftMaluses:
+      specialValues &= " {" & $malus & "}"
+    tclEval(script = specialBox & " configure -values [list" & specialValues & "]")
     tclEval(script = specialBox & " current 0")
     tclEval(script = "grid " & specialBox & " -padx 5 -row 0 -column 2")
     tclEval(script = "grid " & specialFrame & " -padx 5 -columnspan 2")
