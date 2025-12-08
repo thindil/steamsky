@@ -1,3 +1,4 @@
+import std/paths
 import ../src/careers
 import unittest2
 include ../src/mobs
@@ -6,9 +7,9 @@ suite "Unit tests for mobs module":
 
   checkpoint "Loading the game data."
   loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
+  loadItems("bin/data/items.dat".Path)
   loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
+  loadFactions("bin/data/factions.dat".Path)
   loadMobs("bin/data/mobs.dat")
 
   test "Generating a random mob.":
