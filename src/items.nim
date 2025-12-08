@@ -18,7 +18,7 @@
 ## Provides code related items used by the player and NPC's, like loading
 ## them from files, getting random item, etc.
 
-import std/[logging, math, strutils, tables, xmlparser, xmltree]
+import std/[logging, math, paths, strutils, tables, xmlparser, xmltree]
 import contracts, nimalyzer
 import config, crewinventory, game, log, messages, shipscargo, shipscrew, types, utils
 
@@ -38,13 +38,13 @@ var
   toolsList*: seq[string] = @[]
     ## The list of all tools prototypes indexes
 
-proc loadItems*(fileName: string) {.raises: [DataLoadingError],
+proc loadItems*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the items data from the file
   ##
   ## * fileName - the name of the file to load
   require:
-    fileName.len > 0
+    ($fileName).len > 0
   ensure:
     itemsList.len > 0
     weaponsList.len > 0
@@ -55,7 +55,7 @@ proc loadItems*(fileName: string) {.raises: [DataLoadingError],
     legsArmorsList.len > 0
   body:
     let itemsXml: XmlNode = try:
-        loadXml(path = fileName)
+        loadXml(path = $fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
             message = "Can't load items data file. Reason: " &
