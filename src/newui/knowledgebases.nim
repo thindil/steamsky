@@ -238,6 +238,11 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if currentRow < startRow:
       currentRow.inc
       continue
+    if base.visited:
+      setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    elif skyBases[base.index].skyX == playerShip.destinationX and skyBases[
+        base.index].skyY == playerShip.destinationY:
+      setButtonStyle(field = textNormal, color = theme.colors[yellowColor])
     addButton(label = base.name, tooltip = "Show the base's details",
       data = base.index, code = showBaseInfo, dialog = dialog)
     addButton(label = $base.distance, tooltip = "The distance to the base",
@@ -268,6 +273,7 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           data = base.index, code = showBaseInfo, dialog = dialog)
       addButton(label = "yet", tooltip = "Show the base's details",
           data = base.index, code = showBaseInfo, dialog = dialog)
+    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
     row.inc
     if row == gameSettings.listsLimit + 1:
       break
