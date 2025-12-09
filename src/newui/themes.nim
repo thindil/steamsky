@@ -61,7 +61,7 @@ type
       giveOrderIcon, cargoIcon, moveIcon, repairPriorityIcon, upgradeButtonIcon,
       powerIcon, assignAmmoIcon, giveColoredIcon, dropColoredIcon, craftIcon,
       studyIcon, deconstructIcon, craftColoredIcon, studyColoredIcon,
-      deconstructColoredIcon
+      deconstructColoredIcon, destinationIcon
   MapIconsNames* = enum
     ## Names of icons used in the game's map
     playerShipIcon, emptyMapIcon, targetIcon, storyIcon, deliverIcon,
@@ -137,7 +137,8 @@ let
       "craft-order.svg", defaultThemeIconPath & "study.svg",
       defaultThemeIconPath & "deconstruct.svg", defaultThemeIconPath &
       "craft-order2.svg", defaultThemeIconPath & "study2.svg",
-      defaultThemeIconPath & "deconstruct2.svg"],
+      defaultThemeIconPath & "deconstruct2.svg", defaultThemeIconPath &
+      "destination.svg"],
       colors: ["#1a130c".parseColor, "#eee8aa".parseColor,
       "#4e9a06".parseColor, "#372412".parseColor, "#291913".parseColor,
       "#500000".parseColor, "#120d0d".parseColor, "#ffdf00".parseColor,
