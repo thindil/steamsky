@@ -1,4 +1,3 @@
-import std/paths
 import ../src/careers
 import unittest2
 include ../src/mobs
@@ -10,7 +9,7 @@ suite "Unit tests for mobs module":
   loadItems("bin/data/items.dat".Path)
   loadCareers("bin/data/careers.dat")
   loadFactions("bin/data/factions.dat".Path)
-  loadMobs("bin/data/mobs.dat")
+  loadMobs("bin/data/mobs.dat".Path)
 
   test "Generating a random mob.":
     let newMob = generateMob(5, "POLEIS")
