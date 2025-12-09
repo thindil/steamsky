@@ -18,7 +18,7 @@
 ## Provides code related to the game's mobs, like loading them from files and
 ## generating random one.
 
-import std/[logging, strutils, tables, xmlparser, xmltree]
+import std/[logging, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import factions, game, items, log, shipscrew, types, utils
 
@@ -87,13 +87,13 @@ proc loadSkills(mobNode: XmlNode; mob: var ProtoMobRecord;
       of DataAction.remove:
         mob.skills.delete(i = skillIndex)
 
-proc loadMobs*(fileName: string) {.raises: [DataLoadingError],
+proc loadMobs*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the Mobs data from the file
   ##
   ## * fileName - the name of the file to load
   require:
-    fileName.len > 0
+    ($fileName).len > 0
   body:
     const
       orderNames: array[11, string] = ["Piloting", "Engineering",
@@ -103,7 +103,7 @@ proc loadMobs*(fileName: string) {.raises: [DataLoadingError],
       equipmentNames: array[7, string] = ["Weapon", "Shield", "Head", "Torso",
           "Arms", "Legs", "Tool"]
     let mobsXml: XmlNode = try:
-        loadXml(path = fileName)
+        loadXml(path = $fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
             message = "Can't load mobs data file. Reason: " &
