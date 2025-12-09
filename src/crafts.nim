@@ -18,7 +18,7 @@
 ## Provides code related to crafting items in the player's ship, like setting
 ## a crafting recipe in a workshop, or checking a recipe's dependecies.
 
-import std/[logging, strutils, tables, xmlparser, xmltree]
+import std/[logging, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import config, crewinventory, game, goals, items, log, messages, shipscargo,
     shipscrew, statistics, types, utils
@@ -33,16 +33,16 @@ type
   CraftingNoToolsError* = object of CatchableError
     ## Used to mark problems during crafting with lack of proper crafting tools
 
-proc loadRecipes*(fileName: string) {.raises: [DataLoadingError],
+proc loadRecipes*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the crafting recipes data from the file
   ##
   ## * fileName - the name of the file to load
   require:
-    fileName.len > 0
+    ($fileName).len > 0
   body:
     let recipesXml: XmlNode = try:
-        loadXml(path = fileName)
+        loadXml(path = $fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
             message = "Can't load crafting recipes data file. Reason: " &
