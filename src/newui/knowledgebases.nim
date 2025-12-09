@@ -21,7 +21,7 @@
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basestypes, config, game, reputation, types]
-import coreui, errordialog, setui, table, themes
+import coreui, dialogs, errordialog, setui, table, themes
 
 type BasesSortOrders = enum
   none, nameAsc, nameDesc, distanceAsc, distanceDesc, populationAsc,
@@ -37,6 +37,29 @@ var
   basesType, basesStatus, basesOwner: Natural = 0
   basesSortOrder: BasesSortOrders = defaultBasesSortOrder
 
+proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selectedbase information
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  const
+    width: float = 400
+    height: float = 400
+
+  let
+    base: BaseRecord = skyBases[baseIndex]
+    windowName: string = base.name
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 1)
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = windowName)
+
 proc setBaseInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Set the information about the selected base
@@ -46,6 +69,7 @@ proc setBaseInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   baseIndex = data
+  dialog = baseDialog
 
 proc sortBases(sortAsc, sortDesc: BasesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
