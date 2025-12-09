@@ -1236,6 +1236,35 @@ type
     scrollbarHidingTimer*: float
     widgetsDisabled*: bool
     tables*: NkTable
+  Image* = object
+    ## Used to store Nuklear image data
+    handle*: Handle
+    w*, h*: uint16
+    region*: array[4, uint16]
+  NineSlice* = object
+    ## Used to store Nuklear nine slice data
+    image*: Image
+    l*, t*, r*, b*: uint16
+  StyleItemData* = object
+    ## Used to store Nuklear style item's data
+    case iType: StyleItemType
+    of itemColor:
+      color: NkColor
+    of itemImage:
+      image: Image
+    of itemNineSlice:
+      slice: NineSlice
+  StyleItem* = object
+    ## Used to store Nuklear style item's data
+    iType*: StyleItemType
+    data*: StyleItemData
+  StyleWindowHeader* = object
+    ## Used to store Nuklear style data for windows' headers
+    align*: StyleHeaderAlign
+    padding*, labelPadding*, spacing*: Vec2
+    active*, hover*, normal*: StyleItem
+    labelActive*, labelHover*, labelNormal: NkColor
+    closeSymbol*, minimizeSymbol*, maximizeSymbol*: SymbolType
 
 # ---------
 # Constants
