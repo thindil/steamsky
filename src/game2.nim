@@ -160,13 +160,13 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
             of "goals":
               loadGoals(fileName = localFileName)
             of "help":
-              loadHelp(fileName = $localFileName)
+              loadHelp(fileName = localFileName)
             of "items":
-              loadItems(fileName = $localFileName)
+              loadItems(fileName = localFileName)
             of "mobiles":
-              loadMobs(fileName = $localFileName)
+              loadMobs(fileName = localFileName)
             of "recipes":
-              loadRecipes(fileName = $localFileName)
+              loadRecipes(fileName = localFileName)
             of "bases":
               loadBasesTypes(fileName = $localFileName)
             of "modules":
