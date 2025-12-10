@@ -1,3 +1,4 @@
+import std/paths
 import ../src/[careers, crafts, events, factions, game, items, maps, mobs, ships, shipmodules, types]
 import unittest2
 
@@ -5,12 +6,12 @@ suite "Unit tests for events module":
 
   checkpoint "Loading the game data."
   loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadModules("bin/data/shipmodules.dat")
+  loadItems("bin/data/items.dat".Path)
+  loadModules("bin/data/shipmodules.dat".Path)
   loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
-  loadRecipes("bin/data/recipes.dat")
-  loadMobs("bin/data/mobs.dat")
+  loadFactions("bin/data/factions.dat".Path)
+  loadRecipes("bin/data/recipes.dat".Path)
+  loadMobs("bin/data/mobs.dat".Path)
   loadShips("bin/data/ships.dat")
 
   playerShip.skyX = 1

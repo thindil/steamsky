@@ -10,7 +10,7 @@ suite "Unit tests for ships2 module":
   loadItems("bin/data/items.dat".Path)
   loadCareers("bin/data/careers.dat")
   loadFactions("bin/data/factions.dat".Path)
-  loadModules("bin/data/shipmodules.dat")
+  loadModules("bin/data/shipmodules.dat".Path)
   loadRecipes("bin/data/recipes.dat".Path)
   loadMobs("bin/data/mobs.dat".Path)
   loadShips("bin/data/ships.dat")

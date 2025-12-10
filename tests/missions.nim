@@ -10,7 +10,7 @@ suite "Unit tests for missions module":
   loadItems("bin/data/items.dat".Path)
   loadCareers("bin/data/careers.dat")
   loadFactions("bin/data/factions.dat".Path)
-  loadModules("bin/data/shipmodules.dat")
+  loadModules("bin/data/shipmodules.dat".Path)
 
   playerShip.skyX = 1
   playerShip.skyY = 1
