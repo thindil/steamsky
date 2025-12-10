@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -18,20 +18,20 @@
 ## Provides code related to the ships' modules like reading them from files and
 ## getting their types.
 
-import std/[logging, strutils, tables, xmlparser, xmltree]
+import std/[logging, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, items, log, types
 
-proc loadModules*(fileName: string) {.raises: [DataLoadingError],
+proc loadModules*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load available prototypes of ship's modules from the data file
   ##
   ## * fileName - the path to the file with ship's modules data which will be loaded
   require:
-    fileName.len > 0
+    ($fileName).len > 0
   body:
     let modulesXml: XmlNode = try:
-        loadXml(path = fileName)
+        loadXml(path = $fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
             message = "Can't load modules data file. Reason: " &
