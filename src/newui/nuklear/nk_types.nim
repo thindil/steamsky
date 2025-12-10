@@ -1258,6 +1258,18 @@ type
     ## Used to store Nuklear style item's data
     iType*: StyleItemType
     data*: StyleItemData
+  DrawF* = proc(b: var CommandBuffer; userData: Handle)
+    ## Used to execute additional code when drawing widgets
+  StyleButton* = object
+    ## Used to store Nuklear style data for buttons
+    normal*, hover*, active*: StyleItem
+    borderColor*, textBackground*, textNormal*, textHover*, textActive: NkColor
+    rounding*, border*, colorFactorBackground*, colorFactorText*,
+      disabledFactor*: float
+    padding*, imagePadding*, touchPadding*: Vec2
+    alignment*: nk_flags
+    userData*: Handle
+    drawBegin*, drawEnd*: DrawF
   StyleWindowHeader* = object
     ## Used to store Nuklear style data for windows' headers
     align*: StyleHeaderAlign
@@ -1265,6 +1277,23 @@ type
     active*, hover*, normal*: StyleItem
     labelActive*, labelHover*, labelNormal: NkColor
     closeSymbol*, minimizeSymbol*, maximizeSymbol*: SymbolType
+    closeButton*, minimizeButton*: StyleButton
+  StyleWindow* = object
+    ## Used to store Nuklear style data for windows widgets
+    header*: StyleWindowHeader
+    fixedBackground*, scaler*: StyleItem
+    spacing*, scrollbarSize*, padding*, groupPadding*, popupPadding*,
+      contextualPadding*, comboPadding*, menuPadding*, tooltipPadding*, minSize*: Vec2
+    background*, groupTextColor*, borderColor*, popupBorderColor*,
+      popupBackground*, comboBorderColor*, contextualBorderColor*,
+      menuBorderColor*, groupBorderColor*, tooltipBorderColor*,
+      tooltipBackground*: NkColor
+    border*, comboBorder*, contextualBorder*, menuBorder*, groupBorder*,
+      tooltipBorder*, popupBorder*, rounding*: float
+  Style* = object
+    ## Used to store Nuklear style data
+    window*: StyleWindow
+    button*, contextualButton*, menuButton*: StyleButton
 
 # ---------
 # Constants
