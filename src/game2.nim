@@ -168,9 +168,9 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
             of "recipes":
               loadRecipes(fileName = localFileName)
             of "bases":
-              loadBasesTypes(fileName = $localFileName)
+              loadBasesTypes(fileName = localFileName)
             of "modules":
-              loadModules(fileName = $localFileName)
+              loadModules(fileName = localFileName)
             of "ships":
               loadShips(fileName = $localFileName)
             of "stories":
