@@ -34,6 +34,9 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
+  if mapPreview:
+    state = map
+    return
   if showHeader(dialog = dialog, close = previous, state = state):
     return
   let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
