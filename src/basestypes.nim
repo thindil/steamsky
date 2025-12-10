@@ -18,7 +18,7 @@
 ## Provides code related to sky bases types like loading them from file,
 ## getting price, checking do an item is buyable.
 
-import std/[colors, logging, math, strutils, tables, xmlparser, xmltree]
+import std/[colors, logging, math, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, types
 
@@ -49,16 +49,16 @@ var basesTypesList*: Table[string, BaseTypeData] = initTable[string,
     BaseTypeData]()
   ## The list of all available bases types in the game
 
-proc loadBasesTypes*(fileName: string) {.raises: [DataLoadingError],
+proc loadBasesTypes*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load available bases types from the data file
   ##
   ## * fileName - the path to the file with bases types data which will be loaded
   require:
-    fileName.len > 0
+    ($fileName).len > 0
   body:
     let basesTypesXml: XmlNode = try:
-        loadXml(path = fileName)
+        loadXml(path = $fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
             message = "Can't load bases types data file. Reason: " &
