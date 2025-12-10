@@ -20,7 +20,7 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, basestypes, config, game, reputation, types]
+import ../[bases, basestypes, config, game, messages, reputation, types]
 import coreui, dialogs, errordialog, setui, table, themes
 
 type BasesSortOrders = enum
@@ -55,8 +55,26 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = 30, cols = 3)
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    imageLabelButton(image = images[destinationIcon], text = "Target",
+        alignment = right):
+      if base.skyX == playerShip.skyX and base.skyY == playerShip.skyY:
+        dialog = setMessage(message = "You are at this location now.",
+            title = "Can't set destination")
+        return
+      playerShip.destinationX = base.skyX
+      playerShip.destinationY = base.skyY
+      addMessage(message = "You set the travel destination for your ship.",
+          mType = orderMessage)
+      dialog = none
+    restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    imageLabelButton(image = images[showColoredIcon], text = "Show",
+        alignment = right):
+      discard
+    restoreButtonStyle()
 
   windowSetFocus(name = windowName)
 
