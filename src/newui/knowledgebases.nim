@@ -21,7 +21,7 @@
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basestypes, config, game, messages, reputation, types]
-import coreui, dialogs, errordialog, setui, table, themes
+import coreui, dialogs, errordialog, mapsui, setui, table, themes
 
 type BasesSortOrders = enum
   none, nameAsc, nameDesc, distanceAsc, distanceDesc, populationAsc,
@@ -73,7 +73,10 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[showColoredIcon], text = "Show",
         alignment = right):
-      discard
+      centerX = base.skyX
+      centerY = base.skyY
+      dialog = none
+      mapPreview = true
     restoreButtonStyle()
 
   windowSetFocus(name = windowName)
