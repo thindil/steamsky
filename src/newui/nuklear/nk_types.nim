@@ -1290,10 +1290,21 @@ type
       tooltipBackground*: NkColor
     border*, comboBorder*, contextualBorder*, menuBorder*, groupBorder*,
       tooltipBorder*, popupBorder*, rounding*: float
+  StyleProgress* = object
+    ## Used to store Nuklear style data for progress bar widgets
+    cursorNormal*, cursorHover*, cursorActive*, normal*, hover*,
+      active*: StyleItem
+    borderColor*, cursorBorderColor*: NkColor
+    rounding*, border*, cursorBorder*, cursorRounding*, colorFactor*,
+      disabledFactor*: float
+    padding*: Vec2
+    userData*: Handle
+    drawBegin*, drawEnd*: DrawF
   Style* = object
     ## Used to store Nuklear style data
     window*: StyleWindow
     button*, contextualButton*, menuButton*: StyleButton
+    progress*, property*: StyleProgress
 
 # ---------
 # Constants
