@@ -18,7 +18,7 @@
 ## Provides code related to the game's stories, like reading them from a file,
 ## setting the current story, progressing, etc.
 
-import std/[logging, strutils, tables, xmlparser, xmltree]
+import std/[logging, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import events, game, log, maps, shipscargo, types, utils
 
@@ -233,16 +233,16 @@ proc loadStep(step: XmlNode; story: var StoryData; storyIndex, startStep,
       else:
         story.steps[stepIndex] = tempStep
 
-proc loadStories*(fileName: string) {.raises: [DataLoadingError],
+proc loadStories*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the stories data from the file
   ##
   ## * fileName - the name of the file to load
   require:
-    fileName.len > 0
+    ($fileName).len > 0
   body:
     let storiesXml: XmlNode = try:
-        loadXml(path = fileName)
+        loadXml(path = $fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
             message = "Can't load stories data file. Reason: " &
