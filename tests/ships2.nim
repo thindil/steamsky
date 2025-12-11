@@ -13,7 +13,7 @@ suite "Unit tests for ships2 module":
   loadModules("bin/data/shipmodules.dat".Path)
   loadRecipes("bin/data/recipes.dat".Path)
   loadMobs("bin/data/mobs.dat".Path)
-  loadShips("bin/data/ships.dat")
+  loadShips("bin/data/ships.dat".Path)
 
   test "Damaging a module.":
     playerShip.modules = @[]

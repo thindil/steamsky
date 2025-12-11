@@ -1,4 +1,3 @@
-import std/paths
 import ../src/[careers, crafts, factions, items, shipmodules]
 import unittest2
 include ../src/ships
@@ -13,7 +12,7 @@ suite "Unit tests for ships module":
   loadModules("bin/data/shipmodules.dat".Path)
   loadRecipes("bin/data/recipes.dat".Path)
   loadMobs("bin/data/mobs.dat".Path)
-  loadShips("bin/data/ships.dat")
+  loadShips("bin/data/ships.dat".Path)
 
   test "Getting a cabin's quality.":
     check:

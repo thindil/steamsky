@@ -12,7 +12,7 @@ suite "Unit tests for events module":
   loadFactions("bin/data/factions.dat".Path)
   loadRecipes("bin/data/recipes.dat".Path)
   loadMobs("bin/data/mobs.dat".Path)
-  loadShips("bin/data/ships.dat")
+  loadShips("bin/data/ships.dat".Path)
 
   playerShip.skyX = 1
   playerShip.skyY = 1

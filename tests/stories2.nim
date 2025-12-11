@@ -1,3 +1,4 @@
+import std/paths
 import ../src/[careers, factions, items]
 import unittest2
 include ../src/stories2
@@ -6,10 +7,10 @@ suite "Unit tests for stories2 module":
 
   checkpoint "Loading the game data."
   loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
+  loadItems("bin/data/items.dat".Path)
   loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
-  loadStories("bin/data/stories.dat")
+  loadFactions("bin/data/factions.dat".Path)
+  loadStories("bin/data/stories.dat".Path)
 
   playerShip.crew = @[]
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
