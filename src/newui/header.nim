@@ -457,6 +457,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
         previousState = state
         setShipInfo(dialog = dialog)
         state = shipInfo
+        mapPreview = false
       dialog = none
     if playerShip.crew[0].health > 0 and not inCombat:
       labelButton(title = "Ship orders"):
@@ -469,6 +470,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
           previousState = state
           setCrafting(dialog = dialog)
           state = crafting
+          mapPreview = false
         dialog = none
     labelButton(title = "Last messages"):
       if state == lastMessages:
@@ -476,6 +478,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
       else:
         previousState = state
         state = lastMessages
+        mapPreview = false
       dialog = none
     labelButton(title = "Knowledge lists"):
       if state == knowledgeLists:
@@ -484,6 +487,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
         previousState = state
         setKnowledge(dialog = dialog)
         state = knowledgeLists
+        mapPreview = false
       dialog = none
     if playerShip.crew[0].health > 0 and not inCombat:
       labelButton(title = "Wait orders"):
