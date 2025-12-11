@@ -172,9 +172,9 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
             of "modules":
               loadModules(fileName = localFileName)
             of "ships":
-              loadShips(fileName = $localFileName)
+              loadShips(fileName = localFileName)
             of "stories":
-              loadStories(fileName = $localFileName)
+              loadStories(fileName = localFileName)
             of "data":
               loadData(fileName = $localFileName)
             of "careers":
