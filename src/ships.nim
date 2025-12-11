@@ -19,7 +19,7 @@
 ## the ships' prototypes from a file, damagin a module in a ship, creating
 ## a new ship, etc.
 
-import std/[logging, strutils, tables, xmlparser, xmltree]
+import std/[logging, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, maps, mobs, shipscrew2, types, utils
 
@@ -246,16 +246,16 @@ proc loadShipCrew(shipNode: XmlNode; shipAction: DataAction;
             break
           crewIndex.inc
 
-proc loadShips*(fileName: string) {.raises: [DataLoadingError],
+proc loadShips*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the ships data from the file
   ##
   ## * fileName - the name of the file to load
   require:
-    fileName.len > 0
+    ($fileName).len > 0
   body:
     let shipsXml: XmlNode = try:
-        loadXml(path = fileName)
+        loadXml(path = $fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
             message = "Can't load ships data file. Reason: " &
