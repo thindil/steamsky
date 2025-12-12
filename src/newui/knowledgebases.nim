@@ -66,17 +66,38 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
       setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Last visited:")
       colorLabel(str = formattedTime(time = base.visited),
-        color = theme.colors[goldenColor])
+          color = theme.colors[goldenColor])
       let population: BasePopulation = getBasePopulation(baseIndex = baseIndex)
       var timeDiff: int = 0
       if population > empty and base.reputation.level > -25:
         timeDiff = 30 - daysDifference(dateToCompare = base.recruitDate)
         if timeDiff > 0:
           setLayoutRowDynamic(height = 30, cols = 3,
-            ratio = [0.7.cfloat, 0.1, 0.2])
+              ratio = [0.7.cfloat, 0.1, 0.2])
           label(str = "New recruits available in")
           colorLabel(str = $timeDiff, color = theme.colors[goldenColor])
-          label(str = "days")
+          label(str = "days.")
+        else:
+          setLayoutRowDynamic(height = 30, cols = 1)
+          colorLabel(str = "New recruits available now.",
+              color = theme.colors[greenColor])
+      else:
+        colorLabel(str = "You can't recruit crew members at this base.",
+            color = theme.colors[redColor])
+      if population > empty and base.reputation.level > -25:
+        timeDiff = daysDifference(dateToCompare = base.askedForEvents)
+        if timeDiff < 7:
+          setLayoutRowDynamic(height = 30, cols = 3,
+              ratio = [0.7.cfloat, 0.1, 0.2])
+          label(str = "You asked for events")
+          colorLabel(str = $timeDiff, color = theme.colors[goldenColor])
+          label(str = "days ago.")
+        else:
+          colorLabel(str = "You can ask for events again",
+              color = theme.colors[greenColor])
+      else:
+        colorLabel(str = "You can't ask for events at this base.",
+            color = theme.colors[redColor])
     setLayoutRowDynamic(height = 30, cols = 3)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[destinationIcon], text = "Target",
