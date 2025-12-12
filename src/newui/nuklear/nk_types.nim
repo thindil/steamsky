@@ -1300,11 +1300,30 @@ type
     padding*: Vec2
     userData*: Handle
     drawBegin*, drawEnd*: DrawF
+  TextWidthF* = proc(arg1: Handle; h: float; arg3: string; len: int): cfloat
+    ## Used to count width of the selected text
+  UserFontGlyph* = object
+    ## Used to store Nuklear data about user's font's glyps
+    uv*: array[2, Vec2]
+    offset*: Vec2
+    width*, height*, xAdvance*: float
+  QueryFontGlyphF* = proc(handle: Handle; fontHeight: float;
+      glyph: UserFontGlyph; codepoint, nextCodepoint: nk_rune)
+    ## Used to query glyphs in a font
+  UserFont* = object
+    ## Used to store Nuklear data for user's font
+    userData*: Handle
+    height*: float
+    width*: TextWidthF
+    when defined(nkIncludeVertexBufferOutput):
+      query*: QueryFontGlyphF
+      texture*: Handle
   Style* = object
     ## Used to store Nuklear style data
     window*: StyleWindow
     button*, contextualButton*, menuButton*: StyleButton
     progress*, property*: StyleProgress
+    font*: UserFont
 
 # ---------
 # Constants
