@@ -18,7 +18,7 @@
 ## Provides code related to update the global state of the game, like global
 ## variables, loading the game data, etc.
 
-import std/[os, parsecfg, streams, strutils, tables, xmlparser, xmltree]
+import std/[os, parsecfg, paths, streams, strutils, tables, xmlparser, xmltree]
 import contracts, nimalyzer
 import types
 
@@ -231,13 +231,13 @@ proc findSkillIndex*(skillName: string): Natural {.raises: [],
       return key
   return 0
 
-proc loadData*(fileName: string) {.raises: [DataLoadingError],
+proc loadData*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the game data
   ##
   ## * fileName - the name of the file with the game data to load
   require:
-    fileName.len > 0
+    ($fileName).len > 0
   body:
 
     proc findAttributeIndex(attributeName: string): int {.raises: [], tags: [],
@@ -254,7 +254,7 @@ proc loadData*(fileName: string) {.raises: [DataLoadingError],
       return -1
 
     let gameXml: XmlNode = try:
-        loadXml(path = fileName)
+        loadXml(path = $fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
             message = "Can't load game data file. Reason: " &
