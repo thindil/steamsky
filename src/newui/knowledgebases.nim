@@ -93,11 +93,29 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
           colorLabel(str = $timeDiff, color = theme.colors[goldenColor])
           label(str = "days ago.")
         else:
+          setLayoutRowDynamic(height = 30, cols = 1)
           colorLabel(str = "You can ask for events again",
               color = theme.colors[greenColor])
       else:
         colorLabel(str = "You can't ask for events at this base.",
             color = theme.colors[redColor])
+      if population > empty and base.reputation.level > -1:
+        timeDiff = 7 - daysDifference(dateToCompare = base.missionsDate)
+        if timeDiff > 0:
+          setLayoutRowDynamic(height = 30, cols = 3,
+              ratio = [0.7.cfloat, 0.1, 0.2])
+          label(str = "New missions available in")
+          colorLabel(str = $timeDiff, color = theme.colors[goldenColor])
+          label(str = "days.")
+        else:
+          setLayoutRowDynamic(height = 30, cols = 1)
+          colorLabel(str = "New missions available now.",
+              color = theme.colors[greenColor])
+      else:
+        colorLabel(str = "You can't take missions at this base.",
+            color = theme.colors[redColor])
+      if baseIndex == playerShip.homeBase:
+        colorLabel(str = "It is your home base.", color = theme.colors[cyanColor])
     setLayoutRowDynamic(height = 30, cols = 3)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[destinationIcon], text = "Target",
