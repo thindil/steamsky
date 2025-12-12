@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -17,7 +17,7 @@
 
 ## Provides code related to the player's careers, like loading them from files.
 
-import std/[logging, strutils, tables, xmlparser, xmltree]
+import std/[logging, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log
 
@@ -33,16 +33,16 @@ type
 var careersList*: Table[string, CareerData] = initTable[string, CareerData]()
   ## The list of available player's careers in the game
 
-proc loadCareers*(fileName: string) {.raises: [DataLoadingError],
+proc loadCareers*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the player's careers' data from the file
   ##
   ## * fileName - the path to the file with careers data which will be loaded
   require:
-    fileName.len > 0
+    ($fileName).len > 0
   body:
     let careersXml: XmlNode = try:
-        loadXml(path = fileName)
+        loadXml(path = $fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
             message = "Can't load careers data file. Reason: " &
