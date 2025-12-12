@@ -176,9 +176,9 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
             of "stories":
               loadStories(fileName = localFileName)
             of "data":
-              loadData(fileName = $localFileName)
+              loadData(fileName = localFileName)
             of "careers":
-              loadCareers(fileName = $localFileName)
+              loadCareers(fileName = localFileName)
             else:
               return "Can't load the game data. Unknown type of data: " & dataType
 
