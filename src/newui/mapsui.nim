@@ -765,12 +765,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               skyMap[x][y].visited = true
               mapChar = theme.mapIcons[playerShipIcon]
               mapColor = theme.mapColors[mapDefaultColor]
-            elif mapPreview:
-              for mission in skyBases[skyMap[playerShip.skyX][
-                  playerShip.skyY].baseIndex].missions:
-                if mission.targetX == x and mission.targetY == y:
-                  (mapChar, mapColor) = showMission(mType = mission.mType)
-                  break
             else:
               if x == playerShip.destinationX and y == playerShip.destinationY:
                 mapChar = theme.mapIcons[targetIcon]
@@ -830,6 +824,12 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
                         dialog = setError(
                             message = "Can't get the color of the base.")
                         return
+            if mapPreview:
+              for mission in skyBases[skyMap[playerShip.skyX][
+                  playerShip.skyY].baseIndex].missions:
+                if mission.targetX == x and mission.targetY == y:
+                  (mapChar, mapColor) = showMission(mType = mission.mType)
+                  break
             try:
               let background: Color = (if skyMap[x][y].visited: theme.mapColors[
                   mapVisitedColor] else: theme.mapColors[mapUnvisitedColor])
