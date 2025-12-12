@@ -1,3 +1,4 @@
+import std/paths
 import unittest2
 import ../src/[basestypes, careers, crafts, factions, mobs, reputation, ships,
     shipmodules, utils]
@@ -7,19 +8,19 @@ suite "Unit tests for basesship2 module":
 
   checkpoint "Loading the game data."
   if basesTypesList.len == 0:
-    loadData("bin/data/game.dat")
-    loadItems("bin/data/items.dat")
-    loadCareers("bin/data/careers.dat")
-    loadFactions("bin/data/factions.dat")
-    loadBasesTypes("bin/data/bases.dat")
+    loadData("bin/data/game.dat".Path)
+    loadItems("bin/data/items.dat".Path)
+    loadCareers("bin/data/careers.dat".Path)
+    loadFactions("bin/data/factions.dat".Path)
+    loadBasesTypes("bin/data/bases.dat".Path)
   if modulesList.len == 0:
-    loadModules("bin/data/shipmodules.dat")
+    loadModules("bin/data/shipmodules.dat".Path)
   if recipesList.len == 0:
-    loadRecipes("bin/data/recipes.dat")
+    loadRecipes("bin/data/recipes.dat".Path)
   if protoMobsList.len == 0:
-    loadMobs("bin/data/mobs.dat")
+    loadMobs("bin/data/mobs.dat".Path)
   if protoShipsList.len == 0:
-    loadShips("bin/data/ships.dat")
+    loadShips("bin/data/ships.dat".Path)
 
   skyBases[1].reputation = ReputationData(level: 1, experience: 1)
   playerShip.skyX = 1

@@ -5,9 +5,9 @@ include ../src/ships
 suite "Unit tests for ships module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
+  loadData("bin/data/game.dat".Path)
   loadItems("bin/data/items.dat".Path)
-  loadCareers("bin/data/careers.dat")
+  loadCareers("bin/data/careers.dat".Path)
   loadFactions("bin/data/factions.dat".Path)
   loadModules("bin/data/shipmodules.dat".Path)
   loadRecipes("bin/data/recipes.dat".Path)

@@ -5,10 +5,10 @@ import unittest2
 suite "Unit tests for events module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
+  loadData("bin/data/game.dat".Path)
   loadItems("bin/data/items.dat".Path)
   loadModules("bin/data/shipmodules.dat".Path)
-  loadCareers("bin/data/careers.dat")
+  loadCareers("bin/data/careers.dat".Path)
   loadFactions("bin/data/factions.dat".Path)
   loadRecipes("bin/data/recipes.dat".Path)
   loadMobs("bin/data/mobs.dat".Path)

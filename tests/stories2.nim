@@ -6,9 +6,9 @@ include ../src/stories2
 suite "Unit tests for stories2 module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
+  loadData("bin/data/game.dat".Path)
   loadItems("bin/data/items.dat".Path)
-  loadCareers("bin/data/careers.dat")
+  loadCareers("bin/data/careers.dat".Path)
   loadFactions("bin/data/factions.dat".Path)
   loadStories("bin/data/stories.dat".Path)
 

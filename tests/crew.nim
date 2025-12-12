@@ -6,9 +6,9 @@ include ../src/crew
 suite "Unit tests for crew module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
+  loadData("bin/data/game.dat".Path)
   loadItems("bin/data/items.dat".Path)
-  loadCareers("bin/data/careers.dat")
+  loadCareers("bin/data/careers.dat".Path)
   loadFactions("bin/data/factions.dat".Path)
 
   playerShip.skyX = 1
