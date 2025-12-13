@@ -658,6 +658,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
       specialValues &= " {" & $bonus & "}"
     tclEval(script = specialBox & " configure -values [list" & specialValues & "]")
     tclEval(script = specialBox & " current 0")
+    tclEval(script = "bind " & specialBox & " <<ComboboxSelected>> {SetMaluses}")
     tclEval(script = "grid " & specialBox & " -padx 5")
     label = specialFrame & ".specialsymbol"
     tclEval(script = "ttk::label " & label & " -text {<=>}")
@@ -669,6 +670,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
       specialValues &= " {" & $malus & "}"
     tclEval(script = specialBox & " configure -values [list" & specialValues & "]")
     tclEval(script = specialBox & " current 0")
+    tclEval(script = "bind " & specialBox & " <<ComboboxSelected>> {SetBonuses}")
     tclEval(script = "grid " & specialBox & " -padx 5 -row 0 -column 2")
     tclEval(script = "grid " & specialFrame & " -padx 5 -columnspan 2")
     buttonRow += 2
@@ -1308,6 +1310,40 @@ proc sortCrafting2Command(clientData: cint; interp: PInterp; argc: cint;
   return showCraftingCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowCrafting", "2"].allocCStringArray)
 
+proc setBonusesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect], cdecl, contractual.} =
+  ## Set the list of item's bonuses, based on the selected malus
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetBonuses
+  echo "bonuses"
+  return tclOk
+
+proc setMalusesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect], cdecl, contractual.} =
+  ## Set the list of item's maluses, based on the selected bonus
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetMaluses
+  echo "maluses"
+  return tclOk
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Adds Tcl commands related to the crew UI
@@ -1322,5 +1358,7 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     addCommand(name = "SetCraftWorkshop", nimProc = setCraftWorkshopCommand)
     addCommand(name = "CraftsMore", nimProc = craftsMoreCommand)
     addCommand(name = "SortCrafting2", nimProc = sortCrafting2Command)
+    addCommand(name = "SetBonuses", nimProc = setBonusesCommand)
+    addCommand(name = "SetMaluses", nimProc = setMalusesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
