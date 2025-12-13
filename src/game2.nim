@@ -117,7 +117,10 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
     return
 
   {.hint[XCannotRaiseY]: off.}
-  proc loadSelectedData(dataName: string; fileName: Path): string {.raises: [
+  type GameDataType = enum
+    factions, goals, help, items, mobiles, recipes, bases, modules, ships, stories, data, careers, invalid
+
+  proc loadSelectedData(dataName: GameDataType; fileName: Path): string {.raises: [
       DataLoadingError, KeyError, OSError], tags: [WriteIOEffect, RootEffect],
       contractual.} =
     ## Load the selected game's data from the file
@@ -128,11 +131,10 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
     ## Returns an empty string if the data was loaded correctly, otherwise the
     ## message with information what was wrong.
     require:
-      dataName.len > 0
       ($fileName).len > 0
     body:
       var localFileName: Path = "".Path
-      proc loadDataFile(localDataName: string): string {.raises: [
+      proc loadDataFile(localDataName: GameDataType): string {.raises: [
           DataLoadingError, KeyError], tags: [WriteIOEffect, RootEffect],
               contractual.} =
         ## Load the data from the selected file
@@ -142,50 +144,51 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
         ##
         ## Returns an empty string if the data was loaded correctly, otherwise
         ## the message with information what was wrong.
-        require:
-          localDataName.len > 0
         body:
           let dataXml: XmlNode = try:
               loadXml(path = $localFileName)
             except XmlError, ValueError, IOError, OSError, Exception:
               return getCurrentExceptionMsg()
-          var dataType: string = ""
-          dataType = dataXml.tag
-          if dataType == localDataName or localDataName.len == 0:
-            logMessage(message = "Loading " & dataType & " file: " &
+          var dataType: GameDataType = invalid
+          dataType = try:
+              parseEnum[GameDataType](s = dataXml.tag)
+            except ValueError:
+              invalid
+          if dataType == localDataName or localDataName == invalid:
+            logMessage(message = "Loading " & $dataType & " file: " &
                 $localFileName, messageLevel = lvlInfo)
             case dataType
-            of "factions":
+            of factions:
               loadFactions(fileName = localFileName)
-            of "goals":
+            of goals:
               loadGoals(fileName = localFileName)
-            of "help":
+            of help:
               loadHelp(fileName = localFileName)
-            of "items":
+            of items:
               loadItems(fileName = localFileName)
-            of "mobiles":
+            of mobiles:
               loadMobs(fileName = localFileName)
-            of "recipes":
+            of recipes:
               loadRecipes(fileName = localFileName)
-            of "bases":
+            of bases:
               loadBasesTypes(fileName = localFileName)
-            of "modules":
+            of modules:
               loadModules(fileName = localFileName)
-            of "ships":
+            of ships:
               loadShips(fileName = localFileName)
-            of "stories":
+            of stories:
               loadStories(fileName = localFileName)
-            of "data":
+            of data:
               loadData(fileName = localFileName)
-            of "careers":
+            of careers:
               loadCareers(fileName = localFileName)
-            else:
-              return "Can't load the game data. Unknown type of data: " & dataType
+            of invalid:
+              return "Can't load the game data. Invalid data type."
 
       if ($fileName).len == 0:
-        for file in walkFiles(pattern = dataName & DirSep & "*.dat"):
+        for file in walkFiles(pattern = $dataName & DirSep & "*.dat"):
           localFileName = file.Path
-          result = loadDataFile(localDataName = "")
+          result = loadDataFile(localDataName = invalid)
           if result.len > 0:
             return
       else:
@@ -194,12 +197,11 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
   {.hint[XCannotRaiseY]: on.}
 
   type
-    DataName = string
     DataTypeRecord = object
-      name: DataName
+      name: GameDataType
       fileName: Path
 
-  proc newDataTypeRecord(name, fileName: string): DataTypeRecord {.raises: [], tags: [],
+  proc newDataTypeRecord(name: GameDataType; fileName: string): DataTypeRecord {.raises: [], tags: [],
       contractual.} =
     ## Create a new data structure for the game data to read from a file
     ##
@@ -209,18 +211,18 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
     ## Returns the new structure with information about the selected data
     return DataTypeRecord(name: name, fileName: fileName.Path)
 
-  const dataTypes: array[1..12, DataTypeRecord] = [newDataTypeRecord(name = "data",
-      fileName = "game.dat"), newDataTypeRecord(name = "items",
-      fileName = "items.dat"), newDataTypeRecord(name = "modules",
-      fileName = "shipmodules.dat"), newDataTypeRecord(name = "recipes",
-      fileName = "recipes.dat"), newDataTypeRecord(name = "bases",
-      fileName = "bases.dat"), newDataTypeRecord(name = "mobiles",
-      fileName = "mobs.dat"), newDataTypeRecord(name = "careers",
-      fileName = "careers.dat"), newDataTypeRecord(name = "factions",
-      fileName = "factions.dat"), newDataTypeRecord(name = "help",
-      fileName = "help.dat"), newDataTypeRecord(name = "ships",
-      fileName = "ships.dat"), newDataTypeRecord(name = "goals",
-      fileName = "goals.dat"), newDataTypeRecord(name = "stories",
+  const dataTypes: array[1..12, DataTypeRecord] = [newDataTypeRecord(name = data,
+      fileName = "game.dat"), newDataTypeRecord(name = items,
+      fileName = "items.dat"), newDataTypeRecord(name = modules,
+      fileName = "shipmodules.dat"), newDataTypeRecord(name = recipes,
+      fileName = "recipes.dat"), newDataTypeRecord(name = bases,
+      fileName = "bases.dat"), newDataTypeRecord(name = mobiles,
+      fileName = "mobs.dat"), newDataTypeRecord(name = careers,
+      fileName = "careers.dat"), newDataTypeRecord(name = factions,
+      fileName = "factions.dat"), newDataTypeRecord(name = help,
+      fileName = "help.dat"), newDataTypeRecord(name = ships,
+      fileName = "ships.dat"), newDataTypeRecord(name = goals,
+      fileName = "goals.dat"), newDataTypeRecord(name = stories,
       fileName = "stories.dat")]
   # Load the standard game data
   for dataType in dataTypes:
@@ -230,7 +232,11 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
       return
   # Load the modifications
   for modDirectory in walkDirs(pattern = modsDirectory & "*"):
-    result = loadSelectedData(dataName = modDirectory, fileName = "".Path)
+    let dataType: GameDataType = try:
+          parseEnum[GameDataType](s = modDirectory)
+        except ValueError:
+          invalid
+    result = loadSelectedData(dataName = dataType, fileName = "".Path)
     if result.len > 0:
       return
   setToolsList()
