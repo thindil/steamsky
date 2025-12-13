@@ -1,3 +1,4 @@
+import std/paths
 import ../src/[careers, factions, shipmodules]
 import unittest2
 include ../src/shipsrepairs
@@ -5,11 +6,11 @@ include ../src/shipsrepairs
 suite "Unit tests for shipsrepairs module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
-  loadModules("bin/data/shipmodules.dat")
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
+  loadCareers("bin/data/careers.dat".Path)
+  loadFactions("bin/data/factions.dat".Path)
+  loadModules("bin/data/shipmodules.dat".Path)
 
   playerShip.modules = @[]
   playerShip.modules.add(ModuleData(mType: ModuleType2.engine, protoIndex: 3,
