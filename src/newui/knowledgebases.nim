@@ -121,8 +121,13 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
         label(str = "Reputation:")
         colorLabel(str = "Unknown", color = theme.colors[goldenColor])
       else:
-        setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.3.cfloat, 0.6])
+        setLayoutRowDynamic(height = 30, cols = (if base.reputation.level >
+            0: 2 else: 3), ratio = [0.3.cfloat, 0.6])
         label(str = "Reputation:")
+        if base.reputation.level < 0:
+          var repLevel: int = base.reputation.level
+          progressBar(value = repLevel, maxValue = 100, modifyable = false,
+              reversed = true)
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(), text = getReputationText(
               reputationLevel = base.reputation.level))
