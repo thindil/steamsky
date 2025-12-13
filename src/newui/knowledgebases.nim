@@ -116,6 +116,22 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
             color = theme.colors[redColor])
       if baseIndex == playerShip.homeBase:
         colorLabel(str = "It is your home base.", color = theme.colors[cyanColor])
+      if skyBases[baseIndex].reputation.level == 0:
+        setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.3.cfloat, 0.3])
+        label(str = "Reputation:")
+        colorLabel(str = "Unknown", color = theme.colors[goldenColor])
+      else:
+        setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.3.cfloat, 0.6])
+        label(str = "Reputation:")
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(), text = getReputationText(
+              reputationLevel = base.reputation.level))
+        if base.reputation.level > 0:
+          var repLevel: Positive = base.reputation.level
+          progressBar(value = repLevel, maxValue = 100, modifyable = false)
+        else:
+          var repLevel: Natural = 0
+          progressBar(value = repLevel, maxValue = 100, modifyable = false)
     setLayoutRowDynamic(height = 30, cols = 3)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[destinationIcon], text = "Target",
