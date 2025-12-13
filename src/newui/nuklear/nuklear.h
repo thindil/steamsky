@@ -26426,7 +26426,8 @@ NK_LIB nk_size
 nk_do_progress(nk_flags *state,
     struct nk_command_buffer *out, struct nk_rect bounds,
     nk_size value, nk_size max, nk_bool modifiable,
-    const struct nk_style_progress *style, struct nk_input *in)
+    const struct nk_style_progress *style, struct nk_input *in,
+    nk_bool reversed)
 {
     float prog_scale;
     nk_size prog_value;
@@ -26454,7 +26455,8 @@ nk_do_progress(nk_flags *state,
     return prog_value;
 }
 NK_API nk_bool
-nk_progress(struct nk_context *ctx, nk_size *cur, nk_size max, nk_bool is_modifyable)
+nk_progress(struct nk_context *ctx, nk_size *cur, nk_size max,
+    nk_bool is_modifyable, nk_bool reversed)
 {
     struct nk_window *win;
     struct nk_panel *layout;
@@ -26481,7 +26483,7 @@ nk_progress(struct nk_context *ctx, nk_size *cur, nk_size max, nk_bool is_modify
     in = (state == NK_WIDGET_ROM || state == NK_WIDGET_DISABLED || layout->flags & NK_WINDOW_ROM) ? 0 : &ctx->input;
     old_value = *cur;
     *cur = nk_do_progress(&ctx->last_widget_state, &win->buffer, bounds,
-            *cur, max, is_modifyable, &style->progress, in);
+            *cur, max, is_modifyable, &style->progress, in, reversed);
     return (*cur != old_value);
 }
 NK_API nk_size

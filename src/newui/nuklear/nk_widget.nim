@@ -33,7 +33,8 @@ import nk_context, nk_types
 # ---------------------
 using ctx: PContext
 
-proc nkWidgetStateReset*(s: var nk_flags) {.raises: [], tags: [], contractual.} =
+proc nkWidgetStateReset*(s: var nk_flags) {.raises: [], tags: [],
+    contractual.} =
   ## Reset the state of a widget. Internal use only
   ##
   ## * s - the state to reset
@@ -74,19 +75,21 @@ proc option*(label: string; selected: bool): bool {.raises: [], tags: [],
   var active: cint = (if selected: 1 else: 0)
   return nk_option_label(ctx = ctx, name = label.cstring, active = active) == nkTrue
 
-proc progressBar*(value: var int; maxValue: int;
-    modifyable: bool = true): bool {.discardable, raises: [], tags: [],
-        contractual.} =
+proc progressBar*(value: var int; maxValue: int; modifyable: bool = true;
+    reversed: bool = false): bool {.discardable, raises: [], tags: [],
+    contractual.} =
   ## Create a Nuklear progress bar widget
   ##
   ## * value      - the current value of the progress bar
   ## * maxValue   - the maximum value of the progress bar
   ## * modifyable - if true, the user can modify the value of the progress bar
+  ## * reversed   - if true, the progress bar should be draw in reverse, from
+  ##                the end
   ##
   ## Returns true if the value parameter was changed, otherwise false
-  proc nk_progress(ctx; cur: var nk_size; max: nk_size;
-      modifyable: nk_bool): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+  proc nk_progress(ctx; cur: var nk_size; max: nk_size; modifyable,
+      reversed: nk_bool): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## Nuklear C binding
   return nk_progress(ctx = ctx, cur = value, max = maxValue,
-      modifyable = modifyable.nk_bool) == nkTrue
+      modifyable = modifyable.nk_bool, reversed = reversed.nk_bool) == nkTrue
 

@@ -2726,13 +2726,13 @@ template colorChart*(cType: ChartType; color, highlight: NkColor; count: int;
     nk_chart_end(ctx = ctx)
 
 proc addColorChartSlot*(ctype: ChartType; color,
-    higlight: NkColor; count: cint; minValue, maxValue: cfloat) {.raises: [],
+    highlight: NkColor; count: cint; minValue, maxValue: cfloat) {.raises: [],
         tags: [], contractual.} =
   ## Add another chart to the existing one
   ##
   ## * ctype     - the type of the chart
   ## * color     - the color used for drawing the chart
-  ## * highligh  - the color used for highlighting point when mouse hovering
+  ## * highlight - the color used for highlighting point when mouse hovering
   ##               over it
   ## * count     - the amount of values on the chart
   ## * min_value - the minimal value of the chart
@@ -2743,7 +2743,7 @@ proc addColorChartSlot*(ctype: ChartType; color,
     ## A binding to Nuklear's function. Internal use only
   nk_chart_add_slot_colored(ctx = ctx, ctype = ctype, color = nk_rgb(
       r = color.r.cint, g = color.g.cint, b = color.b.cint), higlight = nk_rgb(
-      r = higlight.r.cint, g = higlight.g.cint, b = higlight.b.cint),
+      r = highlight.r.cint, g = highlight.g.cint, b = highlight.b.cint),
       count = count, minValue = minValue, maxValue = maxValue)
 
 template chart*(cType: ChartType; num: int; min, max: float; content: untyped) =
