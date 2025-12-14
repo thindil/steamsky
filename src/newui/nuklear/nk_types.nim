@@ -1318,12 +1318,18 @@ type
     when defined(nkIncludeVertexBufferOutput):
       query*: QueryFontGlyphF
       texture*: Handle
+  StyleText* = object
+    ## Used to store Nuklear style data for text widgets
+    padding*: Vec2
+    color*: NkColor
+    colorFactor*, disabledFactor*: float
   Style* = object
     ## Used to store Nuklear style data
     window*: StyleWindow
     button*, contextualButton*, menuButton*: StyleButton
     progress*, property*: StyleProgress
     font*: UserFont
+    text*: StyleText
 
 # ---------
 # Constants
