@@ -1341,7 +1341,24 @@ proc setMalusesCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## SetMaluses
-  echo "maluses"
+
+  let
+    malusesBox: string = ".craftdialog.special.special2"
+    bonusIndex: Natural = try:
+        tclEval2(script = ".craftdialog.special.special1 current").parseInt
+      except:
+        showError(message = "Can't get the bonus index.")
+        return tclOk
+  var
+    maluses: string = ""
+    index: Natural = 0
+  for malus in CraftMaluses:
+    if index > 0 and bonusIndex == index:
+      index.inc
+      continue
+    maluses &= " {" & $malus & "}"
+    index.inc
+  tclEval(script = malusesBox & " configure -values [list" & maluses & "]")
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
