@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+#strutils,  Copyright 2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -18,7 +18,7 @@
 ## Provides code related to the information about the player's knowledge, like
 ## lists of known bases, events missions, finished stories, etc.
 
-import std/[algorithm, tables]
+import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basestypes, config, game, messages, reputation, types, utils]
 import coreui, dialogs, errordialog, mapsui, setui, table, themes
@@ -121,9 +121,10 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
         label(str = "Reputation:")
         colorLabel(str = "Unknown", color = theme.colors[goldenColor])
       else:
-        setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.3.cfloat, 0.3, 0.3])
+        setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.3.cfloat, 0.35, 0.35])
         label(str = "Reputation:")
-        let reputationText: string = getReputationText(reputationLevel = base.reputation.level)
+        let reputationText: string = getReputationText(
+            reputationLevel = base.reputation.level)
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(), text = reputationText)
         if base.reputation.level < 0:
@@ -328,6 +329,9 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     label(str = "Owner:")
     basesOwner = comboList(items = basesOwners, selected = basesOwner,
         itemHeight = 25, x = 150, y = 150)
+    setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.2.cfloat, 0.8])
+    label(str = "Name:")
+    editString(text = nameSearch, maxLen = 64)
   const
     headers: array[8, HeaderData[BasesSortOrders]] = [
       HeaderData[BasesSortOrders](label: "Name", sortAsc: nameAsc,
@@ -366,6 +370,13 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     row, currentRow: Positive = 1
   # Show the list of known bases
   for base in knownBasesList:
+    if nameSearch.len > 0 and base.name.toLowerAscii.find(
+        sub = nameSearch.toLowerAscii) == -1:
+      continue
+    if basesStatus > 0 and (basesStatus - 1) != base.visited.ord:
+      continue
+    if basesOwner > 0 and (not base.visited or basesOwners[basesOwner] != base.owner):
+      continue
     if currentRow < startRow:
       currentRow.inc
       continue
