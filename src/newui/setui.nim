@@ -1126,6 +1126,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
+  nameSearch = ""
   basesTList = @["Any"]
   for baseType in basesTypesList.values:
     basesTList.add(y = baseType.name)
