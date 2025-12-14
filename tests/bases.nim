@@ -1,3 +1,4 @@
+import std/paths
 import unittest2
 import ../src/careers
 include ../src/bases
@@ -5,11 +6,11 @@ include ../src/bases
 suite "Unit tests for bases module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
-  loadBasesTypes("bin/data/bases.dat")
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
+  loadCareers("bin/data/careers.dat".Path)
+  loadFactions("bin/data/factions.dat".Path)
+  loadBasesTypes("bin/data/bases.dat".Path)
   checkpoint "Setting the tests."
   playerShip.skyX = 1
   playerShip.skyY = 1

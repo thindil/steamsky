@@ -4,7 +4,7 @@ include ../src/game
 suite "Unit tests for game module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
+  loadData("bin/data/game.dat".Path)
 
   test "Find an index of an exisiting skill":
     check:

@@ -1,3 +1,4 @@
+import std/paths
 import ../src/[basestypes, careers, factions, items, reputation, shipmodules]
 import unittest2
 include ../src/missions2
@@ -5,12 +6,12 @@ include ../src/missions2
 suite "Unit tests for missions2 module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
-  loadModules("bin/data/shipmodules.dat")
-  loadBasesTypes("bin/data/bases.dat")
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
+  loadCareers("bin/data/careers.dat".Path)
+  loadFactions("bin/data/factions.dat".Path)
+  loadModules("bin/data/shipmodules.dat".Path)
+  loadBasesTypes("bin/data/bases.dat".Path)
 
   playerShip.skyX = 1
   playerShip.skyY = 1
