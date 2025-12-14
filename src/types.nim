@@ -139,14 +139,17 @@ type
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ItemsDurability* = range[0..101] ## The range of the items durability
   SkillRange* = range[0..100] ## The range of skills levels
-  AttributesArray* = array[1..2, Natural] ## 1 - Attribute level, 2 - Attribute experience
   BasesRange* = range[1..1_024] ## The amount of bases in the game
   ExtendedBasesRange* = range[0..1_024] ## The amount of bases in the game with zero value
   ReputationRange* = range[-100..100] ## The range of possible reputation levels
   RewardMultiplier* = range[0.0..2.0] ## The range of multiplier for missions reward
-  EquipmentArray* = array[EquipmentLocations, int] ## The equipment of mobs
   ExtendedNatural* = range[-1..Natural.high] ## Extended Natural range, with -1
+
+  AttributesArray* = array[1..2, Natural] ## 1 - Attribute level, 2 - Attribute experience
+  EquipmentArray* = array[EquipmentLocations, int] ## The equipment of mobs
+
   XmlAttribute* = string ## Used to read the game data from XML files
+  FactionIndex* = string ## Used to store in-game factions indexes
 
   ModuleData* = object
     ## Used to store information about ships' modules
@@ -299,7 +302,7 @@ type
     morale*: AttributesArray
     loyalty*: SkillRange = 100
     homeBase*: BasesRange = 1
-    faction*: string = ""
+    faction*: FactionIndex = ""
 
   ShipRecord* = object
     ## Used to store information about ships
@@ -551,7 +554,7 @@ type
     reputation*: ReputationData
     missionsDate*: DateRecord
     missions*: seq[MissionData]
-    owner*: string
+    owner*: FactionIndex
     cargo*: seq[BaseCargo]
     size*: BasesSize
 
@@ -720,7 +723,7 @@ type
     combatValue*: Positive
     crew*: seq[ProtoMemberData]
     description*: string
-    owner*: string
+    owner*: FactionIndex
     knownRecipes*: seq[string]
     reputation*: Natural
 
