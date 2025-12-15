@@ -145,6 +145,9 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
           progressBar(value = repLevel, maxValue = 100, modifyable = false)
     setLayoutRowDynamic(height = 30, cols = 3)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Set the base as the ship destination")
     imageLabelButton(image = images[destinationIcon], text = "Target",
         alignment = right):
       if base.skyX == playerShip.skyX and base.skyY == playerShip.skyY:
@@ -159,6 +162,8 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
     restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Show the base on the map")
     imageLabelButton(image = images[showColoredIcon], text = "Show",
         alignment = right):
       centerX = base.skyX
@@ -321,16 +326,28 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     setLayoutRowStatic(height = 25, cols = 6, ratio = [50.cfloat, 150, 75,
         150, 75, 150])
     label(str = "Type:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show only the selected type bases")
     basesType = comboList(items = basesTList, selected = basesType,
         itemHeight = 25, x = 150, y = 150)
     label(str = "Status:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show only the selected status bases")
     basesStatus = comboList(items = basesStatuses, selected = basesStatus,
         itemHeight = 25, x = 150, y = 150)
     label(str = "Owner:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show only the selected owner bases")
     basesOwner = comboList(items = basesOwners, selected = basesOwner,
         itemHeight = 25, x = 150, y = 150)
     setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.2.cfloat, 0.8])
     label(str = "Name:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Search for a base with the selected name")
     editString(text = nameSearch, maxLen = 64)
   const
     headers: array[8, HeaderData[BasesSortOrders]] = [
