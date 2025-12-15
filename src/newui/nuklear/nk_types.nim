@@ -1323,6 +1323,10 @@ type
     padding*: Vec2
     color*: NkColor
     colorFactor*, disabledFactor*: float
+  Cursor* = object
+    ## Used to store Nuklear style data for mouse's cursor
+    img*: Image
+    size*, offset*: Vec2
   Style* = object
     ## Used to store Nuklear style data
     window*: StyleWindow
@@ -1330,6 +1334,9 @@ type
     progress*, property*: StyleProgress
     font*: UserFont
     text*: StyleText
+    cursorActive*, cursorLast*: Cursor
+    cursors*: array[cursorCount, Cursor]
+    cursorVisible*: int
 
 # ---------
 # Constants
