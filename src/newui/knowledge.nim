@@ -20,7 +20,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config]
-import coreui, header, knowledgebases, messagesui, themes
+import coreui, header, knowledgebases, knowledgeevents, messagesui, themes
 
 var expandedSection: Natural = 0
 
@@ -80,6 +80,7 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 2
+      showEventsInfo(dialog = dialog)
   # The list of accepted missions
   if expandedSection in {0, 3}:
     group(title = "Accepted missions:", flags = {windowBorder, windowTitle}):
