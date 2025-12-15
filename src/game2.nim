@@ -350,7 +350,8 @@ proc setBases(maxSpawnRoll: Natural; basesArray: var Table[string, seq[
   ##
   ## Returns the modified parameter basesArray
   var
-    baseOwner, baseType: string = ""
+    baseOwner: FactionIndex = ""
+    baseType: string = ""
     basePopulation: Natural = 0
     baseReputation: ReputationRange = 0
     baseSize: BasesSize = unknown
