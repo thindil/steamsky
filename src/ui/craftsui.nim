@@ -1324,7 +1324,25 @@ proc setBonusesCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## SetBonuses
-  echo "bonuses"
+  let
+    bonusesBox: string = ".craftdialog.special.special1"
+    malusIndex: Natural = try:
+        tclEval2(script = ".craftdialog.special.special2 current").parseInt
+      except:
+        showError(message = "Can't get the malus index.")
+        return tclOk
+  var
+    bonuses: string = ""
+    index: Natural = 0
+  for bonus in CraftBonuses:
+    if index > 0 and malusIndex == index:
+      index.inc
+      continue
+    bonuses &= " {" & $bonus & "}"
+    index.inc
+  tclEval(script = bonusesBox & " configure -values [list" & bonuses & "]")
+  tclEval(script = bonusesBox & " current " & (if malusIndex >
+      0: "1" else: "0"))
   return tclOk
 
 proc setMalusesCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -1359,6 +1377,8 @@ proc setMalusesCommand(clientData: cint; interp: PInterp; argc: cint;
     maluses &= " {" & $malus & "}"
     index.inc
   tclEval(script = malusesBox & " configure -values [list" & maluses & "]")
+  tclEval(script = malusesBox & " current " & (if bonusIndex >
+      0: "1" else: "0"))
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
