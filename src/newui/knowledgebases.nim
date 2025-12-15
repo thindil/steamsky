@@ -1,4 +1,4 @@
-#strutils,  Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-## Provides code related to the information about the player's knowledge, like
-## lists of known bases, events missions, finished stories, etc.
+## Provides code related to the information about the list of known bases, like
+## showing the list, information about the selected base, etc.
 
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
@@ -351,7 +351,6 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       HeaderData[BasesSortOrders](label: "Reputation",
           sortAsc: reputationAsc, sortDesc: reputationDesc)]
     ratio: array[8, cfloat] = [200.cfloat, 100, 100, 100, 100, 100, 100, 100]
-
 
   addHeader(headers = headers, ratio = ratio, tooltip = "bases",
       code = sortBases, dialog = dialog)
