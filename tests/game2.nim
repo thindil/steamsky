@@ -4,16 +4,16 @@ include ../src/game2
 suite "Unit tests for game2 module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadCareers("bin/data/careers.dat")
-  loadBasesTypes("bin/data/bases.dat")
-  loadFactions("bin/data/factions.dat")
-  loadModules("bin/data/shipmodules.dat")
-  loadRecipes("bin/data/recipes.dat")
-  loadMobs("bin/data/mobs.dat")
-  loadShips("bin/data/ships.dat")
-  loadGoals("bin/data/goals.dat")
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
+  loadCareers("bin/data/careers.dat".Path)
+  loadBasesTypes("bin/data/bases.dat".Path)
+  loadFactions("bin/data/factions.dat".Path)
+  loadModules("bin/data/shipmodules.dat".Path)
+  loadRecipes("bin/data/recipes.dat".Path)
+  loadMobs("bin/data/mobs.dat".Path)
+  loadShips("bin/data/ships.dat".Path)
+  loadGoals("bin/data/goals.dat".Path)
 
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
   playerShip.modules = @[]

@@ -1,11 +1,12 @@
+import std/paths
 import ../src/[crewinventory, game, items, types]
 import unittest2
 
 suite "Unit tests for crewinventory module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
 
   playerShip.crew = @[]
   var member = MemberData(homeBase: 1)

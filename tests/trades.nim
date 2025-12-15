@@ -1,3 +1,4 @@
+import std/paths
 import ../src/[careers, crafts, factions, mobs, reputation, shipmodules]
 import unittest2
 include ../src/trades
@@ -5,15 +6,15 @@ include ../src/trades
 suite "Unit tests for trades module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
-  loadModules("bin/data/shipmodules.dat")
-  loadRecipes("bin/data/recipes.dat")
-  loadMobs("bin/data/mobs.dat")
-  loadShips("bin/data/ships.dat")
-  loadBasesTypes("bin/data/bases.dat")
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
+  loadCareers("bin/data/careers.dat".Path)
+  loadFactions("bin/data/factions.dat".Path)
+  loadModules("bin/data/shipmodules.dat".Path)
+  loadRecipes("bin/data/recipes.dat".Path)
+  loadMobs("bin/data/mobs.dat".Path)
+  loadShips("bin/data/ships.dat".Path)
+  loadBasesTypes("bin/data/bases.dat".Path)
 
   playerShip.skyX = 1
   playerShip.skyY = 1
