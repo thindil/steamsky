@@ -130,7 +130,8 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
                 colorLabel(str = factionsList[skyBases[baseIndex].owner].name,
                     color = theme.mapColors[mapGoldenYellow])
         setLayoutRowDynamic(height = 25, cols = 1)
-        if getBasePopulation(baseIndex = baseIndex) > empty:
+        if getBasePopulation(baseIndex = baseIndex) > empty and skyBases[
+            baseIndex].visited.year > 0:
           case skyBases[baseIndex].reputation.level
           of -100.. -75:
             colorLabel(str = "You are hated here", color = theme.mapColors[mapRedColor])
@@ -434,7 +435,8 @@ proc moveShipOnMap(dialog: var GameDialog): Natural {.raises: [],
         return
     if playerShip.destinationX == playerShip.skyX and
         playerShip.destinationY == playerShip.skyY:
-      addMessage(message = "You reached your travel destination.", mType = orderMessage)
+      addMessage(message = "You reached your travel destination.",
+          mType = orderMessage)
       playerShip.destinationX = 0
       playerShip.destinationY = 0
       if gameSettings.autoFinish:
