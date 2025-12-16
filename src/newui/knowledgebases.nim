@@ -187,7 +187,7 @@ proc setBaseInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
 
 proc sortBases(sortAsc, sortDesc: BasesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
-  ## Sort recipes on the list
+  ## Sort bases on the list
   ##
   ## * sortAsc  - the sorting value for ascending sort
   ## * sortDesc - the sorting value for descending sort
