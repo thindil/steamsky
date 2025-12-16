@@ -1327,6 +1327,13 @@ type
     ## Used to store Nuklear style data for mouse's cursor
     img*: Image
     size*, offset*: Vec2
+  StyleToggle* = object
+    ## Used to store Nuklear style data for toggle widgets
+    normal*, hover*, active*, cursorNormal*, cursorHover*: StyleItem
+    borderColor*, textNormal*, textHover*, textActive*, textBackground*: NkColor
+    textAlignment*: nk_flags
+    padding*, touchPadding*: Vec2
+    spacing*, border*, colorFactor*, disabledFactor*: float
   Style* = object
     ## Used to store Nuklear style data
     window*: StyleWindow
@@ -1337,6 +1344,7 @@ type
     cursorActive*, cursorLast*: Cursor
     cursors*: array[cursorCount, Cursor]
     cursorVisible*: int
+    option*, checkbox*: StyleToggle
 
 # ---------
 # Constants
