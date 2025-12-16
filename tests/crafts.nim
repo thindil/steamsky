@@ -5,12 +5,12 @@ include ../src/crafts
 suite "Unit tests for crafts module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
-  loadRecipes("bin/data/recipes.dat")
-  loadModules("bin/data/shipmodules.dat")
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
+  loadCareers("bin/data/careers.dat".Path)
+  loadFactions("bin/data/factions.dat".Path)
+  loadRecipes("bin/data/recipes.dat".Path)
+  loadModules("bin/data/shipmodules.dat".Path)
 
   playerShip.modules = @[]
   playerShip.modules.add(ModuleData(mType: ModuleType2.workshop, protoIndex: 6,

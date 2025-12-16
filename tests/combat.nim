@@ -1,18 +1,19 @@
+import std/paths
 import ../src/[basestypes, careers, crafts, factions, mobs, shipmodules]
 import unittest2
 include ../src/combat
 
 suite "Unit tests for combat module":
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
-  loadBasesTypes("bin/data/bases.dat")
-  loadModules("bin/data/shipmodules.dat")
-  loadRecipes("bin/data/recipes.dat")
-  loadMobs("bin/data/mobs.dat")
-  loadShips("bin/data/ships.dat")
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
+  loadCareers("bin/data/careers.dat".Path)
+  loadFactions("bin/data/factions.dat".Path)
+  loadBasesTypes("bin/data/bases.dat".Path)
+  loadModules("bin/data/shipmodules.dat".Path)
+  loadRecipes("bin/data/recipes.dat".Path)
+  loadMobs("bin/data/mobs.dat".Path)
+  loadShips("bin/data/ships.dat".Path)
 
   playerShip.skyX = 200
   playerShip.skyY = 200
