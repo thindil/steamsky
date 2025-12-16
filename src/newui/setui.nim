@@ -1090,7 +1090,7 @@ type
     name*: string
       ## The name of the base
     distance*: Natural
-      ## The distance to the bese from the current player's position
+      ## The distance to the base from the current player's position
     coords*: string
       ## The coordinates of the base
     population*: BasePopulation
@@ -1105,6 +1105,18 @@ type
       ## The player's reputaion in the base
     visited*: bool
       ## If true, the base was visited by the player
+  EventUIData* = object
+    ## Stores data needed to show information about an event
+    index*: Natural
+      ## The index of the event
+    name*: string
+      ## The name of the event
+    distance*: Natural
+      ## The distance to the event from the current player's position
+    coords*: string
+      ## The coordinates of the event
+    details*: string
+      ## Additional information about the event
 
 const
   basesStatuses*: array[3, string] = ["Any", "Not visited", "Visited"]
@@ -1117,6 +1129,8 @@ var
     ## The list of owners of all bases in the game
   knownBasesList*: seq[BaseData] = @[]
     ## The list of known bases
+  knownEventsList*: seq[EventUIData] = @[]
+    ## The list of known events
 
 proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -1137,7 +1151,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for index, base in skyBases:
     if base.known:
       try:
-        knownBasesList.add(BaseData(index: index, name: base.name,
+        knownBasesList.add(y = BaseData(index: index, name: base.name,
             distance: countDistance(destinationX = base.skyX,
             destinationY = base.skyY), coords: "X: " & $base.skyX & " Y: " &
             $base.skyY, population: getBasePopulation(baseIndex = index),
@@ -1148,3 +1162,6 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             visited: base.visited.year > 0))
       except:
         dialog = setError(message = "Can't get a base info")
+  knownEventsList = @[]
+  for index, event in eventsList:
+    knownEventsList.add(y = EventUIData(index: index))
