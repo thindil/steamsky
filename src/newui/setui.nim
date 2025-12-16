@@ -23,7 +23,7 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
     crafts, crew, game, items, maps, missions, reputation, shipscargo,
     shipscrew, types]
-import coreui, errordialog, utilsui2
+import coreui, errordialog, utilsui2, themes
 
 var
   moneyAmount*: Natural = 0
@@ -1117,6 +1117,8 @@ type
       ## The coordinates of the event
     details*: string
       ## Additional information about the event
+    color*: ColorsNames
+      ## The color used show the event's info
 
 const
   basesStatuses*: array[3, string] = ["Any", "Not visited", "Visited"]
@@ -1164,4 +1166,16 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         dialog = setError(message = "Can't get a base info")
   knownEventsList = @[]
   for index, event in eventsList:
-    knownEventsList.add(y = EventUIData(index: index))
+    try:
+      case event.eType
+      of enemyShip:
+        knownEventsList.add(y = EventUIData(index: index,
+            name: "Enemy ship spotted", distance: countDistance(
+            destinationX = event.skyX, destinationY = event.skyY), coords: "X: " &
+            $event.skyX & " Y: " & $event.skyY, details: protoShipsList[
+            event.shipIndex].name, color: (if playerShip.skyX == event.skyX and
+            playerShip.skyY == event.skyY: yellowColor else: redColor)))
+      else:
+        knownEventsList.add(y = EventUIData(index: index))
+    except KeyError:
+      dialog = setError(message = "Can't set an event info")
