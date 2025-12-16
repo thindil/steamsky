@@ -19,7 +19,31 @@
 ## sorting them, showing information about them, etc.
 
 import contracts
-import coreui
+import coreui, table
+
+
+type EventsSortOrders = enum
+  none, typeAsc, typeDesc, distanceAsc, distanceDesc, detailsAsc, detailsDesc,
+    coordAsc, coordDesc
+
+const defaultEventsSortOrder: EventsSortOrders = none
+
+var eventsSortOrder: EventsSortOrders = defaultEventsSortOrder
+
+proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort events on the list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if eventsSortOrder == sortAsc:
+    eventsSortOrder = sortDesc
+  else:
+    eventsSortOrder = sortAsc
 
 proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -29,4 +53,17 @@ proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  discard
+  const
+    headers: array[4, HeaderData[EventsSortOrders]] = [
+      HeaderData[EventsSortOrders](label: "Name", sortAsc: typeAsc,
+          sortDesc: typeDesc),
+      HeaderData[EventsSortOrders](label: "Distance",
+          sortAsc: distanceAsc, sortDesc: distanceDesc),
+      HeaderData[EventsSortOrders](label: "Coordinates", sortAsc: coordAsc,
+          sortDesc: coordDesc),
+      HeaderData[EventsSortOrders](label: "Details",
+          sortAsc: detailsAsc, sortDesc: detailsDesc)]
+    ratio: array[4, cfloat] = [200.cfloat, 100, 100, 100]
+
+  addHeader(headers = headers, ratio = ratio, tooltip = "events",
+      code = sortEvents, dialog = dialog)
