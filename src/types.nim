@@ -150,6 +150,7 @@ type
 
   XmlAttribute* = string ## Used to read the game data from XML files
   FactionIndex* = string ## Used to store in-game factions indexes
+  BaseType* = string ## Used to store types of bases
 
   ModuleData* = object
     ## Used to store information about ships' modules
@@ -544,7 +545,7 @@ type
     visited*: DateRecord
     skyX*: MapXRange
     skyY*: MapYRange
-    baseType*: string
+    baseType*: BaseType
     population*: Natural
     recruitDate*: DateRecord
     recruits*: seq[RecruitData]
