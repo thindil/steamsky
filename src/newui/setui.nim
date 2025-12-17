@@ -1172,10 +1172,10 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         knownEventsList.add(y = EventUIData(index: index,
             name: "Enemy ship spotted", distance: countDistance(
             destinationX = event.skyX, destinationY = event.skyY),
-            coords: "X: " &
-            $event.skyX & " Y: " & $event.skyY, details: protoShipsList[
-            event.shipIndex].name, color: (if playerShip.skyX == event.skyX and
-            playerShip.skyY == event.skyY: yellowColor else: redColor)))
+            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+            details: protoShipsList[event.shipIndex].name, color: (
+            if playerShip.skyX == event.skyX and playerShip.skyY ==
+            event.skyY: yellowColor else: redColor)))
       of fullDocks:
         knownEventsList.add(y = EventUIData(index: index,
             name: "Full docks in base", distance: countDistance(
@@ -1208,7 +1208,32 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
             color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
             event.skyY: yellowColor else: redColor)))
-      else:
-        knownEventsList.add(y = EventUIData(index: index))
+      of doublePrice:
+        knownEventsList.add(y = EventUIData(index: index,
+            name: "Double price in base", distance: countDistance(
+            destinationX = event.skyX, destinationY = event.skyY),
+            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+            details: itemsList[event.itemIndex].name & " in " & skyBases[skyMap[
+            event.skyX][event.skyY].baseIndex].name, color: (
+            if playerShip.skyX == event.skyX and playerShip.skyY ==
+            event.skyY: yellowColor else: limeColor)))
+      of trader:
+        knownEventsList.add(y = EventUIData(index: index,
+            name: "Friendly trader spotted", distance: countDistance(
+            destinationX = event.skyX, destinationY = event.skyY),
+            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+            details: protoShipsList[event.shipIndex].name, color: (
+            if playerShip.skyX == event.skyX and playerShip.skyY ==
+            event.skyY: yellowColor else: greenColor)))
+      of friendlyShip:
+        knownEventsList.add(y = EventUIData(index: index,
+            name: "Friendly ship spotted", distance: countDistance(
+            destinationX = event.skyX, destinationY = event.skyY),
+            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+            details: protoShipsList[event.shipIndex].name, color: (
+            if playerShip.skyX == event.skyX and playerShip.skyY ==
+            event.skyY: yellowColor else: greenColor)))
+      of EventsTypes.none, baseRecovery:
+        discard
     except KeyError:
       dialog = setError(message = "Can't set an event info")
