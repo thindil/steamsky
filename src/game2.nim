@@ -351,7 +351,7 @@ proc setBases(maxSpawnRoll: Natural; basesArray: var Table[string, seq[
   ## Returns the modified parameter basesArray
   var
     baseOwner: FactionIndex = ""
-    baseType: string = ""
+    baseType: BaseType = ""
     basePopulation: Natural = 0
     baseReputation: ReputationRange = 0
     baseSize: BasesSize = unknown
@@ -442,11 +442,12 @@ proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
       maxSpawnRoll += faction.spawnChance
       basesArray[index] = @[]
     setBases(maxSpawnRoll = maxSpawnRoll, basesArray = basesArray)
+    type LocalMapRange = range[-100..2_000]
     for factionBases in basesArray.values:
       for index, faction in factionBases:
         var
           attempts: Positive = 1
-          posX, posY: int = 0
+          posX, posY: LocalMapRange = 0
         while true:
           var validLocation: bool = true
           if index == factionBases.low or ("loner" in factionsList[skyBases[
@@ -477,10 +478,10 @@ proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
                   max = BasesRange.high - 10)
               attempts = 1
           for j in -5..5:
-            var tempX: int = posX + j
+            var tempX: LocalMapRange = posX + j
             normalizeCoord(coord = tempX)
             for k in -5..5:
-              var tempY: int = posY + k
+              var tempY: LocalMapRange = posY + k
               normalizeCoord(coord = tempY, isXAxis = false)
               if skyMap[tempX][tempY].baseIndex > 0:
                 validLocation = false
