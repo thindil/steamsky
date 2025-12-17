@@ -1,3 +1,4 @@
+import std/paths
 import ../src/[careers, crafts, factions, game, goals, items, mobs,
     shipmodules, ships, statistics, types]
 import unittest2
@@ -5,15 +6,15 @@ import unittest2
 suite "Unit tests for statistics module":
 
   checkpoint "Loading the game data."
-  loadGoals("bin/data/goals.dat")
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
-  loadModules("bin/data/shipmodules.dat")
-  loadRecipes("bin/data/recipes.dat")
-  loadMobs("bin/data/mobs.dat")
-  loadShips("bin/data/ships.dat")
+  loadGoals("bin/data/goals.dat".Path)
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
+  loadCareers("bin/data/careers.dat".Path)
+  loadFactions("bin/data/factions.dat".Path)
+  loadModules("bin/data/shipmodules.dat".Path)
+  loadRecipes("bin/data/recipes.dat".Path)
+  loadMobs("bin/data/mobs.dat".Path)
+  loadShips("bin/data/ships.dat".Path)
 
   test "Updating an crafting orders goals' list.":
     gameStats.craftingOrders = @[]

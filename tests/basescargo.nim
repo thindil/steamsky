@@ -1,3 +1,4 @@
+import std/paths
 import unittest2
 import ../src/[careers, factions]
 include ../src/basescargo
@@ -5,11 +6,11 @@ include ../src/basescargo
 suite "Unit tests for basescargo module.":
   checkpoint "Loading the game data."
 
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
-  loadBasesTypes("bin/data/bases.dat")
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
+  loadCareers("bin/data/careers.dat".Path)
+  loadFactions("bin/data/factions.dat".Path)
+  loadBasesTypes("bin/data/bases.dat".Path)
 
   skyBases[1].reputation = ReputationData(level: 1, experience: 1)
   playerShip.skyX = 1

@@ -1,13 +1,14 @@
+import std/paths
 import ../src/[careers, factions, game, maps, items, shipscrew, types]
 import unittest2
 
 suite "Unit tests for shipscrew module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
+  loadCareers("bin/data/careers.dat".Path)
+  loadFactions("bin/data/factions.dat".Path)
 
   playerCareer = "general"
   playerShip.skyX = 1

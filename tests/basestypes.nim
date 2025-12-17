@@ -4,9 +4,9 @@ include ../src/basestypes
 
 suite "Unit tests for basestypes module":
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadBasesTypes("bin/data/bases.dat")
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
+  loadBasesTypes("bin/data/bases.dat".Path)
 
   test "Get the price of a non-buyable item.":
     check:
