@@ -1171,10 +1171,35 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       of enemyShip:
         knownEventsList.add(y = EventUIData(index: index,
             name: "Enemy ship spotted", distance: countDistance(
-            destinationX = event.skyX, destinationY = event.skyY), coords: "X: " &
+            destinationX = event.skyX, destinationY = event.skyY),
+            coords: "X: " &
             $event.skyX & " Y: " & $event.skyY, details: protoShipsList[
             event.shipIndex].name, color: (if playerShip.skyX == event.skyX and
             playerShip.skyY == event.skyY: yellowColor else: redColor)))
+      of fullDocks:
+        knownEventsList.add(y = EventUIData(index: index,
+            name: "Full docks in base", distance: countDistance(
+            destinationX = event.skyX, destinationY = event.skyY),
+            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+            details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
+            color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
+            event.skyY: yellowColor else: cyanColor)))
+      of attackOnBase:
+        knownEventsList.add(y = EventUIData(index: index,
+            name: "Base is under attack", distance: countDistance(
+            destinationX = event.skyX, destinationY = event.skyY),
+            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+            details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
+            color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
+            event.skyY: yellowColor else: redColor)))
+      of disease:
+        knownEventsList.add(y = EventUIData(index: index,
+            name: "Disease in base", distance: countDistance(
+            destinationX = event.skyX, destinationY = event.skyY),
+            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+            details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
+            color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
+            event.skyY: yellowColor else: goldenColor)))
       else:
         knownEventsList.add(y = EventUIData(index: index))
     except KeyError:
