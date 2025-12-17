@@ -1334,6 +1334,17 @@ type
     textAlignment*: nk_flags
     padding*, touchPadding*: Vec2
     spacing*, border*, colorFactor*, disabledFactor*: float
+  StyleSelectable* = object
+    ## Used to store Nuklear style data for selectabel widgets
+    normal*, hover*, pressed*, normalActive*, hoverActive*,
+      pressedActive*: StyleItem
+    textNormal*, textHover*, textPressed*, textNormalActive*, textHoverActive*,
+      textPressedActive*, textBackground*: NkColor
+    textAlignment*: nk_flags
+    rounding*, colorFactor*, disabledFactor*: float
+    padding*, touchPadding*, imagePadding*: Vec2
+    userData*: Handle
+    drawBegin*, drawEnd*: DrawF
   Style* = object
     ## Used to store Nuklear style data
     window*: StyleWindow
@@ -1345,6 +1356,7 @@ type
     cursors*: array[cursorCount, Cursor]
     cursorVisible*: int
     option*, checkbox*: StyleToggle
+    selectable*: StyleSelectable
 
 # ---------
 # Constants
