@@ -1200,6 +1200,14 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
             color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
             event.skyY: yellowColor else: goldenColor)))
+      of enemyPatrol:
+        knownEventsList.add(y = EventUIData(index: index,
+            name: "Enemy patrol", distance: countDistance(
+            destinationX = event.skyX, destinationY = event.skyY),
+            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+            details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
+            color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
+            event.skyY: yellowColor else: redColor)))
       else:
         knownEventsList.add(y = EventUIData(index: index))
     except KeyError:
