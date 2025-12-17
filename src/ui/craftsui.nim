@@ -1326,8 +1326,9 @@ proc setBonusesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## SetBonuses
   let
     bonusesBox: string = ".craftdialog.special.special1"
+    malusesBox: string = ".craftdialog.special.special2"
     malusIndex: Natural = try:
-        tclEval2(script = ".craftdialog.special.special2 current").parseInt
+        tclEval2(script = malusesBox & " current").parseInt
       except:
         showError(message = "Can't get the malus index.")
         return tclOk
@@ -1343,6 +1344,12 @@ proc setBonusesCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = bonusesBox & " configure -values [list" & bonuses & "]")
   tclEval(script = bonusesBox & " current " & (if malusIndex >
       0: "1" else: "0"))
+  if malusIndex == 0:
+    var maluses: string = ""
+    for malus in CraftMaluses:
+      maluses &= " {" & $malus & "}"
+    tclEval(script = malusesBox & " configure -values [list" & maluses & "]")
+    tclEval(script = malusesBox & " current 0")
   return tclOk
 
 proc setMalusesCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -1362,8 +1369,9 @@ proc setMalusesCommand(clientData: cint; interp: PInterp; argc: cint;
 
   let
     malusesBox: string = ".craftdialog.special.special2"
+    bonusesBox: string = ".craftdialog.special.special1"
     bonusIndex: Natural = try:
-        tclEval2(script = ".craftdialog.special.special1 current").parseInt
+        tclEval2(script = bonusesBox & " current").parseInt
       except:
         showError(message = "Can't get the bonus index.")
         return tclOk
@@ -1379,6 +1387,12 @@ proc setMalusesCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = malusesBox & " configure -values [list" & maluses & "]")
   tclEval(script = malusesBox & " current " & (if bonusIndex >
       0: "1" else: "0"))
+  if bonusIndex == 0:
+    var bonuses: string = ""
+    for bonus in CraftBonuses:
+      bonuses &= " {" & $bonus & "}"
+    tclEval(script = bonusesBox & " configure -values [list" & bonuses & "]")
+    tclEval(script = bonusesBox & " current 0")
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
