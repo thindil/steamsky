@@ -22,13 +22,15 @@ import contracts
 import game, log
 
 type
+  CareerName* = string
+    ## The name of a career
   CareerData = object
     ## Used to store data about available player's careers
     ##
     ## * mame   - The name of the career
     ## * skills - The list of skills which have bonuses from the career
-    name*: string
-    skills*: seq[string]
+    name*: CareerName
+    skills*: seq[SkillName]
 
 var careersList*: Table[string, CareerData] = initTable[string, CareerData]()
   ## The list of available player's careers in the game
