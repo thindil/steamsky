@@ -660,6 +660,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = specialBox & " current 0")
     tclEval(script = "bind " & specialBox & " <<ComboboxSelected>> {SetMaluses}")
     tclEval(script = "grid " & specialBox & " -padx 5")
+    tclEval(script = "tooltip::tooltip " & specialBox & " \"Optional special bonus for the crafted item. If you\nselect any, you will need also to select a malus for it.\"")
     label = specialFrame & ".specialsymbol"
     tclEval(script = "ttk::label " & label & " -text {<=>}")
     tclEval(script = "grid " & label & " -padx 5 -row 0 -column 1")
@@ -672,6 +673,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = specialBox & " current 0")
     tclEval(script = "bind " & specialBox & " <<ComboboxSelected>> {SetBonuses}")
     tclEval(script = "grid " & specialBox & " -padx 5 -row 0 -column 2")
+    tclEval(script = "tooltip::tooltip " & specialBox & " \"Optional special malus for the crafted item. If you\nselect any, you will need also to select a bonus for it.\"")
     tclEval(script = "grid " & specialFrame & " -padx 5 -columnspan 2")
     buttonRow += 2
   var mType: ModuleType = ModuleType.any
