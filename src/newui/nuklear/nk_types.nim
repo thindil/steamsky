@@ -1335,7 +1335,7 @@ type
     padding*, touchPadding*: Vec2
     spacing*, border*, colorFactor*, disabledFactor*: float
   StyleSelectable* = object
-    ## Used to store Nuklear style data for selectabel widgets
+    ## Used to store Nuklear style data for selectable widgets
     normal*, hover*, pressed*, normalActive*, hoverActive*,
       pressedActive*: StyleItem
     textNormal*, textHover*, textPressed*, textNormalActive*, textHoverActive*,
@@ -1345,8 +1345,15 @@ type
     padding*, touchPadding*, imagePadding*: Vec2
     userData*: Handle
     drawBegin*, drawEnd*: DrawF
+  StyleSlider* = object
+    ## Used to store Nuklear style data for
+    normal*, hover*, active*, barNormal*, barHover*, barActive*, cursorNormal*,
+      cursorHover*, cursorActive*: StyleItem
+    borderColor*, barFilled*: NkColor
+    border*, rounding*, barHeight*, colorFactor*, disabledFactor*: float
+    padding*, spacing*, cursorSize*: Vec2
   Style* = object
-    ## Used to store Nuklear style data
+    ## Used to store Nuklear style data slider widgets
     window*: StyleWindow
     button*, contextualButton*, menuButton*: StyleButton
     progress*, property*: StyleProgress
@@ -1357,6 +1364,7 @@ type
     cursorVisible*: int
     option*, checkbox*: StyleToggle
     selectable*: StyleSelectable
+    slider*: StyleSlider
 
 # ---------
 # Constants
