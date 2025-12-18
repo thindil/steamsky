@@ -18,8 +18,9 @@
 ## Provides code related to the information about the list of known bases, like
 ## sorting them, showing information about them, etc.
 
-import contracts
-import coreui, table
+import contracts, nuklear/nuklear_sdl_renderer
+import ../config
+import coreui, errordialog, setui, table, themes
 
 
 type EventsSortOrders = enum
@@ -53,17 +54,45 @@ proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  const
-    headers: array[4, HeaderData[EventsSortOrders]] = [
-      HeaderData[EventsSortOrders](label: "Name", sortAsc: typeAsc,
-          sortDesc: typeDesc),
-      HeaderData[EventsSortOrders](label: "Distance",
-          sortAsc: distanceAsc, sortDesc: distanceDesc),
-      HeaderData[EventsSortOrders](label: "Coordinates", sortAsc: coordAsc,
-          sortDesc: coordDesc),
-      HeaderData[EventsSortOrders](label: "Details",
-          sortAsc: detailsAsc, sortDesc: detailsDesc)]
-    ratio: array[4, cfloat] = [200.cfloat, 100, 100, 100]
+  # No events
+  if knownEventsList.len == 0:
+    setLayoutRowDynamic(height = 100, cols = 1)
+    wrapLabel(str = "You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.")
+  else:
+    const
+      headers: array[4, HeaderData[EventsSortOrders]] = [
+        HeaderData[EventsSortOrders](label: "Name", sortAsc: typeAsc,
+            sortDesc: typeDesc),
+        HeaderData[EventsSortOrders](label: "Distance",
+            sortAsc: distanceAsc, sortDesc: distanceDesc),
+        HeaderData[EventsSortOrders](label: "Coordinates", sortAsc: coordAsc,
+            sortDesc: coordDesc),
+        HeaderData[EventsSortOrders](label: "Details",
+            sortAsc: detailsAsc, sortDesc: detailsDesc)]
+      ratio: array[4, cfloat] = [200.cfloat, 100, 100, 100]
 
-  addHeader(headers = headers, ratio = ratio, tooltip = "events",
-      code = sortEvents, dialog = dialog)
+    addHeader(headers = headers, ratio = ratio, tooltip = "events",
+        code = sortEvents, dialog = dialog)
+    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    var
+      row, currentRow: Positive = 1
+    # Show the list of known events
+    for event in knownEventsList:
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      row.inc
+      if row == gameSettings.listsLimit + 1:
+        break
+    restoreButtonStyle()
+    addPagination(page = currentPage, row = row)
