@@ -1,3 +1,4 @@
+import std/paths
 import ../src/[careers, factions, maps, shipmodules]
 import unittest2
 include ../src/shipscrew2
@@ -5,11 +6,11 @@ include ../src/shipscrew2
 suite "Unit tests for shipscrew2 module":
 
   checkpoint "Loading the game data."
-  loadData("bin/data/game.dat")
-  loadItems("bin/data/items.dat")
-  loadCareers("bin/data/careers.dat")
-  loadFactions("bin/data/factions.dat")
-  loadModules("bin/data/shipmodules.dat")
+  loadData("bin/data/game.dat".Path)
+  loadItems("bin/data/items.dat".Path)
+  loadCareers("bin/data/careers.dat".Path)
+  loadFactions("bin/data/factions.dat".Path)
+  loadModules("bin/data/shipmodules.dat".Path)
 
   playerShip.skyX = 1
   playerShip.skyY = 1
