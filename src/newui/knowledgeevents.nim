@@ -18,6 +18,7 @@
 ## Provides code related to the information about the list of known bases, like
 ## sorting them, showing information about them, etc.
 
+import std/algorithm
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
 import coreui, errordialog, setui, table, themes
@@ -45,6 +46,132 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
     eventsSortOrder = sortDesc
   else:
     eventsSortOrder = sortAsc
+
+  type LocalEventData = object
+    name: string
+    distance: Natural
+    coords: string
+    details: string
+    id: Natural
+  var localEvents: seq[LocalEventData] = @[]
+  for event in knownEventsList:
+    localEvents.add(y = LocalEventData(name: event.name,
+        distance: event.distance, coords: event.coords, details: event.details,
+        id: event.index))
+
+  proc sortEvents(x, y: LocalEventData): int {.raises: [], tags: [],
+      contractual.} =
+    ## Compare two events and return which should go first, based on the sort
+    ## order of the events
+    ##
+    ## * x - the first event to compare
+    ## * y - the second event to compare
+    ##
+    ## Returns 1 if the first event should go first, -1 if the second event
+    ## should go first.
+    case eventsSortOrder
+    of typeAsc:
+      if x.name < y.name:
+        return 1
+      return -1
+    of typeDesc:
+      if x.name > y.name:
+        return 1
+      return -1
+    of distanceAsc:
+      if x.distance < y.distance:
+        return 1
+      return -1
+    of distanceDesc:
+      if x.distance > y.distance:
+        return 1
+      return -1
+    of coordAsc:
+      if x.coords < y.coords:
+        return 1
+      return -1
+    of coordDesc:
+      if x.coords > y.coords:
+        return 1
+      return -1
+    of detailsAsc:
+      if x.details < y.details:
+        return 1
+      return -1
+    of detailsDesc:
+      if x.details > y.details:
+        return 1
+      return -1
+    of none:
+      return -1
+
+  localEvents.sort(cmp = sortEvents)
+  knownEventsList = @[]
+  for index, event in localEvents:
+#    let color: ColorsNames = case event.eType
+#        of enemyShip:
+#          if playerShip.skyX == event.skyX and playerShip.skyY == event.skyY: yellowColor else: redColor
+#        of fullDocks:
+#          knownEventsList.add(y = EventUIData(index: index,
+#              name: "Full docks in base", distance: countDistance(
+#              destinationX = event.skyX, destinationY = event.skyY),
+#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+#              details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
+#              color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
+#              event.skyY: yellowColor else: cyanColor)))
+#        of attackOnBase:
+#          knownEventsList.add(y = EventUIData(index: index,
+#              name: "Base is under attack", distance: countDistance(
+#              destinationX = event.skyX, destinationY = event.skyY),
+#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+#              details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
+#              color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
+#              event.skyY: yellowColor else: redColor)))
+#        of disease:
+#          knownEventsList.add(y = EventUIData(index: index,
+#              name: "Disease in base", distance: countDistance(
+#              destinationX = event.skyX, destinationY = event.skyY),
+#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+#              details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
+#              color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
+#              event.skyY: yellowColor else: goldenColor)))
+#        of enemyPatrol:
+#          knownEventsList.add(y = EventUIData(index: index,
+#              name: "Enemy patrol", distance: countDistance(
+#              destinationX = event.skyX, destinationY = event.skyY),
+#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+#              details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
+#              color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
+#              event.skyY: yellowColor else: redColor)))
+#        of doublePrice:
+#          knownEventsList.add(y = EventUIData(index: index,
+#              name: "Double price in base", distance: countDistance(
+#              destinationX = event.skyX, destinationY = event.skyY),
+#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+#              details: itemsList[event.itemIndex].name & " in " & skyBases[skyMap[
+#              event.skyX][event.skyY].baseIndex].name, color: (
+#              if playerShip.skyX == event.skyX and playerShip.skyY ==
+#              event.skyY: yellowColor else: limeColor)))
+#        of trader:
+#          knownEventsList.add(y = EventUIData(index: index,
+#              name: "Friendly trader spotted", distance: countDistance(
+#              destinationX = event.skyX, destinationY = event.skyY),
+#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+#              details: protoShipsList[event.shipIndex].name, color: (
+#              if playerShip.skyX == event.skyX and playerShip.skyY ==
+#              event.skyY: yellowColor else: greenColor)))
+#        of friendlyShip:
+#          knownEventsList.add(y = EventUIData(index: index,
+#              name: "Friendly ship spotted", distance: countDistance(
+#              destinationX = event.skyX, destinationY = event.skyY),
+#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
+#              details: protoShipsList[event.shipIndex].name, color: (
+#              if playerShip.skyX == event.skyX and playerShip.skyY ==
+#              event.skyY: yellowColor else: greenColor)))
+#        of EventsTypes.none, baseRecovery:
+#          discard
+    knownEventsList.add(y = EventUIData(index: event.id, name: event.name,
+        distance: event.distance, coords: event.coords))
 
 proc setEventInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
