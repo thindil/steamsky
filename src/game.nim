@@ -27,6 +27,9 @@ type
     ## Possible actions to do when loading game data
     add, update, remove
 
+  SkillName* = string
+    ## The name of a skill
+
   ToolQuality = object
     ## Store data related to quality of tools needed for train a skill
     ##
@@ -43,7 +46,7 @@ type
     ## * description  - The description of the skill
     ## * tool         - The type of items used to train the skill
     ## * toolsQuality - The quality of tool needed for training
-    name*: string
+    name*: SkillName
     attribute*: Natural
     description*: string
     tool*: string
