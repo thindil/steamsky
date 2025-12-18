@@ -46,6 +46,16 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
   else:
     eventsSortOrder = sortAsc
 
+proc setEventInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Set the information about the selected event
+  ##
+  ## * data   - the index of the selected item
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  eventIndex = data
+
 proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the list of the known events
@@ -91,6 +101,16 @@ proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       if currentRow < startRow:
         currentRow.inc
         continue
+      setButtonStyle(field = textNormal, color = theme.colors[event.color])
+      addButton(label = event.name, tooltip = "Show the event's details",
+          data = event.index, code = setEventInfo, dialog = dialog)
+      addButton(label = $event.distance, tooltip = "The distance to the event",
+          data = event.index, code = setEventInfo, dialog = dialog)
+      addButton(label = event.coords, tooltip = "The coordinates of the event",
+          data = event.index, code = setEventInfo, dialog = dialog)
+      addButton(label = event.details, tooltip = "Show the event's details",
+          data = event.index, code = setEventInfo, dialog = dialog)
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       row.inc
       if row == gameSettings.listsLimit + 1:
         break
