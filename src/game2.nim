@@ -201,7 +201,7 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
       name: GameDataType
       fileName: Path
 
-  proc newDataTypeRecord(name: GameDataType; fileName: string): DataTypeRecord {.raises: [], tags: [],
+  proc initDataTypeRecord(name: GameDataType; fileName: string): DataTypeRecord {.raises: [], tags: [],
       contractual.} =
     ## Create a new data structure for the game data to read from a file
     ##
@@ -211,18 +211,18 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
     ## Returns the new structure with information about the selected data
     return DataTypeRecord(name: name, fileName: fileName.Path)
 
-  const dataTypes: array[1..12, DataTypeRecord] = [newDataTypeRecord(name = data,
-      fileName = "game.dat"), newDataTypeRecord(name = items,
-      fileName = "items.dat"), newDataTypeRecord(name = modules,
-      fileName = "shipmodules.dat"), newDataTypeRecord(name = recipes,
-      fileName = "recipes.dat"), newDataTypeRecord(name = bases,
-      fileName = "bases.dat"), newDataTypeRecord(name = mobiles,
-      fileName = "mobs.dat"), newDataTypeRecord(name = careers,
-      fileName = "careers.dat"), newDataTypeRecord(name = factions,
-      fileName = "factions.dat"), newDataTypeRecord(name = help,
-      fileName = "help.dat"), newDataTypeRecord(name = ships,
-      fileName = "ships.dat"), newDataTypeRecord(name = goals,
-      fileName = "goals.dat"), newDataTypeRecord(name = stories,
+  const dataTypes: array[1..12, DataTypeRecord] = [initDataTypeRecord(name = data,
+      fileName = "game.dat"), initDataTypeRecord(name = items,
+      fileName = "items.dat"), initDataTypeRecord(name = modules,
+      fileName = "shipmodules.dat"), initDataTypeRecord(name = recipes,
+      fileName = "recipes.dat"), initDataTypeRecord(name = bases,
+      fileName = "bases.dat"), initDataTypeRecord(name = mobiles,
+      fileName = "mobs.dat"), initDataTypeRecord(name = careers,
+      fileName = "careers.dat"), initDataTypeRecord(name = factions,
+      fileName = "factions.dat"), initDataTypeRecord(name = help,
+      fileName = "help.dat"), initDataTypeRecord(name = ships,
+      fileName = "ships.dat"), initDataTypeRecord(name = goals,
+      fileName = "goals.dat"), initDataTypeRecord(name = stories,
       fileName = "stories.dat")]
   # Load the standard game data
   for dataType in dataTypes:
