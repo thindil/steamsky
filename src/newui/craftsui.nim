@@ -44,9 +44,9 @@ var
   maxAmount, craftAmount, craftWorkshop: Natural = 0
   craftQuality: Natural = 2
   craftImage, setImage: PImage = nil
-  workshops, workers: seq[string] = @[]
+  workshops, workers, bonuses, maluses: seq[string] = @[]
   assign: AssignType = noone
-  worker: Natural = 0
+  worker, bonus, malus: Natural = 0
   workshopsSortOrder: WorkshopsSortOrders = defaultWorkshopsSortOrder
 
 proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
@@ -220,6 +220,14 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
           if member.skills.len > 0:
             workers.add(y = member.name & getSkillMarks(
                 skillIndex = craft.skill, memberIndex = index))
+        bonus = 0
+        bonuses = @[]
+        for bonus in CraftBonuses:
+          bonuses.add(y = $bonus)
+        malus = 0
+        maluses = @[]
+        for malus in CraftMaluses:
+          maluses.add(y = $malus)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -266,6 +274,15 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
             text = "Desired quality of crafted item. Better quality raises difficulty of crafting, worse lowers.")
       craftQuality = comboList(items = qualities, selected = craftQuality,
           itemHeight = 25, x = 200, y = 150)
+      # Show special properties setting
+      setLayoutRowDynamic(height = 30, cols = 1)
+      label(str = "Special:")
+      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.2, 0.4])
+      bonus = comboList(items = bonuses, selected = bonus, itemHeight = 25,
+          x = 200, y = 150)
+      label(str = "<=>", alignment = centered)
+      malus = comboList(items = maluses, selected = malus, itemHeight = 25,
+          x = 200, y = 150)
     setLayoutRowDynamic(height = 30, cols = 1)
     # Show workshop setting if needed
     if workshops.len > 1:
