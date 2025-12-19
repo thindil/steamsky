@@ -109,19 +109,21 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
   knownEventsList = @[]
   for event in localEvents:
     var color: ColorsNames = yellowColor
-    case eventsList[event.id].eType
-    of enemyShip, attackOnBase, enemyPatrol:
-      color = redColor
-    of fullDocks:
-      color = cyanColor
-    of disease:
-      color = goldenColor
-    of doublePrice:
-      color = limeColor
-    of trader, friendlyShip:
-      color = greenColor
-    of EventsTypes.none, baseRecovery:
-      discard
+    let evnt: EventData = eventsList[event.id]
+    if evnt.skyX != playerShip.skyX or evnt.skyY != playerShip.skyY:
+      case evnt.eType
+      of enemyShip, attackOnBase, enemyPatrol:
+        color = redColor
+      of fullDocks:
+        color = cyanColor
+      of disease:
+        color = goldenColor
+      of doublePrice:
+        color = limeColor
+      of trader, friendlyShip:
+        color = greenColor
+      of EventsTypes.none, baseRecovery:
+        discard
     knownEventsList.add(y = EventUIData(index: event.id, name: event.name,
         distance: event.distance, coords: event.coords, color: color))
 
@@ -158,7 +160,7 @@ proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             sortDesc: coordDesc),
         HeaderData[EventsSortOrders](label: "Details",
             sortAsc: detailsAsc, sortDesc: detailsDesc)]
-      ratio: array[4, cfloat] = [200.cfloat, 100, 100, 100]
+      ratio: array[4, cfloat] = [200.cfloat, 100, 150, 250]
 
     addHeader(headers = headers, ratio = ratio, tooltip = "events",
         code = sortEvents, dialog = dialog)
