@@ -29,8 +29,26 @@ type
     ##
     ## * mame   - The name of the career
     ## * skills - The list of skills which have bonuses from the career
-    name*: CareerName
-    skills*: seq[SkillName]
+    name: CareerName
+    skills: seq[SkillName]
+
+proc name*(career: CareerData): CareerName {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of CareerData type
+  ##
+  ## * career - the CommandLists object which field will be get
+  ##
+  ## Returns the value of the selected field
+  career.name
+
+proc skills*(career: CareerData): seq[SkillName] {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of CareerData type
+  ##
+  ## * career - the CommandLists object which field will be get
+  ##
+  ## Returns the value of the selected field
+  career.skills
 
 var careersList*: Table[string, CareerData] = initTable[string, CareerData]()
   ## The list of available player's careers in the game
