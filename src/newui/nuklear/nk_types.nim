@@ -1346,12 +1346,19 @@ type
     userData*: Handle
     drawBegin*, drawEnd*: DrawF
   StyleSlider* = object
-    ## Used to store Nuklear style data for
+    ## Used to store Nuklear style data for slider widgets
     normal*, hover*, active*, barNormal*, barHover*, barActive*, cursorNormal*,
       cursorHover*, cursorActive*: StyleItem
     borderColor*, barFilled*: NkColor
     border*, rounding*, barHeight*, colorFactor*, disabledFactor*: float
     padding*, spacing*, cursorSize*: Vec2
+  StyleKnob* = object
+    ## Use to store Nuklear style data for knob widgets
+    normal*, hover*, active*: StyleItem
+    borderColor*, knobNormal*, knobHover*, knobActive*, knobBorderColor*,
+      cursorNormal*, cursorHover*, cursorActive*: NkColor
+    border*, knobBorder*, cursorWidth*, colorFactor*, disabledFactor*: float
+    padding*, spacing*: Vec2
   Style* = object
     ## Used to store Nuklear style data slider widgets
     window*: StyleWindow
@@ -1365,6 +1372,7 @@ type
     option*, checkbox*: StyleToggle
     selectable*: StyleSelectable
     slider*: StyleSlider
+    knob*: StyleKnob
 
 # ---------
 # Constants
