@@ -20,7 +20,7 @@
 
 import std/algorithm
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
+import ../[config, game, types]
 import coreui, errordialog, setui, table, themes
 
 
@@ -107,69 +107,36 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
 
   localEvents.sort(cmp = sortEvents)
   knownEventsList = @[]
-  for index, event in localEvents:
-#    let color: ColorsNames = case event.eType
-#        of enemyShip:
-#          if playerShip.skyX == event.skyX and playerShip.skyY == event.skyY: yellowColor else: redColor
-#        of fullDocks:
-#          knownEventsList.add(y = EventUIData(index: index,
-#              name: "Full docks in base", distance: countDistance(
-#              destinationX = event.skyX, destinationY = event.skyY),
-#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-#              details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
-#              color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
-#              event.skyY: yellowColor else: cyanColor)))
-#        of attackOnBase:
-#          knownEventsList.add(y = EventUIData(index: index,
-#              name: "Base is under attack", distance: countDistance(
-#              destinationX = event.skyX, destinationY = event.skyY),
-#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-#              details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
-#              color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
-#              event.skyY: yellowColor else: redColor)))
-#        of disease:
-#          knownEventsList.add(y = EventUIData(index: index,
-#              name: "Disease in base", distance: countDistance(
-#              destinationX = event.skyX, destinationY = event.skyY),
-#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-#              details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
-#              color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
-#              event.skyY: yellowColor else: goldenColor)))
-#        of enemyPatrol:
-#          knownEventsList.add(y = EventUIData(index: index,
-#              name: "Enemy patrol", distance: countDistance(
-#              destinationX = event.skyX, destinationY = event.skyY),
-#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-#              details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
-#              color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
-#              event.skyY: yellowColor else: redColor)))
-#        of doublePrice:
-#          knownEventsList.add(y = EventUIData(index: index,
-#              name: "Double price in base", distance: countDistance(
-#              destinationX = event.skyX, destinationY = event.skyY),
-#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-#              details: itemsList[event.itemIndex].name & " in " & skyBases[skyMap[
-#              event.skyX][event.skyY].baseIndex].name, color: (
-#              if playerShip.skyX == event.skyX and playerShip.skyY ==
-#              event.skyY: yellowColor else: limeColor)))
-#        of trader:
-#          knownEventsList.add(y = EventUIData(index: index,
-#              name: "Friendly trader spotted", distance: countDistance(
-#              destinationX = event.skyX, destinationY = event.skyY),
-#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-#              details: protoShipsList[event.shipIndex].name, color: (
-#              if playerShip.skyX == event.skyX and playerShip.skyY ==
-#              event.skyY: yellowColor else: greenColor)))
-#        of friendlyShip:
-#          knownEventsList.add(y = EventUIData(index: index,
-#              name: "Friendly ship spotted", distance: countDistance(
-#              destinationX = event.skyX, destinationY = event.skyY),
-#              coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-#              details: protoShipsList[event.shipIndex].name, color: (
-#              if playerShip.skyX == event.skyX and playerShip.skyY ==
-#              event.skyY: yellowColor else: greenColor)))
-#        of EventsTypes.none, baseRecovery:
-#          discard
+  for event in localEvents:
+    let evt = eventsList[event.id]
+    var color: ColorsNames = yellowColor
+#    let color: ColorsNames = case eventsList[event.index].eType
+#      of enemyShip:
+#        (if playerShip.skyX == event.skyX and playerShip.skyY ==
+#            event.skyY: yellowColor else: redColor)
+#      of fullDocks:
+#        if playerShip.skyX == event.skyX and playerShip.skyY ==
+#            event.skyY: yellowColor else: cyanColor
+#      of attackOnBase:
+#        if playerShip.skyX == event.skyX and playerShip.skyY ==
+#            event.skyY: yellowColor else: redColor
+#      of disease:
+#        if playerShip.skyX == event.skyX and playerShip.skyY ==
+#            event.skyY: yellowColor else: goldenColor
+#      of enemyPatrol:
+#        if playerShip.skyX == event.skyX and playerShip.skyY ==
+#            event.skyY: yellowColor else: redColor
+#      of doublePrice:
+#        if playerShip.skyX == event.skyX and playerShip.skyY ==
+#            event.skyY: yellowColor else: limeColor
+#      of trader:
+#        if playerShip.skyX == event.skyX and playerShip.skyY ==
+#            event.skyY: yellowColor else: greenColor
+#      of friendlyShip:
+#        if playerShip.skyX == event.skyX and playerShip.skyY ==
+#            event.skyY: yellowColor else: greenColor
+#      of EventsTypes.none, baseRecovery:
+#        discard
     knownEventsList.add(y = EventUIData(index: event.id, name: event.name,
         distance: event.distance, coords: event.coords))
 
