@@ -108,37 +108,22 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
   localEvents.sort(cmp = sortEvents)
   knownEventsList = @[]
   for event in localEvents:
-    let evt = eventsList[event.id]
     var color: ColorsNames = yellowColor
-#    let color: ColorsNames = case eventsList[event.index].eType
-#      of enemyShip:
-#        (if playerShip.skyX == event.skyX and playerShip.skyY ==
-#            event.skyY: yellowColor else: redColor)
-#      of fullDocks:
-#        if playerShip.skyX == event.skyX and playerShip.skyY ==
-#            event.skyY: yellowColor else: cyanColor
-#      of attackOnBase:
-#        if playerShip.skyX == event.skyX and playerShip.skyY ==
-#            event.skyY: yellowColor else: redColor
-#      of disease:
-#        if playerShip.skyX == event.skyX and playerShip.skyY ==
-#            event.skyY: yellowColor else: goldenColor
-#      of enemyPatrol:
-#        if playerShip.skyX == event.skyX and playerShip.skyY ==
-#            event.skyY: yellowColor else: redColor
-#      of doublePrice:
-#        if playerShip.skyX == event.skyX and playerShip.skyY ==
-#            event.skyY: yellowColor else: limeColor
-#      of trader:
-#        if playerShip.skyX == event.skyX and playerShip.skyY ==
-#            event.skyY: yellowColor else: greenColor
-#      of friendlyShip:
-#        if playerShip.skyX == event.skyX and playerShip.skyY ==
-#            event.skyY: yellowColor else: greenColor
-#      of EventsTypes.none, baseRecovery:
-#        discard
+    case eventsList[event.id].eType
+    of enemyShip, attackOnBase, enemyPatrol:
+      color = redColor
+    of fullDocks:
+      color = cyanColor
+    of disease:
+      color = goldenColor
+    of doublePrice:
+      color = limeColor
+    of trader, friendlyShip:
+      color = greenColor
+    of EventsTypes.none, baseRecovery:
+      discard
     knownEventsList.add(y = EventUIData(index: event.id, name: event.name,
-        distance: event.distance, coords: event.coords))
+        distance: event.distance, coords: event.coords, color: color))
 
 proc setEventInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
