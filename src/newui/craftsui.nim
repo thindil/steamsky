@@ -278,11 +278,27 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       setLayoutRowDynamic(height = 30, cols = 1)
       label(str = "Special:")
       setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.2, 0.4])
-      bonus = comboList(items = bonuses, selected = bonus, itemHeight = 25,
-          x = 200, y = 150)
+      var newBonus: Natural = comboList(items = bonuses, selected = bonus,
+          itemHeight = 25, x = 200, y = 150)
+      if newBonus != bonus:
+        bonus = newBonus
+        malus = (if bonus > 0: 1 else: 0)
+        maluses = @[]
+        for malus in CraftMaluses:
+          if newBonus > 0 and malus.ord == newBonus:
+            continue
+          maluses.add(y = $malus)
       label(str = "<=>", alignment = centered)
-      malus = comboList(items = maluses, selected = malus, itemHeight = 25,
-          x = 200, y = 150)
+      var newMalus: Natural = comboList(items = maluses, selected = malus,
+          itemHeight = 25, x = 200, y = 150)
+      if newMalus != malus:
+        malus = newMalus
+        bonus = (if malus > 0: 1 else: 0)
+        bonuses = @[]
+        for bonus in CraftBonuses:
+          if newMalus > 0 and bonus.ord == newMalus:
+            continue
+          bonuses.add(y = $bonus)
     setLayoutRowDynamic(height = 30, cols = 1)
     # Show workshop setting if needed
     if workshops.len > 1:
