@@ -125,24 +125,26 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
       of EventsTypes.none, baseRecovery:
         discard
     let details: string = case evnt.eType
-        of enemyShip, trader, friendlyShip:
-          try:
-            protoShipsList[evnt.shipIndex].name
-          except KeyError:
-            dialog = setError(message = "Can't get ship name")
-            return
-        of fullDocks, disease, attackOnBase, enemyPatrol:
-          skyBases[skyMap[evnt.skyX][evnt.skyY].baseIndex].name
-        of doublePrice:
-          try:
-            itemsList[evnt.itemIndex].name & " in " & skyBases[skyMap[evnt.skyX][evnt.skyY].baseIndex].name
-          except KeyError:
-            dialog = setError(message = "Can't get item name")
-            return
-        of EventsTypes.none, baseRecovery:
-          ""
+      of enemyShip, trader, friendlyShip:
+        try:
+          protoShipsList[evnt.shipIndex].name
+        except KeyError:
+          dialog = setError(message = "Can't get ship name")
+          return
+      of fullDocks, disease, attackOnBase, enemyPatrol:
+        skyBases[skyMap[evnt.skyX][evnt.skyY].baseIndex].name
+      of doublePrice:
+        try:
+          itemsList[evnt.itemIndex].name & " in " & skyBases[skyMap[evnt.skyX][
+              evnt.skyY].baseIndex].name
+        except KeyError:
+          dialog = setError(message = "Can't get item name")
+          return
+      of EventsTypes.none, baseRecovery:
+        ""
     knownEventsList.add(y = EventUIData(index: event.id, name: event.name,
-        distance: event.distance, coords: event.coords, color: color, details: details))
+        distance: event.distance, coords: event.coords, color: color,
+        details: details))
 
 proc setEventInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
