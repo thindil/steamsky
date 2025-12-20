@@ -50,6 +50,16 @@ proc skills*(career: CareerData): seq[SkillName] {.raises: [], tags: [],
   ## Returns the value of the selected field
   career.skills
 
+proc initCareerData(name: CareerName = ""; skills: seq[SkillName] = @[]): CareerData {.raises: [],
+    tags: [], contractual.} =
+  ## Create a new data structure for the player's career's data
+  ##
+  ## * name   - the name of the career
+  ## * skills - the list of skill which have bonuses from the career
+  ##
+  ## Returns the new structure with information about the selected career
+  return CareerData(name: name, skills: skills)
+
 var careersList*: Table[string, CareerData] = initTable[string, CareerData]()
   ## The list of available player's careers in the game
 
@@ -93,9 +103,9 @@ proc loadCareers*(fileName: Path) {.raises: [DataLoadingError],
           try:
             careersList[careerIndex]
           except KeyError:
-            CareerData()
+            initCareerData()
         else:
-          CareerData()
+          initCareerData()
       var attribute: string = careerNode.attr(name = "name")
       if attribute.len() > 0:
         career.name = attribute
