@@ -20,9 +20,8 @@
 
 import std/[algorithm, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, maps, types]
-import coreui, errordialog, setui, table, themes
-
+import ../[config, game, maps, messages, types]
+import coreui, dialogs, errordialog, mapsui, setui, table, themes
 
 type EventsSortOrders = enum
   none, typeAsc, typeDesc, distanceAsc, distanceDesc, detailsAsc, detailsDesc,
@@ -31,6 +30,55 @@ type EventsSortOrders = enum
 const defaultEventsSortOrder: EventsSortOrders = none
 
 var eventsSortOrder: EventsSortOrders = defaultEventsSortOrder
+
+proc showEventInfo*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected event information
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  const
+    width: float = 400
+    height: float = 170
+
+  let
+    event: EventData = eventsList[eventIndex]
+    windowName: string = "Event information"
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 3)
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Set the event as the ship destination")
+    imageLabelButton(image = images[destinationIcon], text = "Target",
+        alignment = right):
+      if event.skyX == playerShip.skyX and event.skyY == playerShip.skyY:
+        dialog = setMessage(message = "You are at this location now.",
+            title = "Can't set destination")
+        return
+      playerShip.destinationX = event.skyX
+      playerShip.destinationY = event.skyY
+      addMessage(message = "You set the travel destination for your ship.",
+          mType = orderMessage)
+      dialog = none
+    restoreButtonStyle()
+    addCloseButton(dialog = dialog, isPopup = false)
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Show the event on the map")
+    imageLabelButton(image = images[showColoredIcon], text = "Show",
+        alignment = right):
+      centerX = event.skyX
+      centerY = event.skyY
+      dialog = none
+      mapPreview = true
+    restoreButtonStyle()
+
+  windowSetFocus(name = windowName)
 
 proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
