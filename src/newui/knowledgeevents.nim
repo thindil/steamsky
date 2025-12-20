@@ -31,6 +31,40 @@ const defaultEventsSortOrder: EventsSortOrders = none
 
 var eventsSortOrder: EventsSortOrders = defaultEventsSortOrder
 
+proc setTargetEvent(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the event as the target for the player's ship
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  closePopup()
+  let event = eventsList[eventIndex]
+  if event.skyX == playerShip.skyX and event.skyY == playerShip.skyY:
+    dialog = setMessage(message = "You are at this location now.",
+        title = "Can't set destination")
+    return
+  playerShip.destinationX = event.skyX
+  playerShip.destinationY = event.skyY
+  addMessage(message = "You set the travel destination for your ship.",
+      mType = orderMessage)
+
+proc showEvent(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Show the event on the map
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  closePopup()
+  let event = eventsList[eventIndex]
+  centerX = event.skyX
+  centerY = event.skyY
+  dialog = none
+  mapPreview = true
+
 proc showEventInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected event information
@@ -39,46 +73,35 @@ proc showEventInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  const
-    width: float = 400
-    height: float = 170
-
-  let
-    event: EventData = eventsList[eventIndex]
-    windowName: string = "Event information"
-  updateDialog(width = width, height = height)
-  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = 30, cols = 3)
-    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Set the event as the ship destination")
-    imageLabelButton(image = images[destinationIcon], text = "Target",
-        alignment = right):
-      if event.skyX == playerShip.skyX and event.skyY == playerShip.skyY:
-        dialog = setMessage(message = "You are at this location now.",
-            title = "Can't set destination")
-        return
-      playerShip.destinationX = event.skyX
-      playerShip.destinationY = event.skyY
-      addMessage(message = "You set the travel destination for your ship.",
-          mType = orderMessage)
-      dialog = none
-    restoreButtonStyle()
-    addCloseButton(dialog = dialog, isPopup = false)
-    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Show the event on the map")
-    imageLabelButton(image = images[showColoredIcon], text = "Show",
-        alignment = right):
-      centerX = event.skyX
-      centerY = event.skyY
-      dialog = none
-      mapPreview = true
-    restoreButtonStyle()
-
-  windowSetFocus(name = windowName)
+  let baseIndex: ExtendedBasesRange = skyMap[eventsList[eventIndex].skyX][eventsList[
+        eventIndex].skyY].baseIndex
+  var eventInfo: string = "X: {gold}" & $eventsList[eventIndex].skyX &
+      "{/gold} Y: {gold}" & $eventsList[eventIndex].skyY & "{/gold}"
+  case eventsList[eventIndex].eType
+  of enemyShip, enemyPatrol, trader, friendlyShip:
+    try:
+      eventInfo.add(y = "\nShip type: {gold}" & protoShipsList[eventsList[
+          eventIndex].shipIndex].name & "{/gold}")
+    except:
+      dialog = setError(message = "Can't get the ship info")
+      return
+  of fullDocks, attackOnBase, disease:
+    eventInfo.add(y = "\nBase name: {gold}" & skyBases[baseIndex].name & "{/gold}")
+  of doublePrice:
+    eventInfo.add(y = "\nBase name: {gold}" & skyBases[baseIndex].name & "{/gold}")
+    try:
+      eventInfo.add(y = "\nItem: {gold}" & itemsList[eventsList[
+          eventIndex].itemIndex].name & "{/gold}")
+    except:
+      dialog = setError(message = "Can't get the item info")
+  of EventsTypes.none, baseRecovery:
+    discard
+  dialog = setInfo(text = eventInfo, title = "Event information",
+      button1 = ButtonSettings(tooltip: "Set the event as the ship destination",
+      code: setTargetEvent, icon: destinationIcon.ord, text: "Target",
+      color: "green"), button2 = ButtonSettings(
+      tooltip: "Show the event on the map", code: showEvent,
+      icon: showColoredIcon.ord, text: "Show", color: "green"))
 
 proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -203,6 +226,7 @@ proc setEventInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   eventIndex = data
+  dialog = eventDialog
 
 proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
