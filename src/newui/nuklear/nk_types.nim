@@ -1353,12 +1353,34 @@ type
     border*, rounding*, barHeight*, colorFactor*, disabledFactor*: float
     padding*, spacing*, cursorSize*: Vec2
   StyleKnob* = object
-    ## Use to store Nuklear style data for knob widgets
+    ## Used to store Nuklear style data for knob widgets
     normal*, hover*, active*: StyleItem
     borderColor*, knobNormal*, knobHover*, knobActive*, knobBorderColor*,
       cursorNormal*, cursorHover*, cursorActive*: NkColor
     border*, knobBorder*, cursorWidth*, colorFactor*, disabledFactor*: float
     padding*, spacing*: Vec2
+  StyleScrollbar* = object
+    ## Used to store Nuklear style data for scrollbar widgets
+    normal*, hover*, active*, cursorNormal*, cursorHover*,
+      cursorActive*: StyleItem
+    borderColor*, cursorBorderColor*: NkColor
+    border*, rounding*, borderCursor*, colorFactor*, disabledFactor*: float
+    padding*: Vec2
+    showButtons: int
+    incButton*, decButton*: StyleButton
+    incSymbol*, decSymbol*: SymbolType
+    userData*: Handle
+    drawBegin*, drawEnd*: DrawF
+  StyleEdit* = object
+    ## Used to store Nuklear style data for edit widgets
+    normal*, hover*, active*: StyleItem
+    borderColor*, cursorNormal*, cursorHover*, cursorTextNormal*,
+      cursorTextHover*, textNormal*, textHover*, textActive*, selectedNormal*,
+      selectedHover*, selectedTextNormal*, selectedTextHover*: NkColor
+    scrollbar*: StyleScrollbar
+    border*, rounding*, cursorSize*, rowPadding*, colorFactor*,
+      disabledFactor*: float
+    scrollbarSize*, padding*: Vec2
   Style* = object
     ## Used to store Nuklear style data slider widgets
     window*: StyleWindow
@@ -1373,6 +1395,7 @@ type
     selectable*: StyleSelectable
     slider*: StyleSlider
     knob*: StyleKnob
+    edit*: StyleEdit
 
 # ---------
 # Constants
