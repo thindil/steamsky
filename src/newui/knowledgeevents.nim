@@ -40,6 +40,7 @@ proc setTargetEvent(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   closePopup()
+  dialog = none
   let event = eventsList[eventIndex]
   if event.skyX == playerShip.skyX and event.skyY == playerShip.skyY:
     dialog = setMessage(message = "You are at this location now.",
