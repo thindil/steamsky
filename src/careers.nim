@@ -19,7 +19,7 @@
 
 import std/[logging, paths, strutils, tables, xmlparser, xmltree]
 import contracts
-import game, log
+import game, log, types
 
 type
   CareerName* = string
@@ -81,7 +81,7 @@ proc loadCareers*(fileName: Path) {.raises: [DataLoadingError],
       if careerNode.kind != xnElement:
         continue
       let
-        careerIndex: string = careerNode.attr(name = "index")
+        careerIndex: XmlAttribute = careerNode.attr(name = "index")
         careerAction: DataAction = try:
             parseEnum[DataAction](s = careerNode.attr(
                 name = "action").toLowerAscii)
@@ -106,13 +106,13 @@ proc loadCareers*(fileName: Path) {.raises: [DataLoadingError],
             initCareerData()
         else:
           initCareerData()
-      var attribute: string = careerNode.attr(name = "name")
+      var attribute: XmlAttribute = careerNode.attr(name = "name")
       if attribute.len() > 0:
         career.name = attribute
       for skillNode in careerNode:
         if skillNode.kind != xnElement:
           continue
-        let skillName: string = skillNode.attr(name = "name")
+        let skillName: XmlAttribute = skillNode.attr(name = "name")
         if skillNode.attr(name = "action") == "remove":
           for index, skill in career.skills:
             if skill == skillName:
