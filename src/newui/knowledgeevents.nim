@@ -65,14 +65,16 @@ proc showEvent(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   dialog = none
   mapPreview = true
 
-proc showEventInfo*(dialog: var GameDialog) {.raises: [], tags: [
+proc showEventInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected event information
   ##
+  ## * data   - the index of the selected item
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
+  eventIndex = data
   let baseIndex: ExtendedBasesRange = skyMap[eventsList[eventIndex].skyX][eventsList[
         eventIndex].skyY].baseIndex
   var eventInfo: string = "X: {gold}" & $eventsList[eventIndex].skyX &
@@ -217,17 +219,6 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
         distance: event.distance, coords: event.coords, color: color,
         details: details))
 
-proc setEventInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
-    RootEffect], contractual.} =
-  ## Set the information about the selected event
-  ##
-  ## * data   - the index of the selected item
-  ## * dialog - the current in-game dialog displayed on the screen
-  ##
-  ## Returns the modified parameter dialog.
-  eventIndex = data
-  dialog = eventDialog
-
 proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the list of the known events
@@ -275,13 +266,13 @@ proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         continue
       setButtonStyle(field = textNormal, color = theme.colors[event.color])
       addButton(label = event.name, tooltip = "Show the event's details",
-          data = event.index, code = setEventInfo, dialog = dialog)
+          data = event.index, code = showEventInfo, dialog = dialog)
       addButton(label = $event.distance, tooltip = "The distance to the event",
-          data = event.index, code = setEventInfo, dialog = dialog)
+          data = event.index, code = showEventInfo, dialog = dialog)
       addButton(label = event.coords, tooltip = "The coordinates of the event",
-          data = event.index, code = setEventInfo, dialog = dialog)
+          data = event.index, code = showEventInfo, dialog = dialog)
       addButton(label = event.details, tooltip = "Show the event's details",
-          data = event.index, code = setEventInfo, dialog = dialog)
+          data = event.index, code = showEventInfo, dialog = dialog)
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       row.inc
       if row == gameSettings.listsLimit + 1:
