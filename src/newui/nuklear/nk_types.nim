@@ -1381,6 +1381,13 @@ type
     border*, rounding*, cursorSize*, rowPadding*, colorFactor*,
       disabledFactor*: float
     scrollbarSize*, padding*: Vec2
+  StyleChart* = object
+    ## Used to store Nuklear style data for chart widgets
+    background*: StyleItem
+    borderColor*, selectedColor*, color*: NkColor
+    border*, rounding*, colorFactor*, disabledFactor*: float
+    padding*: Vec2
+    showMarkers*: bool
   Style* = object
     ## Used to store Nuklear style data slider widgets
     window*: StyleWindow
@@ -1396,6 +1403,8 @@ type
     slider*: StyleSlider
     knob*: StyleKnob
     edit*: StyleEdit
+    chart*: StyleChart
+    scrollH*, scrollV: StyleScrollbar
 
 # ---------
 # Constants
