@@ -278,6 +278,9 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       setLayoutRowDynamic(height = 30, cols = 1)
       label(str = "Special:")
       setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.2, 0.4])
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Optional special bonus for the crafted item. If you select any, you will need also to select a malus for it.")
       var newBonus: Natural = comboList(items = bonuses, selected = bonus,
           itemHeight = 25, x = 200, y = 150)
       if newBonus != bonus:
@@ -289,6 +292,9 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
             continue
           maluses.add(y = $malus)
       label(str = "<=>", alignment = centered)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Optional special malus for the crafted item. If you select any, you will need also to select a bonus for it.")
       var newMalus: Natural = comboList(items = maluses, selected = malus,
           itemHeight = 25, x = 200, y = 150)
       if newMalus != malus:
