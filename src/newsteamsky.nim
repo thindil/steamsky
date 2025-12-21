@@ -23,9 +23,9 @@ import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
 import newui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
     basesui, combatui, coreui, craftsui, dialogs, errordialog, goalsui, header,
-    knowledge, knowledgebases, knowledgeevents, mainmenu, mapsui, messagesui,
-    missionsui, shipsui, shipsuicrew, shipsuicrewinventory, shipsuimodules,
-    themes, tradesui, waitmenu]
+    knowledge, knowledgebases, mainmenu, mapsui, messagesui, missionsui,
+    shipsui, shipsuicrew, shipsuicrewinventory, shipsuimodules, themes,
+    tradesui, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -145,7 +145,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         baseMissions: showMissions, loot: showLoot, shipInfo: showShipInfo,
         crafting: showCrafting, lastMessages: showMessages,
         knowledgeLists: showKnowledge]
-    showDialog: array[GameDialog.errorDialog..GameDialog.eventDialog,
+    showDialog: array[GameDialog.errorDialog..GameDialog.baseDialog,
         proc(dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
         newGoalDialog: showGoals, boardingDialog: showPartyMenu,
@@ -161,8 +161,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         assignCrewDialog: showAssignCrewDialog,
         assignAmmoDialog: showAssignAmmoDialog,
         assignSkillDialog: showAssignSkillDialog, recipeDialog: showRecipeInfo,
-        setRecipeDialog: showSetRecipe, baseDialog: showBaseInfo,
-        eventDialog: showEventInfo]
+        setRecipeDialog: showSetRecipe, baseDialog: showBaseInfo]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
@@ -175,7 +174,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         resetTooltips()
 
       # Show dialogs if needed
-      if dialog in GameDialog.errorDialog..GameDialog.eventDialog:
+      if dialog in GameDialog.errorDialog..GameDialog.baseDialog:
         showDialog[dialog](dialog = dialog)
       elif dialog in buyDialog..dropCargoDialog:
         updateData = showManipulateItem(dialog = dialog)
