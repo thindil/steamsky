@@ -19,15 +19,17 @@
 ## recruirs, buying crafting recipes or heal wounded crew members.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import bases, basescargo, basestypes, config, game, game2, items, maps,
     messages, shipscrew, types, utils
 
+{.push ruleOff: "objects".}
 type
   AlreadyKnownError* = object of CatchableError
     ## Raised when the recipe is already known to the player
   CantHealError* = object of CatchableError
     ## Raised when the selected player's ship's crew member can't be healed
+{.push ruleOn: "objects".}
 
 proc checkMoney(price: Positive; message: string = "") {.raises: [
     NoMoneyError, NotEnoughMoneyError], tags: [], contractual.} =
