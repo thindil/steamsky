@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-## Provides code related to the information about the list of known bases, like
+## Provides code related to the information about the list of known events, like
 ## sorting them, showing information about them, etc.
 
 import std/[algorithm, tables]
@@ -102,9 +102,9 @@ proc showEventInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   dialog = setInfo(text = eventInfo, title = "Event information",
       button1 = ButtonSettings(tooltip: "Set the event as the ship destination",
       code: setTargetEvent, icon: destinationIcon.ord, text: "Target",
-      color: "green"), button2 = ButtonSettings(
+      color: greenColor), button2 = ButtonSettings(
       tooltip: "Show the event on the map", code: showEvent,
-      icon: showColoredIcon.ord, text: "Show", color: "green"))
+      icon: showColoredIcon.ord, text: "Show", color: greenColor))
 
 proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
