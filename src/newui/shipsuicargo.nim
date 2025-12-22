@@ -175,12 +175,11 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   itemIndex = itemsIndexes[data]
   try:
     dialog = showInventoryItemInfo(itemIndex = data, memberIndex = -1,
-        button1 = ButtonSettings(
-        tooltip: "Give item to a crew member",
-        code: setGiveDialog, icon: giveIcon.ord, text: "Give", color: ""),
-        button2 = ButtonSettings(
-        tooltip: "Drop item from the ship cargo",
-        code: setDropDialog, icon: dropIcon.ord, text: "Drop", color: ""))
+        button1 = ButtonSettings(tooltip: "Give item to a crew member",
+        code: setGiveDialog, icon: giveIcon.ord, text: "Give",
+        color: buttonTextColor), button2 = ButtonSettings(
+        tooltip: "Drop item from the ship cargo", code: setDropDialog,
+        icon: dropIcon.ord, text: "Drop", color: buttonTextColor))
   except:
     dialog = setError(message = "Can't show the item's info.")
 

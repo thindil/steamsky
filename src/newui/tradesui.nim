@@ -315,10 +315,11 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
         button1 = (if maxBuyAmount ==
         0: emptyButtonSettings else: ButtonSettings(
         tooltip: "Buy item from the base", code: setBuyDialog,
-        icon: buyDefaultIcon.ord, text: "Buy", color: "")), button2 = (
-        if maxSellAmount == 0: emptyButtonSettings else: ButtonSettings(
+        icon: buyDefaultIcon.ord, text: "Buy", color: buttonTextColor)),
+        button2 = (if maxSellAmount ==
+        0: emptyButtonSettings else: ButtonSettings(
         tooltip: "Sell item from the ship cargo", code: setSellDialog,
-        icon: sellDefaultIcon.ord, text: "Sell", color: "")))
+        icon: sellDefaultIcon.ord, text: "Sell", color: buttonTextColor)))
   except:
     dialog = setError(message = "Can't show the item's info.")
 

@@ -283,7 +283,8 @@ proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
       dialog = showInventoryItemInfo(itemIndex = data, memberIndex = crewIndex,
           button1 = ButtonSettings(
           tooltip: "Move the selected item to the ship's cargo",
-          code: setMoveDialog, icon: cargoIcon.ord, text: "Move", color: ""))
+          code: setMoveDialog, icon: cargoIcon.ord, text: "Move",
+          color: buttonTextColor))
   except:
     dialog = setError(message = "Can't show information about the item.")
 

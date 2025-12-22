@@ -270,10 +270,10 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     dialog = setInfo(text = itemInfo, title = itemsList[protoIndex].name,
         button1 = (if maxAmount == 0: emptyButtonSettings else: ButtonSettings(
         tooltip: "Take item from the base", code: setTakeDialog,
-        icon: giveIcon.ord, text: "Take", color: "")), button2 = (
+        icon: giveIcon.ord, text: "Take", color: buttonTextColor)), button2 = (
         if cargoMaxAmount == 0: emptyButtonSettings else: ButtonSettings(
         tooltip: "Drop item from the ship cargo", code: setDropDialog,
-        icon: dropIcon.ord, text: "Drop", color: "")))
+        icon: dropIcon.ord, text: "Drop", color: buttonTextColor)))
   except:
     dialog = setError(message = "Can't show the item's info.")
 
