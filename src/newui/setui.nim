@@ -1105,20 +1105,21 @@ type
       ## The player's reputaion in the base
     visited*: bool
       ## If true, the base was visited by the player
-  EventUIData* = object
-    ## Stores data needed to show information about an event
+  KnowledgeData* = object
+    ## Stores data needed to show information about an event or an mission
     index*: Natural
-      ## The index of the event
+      ## The index of the event or the mission
     name*: string
-      ## The name of the event
+      ## The name of the event or the mission
     distance*: Natural
-      ## The distance to the event from the current player's position
+      ## The distance to the event or the mission from the current player's
+      ## position
     coords*: string
-      ## The coordinates of the event
+      ## The coordinates of the event or the mission
     details*: string
-      ## Additional information about the event
+      ## Additional information about the event or the mission
     color*: ColorsNames
-      ## The color used show the event's info
+      ## The color used show the event's or the mission's info
 
 const
   basesStatuses*: array[3, string] = ["Any", "Not visited", "Visited"]
@@ -1131,7 +1132,7 @@ var
     ## The list of owners of all bases in the game
   knownBasesList*: seq[BaseData] = @[]
     ## The list of known bases
-  knownEventsList*: seq[EventUIData] = @[]
+  knownEventsList*: seq[KnowledgeData] = @[]
     ## The list of known events
 
 proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -1169,7 +1170,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     try:
       case event.eType
       of enemyShip:
-        knownEventsList.add(y = EventUIData(index: index,
+        knownEventsList.add(y = KnowledgeData(index: index,
             name: "Enemy ship spotted", distance: countDistance(
             destinationX = event.skyX, destinationY = event.skyY),
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
@@ -1177,7 +1178,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             if playerShip.skyX == event.skyX and playerShip.skyY ==
             event.skyY: yellowColor else: redColor)))
       of fullDocks:
-        knownEventsList.add(y = EventUIData(index: index,
+        knownEventsList.add(y = KnowledgeData(index: index,
             name: "Full docks in base", distance: countDistance(
             destinationX = event.skyX, destinationY = event.skyY),
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
@@ -1185,7 +1186,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
             event.skyY: yellowColor else: cyanColor)))
       of attackOnBase:
-        knownEventsList.add(y = EventUIData(index: index,
+        knownEventsList.add(y = KnowledgeData(index: index,
             name: "Base is under attack", distance: countDistance(
             destinationX = event.skyX, destinationY = event.skyY),
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
@@ -1193,7 +1194,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
             event.skyY: yellowColor else: redColor)))
       of disease:
-        knownEventsList.add(y = EventUIData(index: index,
+        knownEventsList.add(y = KnowledgeData(index: index,
             name: "Disease in base", distance: countDistance(
             destinationX = event.skyX, destinationY = event.skyY),
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
@@ -1201,7 +1202,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
             event.skyY: yellowColor else: goldenColor)))
       of enemyPatrol:
-        knownEventsList.add(y = EventUIData(index: index,
+        knownEventsList.add(y = KnowledgeData(index: index,
             name: "Enemy patrol", distance: countDistance(
             destinationX = event.skyX, destinationY = event.skyY),
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
@@ -1209,7 +1210,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
             event.skyY: yellowColor else: redColor)))
       of doublePrice:
-        knownEventsList.add(y = EventUIData(index: index,
+        knownEventsList.add(y = KnowledgeData(index: index,
             name: "Double price in base", distance: countDistance(
             destinationX = event.skyX, destinationY = event.skyY),
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
@@ -1218,7 +1219,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             if playerShip.skyX == event.skyX and playerShip.skyY ==
             event.skyY: yellowColor else: limeColor)))
       of trader:
-        knownEventsList.add(y = EventUIData(index: index,
+        knownEventsList.add(y = KnowledgeData(index: index,
             name: "Friendly trader spotted", distance: countDistance(
             destinationX = event.skyX, destinationY = event.skyY),
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
@@ -1226,7 +1227,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             if playerShip.skyX == event.skyX and playerShip.skyY ==
             event.skyY: yellowColor else: greenColor)))
       of friendlyShip:
-        knownEventsList.add(y = EventUIData(index: index,
+        knownEventsList.add(y = KnowledgeData(index: index,
             name: "Friendly ship spotted", distance: countDistance(
             destinationX = event.skyX, destinationY = event.skyY),
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
