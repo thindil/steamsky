@@ -20,7 +20,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config]
-import coreui, header, knowledgebases, knowledgeevents, messagesui, themes
+import coreui, header, knowledgebases, knowledgeevents, knowledgemissions, messagesui, themes
 
 var expandedSection: Natural = 0
 
@@ -96,6 +96,7 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 3
+      showMissionsInfo(dialog = dialog)
   # The list of known stories
   if expandedSection in {0, 4}:
     group(title = "Known stories:", flags = {windowBorder, windowTitle}):
