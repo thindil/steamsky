@@ -42,7 +42,7 @@ type
     code*: proc(dialog: var GameDialog) ## The code to execute when the button was pressed
     icon*: int       ## The index of the icon to show on the button
     tooltip*: string ## The tooltip text associated with the button
-    color*: string   ## The color of the button's text
+    color*: ColorsNames   ## The color of the button's text
   TextData = object
     text: string
     lines: float
@@ -62,7 +62,7 @@ type
 
 const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "", code: nil,
     icon: -1, tooltip: "",
-    color: "") ## Empty Button setting, used to disable the selected button
+    color: buttonTextColor) ## Empty Button setting, used to disable the selected button
 
 var
   questionData: QuestionData = QuestionData(question: "", data: "")
