@@ -1388,6 +1388,15 @@ type
     border*, rounding*, colorFactor*, disabledFactor*: float
     padding*: Vec2
     showMarkers*: bool
+  StyleTab* = object
+    ## Used to store Nuklear style data for tab widgets
+    background*: StyleItem
+    borderColor*, text*: NkColor
+    tabMaximizeButton*, tabMinimizeButton*, nodeMaximizeButton*,
+      nodeMinimizeButton*: StyleButton
+    symMinimize*, symMaximize*: SymbolType
+    border*, rounding*, indent*, colorFactor*, disabledFactor*: float
+    padding*, spacing*: Vec2
   Style* = object
     ## Used to store Nuklear style data slider widgets
     window*: StyleWindow
@@ -1405,6 +1414,7 @@ type
     edit*: StyleEdit
     chart*: StyleChart
     scrollH*, scrollV: StyleScrollbar
+    tab*: StyleTab
 
 # ---------
 # Constants
