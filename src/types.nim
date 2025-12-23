@@ -151,6 +151,7 @@ type
   XmlAttribute* = string ## Used to read the game data from XML files
   FactionIndex* = string ## Used to store in-game factions indexes
   BaseType* = string ## Used to store types of bases
+  ObjectName* = string ## Used to store names of objects (items)
 
   ModuleData* = object
     ## Used to store information about ships' modules
@@ -412,7 +413,7 @@ type
     ## * showType    - The item's type to show to the player instead of the itemType
     ## * description - The description of the item
     ## * reputation  - The minumal reputation which is needed to buy that item
-    name*: string
+    name*: ObjectName
     weight*: Positive
     itemType*: string
     price*: Natural
