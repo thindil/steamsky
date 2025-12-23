@@ -291,6 +291,10 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
           if newBonus > 0 and malus.ord == newBonus:
             continue
           maluses.add(y = $malus)
+        if bonus == 0:
+          bonuses = @[]
+          for bonus in CraftBonuses:
+            bonuses.add(y = $bonus)
       label(str = "<=>", alignment = centered)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -305,6 +309,10 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
           if newMalus > 0 and bonus.ord == newMalus:
             continue
           bonuses.add(y = $bonus)
+        if malus == 0:
+          maluses = @[]
+          for malus in CraftMaluses:
+            maluses.add(y = $malus)
     setLayoutRowDynamic(height = 30, cols = 1)
     # Show workshop setting if needed
     if workshops.len > 1:
