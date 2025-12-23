@@ -56,7 +56,7 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
   ## * tradePayment   - the percent of trade gain as payment for the recruit
   ## * contractLength - the length of the contract. 0 means infinite contract
   body:
-    let traderIndex: int = findMember(order = talk)
+    let traderIndex: ExtendedNatural = findMember(order = talk)
     if traderIndex == -1:
       raise newException(exceptn = NoTraderError, message = "")
     var price: Natural = cost
@@ -108,12 +108,12 @@ proc buyRecipe*(recipeIndex: string) {.raises: [CantBuyError,
   body:
     let
       baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-      baseType: string = skyBases[baseIndex].baseType
+      baseType: BaseType = skyBases[baseIndex].baseType
     if recipeIndex notin basesTypesList[baseType].recipes:
       raise newException(exceptn = CantBuyError, message = "")
     if recipeIndex in knownRecipes:
       raise newException(exceptn = AlreadyKnownError, message = "")
-    let traderIndex: int = findMember(order = talk)
+    let traderIndex: ExtendedNatural = findMember(order = talk)
     if traderIndex == -1:
       raise newException(exceptn = NoTraderError, message = "")
     var cost: Natural = 0
