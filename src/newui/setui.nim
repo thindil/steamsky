@@ -1083,6 +1083,9 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 ##########################
 
 type
+  DataType* = enum
+    ## Types of knowledge data
+    event, mission
   BaseData* = object
     ## Stores data needed to show information about a base
     index*: Natural
@@ -1116,10 +1119,17 @@ type
       ## position
     coords*: string
       ## The coordinates of the event or the mission
-    details*: string
-      ## Additional information about the event or the mission
     color*: ColorsNames
       ## The color used show the event's or the mission's info
+    case dataType: DataType
+    of event:
+      details*: string
+        ## Additional information about the event
+    of mission:
+      timeLimit*: string
+        ## Limit of time for the mission
+      baseReward*: string
+        ## The base amount of money for the mission
 
 const
   basesStatuses*: array[3, string] = ["Any", "Not visited", "Visited"]
@@ -1178,7 +1188,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
             details: protoShipsList[event.shipIndex].name, color: (
             if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: redColor)))
+            event.skyY: yellowColor else: redColor), dataType: DataType.event))
       of fullDocks:
         knownEventsList.add(y = KnowledgeData(index: index,
             name: "Full docks in base", distance: countDistance(
@@ -1186,7 +1196,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
             details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
             color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: cyanColor)))
+            event.skyY: yellowColor else: cyanColor), dataType: DataType.event))
       of attackOnBase:
         knownEventsList.add(y = KnowledgeData(index: index,
             name: "Base is under attack", distance: countDistance(
@@ -1194,7 +1204,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
             details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
             color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: redColor)))
+            event.skyY: yellowColor else: redColor), dataType: DataType.event))
       of disease:
         knownEventsList.add(y = KnowledgeData(index: index,
             name: "Disease in base", distance: countDistance(
@@ -1202,7 +1212,8 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
             details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
             color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: goldenColor)))
+            event.skyY: yellowColor else: goldenColor),
+            dataType: DataType.event))
       of enemyPatrol:
         knownEventsList.add(y = KnowledgeData(index: index,
             name: "Enemy patrol", distance: countDistance(
@@ -1210,7 +1221,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
             details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
             color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: redColor)))
+            event.skyY: yellowColor else: redColor), dataType: DataType.event))
       of doublePrice:
         knownEventsList.add(y = KnowledgeData(index: index,
             name: "Double price in base", distance: countDistance(
@@ -1219,7 +1230,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             details: itemsList[event.itemIndex].name & " in " & skyBases[skyMap[
             event.skyX][event.skyY].baseIndex].name, color: (
             if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: limeColor)))
+            event.skyY: yellowColor else: limeColor), dataType: DataType.event))
       of trader:
         knownEventsList.add(y = KnowledgeData(index: index,
             name: "Friendly trader spotted", distance: countDistance(
@@ -1227,7 +1238,8 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
             details: protoShipsList[event.shipIndex].name, color: (
             if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: greenColor)))
+            event.skyY: yellowColor else: greenColor),
+            dataType: DataType.event))
       of friendlyShip:
         knownEventsList.add(y = KnowledgeData(index: index,
             name: "Friendly ship spotted", distance: countDistance(
@@ -1235,7 +1247,8 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             coords: "X: " & $event.skyX & " Y: " & $event.skyY,
             details: protoShipsList[event.shipIndex].name, color: (
             if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: greenColor)))
+            event.skyY: yellowColor else: greenColor),
+            dataType: DataType.event))
       of EventsTypes.none, baseRecovery:
         discard
     except KeyError:
@@ -1250,10 +1263,11 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             mission.targetY].baseIndex].name, distance: countDistance(
             destinationX = mission.targetX, destinationY = mission.targetY),
             coords: "X: " & $mission.targetX & " Y: " & $mission.targetY,
-            details: $((mission.reward.float * mission.multiplier).Natural) &
+            baseReward: $((mission.reward.float * mission.multiplier).Natural) &
             " " & moneyName, color: (if playerShip.skyX == mission.targetX and
             playerShip.skyY ==
-            mission.targetY: yellowColor else: tableTextColor)))
+            mission.targetY: yellowColor else: tableTextColor),
+            dataType: DataType.mission))
       else:
         discard
     except KeyError:
