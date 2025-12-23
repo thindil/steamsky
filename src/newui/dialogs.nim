@@ -432,6 +432,7 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
       # Draw the first optional button
       if infoData.button1 != emptyButtonSettings:
         let button: ButtonSettings = infoData.button1
+        setButtonStyle(field = textNormal, color = theme.colors[button.color])
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = button.tooltip)
@@ -446,11 +447,13 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
         else:
           labelButton(title = button.text):
             button.code(dialog = dialog)
+        restoreButtonStyle()
       # Draw close button
       addCloseButton(dialog = dialog)
       # Draw the second optional button
       if infoData.button2 != emptyButtonSettings:
         let button: ButtonSettings = infoData.button2
+        setButtonStyle(field = textNormal, color = theme.colors[button.color])
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = button.tooltip)
@@ -465,6 +468,7 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
         else:
           labelButton(title = button.text):
             button.code(dialog = dialog)
+        restoreButtonStyle()
   except:
     dialog = setError(message = "Can't show the info")
 
