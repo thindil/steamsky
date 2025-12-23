@@ -1134,6 +1134,8 @@ var
     ## The list of known bases
   knownEventsList*: seq[KnowledgeData] = @[]
     ## The list of known events
+  missionsUIList*: seq[KnowledgeData] = @[]
+    ## The list of accepted missions
 
 proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -1238,3 +1240,21 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         discard
     except KeyError:
       dialog = setError(message = "Can't set an event info")
+  missionsUIList = @[]
+  for index, mission in acceptedMissions:
+    try:
+      case mission.mType
+      of deliver:
+        missionsUIList.add(y = KnowledgeData(index: index, name: itemsList[
+            mission.itemIndex].name & " to " & skyBases[skyMap[mission.targetX][
+            mission.targetY].baseIndex].name, distance: countDistance(
+            destinationX = mission.targetX, destinationY = mission.targetY),
+            coords: "X: " & $mission.targetX & " Y: " & $mission.targetY,
+            details: $((mission.reward.float * mission.multiplier).Natural) &
+            " " & moneyName, color: (if playerShip.skyX == mission.targetX and
+            playerShip.skyY ==
+            mission.targetY: yellowColor else: tableTextColor)))
+      else:
+        discard
+    except KeyError:
+      dialog = setError(message = "Can't set a mission info")
