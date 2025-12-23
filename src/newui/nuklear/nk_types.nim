@@ -1397,6 +1397,15 @@ type
     symMinimize*, symMaximize*: SymbolType
     border*, rounding*, indent*, colorFactor*, disabledFactor*: float
     padding*, spacing*: Vec2
+  StyleCombo* = object
+    ## Used to store Nuklear style data for combo widgets
+    normal*, hover*, active*: StyleItem
+    borderColor*, labelNormal*, labelHover*, labelActive*, symbolNormal*,
+      symbolHover*, symbolActive*: nkColor
+    button*: StyleButton
+    symNormal*, symHover*, symActive*: SymbolType
+    border*, rounding*, colorFactor*, disabledFactor*: float
+    contentPadding*, buttonPadding*, spacing*: Vec2
   Style* = object
     ## Used to store Nuklear style data slider widgets
     window*: StyleWindow
@@ -1415,6 +1424,10 @@ type
     chart*: StyleChart
     scrollH*, scrollV: StyleScrollbar
     tab*: StyleTab
+    combo*: StyleCombo
+  Context* = object
+    ## The main context of the Nuklear library
+    style*: Style
 
 # ---------
 # Constants
