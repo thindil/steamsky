@@ -216,7 +216,7 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
           return
       of EventsTypes.none, baseRecovery:
         ""
-    knownEventsList.add(y = EventUIData(index: event.id, name: event.name,
+    knownEventsList.add(y = KnowledgeData(index: event.id, name: event.name,
         distance: event.distance, coords: event.coords, color: color,
         details: details))
 
