@@ -323,6 +323,8 @@ const
     ## The size of the stack of flags
   nkColorStackSize*: Positive = 32
     ## The size of the stack of colors
+  nkInputMax*: Positive = 16
+    ## The max size of the user's input
 
 # -------
 # Objects
@@ -597,8 +599,6 @@ type
     ## Internal Nuklear type
     down*: nk_bool
     clicked*: cuint
-  KeysArray* = array[keyMax, nk_key]
-    ## The array of keyboard keys
   nk_keyboard* {.importc: "struct nk_keyboard", completeStruct.} = object
     ## Internal Nuklear type
     keys*, text*: pointer
@@ -1095,9 +1095,21 @@ type
     delta*, pos*, prev*, scrollDelta*, : Vec2
     buttons*: array[Buttons.max, MouseButton]
     grab*, grabbed*, ungrab*: bool
+  Key* = object
+    ## Internal Nuklear type
+    down*: bool
+    clicked*: uint
+  KeysArray* = array[keyMax, Key]
+    ## The array of keyboard keys
+  Keyboard* = object
+    ## Used to store Nuklear data about keyboard
+    keys*: KeysArray
+    text*: array[nkInputMax, char]
+    textLen*: Natural
   Input* = object
     ## Used to store information about the user's input
     mouse*: Mouse
+    keyboard*: Keyboard
   Handle* = object
     ## Used to store a handle to various elements
     case handleType: HandleType
@@ -1401,7 +1413,7 @@ type
     ## Used to store Nuklear style data for combo widgets
     normal*, hover*, active*: StyleItem
     borderColor*, labelNormal*, labelHover*, labelActive*, symbolNormal*,
-      symbolHover*, symbolActive*: nkColor
+      symbolHover*, symbolActive*: NkColor
     button*: StyleButton
     symNormal*, symHover*, symActive*: SymbolType
     border*, rounding*, colorFactor*, disabledFactor*: float
@@ -1428,6 +1440,11 @@ type
   Context* = object
     ## The main context of the Nuklear library
     style*: Style
+    input*: Input
+    begin*, last*, current*, active*: Window
+    seq*, count*: uint
+    memory: Buffer
+    usePool*: bool
 
 # ---------
 # Constants
