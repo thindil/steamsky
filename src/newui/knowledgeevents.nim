@@ -218,7 +218,7 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
         ""
     knownEventsList.add(y = KnowledgeData(index: event.id, name: event.name,
         distance: event.distance, coords: event.coords, color: color,
-        details: details))
+        details: details, dataType: DataType.event))
 
 proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
