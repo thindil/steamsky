@@ -19,8 +19,8 @@
 
 import std/[logging, os, strutils, tables, xmltree, xmlparser]
 import contracts
-import basessaveload, config, game, goals, log, maps, messages, missions,
-    reputation, shipssaveload, statistics, stories, types, utils
+import basessaveload, config, events, game, goals, log, maps, messages,
+    missions, reputation, shipssaveload, statistics, stories, types, utils
 
 const saveVersion: Positive = 6 ## The current version of the game saves files
 
@@ -421,10 +421,12 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
   playerCareer = careerNode.attr(name = "index")
   logMessage(message = "done", messageLevel = lvlInfo)
   # Load the factions' reputation
-  logMessage(message = "Loading the player's reputation...", messageLevel = lvlInfo)
+  logMessage(message = "Loading the player's reputation...",
+      messageLevel = lvlInfo)
   loadReputation(savedGame = savedGame)
   logMessage(message = "done", messageLevel = lvlInfo)
   logMessage(message = "Finished loading the game.", messageLevel = lvlInfo)
+  getPlayerShips()
 
 proc generateSaveName*(renameSave: bool = false) {.raises: [OSError,
     IOError, Exception], tags: [ReadDirEffect, WriteIOEffect, ReadIOEffect],
