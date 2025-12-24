@@ -129,7 +129,7 @@ proc buyRecipe*(recipeIndex: string) {.raises: [CantBuyError,
       cost = 1
     countPrice(price = cost, traderIndex = traderIndex)
     let
-      recipeName: string = itemsList[recipesList[recipeIndex].resultIndex].name
+      recipeName: ObjectName = itemsList[recipesList[recipeIndex].resultIndex].name
     checkMoney(price = cost, message = recipeName)
     updateMoney(memberIndex = -1, amount = -cost, quality = any)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
@@ -192,7 +192,7 @@ proc healWounded*(memberIndex: int) {.raises: [CantHealError,
     healCost(cost = cost, time = time, memberIndex = memberIndex)
     if cost == 0:
       raise newException(exceptn = CantHealError, message = "")
-    let traderIndex: int = findMember(order = talk)
+    let traderIndex: ExtendedNatural = findMember(order = talk)
     if traderIndex == -1:
       raise newException(exceptn = NoTraderError, message = "")
     if memberIndex > -1:
@@ -261,13 +261,13 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
     memberIndex < playerShip.crew.len
     skillIndex < skillsList.len
   body:
-    let traderIndex: int = findMember(order = talk)
+    let traderIndex: ExtendedNatural = findMember(order = talk)
     giveOrders(ship = playerShip, memberIndex = memberIndex, givenOrder = rest,
         moduleIndex = 0, checkPriorities = false)
     let baseIndex: BasesRange = skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex
     var
-      maxAmount: int = amount
+      maxAmount: -100_000..Positive.high = amount
       sessions, overallCost: Natural = 0
     while maxAmount > 0:
       let
