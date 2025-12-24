@@ -1121,7 +1121,7 @@ type
       ## The coordinates of the event or the mission
     color*: ColorsNames
       ## The color used show the event's or the mission's info
-    case dataType: DataType
+    case dataType*: DataType
     of event:
       details*: string
         ## Additional information about the event
@@ -1180,95 +1180,80 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   knownEventsList = @[]
   for index, event in eventsList:
     try:
+      var eventData: KnowledgeData = KnowledgeData(index: index, name: "",
+          distance: countDistance(destinationX = event.skyX,
+          destinationY = event.skyY), coords: "X: " & $event.skyX & " Y: " &
+          $event.skyY, dataType: DataType.event)
       case event.eType
       of enemyShip:
-        knownEventsList.add(y = KnowledgeData(index: index,
-            name: "Enemy ship spotted", distance: countDistance(
-            destinationX = event.skyX, destinationY = event.skyY),
-            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-            details: protoShipsList[event.shipIndex].name, color: (
-            if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: redColor), dataType: DataType.event))
+        eventData.name = "Enemy ship spotted"
+        eventData.details = protoShipsList[event.shipIndex].name
+        eventData.color = (if playerShip.skyX == event.skyX and
+            playerShip.skyY == event.skyY: yellowColor else: redColor)
       of fullDocks:
-        knownEventsList.add(y = KnowledgeData(index: index,
-            name: "Full docks in base", distance: countDistance(
-            destinationX = event.skyX, destinationY = event.skyY),
-            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-            details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
-            color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: cyanColor), dataType: DataType.event))
+        eventData.name = "Full docks in base"
+        eventData.details = skyBases[skyMap[event.skyX][
+            event.skyY].baseIndex].name
+        eventData.color = (if playerShip.skyX == event.skyX and
+            playerShip.skyY == event.skyY: yellowColor else: cyanColor)
       of attackOnBase:
-        knownEventsList.add(y = KnowledgeData(index: index,
-            name: "Base is under attack", distance: countDistance(
-            destinationX = event.skyX, destinationY = event.skyY),
-            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-            details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
-            color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: redColor), dataType: DataType.event))
+        eventData.name = "Base is under attack"
+        eventData.details = skyBases[skyMap[event.skyX][
+            event.skyY].baseIndex].name
+        eventData.color = (if playerShip.skyX == event.skyX and
+            playerShip.skyY == event.skyY: yellowColor else: redColor)
       of disease:
-        knownEventsList.add(y = KnowledgeData(index: index,
-            name: "Disease in base", distance: countDistance(
-            destinationX = event.skyX, destinationY = event.skyY),
-            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-            details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
-            color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: goldenColor),
-            dataType: DataType.event))
+        eventData.name = "Disease in base"
+        eventData.details = skyBases[skyMap[event.skyX][
+            event.skyY].baseIndex].name
+        eventData.color = (if playerShip.skyX == event.skyX and
+            playerShip.skyY == event.skyY: yellowColor else: goldenColor)
       of enemyPatrol:
-        knownEventsList.add(y = KnowledgeData(index: index,
-            name: "Enemy patrol", distance: countDistance(
-            destinationX = event.skyX, destinationY = event.skyY),
-            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-            details: skyBases[skyMap[event.skyX][event.skyY].baseIndex].name,
-            color: (if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: redColor), dataType: DataType.event))
+        eventData.name = "Enemy patrol"
+        eventData.details = skyBases[skyMap[event.skyX][
+            event.skyY].baseIndex].name
+        eventData.color = (if playerShip.skyX == event.skyX and
+            playerShip.skyY == event.skyY: yellowColor else: redColor)
       of doublePrice:
-        knownEventsList.add(y = KnowledgeData(index: index,
-            name: "Double price in base", distance: countDistance(
-            destinationX = event.skyX, destinationY = event.skyY),
-            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-            details: itemsList[event.itemIndex].name & " in " & skyBases[skyMap[
-            event.skyX][event.skyY].baseIndex].name, color: (
-            if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: limeColor), dataType: DataType.event))
+        eventData.name = "Double price in base"
+        eventData.details = itemsList[event.itemIndex].name & " in " & skyBases[
+            skyMap[event.skyX][event.skyY].baseIndex].name
+        eventData.color = (if playerShip.skyX == event.skyX and
+            playerShip.skyY == event.skyY: yellowColor else: limeColor)
       of trader:
-        knownEventsList.add(y = KnowledgeData(index: index,
-            name: "Friendly trader spotted", distance: countDistance(
-            destinationX = event.skyX, destinationY = event.skyY),
-            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-            details: protoShipsList[event.shipIndex].name, color: (
-            if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: greenColor),
-            dataType: DataType.event))
+        eventData.name = "Friendly trader spotted"
+        eventData.details = protoShipsList[event.shipIndex].name
+        eventData.color = (if playerShip.skyX == event.skyX and
+            playerShip.skyY == event.skyY: yellowColor else: greenColor)
       of friendlyShip:
-        knownEventsList.add(y = KnowledgeData(index: index,
-            name: "Friendly ship spotted", distance: countDistance(
-            destinationX = event.skyX, destinationY = event.skyY),
-            coords: "X: " & $event.skyX & " Y: " & $event.skyY,
-            details: protoShipsList[event.shipIndex].name, color: (
-            if playerShip.skyX == event.skyX and playerShip.skyY ==
-            event.skyY: yellowColor else: greenColor),
-            dataType: DataType.event))
+        eventData.name = "Friendly ship spotted"
+        eventData.details = protoShipsList[event.shipIndex].name
+        eventData.color = (if playerShip.skyX == event.skyX and
+            playerShip.skyY == event.skyY: yellowColor else: greenColor)
       of EventsTypes.none, baseRecovery:
         discard
+      knownEventsList.add(y = eventData)
     except KeyError:
       dialog = setError(message = "Can't set an event info")
   missionsUIList = @[]
   for index, mission in acceptedMissions:
     try:
+      var missionTime: string = ""
+      minutesToDate(minutes = mission.time, infoText = missionTime)
+      var missionData: KnowledgeData = KnowledgeData(index: index, name: "",
+          distance: countDistance(destinationX = mission.targetX,
+          destinationY = mission.targetY), coords: "X: " & $mission.targetX &
+          " Y: " & $mission.targetY, baseReward: $((mission.reward.float *
+          mission.multiplier).Natural) & " " & moneyName, color: (
+          if playerShip.skyX == mission.targetX and playerShip.skyY ==
+          mission.targetY: yellowColor else: tableTextColor),
+          dataType: DataType.mission, timeLimit: missionTime)
       case mission.mType
       of deliver:
-        missionsUIList.add(y = KnowledgeData(index: index, name: itemsList[
-            mission.itemIndex].name & " to " & skyBases[skyMap[mission.targetX][
-            mission.targetY].baseIndex].name, distance: countDistance(
-            destinationX = mission.targetX, destinationY = mission.targetY),
-            coords: "X: " & $mission.targetX & " Y: " & $mission.targetY,
-            baseReward: $((mission.reward.float * mission.multiplier).Natural) &
-            " " & moneyName, color: (if playerShip.skyX == mission.targetX and
-            playerShip.skyY ==
-            mission.targetY: yellowColor else: tableTextColor),
-            dataType: DataType.mission))
+        missionData.name = itemsList[mission.itemIndex].name & " to " &
+            skyBases[skyMap[mission.targetX][mission.targetY].baseIndex].name
       else:
         discard
+      missionsUIList.add(y = missionData)
     except KeyError:
       dialog = setError(message = "Can't set a mission info")
