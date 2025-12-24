@@ -1252,8 +1252,15 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       of deliver:
         missionData.name = itemsList[mission.itemIndex].name & " to " &
             skyBases[skyMap[mission.targetX][mission.targetY].baseIndex].name
-      else:
-        discard
+      of patrol:
+        missionData.name = "Patrol selected area"
+      of explore:
+        missionData.name = "Explore selected area"
+      of destroy:
+        missionData.name = protoShipsList[mission.shipIndex].name
+      of passenger:
+        missionData.name = "To " & skyBases[skyMap[mission.targetX][
+            mission.targetY].baseIndex].name
       missionsUIList.add(y = missionData)
     except KeyError:
       dialog = setError(message = "Can't set a mission info")
