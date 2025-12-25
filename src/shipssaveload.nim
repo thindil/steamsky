@@ -64,6 +64,10 @@ proc savePlayerShip*(saveData: var XmlNode) {.raises: [], tags: [],
       dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.craftingQuality}.toXmlAttributes
       moduleTree.add(son = dataElement)
+      dataElement.attrs = {"value": $module.craftingBonus}.toXmlAttributes
+      moduleTree.add(son = dataElement)
+      dataElement.attrs = {"value": $module.craftingMalus}.toXmlAttributes
+      moduleTree.add(son = dataElement)
     of ModuleType2.trainingRoom:
       var dataElement: XmlNode = newElement(tag = "data")
       dataElement.attrs = {"value": $module.trainedSkill}.toXmlAttributes
@@ -339,6 +343,8 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           craftingIndex: string = ""
           craftingTime, craftingAmount: int = 0
           craftingQuality: ObjectQuality = normal
+          craftingBonus: CraftBonuses = none
+          craftingMalus: CraftMaluses = none
         for modData in module.findAll(tag = "data"):
           case dataIndex
           of 1:
@@ -352,6 +358,12 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           of 4:
             craftingQuality = parseEnum[ObjectQuality](s = modData.attr(
                 name = "value"))
+          of 5:
+            craftingBonus = parseEnum[CraftBonuses](s = modData.attr(
+                name = "value"))
+          of 6:
+            craftingMalus = parseEnum[CraftMaluses](s = modData.attr(
+                name = "value"))
           else:
             discard
           dataIndex.inc
@@ -360,7 +372,8 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
             maxDurability: maxDur, owner: owners,
             upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
             craftingIndex: craftingIndex, craftingTime: craftingTime,
-            craftingAmount: craftingAmount, craftingQuality: craftingQuality))
+            craftingAmount: craftingAmount, craftingQuality: craftingQuality,
+            craftingBonus: craftingBonus, craftingMalus: craftingMalus))
       of medicalRoom:
         playerShip.modules.add(y = ModuleData(mType: medicalRoom, name: name,
             protoIndex: protoIndex, weight: weight, durability: modDur,
