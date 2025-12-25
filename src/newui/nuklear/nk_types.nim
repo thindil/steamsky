@@ -284,6 +284,9 @@ type
   HandleType* = enum
     ## Types of handle
     handlePtr, handleInt
+  PageDataType* = enum
+    ## Types of page data
+    tableType, panelType, windowType
 
 # ---------
 # Constants
@@ -1229,7 +1232,8 @@ type
   NkTable* = object
     ## Used to store Nuklear table widget data
     seq*, size*: uint
-    keys*, values*: pointer
+    keys*: seq[nk_hash]
+    values*: seq[uint]
     next*, prev*: ref NkTable
   Window* = object
     ## Used to store Nuklear window data
@@ -1437,6 +1441,19 @@ type
     scrollH*, scrollV: StyleScrollbar
     tab*: StyleTab
     combo*: StyleCombo
+  PageData* = object
+    ## Used to store memory page's data
+    case pageDataType: PageDataType
+    of tableType:
+      tbl*: NkTable
+    of panelType:
+      pan*: Panel
+    of windowType:
+      win: Window
+  PageElement* = object
+    ## Used to store memory page's elements
+    data*: PageData
+    next*, prev*: ref PageElement
   Context* = object
     ## The main context of the Nuklear library
     style*: Style
