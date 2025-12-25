@@ -28,7 +28,20 @@ type MissionsSortOrders = enum
 
 const defaultMissionsSortOrder: MissionsSortOrders = none
 
-var missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
+var
+  missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
+  missionIndex: Natural = 0
+
+proc showMissionInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected mission's actions menu
+  ##
+  ## * data   - the index of the selected item
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  missionIndex = data
 
 proc sortMissions(sortAsc, sortDesc: MissionsSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -88,5 +101,24 @@ proc showMissionsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     var
       row, currentRow: Positive = 1
     # Show the list of accepted missions
+    for mission in missionsUIList:
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      setButtonStyle(field = textNormal, color = theme.colors[mission.color])
+      addButton(label = mission.name, tooltip = "Show the mission's menu",
+          data = mission.index, code = showMissionInfo, dialog = dialog)
+      addButton(label = $mission.distance, tooltip = "Show the mission's menu",
+          data = mission.index, code = showMissionInfo, dialog = dialog)
+      addButton(label = mission.coords, tooltip = "Show the mission's menu",
+          data = mission.index, code = showMissionInfo, dialog = dialog)
+      addButton(label = mission.timeLimit, tooltip = "Show the mission's menu",
+          data = mission.index, code = showMissionInfo, dialog = dialog)
+      addButton(label = mission.baseReward, tooltip = "Show the mission's menu",
+          data = mission.index, code = showMissionInfo, dialog = dialog)
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+      row.inc
+      if row == gameSettings.listsLimit + 1:
+        break
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
