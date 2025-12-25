@@ -144,6 +144,7 @@ type
   ReputationRange* = range[-100..100] ## The range of possible reputation levels
   RewardMultiplier* = range[0.0..2.0] ## The range of multiplier for missions reward
   ExtendedNatural* = range[-1..Natural.high] ## Extended Natural range, with -1
+  ExtendedNegative* = range[int.low..0] ## Extended negative numbers range, with 0
 
   AttributesArray* = array[1..2, Natural] ## 1 - Attribute level, 2 - Attribute experience
   EquipmentArray* = array[EquipmentLocations, int] ## The equipment of mobs
