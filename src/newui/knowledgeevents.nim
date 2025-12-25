@@ -121,19 +121,7 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
   else:
     eventsSortOrder = sortAsc
 
-  type LocalEventData = object
-    name: string
-    distance: Natural
-    coords: string
-    details: string
-    id: Natural
-  var localEvents: seq[LocalEventData] = @[]
-  for event in knownEventsList:
-    localEvents.add(y = LocalEventData(name: event.name,
-        distance: event.distance, coords: event.coords, details: event.details,
-        id: event.index))
-
-  proc sortEvents(x, y: LocalEventData): int {.raises: [], tags: [],
+  proc sortEvents(x, y: KnowledgeData): int {.raises: [], tags: [],
       contractual.} =
     ## Compare two events and return which should go first, based on the sort
     ## order of the events
@@ -179,46 +167,7 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
     of none:
       return -1
 
-  localEvents.sort(cmp = sortEvents)
-  knownEventsList = @[]
-  for event in localEvents:
-    var color: ColorsNames = yellowColor
-    let evnt: EventData = eventsList[event.id]
-    if evnt.skyX != playerShip.skyX or evnt.skyY != playerShip.skyY:
-      case evnt.eType
-      of enemyShip, attackOnBase, enemyPatrol:
-        color = redColor
-      of fullDocks:
-        color = cyanColor
-      of disease:
-        color = goldenColor
-      of doublePrice:
-        color = limeColor
-      of trader, friendlyShip:
-        color = greenColor
-      of EventsTypes.none, baseRecovery:
-        discard
-    let details: string = case evnt.eType
-      of enemyShip, trader, friendlyShip:
-        try:
-          protoShipsList[evnt.shipIndex].name
-        except KeyError:
-          dialog = setError(message = "Can't get ship name")
-          return
-      of fullDocks, disease, attackOnBase, enemyPatrol:
-        skyBases[skyMap[evnt.skyX][evnt.skyY].baseIndex].name
-      of doublePrice:
-        try:
-          itemsList[evnt.itemIndex].name & " in " & skyBases[skyMap[evnt.skyX][
-              evnt.skyY].baseIndex].name
-        except KeyError:
-          dialog = setError(message = "Can't get item name")
-          return
-      of EventsTypes.none, baseRecovery:
-        ""
-    knownEventsList.add(y = KnowledgeData(index: event.id, name: event.name,
-        distance: event.distance, coords: event.coords, color: color,
-        details: details, dataType: DataType.event))
+  knownEventsList.sort(cmp = sortEvents)
 
 proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
