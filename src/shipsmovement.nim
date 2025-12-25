@@ -19,7 +19,7 @@
 ## counting a ship's speed, docking or undocking, etc.
 
 import std/[strutils, tables]
-import contracts
+import contracts, nimalyzer
 import bases, bases2, config, crewinventory, game, game2, gamesaveload, items,
     maps, messages, ships, shipscargo, shipscrew, shipscrew2, types, utils
 
@@ -30,14 +30,16 @@ proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError,
   ## * minutes - the amount of minutes passed
   if playerShip.speed == docked:
     return
-  var baseFuelNeeded: int = 0
+  var baseFuelNeeded: ExtendedNegative = 0
   for module in playerShip.modules:
     if module.mType == ModuleType2.engine and not module.disabled:
-      baseFuelNeeded -= 1
-  var fuelNeeded: int = baseFuelNeeded * (minutes / 10).int
+      {.ruleOff: "assignments".}
+      baseFuelNeeded = baseFuelNeeded - 1
+      {.ruleOn: "assignments".}
+  var fuelNeeded: ExtendedNegative = baseFuelNeeded * (minutes / 10).int
   if getRandom(min = 1, max = 10) < (minutes mod 10):
     fuelNeeded *= baseFuelNeeded
-  let fuelIndex: int = findItem(inventory = playerShip.cargo,
+  let fuelIndex: ExtendedNatural = findItem(inventory = playerShip.cargo,
       itemType = fuelType, itemQuality = any)
   if fuelIndex == -1:
     addMessage(message = "Ship falls from the sky due to a lack of fuel.",
@@ -51,7 +53,7 @@ proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError,
     return
   updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
       fuelIndex].protoIndex, amount = fuelNeeded, quality = playerShip.cargo[
-          fuelIndex].quality)
+      fuelIndex].quality)
 
 proc haveOrderRequirements(): string {.raises: [KeyError], tags: [],
     contractual.} =
@@ -97,11 +99,12 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.raises: [
   ## * infoOnly - if true, the ship is docked, count with its max speed
   ##
   ## Returns the ships' speed in meters per minute
-  var newSpeed: int = 0
   if ship.name == playerShip.name and not infoOnly:
     if haveOrderRequirements().len > 0:
-      return
-  var baseSpeed: int = 0
+      return 0
+  var
+    newSpeed: int = 0
+    baseSpeed: int = 0
   for module in ship.modules:
     if module.mType == ModuleType2.engine and not module.disabled:
       baseSpeed = module.power * 10
