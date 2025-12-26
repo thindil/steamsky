@@ -137,7 +137,7 @@ type
 
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
-  ItemsDurability* = range[0..101] ## The range of the items durability
+  ItemsDurability* = range[0..121] ## The range of the items durability
   SkillRange* = range[0..100] ## The range of skills levels
   BasesRange* = range[1..1_024] ## The amount of bases in the game
   ExtendedBasesRange* = range[0..1_024] ## The amount of bases in the game with zero value
@@ -147,12 +147,13 @@ type
   ExtendedNegative* = range[int.low..0] ## Extended negative numbers range, with 0
 
   AttributesArray* = array[1..2, Natural] ## 1 - Attribute level, 2 - Attribute experience
-  EquipmentArray* = array[EquipmentLocations, int] ## The equipment of mobs
+  EquipmentArray* = array[EquipmentLocations, ExtendedNatural] ## The equipment of mobs
 
   XmlAttribute* = string ## Used to read the game data from XML files
   FactionIndex* = string ## Used to store in-game factions indexes
   BaseType* = string ## Used to store types of bases
   ObjectName* = string ## Used to store names of objects (items)
+  MessageText* = string ## Used to store the text of a message
 
   ModuleData* = object
     ## Used to store information about ships' modules
@@ -648,7 +649,7 @@ type
     ## * message - The message itself
     ## * kind    - The type of message
     ## * color   - The color used to show the message
-    message*: string
+    message*: MessageText
     kind*: MessageType
     color*: MessageColor
 
