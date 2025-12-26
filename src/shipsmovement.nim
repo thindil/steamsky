@@ -102,9 +102,10 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.raises: [
   if ship.name == playerShip.name and not infoOnly:
     if haveOrderRequirements().len > 0:
       return 0
+  type SpeedRange = range[-1_000_000..1_000_000]
   var
-    newSpeed: int = 0
-    baseSpeed: int = 0
+    newSpeed: SpeedRange = 0
+    baseSpeed: SpeedRange = 0
   for module in ship.modules:
     if module.mType == ModuleType2.engine and not module.disabled:
       baseSpeed = module.power * 10
@@ -167,7 +168,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
           mType = orderMessage)
       if $gameSettings.autoSave == $dock:
         saveGame()
-      var memberIndex: int = 0
+      var memberIndex: Natural = 0
       while memberIndex < playerShip.crew.len:
         if playerShip.crew[memberIndex].contractLength == 0:
           deleteMember(memberIndex = memberIndex, ship = playerShip)
