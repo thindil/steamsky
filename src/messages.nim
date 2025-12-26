@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -43,7 +43,7 @@ proc formattedTime*(time: DateRecord = gameDate): string {.raises: [], tags: [],
     result.add(y = "0")
   result.add(y = $time.minutes)
 
-proc addMessage*(message: string; mType: MessageType;
+proc addMessage*(message: MessageText; mType: MessageType;
     color: MessageColor = white) {.raises: [], tags: [], contractual.} =
   ## Add the message to the messages list. Delete the oldest message if the
   ## adding will reach the max limit of messages. Same as above, but uses
@@ -128,7 +128,7 @@ proc messagesAmount*(kind: MessageType = default): int {.raises: [], tags: [],
     if message.kind == kind:
       result.inc
 
-proc restoreMessage*(message: string; kind: MessageType = MessageType.default;
+proc restoreMessage*(message: MessageText; kind: MessageType = MessageType.default;
     color: MessageColor = white) {.raises: [], tags: [], contractual.} =
   ## Restore the selected message from the save file
   ##
