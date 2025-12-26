@@ -18,6 +18,7 @@
 ## Provides code related to the information about the list of accepted
 ## missions, like sorting them, showing information about them, etc.
 
+import std/algorithm
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
 import coreui, errordialog, setui, table, themes
@@ -57,6 +58,62 @@ proc sortMissions(sortAsc, sortDesc: MissionsSortOrders;
     missionsSortOrder = sortDesc
   else:
     missionsSortOrder = sortAsc
+
+  proc sortMissions(x, y: KnowledgeData): int {.raises: [], tags: [],
+      contractual.} =
+    ## Compare two missions and return which should go first, based on the sort
+    ## order of the missions
+    ##
+    ## * x - the first mission to compare
+    ## * y - the second mission to compare
+    ##
+    ## Returns 1 if the first mission should go first, -1 if the second mission
+    ## should go first.
+    case missionsSortOrder
+    of typeAsc:
+      if x.name < y.name:
+        return 1
+      return -1
+    of typeDesc:
+      if x.name > y.name:
+        return 1
+      return -1
+    of distanceAsc:
+      if x.distance < y.distance:
+        return 1
+      return -1
+    of distanceDesc:
+      if x.distance > y.distance:
+        return 1
+      return -1
+    of coordAsc:
+      if x.coords < y.coords:
+        return 1
+      return -1
+    of coordDesc:
+      if x.coords > y.coords:
+        return 1
+      return -1
+    of timeAsc:
+      if x.timeLimit < y.timeLimit:
+        return 1
+      return -1
+    of timeDesc:
+      if x.timeLimit > y.timeLimit:
+        return 1
+      return -1
+    of rewardAsc:
+      if x.baseReward < y.baseReward:
+        return 1
+      return -1
+    of rewardDesc:
+      if x.baseReward > y.baseReward:
+        return 1
+      return -1
+    of none:
+      return -1
+
+  missionsUIList.sort(cmp = sortMissions)
 
 proc showMissionsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
