@@ -1454,6 +1454,36 @@ type
     ## Used to store memory page's elements
     data*: PageData
     next*, prev*: ref PageElement
+  Str* = object
+    ## Used to store string, replace it later with normal string
+    buffer*: Buffer
+    len*: int
+  TextUndoRecord* = object
+    ## Used to store data about one undo record in text edit widgets
+    where*: int
+    insertLength*, deleteLength*, charStorage*: int16
+  TextUndoState* = object
+    ## Used to store data about text edit undo state
+    undoRec*: array[nkTextEditUndoStateCount, TextUndoRecord]
+    undoPoint*, redoPoint*, undoCharPoint*, redoCharPoint*: int16
+  TextEdit* = object
+    ## Used to store data about edit widgets
+    clip*: Clipboard
+    string*: Str
+    filter*: PluginFilter
+    scrolbar*: Vec2
+    cursor*, selectStart*, selectEnd*: int
+    mode*, cursorAtEndOfLine*, initialized*, hasPreferredX*, singleLine*,
+      active*, padding1*: uint8
+    preferredX*: float
+    undo*: TextUndoState
+  PluginPaste* = proc(handle: Handle; edit: TextEdit)
+  PluginCopy* = proc(handle: Handle; text: string; len: int)
+  Clipboard* = object
+    ## Used to store clipboard data
+    userData*: Handle
+    copy*: PluginCopy
+    paste*: PluginPaste
   Context* = object
     ## The main context of the Nuklear library
     style*: Style
@@ -1462,6 +1492,8 @@ type
     seq*, count*: uint
     memory: Buffer
     usePool*: bool
+    freeList*: PageElement
+    clip*: Clipboard
 
 # ---------
 # Constants
