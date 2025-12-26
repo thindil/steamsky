@@ -237,16 +237,17 @@ type
     ## Used to store information about items in various inventories (cargo, crew
     ## inventory, ect)
     ##
-    ## * protoIndex - The index of the item's prototype
-    ## * amount     - The amount of the item in the inventory
-    ## * name       - The name of the item, if different than the default one
-    ## * durability - The current durability of the item
-    ## * price      - The price for which the item was bought
-    ## * quality    - The quality of the item
+    ## * protoIndex    - The index of the item's prototype
+    ## * amount        - The amount of the item in the inventory
+    ## * name          - The name of the item, if different than the default one
+    ## * durability    - The current durability of the item
+    ## * maxDurability - The maximum durability of the item
+    ## * price         - The price for which the item was bought
+    ## * quality       - The quality of the item
     protoIndex*: Natural = 0
     amount*: Positive = 1
     name*: string
-    durability*: ItemsDurability = 100
+    durability*, maxDurability: ItemsDurability = 100
     price*: Natural = 0
     quality*: ObjectQuality = normal
 
@@ -463,16 +464,17 @@ type
   BaseCargo* = object
     ## Used to store information about items in bases cargo
     ##
-    ## * protoIndex - The index of the item's prototype
-    ## * amount     - The amount of the item in the inventory
-    ## * durability - The current durability of the item
-    ## * price      - The price for which the item was bought
-    ## * quality    - The quality of the item
+    ## * protoIndex    - The index of the item's prototype
+    ## * amount        - The amount of the item in the inventory
+    ## * durability    - The current durability of the item
+    ## * maxDurability - The maximum durability of the item
+    ## * price         - The price for which the item was bought
+    ## * quality       - The quality of the item
     protoIndex*: Natural
     amount*: Natural
-    durability*: ItemsDurability
+    durability*, maxDurability: ItemsDurability = 100
     price*: Natural
-    quality*: ObjectQuality
+    quality*: ObjectQuality = normal
 
   DateRecord* = object
     ## Used to store the game's time
