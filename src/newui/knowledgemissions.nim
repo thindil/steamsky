@@ -20,8 +20,8 @@
 
 import std/algorithm
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
-import coreui, errordialog, setui, table, themes
+import ../[config, game, messages, missions, types]
+import coreui, dialogs, errordialog, mapsui, setui, table, themes
 
 type MissionsSortOrders = enum
   none, typeAsc, typeDesc, distanceAsc, distanceDesc, timeAsc, timeDesc,
@@ -32,6 +32,65 @@ const defaultMissionsSortOrder: MissionsSortOrders = none
 var
   missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
   missionIndex: Natural = 0
+
+proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected mission's actions' menu
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  const
+    width: float = 400
+    height: float = 170
+
+  let
+    mission: MissionData = acceptedMissions[missionIndex]
+    windowName: string = case mission.mType
+      of deliver:
+        "Deliver item"
+      of destroy:
+        "Destroy enemy"
+      of patrol:
+        "Patrol area"
+      of explore:
+        "Explore area"
+      of passenger:
+        "Transport passenger"
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 3)
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Set the mission as the ship destination")
+    imageLabelButton(image = images[destinationIcon], text = "Target",
+        alignment = right):
+      if mission.targetX == playerShip.skyX and mission.targetY == playerShip.skyY:
+        dialog = setMessage(message = "You are at this location now.",
+            title = "Can't set destination")
+        return
+      playerShip.destinationX = mission.targetX
+      playerShip.destinationY = mission.targetY
+      addMessage(message = "You set the travel destination for your ship.",
+          mType = orderMessage)
+      dialog = none
+    restoreButtonStyle()
+    addCloseButton(dialog = dialog, isPopup = false)
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Show the mission on the map")
+    imageLabelButton(image = images[showColoredIcon], text = "Show",
+        alignment = right):
+      centerX = mission.targetX
+      centerY = mission.targetY
+      dialog = none
+      mapPreview = true
+    restoreButtonStyle()
+
+  windowSetFocus(name = windowName)
 
 proc setMissionInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
