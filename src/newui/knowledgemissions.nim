@@ -33,7 +33,7 @@ var
   missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
   missionIndex: Natural = 0
 
-proc showMissionInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+proc setMissionInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected mission's actions menu
   ##
@@ -164,15 +164,15 @@ proc showMissionsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         continue
       setButtonStyle(field = textNormal, color = theme.colors[mission.color])
       addButton(label = mission.name, tooltip = "Show the mission's menu",
-          data = mission.index, code = showMissionInfo, dialog = dialog)
+          data = mission.index, code = setMissionInfo, dialog = dialog)
       addButton(label = $mission.distance, tooltip = "Show the mission's menu",
-          data = mission.index, code = showMissionInfo, dialog = dialog)
+          data = mission.index, code = setMissionInfo, dialog = dialog)
       addButton(label = mission.coords, tooltip = "Show the mission's menu",
-          data = mission.index, code = showMissionInfo, dialog = dialog)
+          data = mission.index, code = setMissionInfo, dialog = dialog)
       addButton(label = mission.timeLimit, tooltip = "Show the mission's menu",
-          data = mission.index, code = showMissionInfo, dialog = dialog)
+          data = mission.index, code = setMissionInfo, dialog = dialog)
       addButton(label = mission.baseReward, tooltip = "Show the mission's menu",
-          data = mission.index, code = showMissionInfo, dialog = dialog)
+          data = mission.index, code = setMissionInfo, dialog = dialog)
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       row.inc
       if row == gameSettings.listsLimit + 1:
