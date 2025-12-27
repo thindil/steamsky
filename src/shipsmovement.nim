@@ -198,7 +198,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
     if escape:
       let roll: Positive = getRandom(min = 1, max = 100)
       var
-        messageText: string = "Ship escaped from base " & skyBases[
+        messageText: MessageText = "Ship escaped from base " & skyBases[
             baseIndex].name & " without paying."
         color: MessageColor = white
       if roll in 1..40:
@@ -220,7 +220,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
           saveGame()
     else:
       if getBasePopulation(baseIndex = baseIndex) == empty:
-        let fuelIndex: int = findItem(inventory = playerShip.cargo,
+        let fuelIndex: ExtendedNatural = findItem(inventory = playerShip.cargo,
             itemType = fuelType, itemQuality = any)
         if fuelIndex == -1:
           return "You can't undock from base because you don't have any fuel."
@@ -239,7 +239,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
         dockingCost = (dockingCost.float * newGameSettings.pricesBonus).int
         if dockingCost == 0:
           dockingCost = 1
-        let traderIndex: int = findMember(order = talk)
+        let traderIndex: ExtendedNatural = findMember(order = talk)
         countPrice(price = dockingCost, traderIndex = traderIndex)
         if dockingCost > moneyAmount:
           return "You can't undock to this base because you don't have enough " &
@@ -248,7 +248,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
         if traderIndex > -1:
           gainExp(amount = 1, skillNumber = talkingSkill,
               crewIndex = traderIndex)
-        let fuelIndex: int = findItem(inventory = playerShip.cargo,
+        let fuelIndex: ExtendedNatural = findItem(inventory = playerShip.cargo,
             itemType = fuelType, itemQuality = any)
         if fuelIndex == -1:
           return "You can't undock from base because you don't have any fuel."
@@ -324,12 +324,12 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
   message = haveOrderRequirements()
   if message.len > 0:
     return 0
-  var fuelIndex: int = findItem(inventory = playerShip.cargo,
+  var fuelIndex: ExtendedNatural = findItem(inventory = playerShip.cargo,
       itemType = fuelType, itemQuality = any)
   if fuelIndex == -1:
     message = "You don't have any fuel."
     return 0
-  let fuelNeeded: int = countFuelNeeded()
+  let fuelNeeded: ExtendedNegative = countFuelNeeded()
   if playerShip.cargo[fuelIndex].amount < fuelNeeded:
     message = "You don't have enough fuel (" & itemsList[playerShip.cargo[
         fuelIndex].protoIndex].name & ")."
@@ -339,8 +339,8 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
     message = "You can't fly because your ship is overloaded."
     return 0
   let
-    newX: int = playerShip.skyX + x
-    newY: int = playerShip.skyY + y
+    newX: ExtendedNatural = playerShip.skyX + x
+    newY: ExtendedNatural = playerShip.skyY + y
   if newX < 1 or newX > 1_024 or newY < 1 or newY > 1_024:
     return 0;
   playerShip.skyX = newX
@@ -348,7 +348,7 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
   updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
       fuelIndex].protoIndex, amount = fuelNeeded, quality = playerShip.cargo[
           fuelIndex].quality)
-  var timePassed: int = (100.0 / speed).int
+  var timePassed: Natural = (100.0 / speed).int
   if timePassed > 0:
     case playerShip.speed
     of quarterSpeed:
