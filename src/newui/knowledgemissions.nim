@@ -33,7 +33,7 @@ var
   missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
   missionIndex: Natural = 0
 
-proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
+proc showMissionMenu*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected mission's actions' menu
   ##
@@ -43,7 +43,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   const
     width: float = 400
-    height: float = 170
+    height: float = 90
 
   let
     mission: MissionData = acceptedMissions[missionIndex]
@@ -102,6 +102,7 @@ proc setMissionInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   missionIndex = data
+  dialog = missionActionDialog
 
 proc sortMissions(sortAsc, sortDesc: MissionsSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
