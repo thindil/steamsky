@@ -247,7 +247,7 @@ type
     protoIndex*: Natural = 0
     amount*: Positive = 1
     name*: string
-    durability*, maxDurability: ItemsDurability = 100
+    durability*, maxDurability*: ItemsDurability = 100
     price*: Natural = 0
     quality*: ObjectQuality = normal
 
