@@ -37,9 +37,9 @@ type
       renameDialog, giveOrderDialog, memberDialog, renameMemberDialog,
       inventoryDialog, moduleInfoDialog, renameModuleDialog, assignCrewDialog,
       assignAmmoDialog, assignSkillDialog, recipeDialog, setRecipeDialog,
-      baseDialog, baseActionDialog, ordersDialog, destinationDialog,
-      messageDialog, infoDialog, buyDialog, sellDialog, takeDialog, dropDialog,
-      moveDialog, giveDialog, dropCargoDialog
+      baseDialog, missionActionDialog, baseActionDialog, ordersDialog,
+      destinationDialog, messageDialog, infoDialog, buyDialog, sellDialog,
+      takeDialog, dropDialog, moveDialog, giveDialog, dropCargoDialog
 
 const
   dtime*: float = 20.0        ## The length in miliseconds of one game's frame
