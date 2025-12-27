@@ -1484,6 +1484,16 @@ type
     userData*: Handle
     copy*: PluginCopy
     paste*: PluginPaste
+  ConfigStackStyleItemElement* = object
+    ## Used to store data about style element on the stack
+    address*, oldValue*: StyleItem
+  ConfigStackStyleItem* = object
+    ## Used to store stack of style elements
+    head*: int
+    elements*: array[nkStyleItemStackSize, ConfigStackStyleItemElement]
+  ConfigurationStacks* = object
+    ## Used to store configuration stacks
+    styleItems*: ConfigStackStyleItem
   Context* = object
     ## The main context of the Nuklear library
     style*: Style
@@ -1494,6 +1504,8 @@ type
     usePool*: bool
     freeList*: PageElement
     clip*: Clipboard
+    lastWidgetState*: nk_flags
+    buttonBehavior*: ButtonBehavior
 
 # ---------
 # Constants
