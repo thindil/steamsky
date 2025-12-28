@@ -62,11 +62,13 @@ proc savePlayerShip*(saveData: var XmlNode) {.raises: [], tags: [],
       dataElement.attrs = {"value": $module.craftingAmount}.toXmlAttributes
       moduleTree.add(son = dataElement)
       dataElement = newElement(tag = "data")
-      dataElement.attrs = {"value": $module.craftingQuality}.toXmlAttributes
+      dataElement.attrs = {"value": $(module.craftingQuality.ord)}.toXmlAttributes
       moduleTree.add(son = dataElement)
-      dataElement.attrs = {"value": $module.craftingBonus}.toXmlAttributes
+      dataElement = newElement(tag = "data")
+      dataElement.attrs = {"value": $(module.craftingBonus.ord)}.toXmlAttributes
       moduleTree.add(son = dataElement)
-      dataElement.attrs = {"value": $module.craftingMalus}.toXmlAttributes
+      dataElement = newElement(tag = "data")
+      dataElement.attrs = {"value": $(module.craftingMalus.ord)}.toXmlAttributes
       moduleTree.add(son = dataElement)
     of ModuleType2.trainingRoom:
       var dataElement: XmlNode = newElement(tag = "data")
@@ -358,14 +360,12 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           of 3:
             craftingAmount = modData.attr(name = "value").parseInt
           of 4:
-            craftingQuality = parseEnum[ObjectQuality](s = modData.attr(
-                name = "value"))
+            craftingQuality = modData.attr(
+                name = "value").parseInt.ObjectQuality
           of 5:
-            craftingBonus = parseEnum[CraftBonuses](s = modData.attr(
-                name = "value"))
+            craftingBonus = modData.attr(name = "value").parseInt.CraftBonuses
           of 6:
-            craftingMalus = parseEnum[CraftMaluses](s = modData.attr(
-                name = "value"))
+            craftingMalus = modData.attr(name = "value").parseInt.CraftMaluses
           else:
             discard
           dataIndex.inc
