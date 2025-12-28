@@ -217,7 +217,7 @@ type
       craftingIndex*: string
       craftingTime*: Natural
       craftingAmount*: Natural
-      craftingQuality*: ObjectQuality
+      craftingQuality*: ObjectQuality = normal
       craftingBonus*: CraftBonuses
       craftingMalus*: CraftMaluses
     of ModuleType2.trainingRoom:
