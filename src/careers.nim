@@ -36,7 +36,7 @@ proc name*(career: CareerData): CareerName {.raises: [], tags: [],
     contractual.} =
   ## The getter of a field of CareerData type
   ##
-  ## * career - the CommandLists object which field will be get
+  ## * career - the CareerData object which field will be get
   ##
   ## Returns the value of the selected field
   career.name
@@ -45,7 +45,7 @@ proc skills*(career: CareerData): seq[SkillName] {.raises: [], tags: [],
     contractual.} =
   ## The getter of a field of CareerData type
   ##
-  ## * career - the CommandLists object which field will be get
+  ## * career - the CareerData object which field will be get
   ##
   ## Returns the value of the selected field
   career.skills
