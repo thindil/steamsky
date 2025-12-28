@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Items can be studies or deconstructed without a proper tool
 - Generating enemy ship events after loading a game
+- Default crafted items' quality
 
 ## [11.7] - 2025-11-02
 
