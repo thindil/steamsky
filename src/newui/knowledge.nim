@@ -20,7 +20,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config]
-import coreui, header, knowledgebases, knowledgeevents, knowledgemissions, messagesui, themes
+import coreui, header, knowledgebases, knowledgeevents, knowledgemissions, knowledgestories, messagesui, themes
 
 var expandedSection: Natural = 0
 
@@ -112,5 +112,6 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 4
+      showStoriesInfo(dialog = dialog)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       height - 75)
