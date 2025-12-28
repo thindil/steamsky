@@ -21,7 +21,7 @@
 import contracts
 import coreui
 
-proc showStoriessInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc showStoriesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the list of the known stories
   ##
