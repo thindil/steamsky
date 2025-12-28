@@ -35,8 +35,8 @@ type
     ##
     ## * level   - The minimal level of a skill which need that quality of tool
     ## * quality - The level of quality of tool needed for training
-    level*: Natural
-    quality*: Natural
+    level: Natural
+    quality: Natural
 
   SkillRecord* = object
     ## Store data releated to the skills
@@ -64,6 +64,22 @@ type
     ## * description - The description of the attribute
     name*: string
     description*: string
+
+proc level*(tool: ToolQuality): Natural {.raises: [], tags: [], contractual.} =
+  ## The getter of a field of ToolQuality type
+  ##
+  ## * tool - the ToolQuality object which field will be get
+  ##
+  ## Returns the value of the selected field
+  tool.level
+
+proc quality*(tool: ToolQuality): Natural {.raises: [], tags: [], contractual.} =
+  ## The getter of a field of ToolQuality type
+  ##
+  ## * tool - the ToolQuality object which field will be get
+  ##
+  ## Returns the value of the selected field
+  tool.quality
 
 const
   defaultItemDurability*: ItemsDurability = 100 ## Default durability for the new items
