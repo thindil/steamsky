@@ -1486,14 +1486,51 @@ type
     paste*: PluginPaste
   ConfigStackStyleItemElement* = object
     ## Used to store data about style element on the stack
-    address*, oldValue*: StyleItem
+    address*: ref StyleItem
+    oldValue*: StyleItem
+  ConfigStackFloatElement* = object
+    ## Used to store data about float element on the stack
+    address*: ref float
+    oldValue*: float
+  ConfigStackVec2Element* = object
+    ## Used to store data about vec2 element on the stack
+    address*: ref Vec2
+    oldValue*: Vec2
+  ConfigStackFlagsElement* = object
+    ## Used to store data about flag element on the stack
+    address*: ref nk_flags
+    oldValue*: nk_flags
+  ConfigStackColorElement* = object
+    ## Used to store data about color element on the stack
+    address*: ref NkColor
+    oldValue*: NkColor
   ConfigStackStyleItem* = object
     ## Used to store stack of style elements
     head*: int
     elements*: array[nkStyleItemStackSize, ConfigStackStyleItemElement]
+  ConfigStackFloat* = object
+    ## Used to store stack of float elements
+    head*: int
+    elements*: array[nkFloatStackSize, ConfigStackFloatElement]
+  ConfigStackVec2* = object
+    ## Used to store stack of Vec2 elements
+    head*: int
+    elements*: array[nkVectorStackSize, ConfigStackVec2Element]
+  ConfigStackFlags* = object
+    ## Used to store stack of flags elements
+    head*: int
+    elements*: array[nkFlagsStackSize, ConfigStackFlagsElement]
+  ConfigStackColors* = object
+    ## Used to store stack of color elements
+    head*: int
+    elements*: array[nkColorStackSize, ConfigStackColorElement]
   ConfigurationStacks* = object
     ## Used to store configuration stacks
     styleItems*: ConfigStackStyleItem
+    floats*: ConfigStackFloat
+    vectors*: ConfigStackVec2
+    flags*: ConfigStackFlags
+    colors*: ConfigStackColors
   Context* = object
     ## The main context of the Nuklear library
     style*: Style
