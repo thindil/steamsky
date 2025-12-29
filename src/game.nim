@@ -29,6 +29,10 @@ type
 
   SkillName* = string
     ## The name of a skill
+  SkillDescription* = string
+    ## The description of a skill
+  SkillTool* = string
+    ## The type of items used to train a skill
 
   ToolQuality = object
     ## Store data related to quality of tools needed for train a skill
@@ -48,8 +52,8 @@ type
     ## * toolsQuality - The quality of tool needed for training
     name*: SkillName
     attribute*: Natural
-    description*: string
-    tool*: string
+    description*: SkillDescription
+    tool*: SkillTool
     toolsQuality*: seq[ToolQuality]
 
   DataLoadingError* = object of CatchableError
