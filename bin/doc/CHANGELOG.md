@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Generating enemy ship events after loading a game
 - Default crafted items' quality
 - Saving the current story to a file
+- Starting a new story
 
 ## [11.7] - 2025-11-02
 
