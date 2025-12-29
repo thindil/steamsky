@@ -172,6 +172,7 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
     if currentStory.data.len > 0:
       attrs2.add(y = ("data", currentStory.data))
     attrs2.add(y = ("finishedstep", $currentStory.finishedStep.ord))
+    attrs2.add(y = ("step", $currentStory.step))
     storyElement.attrs = attrs2.toXmlAttributes
     saveTree.add(son = storyElement)
     logMessage(message = "done", messageLevel = lvlInfo)
