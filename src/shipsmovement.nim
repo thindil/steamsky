@@ -330,7 +330,7 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
     message = "You don't have any fuel."
     return 0
   let fuelNeeded: ExtendedNegative = countFuelNeeded()
-  if playerShip.cargo[fuelIndex].amount < fuelNeeded:
+  if playerShip.cargo[fuelIndex].amount < fuelNeeded.abs:
     message = "You don't have enough fuel (" & itemsList[playerShip.cargo[
         fuelIndex].protoIndex].name & ")."
     return 0
