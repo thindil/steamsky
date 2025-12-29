@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Default crafted items' quality
 - Saving the current story to a file
 - Starting a new story
+- Checking for needed fuel amount during the ship's movement
 
 ## [11.7] - 2025-11-02
 
