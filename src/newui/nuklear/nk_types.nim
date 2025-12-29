@@ -326,6 +326,10 @@ const
     ## The size of the stack of flags
   nkColorStackSize*: Positive = 32
     ## The size of the stack of colors
+  nkFontStackSize*: Positive = 8
+    ## The size of the stack of user fonts
+  nkButtonBehaviorStackSize*: Positive = 8
+    ## The size of the stack of user fonts
   nkInputMax*: Positive = 16
     ## The max size of the user's input
 
@@ -1504,6 +1508,14 @@ type
     ## Used to store data about color element on the stack
     address*: ref NkColor
     oldValue*: NkColor
+  ConfigStackUserFontElement* = object
+    ## Used to store data about user font element on the stack
+    address*: ref UserFont
+    oldValue*: UserFont
+  ConfigStackButtonBehaviorElement* = object
+    ## Used to store data about button behavior element on the stack
+    address*: ref UserFont
+    oldValue*: UserFont
   ConfigStackStyleItem* = object
     ## Used to store stack of style elements
     head*: int
@@ -1524,6 +1536,14 @@ type
     ## Used to store stack of color elements
     head*: int
     elements*: array[nkColorStackSize, ConfigStackColorElement]
+  ConfigStackUserFont* = object
+    ## Used to store stack of user font elements
+    head*: int
+    elements*: array[nkFontStackSize, ConfigStackUserFontElement]
+  ConfigStackButtonBehavior* = object
+    ## Used to store stack of user font elements
+    head*: int
+    elements*: array[nkButtonBehaviorStackSize, ConfigStackButtonBehaviorElement]
   ConfigurationStacks* = object
     ## Used to store configuration stacks
     styleItems*: ConfigStackStyleItem
@@ -1531,6 +1551,8 @@ type
     vectors*: ConfigStackVec2
     flags*: ConfigStackFlags
     colors*: ConfigStackColors
+    fonts*: ConfigStackUserFont
+    buttonBehaviors*: ConfigStackButtonBehavior
   Context* = object
     ## The main context of the Nuklear library
     style*: Style
@@ -1543,6 +1565,9 @@ type
     clip*: Clipboard
     lastWidgetState*: nk_flags
     buttonBehavior*: ButtonBehavior
+    stacks*: ConfigurationStacks
+    when defined(nkIncludeCommandUserData):
+      userData*: Handle ## Interna Nuklear data
 
 # ---------
 # Constants
