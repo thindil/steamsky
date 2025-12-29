@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Items can be studies or deconstructed without a proper tool
 - Generating enemy ship events after loading a game
 - Default crafted items' quality
+- Saving the current story to a file
 
 ## [11.7] - 2025-11-02
 
