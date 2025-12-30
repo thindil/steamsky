@@ -50,11 +50,11 @@ type
     ## * description  - The description of the skill
     ## * tool         - The type of items used to train the skill
     ## * toolsQuality - The quality of tool needed for training
-    name*: SkillName
-    attribute*: Natural
-    description*: SkillDescription
-    tool*: SkillTool
-    toolsQuality*: seq[ToolQuality]
+    name: SkillName
+    attribute: Natural
+    description: SkillDescription
+    tool: SkillTool
+    toolsQuality: seq[ToolQuality]
 
   DataLoadingError* = object of CatchableError
     ## Used to mark problems during loading the game data from files
@@ -84,6 +84,46 @@ proc quality*(tool: ToolQuality): Natural {.raises: [], tags: [], contractual.} 
   ##
   ## Returns the value of the selected field
   tool.quality
+
+proc name*(skill: SkillRecord): SkillName {.raises: [], tags: [], contractual.} =
+  ## The getter of a field of SkillRecord type
+  ##
+  ## * skill - the SkillRecord object which field will be get
+  ##
+  ## Returns the value of the selected field
+  skill.name
+
+proc attribute*(skill: SkillRecord): Natural {.raises: [], tags: [], contractual.} =
+  ## The getter of a field of SkillRecord type
+  ##
+  ## * skill - the SkillRecord object which field will be get
+  ##
+  ## Returns the value of the selected field
+  skill.attribute
+
+proc description*(skill: SkillRecord): SkillDescription {.raises: [], tags: [], contractual.} =
+  ## The getter of a field of SkillRecord type
+  ##
+  ## * skill - the SkillRecord object which field will be get
+  ##
+  ## Returns the value of the selected field
+  skill.description
+
+proc tool*(skill: SkillRecord): SkillTool {.raises: [], tags: [], contractual.} =
+  ## The getter of a field of SkillRecord type
+  ##
+  ## * skill - the SkillRecord object which field will be get
+  ##
+  ## Returns the value of the selected field
+  skill.tool
+
+proc toolsQuality*(skill: SkillRecord): seq[ToolQuality] {.raises: [], tags: [], contractual.} =
+  ## The getter of a field of SkillRecord type
+  ##
+  ## * skill - the SkillRecord object which field will be get
+  ##
+  ## Returns the value of the selected field
+  skill.toolsQuality
 
 const
   defaultItemDurability*: ItemsDurability = 100 ## Default durability for the new items
