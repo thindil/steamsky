@@ -1134,7 +1134,7 @@ type
     ## Stores data needed to show information about a known story
     name*: string
       ## The name of the story
-    index*: string
+    index*: Natural
       ## The index of the story
 
 const
@@ -1278,9 +1278,9 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't set a mission info")
   # Set the list of known stories
   knownStoriesList = @[]
-  if currentStory.index.len > 0:
+  for index, story in finishedStories:
     try:
-      knownStoriesList.add(y = StoryUIData(index: currentStory.index,
-          name: storiesList[currentStory.index].name))
+      knownStoriesList.add(y = StoryUIData(index: index, name: storiesList[
+          story.index].name))
     except KeyError:
-      dialog = setError(message = "Can't set the current story")
+      dialog = setError(message = "Can't set the known story")
