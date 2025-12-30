@@ -472,7 +472,7 @@ type
     ## * quality       - The quality of the item
     protoIndex*: Natural
     amount*: Natural
-    durability*, maxDurability: ItemsDurability = 100
+    durability*, maxDurability*: ItemsDurability = 100
     price*: Natural
     quality*: ObjectQuality = normal
 
