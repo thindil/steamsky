@@ -64,6 +64,7 @@ proc progressStory*(nextStep: bool = false): bool {.raises: [
             skillIndex = findSkillIndex(skillName = finishCondition))
   of stories.any:
     discard
+  chance += getRandom(min = 1, max = 100)
   if chance < maxRandom:
     updateGame(minutes = 10)
     return false
