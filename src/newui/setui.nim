@@ -22,7 +22,7 @@ import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
     crafts, crew, game, items, maps, missions, reputation, shipscargo,
-    shipscrew, types]
+    shipscrew, stories, types]
 import coreui, errordialog, utilsui2, themes
 
 var
@@ -1130,6 +1130,12 @@ type
         ## Limit of time for the mission
       baseReward*: string
         ## The base amount of money for the mission
+  StoryUIData* = object
+    ## Stores data needed to show information about a known story
+    name*: string
+      ## The name of the story
+    index*: string
+      ## The index of the story
 
 const
   basesStatuses*: array[3, string] = ["Any", "Not visited", "Visited"]
@@ -1146,6 +1152,8 @@ var
     ## The list of known events
   missionsUIList*: seq[KnowledgeData] = @[]
     ## The list of accepted missions
+  knownStoriesList*: seq[StoryUIData] = @[]
+    ## The list of known stories
 
 proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -1162,6 +1170,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   basesOwners = @["Any"]
   for faction in factionsList.values:
     basesOwners.add(y = faction.name)
+  # Set the list of known bases
   knownBasesList = @[]
   for index, base in skyBases:
     if base.known:
@@ -1177,6 +1186,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             visited: base.visited.year > 0))
       except:
         dialog = setError(message = "Can't get a base info")
+  # Set the list of known events
   knownEventsList = @[]
   for index, event in eventsList:
     try:
@@ -1235,6 +1245,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       knownEventsList.add(y = eventData)
     except KeyError:
       dialog = setError(message = "Can't set an event info")
+  # Set the list of accepted missions
   missionsUIList = @[]
   for index, mission in acceptedMissions:
     try:
@@ -1265,3 +1276,11 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       missionsUIList.add(y = missionData)
     except KeyError:
       dialog = setError(message = "Can't set a mission info")
+  # Set the list of known stories
+  knownStoriesList = @[]
+  if currentStory.index.len > 0:
+    try:
+      knownStoriesList.add(y = StoryUIData(index: currentStory.index,
+          name: storiesList[currentStory.index].name))
+    except KeyError:
+      dialog = setError(message = "Can't set the current story")
