@@ -296,7 +296,7 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
   ensure:
     result < playerShip.crew[memberIndex].inventory.len
   body:
-    result = playerShip.crew[memberIndex].equipment[tool]
+    result = playerShip.crew[memberIndex].equipment[EquipmentLocations.tool]
     if result > -1:
       let protoIndex: Natural = playerShip.crew[memberIndex].inventory[
           result].protoIndex
@@ -353,7 +353,7 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
           giveOrders(ship = playerShip, memberIndex = memberIndex,
               givenOrder = rest)
           return -1
-    playerShip.crew[memberIndex].equipment[tool] = result
+    playerShip.crew[memberIndex].equipment[EquipmentLocations.tool] = result
 
 proc getRandomItem*(itemsIndexes: seq[Positive]; equipIndex: EquipmentLocations;
     highestLevel, weaponSkillLevel: Positive;

@@ -492,15 +492,15 @@ proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
       member.previousOrder = member.order
       member.order = rest
       member.orderTime = 15
-      if member.equipment[tool] > -1:
+      if member.equipment[EquipmentLocations.tool] > -1:
         updateCargo(ship = playerShip, protoIndex = member.inventory[
-            member.equipment[tool]].protoIndex, amount = 1,
-            durability = member.inventory[member.equipment[tool]].durability,
-            quality = member.inventory[member.equipment[tool]].quality)
+            member.equipment[EquipmentLocations.tool]].protoIndex, amount = 1,
+            durability = member.inventory[member.equipment[EquipmentLocations.tool]].durability,
+            quality = member.inventory[member.equipment[EquipmentLocations.tool]].quality)
         updateInventory(memberIndex = memberIndex, amount = -1,
-            inventoryIndex = member.equipment[tool], ship = playerShip,
-                quality = member.inventory[member.equipment[tool]].quality)
-        member.equipment[tool] = -1
+            inventoryIndex = member.equipment[EquipmentLocations.tool], ship = playerShip,
+                quality = member.inventory[member.equipment[EquipmentLocations.tool]].quality)
+        member.equipment[EquipmentLocations.tool] = -1
       addMessage(message = member.name &
           " is too tired to work, they're going to rest.",
           mType = orderMessage, color = yellow)

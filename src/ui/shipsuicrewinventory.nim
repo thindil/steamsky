@@ -475,7 +475,7 @@ proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
   elif itemType == legsArmor:
     playerShip.crew[memberIndex].equipment[legs] = itemIndex
   elif itemType in toolsList:
-    playerShip.crew[memberIndex].equipment[tool] = itemIndex
+    playerShip.crew[memberIndex].equipment[EquipmentLocations.tool] = itemIndex
   {.ruleOn: "ifStatements".}
   return sortCrewInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SortCrewInventory", "-1"].allocCStringArray)

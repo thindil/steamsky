@@ -236,7 +236,7 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
     var
       toolsIndex: int = -1
       requiredTool: string = ""
-    toolsIndex = ship.crew[memberIndex].equipment[tool]
+    toolsIndex = ship.crew[memberIndex].equipment[EquipmentLocations.tool]
     if toolsIndex > 0 and itemsList[ship.crew[memberIndex].inventory[
         toolsIndex].protoIndex].itemType != requiredTool:
       updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
@@ -266,9 +266,9 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
                 itemType = requiredTool, quality = toolQuality,
                     itemQuality = any)
             if toolsIndex > -1:
-              ship.crew[memberIndex].equipment[tool] = toolsIndex
+              ship.crew[memberIndex].equipment[EquipmentLocations.tool] = toolsIndex
           else:
-            ship.crew[memberIndex].equipment[tool] = -1
+            ship.crew[memberIndex].equipment[EquipmentLocations.tool] = -1
         if toolsIndex == -1:
           case givenOrder
             of repair:
@@ -288,7 +288,7 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
     if givenOrder == rest:
       ship.crew[memberIndex].previousOrder = rest
       if ship.crew[memberIndex].order in [repair, clean, upgrading, train]:
-        toolsIndex = ship.crew[memberIndex].equipment[tool]
+        toolsIndex = ship.crew[memberIndex].equipment[EquipmentLocations.tool]
         if toolsIndex > -1:
           updateCargo(ship = ship, protoIndex = ship.crew[
               memberIndex].inventory[toolsIndex].protoIndex, amount = 1,
@@ -386,7 +386,7 @@ proc giveRestOrder(ship: var ShipRecord; memberIndex: Natural) {.raises: [
   body:
     ship.crew[memberIndex].previousOrder = rest
     if ship.crew[memberIndex].order in [repair, clean, upgrading, train]:
-      var toolsIndex: int = ship.crew[memberIndex].equipment[tool]
+      var toolsIndex: int = ship.crew[memberIndex].equipment[EquipmentLocations.tool]
       if toolsIndex > -1:
         updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
             toolsIndex].protoIndex, amount = 1, durability = ship.crew[

@@ -207,7 +207,7 @@ proc setUseItem(dialog: var GameDialog; data: CrewData; used: bool) {.raises: [
     elif itemType == legsArmor:
       playerShip.crew[crewIndex].equipment[legs] = data.index
     elif itemType in toolsList:
-      playerShip.crew[crewIndex].equipment[tool] = data.index
+      playerShip.crew[crewIndex].equipment[EquipmentLocations.tool] = data.index
     {.ruleOn: "ifStatements".}
 
 proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
