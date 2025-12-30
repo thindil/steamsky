@@ -1553,6 +1553,23 @@ type
     colors*: ConfigStackColors
     fonts*: ConfigStackUserFont
     buttonBehaviors*: ConfigStackButtonBehavior
+  DrawNullTexture* = object
+    ## Used to store data about null textures
+    texture*: Handle
+    uv*: Vec2
+  DrawVertexLayoutElement* = object
+    ## Used to store data about vertex layout elements
+    attribute*: DrawVertexLayoutAttribute
+    format*: DrawVertexLayoutFormat
+    offset*: int
+  ConvertConfig* = object
+    ## Used to store data for convert config
+    globalAlpha: float
+    lineAA*, shapeAA*: AntiAliasing
+    circleSegmentCount*, arcSegmentCount*, curveSegmentCount*: uint
+    texNull*: DrawNullTexture
+    vertexLayout*: DrawVertexLayoutElement
+    vertexSize*, vertexAlignment*: int
   Context* = object
     ## The main context of the Nuklear library
     style*: Style
