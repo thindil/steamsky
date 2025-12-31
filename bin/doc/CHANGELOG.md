@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Starting a new story
 - Checking for needed fuel amount during the ship's movement
 - Progressing the current story
+- Counting fuel usage when waiting in place in the sky
 
 ## [11.7] - 2025-11-02
 
