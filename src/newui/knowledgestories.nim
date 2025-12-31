@@ -18,8 +18,10 @@
 ## Provides code related to the information about the list of known stories,
 ## like sorting them, showing information about them, etc.
 
-import contracts
-import coreui
+import contracts, nuklear/nuklear_sdl_renderer
+import coreui, setui
+
+var storyIndex: Natural = 0
 
 proc showStoriesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -30,4 +32,12 @@ proc showStoriesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # No stories discovered
-  discard
+  if knownStoriesList.len == 0:
+    setLayoutRowDynamic(height = 100, cols = 1)
+    wrapLabel(str = "You didn't discover any story yet.")
+  else:
+    setLayoutRowDynamic(height = 30, cols = 3)
+    let newStoryIndex = comboList(items = knownStoriesList,
+        selected = storyIndex, itemHeight = 25, x = 150, y = 150)
+    if newStoryIndex != storyIndex:
+      storyIndex = newStoryIndex
