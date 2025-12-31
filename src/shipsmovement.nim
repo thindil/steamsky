@@ -19,7 +19,7 @@
 ## counting a ship's speed, docking or undocking, etc.
 
 import std/[strutils, tables]
-import contracts, nimalyzer
+import contracts
 import bases, bases2, config, crewinventory, game, game2, gamesaveload, items,
     maps, messages, ships, shipscargo, shipscrew, shipscrew2, types, utils
 
@@ -33,9 +33,7 @@ proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError,
   var baseFuelNeeded: ExtendedNegative = 0
   for module in playerShip.modules:
     if module.mType == ModuleType2.engine and not module.disabled:
-      {.ruleOff: "assignments".}
-      baseFuelNeeded = baseFuelNeeded - 1
-      {.ruleOn: "assignments".}
+      baseFuelNeeded.dec
   var fuelNeeded: ExtendedNegative = baseFuelNeeded * (minutes / 10).int
   if getRandom(min = 1, max = 10) < (minutes mod 10):
     fuelNeeded *= baseFuelNeeded
