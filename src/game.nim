@@ -33,6 +33,10 @@ type
     ## The description of a skill
   SkillTool* = string
     ## The type of items used to train a skill
+  AttributeName* = string
+    ## The name of an attribute
+  AttributeDescription* = string
+    ## The description of an attribute
 
   ToolQuality = object
     ## Store data related to quality of tools needed for train a skill
@@ -66,8 +70,8 @@ type
     ##
     ## * name        - The name of the attribute
     ## * description - The description of the attribute
-    name*: string
-    description*: string
+    name*: AttributeName
+    description*: AttributeDescription
 
 proc level*(tool: ToolQuality): Natural {.raises: [], tags: [], contractual.} =
   ## The getter of a field of ToolQuality type
