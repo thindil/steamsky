@@ -1570,6 +1570,18 @@ type
     texNull*: DrawNullTexture
     vertexLayout*: DrawVertexLayoutElement
     vertexSize*, vertexAlignment*: int
+  DrawList* = object
+    ## Used to store data for drawing
+    clipRect*: Rect
+    circleVtx*: array[12, Vec2]
+    config*: ConvertConfig
+    buffer*, vertices*, elements*: Buffer
+    elementCount*, vertexCount*, cmdCount*, pathCount*, pathOffset*: uint
+    cmdOffset*: nk_size
+    lineAA*, shapeAA*: AntiAliasing
+    when defined(nkIncludeCommandUserData):
+      userdata*: Handle
+        ## Internal Nuklear type
   Context* = object
     ## The main context of the Nuklear library
     style*: Style
@@ -1584,7 +1596,14 @@ type
     buttonBehavior*: ButtonBehavior
     stacks*: ConfigurationStacks
     when defined(nkIncludeCommandUserData):
-      userData*: Handle ## Interna Nuklear data
+      userData*: Handle
+        ## Interna Nuklear data
+    when defined(nkIncludeVertexBufferOutput):
+      drawList*: DrawList
+        ## Internal Nuklear type
+    textEdit*: TextEdit
+    overlay*: CommandBuffer
+    build*: int
 
 # ---------
 # Constants
