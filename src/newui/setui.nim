@@ -1130,12 +1130,6 @@ type
         ## Limit of time for the mission
       baseReward*: string
         ## The base amount of money for the mission
-  StoryUIData* = object
-    ## Stores data needed to show information about a known story
-    name*: string
-      ## The name of the story
-    index*: Natural
-      ## The index of the story
 
 const
   basesStatuses*: array[3, string] = ["Any", "Not visited", "Visited"]
@@ -1152,7 +1146,7 @@ var
     ## The list of known events
   missionsUIList*: seq[KnowledgeData] = @[]
     ## The list of accepted missions
-  knownStoriesList*: seq[StoryUIData] = @[]
+  knownStoriesList*: seq[string] = @[]
     ## The list of known stories
 
 proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -1280,7 +1274,6 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   knownStoriesList = @[]
   for index, story in finishedStories:
     try:
-      knownStoriesList.add(y = StoryUIData(index: index, name: storiesList[
-          story.index].name))
+      knownStoriesList.add(y = storiesList[story.index].name)
     except KeyError:
       dialog = setError(message = "Can't set the known story")
