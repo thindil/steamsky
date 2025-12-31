@@ -36,7 +36,7 @@ proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError,
       baseFuelNeeded.dec
   var fuelNeeded: ExtendedNegative = baseFuelNeeded * (minutes / 10).int
   if getRandom(min = 1, max = 10) < (minutes mod 10):
-    fuelNeeded *= baseFuelNeeded
+    fuelNeeded = (fuelNeeded * baseFuelNeeded) * -1
   let fuelIndex: ExtendedNatural = findItem(inventory = playerShip.cargo,
       itemType = fuelType, itemQuality = any)
   if fuelIndex == -1:
