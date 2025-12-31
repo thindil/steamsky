@@ -131,7 +131,7 @@ proc saveBases*(saveData: var XmlNode) {.raises: [], tags: [],
           itemElement: XmlNode = newElement(tag = "item")
           attrs: seq[tuple[key, val: string]] = @[("index", $item.protoIndex), (
               "amount", $item.amount), ("durability", $item.durability), (
-              "price", $item.price)]
+              "price", $item.price), ("maxdurability", $item.maxDurability)]
         if item.quality != normal:
           attrs.add(y = ("quality", $item.quality))
         itemElement.attrs = attrs.toXmlAttributes
@@ -295,6 +295,10 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
               name = "quality"))
         else:
           item.quality = normal
+        if baseItem.attr(name = "maxdurability").len > 0:
+          item.maxDurability = baseItem.attr(name = "maxdurability").parseInt
+        else:
+          item.maxDurability = 100
         skyBases[baseIndex].cargo.add(y = item)
       skyMap[skyBases[baseIndex].skyX][skyBases[
           baseIndex].skyY].baseIndex = baseIndex
