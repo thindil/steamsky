@@ -36,8 +36,12 @@ proc showStoriesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     setLayoutRowDynamic(height = 100, cols = 1)
     wrapLabel(str = "You didn't discover any story yet.")
   else:
-    setLayoutRowDynamic(height = 30, cols = 3)
+    setLayoutRowStatic(height = 30, cols = 3, ratio = [200.cfloat, 150, 250])
     let newStoryIndex = comboList(items = knownStoriesList,
-        selected = storyIndex, itemHeight = 25, x = 150, y = 150)
+        selected = storyIndex, itemHeight = 25, x = 150, y = 200)
     if newStoryIndex != storyIndex:
       storyIndex = newStoryIndex
+    labelButton(title = "Show on map"):
+      discard
+    labelButton(title = "Set as destination for ship"):
+      discard
