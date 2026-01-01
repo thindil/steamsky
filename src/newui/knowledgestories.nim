@@ -19,8 +19,8 @@
 ## like sorting them, showing information about them, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../stories
-import coreui, errordialog, mapsui, setui
+import ../[game, messages, stories, types]
+import coreui, dialogs, errordialog, mapsui, setui
 
 var storyIndex: Natural = 0
 
@@ -50,7 +50,18 @@ proc showStoriesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           return
       centerX = newX
       centerY = newY
-      dialog = none
       mapPreview = true
     labelButton(title = "Set as destination for ship"):
-      discard
+      var (newX, newY) = try:
+          getStoryLocation()
+        except:
+          dialog = setError(message = "Can't get the story location.")
+          return
+      if newX == playerShip.skyX and newY == playerShip.skyY:
+        dialog = setMessage(message = "You are at this location now.",
+            title = "Can't set destination")
+        return
+      playerShip.destinationX = newX
+      playerShip.destinationY = newY
+      addMessage(message = "You set the travel destination for your ship.",
+          mType = orderMessage)
