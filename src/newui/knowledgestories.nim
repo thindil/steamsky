@@ -19,7 +19,8 @@
 ## like sorting them, showing information about them, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import coreui, setui
+import ../stories
+import coreui, errordialog, mapsui, setui
 
 var storyIndex: Natural = 0
 
@@ -42,6 +43,14 @@ proc showStoriesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if newStoryIndex != storyIndex:
       storyIndex = newStoryIndex
     labelButton(title = "Show on map"):
-      discard
+      var (newX, newY) = try:
+          getStoryLocation()
+        except:
+          dialog = setError(message = "Can't get the story location.")
+          return
+      centerX = newX
+      centerY = newY
+      dialog = none
+      mapPreview = true
     labelButton(title = "Set as destination for ship"):
       discard
