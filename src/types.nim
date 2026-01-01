@@ -244,12 +244,14 @@ type
     ## * maxDurability - The maximum durability of the item
     ## * price         - The price for which the item was bought
     ## * quality       - The quality of the item
+    ## * weight        - The weight of the item
     protoIndex*: Natural = 0
     amount*: Positive = 1
     name*: string
     durability*, maxDurability*: ItemsDurability = 100
     price*: Natural = 0
     quality*: ObjectQuality = normal
+    weight*: Positive = 1
 
   MobAttributeRecord* = object
     ## Used to store information about the crew member's attributes
@@ -470,11 +472,13 @@ type
     ## * maxDurability - The maximum durability of the item
     ## * price         - The price for which the item was bought
     ## * quality       - The quality of the item
+    ## * weight        - The weight of the item
     protoIndex*: Natural
     amount*: Natural
     durability*, maxDurability*: ItemsDurability = 100
     price*: Natural
     quality*: ObjectQuality = normal
+    weight*: Positive = 1
 
   DateRecord* = object
     ## Used to store the game's time
