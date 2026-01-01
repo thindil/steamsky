@@ -1582,6 +1582,19 @@ type
     when defined(nkIncludeCommandUserData):
       userdata*: Handle
         ## Internal Nuklear type
+  Page* = object
+    ## Used to store data for page memory
+    size*: uint
+    next*: ref Page
+    win*: array[1, PageElement]
+  Pool* = object
+    ## Used to store data for memory pool
+    alloc*: Allocator
+    aType*: AllocationType
+    pageCount*, capacity*: uint
+    pages*: Page
+    freeList*: PageElement
+    size*, cap*: nk_size
   Context* = object
     ## The main context of the Nuklear library
     style*: Style
@@ -1604,6 +1617,7 @@ type
     textEdit*: TextEdit
     overlay*: CommandBuffer
     build*: int
+    pool*: Pool
 
 # ---------
 # Constants
