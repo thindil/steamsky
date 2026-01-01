@@ -70,8 +70,8 @@ type
     ##
     ## * name        - The name of the attribute
     ## * description - The description of the attribute
-    name*: AttributeName
-    description*: AttributeDescription
+    name: AttributeName
+    description: AttributeDescription
 
 proc level*(tool: ToolQuality): Natural {.raises: [], tags: [], contractual.} =
   ## The getter of a field of ToolQuality type
@@ -81,7 +81,8 @@ proc level*(tool: ToolQuality): Natural {.raises: [], tags: [], contractual.} =
   ## Returns the value of the selected field
   tool.level
 
-proc quality*(tool: ToolQuality): Natural {.raises: [], tags: [], contractual.} =
+proc quality*(tool: ToolQuality): Natural {.raises: [], tags: [],
+    contractual.} =
   ## The getter of a field of ToolQuality type
   ##
   ## * tool - the ToolQuality object which field will be get
@@ -89,7 +90,8 @@ proc quality*(tool: ToolQuality): Natural {.raises: [], tags: [], contractual.} 
   ## Returns the value of the selected field
   tool.quality
 
-proc name*(skill: SkillRecord): SkillName {.raises: [], tags: [], contractual.} =
+proc name*(skill: SkillRecord): SkillName {.raises: [], tags: [],
+    contractual.} =
   ## The getter of a field of SkillRecord type
   ##
   ## * skill - the SkillRecord object which field will be get
@@ -97,7 +99,8 @@ proc name*(skill: SkillRecord): SkillName {.raises: [], tags: [], contractual.} 
   ## Returns the value of the selected field
   skill.name
 
-proc attribute*(skill: SkillRecord): Natural {.raises: [], tags: [], contractual.} =
+proc attribute*(skill: SkillRecord): Natural {.raises: [], tags: [],
+    contractual.} =
   ## The getter of a field of SkillRecord type
   ##
   ## * skill - the SkillRecord object which field will be get
@@ -105,7 +108,8 @@ proc attribute*(skill: SkillRecord): Natural {.raises: [], tags: [], contractual
   ## Returns the value of the selected field
   skill.attribute
 
-proc description*(skill: SkillRecord): SkillDescription {.raises: [], tags: [], contractual.} =
+proc description*(skill: SkillRecord): SkillDescription {.raises: [], tags: [],
+    contractual.} =
   ## The getter of a field of SkillRecord type
   ##
   ## * skill - the SkillRecord object which field will be get
@@ -113,7 +117,8 @@ proc description*(skill: SkillRecord): SkillDescription {.raises: [], tags: [], 
   ## Returns the value of the selected field
   skill.description
 
-proc tool*(skill: SkillRecord): SkillTool {.raises: [], tags: [], contractual.} =
+proc tool*(skill: SkillRecord): SkillTool {.raises: [], tags: [],
+    contractual.} =
   ## The getter of a field of SkillRecord type
   ##
   ## * skill - the SkillRecord object which field will be get
@@ -121,13 +126,32 @@ proc tool*(skill: SkillRecord): SkillTool {.raises: [], tags: [], contractual.} 
   ## Returns the value of the selected field
   skill.tool
 
-proc toolsQuality*(skill: SkillRecord): seq[ToolQuality] {.raises: [], tags: [], contractual.} =
+proc toolsQuality*(skill: SkillRecord): seq[ToolQuality] {.raises: [], tags: [],
+    contractual.} =
   ## The getter of a field of SkillRecord type
   ##
   ## * skill - the SkillRecord object which field will be get
   ##
   ## Returns the value of the selected field
   skill.toolsQuality
+
+proc name*(attribute: AttributeRecord): AttributeName {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of AttributeRecord type
+  ##
+  ## * attribute - the AttributeRecord object which field will be get
+  ##
+  ## Returns the value of the selected field
+  attribute.name
+
+proc description*(attribute: AttributeRecord): AttributeName {.raises: [],
+    tags: [], contractual.} =
+  ## The getter of a field of AttributeRecord type
+  ##
+  ## * attribute - the AttributeRecord object which field will be get
+  ##
+  ## Returns the value of the selected field
+  attribute.description
 
 const
   defaultItemDurability*: ItemsDurability = 100 ## Default durability for the new items
