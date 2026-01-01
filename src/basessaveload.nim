@@ -298,7 +298,7 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
         if baseItem.attr(name = "maxdurability").len > 0:
           item.maxDurability = baseItem.attr(name = "maxdurability").parseInt
         else:
-          item.maxDurability = 100
+          item.maxDurability = defaultItemDurability
         skyBases[baseIndex].cargo.add(y = item)
       skyMap[skyBases[baseIndex].skyX][skyBases[
           baseIndex].skyY].baseIndex = baseIndex
