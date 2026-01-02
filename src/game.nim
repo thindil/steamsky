@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -89,6 +89,16 @@ proc quality*(tool: ToolQuality): Natural {.raises: [], tags: [],
   ##
   ## Returns the value of the selected field
   tool.quality
+
+proc initToolQuality(level, quality: Natural): ToolQuality {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for the tool quality information
+  ##
+  ## * level   - the maximum level on which the tool is used
+  ## * quality - the minimum quality of the used tool
+  ##
+  ## Returns the new structure with information about the selected data
+  return ToolQuality(level: level, quality: quality)
 
 proc name*(skill: SkillRecord): SkillName {.raises: [], tags: [],
     contractual.} =
@@ -407,9 +417,9 @@ proc loadData*(fileName: Path) {.raises: [DataLoadingError],
             newSkill.description = childNode.innerText()
           of "toolquality":
             try:
-              newSkill.toolsQuality.add(y = ToolQuality(level: childNode.attr(
-                  name = "level").parseInt(), quality: childNode.attr(
-                  name = "quality").parseInt()))
+              newSkill.toolsQuality.add(y = initToolQuality(
+                  level = childNode.attr(name = "level").parseInt(),
+                  quality = childNode.attr(name = "quality").parseInt()))
             except ValueError:
               raise newException(exceptn = DataLoadingError,
                   message = "Can't add skill '" & newSkill.name & "'. Invalid value for tools quality.")
