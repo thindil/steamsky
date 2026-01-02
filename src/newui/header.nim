@@ -495,7 +495,13 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
         setWaitMenu()
         dialog = waitDialog
     labelButton(title = "Game statistics"):
-      discard
+      if state == gameStatistics:
+        state = previousState
+      else:
+        previousState = state
+        state = gameStatistics
+        mapPreview = false
+      dialog = none
     if playerShip.crew[0].health > 0:
       labelButton(title = "Help"):
         discard
