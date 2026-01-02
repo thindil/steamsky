@@ -57,15 +57,15 @@ proc nk_layout_space_end(ctx) {.importc, cdecl, raises: [], tags: [], contractua
 # High level bindings
 # -------------------
 
-proc nkPanelLayout(ctx; win: Window; height: float; cols: int) {.raises: [
-    NuklearException], tags: [RootEffect], contractual.} =
+proc nkPanelLayout(ctx: Context; win: Window; height: float;
+    cols: int) {.raises: [NuklearException], tags: [RootEffect], contractual.} =
   ## Set the panel layout.  Internal use only
   ##
   ## * ctx    - the Nuklear context
   ## * height - the height in pixels of each row
   ## * cols   - the amount of columns in each row
   var layout: Panel = win.layout
-  let  style: nk_style = ctx.style
+  let style: Style = ctx.style
 
   if not (layout.flags and windowMinimized.int).bool:
     raise newException(exceptn = NuklearException,
@@ -81,7 +81,7 @@ proc nkPanelLayout(ctx; win: Window; height: float; cols: int) {.raises: [
   layout.row.index = 0
   layout.atY += layout.row.height
   layout.row.columns = cols.cint
-  let itemSpacing: nk_vec2 = style.window.spacing
+  let itemSpacing: Vec2 = style.window.spacing
   if height == 0:
     layout.row.height = max(x = height, y = layout.row.minHeight) + itemSpacing.y
   else:
@@ -96,16 +96,18 @@ proc nkPanelLayout(ctx; win: Window; height: float; cols: int) {.raises: [
     background.y = layout.atY - 1.0
     background.h = layout.row.height + 1.0
     let
-      color: nk_color = if layout.pType == panelTooltip:
-          style.window.tooltip_background
+      color: NkColor = if layout.pType == panelTooltip:
+          style.window.tooltipBackground
         elif layout.pType == panelPopup:
-          style.window.popup_background
+          style.window.popupBackground
         else:
           style.window.background
     var commBuff: CommandBuffer = win.buffer
-    nkFillRect(b = commBuff, rect = background, rounding = 0.0, c = color)
+    nkFillRect(b = commBuff, rect = background, rounding = 0.0, c = nk_color(
+        r: color.r.nk_byte, g: color.g.nk_byte, b: color.b.nk_byte,
+        a: color.a.nk_byte))
 
-proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
+proc nkRowLayout(ctx: var Context; fmt: LayoutFormat; height: float; cols,
     width: int) {.raises: [NuklearException], tags: [RootEffect],
         contractual.} =
   ## Set the current row layout,  Internal use only
@@ -115,27 +117,21 @@ proc nkRowLayout(ctx; fmt: LayoutFormat; height: float; cols,
   ## * height - the height in pixels of each row
   ## * width  - the width in pixels of each column
   ## * cols   - the amount of columns in each row
-  require:
-    ctx != nil
-    ctx.current != nil
-    ctx.current.layout != nil
   body:
-    if ctx == nil or ctx.current == nil or ctx.current.layout == nil:
-      return
-
-    let win: PNkWindow = ctx.current
-#    nkPanelLayout(ctx = ctx, win = win, height = height, cols = cols)
+    var win: Window = ctx.current
+    nkPanelLayout(ctx = ctx, win = win, height = height, cols = cols)
     if fmt == dynamic:
-      win.layout.row.`type` = layoutDynamicFixed
+      win.layout.row.rlType = layoutDynamicFixed
     else:
-      win.layout.row.`type` = layoutStaticFixed
+      win.layout.row.rlType = layoutStaticFixed
 
     win.layout.row.ratio = 0
     win.layout.row.filled = 0
-    win.layout.row.item_offset = 0
-    win.layout.row.item_width = width.float
+    win.layout.row.itemOffset = 0
+    win.layout.row.itemWidth = width.float
+    ctx.current = win
 
-proc nkLayoutRowDynamic(ctx; height: float; cols: int) {.raises: [
+proc nkLayoutRowDynamic(ctx: var Context; height: float; cols: int) {.raises: [
     NuklearException], tags: [RootEffect], contractual, used.} =
   ## Set the current row layout to dynamic,  Internal use only
   ##
