@@ -29,7 +29,7 @@ suite "Unit tests for shipsrepairs module":
       experience: 0), MobAttributeRecord(level: 3, experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0)], equipment: [-1, -1, -1, -1, -1, -1, -1]))
-  playerShip.crew[0].equipment[tool] = -1
+  playerShip.crew[0].equipment[EquipmentLocations.tool] = -1
 
   test "Repairing the player's ship.":
     repairShip(15)
