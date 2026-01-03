@@ -1,4 +1,4 @@
-# Copyright © 2023-2025 Bartek Jasicki
+# Copyright © 2023-2026 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -958,7 +958,7 @@ proc nkWidgetText(o: var CommandBuffer; b: var Rect; str: string; len: var int;
 # -------
 # Buttons
 # -------
-proc nkButtonBehavior(state: var nk_flags; r: Rect; i: ptr nk_input;
+proc nkButtonBehavior(state: var nk_flags; r: Rect; i: Input;
   behavior: ButtonBehavior): bool {.raises: [], tags: [], contractual.} =
   ## Set the button's behavior. Internal use only
   ##
@@ -970,8 +970,6 @@ proc nkButtonBehavior(state: var nk_flags; r: Rect; i: ptr nk_input;
   ## Returns true if button's behavior was properly set, otherwise false
   nkWidgetStateReset(s = state)
   result = false
-  if i == nil:
-    return
   if isMouseHovering(rect = r):
     state = widgetStateHovered.nk_flags
     if isMouseDown(id = left):
@@ -990,7 +988,7 @@ proc nkButtonBehavior(state: var nk_flags; r: Rect; i: ptr nk_input;
     state = state or widgetStateLeft.ord
 
 proc nkDoButton(state: var nk_flags; `out`: var CommandBuffer; r: Rect;
-  style: ptr nk_style_button; `in`: ptr nk_input; behavior: ButtonBehavior;
+  style: StyleButton; `in`: Input; behavior: ButtonBehavior;
   content: var Rect): bool {.raises: [], tags: [], contractual.} =
   ## Draw a button. Internal use only
   ##
@@ -1003,12 +1001,7 @@ proc nkDoButton(state: var nk_flags; `out`: var CommandBuffer; r: Rect;
   ## * content  - the space of the button's content
   ##
   ## Returns true if button was properly drawn, otherwise false
-  require:
-    style != nil
   body:
-    if style == nil:
-      return false
-
     # calculate button content space
     content.x = r.x + style.padding.x + style.border + style.rounding
     content.y = r.y + style.padding.y + style.border + style.rounding
@@ -1024,7 +1017,7 @@ proc nkDoButton(state: var nk_flags; `out`: var CommandBuffer; r: Rect;
     return nkButtonBehavior(state = state, r = bounds, i = `in`, behavior = behavior)
 
 proc nkDrawButton(`out`: var CommandBuffer; bounds: Rect;
-  state: nk_flags; style: ptr nk_style_button): nk_style_item {.raises: [],
+  state: nk_flags; style: ptr StyleButton): StyleItem {.raises: [],
   tags: [RootEffect], contractual.} =
   ## Draw a button. Internal use only
   ## * out      - the command buffer in which the button will be drawn
@@ -1040,22 +1033,22 @@ proc nkDrawButton(`out`: var CommandBuffer; bounds: Rect;
   else:
     result = style.normal
 
-  let bg: nk_style_item_data = cast[nk_style_item_data](result.data)
-  case result.`type`
-  of itemImage:
-    nkDrawImage(b = `out`, r = bounds, img = bg.image.addr, col =
-      nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
-      factor = style.color_factor_background))
-  of itemNineSlice:
-    nkDrawNineSlice(b = `out`, r = bounds, slc = bg.slice.addr, col =
-      nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
-      factor = style.color_factor_background))
-  of itemColor:
-    nkFillRect(b = `out`, rect = bounds, rounding = style.rounding, c =
-      nk_rgb_factor(col = bg.color, factor = style.color_factor_background))
-    nkStrokeRect(b = `out`, rect = bounds, rounding = style.rounding,
-      lineThickness = style.border, c = nk_rgb_factor(col = bg.color,
-      factor = style.color_factor_background))
+  let bg: StyleItemData = result.data
+#  case result.iType
+#  of itemImage:
+#    nkDrawImage(b = `out`, r = bounds, img = bg.image.addr, col =
+#      nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
+#      factor = style.color_factor_background))
+#  of itemNineSlice:
+#    nkDrawNineSlice(b = `out`, r = bounds, slc = bg.slice.addr, col =
+#      nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
+#      factor = style.color_factor_background))
+#  of itemColor:
+#    nkFillRect(b = `out`, rect = bounds, rounding = style.rounding, c =
+#      nk_rgb_factor(col = bg.color, factor = style.color_factor_background))
+#    nkStrokeRect(b = `out`, rect = bounds, rounding = style.rounding,
+#      lineThickness = style.border, c = nk_rgb_factor(col = bg.color,
+#      factor = style.color_factor_background))
 
 proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
   content: var Rect; background, foreground: nk_color; borderWidth: float;
@@ -1141,8 +1134,8 @@ proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
     discard
 
 proc nkDrawButtonSymbol(`out`: var CommandBuffer; bounds, content: var Rect;
-  state: nk_flags; style: ptr nk_style_button; `type`: SymbolType;
-  font: ptr nk_user_font) {.raises: [], tags: [RootEffect], contractual.} =
+  state: nk_flags; style: ptr StyleButton; `type`: SymbolType;
+  font: UserFont) {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only
   ##
   ## * out      - the command buffer in which the button will be drawn
@@ -1153,22 +1146,21 @@ proc nkDrawButtonSymbol(`out`: var CommandBuffer; bounds, content: var Rect;
   ## * type     - the type of symbol to draw
   ## * font     - the font used to draw on the button
   # select correct colors/images
-  let background: nk_style_item = nkDrawButton(`out` = `out`, bounds = bounds,
+  let background: StyleItem = nkDrawButton(`out` = `out`, bounds = bounds,
     state = state, style = style)
-  let bg: nk_color = (if background.`type` == itemColor:
-    cast[nk_style_item_data](background.data).color else: style.text_background)
-
-  var sym: nk_color = (if (state and widgetStateHover.ord).bool:
-    style.text_hover elif (state and widgetStateActive.ord).bool:
-      style.text_active else: style.text_normal)
-
-  sym = nk_rgb_factor(col = sym, factor = style.color_factor_text)
-  nkDrawSymbol(`out` = `out`, `type` = `type`, content = content,
-    background = bg, foreground = sym, borderWidth = 1, font = font)
+#  let bg: NkColor = (if background.iType == itemColor: background.data.color else: style.textBackground)
+#
+#  var sym: nk_color = (if (state and widgetStateHover.ord).bool:
+#    style.text_hover elif (state and widgetStateActive.ord).bool:
+#      style.text_active else: style.text_normal)
+#
+#  sym = nk_rgb_factor(col = sym, factor = style.color_factor_text)
+#  nkDrawSymbol(`out` = `out`, `type` = `type`, content = content,
+#    background = bg, foreground = sym, borderWidth = 1, font = font)
 
 proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer; bounds: var Rect,
-  symbol: SymbolType; behavior: ButtonBehavior; style: ptr nk_style_button;
-  `in`: ptr nk_input; font: ptr nk_user_font): bool {.raises: [], tags: [RootEffect], contractual.} =
+  symbol: SymbolType; behavior: ButtonBehavior; style: StyleButton;
+  `in`: Input; font: UserFont): bool {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only
   ##
   ## * state    - the state of the button
@@ -1181,21 +1173,20 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer; bounds: var
   ## * font     - the font used to draw on the button
   ##
   ## Returns true if button was properly drawn, otherwise false
-  require:
-    style != nil
-    font != nil
   body:
     var content: Rect = Rect()
     result = nkDoButton(state = state, `out` = `out`, r = bounds, style = style,
       `in` = `in`, behavior = behavior, content = content)
-    # TODO
-    # if style.draw_begin != nil:
-    #   style.draw_begin(b = `out`, style.userdata)
-    nkDrawButtonSymbol(`out` = `out`, bounds = bounds, content = content,
-      state = state, style = style, `type` = symbol, font = font)
-    # TODO
-    # if style.draw_end != nil:
-    #   style.draw_end(b = `out`, style.userdata)
+    try:
+      style.drawBegin(b = `out`, style.userData)
+    except:
+      discard
+#    nkDrawButtonSymbol(`out` = `out`, bounds = bounds, content = content,
+#      state = state, style = style, `type` = symbol, font = font)
+    try:
+      style.drawEnd(b = `out`, style.userdata)
+    except:
+      discard
 
 # ------------
 # Page element
