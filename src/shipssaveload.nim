@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -126,7 +126,7 @@ proc savePlayerShip*(saveData: var XmlNode) {.raises: [], tags: [],
     shipTree.add(son = moduleTree)
   for item in playerShip.cargo:
     var attrs: seq[tuple[key, val: string]] = @[("index", $item.protoIndex), (
-        "amount", $item.amount), ("durability", $item.durability)]
+        "amount", $item.amount), ("durability", $item.durability) ]
     if item.name.len > 0:
       attrs.add(y = ("name", item.name))
     if item.price > 0:
@@ -135,6 +135,8 @@ proc savePlayerShip*(saveData: var XmlNode) {.raises: [], tags: [],
       attrs.add(y = ("quality", $item.quality))
     if item.maxDurability != 100:
       attrs.add(y = ("maxdurability", $item.maxDurability))
+    if item.weight > 0:
+      attrs.add(y = ("weight", $item.weight))
     var itemElement: XmlNode = newElement(tag = "cargo")
     itemElement.attrs = attrs.toXmlAttributes
     shipTree.add(son = itemElement)
@@ -490,9 +492,11 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
         maxDurability: ItemsDurability = (if cargo.attr(
             name = "maxdurability").len == 0: 100 else: cargo.attr(
             name = "maxdurability").parseInt)
+        weight: Natural = (if cargo.attr(name = "weight").len == 0: itemsList[
+            protoIndex].weight else: cargo.attr(name = "weight").parseInt)
       playerShip.cargo.add(y = InventoryData(protoIndex: protoIndex,
           amount: amount, name: name, durability: itemDurability, price: price,
-          quality: quality, maxDurability: maxDurability))
+          quality: quality, maxDurability: maxDurability, weight: weight))
     for crew in shipNode.findAll(tag = "member"):
       var member: MemberData = MemberData()
       member.name = crew.attr(name = "name")
