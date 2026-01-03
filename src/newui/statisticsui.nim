@@ -51,14 +51,8 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
 
   group(title = "Group1", flags = {}):
     setLayoutRowDynamic(height = 25, cols = 2)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "The amount of points gained in this game")
-    label(str = "Points:")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "The amount of points gained in this game")
-    colorLabel(str = $getGamePoints(), color = theme.colors[goldenColor])
+    addStatistic(title = "Points", value = $getGamePoints(),
+        tooltip = "The amount of points gained in this game")
   group(title = "Group2", flags = {}):
     discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
