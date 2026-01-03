@@ -90,8 +90,8 @@ proc quality*(tool: ToolQuality): Natural {.raises: [], tags: [],
   ## Returns the value of the selected field
   tool.quality
 
-proc initToolQuality(level, quality: Natural): ToolQuality {.raises: [], tags: [],
-    contractual.} =
+proc initToolQuality(level, quality: Natural): ToolQuality {.raises: [], tags: [
+    ], contractual.} =
   ## Create a new data structure for the tool quality information
   ##
   ## * level   - the maximum level on which the tool is used
@@ -144,6 +144,21 @@ proc toolsQuality*(skill: SkillRecord): seq[ToolQuality] {.raises: [], tags: [],
   ##
   ## Returns the value of the selected field
   skill.toolsQuality
+
+proc initSkillRecord(name: SkillName = ""; attribute: Natural = 1;
+    description: SkillDescription = ""; tool: SkillTool = ""; toolsQuality: seq[
+    ToolQuality] = @[]): SkillRecord {.raises: [], tags: [], contractual.} =
+  ## Create a new data structure for the player's skill information
+  ##
+  ## * name         - the name of the skill
+  ## * attribute    - the attribute associated with the skill
+  ## * description  - the description of the skill
+  ## * tool         - the type of items used as a tool to train the skill
+  ## * toolsQuality - the list of tools' qualities needed for training
+  ##
+  ## Returns the new structure with information about the selected data
+  return SkillRecord(name: name, attribute: attribute, description: description,
+      tool: tool, toolsQuality: toolsQuality)
 
 proc name*(attribute: AttributeRecord): AttributeName {.raises: [], tags: [],
     contractual.} =
@@ -401,7 +416,7 @@ proc loadData*(fileName: Path) {.raises: [DataLoadingError],
         attributesList.add(y = AttributeRecord(name: gameNode.attr(
             name = "name"), description: gameNode.innerText()))
       of "skill":
-        var newSkill: SkillRecord = SkillRecord(attribute: 1)
+        var newSkill: SkillRecord = initSkillRecord()
         newSkill.name = gameNode.attr(name = "name")
         newSkill.tool = gameNode.attr(name = "tool")
         let attributeName: string = gameNode.attr(name = "attribute")
