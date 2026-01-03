@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -246,7 +246,7 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Send a mail to the game creator")
-      labelButton(title = "(c)2016-2025 Bartek thindil Jasicki"):
+      labelButton(title = "(c)2016-2026 Bartek thindil Jasicki"):
         openLink(link = "mailto:thindil@laeran.pl.eu.org")
     row(x = 160, y = 40, w = 315, h = 30):
       label(str = "__________________________")

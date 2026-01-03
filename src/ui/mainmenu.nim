@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -129,7 +129,7 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
          -command {OpenLink https://thindil.itch.io/steam-sky}] -row 1 -columnspan 3
       tooltip::tooltip .aboutmenu.website \
          {Visit the game website: https://thindil.itch.io/steam-sky}
-      grid [ttk::button .aboutmenu.mail -text {(c)2016-2025 Bartek thindil Jasicki} \
+      grid [ttk::button .aboutmenu.mail -text {(c)2016-2026 Bartek thindil Jasicki} \
          -style Link.Toolbutton -command {OpenLink mailto:thindil@laeran.pl.eu.org}] \
          -row 2 -columnspan 3
       tooltip::tooltip .aboutmenu.mail {Send a mail to the game creator}
