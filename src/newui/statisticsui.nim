@@ -17,8 +17,9 @@
 
 ## Provides code related to the game's statistics ui, like showing them, etc.
 
-import contracts
-import coreui
+import contracts, nuklear/nuklear_sdl_renderer
+import ../config
+import coreui, header, messagesui
 
 proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -29,4 +30,13 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  discard
+  if showHeader(dialog = dialog, close = previous, state = state):
+    return
+  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+  setLayoutRowDynamic(height = height, cols = 2)
+  group(title = "Group1", flags = {}):
+    discard
+  group(title = "Group2", flags = {}):
+    discard
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+      height - 75)
