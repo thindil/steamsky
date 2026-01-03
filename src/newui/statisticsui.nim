@@ -18,8 +18,8 @@
 ## Provides code related to the game's statistics ui, like showing them, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
-import coreui, header, messagesui
+import ../[config, statistics]
+import coreui, header, messagesui, themes
 
 proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -34,8 +34,31 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
   setLayoutRowDynamic(height = height, cols = 2)
+
+  proc addStatistic(title, value, tooltip: string) {.raises: [], tags: [],
+      contractual.} =
+    ## Add elements with information about the selected statistic
+    ##
+    ## * title   - the title of the statistic to show
+    ## * value   - the value of the statistic to show
+    ## * tooltip - the tooltip for the statistic
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = tooltip)
+    label(str = title)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = tooltip)
+    colorLabel(str = value, color = theme.colors[goldenColor])
+
   group(title = "Group1", flags = {}):
-    discard
+    setLayoutRowDynamic(height = 25, cols = 2)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "The amount of points gained in this game")
+    label(str = "Points:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "The amount of points gained in this game")
+    colorLabel(str = $getGamePoints(), color = theme.colors[goldenColor])
   group(title = "Group2", flags = {}):
     discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
