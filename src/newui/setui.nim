@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -22,7 +22,7 @@ import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
     crafts, crew, game, items, maps, missions, reputation, shipscargo,
-    shipscrew, stories, types]
+    shipscrew, statistics, stories, types]
 import coreui, errordialog, utilsui2, themes
 
 var
@@ -1277,3 +1277,23 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       knownStoriesList.add(y = storiesList[story.index].name)
     except KeyError:
       dialog = setError(message = "Can't set the known story")
+
+###########################
+# Setting the statistics UI
+###########################
+
+var statisticsValues*: array[2, string] = ["", ""]
+
+
+proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for the game's statistics screen
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  statisticsValues[0] = $getGamePoints()
+  let minutesDiff: int = (gameDate.minutes + (gameDate.hour * 60) + (gameDate.day *
+      1_440) + (gameDate.month * 43_200) + (gameDate.year * 518_400)) - 829_571_520
+  minutesToDate(minutes = minutesDiff, infoText = statisticsValues[1])
