@@ -60,11 +60,6 @@ type
     tool: SkillTool
     toolsQuality: seq[ToolQuality]
 
-  DataLoadingError* = object of CatchableError
-    ## Used to mark problems during loading the game data from files
-  TradeNoFreeCargoError* = object of CatchableError
-    ## Used to mark problems with free cargo space in the ship
-
   AttributeRecord* = object
     ## Store data related to the attributes
     ##
@@ -72,6 +67,14 @@ type
     ## * description - The description of the attribute
     name: AttributeName
     description: AttributeDescription
+
+{.push ruleOff: "objects".}
+type
+  DataLoadingError* = object of CatchableError
+    ## Used to mark problems during loading the game data from files
+  TradeNoFreeCargoError* = object of CatchableError
+    ## Used to mark problems with free cargo space in the ship
+{.push ruleOn: "objects".}
 
 proc level*(tool: ToolQuality): Natural {.raises: [], tags: [], contractual.} =
   ## The getter of a field of ToolQuality type
