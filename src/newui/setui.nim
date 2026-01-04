@@ -18,7 +18,7 @@
 ## Provides code related to training skills in bases, like show the UI,
 ## set the skill to train, etc.
 
-import std/[strutils, tables]
+import std/[strutils, strformat, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
     crafts, crew, game, items, maps, missions, reputation, shipscargo,
@@ -1282,7 +1282,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the statistics UI
 ###########################
 
-var statisticsValues*: array[2, string] = ["", ""]
+var statisticsValues*: array[5, string] = ["", "", "", "",  ""]
 
 
 proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -1297,3 +1297,18 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   let minutesDiff: int = (gameDate.minutes + (gameDate.hour * 60) + (gameDate.day *
       1_440) + (gameDate.month * 43_200) + (gameDate.year * 518_400)) - 829_571_520
   minutesToDate(minutes = minutesDiff, infoText = statisticsValues[1])
+  var visitedPercent: float = (gameStats.basesVisited.float / 1_024.0) * 100.0
+  statisticsValues[2] = try:
+      $gameStats.basesVisited & " (" & fmt"{visitedPercent:5.3f}" & "%)"
+    except:
+      dialog = setError(message = "Can't show info about visited bases.")
+      return
+  visitedPercent = (gameStats.mapVisited.float / (1_024.0 * 1_024.0)) * 100.0
+  if visitedPercent < 0.001:
+    visitedPercent = 0.001
+  statisticsValues[3] = try:
+      fmt"{visitedPercent:5.3f}" & "%"
+    except:
+      dialog = setError(message = "Can't show info about discovered map.")
+      return
+  statisticsValues[4] = $gameStats.distanceTraveled
