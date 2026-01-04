@@ -1169,6 +1169,11 @@ type
     rounding*, w*, h*: uint16
     x*, y*: int16
     color*: NkColor
+  CommandScissor* = object
+    ## Used to store Nuklear command data for clearing rectangles
+    header*: Command
+    x*, y*: int16
+    w*, h*: uint16
   RowLayout* = object
     ## Used to store Nuklear row layout data
     index*, columns*, treeDepth*: int
