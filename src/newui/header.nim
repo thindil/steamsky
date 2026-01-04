@@ -499,6 +499,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
         state = previousState
       else:
         previousState = state
+        setStatistics(dialog = dialog)
         state = gameStatistics
         mapPreview = false
       dialog = none
