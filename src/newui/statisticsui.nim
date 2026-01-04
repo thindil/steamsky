@@ -18,8 +18,8 @@
 ## Provides code related to the game's statistics ui, like showing them, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, statistics]
-import coreui, header, messagesui, themes
+import ../config
+import coreui, header, messagesui, setui, themes
 
 proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -50,9 +50,20 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
     colorLabel(str = value, color = theme.colors[goldenColor])
 
   group(title = "Group1", flags = {}):
+
+    type
+      StatsData = object
+        title, tooltip: string
+
+    const statsData: array[2, StatsData] = [StatsData(title: "Points:",
+        tooltip: "The amount of points gained in this game"), StatsData(
+        title: "Time passed:",
+        tooltip: "In game time which was passed since it started")]
+
     setLayoutRowDynamic(height = 25, cols = 2)
-    addStatistic(title = "Points", value = $getGamePoints(),
-        tooltip = "The amount of points gained in this game")
+    for index, stat in statsData:
+      addStatistic(title = stat.title, value = statisticsValues[index],
+          tooltip = stat.tooltip)
   group(title = "Group2", flags = {}):
     discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
