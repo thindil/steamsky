@@ -36,7 +36,7 @@ suite "Unit tests for stories module":
       currentStory.index.len > 0
 
   test "Getting the current story text.":
-    currentStory.finishedStep = askInBase
+    currentStory.finishedStep = any
     check:
       getCurrentStoryText().len > 0
 
