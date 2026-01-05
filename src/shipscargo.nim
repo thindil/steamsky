@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -24,19 +24,22 @@ import config, game, types
 
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
-    price: Natural = 0; quality: ObjectQuality) {.raises: [], tags: [],
-    contractual.} =
+    price: Natural = 0; quality: ObjectQuality;
+    maxDurability: ItemsDurability = defaultItemDurability;
+    weight: Natural = 0) {.raises: [], tags: [], contractual.} =
   ## Updated the selected ship cargo, add or remove items to it
   ##
-  ## * ship       - The ship which cargo will be updated
-  ## * protoIndex - The prototype index of the item which will be modified. Can
-  ##                be empty if cargoIndex is set
-  ## * amount     - The amount of the item to add or delete from the cargo
-  ## * durability - The durability of the item to modify. Can be empty
-  ## * cargoIndex - The ship cargo index of the item which will be modified. Can
-  ##                be empty if protoIndex is set
-  ## * price      - The price of the item which will be modified
-  ## * quality    - The quality of the item which will be modified
+  ## * ship          - The ship which cargo will be updated
+  ## * protoIndex    - The prototype index of the item which will be modified. Can
+  ##                   be empty if cargoIndex is set
+  ## * amount        - The amount of the item to add or delete from the cargo
+  ## * durability    - The durability of the item to modify. Can be empty
+  ## * cargoIndex    - The ship cargo index of the item which will be modified. Can
+  ##                   be empty if protoIndex is set
+  ## * price         - The price of the item which will be modified
+  ## * quality       - The quality of the item which will be modified
+  ## * maxDurability - The maximum durability of the item to modify. Can be empty
+  ## * weight        - The weight of the item. Can be empty
   ##
   ## Returns the modified ship parameter
   require:
@@ -46,7 +49,8 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     if protoIndex > 0 and cargoIndex < 0:
       for index, item in ship.cargo:
         if item.protoIndex == protoIndex and item.durability == durability and
-            item.quality == quality:
+            item.quality == quality and item.maxDurability == maxDurability and
+            item.weight == weight:
           itemIndex = index
           break
     else:
@@ -55,7 +59,8 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
       return
     if itemIndex == -1:
       ship.cargo.add(y = InventoryData(protoIndex: protoIndex, amount: amount,
-          name: "", durability: durability, price: price, quality: quality))
+          name: "", durability: durability, price: price, quality: quality,
+          maxDurability: maxDurability, weight: weight))
       return
     let newAmount: int = ship.cargo[itemIndex].amount + amount
     if newAmount < 1:
