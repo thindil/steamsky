@@ -1282,7 +1282,19 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the statistics UI
 ###########################
 
-var statisticsValues*: array[5, string] = ["", "", "", "",  ""]
+type
+  StatItemData* = object
+    ## Stores data needed to show information about a statistic's item
+    name*: string
+      ## The name of the item
+    amount*: Natural
+      ## The amount of the item
+
+var
+  statisticsValues*: array[6, string] = ["", "", "", "", "", ""]
+    ## Values of the game's statistics
+  finishedCrafts*: seq[StatItemData] = @[]
+    ## The list of finished crafting orders
 
 
 proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -1294,8 +1306,9 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   statisticsValues[0] = $getGamePoints()
-  let minutesDiff: int = (gameDate.minutes + (gameDate.hour * 60) + (gameDate.day *
-      1_440) + (gameDate.month * 43_200) + (gameDate.year * 518_400)) - 829_571_520
+  let minutesDiff: int = (gameDate.minutes + (gameDate.hour * 60) + (
+      gameDate.day * 1_440) + (gameDate.month * 43_200) + (gameDate.year *
+      518_400)) - 829_571_520
   minutesToDate(minutes = minutesDiff, infoText = statisticsValues[1])
   var visitedPercent: float = (gameStats.basesVisited.float / 1_024.0) * 100.0
   statisticsValues[2] = try:
@@ -1312,3 +1325,18 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't show info about discovered map.")
       return
   statisticsValues[4] = $gameStats.distanceTraveled
+  var
+    totalFinished: Natural = 0
+    statsList: seq[StatisticsData] = gameStats.craftingOrders
+  for craftingOrder in statsList:
+    totalFinished += craftingOrder.amount
+  statisticsValues[5] = $totalFinished
+  if totalFinished > 0:
+    finishedCrafts = @[]
+    for stat in statsList:
+      try:
+        finishedCrafts.add(y = StatItemData(name: itemsList[recipesList[
+            stat.index].resultIndex].name, amount: stat.amount))
+      except:
+        dialog = setError(message = "Can't show finished crafting orders.")
+        return
