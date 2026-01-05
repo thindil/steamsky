@@ -1195,9 +1195,9 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer; bounds: var
 # -----
 # Panel
 # -----
-proc panelHeader(win: ptr nkWindow; title: string; style: nk_style;
-  font: ptr nk_user_font; layout: PNkPanel; `out`: var CommandBuffer,
-  `in`: nk_input): bool {.raises: [], tags: [RootEffect], contractual.} =
+proc panelHeader(win: Window; title: string; style: Style; font: UserFont;
+  layout: var Panel; `out`: var CommandBuffer, `in`: Input): bool {.raises: [],
+  tags: [RootEffect], contractual.} =
   ## Start drawing a Nuklear panel's header if needed. Internal use only
   ##
   ## * win    - the panel which header will be draw
@@ -1212,8 +1212,8 @@ proc panelHeader(win: ptr nkWindow; title: string; style: nk_style;
   if nkPanelHasHeader(flags = win.flags, title = title):
     var
       header: Rect = Rect()
-      background: nk_style_item = nk_style_item()
-      text: nk_text = nk_text()
+      background: StyleItem = StyleItem()
+      text: Text = Text()
 
     # calculate header bounds
     header.x = win.bounds.x
@@ -1229,28 +1229,28 @@ proc panelHeader(win: ptr nkWindow; title: string; style: nk_style;
     layout.at_y += header.h
 
     # select correct header background and text color
-    if ctx.active == win:
+    if context.active.name == win.name:
       background = style.window.header.active
-      if layout.`type` == panelGroup:
-        text.text = style.window.group_text_color
+      if layout.pType == panelGroup:
+        text.text = style.window.groupTextColor
       else:
-        text.text = style.window.header.label_active
+        text.text = style.window.header.labelActive
     elif isMouseHovering(rect = header):
       background = style.window.header.hover
-      if layout.`type` == panelGroup:
-        text.text = style.window.group_text_color
+      if layout.pType == panelGroup:
+        text.text = style.window.groupTextColor
       else:
-        text.text = style.window.header.label_hover
+        text.text = style.window.header.labelHover
     else:
       background = style.window.header.normal
-      if layout.`type` == panelGroup:
-        text.text = style.window.group_text_color
+      if layout.pType == panelGroup:
+        text.text = style.window.groupTextColor
       else:
-        text.text = style.window.header.label_normal
+        text.text = style.window.header.labelNormal
 
     # draw header background
     header.h += 1.0
-    let bg: nk_style_item_data = cast[nk_style_item_data](background.data)
+#    let bg: nk_style_item_data = cast[nk_style_item_data](background.data)
 #    case background.`type`
 #    of itemImage:
 #      text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
@@ -1309,22 +1309,22 @@ proc panelHeader(win: ptr nkWindow; title: string; style: nk_style;
 
     # window header title
     var textLen: int = title.len
-    let t: float = try:
-        font.width(arg1 = font.userdata, h = font.height,
-          arg3 = title.cstring, len = textLen.cint)
-      except Exception:
-        return false
-    text.padding = new_nk_vec2(x = 0, y = 0)
+#    let t: float = try:
+#        font.width(arg1 = font.userdata, h = font.height,
+#          arg3 = title.cstring, len = textLen.cint)
+#      except Exception:
+#        return false
+    text.padding = Vec2(x: 0, y: 0)
     var label: Rect = Rect(x: 0, y: 0, w: 0, h: 0)
 
     label.x = header.x + style.window.header.padding.x
     label.x += style.window.header.label_padding.x
     label.y = header.y + style.window.header.label_padding.y
     label.h = font.height + 2 * style.window.header.label_padding.y
-    label.w = t + 2 * style.window.header.spacing.x
+#    label.w = t + 2 * style.window.header.spacing.x
     label.w = (0.float).clamp(a = label.w, b = header.x + header.w - label.x)
-    nkWidgetText(o = `out`, b = label, str = title, len = textLen,
-      t = text.addr, a = TextAlignment.left, f = font)
+#    nkWidgetText(o = `out`, b = label, str = title, len = textLen,
+#      t = text.addr, a = TextAlignment.left, f = font)
   return true
 
 proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [

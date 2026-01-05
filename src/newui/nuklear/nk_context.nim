@@ -1,4 +1,4 @@
-# Copyright © 2024 Bartek Jasicki
+# Copyright © 2024-2026 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -34,8 +34,10 @@ type
 # ---------
 # Variables
 # ---------
-var ctx*: PContext = nil
-  ## Pointer to the Nuklear context
+var
+  ctx*: PContext = nil
+    ## Pointer to the Nuklear context
+  context*: Context = Context()
 
 # -------
 # General

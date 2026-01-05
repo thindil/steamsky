@@ -1300,7 +1300,7 @@ type
     align*: StyleHeaderAlign
     padding*, labelPadding*, spacing*: Vec2
     active*, hover*, normal*: StyleItem
-    labelActive*, labelHover*, labelNormal: NkColor
+    labelActive*, labelHover*, labelNormal*: NkColor
     closeSymbol*, minimizeSymbol*, maximizeSymbol*: SymbolType
     closeButton*, minimizeButton*: StyleButton
   StyleWindow* = object
@@ -1623,6 +1623,10 @@ type
     overlay*: CommandBuffer
     build*: int
     pool*: Pool
+  Text* = object
+    ## Used to store data for text
+    padding*: Vec2
+    background*, text*: NkColor
 
 # ---------
 # Constants
