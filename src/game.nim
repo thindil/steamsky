@@ -181,6 +181,17 @@ proc description*(attribute: AttributeRecord): AttributeName {.raises: [],
   ## Returns the value of the selected field
   attribute.description
 
+proc initAttributeRecord(name: AttributeName;
+    description: AttributeDescription): AttributeRecord {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for the attribute information
+  ##
+  ## * name        - the name of the attribute
+  ## * description - the description of the attribute
+  ##
+  ## Returns the new structure with information about the selected data
+  return AttributeRecord(name: name, description: description)
+
 const
   defaultItemDurability*: ItemsDurability = 100 ## Default durability for the new items
   startDate*: DateRecord = DateRecord(year: 1600, month: 3, day: 1, hour: 8,
@@ -416,8 +427,8 @@ proc loadData*(fileName: Path) {.raises: [DataLoadingError],
       of "shipssyllableend":
         shipsSyllablesEndList.add(y = gameNode.attr(name = "value"))
       of "attribute":
-        attributesList.add(y = AttributeRecord(name: gameNode.attr(
-            name = "name"), description: gameNode.innerText()))
+        attributesList.add(y = initAttributeRecord(name = gameNode.attr(
+            name = "name"), description = gameNode.innerText()))
       of "skill":
         var newSkill: SkillRecord = initSkillRecord()
         newSkill.name = gameNode.attr(name = "name")
