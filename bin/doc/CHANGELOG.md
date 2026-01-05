@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Checking for needed fuel amount during the ship's movement
 - Progressing the current story
 - Counting fuel usage when waiting in place in the sky
+- Counting distance traveled by the player's ship during the game
 
 ## [11.7] - 2025-11-02
 
