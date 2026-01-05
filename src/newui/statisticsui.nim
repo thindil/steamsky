@@ -55,10 +55,16 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
       StatsData = object
         title, tooltip: string
 
-    const statsData: array[2, StatsData] = [StatsData(title: "Points:",
+    const statsData: array[5, StatsData] = [StatsData(title: "Points:",
         tooltip: "The amount of points gained in this game"), StatsData(
         title: "Time passed:",
-        tooltip: "In game time which was passed since it started")]
+        tooltip: "In game time which was passed since it started"), StatsData(
+        title: "Bases visited:",
+        tooltip: "The amount of sky bases visited and total percentage of all bases"),
+        StatsData(title: "Map discovered:",
+        tooltip: "The amount of unique map's fields visited"), StatsData(
+        title: "Distance traveled:",
+        tooltip: "The total amount of map's fields visited")]
 
     setLayoutRowDynamic(height = 25, cols = 2)
     for index, stat in statsData:
