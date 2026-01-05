@@ -28,7 +28,7 @@ suite "Unit tests for shipsupgrade module":
       experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
-  playerShip.crew[0].equipment[tool] = -1
+  playerShip.crew[0].equipment[EquipmentLocations.tool] = -1
 
 
   test "Upgrading the player's ship.":
