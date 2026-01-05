@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -21,7 +21,7 @@
 import std/[strutils, tables]
 import contracts
 import bases, bases2, config, crewinventory, game, game2, gamesaveload, items,
-    maps, messages, ships, shipscargo, shipscrew, shipscrew2, types, utils
+    maps, messages, ships, shipscargo, shipscrew, shipscrew2, statistics, types, utils
 
 proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError,
     ReputationError], tags: [WriteIOEffect], contractual.} =
@@ -340,7 +340,7 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
     newX: ExtendedNatural = playerShip.skyX + x
     newY: ExtendedNatural = playerShip.skyY + y
   if newX < 1 or newX > 1_024 or newY < 1 or newY > 1_024:
-    return 0;
+    return 0
   playerShip.skyX = newX
   playerShip.skyY = newY
   updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
@@ -391,4 +391,5 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
       if not gameSettings.autoRest:
         return 7
       return 8
+  gameStats.distanceTraveled.inc
   return 1
