@@ -75,10 +75,8 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
     # Show crafting table
     if finishedCrafts.len > 0:
       setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.7.cfloat, 0.3])
-      changeStyle(field = background, color = theme.colors[
-          ColorsNames.buttonColor]):
-        label(str = "Name")
-        label(str = "Amount")
+      colorLabel(str = "Name", color = theme.colors[goldenColor])
+      colorLabel(str = "Amount", color = theme.colors[goldenColor])
       for craft in finishedCrafts:
         label(str = craft.name)
         label(str = $craft.amount)
