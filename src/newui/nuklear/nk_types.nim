@@ -1174,6 +1174,13 @@ type
     header*: Command
     x*, y*: int16
     w*, h*: uint16
+  CommandImage* = object
+    ## Used to store Nuklear command data for draw images
+    header*: Command
+    x*, y*: int16
+    w*, h*: uint16
+    img*: Image
+    col*: NkColor
   RowLayout* = object
     ## Used to store Nuklear row layout data
     index*, columns*, treeDepth*: int

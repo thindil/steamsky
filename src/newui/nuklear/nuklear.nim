@@ -1195,7 +1195,7 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer; bounds: var
 # -----
 # Panel
 # -----
-proc panelHeader(win: Window; title: string; style: Style; font: UserFont;
+proc panelHeader(win: var Window; title: string; style: Style; font: UserFont;
   layout: var Panel; `out`: var CommandBuffer, `in`: Input): bool {.raises: [],
   tags: [RootEffect], contractual.} =
   ## Start drawing a Nuklear panel's header if needed. Internal use only
@@ -1250,19 +1250,19 @@ proc panelHeader(win: Window; title: string; style: Style; font: UserFont;
 
     # draw header background
     header.h += 1.0
-#    let bg: nk_style_item_data = cast[nk_style_item_data](background.data)
-#    case background.`type`
+#    case background.iType
 #    of itemImage:
-#      text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
-#      nkDrawImage(b = win.buffer.addr, r = header, img = bg.image.addr,
-#        col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+#      text.background = NkColor(r: 0, g: 0, b: 0, a: 0)
+#      nkDrawImage(b = win.buffer, r = header, img = background.data.image,
+#        col = NkColor(r: 255, g: 255, b: 255, a: 255))
 #    of itemNineSlice:
-#      text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
-#      nkDrawNineSlice(b = win.buffer.addr, r = header, slc = bg.slice.addr,
-#        col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+#      text.background = NkColor(r: 0, g: 0, b: 0, a: 0)
+#      nkDrawNineSlice(b = win.buffer.addr, r = header, slc = background.data.slice,
+#        col = NkColor(r: 255, g: 255, b: 255, a: 255))
 #    of itemColor:
-#      text.background = bg.color
-#      nkFillRect(b = `out`.addr, rect = header, rounding = 0, c = bg.color)
+#      text.background = background.data.color
+#      nkFillRect(b = `out`.addr, rect = header, rounding = 0,
+#        c = background.data.color)
 
     # window close button
     var button: Rect = Rect()
