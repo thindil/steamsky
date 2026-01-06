@@ -55,7 +55,7 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
       StatsData = object
         title, tooltip: string
 
-    const statsData: array[5, StatsData] = [StatsData(title: "Points:",
+    const statsData: array[6, StatsData] = [StatsData(title: "Points:",
         tooltip: "The amount of points gained in this game"), StatsData(
         title: "Time passed:",
         tooltip: "In game time which was passed since it started"), StatsData(
@@ -64,12 +64,22 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
         StatsData(title: "Map discovered:",
         tooltip: "The amount of unique map's fields visited"), StatsData(
         title: "Distance traveled:",
-        tooltip: "The total amount of map's fields visited")]
+        tooltip: "The total amount of map's fields visited"), StatsData(
+        title: "Crafting orders finished:",
+        tooltip: "The total amount of crafting orders finished in this game")]
 
-    setLayoutRowDynamic(height = 25, cols = 2)
+    setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.6.cfloat, 0.4])
     for index, stat in statsData:
       addStatistic(title = stat.title, value = statisticsValues[index],
           tooltip = stat.tooltip)
+    # Show crafting table
+    if finishedCrafts.len > 0:
+      setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.7.cfloat, 0.3])
+      label(str = "Name")
+      label(str = "Amount")
+      for craft in finishedCrafts:
+        label(str = craft.name)
+        label(str = $craft.amount)
   group(title = "Group2", flags = {}):
     discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
