@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -48,7 +48,7 @@ proc startLogging*() {.raises: [], tags: [RootEffect], contractual.} =
     return
   try:
     let
-      fileLogger: FileLogger = newFileLogger(filename = saveDirectory &
+      fileLogger: FileLogger = newFileLogger(filename = saveDirectory.string &
           "debug.log", levelThreshold = debugMode.ord.Level,
           fmtStr = "[$datetime] - $levelname: ", flushThreshold = lvlAll)
       consoleLogger: ConsoleLogger = newConsoleLogger(

@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -192,7 +192,7 @@ var
 
 proc loadConfig*() {.raises: [], tags: [RootEffect], contractual.} =
   ## Load the game and new game settings from the file
-  let fileName: string = saveDirectory & "game.cfg"
+  let fileName: string = saveDirectory.string & "game.cfg"
   var configFile: FileStream = newFileStream(filename = fileName, mode = fmRead)
   if configFile == nil:
     return
@@ -445,4 +445,4 @@ proc saveConfig*() {.raises: [KeyError, IOError, OSError], tags: [
   config.setSectionKey(section = "", key = "WaitMinutes",
       value = $gameSettings.waitMinutes)
   saveAdaBoolean(value = gameSettings.autoDestination, name = "AutoDestination")
-  config.writeConfig(filename = saveDirectory & "game.cfg")
+  config.writeConfig(filename = saveDirectory.string & "game.cfg")

@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -935,7 +935,7 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     """)
     tclEval(script = "bind " & optionsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
     let labelsArray: array[4, WidgetData] = [WidgetData(name: "data",
-        value: dataDirectory), WidgetData(name: "save", value: saveDirectory),
+        value: dataDirectory), WidgetData(name: "save", value: saveDirectory.string),
         WidgetData(name: "docs", value: docDirectory), WidgetData(name: "mods",
         value: modsDirectory)]
     for label in labelsArray:
@@ -1304,7 +1304,7 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
           accel.entryName & " get")
     accel.shortcut = tclEval2(script = rootName & accel.entryName & " get")
   let keyFile: File = try:
-        open(filename = saveDirectory & "keys.cfg", mode = fmWrite)
+        open(filename = saveDirectory.string & "keys.cfg", mode = fmWrite)
       except:
         return showError(message = "Can't open keys configuration file.")
   for accel in accels:

@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -437,8 +437,8 @@ proc generateSaveName*(renameSave: bool = false) {.raises: [OSError,
   ## * renameSave - if true, rename the existing save game file.
   let oldSaveName: string = saveName
   while true:
-    saveName = saveDirectory & playerShip.crew[0].name & "_" & playerShip.name &
-        "_" & $getRandom(min = 100, max = 999) & ".sav"
+    saveName = saveDirectory.string & playerShip.crew[0].name & "_" &
+        playerShip.name & "_" & $getRandom(min = 100, max = 999) & ".sav"
     if not fileExists(filename = saveName):
       break
   if renameSave:

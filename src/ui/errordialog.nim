@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -128,7 +128,7 @@ proc showError*(message: string; e: ref Exception = getCurrentException(
   debugInfo.add(y = "\nLast Tcl error: " & tclGetVar(varName = "errorInfo"))
   logMessage(message = debugInfo, messageLevel = lvlError)
   try:
-    let errorLog: File = open(fileName = saveDirectory & "error.log",
+    let errorLog: File = open(fileName = saveDirectory.string & "error.log",
         mode = fmAppend)
     errorLog.write(s = debugInfo & '\n' & repeat(c = '-', count = 80) & '\n')
     errorLog.close
@@ -160,7 +160,7 @@ proc showError*(message: string; e: ref Exception = getCurrentException(
   errorButton = errorFrame & ".showdirectory"
   tclEval(script = "ttk::button " & errorButton &
       " -text {Open directory with saved games} -command {OpenLink {" &
-      saveDirectory & "}}")
+      saveDirectory.string & "}}")
   tclEval(script = "grid " & errorButton)
   addCloseButton(name = errorFrame & ".close", text = "Close",
       command = "CloseDialog " & errorDialog & (if parentName ==

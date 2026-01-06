@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -633,7 +633,7 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     playerName, shipName, saveTime, fileName: string
   var saves: seq[SaveRecord] = @[]
   try:
-    for file in walkFiles(pattern = saveDirectory & "*.sav"):
+    for file in walkFiles(pattern = saveDirectory.string & "*.sav"):
       let
         (_, name, _) = splitFile(path = file)
         parts = name.split(sep = '_')

@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -609,7 +609,7 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   var newStart: bool = false
   if tclEval2(script = "winfo exists " & mapView) == "0":
     newStart = true
-    let fileName: string = saveDirectory & "keys.cfg"
+    let fileName: string = saveDirectory.string & "keys.cfg"
     var configFile: FileStream = newFileStream(filename = fileName)
     if configFile == nil:
       if DirSep == '\\':

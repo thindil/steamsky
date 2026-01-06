@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -18,7 +18,7 @@
 ## The main game module. Read the game configuration, command line arguments,
 ## initialize graphic and start the game.
 
-import std/[os, parseopt, strutils, tables, times]
+import std/[os, parseopt, paths, strutils, tables, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
 import newui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
@@ -40,7 +40,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   for kind, key, val in gameParams.getopt():
     case key
     of "savedir":
-      saveDirectory = val & DirSep
+      saveDirectory = (val & DirSep).Path
       normalizePath(path = saveDirectory)
     of "modsdir":
       modsDirectory = val & DirSep
@@ -68,7 +68,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         return
   # Create the game directories
   try:
-    createDir(dir = saveDirectory)
+    createDir(dir = $saveDirectory)
     createDir(dir = modsDirectory)
     createDir(dir = themesDirectory)
   except:

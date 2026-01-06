@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -45,7 +45,7 @@ proc loadHallOfFame*() {.raises: [DataLoadingError], tags: [
   for entry in hallOfFameArray.mitems:
     entry = HallOfFameData(name: "", points: 0, deathReason: "")
   let hofXml: XmlNode = try:
-      loadXml(path = saveDirectory & "halloffame.dat")
+      loadXml(path = saveDirectory.string & "halloffame.dat")
     except XmlError, ValueError, IOError, OSError, Exception:
       return
   var index: Positive = 1
@@ -94,4 +94,5 @@ proc updateHallOfFame*(playerName, deathReason: string) {.raises: [
       element.attrs = values
       entries.add(y = element)
     let xmlTree: XmlNode = newXmlTree(tag = "halloffame", children = entries)
-    writeFile(filename = saveDirectory & "halloffame.dat", content = xmlHeader & $xmlTree)
+    writeFile(filename = saveDirectory.string & "halloffame.dat",
+        content = xmlHeader & $xmlTree)

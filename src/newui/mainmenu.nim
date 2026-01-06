@@ -78,8 +78,9 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
             currentBase = i
           i.inc
     playerFactions.add(y = "Random")
-  showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
-  showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
+  showLoadButton = walkFiles(pattern = saveDirectory.string &
+      "*.sav").toSeq.len > 0
+  showHoFButton = fileExists(filename = saveDirectory.string & "halloffame.dat")
 
 proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -450,7 +451,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       saves = @[]
       answered = false
     if saves.len == 0:
-      for file in walkFiles(pattern = saveDirectory & "*.sav"):
+      for file in walkFiles(pattern = saveDirectory.string & "*.sav"):
         let
           (_, name, _) = splitFile(path = file)
           parts = name.split(sep = '_')

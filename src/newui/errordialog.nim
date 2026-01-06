@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -42,7 +42,7 @@ proc setError*(message: string; e: ref Exception = getCurrentException(
       debugInfo.add(y = "\nStack trace:\n" & e.getStackTrace)
   logMessage(message = debugInfo, messageLevel = lvlError)
   try:
-    let errorLog: File = open(fileName = saveDirectory & "error.log",
+    let errorLog: File = open(fileName = saveDirectory.string & "error.log",
         mode = fmAppend)
     errorLog.write(s = debugInfo & '\n' & repeat(c = '-', count = 80) & '\n')
     errorLog.close
@@ -116,7 +116,7 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
         openLink(link = url)
       label(str = "and attach (if possible) file with saved game or 'error.log'.")
       labelButton(title = "Open directory with saved games"):
-        openLink(link = saveDirectory)
+        openLink(link = saveDirectory.string)
       treeTab(title = "Technical details", state = minimized, index = 1):
         setLayoutRowDynamic(height = (30 * debugInfo.countLines).float, cols = 1)
         wrapLabel(str = debugInfo)

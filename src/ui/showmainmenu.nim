@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -59,7 +59,7 @@ proc showMainMenu*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   tclEval(script = "pack " & mainMenuFrame & " -fill both -expand true")
   var button: string = ".mainmenu.loadgame"
   try:
-    if walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0:
+    if walkFiles(pattern = saveDirectory.string & "*.sav").toSeq.len > 0:
       tclEval(script = "pack " & button & " -after .mainmenu.newgame")
     else:
       tclEval(script = "pack forget " & button)
@@ -70,7 +70,7 @@ proc showMainMenu*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         getCurrentExceptionMsg(), parentFrame = ".",
         title = "Can't check saves")
   button = ".mainmenu.halloffame"
-  if fileExists(fileName = saveDirectory & "halloffame.dat"):
+  if fileExists(fileName = saveDirectory.string & "halloffame.dat"):
     tclEval(script = "pack " & button & " -before .mainmenu.news")
   else:
     tclEval(script = "pack forget " & button)
@@ -83,8 +83,8 @@ proc showMainMenu*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         parentFrame = ".", title = "The game data error")
     return
   try:
-    writeFile(fileName = saveDirectory & "test.txt", content = "")
-    removeFile(file = saveDirectory & "test.txt")
+    writeFile(fileName = saveDirectory.string & "test.txt", content = "")
+    removeFile(file = saveDirectory.string & "test.txt")
   except IOError, OSError:
     button = ".mainmenu.newgame"
     tclEval(script = "pack forget " & button)
@@ -97,6 +97,6 @@ proc showMainMenu*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
           parentFrame = ".", title = "Can't save the game")
     else:
       showMessage(text = "You don't have permissions to write to directory " &
-          saveDirectory &
+          saveDirectory.string &
           "\" which is set as directory for saved games. Please select different directory.",
           parentFrame = ".", title = "Can't save the game")
