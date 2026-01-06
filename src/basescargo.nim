@@ -175,21 +175,25 @@ proc countFreeCargo*(baseIndex: ExtendedBasesRange): Natural {.raises: [],
 
 proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
-    quality: ObjectQuality) {.raises: [KeyError, NoFreeSpaceError],
-    tags: [], contractual.} =
+    quality: ObjectQuality;
+    maxDurability: ItemsDurability = defaultItemDurability;
+    weight: Natural = 0) {.raises: [KeyError, NoFreeSpaceError], tags: [],
+    contractual.} =
   ## Update the selected item amount in the cargo of the base where the player
   ## is
   ##
-  ## * protoIndex - the index of the prototype of the item which amount will be
-  ##                upgraded. This argument or cargoIndex argument must always
-  ##                be set, but only one of them.
-  ## * amount     - the amount which will be add or removed from the amount of
-  ##                the selected item
-  ## * durability - the durability of the item to search
-  ## * cargoIndex - the index of the item in the base's cargo which will be
-  ##                updated. This argument or protoIndex argument must always
-  ##                be set, but only one of them.
-  ## * quality    - the quality of the item to search
+  ## * protoIndex    - the index of the prototype of the item which amount will be
+  ##                   upgraded. This argument or cargoIndex argument must always
+  ##                   be set, but only one of them.
+  ## * amount        - the amount which will be add or removed from the amount of
+  ##                   the selected item
+  ## * durability    - the durability of the item to search
+  ## * cargoIndex    - the index of the item in the base's cargo which will be
+  ##                   updated. This argument or protoIndex argument must always
+  ##                   be set, but only one of them.
+  ## * quality       - the quality of the item to search
+  ## * maxDurability - The maximum durability of the item to modify. Can be empty
+  ## * weight        - The weight of the item. Can be empty
   let
     baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex
@@ -206,8 +210,8 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
       skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: protoIndex,
           amount: amount, durability: durability, price: getPrice(
           baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex,
-              quality = quality),
-          quality: quality))
+          quality = quality), quality: quality, maxDurability: maxDurability,
+          weight: weight))
     else:
       skyBases[baseIndex].cargo[itemIndex].amount = skyBases[baseIndex].cargo[
           itemIndex].amount + amount
