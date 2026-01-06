@@ -1331,8 +1331,8 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for craftingOrder in statsList:
     totalFinished += craftingOrder.amount
   statisticsValues[5] = $totalFinished
+  finishedCrafts = @[]
   if totalFinished > 0:
-    finishedCrafts = @[]
     for stat in statsList:
       try:
         finishedCrafts.add(y = StatItemData(name: itemsList[recipesList[
