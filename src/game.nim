@@ -37,6 +37,8 @@ type
     ## The name of an attribute
   AttributeDescription* = string
     ## The description of an attribute
+  VersionString = string
+    ## The version of the game
 
   ToolQuality = object
     ## Store data related to quality of tools needed for train a skill
@@ -198,7 +200,7 @@ const
       minutes: 1) ## The start date for a new game
   noDate*: DateRecord = DateRecord(year: 0, month: 0, day: 0, hour: 0,
       minutes: 0) ## The empty, not set game date
-  gameVersion*: string = "Version: " & staticRead(
+  gameVersion*: VersionString = "Version: " & staticRead(
       filename = "../steamsky.nimble").newStringStream.loadConfig.getSectionValue(
       section = "", key = "version")
     ## The current version of the game
@@ -206,8 +208,9 @@ const
 {.warning[UnsafeSetLen]: off.}
 {.warning[UnsafeDefault]: off.}
 var
-  saveDirectory*: string = "data" & DirSep & "saves" &
-      DirSep ## The directory where the saved games and logs are stored
+  saveDirectory*: Path = ("data" & DirSep & "saves" &
+      DirSep).Path
+    ## The directory where the saved games and logs are stored
   modsDirectory*: string = "data" & DirSep & "mods" &
       DirSep ## The directory where the game's modifications are stored
   dataDirectory*: string = "data" & DirSep
