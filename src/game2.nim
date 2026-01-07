@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -231,7 +231,7 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
     if result.len > 0:
       return
   # Load the modifications
-  for modDirectory in walkDirs(pattern = modsDirectory & "*"):
+  for modDirectory in walkDirs(pattern = $modsDirectory & "*"):
     let dataType: GameDataType = try:
           parseEnum[GameDataType](s = modDirectory)
         except ValueError:
