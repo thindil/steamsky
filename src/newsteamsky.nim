@@ -43,7 +43,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       saveDirectory = (val & DirSep).Path
       normalizePath(path = saveDirectory)
     of "modsdir":
-      modsDirectory = val & DirSep
+      modsDirectory = (val & DirSep).Path
       normalizePath(path = modsDirectory)
     of "datadir":
       dataDirectory = val & DirSep
@@ -69,7 +69,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   # Create the game directories
   try:
     createDir(dir = $saveDirectory)
-    createDir(dir = modsDirectory)
+    createDir(dir = $modsDirectory)
     createDir(dir = themesDirectory)
   except:
     echo "Can't create directories"
