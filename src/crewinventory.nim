@@ -23,19 +23,23 @@ import contracts
 import game, shipscargo, types, utils
 
 proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
-    itemType: string = ""; durability: ItemsDurability = ItemsDurability.high;
-    quality: Positive = 100; itemQuality: ObjectQuality): ExtendedNatural {.raises: [],
-    tags: [], contractual.} =
+    itemType: string = ""; durability: ItemsDurability = defaultItemDurability;
+    quality: Positive = 100; itemQuality: ObjectQuality;
+    maxDurability: ItemsDurability = defaultItemDurability;
+    weight: Natural = 0): ExtendedNatural {.raises: [], tags: [],
+    contractual.} =
   ## Find the index of the selected item in the selected inventory
   ##
-  ## * inventory    - the inventory in which the item will be looking for
-  ## * protoIndex   - the index of prototype item of the item to find. Can be
-  ##                  empty. If empty, itemType parameter must be set
-  ## * itemType     - the type of prototype item of the item to find. Can be
-  ##                  empty. If empty, protoIndex parameter must be set
-  ## * durability   - the durability of the item to find. Can be empty
-  ## * quality      - the quality of the item to find. Can be empty
-  ## * itemQuality  - the quality of the item to find (good, normal, poor, etc).
+  ## * inventory     - the inventory in which the item will be looking for
+  ## * protoIndex    - the index of prototype item of the item to find. Can be
+  ##                   empty. If empty, itemType parameter must be set
+  ## * itemType      - the type of prototype item of the item to find. Can be
+  ##                   empty. If empty, protoIndex parameter must be set
+  ## * durability    - the durability of the item to find. Can be empty
+  ## * quality       - the quality of the item to find. Can be empty
+  ## * itemQuality   - the quality of the item to find (good, normal, poor, etc).
+  ## * maxDurability - The maximum durability of the item to modify. Can be empty
+  ## * weight        - The weight of the item. Can be empty
   ##
   ## Returns the index of the item in the selected inventory which meet searching
   ## criteria or -1 if item not found.
@@ -48,18 +52,26 @@ proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
         for index, item in inventory:
           if item.protoIndex == protoIndex and itemsList[protoIndex].value[1] <=
               quality:
-            if durability < ItemsDurability.high and item.durability != durability:
+            if durability != defaultItemDurability and item.durability != durability:
               continue
             if itemQuality != any and item.quality != itemQuality:
+              continue
+            if maxDurability != defaultItemDurability and item.maxDurability != maxDurability:
+              continue
+            if weight > 0 and item.weight != weight:
               continue
             return index
       elif itemType.len > 0:
         for index, item in inventory:
           if itemsList[item.protoIndex].itemType == itemType and itemsList[
               item.protoIndex].value[1] <= quality:
-            if durability < ItemsDurability.high and item.durability != durability:
+            if durability != defaultItemDurability and item.durability != durability:
               continue
             if itemQuality != any and item.quality != itemQuality:
+              continue
+            if maxDurability != defaultItemDurability and item.maxDurability != maxDurability:
+              continue
+            if weight > 0 and item.weight != weight:
               continue
             return index
     except KeyError:
@@ -117,7 +129,9 @@ proc takeOffItem*(memberIndex, itemIndex: Natural) {.raises: [],
 proc updateInventory*(memberIndex: Natural; amount: int;
     protoIndex: Natural = 0; durability: ItemsDurability = 0;
     inventoryIndex: int = -1; price: Natural = 0; ship: var ShipRecord;
-    quality: ObjectQuality) {.raises: [CrewNoSpaceError, KeyError], tags: [],
+    quality: ObjectQuality;
+    maxDurability: ItemsDurability = defaultItemDurability;
+    weight: Natural = 0) {.raises: [CrewNoSpaceError, KeyError], tags: [],
     contractual.} =
   ## Update the inventory of the selected crew member.
   ##
@@ -133,6 +147,8 @@ proc updateInventory*(memberIndex: Natural; amount: int;
   ## * price          - the price of the item to update. Default value is 0.
   ## * ship           - the ship in which the crew member inventory will be updated
   ## * quality        - the quality of the item to update (good, normal, poor, etc).
+  ## * maxDurability  - The maximum durability of the item to modify. Can be empty
+  ## * weight         - The weight of the item. Can be empty
   ##
   ## Returns the updated ship argument
   require:
@@ -143,10 +159,12 @@ proc updateInventory*(memberIndex: Natural; amount: int;
       if durability > 0:
         itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
             protoIndex = protoIndex, durability = durability,
-                itemQuality = quality)
+            itemQuality = quality, maxDurability = maxDurability,
+            weight = weight)
       else:
         itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
-            protoIndex = protoIndex, itemQuality = quality)
+            protoIndex = protoIndex, itemQuality = quality,
+            maxDurability = maxDurability, weight = weight)
     else:
       itemIndex = inventoryIndex
     if amount > 0:
