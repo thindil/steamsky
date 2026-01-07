@@ -1296,6 +1296,7 @@ var
   finishedCrafts*: seq[StatItemData] = @[]
     ## The list of finished crafting orders
   finishedMissions*: seq[StatItemData] = @[]
+    ## The list of finished missions
 
 
 proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -1350,3 +1351,26 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     missionsPercent = ((totalFinished.float /
         gameStats.acceptedMissions.float) * 100.0).int
   statisticsValues[6] = $totalFinished & " (" & $missionsPercent & "%)"
+  finishedMissions = @[]
+  if totalFinished > 0:
+    for stat in statsList:
+      try:
+        case parseEnum[MissionsTypes](s = stat.index)
+        of deliver:
+          finishedMissions.add(y = StatItemData(name: "Delivered items",
+              amount: stat.amount))
+        of patrol:
+          finishedMissions.add(y = StatItemData(name: "Patroled areas",
+              amount: stat.amount))
+        of destroy:
+          finishedMissions.add(y = StatItemData(name: "Destroyed ships",
+              amount: stat.amount))
+        of explore:
+          finishedMissions.add(y = StatItemData(name: "Explored areas",
+              amount: stat.amount))
+        of passenger:
+          finishedMissions.add(y = StatItemData(name: "Passengers transported",
+              amount: stat.amount))
+      except:
+        dialog = setError(message = "Can't show finished missions.")
+        return
