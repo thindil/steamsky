@@ -463,15 +463,13 @@ proc nkPushScissor(b: var CommandBuffer; r: Rect) {.raises: [], tags: [
   ## Returns the modified parameter b
   body:
     b.clip = r
-    let cmd: ptr nk_command_scissor = cast[ptr nk_command_scissor](
-        nkCommandBufferPush(b = b, t = commandScissor,
-            size = nk_command_scissor.sizeof))
-    if cmd == nil:
-      return
-    cmd.x = r.x.cshort
-    cmd.y = r.y.cshort
-    cmd.w = max(x = 0.cushort, y = r.w.cushort)
-    cmd.h = max(x = 0.cushort, y = r.h.cushort)
+    var cmd: CommandScissor = cast[CommandScissor](
+      nkCommandBufferPush(b = b, t = commandScissor,
+      size = nk_command_scissor.sizeof))
+    cmd.x = r.x.int16
+    cmd.y = r.y.int16
+    cmd.w = max(x = 0.uint16, y = r.w.uint16)
+    cmd.h = max(x = 0.uint16, y = r.h.uint16)
 
 proc nkStrokeRect(b: var CommandBuffer, rect: Rect, rounding,
   lineThickness: float, c: nk_color) {.raises: [], tags: [RootEffect],
