@@ -80,6 +80,10 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
       for craft in finishedCrafts:
         label(str = craft.name)
         label(str = $craft.amount)
+    # Show completed missions statistics
+    setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.6.cfloat, 0.4])
+    addStatistic(title = "Missions completed:", value = statisticsValues[6],
+        tooltip = "The total amount of missions finished in this game")
   group(title = "Group2", flags = {}):
     discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
