@@ -1291,10 +1291,11 @@ type
       ## The amount of the item
 
 var
-  statisticsValues*: array[6, string] = ["", "", "", "", "", ""]
+  statisticsValues*: array[7, string] = ["", "", "", "", "", "", ""]
     ## Values of the game's statistics
   finishedCrafts*: seq[StatItemData] = @[]
     ## The list of finished crafting orders
+  finishedMissions*: seq[StatItemData] = @[]
 
 
 proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -1340,3 +1341,12 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       except:
         dialog = setError(message = "Can't show finished crafting orders.")
         return
+  totalFinished = 0
+  statsList = gameStats.finishedMissions
+  for finishedMission in statsList:
+    totalFinished += finishedMission.amount
+  var missionsPercent: int = 0
+  if gameStats.acceptedMissions > 0:
+    missionsPercent = ((totalFinished.float /
+        gameStats.acceptedMissions.float) * 100.0).int
+  statisticsValues[6] = $totalFinished & " (" & $missionsPercent & "%)"
