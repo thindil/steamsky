@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -19,7 +19,7 @@
 ## showing them, updating the list of messages, giving orders to the
 ## crew members, etc.
 
-import std/[os, math, strbasics, strutils, tables]
+import std/[math, strbasics, strutils, tables]
 import contracts, nimalyzer
 import ../[combat, config, crewinventory, game, items, maps, messages,
     shipscrew, shipmodules, shipsmovement, tk, types]
@@ -1339,7 +1339,6 @@ proc showCombatUi(newCombat: bool = true) {.raises: [], tags: [],
         grid rowconfigure $combatframe 0 -weight 1
         grid rowconfigure $combatframe 1 -weight 1
       """)
-      tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "combat.tcl")
       pilotOrder = 2
       engineerOrder = 3
       try:
