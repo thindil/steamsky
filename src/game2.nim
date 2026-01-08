@@ -192,7 +192,7 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
           if result.len > 0:
             return
       else:
-        localFileName = (dataDirectory & $fileName).Path
+        localFileName = ($dataDirectory & $fileName).Path
         result = loadDataFile(localDataName = dataName)
   {.hint[XCannotRaiseY]: on.}
 

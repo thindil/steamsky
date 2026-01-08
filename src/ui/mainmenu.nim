@@ -27,13 +27,13 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
     WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Create the main menu UI
   let
-    uiDirectory: string = dataDirectory & "ui" & DirSep
+    uiDirectory: string = dataDirectory.string & "ui" & DirSep
     iconPath: string = uiDirectory & "images" & DirSep & "icon.png"
   const mainWindow: string = "."
   if not fileExists(filename = iconPath):
     tclEval(script = "wm withdraw " & mainWindow)
     tclEval(script = "tk_messageBox -message {Couldn't not find the game data files and the game have to stop. Are you sure that directory \"" &
-        dataDirectory & "\" is the proper place where the game data files exists?} -icon error -type ok")
+        dataDirectory.string & "\" is the proper place where the game data files exists?} -icon error -type ok")
     tclEval(script = "exit 1")
     return
   mainmenucommands.addCommands()

@@ -46,10 +46,10 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       modsDirectory = (val & DirSep).Path
       normalizePath(path = modsDirectory)
     of "datadir":
-      dataDirectory = val & DirSep
+      dataDirectory = (val & DirSep).Path
       normalizePath(path = dataDirectory)
-      if not dirExists(dir = dataDirectory):
-        echo "Directory " & dataDirectory & " does not exists. You must use an existing directory as Data directory"
+      if not dirExists(dir = $dataDirectory):
+        echo "Directory " & $dataDirectory & " does not exists. You must use an existing directory as Data directory"
         return
     of "docdir":
       docDirectory = val & DirSep
@@ -91,7 +91,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   # Initialize SDL and create the main window of the game
   nuklearInit(windowWidth = menuWidth, windowHeight = menuHeight,
-      name = windowName, iconPath = dataDirectory & "ui" & DirSep & "images" &
+      name = windowName, iconPath = $dataDirectory & "ui" & DirSep & "images" &
       DirSep & "icon.png")
   # Load the game's theme
   loadThemes()

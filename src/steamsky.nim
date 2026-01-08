@@ -42,10 +42,10 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       modsDirectory = (val & DirSep).Path
       normalizePath(path = modsDirectory)
     of "datadir":
-      dataDirectory = val & DirSep
+      dataDirectory = (val & DirSep).Path
       normalizePath(path = dataDirectory)
-      if not dirExists(dir = dataDirectory):
-        echo "Directory " & dataDirectory & " does not exists. You must use an existing directory as Data directory"
+      if not dirExists(dir = $dataDirectory):
+        echo "Directory " & $dataDirectory & " does not exists. You must use an existing directory as Data directory"
         return
     of "docdir":
       docDirectory = val & DirSep

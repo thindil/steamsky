@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -79,12 +79,12 @@ type
     mapColors*: array[MapColorsNames, Color]
 
 let
-  defaultThemePath: string = dataDirectory & "ui" & DirSep
+  defaultThemePath: string = dataDirectory.string & "ui" & DirSep
   defaultThemeIconPath: string = defaultThemePath & "images" & DirSep & "ui" & DirSep
   defaultThemeFontPath: string = defaultThemePath & "fonts" & DirSep
   defaultTheme*: ThemeData = ThemeData(name: "Default theme",
-      fileName: dataDirectory & "ui" & DirSep & "theme.cfg", icons: [
-      dataDirectory & "ui" & DirSep & "images" & DirSep & "logo.svg",
+      fileName: dataDirectory.string & "ui" & DirSep & "theme.cfg", icons: [
+      dataDirectory.string & "ui" & DirSep & "images" & DirSep & "logo.svg",
       defaultThemeIconPath & "random.svg", defaultThemeIconPath &
       "male.svg", defaultThemeIconPath & "female.svg",
       defaultThemeIconPath & "menu.svg", defaultThemeIconPath & "fuel.svg",

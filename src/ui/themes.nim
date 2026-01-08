@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -277,9 +277,9 @@ var themesList*: Table[string, ThemeRecord] = initTable[string, ThemeRecord]()
   ## The list of all available themes
 
 let
-  defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" & DirSep &
+  defaultThemeIconPath: string = dataDirectory.string & "ui" & DirSep & "images" & DirSep &
       "ui" & DirSep ## The path to the default theme's icons
-  defaultTheme: ThemeRecord = ThemeRecord(name: "Default theme", fileName: dataDirectory &
+  defaultTheme: ThemeRecord = ThemeRecord(name: "Default theme", fileName: dataDirectory.string &
       DirSep & "ui" & DirSep & "theme.tcl", enemyShipIcon: "\uf51c",
       attackOnBaseIcon: "\uf543", diseaseIcon: "\uf5a6",
       doublePriceIcon: "\uf0d6", fullDocksIcon: "\uf057",
