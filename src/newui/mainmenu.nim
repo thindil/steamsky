@@ -578,6 +578,14 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     dialog = setError(message = "Can't load this game.")
     return
   dialog = none
+  selectedGoal = try:
+      goalText(index = 0)
+    except KeyError:
+      state = loadGame
+      dialog = setError(message = "Can't set the current goal.")
+      return
+  if selectedGoal.len > 16:
+    selectedGoal = selectedGoal[0..16] & "..."
   setGame(dialog = dialog)
   if dialog == none:
     state = map
