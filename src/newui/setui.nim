@@ -1291,7 +1291,7 @@ type
       ## The amount of the item
 
 var
-  statisticsValues*: array[7, string] = ["", "", "", "", "", "", ""]
+  statisticsValues*: array[8, string] = ["", "", "", "", "", "", "", ""]
     ## Values of the game's statistics
   finishedCrafts*: seq[StatItemData] = @[]
     ## The list of finished crafting orders
@@ -1374,3 +1374,8 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       except:
         dialog = setError(message = "Can't show finished missions.")
         return
+  totalFinished = 0
+  statsList = gameStats.finishedGoals
+  for finishedGoal in statsList:
+    totalFinished += finishedGoal.amount
+  statisticsValues[7] = $totalFinished
