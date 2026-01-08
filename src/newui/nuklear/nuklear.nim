@@ -465,14 +465,14 @@ proc nkPushScissor(b: var CommandBuffer; r: Rect) {.raises: [], tags: [
     b.clip = r
     var cmd: CommandScissor = cast[CommandScissor](
       nkCommandBufferPush(b = b, t = commandScissor,
-      size = nk_command_scissor.sizeof))
+      size = CommandScissor.sizeof))
     cmd.x = r.x.int16
     cmd.y = r.y.int16
     cmd.w = max(x = 0.uint16, y = r.w.uint16)
     cmd.h = max(x = 0.uint16, y = r.h.uint16)
 
 proc nkStrokeRect(b: var CommandBuffer, rect: Rect, rounding,
-  lineThickness: float, c: nk_color) {.raises: [], tags: [RootEffect],
+  lineThickness: float, c: NkColor) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw a rectangle. Internal use only
   ##
@@ -487,10 +487,8 @@ proc nkStrokeRect(b: var CommandBuffer, rect: Rect, rounding,
     if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h,
       x1 = b.clip.x, y1 = b.clip.y, w1 = b.clip.w, h1 = b.clip.h):
       return
-  var cmd: ptr nk_command_rect = nil
-  cmd = cast[ptr nk_command_rect](nkCommandBufferPush(b = b, t = commandRect, size = cmd.sizeof))
-  if cmd == nil:
-    return
+  var cmd: CommandRect = cast[CommandRect](nkCommandBufferPush(b = b,
+    t = commandRect, size = CommandRect.sizeof))
   cmd.rounding = rounding.cushort
   cmd.line_thickness = lineThickness.cushort
   cmd.x = rect.x.cshort
@@ -617,7 +615,7 @@ proc nkDrawImage(b: var CommandBuffer; r: Rect; img: PImage; col: nk_color)
   cmd.img = cast[nk_image](img)
   cmd.col = col
 
-proc nkDrawNineSlice(b: var CommandBuffer; r: Rect; slc: ptr nk_nine_slice; col: nk_color)
+proc nkDrawNineSlice(b: var CommandBuffer; r: Rect; slc: ptr NineSlice; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected fragments of an image
   ##
@@ -1032,21 +1030,22 @@ proc nkDrawButton(`out`: var CommandBuffer; bounds: Rect;
     result = style.normal
 
   let bg: StyleItemData = result.data
-#  case result.iType
-#  of itemImage:
-#    nkDrawImage(b = `out`, r = bounds, img = bg.image.addr, col =
-#      nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
-#      factor = style.color_factor_background))
-#  of itemNineSlice:
-#    nkDrawNineSlice(b = `out`, r = bounds, slc = bg.slice.addr, col =
-#      nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
-#      factor = style.color_factor_background))
-#  of itemColor:
-#    nkFillRect(b = `out`, rect = bounds, rounding = style.rounding, c =
-#      nk_rgb_factor(col = bg.color, factor = style.color_factor_background))
-#    nkStrokeRect(b = `out`, rect = bounds, rounding = style.rounding,
-#      lineThickness = style.border, c = nk_rgb_factor(col = bg.color,
-#      factor = style.color_factor_background))
+  case result.iType
+  of itemImage:
+    nkDrawImage(b = `out`, r = bounds, img = bg.image.addr, col =
+      nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
+      factor = style.colorFactorBackground))
+  of itemNineSlice:
+    nkDrawNineSlice(b = `out`, r = bounds, slc = bg.slice.addr, col =
+      nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
+      factor = style.colorFactorBackground))
+  of itemColor:
+    nkFillRect(b = `out`, rect = bounds, rounding = style.rounding, c =
+      nk_rgb_factor(col = nk_rgba(r = bg.color.r.cint, g = bg.color.g.cint,
+      b = bg.color.b.cint, a = bg.color.a.cint), factor = style.color_factor_background))
+    nkStrokeRect(b = `out`, rect = bounds, rounding = style.rounding,
+      lineThickness = style.border, c = nkRGBFactor(col = bg.color,
+      factor = style.colorFactorBackground))
 
 proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
   content: var Rect; background, foreground: nk_color; borderWidth: float;

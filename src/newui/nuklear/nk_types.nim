@@ -1163,6 +1163,12 @@ type
     next*: nk_size
     when defined(nkIncludeCommandUserData):
       userdata*: Handle ## Interna Nuklear data
+  CommandRect* = object
+    ## Used to store Nuklear command data for draw rectangles
+    header*: Command
+    rounding*, w*, h*, lineThickness*: uint16
+    x*, y*: int16
+    color*: NkColor
   CommandRectFilled* = object
     ## Used to store Nuklear command data for draw filled rectangles
     header*: Command
@@ -1279,13 +1285,13 @@ type
     l*, t*, r*, b*: uint16
   StyleItemData* = object
     ## Used to store Nuklear style item's data
-    case iType: StyleItemType
+    case iType*: StyleItemType
     of itemColor:
-      color: NkColor
+      color*: NkColor
     of itemImage:
-      image: Image
+      image*: Image
     of itemNineSlice:
-      slice: NineSlice
+      slice*: NineSlice
   StyleItem* = object
     ## Used to store Nuklear style item's data
     iType*: StyleItemType

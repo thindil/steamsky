@@ -1,4 +1,4 @@
-# Copyright © 2025 Bartek Jasicki
+# Copyright © 2025-2026 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -40,3 +40,20 @@ proc nk_rgba*(r, g, b, a: cint): nk_color {.importc, nodecl, raises: [], tags: [
 proc nk_rgb_factor*(col: nk_color; factor: cfloat): nk_color {.importc, nodecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
+
+# ------------------
+# High level bindings
+# ------------------
+proc nkRGBFactor*(col: NkColor; factor: float): NkColor {.raises: [], tags: [],
+    contractual.} =
+  ## Get the color after modyfying it by the selected factor
+  ##
+  ## * col    - the color which will be modified
+  ## * factor - the factor about which the color will be modified
+  ##
+  ## Returns the selected color modified by the selected factor
+  if factor == 1.0:
+    return col
+  result.r = (col.r.float * factor).int
+  result.g = (col.g.float * factor).int
+  result.b = (col.b.float * factor).int
