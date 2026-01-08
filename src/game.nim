@@ -213,7 +213,7 @@ var
     ## The directory where the saved games and logs are stored
   modsDirectory*: Path = ("data" & DirSep & "mods" &
       DirSep).Path ## The directory where the game's modifications are stored
-  dataDirectory*: string = "data" & DirSep
+  dataDirectory*: Path = ("data" & DirSep).Path
     ## The directory where the game's data is stored
   docDirectory*: string = "doc" & DirSep
     ## The directory where the game's documentation is stored
