@@ -19,7 +19,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
-import coreui, header, messagesui, setui, themes
+import coreui, goalsui, header, messagesui, setui, themes
 
 proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -84,6 +84,18 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.6.cfloat, 0.4])
     addStatistic(title = "Missions completed:", value = statisticsValues[6],
         tooltip = "The total amount of missions finished in this game")
+    if finishedMissions.len > 0:
+      setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.7.cfloat, 0.3])
+      colorLabel(str = "Name", color = theme.colors[goldenColor])
+      colorLabel(str = "Amount", color = theme.colors[goldenColor])
+      for mission in finishedMissions:
+        label(str = mission.name)
+        label(str = $mission.amount)
+    # Show goal button
+    setLayoutRowDynamic(height = 25, cols = 1)
+    labelButton(title = selectedGoal):
+      dialog = newGoalDialog
+      setSelectedGoal()
   group(title = "Group2", flags = {}):
     discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
