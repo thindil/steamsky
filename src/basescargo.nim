@@ -114,15 +114,17 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
               max = getMaxAmount(amount = item.amount)))
 
 proc findBaseCargo*(protoIndex: Natural;
-    durability: ItemsDurability = ItemsDurability.high;
-    quality: ObjectQuality): int {.raises: [], tags: [],
-    contractual.} =
+    durability: ItemsDurability = defaultItemDurability; quality: ObjectQuality;
+    maxDurability: ItemsDurability = defaultItemDurability;
+    weight: Natural = 0): int {.raises: [], tags: [], contractual.} =
   ## Find the selected item in the currently visited base's cargo
   ##
-  ## * protoIndex - the index of the prototype to search
-  ## * durability - the durability of the item to search. Can be empty. If not
-  ##                set, the items will not be checked against it.
-  ## * quality    - the quality of the item to search.
+  ## * protoIndex    - the index of the prototype to search
+  ## * durability    - the durability of the item to search. Can be empty. If not
+  ##                   set, the items will not be checked against it.
+  ## * quality       - the quality of the item to search.
+  ## * maxDurability - The maximum durability of the item to modify. Can be empty
+  ## * weight        - The weight of the item. Can be empty
   ##
   ## The index of the item with the selected prototype index or -1 if nothing
   ## found.
@@ -141,7 +143,8 @@ proc findBaseCargo*(protoIndex: Natural;
     for index, item in localBaseCargo:
       if durability < ItemsDurability.high or quality != normal:
         if item.protoIndex == protoIndex and item.durability == durability and
-            item.quality == quality:
+            item.quality == quality and item.maxDurability == maxDurability and
+            item.weight == weight:
           return index
       else:
         if item.protoIndex == protoIndex:
@@ -199,7 +202,7 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
         playerShip.skyY].baseIndex
     itemIndex: int = if protoIndex > 0:
         findBaseCargo(protoIndex = protoIndex, durability = durability,
-            quality = quality)
+            quality = quality, maxDurability = maxDurability, weight = weight)
       else:
         cargoIndex
   {.ruleOff: "assignments".}
