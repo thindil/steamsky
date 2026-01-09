@@ -1,4 +1,4 @@
-# Copyright © 2025 Bartek Jasicki
+# Copyright © 2025-2026 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -103,9 +103,7 @@ proc nkPanelLayout(ctx: Context; win: Window; height: float;
         else:
           style.window.background
     var commBuff: CommandBuffer = win.buffer
-    nkFillRect(b = commBuff, rect = background, rounding = 0.0, c = nk_color(
-        r: color.r.nk_byte, g: color.g.nk_byte, b: color.b.nk_byte,
-        a: color.a.nk_byte))
+    nkFillRect(b = commBuff, rect = background, rounding = 0.0, c = color)
 
 proc nkRowLayout(ctx: var Context; fmt: LayoutFormat; height: float; cols,
     width: int) {.raises: [NuklearException], tags: [RootEffect],

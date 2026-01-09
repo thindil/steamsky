@@ -498,7 +498,7 @@ proc nkStrokeRect(b: var CommandBuffer, rect: Rect, rounding,
   cmd.color = c
 
 proc nkStrokeTriangle(b: var CommandBuffer; x0, y0, x1, y1, x2, y2,
-  lineThickness: cfloat; c: nk_color) {.raises: [], tags: [], contractual.} =
+  lineThickness: float; c: NkColor) {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw a triangle. Internal use only
   ##
   ## * b             - the command buffer in which the triangle will be drawn
@@ -519,16 +519,15 @@ proc nkStrokeTriangle(b: var CommandBuffer; x0, y0, x1, y1, x2, y2,
       y = b.clip.y, w = b.clip.w, h = b.clip.h):
       return
 
-  var cmd: ptr nk_command_triangle = nil
-  if cmd == nil:
-    return
-  cmd.line_thickness = lineThickness.cshort
-  cmd.a.x = x0.cshort
-  cmd.a.y = y0.cshort
-  cmd.b.x = x1.cshort
-  cmd.b.y = y1.cshort
-  cmd.c.x = x2.cshort
-  cmd.c.y = y2.cshort
+  var cmd: CommandTriangle = cast[CommandTriangle](nkCommandBufferPush(b = b,
+    t = commandTriangle, size = CommandTriangle.sizeof))
+  cmd.line_thickness = lineThickness.uint16
+  cmd.a.x = x0.int16
+  cmd.a.y = y0.int16
+  cmd.b.x = x1.int16
+  cmd.b.y = y1.int16
+  cmd.c.x = x2.int16
+  cmd.c.y = y2.int16
   cmd.color = c
 
 proc nkFillCircle(b: var CommandBuffer; rect: Rect; c: nk_color)
@@ -1041,14 +1040,13 @@ proc nkDrawButton(`out`: var CommandBuffer; bounds: Rect;
       factor = style.colorFactorBackground))
   of itemColor:
     nkFillRect(b = `out`, rect = bounds, rounding = style.rounding, c =
-      nk_rgb_factor(col = nk_rgba(r = bg.color.r.cint, g = bg.color.g.cint,
-      b = bg.color.b.cint, a = bg.color.a.cint), factor = style.color_factor_background))
+      nkRGBFactor(col = bg.color, factor = style.colorFactorBackground))
     nkStrokeRect(b = `out`, rect = bounds, rounding = style.rounding,
       lineThickness = style.border, c = nkRGBFactor(col = bg.color,
       factor = style.colorFactorBackground))
 
 proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
-  content: var Rect; background, foreground: nk_color; borderWidth: float;
+  content: var Rect; background, foreground: NkColor; borderWidth: float;
   font: ptr nk_user_font) {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected symbol
   ##
@@ -1073,13 +1071,13 @@ proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
         '-'
       else:
         ' '
-    var text: nk_text = nk_text()
-    text.padding = nk_vec2(x: 0, y: 0)
+    var text: Text = Text()
+    text.padding = Vec2(x: 0, y: 0)
     text.background = background
     text.text = foreground
     var length: Positive = 1
-    nkWidgetText(o = `out`, b = content, str = $ch, len = length, t = text.addr,
-      a = centered, f = font)
+#    nkWidgetText(o = `out`, b = content, str = $ch, len = length, t = text.addr,
+#      a = centered, f = font)
   of circleSolid, circleOutline, rectSolid, rectOutline:
     var drawRect: Rect = content
     drawRect = nkShrinkRect(r = drawRect, amount = borderWidth)
@@ -1088,10 +1086,10 @@ proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
       nkFillRect(b = `out`, rect = content, rounding = 0, c = foreground)
       if `type` == rectOutline:
         nkFillRect(b = `out`, rect = drawRect, rounding = 0, c = background)
-    else:
-      nkFillCircle(b = `out`, rect = content, c = foreground)
-      if `type` == circleOutline:
-        nkFillCircle(b = `out`, rect = drawRect, c = background)
+#    else:
+#      nkFillCircle(b = `out`, rect = content, c = foreground)
+#      if `type` == circleOutline:
+#        nkFillCircle(b = `out`, rect = drawRect, c = background)
   of triangleUp, triangleDown, triangleLeft, triangleRight:
     var heading: Heading = right
     var points: array[3, Rect] = [Rect(), Rect(), Rect()]
@@ -1106,9 +1104,9 @@ proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
         heading = down
     nkTriangleFromDirection(`result` = points, r = content, padX = 0,
       padY = 0, direction = heading)
-    nkFillTriangle(b = `out`, x0 = points[0].x, y0 = points[0].y,
-      x1 = points[1].x, y1 = points[1].y, x2 = points[2].x, y2 = points[2].y,
-      c = foreground)
+#    nkFillTriangle(b = `out`, x0 = points[0].x, y0 = points[0].y,
+#      x1 = points[1].x, y1 = points[1].y, x2 = points[2].x, y2 = points[2].y,
+#      c = foreground)
   of triangleUpOutline, triangleDownOutline, triangleLeftOutline,
     triangleRightOutline:
     var heading: Heading = right

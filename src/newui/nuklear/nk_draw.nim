@@ -59,7 +59,7 @@ proc nkCommandBufferPush*(b: var CommandBuffer; t: CommandType;
     return cmd
 
 proc nkFillRect*(b: var CommandBuffer; rect: Rect; rounding: float;
-  c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
+  c: NkColor) {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the rectangle with the selected color
   ##
   ## * b        - the command buffer in which the rectangle will be drawn
@@ -73,15 +73,12 @@ proc nkFillRect*(b: var CommandBuffer; rect: Rect; rounding: float;
       x1 = b.clip.x, y1 = b.clip.y, w1 = b.clip.w, h1 = b.clip.h):
       return
 
-  var cmd: ptr nk_command_rect_filled = nil
-  cmd = cast[ptr nk_command_rect_filled](nkCommandBufferPush(b = b,
-    t = commandRectFilled, size = cmd.sizeof))
-  if cmd == nil:
-    return
-  cmd.rounding = rounding.cushort
-  cmd.x = rect.x.cshort
-  cmd.y = rect.y.cshort
-  cmd.w = max(x = 0, y = rect.w).cushort
-  cmd.h = max(x = 0, y = rect.h).cushort
+  var cmd: CommandRectFilled = cast[CommandRectFilled](nkCommandBufferPush(
+      b = b, t = commandRectFilled, size = CommandRectFilled.sizeof))
+  cmd.rounding = rounding.uint16
+  cmd.x = rect.x.int16
+  cmd.y = rect.y.int16
+  cmd.w = max(x = 0, y = rect.w).uint16
+  cmd.h = max(x = 0, y = rect.h).uint16
   cmd.color = c
 

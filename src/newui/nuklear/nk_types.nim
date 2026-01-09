@@ -1081,6 +1081,12 @@ type
     ## * x - the X coordinate of the point
     ## * y - the Y coordinate of the point
     x*, y*: float
+  Vec2I* = object
+    ## Used to store information about UI vector.
+    ##
+    ## * x - the X coordinate of the point
+    ## * y - the Y coordinate of the point
+    x*, y*: int16
   ButtonStyle* = object
     ## Used to store information about a button's style.
     borderColor*, textNormal*, textHover*: NkColor
@@ -1174,6 +1180,12 @@ type
     header*: Command
     rounding*, w*, h*: uint16
     x*, y*: int16
+    color*: NkColor
+  CommandTriangle* = object
+    ## Used to store Nuklear command data for draw triangles
+    header*: Command
+    lineThickness*: uint16
+    a*, b*, c*: Vec2I
     color*: NkColor
   CommandScissor* = object
     ## Used to store Nuklear command data for clearing rectangles
