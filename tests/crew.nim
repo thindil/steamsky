@@ -108,5 +108,5 @@ suite "Unit tests for crew module":
 
   test "Testing updating a dead crew member":
     playerShip.crew[0].health = 0
-    saveDirectory = ""
+    saveDirectory = "".Path
     updateCrew(1, 1)
