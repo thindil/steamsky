@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -38,7 +38,8 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
     for item in traderShip.cargo:
       traderCargo.add(y = BaseCargo(protoIndex: item.protoIndex,
           amount: item.amount, durability: defaultItemDurability,
-          price: itemsList[item.protoIndex].price, quality: getQuality()))
+          price: itemsList[item.protoIndex].price, quality: getQuality(),
+          maxDurability: defaultItemDurability, weight: 0))
     var cargoAmount: Natural = if traderShip.crew.len < 5: getRandom(min = 1, max = 3)
         elif traderShip.crew.len < 10: getRandom(min = 1, max = 5)
         else: getRandom(min = 1, max = 10)
@@ -90,9 +91,10 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
     let
       baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
       protoIndex: Natural = playerShip.cargo[itemIndex].protoIndex
+      playerItem: InventoryData = playerShip.cargo[itemIndex]
     var baseItemIndex: int = -1
     if baseIndex > 0:
-      baseItemIndex = findBaseCargo(protoIndex = protoIndex, quality = playerShip.cargo[itemIndex].quality)
+      baseItemIndex = findBaseCargo(protoIndex = protoIndex, quality = playerItem.quality)
     else:
       for index, item in traderCargo:
         if item.protoIndex == protoIndex:
@@ -114,7 +116,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
     let sellAmount: Positive = amount.parseInt
     var profit: Natural = price * sellAmount
     if playerShip.cargo[itemIndex].durability < 100:
-      profit = (profit.float * (playerShip.cargo[itemIndex].durability.float / 100.0)).int
+      profit = (profit.float * (playerItem.durability.float / 100.0)).int
     countPrice(price = price, traderIndex = traderIndex, reduce = false)
     for index, member in playerShip.crew:
       if member.payment[2] == 0:
@@ -143,26 +145,31 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
       if profit > skyBases[baseIndex].cargo[0].amount:
         raise newException(exceptn = NoMoneyInBaseError, message = itemName)
       updateBaseCargo(protoIndex = protoIndex, amount = sellAmount,
-        durability = playerShip.cargo[itemIndex].durability,
-        quality = playerShip.cargo[itemIndex].quality)
+        durability = playerItem.durability, quality = playerItem.quality,
+        maxDurability = playerItem.maxDurability, weight = playerItem.weight)
     else:
       if profit > traderCargo[0].amount:
         raise newException(exceptn = NoMoneyInBaseError, message = itemName)
       var cargoAdded: bool = false
       for item in traderCargo.mitems:
         if item.protoIndex == protoIndex and item.durability ==
-            playerShip.cargo[itemIndex].durability:
+            playerItem.durability and item.quality == playerItem.quality and
+            item.maxDurability == playerItem.durability and item.weight ==
+            playerItem.weight:
           item.amount += sellAmount
           cargoAdded = true
           break
       if not cargoAdded:
         traderCargo.add(y = BaseCargo(protoIndex: protoIndex,
           amount: sellAmount,
-          durability: playerShip.cargo[itemIndex].durability,
+          durability: playerItem.durability,
           price: itemsList[protoIndex].price,
-          quality: playerShip.cargo[itemIndex].quality))
+          quality: playerItem.quality,
+          maxDurability: playerItem.maxDurability,
+          weight: playerItem.weight))
     updateCargo(ship = playerShip, cargoIndex = itemIndex, amount = -sellAmount,
-        price = playerShip.cargo[itemIndex].price, quality = playerShip.cargo[itemIndex].quality)
+        price = playerItem.price, quality = playerItem.quality,
+        maxDurability = playerItem.maxDurability, weight = playerItem.weight)
     updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = profit, quality = normal)
     if baseIndex > 0:
       updateBaseCargo(protoIndex = moneyIndex, amount = -profit, quality = normal)
