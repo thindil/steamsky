@@ -92,7 +92,7 @@ proc showMainMenu*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     tclEval(script = "pack forget " & button)
     when defined(windows):
       showMessage(text = "You don't have permissions to write to directory \"" &
-          saveDirectory &
+          saveDirectory.string &
           "\" which is set as directory for saved games. Please run the game as Administrator or select different directory.",
           parentFrame = ".", title = "Can't save the game")
     else:

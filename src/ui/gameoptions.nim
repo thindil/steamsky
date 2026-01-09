@@ -936,7 +936,7 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & optionsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
     let labelsArray: array[4, WidgetData] = [WidgetData(name: "data",
         value: dataDirectory.string), WidgetData(name: "save", value: saveDirectory.string),
-        WidgetData(name: "docs", value: docDirectory), WidgetData(name: "mods",
+        WidgetData(name: "docs", value: docDirectory.string), WidgetData(name: "mods",
         value: modsDirectory.string)]
     for label in labelsArray:
       let labelName: string = optionsCanvas & ".options.info." & label.name

@@ -76,15 +76,15 @@ proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = textView & " configure -state normal")
   tclEval(script = textView & " delete 1.0 end")
   let fileName: string = $argv[1]
-  if fileExists(filename = docDirectory & fileName):
+  if fileExists(filename = docDirectory.string & fileName):
     try:
-      for line in lines(filename = docDirectory & fileName):
+      for line in lines(filename = docDirectory.string & fileName):
         tclEval(script = textView & " insert end {" & line & "\n}")
     except:
       showError(message = "Can't read file '" & fileName & "'.")
   else:
     tclEval(script = textView & " insert end {Can't find file to load. Did '" &
-        fileName & "' file is in '" & docDirectory & "' directory?}")
+        fileName & "' file is in '" & docDirectory.string & "' directory?}")
   tclEval(script = textView & " configure -state disabled")
   tclEval(script = "bind . <Alt-b> {InvokeButton .showfilemenu.back}")
   tclEval(script = "bind . <Escape> {InvokeButton .showfilemenu.back}")
@@ -121,10 +121,10 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
   const textView: string = ".newsmenu.text"
   tclEval(script = textView & " configure -state normal")
   tclEval(script = textView & " delete 1.0 end")
-  if fileExists(filename = docDirectory & "CHANGELOG.md"):
+  if fileExists(filename = docDirectory.string & "CHANGELOG.md"):
     try:
       var index: Natural = 0
-      for line in lines(filename = docDirectory & "CHANGELOG.md"):
+      for line in lines(filename = docDirectory.string & "CHANGELOG.md"):
         index.inc
         if index < 6:
           continue
@@ -135,7 +135,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
       showError(message = "Can't read file 'CHANGELOG.md'")
   else:
     tclEval(script = textView & " insert end {Can't find file to load. Did 'CHANGELOG.md' file is in '" &
-        docDirectory & "' directory?}")
+        docDirectory.string & "' directory?}")
   tclEval(script = textView & " configure -state disabled")
   return tclOk
 

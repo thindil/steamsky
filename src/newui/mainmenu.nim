@@ -163,11 +163,11 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
   if fileContent.len == 0 and dialog == none:
-    if fileExists(filename = docDirectory & "CHANGELOG.md"):
+    if fileExists(filename = docDirectory.string & "CHANGELOG.md"):
       try:
         var index: Natural = 0
         fileLines = 1
-        for line in lines(filename = docDirectory & "CHANGELOG.md"):
+        for line in lines(filename = docDirectory.string & "CHANGELOG.md"):
           index.inc
           if index < 6:
             continue
@@ -189,7 +189,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
       wrapLabel(str = fileContent)
   else:
     wrapLabel(str = "Can't find file to load. Did 'CHANGELOG.md' file is in '" &
-        docDirectory & "' directory?")
+        docDirectory.string & "' directory?")
   layoutSpaceStatic(height = 50, widgetsCount = 2):
     if state == news:
       row(x = (menuWidth - 310).float, y = 0, w = 155, h = 40):
@@ -310,12 +310,12 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
   if fileContent.len == 0 and dialog == none:
-    if fileExists(filename = docDirectory & fileName):
+    if fileExists(filename = docDirectory.string & fileName):
       try:
         fileLines = 1
         if fileName == "CONTRIBUTING.md":
           fileLines = 6
-        for line in lines(filename = docDirectory & fileName):
+        for line in lines(filename = docDirectory.string & fileName):
           fileContent.add(y = line & "\n")
           var needLines: float = ceil(x = getTextWidth(text = line) /
               menuWidth.float)
@@ -332,7 +332,7 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
       wrapLabel(str = fileContent)
   else:
     wrapLabel(str = "Can't find file to load. Did '" & fileName &
-        "' file is in '" & docDirectory & "' directory?")
+        "' file is in '" & docDirectory.string & "' directory?")
   layoutSpaceStatic(height = 50, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
