@@ -21,7 +21,7 @@
 import std/[strutils, strformat, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
-    crafts, crew, game, items, maps, missions, reputation, shipscargo,
+    crafts, crew, game, goals, items, maps, missions, reputation, shipscargo,
     shipscrew, statistics, stories, types]
 import coreui, errordialog, utilsui2, themes
 
@@ -1297,6 +1297,8 @@ var
     ## The list of finished crafting orders
   finishedMissions*: seq[StatItemData] = @[]
     ## The list of finished missions
+  finishedGoals*: seq[StatItemData] = @[]
+    ## The list of finished goals
 
 
 proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -1379,3 +1381,12 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for finishedGoal in statsList:
     totalFinished += finishedGoal.amount
   statisticsValues[7] = $totalFinished
+  finishedGoals = @[]
+  if totalFinished > 0:
+    for stat in statsList:
+      try:
+        finishedGoals.add(y = StatItemData(name: goalText(
+            index = stat.index.parseInt), amount: stat.amount))
+      except:
+        dialog = setError(message = "Can't show finished goals.")
+        return
