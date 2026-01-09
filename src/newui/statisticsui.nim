@@ -91,11 +91,14 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
       for mission in finishedMissions:
         label(str = mission.name)
         label(str = $mission.amount)
-    # Show goal button
-    setLayoutRowDynamic(height = 25, cols = 1)
+    # Show goals's statistics
+    setLayoutRowDynamic(height = 30, cols = 1)
     labelButton(title = selectedGoal):
       dialog = newGoalDialog
       setSelectedGoal()
+    setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.6.cfloat, 0.4])
+    addStatistic(title = "Finished goals:", value = statisticsValues[7],
+        tooltip = "The total amount of goals finished in this game")
   group(title = "Group2", flags = {}):
     discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
