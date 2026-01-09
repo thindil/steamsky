@@ -215,7 +215,7 @@ var
       DirSep).Path ## The directory where the game's modifications are stored
   dataDirectory*: Path = ("data" & DirSep).Path
     ## The directory where the game's data is stored
-  docDirectory*: string = "doc" & DirSep
+  docDirectory*: Path = ("doc" & DirSep).Path
     ## The directory where the game's documentation is stored
   themesDirectory*: string = "data" & DirSep & "themes" &
       DirSep
