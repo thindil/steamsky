@@ -107,6 +107,16 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
         label(str = goal.name)
         label(str = $goal.amount)
   group(title = "Group2", flags = {}):
-    discard
+    # Show destroyed ships statistics
+    setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.6.cfloat, 0.4])
+    addStatistic(title = "Destroyed ships:", value = statisticsValues[8],
+        tooltip = "The total amount of destroyed ships in this game")
+    if destroyedShips.len > 0:
+      setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.7.cfloat, 0.3])
+      colorLabel(str = "Name", color = theme.colors[goldenColor])
+      colorLabel(str = "Amount", color = theme.colors[goldenColor])
+      for ship in destroyedShips:
+        label(str = ship.name)
+        label(str = $ship.amount)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       height - 75)
