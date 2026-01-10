@@ -54,7 +54,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         echo "Directory " & $docDirectory & " does not exists. You must use an existing directory as Documentation directory"
         return
     of "themesdir":
-      themesDirectory = val & DirSep
+      themesDirectory = (val & DirSep).Path
       normalizePath(path = themesDirectory)
     of "debug":
       try:
@@ -66,7 +66,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   try:
     createDir(dir = $saveDirectory)
     createDir(dir = $modsDirectory)
-    createDir(dir = themesDirectory)
+    createDir(dir = $themesDirectory)
   except:
     echo "Can't create directories"
     return

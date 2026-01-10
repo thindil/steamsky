@@ -394,7 +394,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   var theme: ThemeRecord = defaultTheme
   themesList["steamsky"] = theme
   try:
-    for themeDir in walkDirs(pattern = themesDirectory):
+    for themeDir in walkDirs(pattern = themesDirectory.string):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
         if configFile == nil:
