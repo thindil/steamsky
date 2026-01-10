@@ -1,4 +1,4 @@
-# Copyright © 2023-2025 Bartek Jasicki
+# Copyright © 2023-2026 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -1199,6 +1199,16 @@ type
     w*, h*: uint16
     img*: Image
     col*: NkColor
+  CommandText* = object
+    ## Used to store Nuklear command data for draw text
+    header*: Command
+    x*, y*: int16
+    w*, h*: uint16
+    background*, foreground*: NkColor
+    font*: UserFont
+    length*: int
+    text*: string
+    height*: float
   RowLayout* = object
     ## Used to store Nuklear row layout data
     index*, columns*, treeDepth*: int

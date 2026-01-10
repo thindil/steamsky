@@ -589,7 +589,7 @@ proc nkFillTriangle(b: var CommandBuffer, x0, y0, x1, y1, x2, y2: cfloat,
   cmd.c.y = y2.cshort
   cmd.color = c
 
-proc nkDrawImage(b: var CommandBuffer; r: Rect; img: PImage; col: nk_color)
+proc nkDrawImage(b: var CommandBuffer; r: Rect; img: Image; col: NkColor)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected image
   ##
@@ -602,19 +602,16 @@ proc nkDrawImage(b: var CommandBuffer; r: Rect; img: PImage; col: nk_color)
       h0 = r.h, x1 = b.clip.x, y1 = b.clip.y, w1 = b.clip.w, h1 = b.clip.h):
       return
 
-  var cmd: ptr nk_command_image = nil
-  cmd = cast[ptr nk_command_image](nkCommandBufferPush(b = b, t = commandImage,
-    size = cmd.sizeof))
-  if cmd == nil:
-    return
+  var cmd: CommandImage = cast[CommandImage](nkCommandBufferPush(b = b, t = commandImage,
+    size = CommandImage.sizeof))
   cmd.x = r.x.cshort
   cmd.y = r.y.cshort
   cmd.w = max(x = 0.cushort, y = r.w.cushort)
   cmd.h = max(x = 0.cushort, y = r.h.cushort)
-  cmd.img = cast[nk_image](img)
+  cmd.img = img
   cmd.col = col
 
-proc nkDrawNineSlice(b: var CommandBuffer; r: Rect; slc: ptr NineSlice; col: nk_color)
+proc nkDrawNineSlice(b: var CommandBuffer; r: Rect; slc: NineSlice; col: NkColor)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected fragments of an image
   ##
@@ -622,14 +619,14 @@ proc nkDrawNineSlice(b: var CommandBuffer; r: Rect; slc: ptr NineSlice; col: nk_
   ## * r   - the rectangle in which the slice will be drawn
   ## * slc - the image's slice to draw
   ## * col - the color used as a background for the slice
-  let slcImg: ptr nk_image = cast[ptr nk_image](slc)
+  let slcImg: Image = slc.image
   var rgnX, rgnY, rgnW, rgnH: nk_ushort = 0
   rgnX = slcImg.region[0]
   rgnY = slcImg.region[1]
   rgnW = slcImg.region[2]
   rgnH = slcImg.region[3]
 
-  var img: nk_image = nk_image()
+  var img: Image = Image()
 
   # top-left
   img.handle = slcImg.handle
@@ -637,39 +634,39 @@ proc nkDrawNineSlice(b: var CommandBuffer; r: Rect; slc: ptr NineSlice; col: nk_
   img.h = slcImg.h
   img.region = [rgnX, rgnY, slc.l, slc.t]
 
-  nkDrawImage(b = b, r = Rect(x: r.x, y: r.y, w: slc.l.float, h: slc.t.float), img = img.addr, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x, y: r.y, w: slc.l.float, h: slc.t.float), img = img, col = col)
 
   # top-center
   img.region = [rgnX + slc.l, rgnY, rgnW - slc.l - slc.r, slc.t]
-  nkDrawImage(b = b, r = Rect(x: r.x + slc.l.float, y: r.y, w: r.w - slc.l.float - slc.r.float, h: slc.t.float), img = img.addr, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x + slc.l.float, y: r.y, w: r.w - slc.l.float - slc.r.float, h: slc.t.float), img = img, col = col)
 
   # top-right
   img.region = [rgnX + rgnW - slc.r, rgnY, slc.r, slc.t]
-  nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y, w: slc.r.float, h: slc.t.float), img = img.addr, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y, w: slc.r.float, h: slc.t.float), img = img, col = col)
 
   # center-left
   img.region = [rgnX, rgnY + slc.t, slc.l, rgnH - slc.t - slc.b]
-  nkDrawImage(b = b, r = Rect(x: r.x, y: r.y + slc.t.float, w: slc.l.float, h: r.h - slc.t.float - slc.b.float), img = img.addr, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x, y: r.y + slc.t.float, w: slc.l.float, h: r.h - slc.t.float - slc.b.float), img = img, col = col)
 
   # center
   img.region = [rgnX + slc.l, rgnY + slc.t, rgnW - slc.l - slc.r, rgnH - slc.t - slc.b]
-  nkDrawImage(b = b, r = Rect(x: r.x + slc.l.float, y: r.y + slc.t.float, w: r.w - slc.l.float - slc.r.float, h: r.h - slc.t.float - slc.b.float), img = img.addr, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x + slc.l.float, y: r.y + slc.t.float, w: r.w - slc.l.float - slc.r.float, h: r.h - slc.t.float - slc.b.float), img = img, col = col)
 
   # center-right
   img.region = [rgnX + rgnW - slc.r, rgnY + slc.t, slc.r, rgnH - slc.t - slc.b]
-  nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y - slc.t.float, w: slc.r.float, h: r.h - slc.t.float - slc.b.float), img = img.addr, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y - slc.t.float, w: slc.r.float, h: r.h - slc.t.float - slc.b.float), img = img, col = col)
 
   # bottom-left
   img.region = [rgnX, rgnY + rgnH - slc.b, slc.l, slc.b]
-  nkDrawImage(b = b, r = Rect(x: r.x, y: r.y + r.h - slc.b.float, w: slc.l.float, h: slc.b.float), img = img.addr, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x, y: r.y + r.h - slc.b.float, w: slc.l.float, h: slc.b.float), img = img, col = col)
 
   # bottom-center
   img.region = [rgnX + slc.l, rgnY + rgnH - slc.b, rgnW - slc.l - slc.r, slc.b]
-  nkDrawImage(b = b, r = Rect(x: r.x + slc.l.float, y: r.y + r.h - slc.b.float, w: r.w - slc.l.float - slc.r.float, h: slc.b.float), img = img.addr, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x + slc.l.float, y: r.y + r.h - slc.b.float, w: r.w - slc.l.float - slc.r.float, h: slc.b.float), img = img, col = col)
 
   # bottom-right
   img.region = [rgnX + rgnW - slc.r, rgnY + rgnH - slc.b, slc.r, slc.b]
-  nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y + r.h - slc.b.float, w: slc.r.float, h: slc.b.float), img = img.addr, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y + r.h - slc.b.float, w: slc.r.float, h: slc.b.float), img = img, col = col)
 
 proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
   space: float; glyphs: var int; textWidth: var float; sepList: seq[nk_rune];
@@ -730,7 +727,7 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
   return if sepLen == 0: len else: sepLen
 
 proc nkDrawText(b: var CommandBuffer; r: Rect; str: string; length: var int;
-  font: ptr nk_user_font; bg, fg: nk_color) {.raises: [], tags: [RootEffect],
+  font: UserFont; bg, fg: NkColor) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw the selected text
   ##
@@ -741,8 +738,6 @@ proc nkDrawText(b: var CommandBuffer; r: Rect; str: string; length: var int;
   ## * font - the font used to draw the text
   ## * bg   - the background color of the text
   ## * fg   - the foreground color of the text
-  require:
-    font != nil
   body:
     if str == "" or length == 0 or (bg.a == 0 and fg.a == 0):
       return
@@ -754,31 +749,31 @@ proc nkDrawText(b: var CommandBuffer; r: Rect; str: string; length: var int;
 
     # make sure text fits inside bounds
     let textWidth: float = try:
-        font.width(arg1 = font.userdata, h = font.height, arg3 = str.cstring, len = length.cint)
+        font.width(arg1 = font.userdata, h = font.height, arg3 = str, len = length)
       except Exception:
         return
     if textWidth > r.w:
       var
         glyphs: int = 0
         txtWidth: float = textWidth
-      length = nkTextClamp(font = font, text = str, textLen = length,
-        space = r.w, glyphs = glyphs, textWidth = txtWidth, sepList = @[], sepCount = 0)
+#      length = nkTextClamp(font = font, text = str, textLen = length,
+#        space = r.w, glyphs = glyphs, textWidth = txtWidth, sepList = @[], sepCount = 0)
 
     if length == 0:
       return
-    let cmd: ptr nk_command_text = cast[ptr nk_command_text](
+    var cmd: CommandText = cast[CommandText](
         nkCommandBufferPush(b = b, t = commandText,
-            size = nk_command_text.sizeof + (length + 1).nk_size))
-    cmd.x = r.x.cshort
-    cmd.y = r.y.cshort
-    cmd.w = r.w.cushort
-    cmd.h = r.h.cushort
+            size = CommandText.sizeof + (length + 1).nk_size))
+    cmd.x = r.x.int16
+    cmd.y = r.y.int16
+    cmd.w = r.w.uint16
+    cmd.h = r.h.uint16
     cmd.background = bg
     cmd.foreground = fg
     cmd.font = font
-    cmd.length = length.cint
+    cmd.length = length
     cmd.height = font.height
-    cmd.`string` = str[0..length].cstring
+    cmd.text = str[0..length]
 
 # -----
 # Input
@@ -890,7 +885,7 @@ proc isMouseReleased*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
 # Text
 # ----
 proc nkWidgetText(o: var CommandBuffer; b: var Rect; str: string; len: var int;
-  t: ptr nk_text; a: nk_flags; f: ptr nk_user_font) {.raises: [], tags: [RootEffect],
+  t: Text; a: nk_flags; f: UserFont) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw a text widget. Internal use only
   ##
@@ -901,11 +896,7 @@ proc nkWidgetText(o: var CommandBuffer; b: var Rect; str: string; len: var int;
   ## * t   - the text style
   ## * a   - the flags related to the widget
   ## * f   - the font used to draw the widget
-  require:
-    t != nil
   body:
-    if t == nil:
-      return
     b.h = max(x = b.h, y = 2 * t.padding.y)
     var label: Rect = Rect()
     label.x = 0
@@ -914,8 +905,7 @@ proc nkWidgetText(o: var CommandBuffer; b: var Rect; str: string; len: var int;
     label.h = min(x = f.height, y = b.h - 2 * t.padding.y)
     var textWidth: float = 0.0
     textWidth = try:
-        f.width(arg1 = f.userdata, h = f.height, arg3 = str.cstring,
-          len = len.cint)
+        f.width(arg1 = f.userdata, h = f.height, arg3 = str, len = len)
       except Exception:
         return
     textWidth += (2.0 * t.padding.x)
@@ -1031,12 +1021,12 @@ proc nkDrawButton(`out`: var CommandBuffer; bounds: Rect;
   let bg: StyleItemData = result.data
   case result.iType
   of itemImage:
-    nkDrawImage(b = `out`, r = bounds, img = bg.image.addr, col =
-      nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
+    nkDrawImage(b = `out`, r = bounds, img = bg.image, col =
+      nkRGBFactor(col = NkColor(r: 255, g: 255, b: 255, a: 255),
       factor = style.colorFactorBackground))
   of itemNineSlice:
-    nkDrawNineSlice(b = `out`, r = bounds, slc = bg.slice.addr, col =
-      nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
+    nkDrawNineSlice(b = `out`, r = bounds, slc = bg.slice, col =
+      nkRGBFactor(col = NkColor(r: 255, g: 255, b: 255, a: 255),
       factor = style.colorFactorBackground))
   of itemColor:
     nkFillRect(b = `out`, rect = bounds, rounding = style.rounding, c =
