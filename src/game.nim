@@ -217,8 +217,8 @@ var
     ## The directory where the game's data is stored
   docDirectory*: Path = ("doc" & DirSep).Path
     ## The directory where the game's documentation is stored
-  themesDirectory*: string = "data" & DirSep & "themes" &
-      DirSep
+  themesDirectory*: Path = ("data" & DirSep & "themes" &
+      DirSep).Path
     ## The directory where the game's themes are stored
   moneyIndex*: Positive = 1
     ## The item's index of the item used as money in the game
