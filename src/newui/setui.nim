@@ -1291,7 +1291,7 @@ type
       ## The amount of the item
 
 var
-  statisticsValues*: array[9, string] = ["", "", "", "", "", "", "", "", ""]
+  statisticsValues*: array[10, string] = ["", "", "", "", "", "", "", "", "", ""]
     ## Values of the game's statistics
   finishedCrafts*: seq[StatItemData] = @[]
     ## The list of finished crafting orders
@@ -1301,6 +1301,8 @@ var
     ## The list of finished goals
   destroyedShips*: seq[StatItemData] = @[]
     ## The list of destroyed ships
+  killedMobs*: seq[StatItemData] = @[]
+    ## The list of killed mobs
 
 
 proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -1397,6 +1399,7 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for destroyedShip in statsList:
     totalFinished += destroyedShip.amount
   statisticsValues[8] = $totalFinished
+  destroyedShips = @[]
   if totalFinished > 0:
     for stat in statsList:
       try:
@@ -1404,4 +1407,17 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             stat.index.parseInt].name, amount: stat.amount))
       except:
         dialog = setError(message = "Can't show destroyed ships.")
+        return
+  totalFinished = 0
+  statsList = gameStats.killedMobs
+  for killedMob in statsList:
+    totalFinished += killedMob.amount
+  statisticsValues[9] = $totalFinished
+  killedMobs = @[]
+  if totalFinished > 0:
+    for stat in statsList:
+      try:
+        killedMobs.add(y = StatItemData(name: stat.index, amount: stat.amount))
+      except:
+        dialog = setError(message = "Can't show killed mobs.")
         return
