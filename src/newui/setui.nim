@@ -1291,7 +1291,7 @@ type
       ## The amount of the item
 
 var
-  statisticsValues*: array[8, string] = ["", "", "", "", "", "", "", ""]
+  statisticsValues*: array[9, string] = ["", "", "", "", "", "", "", "", ""]
     ## Values of the game's statistics
   finishedCrafts*: seq[StatItemData] = @[]
     ## The list of finished crafting orders
@@ -1299,6 +1299,8 @@ var
     ## The list of finished missions
   finishedGoals*: seq[StatItemData] = @[]
     ## The list of finished goals
+  destroyedShips*: seq[StatItemData] = @[]
+    ## The list of destroyed ships
 
 
 proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -1389,4 +1391,17 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             index = stat.index.parseInt), amount: stat.amount))
       except:
         dialog = setError(message = "Can't show finished goals.")
+        return
+  totalFinished = 0
+  statsList = gameStats.destroyedShips
+  for destroyedShip in statsList:
+    totalFinished += destroyedShip.amount
+  statisticsValues[8] = $totalFinished
+  if totalFinished > 0:
+    for stat in statsList:
+      try:
+        destroyedShips.add(y = StatItemData(name: protoShipsList[
+            stat.index.parseInt].name, amount: stat.amount))
+      except:
+        dialog = setError(message = "Can't show destroyed ships.")
         return
