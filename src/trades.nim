@@ -233,17 +233,19 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
   else:
     traderCargo[0].amount += cost
   if baseIndex > 0:
+    let item: BaseCargo = skyBases[baseIndex].cargo[baseItemIndex]
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
-        durability = skyBases[baseIndex].cargo[baseItemIndex].durability,
-        price = price, quality = skyBases[baseIndex].cargo[baseItemIndex].quality)
+        durability = item.durability, price = price, quality = item.quality,
+        maxDurability = item.maxDurability, weight = item.weight)
     updateBaseCargo(cargoIndex = baseItemIndex.cint, amount = -buyAmount,
-        durability = skyBases[baseIndex].cargo[baseItemIndex].durability,
-        quality = skyBases[baseIndex].cargo[baseItemIndex].quality)
+        durability = item.durability, quality = item.quality,
+        maxDurability = item.maxDurability, weight = item.weight)
     gainRep(baseIndex = baseIndex, points = 1)
   else:
+    let item: BaseCargo = traderCargo[baseItemIndex]
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
-        durability = traderCargo[baseItemIndex].durability, price = price,
-        quality = skyBases[baseIndex].cargo[baseItemIndex].quality)
+        durability = item.durability, price = price, quality = item.quality,
+        maxDurability = item.maxDurability, weight = item.weight)
     traderCargo[baseItemIndex].amount -= buyAmount
     if traderCargo[baseItemIndex].amount == 0:
       traderCargo.delete(i = baseItemIndex)
