@@ -39,6 +39,8 @@ type
     ## The description of an attribute
   VersionString = string
     ## The version of the game
+  SettingString = string
+    ## Used to store in-game settings, like money, tools names, etc
 
   ToolQuality = object
     ## Store data related to quality of tools needed for train a skill
@@ -222,7 +224,7 @@ var
     ## The directory where the game's themes are stored
   moneyIndex*: Positive = 1
     ## The item's index of the item used as money in the game
-  moneyName*: string = "Charcollum"
+  moneyName*: SettingString = "Charcollum"
     ## The name of the item used as a money in the game
   skillsList*: Table[Positive, SkillRecord] = initTable[Positive, SkillRecord]()
     ## The list of all skill available in the game
@@ -262,19 +264,19 @@ var
     ## The list of all attributes available in the game
   itemsTypesList*: seq[string] = @[]
     ## The list of all types of items available in the game
-  repairTools*: string = ""
+  repairTools*: SettingString = ""
     ## The type of item used to repair ships
-  cleaningTools*: string = ""
+  cleaningTools*: SettingString = ""
     ## The type of item used to cleaning ships
-  alchemyTools*: string = ""
+  alchemyTools*: SettingString = ""
     ## The type of item used as alchemy tools
   corpseIndex*: Positive = 1
     ## The index of item used as prototype for corpses
-  missionItemsType*: string = ""
+  missionItemsType*: SettingString = ""
     ## The type of item used in missions
-  fuelType*: string = ""
+  fuelType*: SettingString = ""
     ## The type of item used as fuel for ships
-  tradersName*: string = ""
+  tradersName*: SettingString = ""
     ## The word used to mark traders ships in their names
   conditionIndex*: Natural = 0
     ## The index of condition attribute
@@ -290,17 +292,17 @@ var
     ## The index of talking skill
   perceptionSkill*: Positive = 1
     ## The index of perception skil
-  headArmor*: string = ""
+  headArmor*: SettingString = ""
     ## The type of items used as head armor
-  chestArmor*: string = ""
+  chestArmor*: SettingString = ""
     ## The type of items used as chest armor
-  armsArmor*: string = ""
+  armsArmor*: SettingString = ""
     ## The type of items used as arms armor
-  legsArmor*: string = ""
+  legsArmor*: SettingString = ""
     ## The type of items used as legs armor
-  shieldType*: string = ""
+  shieldType*: SettingString = ""
     ## The type of items used as shield
-  weaponType*: string = ""
+  weaponType*: SettingString = ""
     ## The type of items used as weapon
   dodgeSkill*: Positive = 1
     ## The index of dodge skill
@@ -318,7 +320,7 @@ var
   goalsList*: OrderedTable[Positive, GoalData] = initOrderedTable[Positive,
       GoalData]()
     ## The list of available goals in the game
-  playerCareer*: string = ""
+  playerCareer*: CareerName = ""
     ## Index of the career of the player selected when starting a new game
   knownRecipes*: seq[string] = @[]
     ## The list of known recipes by the player
@@ -436,7 +438,7 @@ proc loadData*(fileName: Path) {.raises: [DataLoadingError],
         var newSkill: SkillRecord = initSkillRecord()
         newSkill.name = gameNode.attr(name = "name")
         newSkill.tool = gameNode.attr(name = "tool")
-        let attributeName: string = gameNode.attr(name = "attribute")
+        let attributeName: XmlAttribute = gameNode.attr(name = "attribute")
         for index, attribute in attributesList.pairs():
           if attribute.name == attributeName:
             newSkill.attribute = index
