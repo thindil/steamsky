@@ -32,7 +32,7 @@ suite "Unit tests for game2 module":
 
   test "Ending the game.":
     let oldSaveDir = saveDirectory
-    saveDirectory = "tests/"
+    saveDirectory = "tests/".Path
     addMessage("Test message", otherMessage)
     endGame(false)
     saveDirectory = oldSaveDir
@@ -41,7 +41,7 @@ suite "Unit tests for game2 module":
 
   test "Starting a new game.":
     let oldSaveDir = saveDirectory
-    saveDirectory = "tests/"
+    saveDirectory = "tests/".Path
     newGame()
     saveDirectory = oldSaveDir
     check:
