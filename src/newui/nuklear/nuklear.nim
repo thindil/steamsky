@@ -530,7 +530,7 @@ proc nkStrokeTriangle(b: var CommandBuffer; x0, y0, x1, y1, x2, y2,
   cmd.c.y = y2.int16
   cmd.color = c
 
-proc nkFillCircle(b: var CommandBuffer; rect: Rect; c: nk_color)
+proc nkFillCircle(b: var CommandBuffer; rect: Rect; c: NkColor)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the circle with the selected color
   ##
@@ -544,19 +544,16 @@ proc nkFillCircle(b: var CommandBuffer; rect: Rect; c: nk_color)
       x1 = b.clip.x, y1 = b.clip.y, w1 = b.clip.w, h1 = b.clip.h):
       return
 
-  var cmd: ptr nk_command_circle_filled = nil
-  cmd = cast[ptr nk_command_circle_filled](nkCommandBufferPush(b = b,
-    t = commandCircleFilled, size = cmd.sizeof))
-  if cmd == nil:
-    return
-  cmd.x = rect.x.cshort
-  cmd.y = rect.y.cshort
-  cmd.w = max(x = 0, y = rect.w).cushort
-  cmd.h = max(x = 0, y = rect.h).cushort
+  var cmd: CommandCircleFilled = cast[CommandCircleFilled](nkCommandBufferPush(b = b,
+    t = commandCircleFilled, size = CommandCircleFilled.sizeof))
+  cmd.x = rect.x.int16
+  cmd.y = rect.y.int16
+  cmd.w = max(x = 0, y = rect.w).uint16
+  cmd.h = max(x = 0, y = rect.h).uint16
   cmd.color = c
 
-proc nkFillTriangle(b: var CommandBuffer, x0, y0, x1, y1, x2, y2: cfloat,
-  c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
+proc nkFillTriangle(b: var CommandBuffer, x0, y0, x1, y1, x2, y2: float,
+  c: NkColor) {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the circle with the selected color
   ##
   ## * b  - the command buffer in which the triangle will be drawn
@@ -576,17 +573,14 @@ proc nkFillTriangle(b: var CommandBuffer, x0, y0, x1, y1, x2, y2: cfloat,
       y = b.clip.y, w = b.clip.w, h = b.clip.h):
       return
 
-  var cmd: ptr nk_command_triangle_filled = nil
-  cmd = cast[ptr nk_command_triangle_filled](nkCommandBufferPush(b = b,
-    t = commandTriangleFilled, size = cmd.sizeof))
-  if cmd == nil:
-    return
-  cmd.a.x = x0.cshort
-  cmd.a.y = y0.cshort
-  cmd.b.x = x1.cshort
-  cmd.b.y = y1.cshort
-  cmd.c.x = x2.cshort
-  cmd.c.y = y2.cshort
+  var cmd: CommandTriangleFilled = cast[CommandTriangleFilled](nkCommandBufferPush(b = b,
+    t = commandTriangleFilled, size = CommandTriangleFilled.sizeof))
+  cmd.a.x = x0.int16
+  cmd.a.y = y0.int16
+  cmd.b.x = x1.int16
+  cmd.b.y = y1.int16
+  cmd.c.x = x2.int16
+  cmd.c.y = y2.int16
   cmd.color = c
 
 proc nkDrawImage(b: var CommandBuffer; r: Rect; img: Image; col: NkColor)
@@ -668,7 +662,7 @@ proc nkDrawNineSlice(b: var CommandBuffer; r: Rect; slc: NineSlice; col: NkColor
   img.region = [rgnX + rgnW - slc.r, rgnY + rgnH - slc.b, slc.r, slc.b]
   nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y + r.h - slc.b.float, w: slc.r.float, h: slc.b.float), img = img, col = col)
 
-proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
+proc nkTextClamp(font: UserFont; text: string; textLen: int;
   space: float; glyphs: var int; textWidth: var float; sepList: seq[nk_rune];
   sepCount: int): int {.raises: [], tags: [RootEffect], contractual.} =
   ## Clamp the selected text
@@ -697,8 +691,8 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
       sepLen = len
       break
     let s: float = try:
-        font.width(arg1 = font.userdata, h = font.height, arg3 = text.cstring,
-          len = len.cint)
+        font.width(arg1 = font.userdata, h = font.height, arg3 = text,
+          len = len)
       except Exception:
         return
     var i: Natural = 0
@@ -756,8 +750,8 @@ proc nkDrawText(b: var CommandBuffer; r: Rect; str: string; length: var int;
       var
         glyphs: int = 0
         txtWidth: float = textWidth
-#      length = nkTextClamp(font = font, text = str, textLen = length,
-#        space = r.w, glyphs = glyphs, textWidth = txtWidth, sepList = @[], sepCount = 0)
+      length = nkTextClamp(font = font, text = str, textLen = length,
+        space = r.w, glyphs = glyphs, textWidth = txtWidth, sepList = @[], sepCount = 0)
 
     if length == 0:
       return
@@ -1002,7 +996,7 @@ proc nkDoButton(state: var nk_flags; `out`: var CommandBuffer; r: Rect;
     return nkButtonBehavior(state = state, r = bounds, i = `in`, behavior = behavior)
 
 proc nkDrawButton(`out`: var CommandBuffer; bounds: Rect;
-  state: nk_flags; style: ptr StyleButton): StyleItem {.raises: [],
+  state: nk_flags; style: StyleButton): StyleItem {.raises: [],
   tags: [RootEffect], contractual.} =
   ## Draw a button. Internal use only
   ## * out      - the command buffer in which the button will be drawn
@@ -1037,7 +1031,7 @@ proc nkDrawButton(`out`: var CommandBuffer; bounds: Rect;
 
 proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
   content: var Rect; background, foreground: NkColor; borderWidth: float;
-  font: ptr nk_user_font) {.raises: [], tags: [RootEffect], contractual.} =
+  font: UserFont) {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected symbol
   ##
   ## * out         - the command buffer in which the symbol will be drawn
@@ -1066,8 +1060,8 @@ proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
     text.background = background
     text.text = foreground
     var length: Positive = 1
-#    nkWidgetText(o = `out`, b = content, str = $ch, len = length, t = text.addr,
-#      a = centered, f = font)
+    nkWidgetText(o = `out`, b = content, str = $ch, len = length, t = text,
+      a = centered, f = font)
   of circleSolid, circleOutline, rectSolid, rectOutline:
     var drawRect: Rect = content
     drawRect = nkShrinkRect(r = drawRect, amount = borderWidth)
@@ -1076,10 +1070,10 @@ proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
       nkFillRect(b = `out`, rect = content, rounding = 0, c = foreground)
       if `type` == rectOutline:
         nkFillRect(b = `out`, rect = drawRect, rounding = 0, c = background)
-#    else:
-#      nkFillCircle(b = `out`, rect = content, c = foreground)
-#      if `type` == circleOutline:
-#        nkFillCircle(b = `out`, rect = drawRect, c = background)
+    else:
+      nkFillCircle(b = `out`, rect = content, c = foreground)
+      if `type` == circleOutline:
+        nkFillCircle(b = `out`, rect = drawRect, c = background)
   of triangleUp, triangleDown, triangleLeft, triangleRight:
     var heading: Heading = right
     var points: array[3, Rect] = [Rect(), Rect(), Rect()]
@@ -1094,9 +1088,9 @@ proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
         heading = down
     nkTriangleFromDirection(`result` = points, r = content, padX = 0,
       padY = 0, direction = heading)
-#    nkFillTriangle(b = `out`, x0 = points[0].x, y0 = points[0].y,
-#      x1 = points[1].x, y1 = points[1].y, x2 = points[2].x, y2 = points[2].y,
-#      c = foreground)
+    nkFillTriangle(b = `out`, x0 = points[0].x, y0 = points[0].y,
+      x1 = points[1].x, y1 = points[1].y, x2 = points[2].x, y2 = points[2].y,
+      c = foreground)
   of triangleUpOutline, triangleDownOutline, triangleLeftOutline,
     triangleRightOutline:
     var heading: Heading = right
@@ -1119,7 +1113,7 @@ proc nkDrawSymbol(`out`: var CommandBuffer; `type`: SymbolType;
     discard
 
 proc nkDrawButtonSymbol(`out`: var CommandBuffer; bounds, content: var Rect;
-  state: nk_flags; style: ptr StyleButton; `type`: SymbolType;
+  state: nk_flags; style: StyleButton; `type`: SymbolType;
   font: UserFont) {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only
   ##
@@ -1133,15 +1127,15 @@ proc nkDrawButtonSymbol(`out`: var CommandBuffer; bounds, content: var Rect;
   # select correct colors/images
   let background: StyleItem = nkDrawButton(`out` = `out`, bounds = bounds,
     state = state, style = style)
-#  let bg: NkColor = (if background.iType == itemColor: background.data.color else: style.textBackground)
-#
-#  var sym: nk_color = (if (state and widgetStateHover.ord).bool:
-#    style.text_hover elif (state and widgetStateActive.ord).bool:
-#      style.text_active else: style.text_normal)
-#
-#  sym = nk_rgb_factor(col = sym, factor = style.color_factor_text)
-#  nkDrawSymbol(`out` = `out`, `type` = `type`, content = content,
-#    background = bg, foreground = sym, borderWidth = 1, font = font)
+  let bg: NkColor = (if background.iType == itemColor: background.data.color else: style.textBackground)
+
+  var sym: NkColor = (if (state and widgetStateHover.ord).bool:
+    style.textHover elif (state and widgetStateActive.ord).bool:
+      style.textActive else: style.textNormal)
+
+  sym = nkRGBFactor(col = sym, factor = style.colorFactorText)
+  nkDrawSymbol(`out` = `out`, `type` = `type`, content = content,
+    background = bg, foreground = sym, borderWidth = 1, font = font)
 
 proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer; bounds: var Rect,
   symbol: SymbolType; behavior: ButtonBehavior; style: StyleButton;
@@ -1166,8 +1160,8 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer; bounds: var
       style.drawBegin(b = `out`, style.userData)
     except:
       discard
-#    nkDrawButtonSymbol(`out` = `out`, bounds = bounds, content = content,
-#      state = state, style = style, `type` = symbol, font = font)
+    nkDrawButtonSymbol(`out` = `out`, bounds = bounds, content = content,
+      state = state, style = style, `type` = symbol, font = font)
     try:
       style.drawEnd(b = `out`, style.userdata)
     except:

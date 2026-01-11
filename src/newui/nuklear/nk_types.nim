@@ -1187,6 +1187,17 @@ type
     lineThickness*: uint16
     a*, b*, c*: Vec2I
     color*: NkColor
+  CommandTriangleFilled* = object
+    ## Used to store Nuklear command data for draw filled triangles
+    header*: Command
+    a*, b*, c*: Vec2I
+    color*: NkColor
+  CommandCircleFilled* = object
+    ## Used to store Nuklear command data for draw filled circle
+    header*: Command
+    w*, h*: uint16
+    x*, y*: int16
+    color*: NkColor
   CommandScissor* = object
     ## Used to store Nuklear command data for clearing rectangles
     header*: Command
@@ -1323,7 +1334,7 @@ type
   StyleButton* = object
     ## Used to store Nuklear style data for buttons
     normal*, hover*, active*: StyleItem
-    borderColor*, textBackground*, textNormal*, textHover*, textActive: NkColor
+    borderColor*, textBackground*, textNormal*, textHover*, textActive*: NkColor
     rounding*, border*, colorFactorBackground*, colorFactorText*,
       disabledFactor*: float
     padding*, imagePadding*, touchPadding*: Vec2
