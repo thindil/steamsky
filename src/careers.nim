@@ -22,8 +22,6 @@ import contracts
 import game, log, types
 
 type
-  CareerName* = string
-    ## The name of a career
   CareerData = object
     ## Used to store data about available player's careers
     ##

@@ -154,6 +154,7 @@ type
   BaseType* = string ## Used to store types of bases
   ObjectName* = string ## Used to store names of objects (items)
   MessageText* = string ## Used to store the text of a message
+  CareerName* = string ## The name of a career
 
   ModuleData* = object
     ## Used to store information about ships' modules
