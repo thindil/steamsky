@@ -23,9 +23,9 @@ import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
 import newui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
     basesui, combatui, coreui, craftsui, dialogs, errordialog, goalsui, header,
-    knowledge, knowledgebases, knowledgemissions, mainmenu, mapsui, messagesui,
-    missionsui, shipsui, shipsuicrew, shipsuicrewinventory, shipsuimodules,
-    statisticsui, themes, tradesui, waitmenu]
+    helpui, knowledge, knowledgebases, knowledgemissions, mainmenu, mapsui,
+    messagesui, missionsui, shipsui, shipsuicrew, shipsuicrewinventory,
+    shipsuimodules, statisticsui, themes, tradesui, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -131,7 +131,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = 200)
   const
-    showGame: array[GameState.mainMenu..GameState.gameStatistics, proc (
+    showGame: array[GameState.mainMenu..GameState.help, proc (
         state: var GameState; dialog: var GameDialog){.nimcall, raises: [
             ].}] = [
       GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
@@ -144,7 +144,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         buyRecipes: showRecipes, shipyard: showShipyard,
         baseMissions: showMissions, loot: showLoot, shipInfo: showShipInfo,
         crafting: showCrafting, lastMessages: showMessages,
-        knowledgeLists: showKnowledge, gameStatistics: showStatistics]
+        knowledgeLists: showKnowledge, gameStatistics: showStatistics,
+        help: showHelp]
     showDialog: array[GameDialog.errorDialog..GameDialog.missionActionDialog,
         proc(dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
@@ -191,7 +192,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         let
           oldState: GameState = state
           oldDialog: GameDialog = dialog
-        if state in GameState.mainMenu..GameState.gameStatistics:
+        if state in GameState.mainMenu..GameState.help:
           # Show the proper window
           showGame[state](state = state, dialog = dialog)
         # Add the tooltips, if enabled
