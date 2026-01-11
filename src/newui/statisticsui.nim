@@ -118,5 +118,16 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
       for ship in destroyedShips:
         label(str = ship.name)
         label(str = $ship.amount)
+    # Show killed mobs statistics
+    setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.6.cfloat, 0.4])
+    addStatistic(title = "Killed enemies:", value = statisticsValues[9],
+        tooltip = "The total amount of enemies killed in melee combat in this game")
+    if destroyedShips.len > 0:
+      setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.7.cfloat, 0.3])
+      colorLabel(str = "Name", color = theme.colors[goldenColor])
+      colorLabel(str = "Amount", color = theme.colors[goldenColor])
+      for mob in killedMobs:
+        label(str = mob.name)
+        label(str = $mob.amount)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       height - 75)
