@@ -38,11 +38,11 @@ type
     lines, started: float
   ButtonSettings* = object
     ## Used to store information about a button in a dialog
-    text*: string    ## Text to show on the button
+    text*: string       ## Text to show on the button
     code*: proc(dialog: var GameDialog) ## The code to execute when the button was pressed
-    icon*: int       ## The index of the icon to show on the button
-    tooltip*: string ## The tooltip text associated with the button
-    color*: ColorsNames   ## The color of the button's text
+    icon*: int          ## The index of the icon to show on the button
+    tooltip*: string    ## The tooltip text associated with the button
+    color*: ColorsNames ## The color of the button's text
   TextData = object
     text: string
     lines: float
@@ -717,22 +717,22 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             sellItems(itemIndex = manipulateData.itemIndex,
                 amount = $manipulateData.amount)
           of takeDialog:
+            let item: BaseCargo = skyBases[baseIndex].cargo[baseCargoIndex]
             if cargoIndex > -1:
               updateCargo(ship = playerShip, cargoIndex = cargoIndex,
-                  amount = manipulateData.amount, durability = skyBases[
-                  baseIndex].cargo[baseCargoIndex].durability,
-                  quality = skyBases[baseIndex].cargo[baseCargoIndex].quality)
+                  amount = manipulateData.amount, durability = item.durability,
+                  quality = item.quality, maxDurability = item.maxDurability,
+                  weight = item.weight)
             else:
               updateCargo(ship = playerShip, protoIndex = protoIndex,
-                  amount = manipulateData.amount, durability = skyBases[
-                  baseIndex].cargo[baseCargoIndex].durability,
-                  quality = skyBases[baseIndex].cargo[baseCargoIndex].quality)
+                  amount = manipulateData.amount, durability = item.durability,
+                  quality = item.quality, maxDurability = item.maxDurability,
+                  weight = item.weight)
             try:
               updateBaseCargo(cargoIndex = baseCargoIndex,
-                  amount = -manipulateData.amount, durability = skyBases[
-                  baseIndex].cargo[baseCargoIndex].durability,
-                      quality = skyBases[baseIndex].cargo[
-                      baseCargoIndex].quality)
+                  amount = -manipulateData.amount, durability = item.durability,
+                  quality = item.quality, maxDurability = item.maxDurability,
+                  weight = item.weight)
             except:
               dialog = setError(message = "Can't update the base's cargo3.")
               return
@@ -743,12 +743,13 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
               dialog = setError(message = "Can't add message.")
               return
           of dropDialog:
+            let item: InventoryData = playerShip.cargo[cargoIndex]
             if baseCargoIndex > -1:
               try:
                 updateBaseCargo(cargoIndex = baseCargoIndex,
                     amount = manipulateData.amount,
-                    durability = playerShip.cargo[cargoIndex].durability,
-                    quality = playerShip.cargo[cargoIndex].quality)
+                    durability = item.durability, quality = item.quality,
+                    maxDurability = item.maxDurability, weight = item.weight)
               except:
                 dialog = setError(message = "Can't update the base's cargo.")
                 return
@@ -756,15 +757,15 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
               try:
                 updateBaseCargo(protoIndex = protoIndex,
                     amount = manipulateData.amount,
-                    durability = playerShip.cargo[cargoIndex].durability,
-                    quality = playerShip.cargo[cargoIndex].quality)
+                    durability = item.durability, quality = item.quality,
+                    maxDurability = item.maxDurability, weight = item.weight)
               except:
                 dialog = setError(message = "Can't update the base's cargo2.")
                 return
             updateCargo(ship = playerShip, cargoIndex = cargoIndex,
-                amount = -manipulateData.amount, durability = playerShip.cargo[
-                cargoIndex].durability, quality = playerShip.cargo[
-                cargoIndex].quality)
+                amount = -manipulateData.amount, durability = item.durability,
+                quality = item.quality, maxDurability = item.maxDurability,
+                weight = item.weight)
             try:
               addMessage(message = "You drop " & $manipulateData.amount & " " &
                   itemsList[protoIndex].name & ".", mType = orderMessage)
@@ -810,13 +811,15 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
               updateInventory(memberIndex = manipulateData.data,
                   amount = manipulateData.amount, protoIndex = item.protoIndex,
                   durability = item.durability, price = item.price,
-                  ship = playerShip, quality = item.quality)
+                  ship = playerShip, quality = item.quality,
+                  maxDurability = item.maxDurability, weight = item.weight)
             except:
               dialog = setError(message = "Can't update the member's inventory.")
               return
             updateCargo(ship = playerShip, amount = -manipulateData.amount,
                 cargoIndex = manipulateData.itemIndex, price = item.price,
-                quality = item.quality)
+                quality = item.quality, maxDurability = item.maxDurability,
+                weight = item.weight)
           of dropCargoDialog:
             var dropAmount, dropAmount2: Natural = manipulateData.amount
             let itemIndex: Natural = manipulateData.itemIndex
@@ -840,11 +843,11 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
               addMessage(message = "You dropped " & $dropAmount & " " &
                   getItemName(item = playerShip.cargo[itemIndex]) & ".",
                       mtype = otherMessage)
-              updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-                  itemIndex].protoIndex, amount = -dropAmount,
-                  durability = playerShip.cargo[itemIndex].durability,
-                  price = playerShip.cargo[itemIndex].price,
-                  quality = playerShip.cargo[itemIndex].quality)
+              let item: InventoryData = playerShip.cargo[itemIndex]
+              updateCargo(ship = playerShip, protoIndex = item.protoIndex,
+                amount = -dropAmount, durability = item.durability,
+                price = item.price, quality = item.quality,
+                maxDurability = item.maxDurability, weight = item.weight)
           else:
             return false
           dialog = none
