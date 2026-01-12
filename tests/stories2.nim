@@ -19,7 +19,7 @@ suite "Unit tests for stories2 module":
       experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
-  for i in 1 .. 1_000_000:
+  while currentStory.index.len == 0:
     startStory("Undead", dropItem)
     if currentStory.index.len > 0:
       break
