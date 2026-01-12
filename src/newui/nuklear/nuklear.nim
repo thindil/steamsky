@@ -1229,19 +1229,19 @@ proc panelHeader(win: var Window; title: string; style: Style; font: UserFont;
 
     # draw header background
     header.h += 1.0
-#    case background.iType
-#    of itemImage:
-#      text.background = NkColor(r: 0, g: 0, b: 0, a: 0)
-#      nkDrawImage(b = win.buffer, r = header, img = background.data.image,
-#        col = NkColor(r: 255, g: 255, b: 255, a: 255))
-#    of itemNineSlice:
-#      text.background = NkColor(r: 0, g: 0, b: 0, a: 0)
-#      nkDrawNineSlice(b = win.buffer.addr, r = header, slc = background.data.slice,
-#        col = NkColor(r: 255, g: 255, b: 255, a: 255))
-#    of itemColor:
-#      text.background = background.data.color
-#      nkFillRect(b = `out`.addr, rect = header, rounding = 0,
-#        c = background.data.color)
+    case background.iType
+    of itemImage:
+      text.background = NkColor(r: 0, g: 0, b: 0, a: 0)
+      nkDrawImage(b = win.buffer, r = header, img = background.data.image,
+        col = NkColor(r: 255, g: 255, b: 255, a: 255))
+    of itemNineSlice:
+      text.background = NkColor(r: 0, g: 0, b: 0, a: 0)
+      nkDrawNineSlice(b = win.buffer, r = header, slc = background.data.slice,
+        col = NkColor(r: 255, g: 255, b: 255, a: 255))
+    of itemColor:
+      text.background = background.data.color
+      nkFillRect(b = `out`, rect = header, rounding = 0,
+        c = background.data.color)
 
     # window close button
     var button: Rect = Rect()
@@ -1256,12 +1256,12 @@ proc panelHeader(win: var Window; title: string; style: Style; font: UserFont;
       else:
         button.x = header.x + style.window.header.padding.x
         header.x += button.w + style.window.header.spacing.x + style.window.header.padding.x
-#      if nkDoButtonSymbol(state = ws, `out` = win.buffer.addr, bounds = button,
-#        symbol = style.window.header.close_symbol, behavior = default,
-#        style = style.window.header.close_button.addr, `in` = `in`.addr,
-#        font = style.font) and not(win.flags and windowRom.cint).nk_bool:
-#        layout.flags = layout.flags or windowHidden.cint
-#        layout.flags = layout.flags and not windowMinimized.cint
+      if nkDoButtonSymbol(state = ws, `out` = win.buffer, bounds = button,
+        symbol = style.window.header.close_symbol, behavior = default,
+        style = style.window.header.close_button, `in` = `in`,
+        font = style.font) and not(win.flags and windowRom.cint).nk_bool:
+        layout.flags = layout.flags or windowHidden.cint
+        layout.flags = layout.flags and not windowMinimized.cint
 
     # window minimize button
     if (win.flags and windowMinimizable.cint).nk_bool:
@@ -1276,23 +1276,23 @@ proc panelHeader(win: var Window; title: string; style: Style; font: UserFont;
         button.x = header.x
         header.x += button.w + style.window.header.spacing.x +
           style.window.header.padding.x
-#      if nkDoButtonSymbol(state = ws, `out` = win.buffer, bounds = button,
-#        symbol = if (layout.flags and windowMinimized.cint).nk_bool:
-#        style.window.header.maximizeSymbol else:
-#        style.window.header.minimizeSymbol, behavior = default,
-#        style = style.window.header.minimize_button.addr, `in` = `in`.addr,
-#        font = style.font) and not(win.flags and windowRom.cint).nk_bool:
-#          layout.flags = if (layout.flags and windowMinimized.cint).nk_bool:
-#            layout.flags and not windowMinimized.cint else:
-#            layout.flags or windowMinimized.cint
+      if nkDoButtonSymbol(state = ws, `out` = win.buffer, bounds = button,
+        symbol = if (layout.flags and windowMinimized.cint).nk_bool:
+        style.window.header.maximizeSymbol else:
+        style.window.header.minimizeSymbol, behavior = default,
+        style = style.window.header.minimize_button, `in` = `in`,
+        font = style.font) and not(win.flags and windowRom.cint).nk_bool:
+          layout.flags = if (layout.flags and windowMinimized.cint).nk_bool:
+            layout.flags and not windowMinimized.cint else:
+            layout.flags or windowMinimized.cint
 
     # window header title
     var textLen: int = title.len
-#    let t: float = try:
-#        font.width(arg1 = font.userdata, h = font.height,
-#          arg3 = title.cstring, len = textLen.cint)
-#      except Exception:
-#        return false
+    let t: float = try:
+        font.width(arg1 = font.userdata, h = font.height,
+          arg3 = title, len = textLen)
+      except Exception:
+        return false
     text.padding = Vec2(x: 0, y: 0)
     var label: Rect = Rect(x: 0, y: 0, w: 0, h: 0)
 
@@ -1300,13 +1300,13 @@ proc panelHeader(win: var Window; title: string; style: Style; font: UserFont;
     label.x += style.window.header.label_padding.x
     label.y = header.y + style.window.header.label_padding.y
     label.h = font.height + 2 * style.window.header.label_padding.y
-#    label.w = t + 2 * style.window.header.spacing.x
+    label.w = t + 2 * style.window.header.spacing.x
     label.w = (0.float).clamp(a = label.w, b = header.x + header.w - label.x)
-#    nkWidgetText(o = `out`, b = label, str = title, len = textLen,
-#      t = text.addr, a = TextAlignment.left, f = font)
+    nkWidgetText(o = `out`, b = label, str = title, len = textLen,
+      t = text, a = TextAlignment.left, f = font)
   return true
 
-proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
+proc nkPanelBegin(context: Context; title: string; panelType: PanelType): bool {.raises: [
     ], tags: [RootEffect], contractual.} =
   ## Start drawing a Nuklear panel. Internal use only
   ##
@@ -1330,10 +1330,10 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     let
       style: nk_style = ctx.style
       font: ptr nk_user_font = style.font
-    var win: ptr nk_window = ctx.current
-    let
-      layout: PNkPanel = win.layout
-      `out`: nk_command_buffer = win.buffer
+    var
+      win: Window = context.current
+      layout: Panel = win.layout
+    let  `out`: CommandBuffer = win.buffer
     var `in`: nk_input = (if (win.flags and windowNoInput.cint) ==
           1: nk_input() else: ctx.input)
     when defined(nkIncludeCommandUserdata):
@@ -1371,7 +1371,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       `in`.mouse.buttons = buttons.addr
 
     # setup panel
-    layout.`type` = panelType
+    layout.pType = panelType
     layout.flags = win.flags
     layout.bounds = win.bounds
     layout.bounds.x += panelPadding.x
@@ -1381,8 +1381,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       var shrinked: Rect = Rect(x: layout.bounds.x, y: layout.bounds.y,
         w: layout.bounds.w, h: layout.bounds.h)
       shrinked = nkShrinkRect(r = shrinked, amount = layout.border)
-      layout.bounds = new_nk_rect(x = shrinked.x, y = shrinked.y,
-        w = shrinked.w, h = shrinked.h)
+      layout.bounds = shrinked
     else:
       layout.border = 0
     layout.at_y = layout.bounds.y
@@ -1397,7 +1396,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.row.item_width = 0
     layout.row.tree_depth = 0
     layout.row.height = panelPadding.y
-    layout.has_scrolling = nkTrue.cuint
+    layout.has_scrolling = nkTrue
     if not(win.flags and windowNoScrollbar.cint).nk_bool:
       layout.bounds.w -= scrollbarSize.x
     if nkPanelIsNonblock(`type` = panelType):
@@ -1442,7 +1441,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       y0 = layout.clip.y, x1 = layout.clip.x + layout.clip.w,
       y1 = layout.clip.y + layout.clip.h)
 #    nkPushScissor(b = `out`.addr, r = clip)
-    layout.clip = new_nk_rect(x = clip.x, y = clip.y, w = clip.w, h = clip.h)
+    layout.clip = clip
     return not (layout.flags and windowHidden.cint).nk_bool and not
       (layout.flags and windowMinimized.cint).nk_bool
 
@@ -1535,7 +1534,7 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[PanelFlags];
 #    nkPushScissor(b = popup.buffer.addr, r = nkNullRect)
 
     # popup is running therefore invalidate parent panels
-    if nkPanelBegin(ctx = ctx, title = title, panelType = panelPopup):
+    if nkPanelBegin(context = context, title = title, panelType = panelPopup):
       var root: PNkPanel = win.layout
       while root != nil:
         root.flags = root.flags or windowRom.cint
