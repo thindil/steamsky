@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -96,7 +96,7 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
         updateRep(index = index, points = amount)
       else:
         updateRep(index = index, points = (amount * -1))
-    except:
+    except KeyError:
       raise newException(exceptn = ReputationError,
           message = getCurrentExceptionMsg())
 
