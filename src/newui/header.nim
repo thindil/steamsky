@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -505,7 +505,13 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
       dialog = none
     if playerShip.crew[0].health > 0:
       labelButton(title = "Help"):
-        discard
+        if state == help:
+          state = previousState
+        else:
+          previousState = state
+          state = help
+          mapPreview = false
+        dialog = none
       labelButton(title = "Game options"):
         discard
       labelButton(title = "Quit from game"):
