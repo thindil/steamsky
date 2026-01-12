@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -372,9 +372,10 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
       break
     let
       protoIndex: Natural = playerShip.cargo[i].protoIndex
+      item: InventoryData = playerShip.cargo[i]
       baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
-          durability = playerShip.cargo[i].durability,
-          quality = playerShip.cargo[i].quality)
+          durability = item.durability, quality = item.quality,
+          maxDurability = item.maxDurability, weight = item.maxDurability)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
     let itemType: string = try:
@@ -387,7 +388,7 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
           return
     if typeIndex > 0 and itemType != typesList[typeIndex]:
       continue
-    let itemName: string = getItemName(item = playerShip.cargo[i],
+    let itemName: string = getItemName(item = item,
         damageInfo = false, toLower = false)
     if nameSearch.len > 0 and itemName.toLowerAscii.find(
         sub = nameSearch.toLowerAscii) == -1:
@@ -399,7 +400,7 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
     if baseCargoIndex == -1:
       try:
         price = getPrice(baseType = baseType, itemIndex = protoIndex,
-            quality = playerShip.cargo[i].quality)
+            quality = item.quality)
       except:
         dialog = setError(message = "Can't get price2.")
         return
@@ -412,7 +413,7 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
       if eventsList[eventIndex].eType == doublePrice and eventsList[
           eventIndex].itemIndex == protoIndex:
         price *= 2
-    let profit: int = price - playerShip.cargo[i].price
+    let profit: int = price - item.price
     var baseAmount: Natural = 0
     if baseIndex > 0:
       try:
@@ -430,11 +431,11 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
     addButton(label = itemType, tooltip = "Show available options of item.",
       data = index, code = showItemInfo, dialog = dialog)
     addProgressBar(tooltip = (if playerShip.cargo[i].durability < 100:
-      getItemDamage(itemDurability = playerShip.cargo[i].durability)
-      else: "Unused"), value = playerShip.cargo[i].durability,
+      getItemDamage(itemDurability = item.durability)
+      else: "Unused"), value = item.durability,
       maxValue = defaultItemDurability, data = index, code = showItemInfo,
       dialog = dialog)
-    addButton(label = ($playerShip.cargo[i].quality).capitalizeAscii,
+    addButton(label = ($item.quality).capitalizeAscii,
         tooltip = "Show available options of item.", data = index,
         code = showItemInfo, dialog = dialog)
     addButton(label = $price, tooltip = "Show available options of item.",
@@ -451,7 +452,7 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
     except:
       dialog = setError(message = "Can't show weight")
       return
-    addButton(label = $playerShip.cargo[i].amount,
+    addButton(label = $item.amount,
       tooltip = "Show available options of item.", data = index,
       code = showItemInfo, dialog = dialog)
     addButton(label = $baseAmount, tooltip = "Show available options of item.",

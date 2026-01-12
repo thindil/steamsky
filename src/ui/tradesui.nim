@@ -834,8 +834,10 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
   if cargoIndex > -1:
     protoIndex = playerShip.cargo[cargoIndex].protoIndex
     if baseCargoIndex == -1:
+      let item: InventoryData = playerShip.cargo[cargoIndex]
       baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
-          quality = playerShip.cargo[cargoIndex].quality)
+          quality = item.quality, maxDurability = item.maxDurability,
+          weight = item.weight)
   else:
     protoIndex = (if baseIndex == 0: traderCargo[
         baseCargoIndex].protoIndex else: skyBases[baseIndex].cargo[
