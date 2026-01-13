@@ -420,7 +420,8 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     updateInventory(memberIndex = memberIndex, amount = amount,
         protoIndex = item.protoIndex, durability = item.durability,
-        price = item.price, ship = playerShip, quality = item.quality)
+        price = item.price, ship = playerShip, quality = item.quality,
+        maxDurability = item.maxDurability, weight = item.weight)
   except:
     return showError(message = "Can't update the member's inventory.")
   updateCargo(ship = playerShip, amount = -amount, cargoIndex = itemIndex,
@@ -477,16 +478,17 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval2(script = spinBox & " get").parseInt
     except:
       return showError(message = "Can't get the drop amount.")
-  let itemIndex: Natural = try:
-      ($argv[1]).parseInt - 1
-    except:
-      return showError(message = "Can't get the item's index.")
+  let
+    itemIndex: Natural = try:
+        ($argv[1]).parseInt - 1
+      except:
+        return showError(message = "Can't get the item's index.")
+    item: InventoryData = playerShip.cargo[itemIndex]
   try:
-    if itemsList[playerShip.cargo[itemIndex].protoIndex].itemType == missionItemsType:
+    if itemsList[item.protoIndex].itemType == missionItemsType:
       for j in 1 .. dropAmount2:
         for index, mission in acceptedMissions:
-          if mission.mType == deliver and mission.itemIndex == playerShip.cargo[
-              itemIndex].protoIndex:
+          if mission.mType == deliver and mission.itemIndex == item.protoIndex:
             deleteMission(missionIndex = index)
             dropAmount.dec
             break
@@ -498,12 +500,11 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't check the drop amount.")
   if dropAmount > 0:
     addMessage(message = "You dropped " & $dropAmount & " " & getItemName(
-        item = playerShip.cargo[itemIndex]) & ".", mtype = otherMessage)
-    updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-        itemIndex].protoIndex, amount = -dropAmount,
-        durability = playerShip.cargo[itemIndex].durability,
-        price = playerShip.cargo[itemIndex].price,
-        quality = playerShip.cargo[itemIndex].quality)
+        item = item) & ".", mtype = otherMessage)
+    updateCargo(ship = playerShip, protoIndex = item.protoIndex,
+        amount = -dropAmount, durability = item.durability, price = item.price,
+        quality = item.quality, maxDurability = item.maxDurability,
+        weight = item.weight)
   discard closeDialogCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["CloseDialog", ".itemdialog"].allocCStringArray)
   updateHeader()
