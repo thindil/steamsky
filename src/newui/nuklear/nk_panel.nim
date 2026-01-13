@@ -1,4 +1,4 @@
-# Copyright © 2025 Bartek Jasicki
+# Copyright © 2025-2026 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -42,58 +42,58 @@ proc nk_create_panel*(ctx): pointer {.importc, cdecl, raises: [], tags: [], cont
 # -------------------
 # High level bindings
 # -------------------
-proc nkPanelGetPadding*(style: nk_style; `type`: PanelType): nk_vec2 {.raises: [
+proc nkPanelGetPadding*(style: Style; pType: PanelType): Vec2 {.raises: [
     ], tags: [], contractual.} =
   ## Get the padding for the selected panel, based on its type. Internal use
   ## only
   ##
   ## * style - the whole style of the application
-  ## * type  - the selected type of the panel
+  ## * pType  - the selected type of the panel
   ##
   ## Returns vector with information about padding for the selected panel
-  case `type`
+  case pType
   of panelWindow:
     return style.window.padding
   of panelGroup:
-    return style.window.group_padding
+    return style.window.groupPadding
   of panelPopup:
-    return style.window.popup_padding
+    return style.window.popupPadding
   of panelContextual:
-    return style.window.contextual_padding
+    return style.window.contextualPadding
   of panelCombo:
-    return style.window.combo_padding
+    return style.window.comboPadding
   of panelMenu:
-    return style.window.menu_padding
+    return style.window.menuPadding
   of panelTooltip:
-    return style.window.tooltip_padding
+    return style.window.tooltipPadding
   else:
     discard
 
-proc nkPanelGetBorder*(style: nk_style; flags: nk_flags;
-    `type`: PanelType): cfloat {.raises: [], tags: [], contractual.} =
+proc nkPanelGetBorder*(style: Style; flags: nk_flags;
+    pType: PanelType): float {.raises: [], tags: [], contractual.} =
   ## Get the border size for the selected panel, based on its type. Internal use
   ## only
   ##
   ## * style - the whole style of the application
-  ## * type  - the selected type of the panel
+  ## * pType  - the selected type of the panel
   ##
   ## Returns size of the border of the selected panel
   if (flags and windowBorder.ord.int).nk_bool:
-    case `type`
+    case pType
     of panelWindow:
       return style.window.border
     of panelGroup:
-      return style.window.group_border
+      return style.window.groupBorder
     of panelPopup:
-      return style.window.popup_border
+      return style.window.popupBorder
     of panelContextual:
-      return style.window.contextual_border
+      return style.window.contextualBorder
     of panelCombo:
-      return style.window.combo_border
+      return style.window.comboBorder
     of panelMenu:
-      return style.window.menu_border
+      return style.window.menuBorder
     of panelTooltip:
-      return style.window.tooltip_border
+      return style.window.tooltipBorder
     else:
       return 0
   else:

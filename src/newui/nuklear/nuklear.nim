@@ -1315,10 +1315,6 @@ proc nkPanelBegin(context: Context; title: string; panelType: PanelType): bool {
   ## * panelType - the type of the panel to draw
   ##
   ## Returns true if the panel was drawn, otherwise false
-  require:
-    ctx != nil
-    ctx.current != nil
-    ctx.current.layout != nil
   body:
     zeroMem(p = ctx.current.layout, size = ctx.current.layout.sizeof)
     if (ctx.current.flags and windowHidden.cint) == 1 or (
@@ -1328,21 +1324,21 @@ proc nkPanelBegin(context: Context; title: string; panelType: PanelType): bool {
       return false;
     # pull state into local stack
     let
-      style: nk_style = ctx.style
-      font: ptr nk_user_font = style.font
+      style: Style = context.style
+      font: UserFont = style.font
     var
       win: Window = context.current
       layout: Panel = win.layout
-    let  `out`: CommandBuffer = win.buffer
-    var `in`: nk_input = (if (win.flags and windowNoInput.cint) ==
-          1: nk_input() else: ctx.input)
+    var  `out`: CommandBuffer = win.buffer
+    var `in`: Input = (if (win.flags and windowNoInput.cint) ==
+          1: Input() else: context.input)
     when defined(nkIncludeCommandUserdata):
       win.buffer.userdata = ctx.userdata
     # pull style configuration into local stack
     let
-      scrollbarSize: nk_vec2 = style.window.scrollbar_size
-      panelPadding: nk_vec2 = nkPanelGetPadding(style = style,
-          `type` = panelType)
+      scrollbarSize: Vec2 = style.window.scrollbar_size
+      panelPadding: Vec2 = nkPanelGetPadding(style = style,
+          pType = panelType)
 
     # window movement
     if (win.flags and windowMovable.cint) == 1 and (win.flags and
@@ -1356,7 +1352,7 @@ proc nkPanelBegin(context: Context; title: string; panelType: PanelType): bool {
       else:
         header.h = panelPadding.y
       # window movement by dragging
-      var buttons: ButtonsArray = cast[ButtonsArray](`in`.mouse.buttons)
+      var buttons: array[Buttons.max, MouseButton] = `in`.mouse.buttons
       let
         leftMouseDown: bool = buttons[Buttons.left].down
         leftMouseClicked: bool = buttons[Buttons.left].clicked == 1
@@ -1368,7 +1364,7 @@ proc nkPanelBegin(context: Context; title: string; panelType: PanelType): bool {
         buttons[Buttons.left].clicked_pos.x += `in`.mouse.delta.x
         buttons[Buttons.left].clicked_pos.y += `in`.mouse.delta.y
         ctx.style.cursor_active = cursors[cursorMove].addr
-      `in`.mouse.buttons = buttons.addr
+      `in`.mouse.buttons = buttons
 
     # setup panel
     layout.pType = panelType
@@ -1377,7 +1373,7 @@ proc nkPanelBegin(context: Context; title: string; panelType: PanelType): bool {
     layout.bounds.x += panelPadding.x
     layout.bounds.w -= (2 * panelPadding.x)
     if (win.flags and windowBorder.cint).nk_bool:
-      layout.border = nkPanelGetBorder(style = style, flags = win.flags, `type` = panelType)
+      layout.border = nkPanelGetBorder(style = style, flags = win.flags, pType = panelType)
       var shrinked: Rect = Rect(x: layout.bounds.x, y: layout.bounds.y,
         w: layout.bounds.w, h: layout.bounds.h)
       shrinked = nkShrinkRect(r = shrinked, amount = layout.border)
@@ -1407,9 +1403,9 @@ proc nkPanelBegin(context: Context; title: string; panelType: PanelType): bool {
       layout.bounds.h -= layout.footer_height
 
     # panel header
-#    if not panelHeader(win = win, title = title, style = style, font = font,
-#      layout = layout, `out` = `out`, `in` = `in`):
-#      return false
+    if not panelHeader(win = win, title = title, style = style, font = font,
+      layout = layout, `out` = `out`, `in` = `in`):
+      return false
 
     # draw window background
     if not (layout.flags and windowMinimized.cint).nk_bool and not
@@ -1420,7 +1416,7 @@ proc nkPanelBegin(context: Context; title: string; panelType: PanelType): bool {
       body.y = (win.bounds.y + layout.header_height)
       body.h = (win.bounds.h - layout.header_height)
 
-      let bg: nk_style_item_data = cast[nk_style_item_data](style.window.fixed_background.data)
+      let bg: StyleItemData = style.window.fixedBackground.data
 #      case style.window.fixed_background.`type`
 #      of itemImage:
 #        nkDrawImage(b = `out`.addr, r = body, img = bg.image.addr,
