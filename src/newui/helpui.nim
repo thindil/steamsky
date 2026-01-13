@@ -20,9 +20,11 @@
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, help, types]
-import coreui, header, themes
+import coreui, errordialog, header, themes
 
-var selected: ExtendedNatural = 0
+var
+  selected: ExtendedNatural = -1
+  topic: string = ""
 
 proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -38,13 +40,18 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = gameSettings.topicsPosition.float, cols = 1)
   group(title = "TopicsGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = 25, cols = 1)
-    var index = 0
+    var index: ExtendedNatural = 0
     for title in helpList.keys:
       index.inc
       var sel: bool = selected == index
-      if selectableLabel(str = title, value = sel):
+      if selectableLabel(str = title, value = sel) or selected == -1:
         if sel:
           selected = index
+          topic = try:
+              helpList[title].index
+            except KeyError:
+              dialog = setError(message = "Can't get the help's topic.")
+              return
   setLayoutRowDynamic(height = 20, cols = 2)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
@@ -56,3 +63,11 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
         text = "Make the list of topics bigger.")
   imageButtonCentered(image = images[expand2Icon]):
     gameSettings.topicsPosition += gameSettings.interfaceFontSize + 10
+  setLayoutRowDynamic(height = windowHeight -
+      gameSettings.topicsPosition.float - 20, cols = 1)
+  group(title = "ContentGroup", flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = 25, cols = 1)
+    for entry in helpList.values:
+      if entry.index != topic:
+        continue
+      wrapLabel(str = entry.text)
