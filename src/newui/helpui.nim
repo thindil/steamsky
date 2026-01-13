@@ -22,7 +22,7 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, help, types]
 import coreui, header, themes
 
-var selected: ExtendedNatural = -1
+var selected: ExtendedNatural = 0
 
 proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -39,14 +39,12 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "TopicsGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = 25, cols = 1)
     var index = 0
-    for title, help in helpList:
+    for title in helpList.keys:
       index.inc
       var sel: bool = selected == index
       if selectableLabel(str = title, value = sel):
         if sel:
           selected = index
-        else:
-          selected = -1
   setLayoutRowDynamic(height = 20, cols = 2)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
