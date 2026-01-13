@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -174,27 +174,23 @@ proc moveItem*(itemIndex: Natural; amount: Positive;
   require:
     memberIndex in playerShip.crew.low..playerShip.crew.high
   body:
-    if freeCargo(amount = 0 - (itemsList[playerShip.crew[memberIndex].inventory[
-        itemIndex].protoIndex].weight * amount)) < 0:
+    let item: InventoryData = playerShip.crew[memberIndex].inventory[itemIndex]
+    if freeCargo(amount = 0 - (itemsList[item.protoIndex].weight * amount)) < 0:
       raise newException(exceptn = NoFreeCargoError,
           message = "No free space in ship cargo for tha amout of " &
-          getItemName(item = playerShip.crew[memberIndex].inventory[itemIndex]))
-    updateCargo(ship = playerShip, protoIndex = playerShip.crew[
-        memberIndex].inventory[itemIndex].protoIndex, amount = amount,
-        durability = playerShip.crew[memberIndex].inventory[
-        itemIndex].durability, price = playerShip.crew[memberIndex].inventory[
-        itemIndex].price, quality = playerShip.crew[memberIndex].inventory[
-        itemIndex].quality)
+          getItemName(item = item))
+    updateCargo(ship = playerShip, protoIndex = item.protoIndex,
+        amount = amount, durability = item.durability, price = item.price,
+        quality = item.quality, maxDurability = item.maxDurability,
+        weight = item.weight)
     updateInventory(memberIndex = memberIndex, amount = -amount,
         inventoryIndex = itemIndex, ship = playerShip,
-        quality = playerShip.crew[memberIndex].inventory[itemIndex].quality)
+        quality = item.quality)
     if (playerShip.crew[memberIndex].order == clean and findItem(
         inventory = playerShip.crew[memberIndex].inventory,
-        itemType = cleaningTools, itemQuality = playerShip.crew[
-        memberIndex].inventory[itemIndex].quality) == -1) or (playerShip.crew[
-        memberIndex].order in {upgrading, repair} and findItem(
+        itemType = cleaningTools, itemQuality = item.quality) == -1) or (
+        playerShip.crew[memberIndex].order in {upgrading, repair} and findItem(
         inventory = playerShip.crew[memberIndex].inventory,
-        itemType = repairTools, itemQuality = playerShip.crew[
-        memberIndex].inventory[itemIndex].quality) == -1):
+        itemType = repairTools, itemQuality = item.quality) == -1):
       giveOrders(ship = playerShip, memberIndex = memberIndex,
           givenOrder = rest)
