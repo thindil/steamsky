@@ -43,8 +43,12 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
     var index: ExtendedNatural = -1
     for title in helpList.keys:
       if selected == -1:
-        selected = 0
-        topic = title
+        selected = index
+        topic = try:
+            helpList[title].index
+          except KeyError:
+            dialog = setError(message = "Can't get the help's topic.")
+            return
       index.inc
       var sel: bool = selected == index
       if selectableLabel(str = title, value = sel):
@@ -69,9 +73,8 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = windowHeight -
       gameSettings.topicsPosition.float - 20, cols = 1)
   group(title = "ContentGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = windowHeight -
-        gameSettings.topicsPosition.float - 20, cols = 1)
+    setLayoutRowDynamic(height = 25, cols = 1)
     for entry in helpList.values:
-      if entry.index != topic:
-        continue
-      wrapLabel(str = entry.text)
+      if entry.index == topic:
+       label(str = entry.text)
+       break
