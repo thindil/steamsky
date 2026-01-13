@@ -25,7 +25,7 @@ import config, factions, types, game
 type
   ReputationObject = object
     ## Used to store data about the player's reputation in the selected faction
-    factionIndex: string       ## Index of faction to which the reputation is related
+    factionIndex: FactionIndex ## Index of faction to which the reputation is related
     reputation: ReputationData ## The information about the reputation
 
 var
