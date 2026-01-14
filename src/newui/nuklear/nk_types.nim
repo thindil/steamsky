@@ -1264,7 +1264,7 @@ type
     active*: bool
   PopupState* = object
     ## Used to store Nuklear popup data
-    win*: Window
+    win*: ref Window
     active*: bool
     pType*: PanelType
     name*: nk_hash
@@ -1650,7 +1650,7 @@ type
     ## The main context of the Nuklear library
     style*: Style
     input*: Input
-    begin*, last*, current*, active*: Window
+    begin*, last*, current*, active*: ref Window
     seq*, count*: uint
     memory: Buffer
     usePool*: bool

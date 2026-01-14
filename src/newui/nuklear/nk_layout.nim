@@ -116,8 +116,8 @@ proc nkRowLayout(ctx: var Context; fmt: LayoutFormat; height: float; cols,
   ## * width  - the width in pixels of each column
   ## * cols   - the amount of columns in each row
   body:
-    var win: Window = ctx.current
-    nkPanelLayout(ctx = ctx, win = win, height = height, cols = cols)
+    var win: ref Window = ctx.current
+    nkPanelLayout(ctx = ctx, win = win[], height = height, cols = cols)
     if fmt == dynamic:
       win.layout.row.rlType = layoutDynamicFixed
     else:
