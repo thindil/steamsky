@@ -21,8 +21,8 @@
 import std/[strutils, strformat, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, basesship, basestrade, basestypes, combat, config,
-    crafts, crew, game, goals, items, maps, missions, reputation, shipscargo,
-    shipscrew, statistics, stories, types]
+    crafts, crew, game, goals, help, items, maps, missions, reputation,
+    shipscargo, shipscrew, statistics, stories, types]
 import coreui, errordialog, utilsui2, themes
 
 var
@@ -1421,3 +1421,32 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       except:
         dialog = setError(message = "Can't show killed mobs.")
         return
+
+#####################
+# Setting the help UI
+#####################
+
+
+var
+  selectedHelp*: Natural = 0
+    ## The index of the selected help topic
+  helpContent*: string = ""
+    ## The content of the selected help topic
+
+proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Set the data for the in-game help screen
+  ##
+  ## * dialog    - the current in-game dialog displayed on the screen
+  ## * helpIndex - the index of help topic to show. Can be empty
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  var index: Natural = 0
+  for title, entry in helpList:
+    if index == helpIndex:
+      selectedHelp = index
+      helpContent = entry.text
+      break
+    index.inc
+  dialog = none
