@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -407,28 +407,29 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
   var amount: int = 0
   const amountBox: string = ".itemdialog.amount"
   if $argv[1] in ["drop", "dropall"]:
+    let item: InventoryData = playerShip.cargo[cargoIndex]
     amount = try:
         (if argv[1] == "drop": tclEval2(script = amountBox &
-          " get").parseInt else: playerShip.cargo[cargoIndex].amount)
+          " get").parseInt else: item.amount)
       except:
         return showError(message = "Can't get drop amount.")
     if baseCargoIndex > -1:
       try:
         updateBaseCargo(cargoIndex = baseCargoIndex, amount = amount,
-            durability = playerShip.cargo[cargoIndex].durability,
-            quality = playerShip.cargo[cargoIndex].quality)
+            durability = item.durability, quality = item.quality,
+            maxDurability = item.maxDurability, weight = item.weight)
       except:
         return showError(message = "Can't update the base's cargo.")
     else:
       try:
         updateBaseCargo(protoIndex = protoIndex, amount = amount,
-            durability = playerShip.cargo[cargoIndex].durability,
-            quality = playerShip.cargo[cargoIndex].quality)
+            durability = item.durability, quality = item.quality,
+            maxDurability = item.maxDurability, weight = item.weight)
       except:
         return showError(message = "Can't update the base's cargo2.")
     updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = -amount,
-        durability = playerShip.cargo[cargoIndex].durability,
-        quality = playerShip.cargo[cargoIndex].quality)
+        durability = item.durability, quality = item.quality,
+        maxDurability = item.maxDurability, weight = item.weight)
     try:
       addMessage(message = "You drop " & $amount & " " & itemsList[
           protoIndex].name & ".", mType = orderMessage)
@@ -447,18 +448,19 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
         return tclOk
     except:
       return showError(message = "Can't count free cargo.")
+    let item: BaseCargo = skyBases[baseIndex].cargo[baseCargoIndex]
     if cargoIndex > -1:
       updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = amount,
-          durability = skyBases[baseIndex].cargo[baseCargoIndex].durability,
-          quality = skyBases[baseIndex].cargo[baseCargoIndex].quality)
+          durability = item.durability, quality = item.quality,
+          maxDurability = item.maxDurability, weight = item.weight)
     else:
       updateCargo(ship = playerShip, protoIndex = protoIndex, amount = amount,
-          durability = skyBases[baseIndex].cargo[baseCargoIndex].durability,
-          quality = skyBases[baseIndex].cargo[baseCargoIndex].quality)
+          durability = item.durability, quality = item.quality,
+          maxDurability = item.maxDurability, weight = item.weight)
     try:
       updateBaseCargo(cargoIndex = baseCargoIndex, amount = -(amount),
-          durability = skyBases[baseIndex].cargo[baseCargoIndex].durability,
-          quality = skyBases[baseIndex].cargo[baseCargoIndex].quality)
+          durability = item.durability, quality = item.quality,
+          maxDurability = item.maxDurability, weight = item.weight)
     except:
       return showError(message = "Can't update the base's cargo3.")
     try:
