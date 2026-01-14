@@ -20,11 +20,7 @@
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, help]
-import coreui, header, themes
-
-var
-  selected: Natural = 0
-  content: string = ""
+import coreui, header, setui, themes
 
 proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -42,11 +38,11 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setLayoutRowDynamic(height = 25, cols = 1)
     var index: Natural = 0
     for title, entry in helpList:
-      var sel: bool = selected == index
+      var sel: bool = selectedHelp == index
       if selectableLabel(str = title, value = sel):
         if sel:
-          selected = index
-          content = entry.text
+          selectedHelp = index
+          helpContent = entry.text
       index.inc
   setLayoutRowDynamic(height = 20, cols = 2)
   if gameSettings.showTooltips:
@@ -64,4 +60,4 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "ContentGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = windowHeight -
         gameSettings.topicsPosition.float - 20, cols = 1)
-    wrapLabel(str = content)
+    echo helpContent
