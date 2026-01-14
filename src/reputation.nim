@@ -28,6 +28,16 @@ type
     factionIndex: FactionIndex ## Index of faction to which the reputation is related
     reputation: ReputationData ## The information about the reputation
 
+proc initReputationObject(factionIndex: FactionIndex,
+    reputation: ReputationData): ReputationObject {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for the player's reputation
+  ##
+  ## * factionIndex - the index of faction with which reputation is
+  ## * reputation   - the reputation level and progress
+  ##
+  ## Returns the new structure with information about the selected reputation
+  return ReputationObject(factionIndex: factionIndex, reputation: reputation)
 var
   reputationsList: seq[ReputationObject] = @[]
     ## The list of player's reputation with all factions
@@ -40,8 +50,8 @@ proc resetReputations*() {.raises: [KeyError], tags: [],
     let reputationLevel: int = if index == newGameSettings.playerFaction or
         isFriendly(sourceFaction = newGameSettings.playerFaction,
             targetFaction = index): 1 else: -1
-    reputationsList.add(y = ReputationObject(factionIndex: index,
-        reputation: ReputationData(level: reputationLevel, experience: 0)))
+    reputationsList.add(y = initReputationObject(factionIndex = index,
+        reputation = ReputationData(level: reputationLevel, experience: 0)))
 
 proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
     ReputationError], tags: [], contractual.} =
@@ -132,8 +142,8 @@ proc loadReputation*(savedGame: XmlNode) {.raises: [ValueError], tags: [],
   ##
   ## * savedGame - the XML tree with save data
   for item in savedGame.findAll(tag = "factionrep"):
-    reputationsList.add(y = ReputationObject(factionIndex: item.attr(
-        name = "faction"), reputation: ReputationData(level: item.attr(
+    reputationsList.add(y = initReputationObject(factionIndex = item.attr(
+        name = "faction"), reputation = ReputationData(level: item.attr(
         name = "level").parseInt, experience: item.attr(
         name = "experience").parseInt)))
 
