@@ -19,12 +19,12 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, help, types]
-import coreui, errordialog, header, themes
+import ../[config, help]
+import coreui, header, themes
 
 var
-  selected: ExtendedNatural = -1
-  topic: string = ""
+  selected: Natural = 0
+  content: string = ""
 
 proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -40,25 +40,14 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = gameSettings.topicsPosition.float, cols = 1)
   group(title = "TopicsGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = 25, cols = 1)
-    var index: ExtendedNatural = -1
-    for title in helpList.keys:
-      if selected == -1:
-        selected = index
-        topic = try:
-            helpList[title].index
-          except KeyError:
-            dialog = setError(message = "Can't get the help's topic.")
-            return
-      index.inc
+    var index: Natural = 0
+    for title, entry in helpList:
       var sel: bool = selected == index
       if selectableLabel(str = title, value = sel):
         if sel:
           selected = index
-          topic = try:
-              helpList[title].index
-            except KeyError:
-              dialog = setError(message = "Can't get the help's topic.")
-              return
+          content = entry.text
+      index.inc
   setLayoutRowDynamic(height = 20, cols = 2)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
@@ -73,8 +62,6 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = windowHeight -
       gameSettings.topicsPosition.float - 20, cols = 1)
   group(title = "ContentGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = 25, cols = 1)
-    for entry in helpList.values:
-      if entry.index == topic:
-       label(str = entry.text)
-       break
+    setLayoutRowDynamic(height = windowHeight -
+        gameSettings.topicsPosition.float - 20, cols = 1)
+    wrapLabel(str = content)
