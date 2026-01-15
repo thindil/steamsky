@@ -260,7 +260,8 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
   updateGame(minutes = 5)
 
 proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
-  price: int; quality: ObjectQuality] {.raises: [KeyError], tags: [], contractual.} =
+    price: int; quality: ObjectQuality; maxDurability: ItemsDurability;
+    weight: Natural] {.raises: [KeyError], tags: [], contractual.} =
   ## Get the data related to the item during trading
   ##
   ## * iIndex - the index of the item which data will be get. If positive, the
@@ -269,7 +270,7 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
   ##
   ## Returns tuple with trade data: proto index of the item, max amount of item
   ## to sell, max amount item to buy, its price and quality
-  result = (-1, 0, 0, 0, normal)
+  result = (-1, 0, 0, 0, normal, defaultItemDurability, 0)
   var baseCargoIndex, cargoIndex: int = -1
   if iIndex < 0:
     baseCargoIndex = iIndex.abs
@@ -289,6 +290,20 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
       result.quality = skyBases[baseIndex].cargo[baseCargoIndex].quality
   else:
       result.quality = playerShip.cargo[cargoIndex].quality
+  if iIndex < 0:
+    if baseIndex == 0:
+      result.maxDurability = traderCargo[baseCargoIndex].maxDurability
+    else:
+      result.maxDurability = skyBases[baseIndex].cargo[baseCargoIndex].maxDurability
+  else:
+      result.maxDurability = playerShip.cargo[cargoIndex].maxDurability
+  if iIndex < 0:
+    if baseIndex == 0:
+      result.weight = traderCargo[baseCargoIndex].weight
+    else:
+      result.weight = skyBases[baseIndex].cargo[baseCargoIndex].weight
+  else:
+      result.weight = playerShip.cargo[cargoIndex].weight
   var itemIndex: int = iIndex
   if cargoIndex > -1:
     result.protoIndex = playerShip.cargo[cargoIndex].protoIndex
