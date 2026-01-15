@@ -1426,11 +1426,26 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the help UI
 #####################
 
+type
+  TextTags* = enum
+    ## Help text tags
+    none, underlined, bold, italic
+  HelpUIText* = object
+    ## Used to store data about help text to display
+    text*: string
+    tag*: TextTags
+
 var
   selectedHelp*: Natural = 0
     ## The index of the selected help topic
-  helpContent*: string = ""
+  helpContent*: seq[HelpUIText] = @[]
     ## The content of the selected help topic
+
+proc setHelpContent*(content: string) {.raises: [], tags: [], contractual.} =
+  ## Set the content of the selected help topic to show
+  ##
+  ## * content - the content of the selected help topic
+  helpContent = @[]
 
 proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -1441,11 +1456,14 @@ proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  var index: Natural = 0
+  var
+    index: Natural = 0
+    content: string = ""
   for title, entry in helpList:
     if index == helpIndex:
       selectedHelp = index
-      helpContent = entry.text
+      content = entry.text
       break
     index.inc
+  setHelpContent(content = content)
   dialog = none
