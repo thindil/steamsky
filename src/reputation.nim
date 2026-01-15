@@ -47,9 +47,10 @@ proc resetReputations*() {.raises: [KeyError], tags: [],
   ## Reset the player's reputation with all factions
   reputationsList = @[]
   for index, faction in factionsList:
-    let reputationLevel: int = if index == newGameSettings.playerFaction or
-        isFriendly(sourceFaction = newGameSettings.playerFaction,
-            targetFaction = index): 1 else: -1
+    let reputationLevel: ReputationRange = if index ==
+        newGameSettings.playerFaction or isFriendly(
+        sourceFaction = newGameSettings.playerFaction,
+        targetFaction = index): 1 else: -1
     reputationsList.add(y = initReputationObject(factionIndex = index,
         reputation = ReputationData(level: reputationLevel, experience: 0)))
 
@@ -61,8 +62,8 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
   ##               updated
   ## * amount    - the amount of the reputation to be added or removed from
   ##               the player's reputations' levels
-  let factionIndex: string = skyBases[baseIndex].owner
-  var repIndex: int = -1
+  let factionIndex: FactionIndex = skyBases[baseIndex].owner
+  var repIndex: ExtendedNatural = -1
   for index, reputation in reputationsList:
     if reputation.factionIndex == factionIndex:
       repIndex = index
@@ -84,8 +85,9 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
     if reputationsList[index].reputation.level == 100 and points > 0:
       return
     # Gain or lose reputation with the faction
-    var newPoints: int = reputationsList[index].reputation.experience + (
-        points.float * newGameSettings.reputationBonus).int
+    var newPoints: range[-200_000..200_000] = reputationsList[
+        index].reputation.experience + (points.float *
+        newGameSettings.reputationBonus).int
     while newPoints < 0:
       reputationsList[index].reputation.level.dec
       newPoints += abs(x = reputationsList[index].reputation.level * 500)
