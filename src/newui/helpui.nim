@@ -60,4 +60,4 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "ContentGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = windowHeight -
         gameSettings.topicsPosition.float - 20, cols = 1)
-    wrapLabel(str = helpContent)
+    wrapLabel(str = helpContent[0..10])
