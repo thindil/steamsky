@@ -1426,7 +1426,6 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 # Setting the help UI
 #####################
 
-
 var
   selectedHelp*: Natural = 0
     ## The index of the selected help topic
