@@ -67,3 +67,11 @@ proc nkFreePageElement*(ctx; elem: ptr nk_page_element) {.raises: [], tags: [],
     ctx.memory.size -= elem.sizeOf
   else:
     nkLinkPageElementIntoFreelist(ctx = ctx, elem = elem)
+
+proc nkCreatePageElement*(context: Context): PageElement {.raises: [], tags: [], contractual.} =
+  ## Create a new page element
+  ##
+  ## * context - the Nuklear context
+  ##
+  ## Returns the newly created element
+  return PageElement(data: PageData(pageDataType: windowType))

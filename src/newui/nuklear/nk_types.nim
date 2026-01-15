@@ -1498,13 +1498,13 @@ type
     combo*: StyleCombo
   PageData* = object
     ## Used to store memory page's data
-    case pageDataType: PageDataType
+    case pageDataType*: PageDataType
     of tableType:
       tbl*: NkTable
     of panelType:
       pan*: Panel
     of windowType:
-      win: Window
+      win*: Window
   PageElement* = object
     ## Used to store memory page's elements
     data*: PageData

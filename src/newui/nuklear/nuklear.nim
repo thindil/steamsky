@@ -26,7 +26,7 @@
 import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
 import nk_button, nk_colors, nk_context, nk_draw, nk_input, nk_layout, nk_math,
-  nk_panel, nk_tooltip, nk_types, nk_utf, nk_widget
+  nk_page, nk_panel, nk_tooltip, nk_types, nk_utf, nk_widget
 export nk_button, nk_colors, nk_context, nk_input, nk_layout, nk_tooltip,
   nk_types, nk_widget
 
@@ -449,6 +449,16 @@ proc windowShow*(name: string; state: ShowStates) {.raises: [], tags: [], contra
     nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   nk_window_show(ctx = ctx, name = name.cstring, state = state)
+
+proc createWindow*(context: Context): Window {.raises: [], tags: [], contractual.} =
+  ## Create a new Nuklear widget
+  ##
+  ## * context - the Nuklear context
+  ##
+  ## Returns the newly created widget
+  var elem: PageElement = nkCreatePageElement(context = context)
+  elem.data.win.seq = context.seq
+  return elem.data.win
 
 # ----
 # Misc
