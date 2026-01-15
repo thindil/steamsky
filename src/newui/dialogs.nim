@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -508,7 +508,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
   setDialog(x = windowWidth / 5.0)
   case action
   of buyAction, sellAction:
-    let (protoIndex, maxSellAmount, maxBuyAmount, price, _) = try:
+    let (protoIndex, maxSellAmount, maxBuyAmount, price, _, _, _) = try:
         getTradeData(iIndex = iIndex)
       except:
         return setError(message = "Can't get the trade's data.")

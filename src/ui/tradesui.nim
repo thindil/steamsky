@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -925,7 +925,7 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     itemIndex.inc
   else:
     itemIndex.dec
-  let (protoIndex, maxSellAmount, maxBuyAmount, price, quality) = try:
+  let (protoIndex, maxSellAmount, maxBuyAmount, price, quality, _, _) = try:
       getTradeData(iIndex = itemIndex)
     except:
       return showError(message = "Can't get the trade's data.")
