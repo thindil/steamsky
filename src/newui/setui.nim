@@ -1429,7 +1429,7 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 type
   TextTags* = enum
     ## Help text tags
-    none, underlined, bold, italic
+    none, underline, bold, italic
   HelpUIText* = object
     ## Used to store data about help text to display
     text*: string
@@ -1441,11 +1441,49 @@ var
   helpContent*: seq[HelpUIText] = @[]
     ## The content of the selected help topic
 
-proc setHelpContent*(content: string) {.raises: [], tags: [], contractual.} =
+proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Set the content of the selected help topic to show
   ##
   ## * content - the content of the selected help topic
+  ## * dialog  - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   helpContent = @[]
+  type
+    VariablesData = object
+      name, value: string
+    FontTag = object
+      tag: string
+      textTag: TextTags
+  let
+    variables: array[1..11, VariablesData] = try:
+        [VariablesData(name: "MoneyName", value: moneyName), VariablesData(
+            name: "FuelName", value: itemsList[findProtoItem(
+            itemType = fuelType)].name), VariablesData(name: "StrengthName",
+            value: attributesList[strengthIndex].name), VariablesData(
+            name: "PilotingSkill", value: skillsList[pilotingSkill].name),
+            VariablesData(name: "EngineeringSkill", value: skillsList[
+            engineeringSkill].name), VariablesData(name: "GunnerySkill",
+            value: skillsList[gunnerySkill].name), VariablesData(
+            name: "TalkingSkill", value: skillsList[talkingSkill].name),
+            VariablesData(name: "PerceptionSkill", value: skillsList[
+            perceptionSkill].name), VariablesData(name: "ConditionName",
+            value: attributesList[conditionIndex].name), VariablesData(
+            name: "DodgeSkill", value: skillsList[dodgeSkill].name),
+            VariablesData(name: "UnarmedSkill", value: skillsList[
+            unarmedSkill].name)]
+      except:
+        dialog = setError(message = "Can't set help variables")
+        return
+  const
+    fontTags: array[1..3, FontTag] = [FontTag(tag: "b", textTag: bold),
+        FontTag(tag: "u", textTag: underline), FontTag(tag: "i",
+        textTag: italic)]
+    flagsTags: array[1..8, string] = ["diseaseimmune", "nofatigue",
+        "nomorale", "naturalarmor", "toxicattack", "sentientships",
+        "fanaticism", "loner"]
+    basesFlags: array[1..4, string] = ["shipyard", "temple", "blackmarket", "barracks"]
 
 proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -1465,5 +1503,5 @@ proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
       content = entry.text
       break
     index.inc
-  setHelpContent(content = content)
+  setHelpContent(content = content, dialog = dialog)
   dialog = none
