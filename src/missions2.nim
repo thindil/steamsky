@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,16 +20,18 @@
 ## circular dependencies.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import config, game, game2, goals, maps, messages, missions, shipscrew,
     shipscargo, shipsmovement, statistics, types, utils
 
+{.push ruleOff: "objects".}
 type
   MissionFinishingError* = object of CatchableError
     ## Raised when there is a problem with finishing an accepted mission
 
   MissionAcceptingError* = object of CatchableError
     ## Raised when there is a problem with accepting a mission in a base
+{.push ruleOn: "objects".}
 
 proc finishMission*(missionIndex: Natural) {.raises: [
     MissionFinishingError, KeyError, IOError, Exception], tags: [WriteIOEffect,
