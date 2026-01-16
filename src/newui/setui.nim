@@ -1429,7 +1429,7 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 type
   TextTags* = enum
     ## Help text tags
-    none, underline, bold, italic
+    none, underline, bold, italic, special
   HelpUIText* = object
     ## Used to store data about help text to display
     text*: string
@@ -1485,24 +1485,30 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [], tags
         "nomorale", "naturalarmor", "toxicattack", "sentientships",
         "fanaticism", "loner"]
     basesFlags: array[1..4, string] = ["shipyard", "temple", "blackmarket", "barracks"]
-  var oldIndex: int = 0
+  var
+    oldIndex: int = 0
+    texts: seq[HelpUIText] = @[]
   while true:
     var
       startIndex: int = content.find(sub = '{', start = oldIndex)
       uiText: HelpUIText = HelpUIText()
     if startIndex == -1:
       uiText.text = content[oldIndex..^1]
+      texts.add(y = uiText)
       break
     uiText.text = content[oldIndex..startIndex - 1]
+    texts.add(y = uiText)
     var endIndex: int = content.find(sub = '}', start = startIndex) - 1
     let tagText: string = content[startIndex + 1..endIndex]
-#    for variable in variables:
-#      if tagText == variable.name:
-#        tclEval(script = helpView & " insert end {" & variable.value & "} [list special]")
-#        break
+    for variable in variables:
+      if tagText == variable.name:
+        uiText = HelpUIText(text: variable.value, tag: special)
+        texts.add(y = uiText)
+        break
 #    for index, accel in accelNames:
 #      if tagText == "GameKey" & $index:
-#        tclEval(script = helpView & " insert end {" & accel & "} [list special]")
+#        uiText = HelpUIText(text: accel, tag: special)
+#        texts.add(y = uiText)
 #        break
 #    for tag in fontTags:
 #      if tagText == tag.tag:
