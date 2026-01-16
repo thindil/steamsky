@@ -440,7 +440,8 @@ proc windowDisable*() {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_window_disable(ctx = ctx)
 
-proc windowShow*(name: string; state: ShowStates) {.raises: [], tags: [], contractual.} =
+proc windowShow*(name: string; state: ShowStates) {.raises: [], tags: [],
+    contractual.} =
   ## Show or hide the window depending on the state
   ##
   ## * name  - the name of the window to show or hide
@@ -450,13 +451,15 @@ proc windowShow*(name: string; state: ShowStates) {.raises: [], tags: [], contra
     ## A binding to Nuklear's function. Internal use only
   nk_window_show(ctx = ctx, name = name.cstring, state = state)
 
-proc createWindow*(context: Context): Window {.raises: [], tags: [], contractual.} =
+proc createWindow*(context: var Context): Window {.raises: [], tags: [],
+    contractual.} =
   ## Create a new Nuklear widget
   ##
   ## * context - the Nuklear context
   ##
   ## Returns the newly created widget
-  var elem: PageElement = nkCreatePageElement(context = context)
+  var elem: PageElement = nkCreatePageElement(context = context,
+    pageType = windowType)
   elem.data.win.seq = context.seq
   return elem.data.win
 

@@ -1654,7 +1654,7 @@ type
     seq*, count*: uint
     memory: Buffer
     usePool*: bool
-    freeList*: PageElement
+    freeList*: ref PageElement
     clip*: Clipboard
     lastWidgetState*: nk_flags
     buttonBehavior*: ButtonBehavior
