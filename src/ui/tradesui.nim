@@ -925,7 +925,7 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     itemIndex.inc
   else:
     itemIndex.dec
-  let (protoIndex, maxSellAmount, maxBuyAmount, price, quality, _, _) = try:
+  let (protoIndex, maxSellAmount, maxBuyAmount, price, quality, maxDurability, weight) = try:
       getTradeData(iIndex = itemIndex)
     except:
       return showError(message = "Can't get the trade's data.")
@@ -985,6 +985,21 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     itemInfo.add(y = "Quality: {gold}" & ($quality).capitalizeAscii & "{/gold}")
   except:
     return showError(message = "Can't get quality info.")
+  if maxDurability != defaultItemDurability:
+    try:
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      itemInfo.add(y = "Durability: {gold}" & (if maxDurability >
+          defaultItemDurability: "More" else: "Less") & " durable{/gold}")
+    except:
+      return showError(message = "Can't get max durability info.")
+  if weight > 0:
+    try:
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      itemInfo.add(y = "Weight: {gold}" & $weight & " kg{/gold}")
+    except:
+      return showError(message = "Can't get max durability info.")
   try:
     if itemsList[protoIndex].description.len > 0:
       itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
