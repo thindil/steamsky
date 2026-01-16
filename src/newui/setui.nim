@@ -1434,6 +1434,7 @@ type
     ## Used to store data about help text to display
     text*: string
     tag*: TextTags
+    width*: cfloat
 
 var
   selectedHelp*: Natural = 0
@@ -1484,6 +1485,56 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [], tags
         "nomorale", "naturalarmor", "toxicattack", "sentientships",
         "fanaticism", "loner"]
     basesFlags: array[1..4, string] = ["shipyard", "temple", "blackmarket", "barracks"]
+  var oldIndex: int = 0
+  while true:
+    var
+      startIndex: int = content.find(sub = '{', start = oldIndex)
+      uiText: HelpUIText = HelpUIText()
+    if startIndex == -1:
+      uiText.text = content[oldIndex..^1]
+      break
+    uiText.text = content[oldIndex..startIndex - 1]
+    var endIndex: int = content.find(sub = '}', start = startIndex) - 1
+    let tagText: string = content[startIndex + 1..endIndex]
+#    for variable in variables:
+#      if tagText == variable.name:
+#        tclEval(script = helpView & " insert end {" & variable.value & "} [list special]")
+#        break
+#    for index, accel in accelNames:
+#      if tagText == "GameKey" & $index:
+#        tclEval(script = helpView & " insert end {" & accel & "} [list special]")
+#        break
+#    for tag in fontTags:
+#      if tagText == tag.tag:
+#        startIndex = newText.find(sub = '{', start = endIndex) - 1
+#        tclEval(script = helpView & " insert end {" & newText[endIndex + 2 ..
+#            startIndex] & "} [list " & tag.textTag & "]")
+#        endIndex = newText.find(sub = '}', start = startIndex) - 1
+#        break
+#    for tag in flagsTags:
+#      if tagText == tag:
+#        var factionsWithFlag: string = ""
+#        for faction in factionsList.values:
+#          if tagText in faction.flags:
+#            if factionsWithFlag.len > 0:
+#              factionsWithFlag.add(y = ", ")
+#            factionsWithFlag.add(y = faction.name)
+#        factionsWithFlag.removeSuffix(suffix = ", ")
+#        tclEval(script = helpView & " insert end {" & factionsWithFlag & "}")
+#        break
+#    for tag in basesFlags:
+#      if tagText != tag:
+#        continue
+#      var basesWithFlag: string = ""
+#      for baseType in basesTypesList.values:
+#        if tagText in baseType.flags:
+#          if basesWithFlag.len > 0:
+#            basesWithFlag.add(y = ", ")
+#          basesWithFlag.add(y = baseType.name)
+#      basesWithFlag.removeSuffix(suffix = ", ")
+#      tclEval(script = helpView & " insert end {" & basesWithFlag & "}")
+#      break
+    oldIndex = endIndex + 2
 
 proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
     tags: [RootEffect], contractual.} =
