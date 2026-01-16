@@ -42,7 +42,7 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if selectableLabel(str = title, value = sel):
         if sel:
           selectedHelp = index
-          helpContent = entry.text
+          setHelpContent(content = entry.text, dialog = dialog)
       index.inc
   setLayoutRowDynamic(height = 20, cols = 2)
   if gameSettings.showTooltips:
@@ -60,4 +60,4 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "ContentGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = windowHeight -
         gameSettings.topicsPosition.float - 20, cols = 1)
-    wrapLabel(str = helpContent[0..10])
+    wrapLabel(str = helpContent[0].text[0..10])
