@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -155,6 +155,7 @@ type
   ObjectName* = string ## Used to store names of objects (items)
   MessageText* = string ## Used to store the text of a message
   CareerName* = string ## The name of a career
+  ErrorMessage* = string ## Used to store errors info
 
   ModuleData* = object
     ## Used to store information about ships' modules
