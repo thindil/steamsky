@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -60,6 +60,19 @@ var
   mapPreview*: bool = false        ## If true, the map is in the preview mode
   previousState*: GameState = map  ## The previous screen in the game
   updateData*: bool = false        ## If true, update the data needed for the selected screen
+  mapAccelerators*: array[1..37, string] = ["e", "v", "plus", "minus",
+      "KP_Home", "KP_Up", "KP_Prior", "KP_Left", "KP_Begin", "KP_Right",
+      "KP_End", "KP_Down", "KP_Next", "KP_Divide", "Shift-Return", "Shift-h",
+      "Shift-KP_Home", "Shift-KP_Up", "Shift-KP_Prior", "Shift-KP_Left",
+      "Shift-KP_Right", "Shift-KP_End", "Shift-KP_Down", "Shift-KP_Next",
+      "Control-KP_Home", "Control-KP_Up", "Control-KP_Prior", "Control-KP_Left",
+      "Control-KP_Right", "Control-KP_End", "Control-KP_Down",
+      "Control-KP_Next", "Control-Return", "Control-a", "Control-b",
+      "Control-c", "Control-d"]
+    ## The keyboard shortcuts used on the map
+  menuAccelerators*: array[1..11, string] = ["s", "o", "r", "m", "k", "w",
+      "g", "F1", "p", "q", "x"]
+    ## The game menu keyboard shortcuts
 
 {.push ruleOff: "varDeclared".}
 var images*: array[menuIcon..IconsNames.high,
