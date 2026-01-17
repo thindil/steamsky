@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Progressing the current story
 - Counting fuel usage when waiting in place in the sky
 - Counting distance traveled by the player's ship during the game
+- Showing keyboard shortcuts in the in-game help
 
 ## [11.7] - 2025-11-02
 
