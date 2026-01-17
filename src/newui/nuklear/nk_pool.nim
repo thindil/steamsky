@@ -36,3 +36,9 @@ proc nkPoolAlloc*(pool: Pool; pageType: PageDataType): PageElement {.raises: [],
   ##
   ## Returns allocated page element
   result = PageElement(data: PageData(pageDataType: pageType))
+  if pool.pages == nil or pool.pages.size >= pool.capacity:
+    var page: Page = Page()
+    if pool.aType == bufferFixed:
+      if pool.pages == nil:
+        return
+      return

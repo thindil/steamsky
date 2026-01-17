@@ -1643,7 +1643,7 @@ type
     alloc*: Allocator
     aType*: AllocationType
     pageCount*, capacity*: uint
-    pages*: Page
+    pages*: ref Page
     freeList*: PageElement
     size*, cap*: nk_size
   Context* = object
