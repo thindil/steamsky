@@ -53,7 +53,7 @@ proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError,
       fuelIndex].protoIndex, amount = fuelNeeded, quality = playerShip.cargo[
       fuelIndex].quality)
 
-proc haveOrderRequirements(): string {.raises: [KeyError], tags: [],
+proc haveOrderRequirements(): ErrorMessage {.raises: [KeyError], tags: [],
     contractual.} =
   ## Check if all requirements for the ship's moving orders are valid
   ##
@@ -143,8 +143,9 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.raises: [
     return 0
   return newSpeed.Natural
 
-proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
-    IOError, Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
+proc dockShip*(docking: bool; escape: bool = false): ErrorMessage {.raises: [
+    KeyError, IOError, Exception], tags: [WriteIOEffect, RootEffect],
+    contractual.} =
   ## Dock, undock or escape the player's ship from the currently visited base
   ##
   ## * docking - if true, the player is docking to the base
