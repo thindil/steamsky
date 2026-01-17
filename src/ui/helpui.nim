@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -245,7 +245,7 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = helpView & " insert end {" & variable.value & "} [list special]")
         break
     for index, accel in accelNames:
-      if tagText == "GameKey" & $index:
+      if tagText == "GameKey " & $index:
         tclEval(script = helpView & " insert end {" & accel & "} [list special]")
         break
     for tag in fontTags:
