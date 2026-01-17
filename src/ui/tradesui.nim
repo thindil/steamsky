@@ -989,8 +989,11 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       if itemInfo.len > 0:
         itemInfo.add(y = "\n")
-      itemInfo.add(y = "Durability: {gold}" & (if maxDurability >
-          defaultItemDurability: "More" else: "Less") & " durable{/gold}")
+      if gameSettings.showNumbers:
+        itemInfo.add(y = "Max durability: {gold}" & $maxDurability & "{/gold}")
+      else:
+        itemInfo.add(y = "Max durability: {gold}" & (if maxDurability >
+            defaultItemDurability: "More" else: "Less") & " durable{/gold}")
     except:
       return showError(message = "Can't get max durability info.")
   if weight > 0:

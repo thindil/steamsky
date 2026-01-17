@@ -308,8 +308,11 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     try:
       if itemInfo.len > 0:
         itemInfo.add(y = "\n")
-      itemInfo.add(y = "Durability: {gold}" & (if maxDurability >
-          defaultItemDurability: "More" else: "Less") & " durable{/gold}")
+      if gameSettings.showNumbers:
+        itemInfo.add(y = "Max durability: {gold}" & $maxDurability & "{/gold}")
+      else:
+        itemInfo.add(y = "Max durability: {gold}" & (if maxDurability >
+            defaultItemDurability: "More" else: "Less") & " durable{/gold}")
     except:
       dialog = setError(message = "Can't get max durability info.")
       return
