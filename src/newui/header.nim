@@ -411,6 +411,17 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
         state = previousState
       of none:
         discard
+    if isKeyPressed(key = keyEscape) and dialog == none:
+      showOptions = false
+      case close
+      of combat:
+        state = combat
+      of map:
+        state = map
+      of previous:
+        state = previousState
+      of none:
+        discard
   if options:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
