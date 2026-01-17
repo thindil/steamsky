@@ -1477,6 +1477,15 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [], tags
       except:
         dialog = setError(message = "Can't set help variables")
         return
+    accelNames: array[1..25, string] = [mapAccelerators[5], mapAccelerators[
+        6], mapAccelerators[7], mapAccelerators[8], mapAccelerators[9],
+        mapAccelerators[10], mapAccelerators[11], mapAccelerators[12],
+        mapAccelerators[13], mapAccelerators[14], menuAccelerators[1],
+        menuAccelerators[2], menuAccelerators[3], menuAccelerators[4],
+        menuAccelerators[5], menuAccelerators[6], mapAccelerators[2],
+        menuAccelerators[7], menuAccelerators[9], menuAccelerators[10],
+        menuAccelerators[11], mapAccelerators[1], menuAccelerators[8],
+        mapAccelerators[3], mapAccelerators[4]]
   const
     fontTags: array[1..3, FontTag] = [FontTag(tag: "b", textTag: bold),
         FontTag(tag: "u", textTag: underline), FontTag(tag: "i",
