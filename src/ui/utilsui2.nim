@@ -279,20 +279,39 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
   ##                 the button will not show. Default value is empty.
   var
     protoIndex: Natural = 0
-    itemInfo, quality: string = ""
+    itemInfo, quality, maxDurability, weight: string = ""
   if memberIndex > -1:
-    protoIndex = playerShip.crew[memberIndex].inventory[itemIndex].protoIndex
-    quality = $playerShip.crew[memberIndex].inventory[itemIndex].quality
-    if playerShip.crew[memberIndex].inventory[itemIndex].durability < defaultItemDurability:
-      itemInfo = getItemDamage(itemDurability = playerShip.crew[
-          memberIndex].inventory[itemIndex].durability, withColors = true) & '\n'
+    let item: InventoryData = playerShip.crew[memberIndex].inventory[itemIndex]
+    protoIndex = item.protoIndex
+    quality = $item.quality
+    if item.maxDurability != defaultItemDurability:
+      if gameSettings.showNumbers:
+        maxDurability = $item.maxDurability
+      else:
+        maxDurability = (if item.maxDurability < defaultItemDurability: "Less"
+          else: "More") & " durable"
+    if item.weight != 0:
+      weight = $item.weight
+    if item.durability < item.maxDurability:
+      itemInfo = getItemDamage(itemDurability = item.durability,
+        withColors = true) & '\n'
   else:
-    protoIndex = playerShip.cargo[itemIndex].protoIndex
-    quality = $playerShip.cargo[itemIndex].quality
-    if playerShip.cargo[itemIndex].durability < defaultItemDurability:
-      itemInfo = getItemDamage(itemDurability = playerShip.cargo[
-          itemIndex].durability, withColors = true) & '\n'
-  itemInfo.add(y = "Weight: {gold}" & $itemsList[protoIndex].weight & " kg{/gold}")
+    let item: InventoryData = playerShip.cargo[itemIndex]
+    protoIndex = item.protoIndex
+    quality = $item.quality
+    if item.maxDurability != defaultItemDurability:
+      if gameSettings.showNumbers:
+        maxDurability = $item.maxDurability
+      else:
+        maxDurability = (if item.maxDurability < defaultItemDurability: "Less"
+          else: "More") & " durable"
+    if item.weight != 0:
+      weight = $item.weight
+    if item.durability < item.maxDurability:
+      itemInfo = getItemDamage(itemDurability = item.durability,
+        withColors = true) & '\n'
+  itemInfo.add(y = "Weight: {gold}" & (if weight.len > 0: weight
+      else: $itemsList[protoIndex].weight) & " kg{/gold}")
   if itemsList[protoIndex].itemType == weaponType:
     itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[protoIndex].value[
         3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[
@@ -327,6 +346,8 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
     itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
   if protoIndex != moneyIndex:
     itemInfo.add(y = "\nQuality: {gold}" & quality.capitalizeAscii & "{/gold}")
+  if maxDurability.len > 0:
+    itemInfo.add(y = "\nMax durability: {gold}" & maxDurability & "{/gold}")
   if itemsList[protoIndex].description.len > 0:
     itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
   if parent == ".":
