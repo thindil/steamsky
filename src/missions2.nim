@@ -44,7 +44,7 @@ proc finishMission*(missionIndex: Natural) {.raises: [
   body:
     let missionsAmount: Natural = acceptedMissions.len
     if playerShip.speed != docked:
-      let message: string = dockShip(docking = true)
+      let message: ErrorMessage = dockShip(docking = true)
       if message.len > 0:
         raise newException(exceptn = MissionFinishingError, message = message)
     updateGame(minutes = 5)
@@ -89,7 +89,7 @@ proc autoFinishMissions*(): string {.raises: [KeyError, IOError,
     return
   if findMember(order = talk) == -1:
     return
-  var i: int = 0
+  var i: Natural = 0
   while i <= acceptedMissions.high:
     if (acceptedMissions[i].finished and acceptedMissions[i].startBase ==
         baseIndex) or (acceptedMissions[i].targetX == playerShip.skyX and
@@ -112,7 +112,7 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
   if skyBases[baseIndex].reputation.level < 0:
     raise newException(exceptn = MissionAcceptingError,
         message = "Your reputation in this base is too low to receive any mission.")
-  var missionsLimit: int = case skyBases[baseIndex].reputation.level
+  var missionsLimit: ExtendedNatural = case skyBases[baseIndex].reputation.level
     of 0..25:
       1
     of 26..50:
