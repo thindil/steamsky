@@ -23,6 +23,8 @@ All notable changes to this project will be documented in this file.
 - Counting fuel usage when waiting in place in the sky
 - Counting distance traveled by the player's ship during the game
 - Showing keyboard shortcuts in the in-game help
+- Crash when giving the last item from the player's ship's cargo to a crew
+  member
 
 ## [11.7] - 2025-11-02
 
