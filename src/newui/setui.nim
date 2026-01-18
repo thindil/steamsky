@@ -1514,41 +1514,43 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [], tags
         uiText = HelpUIText(text: variable.value, tag: special)
         texts.add(y = uiText)
         break
-#    for index, accel in accelNames:
-#      if tagText == "GameKey" & $index:
-#        uiText = HelpUIText(text: accel, tag: special)
-#        texts.add(y = uiText)
-#        break
-#    for tag in fontTags:
-#      if tagText == tag.tag:
-#        startIndex = newText.find(sub = '{', start = endIndex) - 1
-#        tclEval(script = helpView & " insert end {" & newText[endIndex + 2 ..
-#            startIndex] & "} [list " & tag.textTag & "]")
-#        endIndex = newText.find(sub = '}', start = startIndex) - 1
-#        break
-#    for tag in flagsTags:
-#      if tagText == tag:
-#        var factionsWithFlag: string = ""
-#        for faction in factionsList.values:
-#          if tagText in faction.flags:
-#            if factionsWithFlag.len > 0:
-#              factionsWithFlag.add(y = ", ")
-#            factionsWithFlag.add(y = faction.name)
-#        factionsWithFlag.removeSuffix(suffix = ", ")
-#        tclEval(script = helpView & " insert end {" & factionsWithFlag & "}")
-#        break
-#    for tag in basesFlags:
-#      if tagText != tag:
-#        continue
-#      var basesWithFlag: string = ""
-#      for baseType in basesTypesList.values:
-#        if tagText in baseType.flags:
-#          if basesWithFlag.len > 0:
-#            basesWithFlag.add(y = ", ")
-#          basesWithFlag.add(y = baseType.name)
-#      basesWithFlag.removeSuffix(suffix = ", ")
-#      tclEval(script = helpView & " insert end {" & basesWithFlag & "}")
-#      break
+    for index, accel in accelNames:
+      if tagText == "GameKey" & $index:
+        uiText = HelpUIText(text: accel, tag: special)
+        texts.add(y = uiText)
+        break
+    for tag in fontTags:
+      if tagText == tag.tag:
+        startIndex = content.find(sub = '{', start = endIndex) - 1
+        uiText = HelpUIText(text: content[endIndex + 2..startIndex], tag: tag.textTag)
+        texts.add(y = uiText)
+        endIndex = content.find(sub = '}', start = startIndex) - 1
+        break
+    for tag in flagsTags:
+      if tagText == tag:
+        var factionsWithFlag: string = ""
+        for faction in factionsList.values:
+          if tagText in faction.flags:
+            if factionsWithFlag.len > 0:
+              factionsWithFlag.add(y = ", ")
+            factionsWithFlag.add(y = faction.name)
+        factionsWithFlag.removeSuffix(suffix = ", ")
+        uiText = HelpUIText(text: factionsWithFlag)
+        texts.add(y = uiText)
+        break
+    for tag in basesFlags:
+      if tagText != tag:
+        continue
+      var basesWithFlag: string = ""
+      for baseType in basesTypesList.values:
+        if tagText in baseType.flags:
+          if basesWithFlag.len > 0:
+            basesWithFlag.add(y = ", ")
+          basesWithFlag.add(y = baseType.name)
+      basesWithFlag.removeSuffix(suffix = ", ")
+      uiText = HelpUIText(text: basesWithFlag)
+      texts.add(y = uiText)
+      break
     oldIndex = endIndex + 2
 
 proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
