@@ -247,6 +247,24 @@ proc showInfo(dialog: var GameDialog): bool {.raises: [], tags: [RootEffect],
       addTooltip(bounds = getWidgetBounds(), text = "Game time.")
     label(str = formattedTime(), alignment = centered)
 
+proc closeScreen(close: CloseDestination; state: var GameState) {.raises: [], tags: [], contractual.} =
+  ## Close the currently opened screen and back to the previous one
+  ##
+  ## * close   - the close button's destination. If none, don't show the button
+  ## * state   - the current state of the game
+  ##
+  ## Returns the modified parameter state.
+  showOptions = false
+  case close
+  of combat:
+    state = combat
+  of map:
+    state = map
+  of previous:
+    state = previousState
+  of none:
+    discard
+
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     state: var GameState; options: bool = false): bool {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -401,27 +419,9 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       addTooltip(bounds = getWidgetBounds(),
           text = "Back to the " & $close & " screen")
     imageButton(image = images[exitIcon]):
-      showOptions = false
-      case close
-      of combat:
-        state = combat
-      of map:
-        state = map
-      of previous:
-        state = previousState
-      of none:
-        discard
+      closeScreen(close = close, state = state)
     if isKeyPressed(key = keyEscape) and dialog == none:
-      showOptions = false
-      case close
-      of combat:
-        state = combat
-      of map:
-        state = map
-      of previous:
-        state = previousState
-      of none:
-        discard
+      closeScreen(close = close, state = state)
   if options:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
