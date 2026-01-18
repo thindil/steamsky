@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -560,7 +560,7 @@ proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   const crewBox: string = ".itemdialog.member"
   let
     itemIndex: Natural = try:
-        ($argv[1]).parseInt
+        ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the item's index.")
     item: InventoryData = playerShip.cargo[itemIndex]
