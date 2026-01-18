@@ -451,8 +451,8 @@ proc windowShow*(name: string; state: ShowStates) {.raises: [], tags: [],
     ## A binding to Nuklear's function. Internal use only
   nk_window_show(ctx = ctx, name = name.cstring, state = state)
 
-proc createWindow*(context: var Context): Window {.raises: [], tags: [],
-    contractual.} =
+proc createWindow*(context: var Context): Window {.raises: [],
+  tags: [RootEffect], contractual.} =
   ## Create a new Nuklear widget
   ##
   ## * context - the Nuklear context

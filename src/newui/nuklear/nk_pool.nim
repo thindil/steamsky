@@ -28,8 +28,8 @@
 import contracts
 import nk_types
 
-proc nkPoolAlloc*(pool: Pool; pageType: PageDataType): PageElement {.raises: [],
-    tags: [], contractual.} =
+proc nkPoolAlloc*(pool: var Pool; pageType: PageDataType): PageElement {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Allocate page element from the pool
   ##
   ## * pool - the pool from which the page element will be allocated
@@ -42,3 +42,11 @@ proc nkPoolAlloc*(pool: Pool; pageType: PageDataType): PageElement {.raises: [],
       if pool.pages == nil:
         return
       return
+    else:
+      var size: nk_size = Page.sizeof
+      size += ((pool.capacity - 1) * PageElement.sizeof.uint).nk_size
+      try:
+        page = cast[Page](pool.alloc.alloc(pool.alloc.userData, nil, size))
+        page.next = pool.pages
+      except:
+        discard

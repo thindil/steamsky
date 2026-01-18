@@ -69,7 +69,8 @@ proc nkFreePageElement*(ctx; elem: ptr nk_page_element) {.raises: [], tags: [],
     nkLinkPageElementIntoFreelist(ctx = ctx, elem = elem)
 
 proc nkCreatePageElement*(context: var Context;
-    pageType: PageDataType): PageElement {.raises: [], tags: [], contractual.} =
+    pageType: PageDataType): PageElement {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Create a new page element
   ##
   ## * context  - the Nuklear context
