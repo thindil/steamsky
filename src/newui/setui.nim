@@ -1527,14 +1527,23 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
         break
     for index, accel in accelNames:
       if tagText == "GameKey" & $index:
-        uiText = HelpUIText(text: accel, tag: special)
+        uiText = try:
+            HelpUIText(text: accel, tag: special, width: accel.getTextWidth)
+          except:
+            dialog = setError(message = "Can't set an accelerator")
+            return
         texts.add(y = uiText)
         break
     for tag in fontTags:
       if tagText == tag.tag:
         startIndex = content.find(sub = '{', start = endIndex) - 1
-        uiText = HelpUIText(text: content[endIndex + 2..startIndex],
-            tag: tag.textTag)
+        uiText = try:
+            HelpUIText(text: content[endIndex + 2..startIndex],
+                tag: tag.textTag, width: content[endIndex +
+                2..startIndex].getTextWidth)
+          except:
+            dialog = setError(message = "Can't set a tag")
+            return
         texts.add(y = uiText)
         endIndex = content.find(sub = '}', start = startIndex) - 1
         break
@@ -1547,7 +1556,12 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
               factionsWithFlag.add(y = ", ")
             factionsWithFlag.add(y = faction.name)
         factionsWithFlag.removeSuffix(suffix = ", ")
-        uiText = HelpUIText(text: factionsWithFlag)
+        uiText = try:
+            HelpUIText(text: factionsWithFlag, tag: none,
+                width: factionsWithFlag.getTextWidth)
+          except:
+            dialog = setError(message = "Can't set the factions")
+            return
         texts.add(y = uiText)
         break
     for tag in basesFlags:
@@ -1560,7 +1574,12 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
             basesWithFlag.add(y = ", ")
           basesWithFlag.add(y = baseType.name)
       basesWithFlag.removeSuffix(suffix = ", ")
-      uiText = HelpUIText(text: basesWithFlag)
+      uiText = try:
+          HelpUIText(text: basesWithFlag, tag: none,
+              width: basesWithFlag.getTextWidth)
+        except:
+          dialog = setError(message = "Can't set the bases")
+          return
       texts.add(y = uiText)
       break
     oldIndex = endIndex + 2
