@@ -35,7 +35,6 @@ proc nkPoolAlloc*(pool: var Pool; pageType: PageDataType): PageElement {.raises:
   ## * pool - the pool from which the page element will be allocated
   ##
   ## Returns allocated page element
-  result = PageElement(data: PageData(pageDataType: pageType))
   if pool.pages == nil or pool.pages.size >= pool.capacity:
     var page: Page = Page()
     if pool.aType == bufferFixed:
@@ -48,5 +47,8 @@ proc nkPoolAlloc*(pool: var Pool; pageType: PageDataType): PageElement {.raises:
       try:
         page = cast[Page](pool.alloc.alloc(pool.alloc.userData, nil, size))
         page.next = pool.pages
+        page.size = 0
       except:
         discard
+  result = pool.pages.win[pool.pages.size]
+  pool.pages.size.inc

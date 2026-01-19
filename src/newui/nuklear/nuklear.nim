@@ -58,9 +58,6 @@ proc nk_widget_disable_end(ctx) {.importc, cdecl, raises: [], tags: [], contract
 # -------
 # Windows
 # -------
-proc nk_create_window(ctx): pointer {.importc, cdecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-
 proc nk_window_find(ctx; name: cstring): ptr nk_window {.importc, nodecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
@@ -1497,12 +1494,12 @@ proc nkPopupBegin(context: var Context; pType: PopupType; title: string; flags: 
       raise newException(exceptn = NuklearException,
           message = "Popups are not allowed to have popups.")
     var popup: ref Window = win.popup.win
-#    if popup == nil:
-#      popup = cast[PNkWindow](nk_create_window(ctx = ctx))
-#      popup.parent = win
-#      win.popup.win = popup
-#      win.popup.active = nkFalse
-#      win.popup.pType = panelPopup
+    if popup == nil:
+      popup[] = createWindow(context = context)
+      popup.parent = win
+      win.popup.win = popup
+      win.popup.active = nkFalse
+      win.popup.pType = panelPopup
     let titleHash: Hash = hash(x = title)
     # make sure we have correct popup
     if win.popup.name != titleHash.nk_hash:

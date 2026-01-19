@@ -1652,7 +1652,7 @@ type
     input*: Input
     begin*, last*, current*, active*: ref Window
     seq*, count*: uint
-    memory: Buffer
+    memory*: Buffer
     usePool*: bool
     freeList*: ref PageElement
     clip*: Clipboard
