@@ -184,6 +184,8 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
       morale = 50 + skyBases[passengerBase].reputation.level
       if morale < 50:
         morale = 50
+      if morale > 100:
+        morale = 100
     var maxAttributeLevel: ReputationRange = skyBases[baseIndex].reputation.level
     if maxAttributeLevel < 10:
       maxAttributeLevel = 10
