@@ -89,7 +89,7 @@ proc autoFinishMissions*(): string {.raises: [KeyError, IOError,
     return
   if findMember(order = talk) == -1:
     return
-  var i: Natural = 0
+  var i: ExtendedNatural = 0
   while i <= acceptedMissions.high:
     if (acceptedMissions[i].finished and acceptedMissions[i].startBase ==
         baseIndex) or (acceptedMissions[i].targetX == playerShip.skyX and
@@ -153,7 +153,7 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
           message = "You don't have proper (or free) cabin for this passenger.")
   mission.startBase = baseIndex
   mission.finished = false
-  var acceptMessage: string = "You accepted the mission to "
+  var acceptMessage: MessageText = "You accepted the mission to "
   case mission.mType
   of deliver:
     acceptMessage.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'")
@@ -177,14 +177,14 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
       gender = 'M'
     else:
       gender = (if getRandom(min = 1, max = 2) == 1: 'M' else: 'F')
-    var morale: int = 50
+    var morale: range[-100..200] = 50
     if "nomorale" in faction.flags:
       morale = 50
     else:
       morale = 50 + skyBases[passengerBase].reputation.level
       if morale < 50:
         morale = 50
-    var maxAttributeLevel: int = skyBases[baseIndex].reputation.level
+    var maxAttributeLevel: ReputationRange = skyBases[baseIndex].reputation.level
     if maxAttributeLevel < 10:
       maxAttributeLevel = 10
     if getRandom(min = 1, max = 100) > 90:
