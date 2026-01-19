@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Showing keyboard shortcuts in the in-game help
 - Crash when giving the last item from the player's ship's cargo to a crew
   member
+- Possible crash when accepting missions in bases
 
 ## [11.7] - 2025-11-02
 
