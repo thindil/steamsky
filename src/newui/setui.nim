@@ -1435,14 +1435,16 @@ type
     text*: string
     tag*: TextTags
     width*: cfloat
+  TextsSeq = seq[HelpUIText]
 
 var
   selectedHelp*: Natural = 0
     ## The index of the selected help topic
-  helpContent*: seq[HelpUIText] = @[]
+  helpContent*: seq[TextsSeq] = @[]
     ## The content of the selected help topic
 
-proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Set the content of the selected help topic to show
   ##
   ## * content - the content of the selected help topic
@@ -1450,7 +1452,6 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [], tags
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  helpContent = @[]
   type
     VariablesData = object
       name, value: string
@@ -1496,13 +1497,18 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [], tags
     basesFlags: array[1..4, string] = ["shipyard", "temple", "blackmarket", "barracks"]
   var
     oldIndex: int = 0
-    texts: seq[HelpUIText] = @[]
+    texts: TextsSeq = @[]
   while true:
     var
       startIndex: int = content.find(sub = '{', start = oldIndex)
       uiText: HelpUIText = HelpUIText()
     if startIndex == -1:
       uiText.text = content[oldIndex..^1]
+      uiText.width = try:
+          uiText.text.getTextWidth
+        except:
+          dialog = setError(message = "Can't get the text's width")
+          return
       texts.add(y = uiText)
       break
     uiText.text = content[oldIndex..startIndex - 1]
@@ -1511,7 +1517,12 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [], tags
     let tagText: string = content[startIndex + 1..endIndex]
     for variable in variables:
       if tagText == variable.name:
-        uiText = HelpUIText(text: variable.value, tag: special)
+        uiText = try:
+            HelpUIText(text: variable.value, tag: special,
+                width: variable.value.getTextWidth)
+          except:
+            dialog = setError(message = "Can't set a variable")
+            return
         texts.add(y = uiText)
         break
     for index, accel in accelNames:
@@ -1522,7 +1533,8 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [], tags
     for tag in fontTags:
       if tagText == tag.tag:
         startIndex = content.find(sub = '{', start = endIndex) - 1
-        uiText = HelpUIText(text: content[endIndex + 2..startIndex], tag: tag.textTag)
+        uiText = HelpUIText(text: content[endIndex + 2..startIndex],
+            tag: tag.textTag)
         texts.add(y = uiText)
         endIndex = content.find(sub = '}', start = startIndex) - 1
         break
@@ -1552,6 +1564,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [], tags
       texts.add(y = uiText)
       break
     oldIndex = endIndex + 2
+  helpContent = @[]
 
 proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
     tags: [RootEffect], contractual.} =
