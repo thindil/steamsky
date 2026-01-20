@@ -523,7 +523,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
       return buyDialog
     return sellDialog
   of takeAction, dropAction:
-    let (protoIndex, maxAmount, cargoMaxAmount, _) = try:
+    let (protoIndex, maxAmount, cargoMaxAmount, _, _, _) = try:
         getLootData(itemIndex = iIndex)
       except:
         return setError(message = "Can't get the trade's data.")

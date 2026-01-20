@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -194,7 +194,7 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     itemIndex.dec
   else:
     itemIndex.inc
-  let (protoIndex, maxAmount, cargoMaxAmount, quality) = try:
+  let (protoIndex, maxAmount, cargoMaxAmount, quality, _, _) = try:
       getLootData(itemIndex = itemIndex)
     except:
       dialog = setError(message = "Can't get the trade's data.")

@@ -296,7 +296,7 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       ($argv[1]).parseInt
     except:
       return showError(message = "Can't get item's index.")
-  let (protoIndex, maxAmount, cargoMaxAmount, quality) = try:
+  let (protoIndex, maxAmount, cargoMaxAmount, quality, _, _) = try:
       getLootData(itemIndex = itemIndex)
     except:
       return showError(message = "Can't get the trade's data.")
