@@ -266,6 +266,23 @@ proc closeScreen(close: CloseDestination; state: var GameState) {.raises: [],
   of none:
     discard
 
+proc showShipInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the ship info screen
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state   - the current state of the game
+  ##
+  ## Returns the modified parameters dialog and state.
+  if state == shipInfo:
+    state = previousState
+  else:
+    previousState = state
+    setShipInfo(dialog = dialog)
+    state = shipInfo
+    mapPreview = false
+  dialog = none
+
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     state: var GameState; options: bool = false): bool {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -463,14 +480,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
       windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 1)
     labelButton(title = "Ship information"):
-      if state == shipInfo:
-        state = previousState
-      else:
-        previousState = state
-        setShipInfo(dialog = dialog)
-        state = shipInfo
-        mapPreview = false
-      dialog = none
+      showShipInfo(dialog = dialog, state = state)
     if playerShip.crew[0].health > 0 and not inCombat:
       labelButton(title = "Ship orders"):
         setDialog()
