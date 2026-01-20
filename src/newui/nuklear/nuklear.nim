@@ -26,7 +26,7 @@
 import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
 import nk_button, nk_colors, nk_context, nk_draw, nk_input, nk_layout, nk_math,
-  nk_page, nk_panel, nk_tooltip, nk_types, nk_utf, nk_widget
+  nk_page, nk_panel, nk_tooltip, nk_types, nk_utf, nk_utils, nk_widget
 export nk_button, nk_colors, nk_context, nk_input, nk_layout, nk_tooltip,
   nk_types, nk_widget
 
@@ -46,9 +46,6 @@ using ctx: PContext
 # General
 # -------
 proc nk_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_zero(`ptr`: pointer; size: culong) {.importc, cdecl, raises: [],
-    tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 proc nk_widget_disable_begin(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
@@ -1506,7 +1503,7 @@ proc nkPopupBegin(context: var Context; pType: PopupType; title: string; flags: 
       if win.popup.active:
         return false
       {.ruleOff: "namedParams".}
-#      nk_zero(`ptr` = popup, size = sizeof(popup).culong)
+      nkZero(pData = popup.addr, size = Window.sizeof)
       {.ruleOn: "namedParams".}
       win.popup.name = titleHash.nk_hash
       win.popup.active = nkTrue
