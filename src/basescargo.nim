@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -228,8 +228,8 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
   {.ruleOn: "assignments".}
 
 proc getLootData*(itemIndex: int): tuple[protoIndex, maxAmount,
-    cargoMaxAmount: int; quality: ObjectQuality] {.raises: [KeyError], tags: [],
-    contractual.} =
+    cargoMaxAmount: int; quality: ObjectQuality; maxDurability: ItemsDurability;
+    weight: Natural] {.raises: [KeyError], tags: [], contractual.} =
   ## Get the data related to the item during looting a base
   ##
   ## * iIndex - the index of the item which data will be get. If positive, the
@@ -237,7 +237,7 @@ proc getLootData*(itemIndex: int): tuple[protoIndex, maxAmount,
   ##            cargo.
   ##
   ## Returns tuple with trade data: proto index of the item, max amount of item
-  ## to get, max amount item to drop and its quality
+  ## to get, max amount item to drop, its quality, maximum durability and weight
   var
     cargoIndex: int = -1
     baseCargoIndex: int = 0
@@ -256,12 +256,20 @@ proc getLootData*(itemIndex: int): tuple[protoIndex, maxAmount,
   result.quality = (if cargoIndex > -1: playerShip.cargo[
         cargoIndex].quality else: skyBases[baseIndex].cargo[
         baseCargoIndex].quality)
+  result.maxDurability = (if cargoIndex > -1: playerShip.cargo[
+        cargoIndex].maxDurability else: skyBases[baseIndex].cargo[
+        baseCargoIndex].maxDurability)
+  result.weight = (if cargoIndex > -1: playerShip.cargo[
+        cargoIndex].weight else: skyBases[baseIndex].cargo[
+        baseCargoIndex].weight)
   if cargoIndex > 0:
     baseCargoIndex = findBaseCargo(protoIndex = result.protoIndex,
-        quality = result.quality)
+        quality = result.quality, maxDurability = result.maxDurability,
+        weight = result.weight)
   else:
     cargoIndex = findItem(inventory = playerShip.cargo,
-        protoIndex = result.protoIndex, itemQuality = result.quality)
+        protoIndex = result.protoIndex, itemQuality = result.quality,
+        maxDurability = result.maxDurability, weight = result.weight)
   result.maxAmount = (if baseCargoIndex > -1: skyBases[baseIndex].cargo[
       baseCargoIndex].amount else: 0)
   let freeAmount: int = (if baseCargoIndex > -1: (freeCargo(amount = 0).float /
