@@ -1587,10 +1587,12 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
   var
     width: float = windowWidth
     row: TextsSeq = @[]
-  for text in texts:
-    if text.width <= width:
-      row.add(y = text)
-      width -= text.width
+    index: Natural = 0
+  while index < texts.high:
+    if texts[index].width <= width:
+      row.add(y = texts[index])
+      width -= texts[index].width
+      index.inc
     if width == 0:
       helpContent.add(y = row)
       row = @[]
