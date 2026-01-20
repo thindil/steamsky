@@ -247,7 +247,8 @@ proc showInfo(dialog: var GameDialog): bool {.raises: [], tags: [RootEffect],
       addTooltip(bounds = getWidgetBounds(), text = "Game time.")
     label(str = formattedTime(), alignment = centered)
 
-proc closeScreen(close: CloseDestination; state: var GameState) {.raises: [], tags: [], contractual.} =
+proc closeScreen(close: CloseDestination; state: var GameState) {.raises: [],
+    tags: [], contractual.} =
   ## Close the currently opened screen and back to the previous one
   ##
   ## * close   - the close button's destination. If none, don't show the button
