@@ -432,19 +432,22 @@ proc finishCrafting(recipe: CraftData; module: ModuleData; crafterIndex: int;
 
 proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
     recipeName: string; module: var ModuleData; owner, toolIndex,
-    crafterIndex: int; quality: ObjectQuality): bool {.raises: [KeyError,
-    Exception], tags: [RootEffect], contractual.} =
+    crafterIndex: int; quality: ObjectQuality; maxDurability: ItemsDurability;
+    weight: Natural): bool {.raises: [KeyError, Exception], tags: [RootEffect],
+    contractual.} =
   ## Craft or deconstruct the selected item
   ##
-  ## * amount       - the amount of space needed for new items
-  ## * recipe       - the executed crafting recipe
-  ## * resultAmount - the amount of items crafted
-  ## * module       - the player's ship's module in which the crafting order
-  ##                  was executed
-  ## * owner        - the index of the crafter in the player's ship's module
-  ## * toolIndex    - the index of the tool used for crafting
-  ## * crafterIndex - the index of the crew member who crafts currently
-  ## * quality      - the quality of the crafted item
+  ## * amount        - the amount of space needed for new items
+  ## * recipe        - the executed crafting recipe
+  ## * resultAmount  - the amount of items crafted
+  ## * module        - the player's ship's module in which the crafting order
+  ##                   was executed
+  ## * owner         - the index of the crafter in the player's ship's module
+  ## * toolIndex     - the index of the tool used for crafting
+  ## * crafterIndex  - the index of the crew member who crafts currently
+  ## * quality       - the quality of the crafted item
+  ## * maxDurability - the maximum durability of the crafted item
+  ## * weight        - the weight of the item
   ##
   ## Returns the modified parameter amount. Additionally, returns true if the
   ## crafting should stop otherwise false
@@ -461,7 +464,8 @@ proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
   else:
     updateCargo(ship = playerShip, protoIndex = recipesList[
         module.craftingIndex].resultIndex, amount = resultAmount,
-        quality = quality)
+        quality = quality, durability = maxDurability,
+        maxDurability = maxDurability, weight = weight)
   for key, protoRecipe in recipesList:
     if protoRecipe.resultIndex == recipe.resultIndex:
       updateCraftingOrders(index = key)
@@ -694,10 +698,16 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
           if module.craftingQuality != normal and quality >
               module.craftingQuality:
             quality = module.craftingQuality
+          let maxDurbility: ItemsDurability = (if module.craftingBonus ==
+              moreDurable: (defaultItemDurability.float *
+              1.20).ItemsDurability elif module.craftingMalus == lessDurable: (
+              defaultItemDurability.float *
+              0.8).ItemsDurability else: defaultItemDurability)
           if craftItem(amount = amount, recipe = recipe,
               resultAmount = resultAmount, recipeName = recipeName,
               module = module, owner = owner, toolIndex = toolIndex,
-              crafterIndex = crafterIndex, quality = quality):
+              crafterIndex = crafterIndex, quality = quality,
+              maxDurability = maxDurability):
             break
         else:
           for key, recipe in recipesList:
