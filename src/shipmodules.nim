@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -73,7 +73,7 @@ proc loadModules*(fileName: Path) {.raises: [DataLoadingError],
             BaseModuleData(repairSkill: 1, installTime: 1, size: 1)
         else:
           BaseModuleData(repairSkill: 1, installTime: 1, size: 1)
-      var attribute: string = moduleNode.attr(name = "name")
+      var attribute: XmlAttribute = moduleNode.attr(name = "name")
       if attribute.len() > 0:
         module.name = attribute
       attribute = moduleNode.attr(name = "type")
@@ -116,7 +116,7 @@ proc loadModules*(fileName: Path) {.raises: [DataLoadingError],
               message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module durability.")
       attribute = moduleNode.attr(name = "material")
       if attribute.len() > 0:
-        let itemIndex: int = findProtoItem(itemType = attribute)
+        let itemIndex: Natural = findProtoItem(itemType = attribute)
         if itemIndex == 0:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $moduleAction & " module '" & $moduleIndex &
@@ -124,7 +124,7 @@ proc loadModules*(fileName: Path) {.raises: [DataLoadingError],
         module.repairMaterial = attribute
       attribute = moduleNode.attr(name = "skill")
       if attribute.len() > 0:
-        let skillIndex: int = findSkillIndex(skillName = attribute)
+        let skillIndex: Natural = findSkillIndex(skillName = attribute)
         if skillIndex == 0:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $moduleAction & " module '" & $moduleIndex &
@@ -208,7 +208,7 @@ proc getModuleType*(moduleIndex: Positive): string {.raises: [
     moduleIndex in modulesList
   body:
     result = $modulesList[moduleIndex].mType
-    let index: int = result.find(chars = {'A'..'Z'})
+    let index: ExtendedNatural = result.find(chars = {'A'..'Z'})
     if index > 0:
       result = result[0 .. index - 1] & " " & result[index].toLowerAscii &
           result[index + 1 .. ^1]
