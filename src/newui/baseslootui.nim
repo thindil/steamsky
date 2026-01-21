@@ -194,7 +194,7 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     itemIndex.dec
   else:
     itemIndex.inc
-  let (protoIndex, maxAmount, cargoMaxAmount, quality, _, _) = try:
+  let (protoIndex, maxAmount, cargoMaxAmount, quality, maxDurability, weight) = try:
       getLootData(itemIndex = itemIndex)
     except:
       dialog = setError(message = "Can't get the trade's data.")
@@ -260,6 +260,26 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't get quality info.")
     return
+  if maxDurability != defaultItemDurability:
+    try:
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      if gameSettings.showNumbers:
+        itemInfo.add(y = "Max durability: {gold}" & $maxDurability & "{/gold}")
+      else:
+        itemInfo.add(y = "Max durability: {gold}" & (if maxDurability >
+            defaultItemDurability: "More" else: "Less") & " durable{/gold}")
+    except:
+      dialog = setError(message = "Can't get max durability info.")
+      return
+  if weight > 0:
+    try:
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      itemInfo.add(y = "Weight: {gold}" & $weight & " kg{/gold}")
+    except:
+      dialog = setError(message = "Can't get max durability info.")
+      return
   try:
     if itemsList[protoIndex].description.len > 0:
       itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)

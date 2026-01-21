@@ -296,14 +296,11 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       ($argv[1]).parseInt
     except:
       return showError(message = "Can't get item's index.")
-  let (protoIndex, maxAmount, cargoMaxAmount, quality, _, _) = try:
+  let (protoIndex, maxAmount, cargoMaxAmount, quality, maxDurability, weight) = try:
       getLootData(itemIndex = itemIndex)
     except:
       return showError(message = "Can't get the trade's data.")
-  var itemInfo: string = try:
-      "Weight: {gold}" & $itemsList[protoIndex].weight & " kg{/gold}"
-    except:
-      return showError(message = "Can't get item's weight.")
+  var itemInfo: string = ""
   try:
     if itemsList[protoIndex].itemType == weaponType:
       itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[
@@ -357,6 +354,24 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     itemInfo.add(y = "Quality: {gold}" & ($quality).capitalizeAscii & "{/gold}")
   except:
     return showError(message = "Can't get quality info.")
+  if maxDurability != defaultItemDurability:
+    try:
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      if gameSettings.showNumbers:
+        itemInfo.add(y = "Max durability: {gold}" & $maxDurability & "{/gold}")
+      else:
+        itemInfo.add(y = "Max durability: {gold}" & (if maxDurability >
+            defaultItemDurability: "More" else: "Less") & " durable{/gold}")
+    except:
+      return showError(message = "Can't get max durability info.")
+  if weight > 0:
+    try:
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      itemInfo.add(y = "Weight: {gold}" & $weight & " kg{/gold}")
+    except:
+      return showError(message = "Can't get max durability info.")
   try:
     if itemsList[protoIndex].description.len > 0:
       itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
