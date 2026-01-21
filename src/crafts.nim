@@ -698,16 +698,24 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
           if module.craftingQuality != normal and quality >
               module.craftingQuality:
             quality = module.craftingQuality
-          let maxDurbility: ItemsDurability = (if module.craftingBonus ==
+          let maxDurability: ItemsDurability = (if module.craftingBonus ==
               moreDurable: (defaultItemDurability.float *
               1.20).ItemsDurability elif module.craftingMalus == lessDurable: (
               defaultItemDurability.float *
               0.8).ItemsDurability else: defaultItemDurability)
+          var weight: Natural = itemsList[recipesList[
+              module.craftingIndex].resultIndex].weight
+          if module.craftingBonus == lighter:
+            weight = (weight.float * 0.8).Natural
+          elif module.craftingMalus == heavier:
+            weight = (weight.float * 1.2).Natural
+          else:
+            weight = 0
           if craftItem(amount = amount, recipe = recipe,
               resultAmount = resultAmount, recipeName = recipeName,
               module = module, owner = owner, toolIndex = toolIndex,
               crafterIndex = crafterIndex, quality = quality,
-              maxDurability = maxDurability):
+              maxDurability = maxDurability, weight = weight):
             break
         else:
           for key, recipe in recipesList:
