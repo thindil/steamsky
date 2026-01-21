@@ -732,7 +732,8 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
             owner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
 
 proc setRecipe*(workshop: Natural; amount: Positive; recipeIndex: string;
-    quality: ObjectQuality = normal) {.raises: [ValueError, CrewOrderError,
+    quality: ObjectQuality = normal; bonus: CraftBonuses = none;
+    malus: CraftMaluses = none) {.raises: [ValueError, CrewOrderError,
     CrewNoSpaceError, Exception], tags: [RootEffect], contractual.} =
   ## Set the selected crafting recipe for the selected workshop in the player's
   ## ship
@@ -741,12 +742,16 @@ proc setRecipe*(workshop: Natural; amount: Positive; recipeIndex: string;
   ## * amount      - how many times the recipe will be made
   ## * recipeIndex - the index of the crafting recipe to set
   ## * quality     - the desired quality of the recipe
+  ## * bonus       - the special bonus for the recipe
+  ## * malus       - the special malus for the recipe
   require:
     workshop < playerShip.modules.len
     recipeIndex.len > 0
   body:
     playerShip.modules[workshop].craftingAmount = amount
     playerShip.modules[workshop].craftingQuality = quality
+    playerShip.modules[workshop].craftingBonus = bonus
+    playerShip.modules[workshop].craftingMalus = malus
     var
       itemIndex: Natural = 0
       recipeName: string = ""
