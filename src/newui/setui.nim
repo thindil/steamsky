@@ -1593,6 +1593,22 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       row.add(y = texts[index])
       width -= texts[index].width
       index.inc
+    else:
+      var endIndex: Positive = ((width / texts[index].width) * 100.0).Positive
+      var newText: HelpUIText = try:
+          HelpUIText(text: texts[index].text[0..endIndex], tag: texts[
+              index].tag, width: texts[index].text[0..endIndex].getTextWidth)
+        except:
+          dialog = setError(message = "Can't split text")
+          return
+      row.add(y = newText)
+      width = 0
+      newText = try:
+          HelpUIText(text: texts[index].text[endIndex..^1], tag: texts[
+              index].tag, width: texts[index].text[endIndex..^1].getTextWidth)
+        except:
+          dialog = setError(message = "Can't get new text")
+          return
     if width == 0:
       helpContent.add(y = row)
       row = @[]
