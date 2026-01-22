@@ -37,16 +37,20 @@ proc nkMemSet*(pData: pointer; c0: int; size: nk_size) {.raises: [], tags: [],
   ## * size  - the size of the data to set
   var c: uint = 0
   const nkWsize: int = uint.sizeof
-  
+
   c = c0.nk_byte
   if c != 0:
     c = (c shl 8) or c # at least 16-bits
     if nkWsize > 2:
       c = (c shl 16) or c # at least 32-bits
   # too small of a word count
-  let dst: ptr nk_byte = cast[ptr nk_byte](pData)
-  if size < 3 * nkWsize:
-    discard
+  var dst: ptr nk_byte = cast[ptr nk_byte](pData)
+  var localSize: nk_size = size
+  if localSize < 3 * nkWsize:
+    while localSize > 0:
+      dst = cast[ptr nk_byte](c0)
+      dst = dst + 1
+      localSize.dec
 
 proc nkZero*(pData: pointer; size: nk_size) {.raises: [], tags: [],
     contractual.} =
