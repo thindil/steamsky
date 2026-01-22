@@ -112,7 +112,7 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
       raise newException(exceptn = ReputationError,
           message = getCurrentExceptionMsg())
 
-proc getReputation*(factionIndex: string): int {.raises: [], tags: [],
+proc getReputation*(factionIndex: string): ReputationRange {.raises: [], tags: [],
     contractual.} =
   ## Get the level of the player's reputation with the selected faction
   ##
