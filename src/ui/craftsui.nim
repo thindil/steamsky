@@ -792,6 +792,8 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     amountBox: string = ".craftdialog.amount"
     memberBox: string = ".craftdialog.members"
     qualityBox: string = ".craftdialog.quality"
+    bonusBox: string = ".craftdialog.special.special1"
+    malusBox: string = ".craftdialog.special.special2"
   let
     assignWorker: string = tclGetVar(varName = "craftworker")
   var workshopIndex: Natural = try:
@@ -807,7 +809,12 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
             " get").parseInt, recipeIndex = recipeIndex, quality = if tclEval2(
             script = "winfo exists " & qualityBox) == "1": tclEval2(
             script = qualityBox &
-            " current").parseInt.ObjectQuality else: normal)
+            " current").parseInt.ObjectQuality else: normal,
+            bonus = if tclEval2(script = "winfo exists " & bonusBox) ==
+            "1": tclEval2(script = bonusBox &
+            " current").parseInt.CraftBonuses else: none, malus = if tclEval2(
+            script = "winfo exists " & malusBox) == "1": tclEval2(
+            script = malusBox & " current").parseInt.CraftMaluses else: none)
       except:
         return showError(message = "Can't set the recipe.")
       if assignWorker == "fromlist":
