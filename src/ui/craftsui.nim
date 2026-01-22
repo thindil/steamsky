@@ -811,10 +811,10 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
             script = qualityBox &
             " current").parseInt.ObjectQuality else: normal,
             bonus = if tclEval2(script = "winfo exists " & bonusBox) ==
-            "1": tclEval2(script = bonusBox &
-            " current").parseInt.CraftBonuses else: none, malus = if tclEval2(
-            script = "winfo exists " & malusBox) == "1": tclEval2(
-            script = malusBox & " current").parseInt.CraftMaluses else: none)
+            "1": parseEnum[CraftBonuses](s = tclEval2(script = bonusBox &
+            " get")) else: none, malus = if tclEval2(
+            script = "winfo exists " & malusBox) == "1": parseEnum[
+            CraftMaluses](tclEval2(script = malusBox & " get")) else: none)
       except:
         return showError(message = "Can't set the recipe.")
       if assignWorker == "fromlist":
