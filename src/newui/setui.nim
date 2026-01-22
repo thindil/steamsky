@@ -1595,6 +1595,8 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       index.inc
     else:
       var endIndex: Positive = ((width / texts[index].width) * 100.0).Positive
+      if endIndex >= texts[index].text.len:
+        endIndex = texts[index].text.len - 1
       var newText: HelpUIText = try:
           HelpUIText(text: texts[index].text[0..endIndex], tag: texts[
               index].tag, width: texts[index].text[0..endIndex].getTextWidth)
