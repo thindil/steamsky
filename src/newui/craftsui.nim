@@ -349,7 +349,9 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
             try:
               setRecipe(workshop = index, amount = craftAmount,
                   recipeIndex = recipe.index,
-                  quality = craftQuality.ObjectQuality)
+                  quality = craftQuality.ObjectQuality, bonus = parseEnum[
+                  CraftBonuses](s = bonuses[bonus]), malus = parseEnum[
+                  CraftMaluses](s = maluses[malus]))
             except:
               dialog = setError(message = "Can't set the recipe.")
               return
