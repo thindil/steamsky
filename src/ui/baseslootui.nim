@@ -167,7 +167,8 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
         100: getItemDamage(itemDurability = playerShip.cargo[
         index].durability) else: "Unused")
     addProgressbar(table = lootTable, value = playerShip.cargo[
-        index].durability, maxValue = defaultItemDurability,
+        index].durability, maxValue = playerShip.cargo[
+        index].maxDurability,
         tooltip = itemDurability, command = "ShowLootItemInfo " & $(index + 1), column = 3)
     addButton(table = lootTable, text = ($playerShip.cargo[
         index].quality).capitalizeAscii, tooltip = tableTooltip,
@@ -221,7 +222,8 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
         itemDurability = currentBaseCargo[itemsIndexes[
         index]].durability) else: "Unused")
     addProgressbar(table = lootTable, value = currentBaseCargo[itemsIndexes[
-        index]].durability, maxValue = defaultItemDurability,
+        index]].durability, maxValue = currentBaseCargo[itemsIndexes[
+        index]].maxDurability,
         tooltip = itemDurability, command = "ShowLootItemInfo -" & $(
         itemsIndexes[index] + 1), column = 3)
     addButton(table = lootTable, text = ($currentBaseCargo[itemsIndexes[
@@ -613,7 +615,7 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       localItems.add(y = LocalItemData(name: getItemName(item = item), iType: (
           if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
-          item.durability.float / defaultItemDurability.float),
+          item.durability.float / item.maxDurability.float),
           owned: item.amount, available: (if baseCargoIndex >
           -1: localBaseCargo[
           baseCargoIndex].amount else: 0), quality: item.quality, id: index))
@@ -694,7 +696,7 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       localItems.add(y = LocalItemData(name: itemsList[protoIndex].name,
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
-          item.durability.float / defaultItemDurability.float), owned: 0,
+          item.durability.float / item.maxDurability.float), owned: 0,
           available: item.amount, quality: item.quality, id: index))
     except:
       return showError(message = "Can't add the base's item.")

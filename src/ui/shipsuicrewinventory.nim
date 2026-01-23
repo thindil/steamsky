@@ -322,7 +322,8 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
           item = playerShip.crew[memberIndex].inventory[index],
           damageInfo = false, toLower = false), damage: playerShip.crew[
           memberIndex].inventory[index].durability.float /
-          defaultItemDurability.float, itemType: (if itemsList[playerShip.crew[
+          playerShip.crew[
+          memberIndex].inventory[index].maxDurability.float, itemType: (if itemsList[playerShip.crew[
           memberIndex].inventory[index].protoIndex].showType.len > 0: itemsList[
           playerShip.crew[memberIndex].inventory[
           index].protoIndex].showType else: itemsList[playerShip.crew[

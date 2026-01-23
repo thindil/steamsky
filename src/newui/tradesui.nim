@@ -185,7 +185,7 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType),
               damage: (
-          item.durability.float / defaultItemDurability.float), price: price,
+          item.durability.float / item.maxDurability.float), price: price,
           profit: -price, weight: itemsList[protoIndex].weight, owned: 0,
           available: item.amount, id: index, quality: item.quality))
     except:

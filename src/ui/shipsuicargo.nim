@@ -222,7 +222,7 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       localCargo.add(y = LocalCargoData(name: getItemName(item = item,
           damageInfo = false, toLower = false), damage: (item.durability.float /
-          defaultItemDurability.float), itemType: (if itemsList[
+          item.maxDurability.float), itemType: (if itemsList[
           item.protoIndex].showType.len > 0: itemsList[
           item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
           amount: item.amount, weight: item.amount * itemsList[

@@ -328,7 +328,8 @@ proc showTraderItems(currentItemIndex: Natural; baseType: string;
         100: getItemDamage(itemDurability = baseCargo[itemsIndexes[
         i]].durability) else: "Unused")
     addProgressbar(table = tradeTable, value = baseCargo[itemsIndexes[
-        i]].durability, maxValue = defaultItemDurability,
+        i]].durability, maxValue = baseCargo[itemsIndexes[
+        i]].maxDurability,
         tooltip = itemDurability, command = "ShowTradeItemInfo -" &
         $(itemsIndexes[i] + 1), column = 3)
     addButton(table = tradeTable, text = ($baseCargo[itemsIndexes[
@@ -768,7 +769,7 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       localItems.add(y = LocalItemData(name: getItemName(item = item), iType: (
           if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
-          item.durability.float / defaultItemDurability.float), price: price,
+          item.durability.float / item.maxDurability.float), price: price,
           profit: price - item.price, weight: itemsList[protoIndex].weight,
           owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
           baseCargoIndex].amount else: 0), id: index, quality: item.quality))
@@ -793,7 +794,7 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       localItems.add(y = LocalItemData(name: itemsList[protoIndex].name,
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
-          item.durability.float / defaultItemDurability.float), price: price,
+          item.durability.float / item.maxDurability.float), price: price,
           profit: -price, weight: itemsList[protoIndex].weight, owned: 0,
           available: item.amount, id: index, quality: item.quality))
     except:
