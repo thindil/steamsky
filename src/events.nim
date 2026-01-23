@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -51,9 +51,15 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
     owner.len > 0
   body:
     for index, ship in protoShipsList:
-      var reputation: int = getReputation(factionIndex = ship.owner)
+      var reputation: ReputationRange = getReputation(factionIndex = ship.owner)
       if getRandom(min = 1, max = 100) > 98:
-        reputation *= 2
+        let newReputation = reputation * 2
+        if newReputation > ReputationRange.high:
+          reputation = ReputationRange.high
+        elif newReputation < ReputationRange.low:
+          reputation = ReputationRange.low
+        else:
+          reputation = newReputation
       if reputation <= -(ship.reputation) and (owner == "Any" or ship.owner ==
           owner) and not isFriendly(sourceFaction = playerShip.crew[0].faction,
           targetFaction = ship.owner) and index notin playerShips and (
