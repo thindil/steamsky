@@ -222,7 +222,7 @@ proc showPlayersItems(currentItemIndex: var Natural; baseType: string;
         100: getItemDamage(itemDurability = playerShip.cargo[
         i].durability) else: "Unused")
     addProgressbar(table = tradeTable, value = playerShip.cargo[i].durability,
-        maxValue = defaultItemDurability, tooltip = itemDurability,
+        maxValue = playerShip.cargo[i].maxDurability, tooltip = itemDurability,
         command = "ShowTradeItemInfo " & $(i + 1), column = 3)
     addButton(table = tradeTable, text = ($playerShip.cargo[
         i].quality).capitalizeAscii, tooltip = "Show available options for item",

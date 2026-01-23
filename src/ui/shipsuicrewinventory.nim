@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -81,7 +81,7 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
         tooltip = "Show the selected item's info",
         command = "ShowInventoryItemInfo " & $(item + 1), column = 2)
     addProgressbar(table = inventoryTable, value = member.inventory[
-        item].durability, maxValue = defaultItemDurability,
+        item].durability, maxValue = member.inventory[item].maxDurability,
         tooltip = "The current durability level of the selected item.",
         command = "ShowInventoryItemInfo " & $(item + 1), column = 3)
     if itemIsUsed(memberIndex = memberIndex, itemIndex = item):
@@ -590,7 +590,8 @@ proc moveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     moveItem(itemIndex = itemIndex, amount = amount, memberIndex = memberIndex)
   except NoFreeCargoError:
-    showMessage(text = getCurrentExceptionMsg(), title = "No free space in cargo")
+    showMessage(text = getCurrentExceptionMsg(),
+        title = "No free space in cargo")
     return
   except CrewNoSpaceError:
     showError(message = "Can't update the member's inventory.")
@@ -632,13 +633,15 @@ proc moveItemsCommand(clientData: cint; interp: PInterp; argc: cint;
         moveItem(itemIndex = index, amount = playerShip.crew[
             memberIndex].inventory[index].amount, memberIndex = memberIndex)
       except NoFreeCargoError:
-        showMessage(text = getCurrentExceptionMsg(), title = "No free space in cargo")
+        showMessage(text = getCurrentExceptionMsg(),
+            title = "No free space in cargo")
         return
       except CrewNoSpaceError:
         showError(message = "Can't update the member's inventory.")
         return
       except CrewOrderError:
-        showMessage(text = getCurrentExceptionMsg(), title = "Can't give an order.")
+        showMessage(text = getCurrentExceptionMsg(),
+            title = "Can't give an order.")
         return
       except:
         showError(message = "Can't move item to the ship cargo.")

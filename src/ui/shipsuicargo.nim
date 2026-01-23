@@ -112,7 +112,7 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
         tooltip = "Show item's description and actions",
         command = "ShowCargoItemInfo " & $(index + 1), column = 1)
     addProgressbar(table = cargoTable, value = item.durability,
-        maxValue = defaultItemDurability,
+        maxValue = item.maxDurability,
         tooltip = "The current durability of the selected item",
         command = "ShowCargoItemInfo " & $(index + 1), column = 2)
     addButton(table = cargoTable, text = ($item.quality).capitalizeAscii,
