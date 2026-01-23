@@ -1502,6 +1502,11 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     var
       startIndex: int = content.find(sub = '{', start = oldIndex)
       uiText: HelpUIText = HelpUIText()
+    while content[oldIndex] == '\n':
+      uiText.text = "\n"
+      uiText.width = 0
+      texts.add(y = uiText)
+      oldIndex.inc
     if startIndex == -1:
       uiText.text = content[oldIndex..^1]
       uiText.width = try:
