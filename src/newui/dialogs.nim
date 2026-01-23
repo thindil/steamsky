@@ -654,7 +654,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           incPerPixel = 1)
       if newValue != manipulateData.amount:
         manipulateData.amount = newValue
-        updateCost(amount = newValue, cargoIndex = cargoIndex, dialog = dialog)
+        updateCost(amount = newValue, cargoIndex = (if cargoIndex >
+            -1: cargoIndex else: 0), dialog = dialog)
       # Amount buttons
       const amounts: array[1..3, Positive] = [100, 500, 1000]
       var cols: Positive = 1
@@ -665,12 +666,12 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       for i in 1..cols - 1:
         labelButton(title = $amounts[i]):
           manipulateData.amount = amounts[i]
-          updateCost(amount = amounts[i], cargoIndex = cargoIndex,
-              dialog = dialog)
+          updateCost(amount = amounts[i], cargoIndex = (if cargoIndex >
+              -1: cargoIndex else: 0), dialog = dialog)
       labelButton(title = "Max"):
         manipulateData.amount = manipulateData.maxAmount
-        updateCost(amount = manipulateData.amount, cargoIndex = cargoIndex,
-            dialog = dialog)
+        updateCost(amount = manipulateData.amount, cargoIndex = (if cargoIndex >
+            -1: cargoIndex else: 0), dialog = dialog)
       # Labels
       if manipulateData.cost > 0:
         setLayoutRowDynamic(height = 30, cols = 2)
@@ -940,7 +941,7 @@ proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
       itemInfo = getItemDamage(itemDurability = playerShip.cargo[
           itemIndex].durability, withColors = true) & '\n'
   itemInfo.add(y = "Weight: {gold}" & (if weight.len > 0: weight
-      else: $itemsList[protoIndex].weight) & " kg{/gold}")
+    else: $itemsList[protoIndex].weight) & " kg{/gold}")
   if itemsList[protoIndex].itemType == weaponType:
     itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[protoIndex].value[
         3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[
