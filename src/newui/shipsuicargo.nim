@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -64,7 +64,7 @@ proc sortCargo(sortAsc, sortDesc: CargoSortOrders;
     try:
       localCargo.add(y = LocalCargoData(name: getItemName(item = item,
           damageInfo = false, toLower = false), damage: (item.durability.float /
-          defaultItemDurability.float), itemType: (if itemsList[
+          item.maxDurability.float), itemType: (if itemsList[
           item.protoIndex].showType.len > 0: itemsList[
           item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
           amount: item.amount, weight: item.amount * itemsList[
@@ -254,7 +254,7 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         tooltip = "Show item's description and actions", data = index,
         code = showItemInfo, dialog = dialog)
     addProgressBar(tooltip = "The current durability of the selected item",
-        value = item.durability, maxValue = defaultItemDurability, data = index,
+        value = item.durability, maxValue = item.maxDurability, data = index,
         code = showItemInfo, dialog = dialog)
     addButton(label = ($item.quality).capitalizeAscii,
         tooltip = "The quality of the selected item", data = index,

@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -123,7 +123,7 @@ proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
       let item: InventoryData = playerShip.crew[crewIndex].inventory[data.index]
       localInventory.add(y = LocalItemData(selected: data.checked,
           name: getItemName(item = item, damageInfo = false, toLower = false),
-          damage: item.durability.float / defaultItemDurability.float,
+          damage: item.durability.float / item.maxDurability.float,
           itemType: (if itemsList[item.protoIndex].showType.len > 0: itemsList[
           item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
           amount: item.amount, weight: item.amount * itemsList[
@@ -367,7 +367,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
             code = setItemInfo, dialog = dialog)
         addProgressBar(tooltip = "The current durability level of the selected item.",
             value = member.inventory[data.index].durability,
-            maxValue = defaultItemDurability, data = data.index,
+            maxValue = member.inventory[data.index].maxDurability, data = data.index,
             code = setItemInfo, dialog = dialog)
         var
           checked: bool = false
