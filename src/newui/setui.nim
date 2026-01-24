@@ -1517,6 +1517,11 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       texts.add(y = uiText)
       break
     uiText.text = content[oldIndex..startIndex - 1]
+    uiText.width = try:
+        uiText.text.getTextWidth
+      except:
+        dialog = setError(message = "Can't get the text's width 2")
+        return
     texts.add(y = uiText)
     var endIndex: int = content.find(sub = '}', start = startIndex) - 1
     let tagText: string = content[startIndex + 1..endIndex]
@@ -1594,6 +1599,9 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     row: TextsSeq = @[]
     index: Natural = 0
   while index < texts.high:
+    if texts[index].text.len == 0:
+      index.inc
+      continue
     if texts[index].width <= width:
       row.add(y = texts[index])
       width -= texts[index].width
@@ -1616,6 +1624,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
         except:
           dialog = setError(message = "Can't get new text")
           return
+      texts[index] = newText
     if width == 0:
       helpContent.add(y = row)
       row = @[]
