@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - The new section in in-game help with information about items
 - Missing option to sorting workshops in the crafting screen
 - Ability to set desired item's quality when setting crafting orders
+- Ability to set special feature for an item whe setting crafting orders
 
 ### Changed
 - Reduced chance for different than normal quality items for recruits in bases
