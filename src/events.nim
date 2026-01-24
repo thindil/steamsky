@@ -53,7 +53,7 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
     for index, ship in protoShipsList:
       var reputation: ReputationRange = getReputation(factionIndex = ship.owner)
       if getRandom(min = 1, max = 100) > 98:
-        let newReputation = reputation * 2
+        let newReputation: range[-300..300] = reputation * 2
         if newReputation > ReputationRange.high:
           reputation = ReputationRange.high
         elif newReputation < ReputationRange.low:
