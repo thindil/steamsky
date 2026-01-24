@@ -51,7 +51,7 @@ proc nkMemSet*(pData: pointer; c0: int; size: nk_size) {.raises: [], tags: [],
   var localSize: nk_size = size
   if localSize < 3 * nkWsize:
     while localSize > 0:
-      dst = cast[ptr nk_byte](c0)
+      dst[] = c0.nk_byte
       dst = dst + 1
       localSize.dec
 
@@ -60,6 +60,15 @@ proc nkMemSet*(pData: pointer; c0: int; size: nk_size) {.raises: [], tags: [],
   if (t and nkWmask) != 0:
     t = nkWsize - t
     localSize -= t
+    t.dec
+    while t != 0:
+      dst[] = c0.nk_byte
+      dst = dst + 1
+      t.dec
+
+  # fill word
+  t = (size / nkWsize).nk_size
+  t.dec
 
 proc nkZero*(pData: pointer; size: nk_size) {.raises: [], tags: [],
     contractual.} =
