@@ -1599,6 +1599,16 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     row: TextsSeq = @[]
     index: Natural = 0
   while index < texts.high:
+    var endIndex: ExtendedNatural = texts[index].text.find(sub = '\n')
+    while endIndex > -1:
+      var newText: HelpUIText = try:
+          HelpUIText(text: texts[index].text[endIndex + 1..^1], tag: texts[
+              index].tag, width: texts[index].text[endIndex + 1..^1].getTextWidth)
+        except:
+          dialog = setError(message = "Can't get new text")
+          return
+  index = 0
+  while index < texts.high:
     if texts[index].text.len == 0:
       index.inc
       continue
