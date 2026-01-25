@@ -19,7 +19,7 @@
 ## updating and deleting events, etc.
 
 import std/[strutils, tables]
-import contracts
+import contracts, nimalyzer
 import factions, game, maps, messages, reputation, types, utils
 
 var playerShips: seq[Positive] = @[]
@@ -90,7 +90,9 @@ proc updateEvents*(minutes: Positive) {.raises: [], tags: [],
     return
   var key: Natural = 0
   while key < eventsList.len:
+    {.ruleOff: "varDeclared".}
     let newTime: int = eventsList[key].time - minutes
+    {.ruleOn: "varDeclared".}
     if newTime < 1:
       if eventsList[key].eType in {disease, attackOnBase} and getRandom(min = 1,
           max = 100) < 10:
@@ -143,9 +145,14 @@ proc generateFriendlyShips*(ships: var seq[Positive]) {.raises: [KeyError],
   ##
   ## Returns the updated paramater ships
   for index, ship in protoShipsList:
-    var reputation: int = getReputation(factionIndex = ship.owner)
+    var reputation: range[ReputationRange.low * 2..ReputationRange.high *
+        2] = getReputation(factionIndex = ship.owner)
     if getRandom(min = 1, max = 100) > 98:
       reputation *= 2
+    if reputation > ReputationRange.high:
+      reputation = ReputationRange.high
+    elif reputation < ReputationRange.low:
+      reputation = ReputationRange.low
     if reputation >= ship.reputation and isFriendly(
         sourceFaction = playerShip.crew[0].faction,
         targetFaction = ship.owner) and index notin playerShips:
@@ -159,8 +166,13 @@ proc generateTraders*(ships: var seq[Positive]) {.raises: [], tags: [],
   ##
   ## Returns the updated paramater ships
   for index, ship in protoShipsList:
-    var reputation: int = getReputation(factionIndex = ship.owner)
+    var reputation: range[ReputationRange.low * 2..ReputationRange.high *
+        2] = getReputation(factionIndex = ship.owner)
     if getRandom(min = 1, max = 100) > 98:
       reputation *= 2
+    if reputation > ReputationRange.high:
+      reputation = ReputationRange.high
+    elif reputation < ReputationRange.low:
+      reputation = ReputationRange.low
     if reputation >= ship.reputation and ship.name.contains(sub = tradersName):
       ships.add(y = index)
