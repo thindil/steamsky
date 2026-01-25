@@ -1508,6 +1508,17 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       texts.add(y = uiText)
       oldIndex.inc
     if startIndex == -1:
+      startIndex = content.find(sub = '\n', start = oldIndex)
+      if startIndex > -1:
+        uiText.text = content[oldIndex..startIndex]
+        uiText.width = try:
+            uiText.text.getTextWidth
+          except:
+            dialog = setError(message = "Can't get the text's width")
+            return
+        texts.add(y = uiText)
+        oldIndex = startIndex + 2
+        continue
       uiText.text = content[oldIndex..^1]
       uiText.width = try:
           uiText.text.getTextWidth
@@ -1614,6 +1625,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       width -= texts[index].width
       index.inc
     else:
+      echo texts[index]
       var endIndex: Positive = ((width / texts[index].width) * texts[
           index].text.len.float).Positive
       if endIndex >= texts[index].text.len:
