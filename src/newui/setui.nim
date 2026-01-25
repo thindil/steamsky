@@ -1618,12 +1618,20 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
           index].text.len.float).Positive
       if endIndex >= texts[index].text.len:
         endIndex = texts[index].text.len - 1
-      var newText: HelpUIText = try:
-          HelpUIText(text: texts[index].text[0..endIndex], tag: texts[
-              index].tag, width: texts[index].text[0..endIndex].getTextWidth)
-        except:
-          dialog = setError(message = "Can't split text")
-          return
+      var textWidth: float = try:
+            texts[index].text[0..endIndex].getTextWidth
+          except:
+            dialog = setError(message = "Can't count text width")
+            return
+      while textWidth > width:
+        endIndex.dec
+        textWidth = try:
+            texts[index].text[0..endIndex].getTextWidth
+          except:
+            dialog = setError(message = "Can't count text width 2")
+            return
+      var newText: HelpUIText = HelpUIText(text: texts[index].text[0..endIndex],
+          tag: texts[index].tag, width: textWidth)
       row.add(y = newText)
       width = 0
       endIndex.inc
@@ -1638,7 +1646,6 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       helpContent.add(y = row)
       row = @[]
       width = windowWidth
-  echo helpContent
 
 proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
     tags: [RootEffect], contractual.} =
