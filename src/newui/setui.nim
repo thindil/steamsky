@@ -1599,14 +1599,14 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     row: TextsSeq = @[]
     index: Natural = 0
   while index < texts.high:
-    var endIndex: ExtendedNatural = texts[index].text.find(sub = '\n')
-    while endIndex > -1:
-      var newText: HelpUIText = try:
-          HelpUIText(text: texts[index].text[endIndex + 1..^1], tag: texts[
-              index].tag, width: texts[index].text[endIndex + 1..^1].getTextWidth)
-        except:
-          dialog = setError(message = "Can't get new text")
-          return
+    var splitText: seq[string] = texts[index].text.splitLines(keepEol = true)
+    if splitText.len > 1:
+      try:
+        texts[index] = HelpUIText(text: splitText[0], tag: texts[index].tag,
+            width: splitText[0].getTextWidth)
+      except:
+        dialog = setError(message = "Can't split text")
+        return
   index = 0
   while index < texts.high:
     if texts[index].text.len == 0:
