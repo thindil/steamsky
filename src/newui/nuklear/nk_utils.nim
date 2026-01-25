@@ -69,6 +69,16 @@ proc nkMemSet*(pData: pointer; c0: int; size: nk_size) {.raises: [], tags: [],
   # fill word
   t = (size / nkWsize).nk_size
   t.dec
+  while t != 0:
+    dst[] = c.nk_byte
+    t.dec
+
+  # fill trailing bytes
+  t = size and nkWmask
+  if t != 0:
+    while t != 0:
+      dst[] = c0.nk_byte
+      t.dec
 
 proc nkZero*(pData: pointer; size: nk_size) {.raises: [], tags: [],
     contractual.} =
