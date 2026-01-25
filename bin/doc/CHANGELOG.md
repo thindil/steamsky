@@ -1,20 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [11.8] - 2025-11-30
+## [11.9] - 2026-01-25
 
 ### Added
-- The new section in in-game help with information about items
-- Missing option to sorting workshops in the crafting screen
-- Ability to set desired item's quality when setting crafting orders
 - Ability to set special feature for an item whe setting crafting orders
 
 ### Changed
-- Reduced chance for different than normal quality items for recruits in bases
 - Updated help
 
 ### Fixed
-- Items can be studies or deconstructed without a proper tool
 - Generating enemy ship events after loading a game
 - Default crafted items' quality
 - Saving the current story to a file
@@ -27,6 +22,20 @@ All notable changes to this project will be documented in this file.
 - Crash when giving the last item from the player's ship's cargo to a crew
   member
 - Possible crash when accepting missions in bases
+
+## [11.8] - 2025-11-30
+
+### Added
+- The new section in in-game help with information about items
+- Missing option to sorting workshops in the crafting screen
+- Ability to set desired item's quality when setting crafting orders
+
+### Changed
+- Reduced chance for different than normal quality items for recruits in bases
+- Updated help
+
+### Fixed
+- Items can be studies or deconstructed without a proper tool
 
 ## [11.7] - 2025-11-02
 
