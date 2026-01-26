@@ -1605,6 +1605,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     var splitText: seq[string] = texts[index].text.splitLines(keepEol = true)
     if splitText.len > 1:
       try:
+        splitText[0].stripLineEnd
         texts[index] = HelpUIText(text: splitText[0], tag: texts[index].tag,
             width: splitText[0].getTextWidth)
       except:
@@ -1642,6 +1643,8 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       index.inc
     else:
       echo texts[index]
+      echo width
+      echo ((width / texts[index].width) * texts[index].text.len.float)
       var endIndex: Positive = ((width / texts[index].width) * texts[
           index].text.len.float).Positive
       if endIndex >= texts[index].text.len:
@@ -1653,11 +1656,11 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
             return
       while textWidth > width:
         endIndex.dec
-        textWidth = try:
-            texts[index].text[0..endIndex].getTextWidth
-          except:
-            dialog = setError(message = "Can't count text width 2")
-            return
+        try:
+          textWidth = texts[index].text[0..endIndex].getTextWidth
+        except:
+          dialog = setError(message = "Can't count text width 2")
+          return
       var newText: HelpUIText = HelpUIText(text: texts[index].text[0..endIndex],
           tag: texts[index].tag, width: textWidth)
       row.add(y = newText)
