@@ -26,7 +26,7 @@
 ## Provides code for nuklear page type
 
 import contracts
-import nk_buffer, nk_types, nk_context, nk_pool
+import nk_buffer, nk_types, nk_context, nk_pool, nk_utils
 
 # ---------------------
 # Procedures parameters
@@ -92,3 +92,6 @@ proc nkCreatePageElement*(context: var Context;
       align: nk_size = PageElement.alignof
     result = cast[PageElement](nkBufferAlloc(b = context.memory,
         bufferAlloc = bufferBack, size = size, align = align))
+  nkZero(pData = result.addr, size = PageElement.sizeof)
+  result.next = nil
+  result.prev = nil
