@@ -1640,11 +1640,10 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     if texts[index].width <= width:
       row.add(y = texts[index])
       width -= texts[index].width
+      if width < 10:
+        width = 0
       index.inc
     else:
-      echo texts[index]
-      echo width
-      echo ((width / texts[index].width) * texts[index].text.len.float)
       var endIndex: Positive = ((width / texts[index].width) * texts[
           index].text.len.float).Positive
       if endIndex >= texts[index].text.len:
