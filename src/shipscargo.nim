@@ -19,7 +19,7 @@
 ## it, counting free space or getting items amount.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import config, game, types
 
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
@@ -45,7 +45,7 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
   require:
     cargoIndex < ship.cargo.len
   body:
-    var itemIndex: int = -1
+    var itemIndex: ExtendedNatural = -1
     if protoIndex > 0 and cargoIndex < 0:
       for index, item in ship.cargo:
         if item.protoIndex == protoIndex and item.durability == durability and
@@ -62,7 +62,9 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
           name: "", durability: durability, price: price, quality: quality,
           maxDurability: maxDurability, weight: weight))
       return
+    {.ruleOff: "varDeclared".}
     let newAmount: int = ship.cargo[itemIndex].amount + amount
+    {.ruleOn: "varDeclared".}
     if newAmount < 1:
       {.warning[UnsafeSetLen]: off.}
       ship.cargo.delete(i = itemIndex)
