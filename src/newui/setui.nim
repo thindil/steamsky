@@ -1604,7 +1604,6 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       continue
     var splitText: seq[string] = texts[index].text.splitLines(keepEol = true)
     if splitText.len > 1:
-      echo texts[index]
       try:
         texts[index] = HelpUIText(text: splitText[0], tag: texts[index].tag,
             width: splitText[0].getTextWidth)
@@ -1615,8 +1614,9 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
         if splitText[i] == "\n":
           texts.insert(item = HelpUIText(text: "\n", tag: none, width: 0),
               i = index + i)
-        else:
-          splitText[i].stripLineEnd
+          continue
+        splitText[i].stripLineEnd
+        if splitText[i].len > 0:
           try:
             texts.insert(item = HelpUIText(text: splitText[i], tag: none,
                 width: splitText[i].getTextWidth), i = index + i)
