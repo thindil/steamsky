@@ -62,6 +62,6 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
       var ratio: seq[cfloat] = @[]
       for lbl in row:
         ratio.add(y = lbl.width)
-      setLayoutRowDynamic(height = 25, cols = row.len, ratio = ratio)
+      setLayoutRowStatic(height = 25, cols = row.len, ratio = ratio)
       for lbl in row:
         label(str = lbl.text)
