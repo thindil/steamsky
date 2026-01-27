@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -100,7 +100,7 @@ proc loadBasesTypes*(fileName: Path) {.raises: [DataLoadingError],
       if attribute.len() > 0:
         baseType.color = try:
             attribute.parseColor
-          except:
+          except ValueError:
             raise newException(exceptn = DataLoadingError,
                 message = "Can't add base type '" & baseTypeIndex &
                 "', invalid the type's color: '" & attribute & "'.")
