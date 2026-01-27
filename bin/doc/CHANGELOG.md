@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Updating the list of items for trade after buying or selling when the list
+  was sorted
+
 ## [11.9] - 2026-01-25
 
 ### Added
