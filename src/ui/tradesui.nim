@@ -896,10 +896,9 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't trade item.")
   updateHeader()
   updateMessages()
-  const typeBox: string = ".gameframe.paned.tradeframe.canvas.trade.options.type"
   return showTradeCommand(clientData = clientData, interp = interp, argc = 2,
-      argv = @["ShowTrade", tclEval2(script = typeBox &
-      " get")].allocCStringArray)
+      argv = @["ShowTrade", tclEval2(
+      script = ".gameframe.paned.tradeframe.canvas.trade.options.type get")].allocCStringArray)
 
 proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
