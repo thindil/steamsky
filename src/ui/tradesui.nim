@@ -896,6 +896,7 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't trade item.")
   updateHeader()
   updateMessages()
+  itemsSortOrder = defaultItemsSortOrder
   return showTradeCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowTrade", tclEval2(
       script = ".gameframe.paned.tradeframe.canvas.trade.options.type get")].allocCStringArray)
