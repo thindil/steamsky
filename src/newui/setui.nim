@@ -1595,7 +1595,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     oldIndex = endIndex + 2
   helpContent = @[]
   var
-    width: float = windowWidth
+    width: float = windowWidth - 30
     row: TextsSeq = @[]
     index: Natural = 0
   while index < texts.high:
@@ -1634,7 +1634,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       row.add(y = HelpUIText())
       helpContent.add(y = row)
       row = @[]
-      width = windowWidth
+      width = windowWidth - 30
       index.inc
       continue
     if texts[index].width <= width:
@@ -1675,7 +1675,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     if width == 0:
       helpContent.add(y = row)
       row = @[]
-      width = windowWidth
+      width = windowWidth - 30
 
 proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
     tags: [RootEffect], contractual.} =
