@@ -59,6 +59,9 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
       gameSettings.topicsPosition.float - 20, cols = 1)
   group(title = "ContentGroup", flags = {windowNoFlags}):
     for row in helpContent:
-      setLayoutRowDynamic(height = 25, cols = row.len)
+      var ratio: seq[cfloat] = @[]
+      for lbl in row:
+        ratio.add(y = lbl.width)
+      setLayoutRowDynamic(height = 25, cols = row.len, ratio = ratio)
       for lbl in row:
         label(str = lbl.text)
