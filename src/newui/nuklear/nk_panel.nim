@@ -26,18 +26,12 @@
 ## Provides code related to the panel widget in nuklear library
 
 import contracts
-import nk_alignment, nk_context, nk_page, nk_types
+import nk_alignment, nk_context, nk_page, nk_types, nk_utils
 
 # ---------------------
 # Procedures parameters
 # ---------------------
 using ctx: PContext
-
-# ------------------
-# Low level bindings
-# ------------------
-proc nk_create_panel*(ctx): pointer {.importc, cdecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
 
 # -------------------
 # High level bindings
@@ -129,6 +123,18 @@ proc nkFreePanel*(ctx; pan: PNkPanel) {.raises: [], tags: [], contractual.} =
   ## * pan - the panel which memory will be freed
   let
     pd: ptr nk_page_data = nkContainerOf(`ptr` = pan, `type` = nk_page_data, member = "")
-    pe: ptr nk_page_element = nkContainerOf(`ptr` = pd, `type` = nk_page_element, member = "data")
+    pe: ptr nk_page_element = nkContainerOf(`ptr` = pd,
+        `type` = nk_page_element, member = "data")
   nkFreePageElement(ctx = ctx, elem = pe)
 
+proc nkCreatePanel*(context: var Context): Panel {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Create a new panel in the selected context
+  ##
+  ## * context - the Nuklear context in which the panel will be created
+  ##
+  ## Returns newly created panel
+  let elem: PageElement = nkCreatePageElement(context = context,
+      pageType = panelType)
+  nkZero(pData = elem.addr, size = PageElement.sizeof)
+  result = Panel()

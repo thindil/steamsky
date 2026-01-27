@@ -1518,7 +1518,7 @@ proc nkPopupBegin(context: var Context; pType: PopupType; title: string; flags: 
     popup.parent = win
     popup.bounds = Rect(x: localX, y: localY, w: w, h: h)
     popup.seq = ctx.seq
-#    popup.layout = cast[PNkPanel](nk_create_panel(ctx = ctx))
+    popup.layout = nkCreatePanel(context = context)
     popup.flags = winSetToInt(nimFlags = flags)
     {.ruleOff: "assignments".}
     popup.flags = popup.flags or windowBorder.cint
