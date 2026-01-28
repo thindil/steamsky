@@ -64,8 +64,9 @@ proc nkPanelLayout(ctx: Context; win: Window; height: float;
   ## * ctx    - the Nuklear context
   ## * height - the height in pixels of each row
   ## * cols   - the amount of columns in each row
-  var layout: Panel = win.layout
-  let style: Style = ctx.style
+  let
+    layout: ref Panel = win.layout
+    style: Style = ctx.style
 
   if not (layout.flags and windowMinimized.int).bool:
     raise newException(exceptn = NuklearException,

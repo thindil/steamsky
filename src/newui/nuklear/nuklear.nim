@@ -40,7 +40,9 @@ type PImage* = pointer ## A pointer to the image type
 # ---------------------
 # Procedures parameters
 # ---------------------
-using ctx: PContext
+using
+  ctx: PContext
+  context: Context
 
 # -------
 # General
@@ -1182,7 +1184,7 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer; bounds: var
 # Panel
 # -----
 proc panelHeader(win: ref Window; title: string; style: Style; font: UserFont;
-  layout: var Panel; `out`: var CommandBuffer, `in`: Input): bool {.raises: [],
+  layout: ref Panel; `out`: var CommandBuffer, `in`: Input): bool {.raises: [],
   tags: [RootEffect], contractual.} =
   ## Start drawing a Nuklear panel's header if needed. Internal use only
   ##
@@ -1335,7 +1337,7 @@ proc nkPanelBegin(context: Context; title: string; panelType: PanelType): bool {
       font: UserFont = style.font
     var
       win: ref Window = context.current
-      layout: Panel = win.layout
+      layout: ref Panel = win.layout
     var  `out`: CommandBuffer = win.buffer
     var `in`: Input = (if (win.flags and windowNoInput.cint) ==
           1: Input() else: context.input)
@@ -1451,19 +1453,16 @@ proc nkPanelBegin(context: Context; title: string; panelType: PanelType): bool {
 # ------
 # Popups
 # ------
-proc nkStartPopup(ctx; win: var PNkWindow) {.raises: [], tags: [],
+proc nkStartPopup(context; win: ref Window) {.raises: [], tags: [],
     contractual.} =
   ## Start setting a popup window. Internal use only
   ##
-  ## * ctx - the Nuklear context
-  ## * win - the window of a popup
-  require:
-    ctx != nil
-    win != nil
+  ## * context - the Nuklear context
+  ## * win     - the window of a popup
   body:
-    var buf: nk_popup_buffer = win.popup.buf
-    buf.begin = win.buffer.`end`
-    buf.end = win.buffer.end
+    var buf: PopupBuffer = win.popup.buf
+    buf.begin = win.buffer.cmdEnd
+    buf.buffEnd = win.buffer.cmdEnd
     buf.parent = win.buffer.last
     buf.last = buf.begin
     buf.active = nkTrue
@@ -1486,7 +1485,7 @@ proc nkPopupBegin(context: var Context; pType: PopupType; title: string; flags: 
     title.len > 0
   body:
     var win: ref Window = context.current
-    let panel: Panel = win.layout
+    let panel: ref Panel = win.layout
     if panel.pType.cint != panelSetPopup.cint:
       raise newException(exceptn = NuklearException,
           message = "Popups are not allowed to have popups.")
@@ -1518,7 +1517,7 @@ proc nkPopupBegin(context: var Context; pType: PopupType; title: string; flags: 
     popup.parent = win
     popup.bounds = Rect(x: localX, y: localY, w: w, h: h)
     popup.seq = ctx.seq
-    popup.layout = nkCreatePanel(context = context)
+#    popup.layout = nkCreatePanel(context = context)
     popup.flags = winSetToInt(nimFlags = flags)
     {.ruleOff: "assignments".}
     popup.flags = popup.flags or windowBorder.cint
@@ -1527,17 +1526,17 @@ proc nkPopupBegin(context: var Context; pType: PopupType; title: string; flags: 
     {.ruleOn: "assignments".}
 
     popup.buffer = win.buffer
-#    nkStartPopup(ctx = ctx, win = win)
+    nkStartPopup(context = context, win = win)
     var allocated: nk_size = ctx.memory.allocated
     nkPushScissor(b = popup.buffer, r = nkNullRect)
 
     # popup is running therefore invalidate parent panels
     if nkPanelBegin(context = context, title = title, panelType = panelPopup):
-#      var root: PNkPanel = win.layout
-#      while root != nil:
-#        root.flags = root.flags or windowRom.cint
-#        root.flags = root.flags and not windowRemoveRom.cint
-#        root = root.parent
+      var root: ref Panel = win.layout
+      while root != nil:
+        root.flags = root.flags or windowRom.cint
+        root.flags = root.flags and not windowRemoveRom.cint
+        root = root.parent
       win.popup.active = nkTrue
       popup.layout.offset_x = popup.scrollbar.x
       popup.layout.offset_y = popup.scrollbar.y

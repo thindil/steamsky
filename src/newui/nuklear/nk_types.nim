@@ -1292,7 +1292,7 @@ type
     next*, prev*: ref NkTable
   Window* = object
     ## Used to store Nuklear window data
-    layout*: Panel
+    layout*: ref Panel
     popup*: ref PopupState
     parent*, next*, prev*: ref Window
     bounds*: Rect

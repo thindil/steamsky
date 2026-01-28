@@ -137,4 +137,4 @@ proc nkCreatePanel*(context: var Context): Panel {.raises: [], tags: [
   let elem: PageElement = nkCreatePageElement(context = context,
       pageType = panelType)
   nkZero(pData = elem.addr, size = PageElement.sizeof)
-  result = Panel()
+  result = elem.data.pan
