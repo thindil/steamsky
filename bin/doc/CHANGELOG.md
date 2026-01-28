@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Updating the list of items for trade after buying or selling when the list
   was sorted
+- Perhaps fixed running the game on Linux
 
 ## [11.9] - 2026-01-25
 
