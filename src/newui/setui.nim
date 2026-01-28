@@ -1599,7 +1599,10 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     row: TextsSeq = @[]
     index: Natural = 0
   while index < texts.high:
-    if texts[index].text.len == 0 or texts[index].text == "\n":
+    if texts[index].text.len == 0:
+      texts.delete(i = index)
+      continue
+    if texts[index].text == "\n":
       index.inc
       continue
     var splitText: seq[string] = texts[index].text.splitLines(keepEol = true)
@@ -1627,10 +1630,10 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     index.inc
   index = 0
   while index < texts.high:
-    if texts[index].text.len == 0:
-      index.inc
-      continue
     if texts[index].text == "\n":
+      if row.len > 0:
+        helpContent.add(y = row)
+        row = @[]
       row.add(y = HelpUIText())
       helpContent.add(y = row)
       row = @[]
@@ -1676,6 +1679,8 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       helpContent.add(y = row)
       row = @[]
       width = windowWidth - 30
+  for row in helpContent:
+    echo "ROW:", row
 
 proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
     tags: [RootEffect], contractual.} =
