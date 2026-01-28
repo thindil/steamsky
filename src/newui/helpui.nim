@@ -64,4 +64,10 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
         ratio.add(y = lbl.width)
       setLayoutRowStatic(height = 25, cols = row.len, ratio = ratio)
       for lbl in row:
-        label(str = lbl.text)
+        case lbl.tag
+        of none:
+          label(str = lbl.text)
+        of bold:
+          colorLabel(str = lbl.text, color = theme.colors[blueColor])
+        else:
+          label(str = lbl.text)
