@@ -40,6 +40,9 @@ type
     mapVisitedColor, mapUnvisitedColor, mapDefaultColor, mapGreenColor,
       mapYellowColor, mapRedColor, mapLimeColor, mapCyanColor, mapRed2Color,
       mapRed3Color, mapGreen2Color, mapGoldenYellow, mapPinkColor
+  HelpColorsNames* = enum
+    ## Names of colors used in the game's map
+    specialHelpColor, underlineHelpColor, boldHelpColor, italicHelpColor
   FontsNames* = enum
     ## Names of fonts used in the game's themes
     UIFont, mapFont
@@ -77,6 +80,7 @@ type
     fonts*: array[FontsNames, string]
     mapIcons*: array[MapIconsNames, string]
     mapColors*: array[MapColorsNames, Color]
+    helpColors*: array[HelpColorsNames, Color]
 
 let
   defaultThemePath: string = dataDirectory.string & "ui" & DirSep
@@ -163,7 +167,8 @@ let
           "#4e9a06".parseColor, "#d79921".parseColor, "#fb4934".parseColor,
           "#00ff00".parseColor, "#00ffff".parseColor, "#a40000".parseColor,
           "#732727".parseColor, "#73d216".parseColor, "#ffdf00".parseColor,
-          "#b16286".parseColor])
+          "#b16286".parseColor],
+      helpColors: [colYellow, "#5f9ea0".parseColor, "#ff7f50".parseColor, colLime])
     ## The default game's theme
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
@@ -213,6 +218,15 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                     let index: MapColorsNames = parseEnum[MapColorsNames](
                         s = entry.value)
                     localTheme.mapColors[index] = entry.value.parseColor
+                    validName = true
+                  except:
+                    discard
+                # Check if the option is a help color
+                if not validName:
+                  try:
+                    let index: HelpColorsNames = parseEnum[HelpColorsNames](
+                        s = entry.value)
+                    localTheme.helpColors[index] = entry.value.parseColor
                     validName = true
                   except:
                     discard
