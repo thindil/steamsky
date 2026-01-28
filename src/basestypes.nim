@@ -45,7 +45,7 @@ type
     flags*: seq[string]
     description*: string
 
-var basesTypesList*: Table[string, BaseTypeData] = initTable[string,
+var basesTypesList*: Table[BaseType, BaseTypeData] = initTable[BaseType,
     BaseTypeData]()
   ## The list of all available bases types in the game
 
