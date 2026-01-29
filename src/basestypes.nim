@@ -27,6 +27,9 @@ type
     ## Used to set base buy and sell price for an item in the base type.
     ## 1 - sell price, 2 - buy price
 
+  BaseTypeName = string ## Used to store bases types names
+  BaseTypeDesc = string ## Used to store bases types description
+
   BaseTypeData* = object
     ## Used to store information about bases types
     ##
@@ -38,12 +41,12 @@ type
     ## * flags       - additional flags for the base type like shipyard, barracs,
     ##                 etc.
     ## * description - the description of the base type, show in the new game screen
-    name*: string
+    name*: BaseTypeName
     color*: Color
     trades: Table[Positive, PricesArray]
     recipes*: seq[string]
     flags*: seq[string]
-    description*: string
+    description*: BaseTypeDesc
 
 var basesTypesList*: Table[BaseType, BaseTypeData] = initTable[BaseType,
     BaseTypeData]()
