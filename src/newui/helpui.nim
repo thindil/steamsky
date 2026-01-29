@@ -56,7 +56,7 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
   imageButtonCentered(image = images[expand2Icon]):
     gameSettings.topicsPosition += gameSettings.interfaceFontSize + 10
   setLayoutRowDynamic(height = windowHeight -
-      gameSettings.topicsPosition.float - 20, cols = 1)
+      gameSettings.topicsPosition.float - 75, cols = 1)
   group(title = "ContentGroup", flags = {windowNoFlags}):
     for row in helpContent:
       var ratio: seq[cfloat] = @[]
