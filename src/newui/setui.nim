@@ -1608,9 +1608,14 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     var splitText: seq[string] = texts[index].text.splitLines(keepEol = true)
     if splitText.len > 1:
       try:
+        let addNewLine: bool = texts[index].text.endsWith(suffix = "\n")
         splitText[0].stripLineEnd
         texts[index] = HelpUIText(text: splitText[0], tag: texts[index].tag,
             width: splitText[0].getTextWidth)
+        if addNewLine:
+          index.inc
+          texts.insert(item = HelpUIText(text: "\n", tag: none, width: 0),
+              i = index)
       except:
         dialog = setError(message = "Can't split text")
         return
@@ -1679,8 +1684,6 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       helpContent.add(y = row)
       row = @[]
       width = windowWidth - 30
-  for row in helpContent:
-    echo "ROW:", row
 
 proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
     tags: [RootEffect], contractual.} =
