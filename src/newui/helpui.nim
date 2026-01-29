@@ -68,6 +68,6 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
         of none:
           label(str = lbl.text)
         of bold:
-          colorLabel(str = lbl.text, color = theme.colors[blueColor])
+          colorLabel(str = lbl.text, color = theme.helpColors[boldHelpColor])
         else:
           label(str = lbl.text)
