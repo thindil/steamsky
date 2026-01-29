@@ -1502,7 +1502,7 @@ type
     of tableType:
       tbl*: NkTable
     of panelType:
-      pan*: Panel
+      pan*: ref Panel
     of windowType:
       win*: Window
   PageElement* = object

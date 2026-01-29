@@ -31,44 +31,46 @@ import nk_buffer, nk_types, nk_context, nk_pool, nk_utils
 # ---------------------
 # Procedures parameters
 # ---------------------
-using ctx: PContext
+using
+  ctx: PContext
+  context: ref Context
 
 # -------------------
 # High level bindings
 # -------------------
-proc nkLinkPageElementIntoFreelist*(ctx; elem: ptr nk_page_element)
+proc nkLinkPageElementIntoFreelist*(context; elem: ref PageElement)
   {.raises: [], tags: [], contractual.} =
   ## Link the element into list of items to free
   ##
-  ## * ctx  - the Nuklear context
-  ## * elem - the page element which will be freed
+  ## * context - the Nuklear context
+  ## * elem    - the page element which will be freed
   # link table into freelist
-  if ctx.freelist == nil:
-    ctx.freelist = elem
+  if context.freeList == nil:
+    context.freeList = elem
   else:
-    elem.next = ctx.freelist
-    ctx.freelist = elem
+    elem.next = context.freeList
+    context.freeList = elem
 
-proc nkFreePageElement*(ctx; elem: ptr nk_page_element) {.raises: [], tags: [],
+proc nkFreePageElement*(context; elem: ref PageElement) {.raises: [], tags: [],
   contractual.} =
   ## Free memory used by the selected page element
   ##
-  ## * ctx  - the Nuklear context
-  ## * elem - the page element which will be removed
+  ## * context - the Nuklear context
+  ## * elem    - the page element which will be removed
   # we have a pool so just add to free list
-  if ctx.use_pool:
-    nkLinkPageElementIntoFreelist(ctx = ctx, elem = elem)
+  if context.usePool:
+    nkLinkPageElementIntoFreelist(context = context, elem = elem)
     return
   # if possible remove last element from back of fixed memory buffer
   let
-    elemEnd: pointer = elem + 1
+    elemEnd: pointer = elem.addr + 1
     bufferEnd: pointer = ctx.memory.memory.`ptr` + ctx.memory.size
   if elemEnd == bufferEnd:
-    ctx.memory.size -= elem.sizeOf
+    context.memory.size -= elem.sizeOf
   else:
-    nkLinkPageElementIntoFreelist(ctx = ctx, elem = elem)
+    nkLinkPageElementIntoFreelist(context = context, elem = elem)
 
-proc nkCreatePageElement*(context: var Context;
+proc nkCreatePageElement*(context;
     pageType: PageDataType): PageElement {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Create a new page element
