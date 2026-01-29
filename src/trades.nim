@@ -170,7 +170,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
     updateCargo(ship = playerShip, cargoIndex = itemIndex, amount = -sellAmount,
         price = playerItem.price, quality = playerItem.quality,
         maxDurability = playerItem.maxDurability, weight = playerItem.weight)
-    updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = profit, quality = normal)
+    updateMoney(memberIndex = -1, amount = profit, quality = normal)
     if baseIndex > 0:
       updateBaseCargo(protoIndex = moneyIndex, amount = -profit, quality = normal)
       gainRep(baseIndex = baseIndex, points = 1)
