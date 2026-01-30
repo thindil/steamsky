@@ -1325,11 +1325,11 @@ proc nkPanelBegin(context; title: string; panelType: PanelType): bool {.raises: 
   ##
   ## Returns true if the panel was drawn, otherwise false
   body:
-    zeroMem(p = ctx.current.layout, size = ctx.current.layout.sizeof)
-    if (ctx.current.flags and windowHidden.cint) == 1 or (
-        ctx.current.flags and windowClosed.cint) == 1:
-      zeroMem(p = ctx.current.layout, size = nk_types.nk_panel.sizeof)
-      ctx.current.layout.`type` = panelType
+    zeroMem(p = context.current.layout.addr, size = Panel.sizeof)
+    if (context.current.flags and windowHidden.cint) == 1 or (
+        context.current.flags and windowClosed.cint) == 1:
+      zeroMem(p = context.current.layout.addr, size = Panel.sizeof)
+      context.current.layout.pType = panelType
       return false;
     # pull state into local stack
     let
@@ -1342,7 +1342,7 @@ proc nkPanelBegin(context; title: string; panelType: PanelType): bool {.raises: 
     var `in`: Input = (if (win.flags and windowNoInput.cint) ==
           1: Input() else: context.input)
     when defined(nkIncludeCommandUserdata):
-      win.buffer.userdata = ctx.userdata
+      win.buffer.userdata = context.userdata
     # pull style configuration into local stack
     let
       scrollbarSize: Vec2 = style.window.scrollbar_size
