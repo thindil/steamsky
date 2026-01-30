@@ -1645,7 +1645,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       continue
     if texts[index].width <= width:
       row.add(y = texts[index])
-      width -= texts[index].width
+      width -= (texts[index].width + 3)
       index.inc
       if width < 10 or index == texts.len:
         width = 0
@@ -1659,7 +1659,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
           except:
             dialog = setError(message = "Can't count text width")
             return
-      while textWidth > width:
+      while textWidth > width and endIndex > 1:
         endIndex.dec
         try:
           textWidth = texts[index].text[0..endIndex].getTextWidth
