@@ -115,7 +115,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
       price *= 2
     let sellAmount: Positive = amount.parseInt
     var profit: Natural = price * sellAmount
-    if playerShip.cargo[itemIndex].durability < 100:
+    if playerShip.cargo[itemIndex].durability < playerShip.cargo[itemIndex].maxDurability:
       profit = (profit.float * (playerItem.durability.float / 100.0)).int
     countPrice(price = price, traderIndex = traderIndex, reduce = false)
     for index, member in playerShip.crew:
