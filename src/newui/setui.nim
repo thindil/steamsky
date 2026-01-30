@@ -1636,10 +1636,8 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
   index = 0
   while index < texts.len:
     if texts[index].text == "\n":
-      if row.len > 0:
-        helpContent.add(y = row)
-        row = @[]
-      row.add(y = HelpUIText())
+      if row.len == 0:
+        row.add(y = HelpUIText())
       helpContent.add(y = row)
       row = @[]
       width = windowWidth - 30
