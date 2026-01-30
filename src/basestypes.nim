@@ -41,12 +41,21 @@ type
     ## * flags       - additional flags for the base type like shipyard, barracs,
     ##                 etc.
     ## * description - the description of the base type, show in the new game screen
-    name*: BaseTypeName
+    name: BaseTypeName
     color*: Color
     trades: Table[Positive, PricesArray]
     recipes*: seq[string]
     flags*: seq[string]
     description*: BaseTypeDesc
+
+proc name*(baseType: BaseTypeData): BaseTypeName {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of BaseTypeData type
+  ##
+  ## * baseType - the BaseTypeData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  baseType.name
 
 var basesTypesList*: Table[BaseType, BaseTypeData] = initTable[BaseType,
     BaseTypeData]()
