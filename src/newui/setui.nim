@@ -1608,7 +1608,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     var splitText: seq[string] = texts[index].text.splitLines(keepEol = true)
     if splitText.len > 1:
       try:
-        let addNewLine: bool = texts[index].text.endsWith(suffix = "\n")
+        let addNewLine: bool = splitText[0].endsWith(suffix = "\n")
         splitText[0].stripLineEnd
         texts[index] = HelpUIText(text: splitText[0], tag: texts[index].tag,
             width: splitText[0].getTextWidth)
