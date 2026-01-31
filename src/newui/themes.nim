@@ -45,7 +45,7 @@ type
     specialHelpColor, underlineHelpColor, boldHelpColor, italicHelpColor
   FontsNames* = enum
     ## Names of fonts used in the game's themes
-    UIFont, mapFont
+    UIFont, mapFont, helpFont, helpItalicFont, helpBoldFont
   IconsNames* = enum
     ## Names of icons used in the game
     logoImage, randomIcon, maleIcon, femaleIcon, menuIcon, fuelIcon, noFuelIcon,
@@ -159,7 +159,10 @@ let
       "#120d0d".parseColor, "#ffdf00".parseColor, "#500000".parseColor,
       "#4e9a06".parseColor, "#00ff00".parseColor],
       fonts: [defaultThemeFontPath & "Amarante-Regular.ttf",
-      defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"],
+      defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf",
+      defaultThemeFontPath & "Roboto-Regular.ttf",
+      defaultThemeFontPath & "Roboto-Italic.ttf",
+      defaultThemeFontPath & "Roboto-Bold.ttf"],
       mapIcons: ["\uf135", " ", "\uf05b", "\uf059", "\uf53b", "\ufc6a",
           "\uf540", "\uf707", "\uf183", "\uf51c", "\uf543", "\uf51b", "\uf5a6",
           "\uf057", "\uf0d6", "\uf197", "\uf197", "\u229b"],
