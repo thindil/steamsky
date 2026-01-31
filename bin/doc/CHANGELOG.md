@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Perhaps fixed running the game on Linux
 - Selling items in bases
 - Counting price of damaged items when selling them
+- Couting profit from selling items
 
 ## [11.9] - 2026-01-25
 
