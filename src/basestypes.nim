@@ -42,11 +42,11 @@ type
     ##                 etc.
     ## * description - the description of the base type, show in the new game screen
     name: BaseTypeName
-    color*: Color
+    color: Color
     trades: Table[Positive, PricesArray]
-    recipes*: seq[string]
-    flags*: seq[string]
-    description*: BaseTypeDesc
+    recipes: seq[string]
+    flags: seq[string]
+    description: BaseTypeDesc
 
 proc name*(baseType: BaseTypeData): BaseTypeName {.raises: [], tags: [],
     contractual.} =
@@ -56,6 +56,42 @@ proc name*(baseType: BaseTypeData): BaseTypeName {.raises: [], tags: [],
   ##
   ## Returns the value of the selected field
   baseType.name
+
+proc color*(baseType: BaseTypeData): Color {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of BaseTypeData type
+  ##
+  ## * baseType - the BaseTypeData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  baseType.color
+
+proc recipes*(baseType: BaseTypeData): seq[string] {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of BaseTypeData type
+  ##
+  ## * baseType - the BaseTypeData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  baseType.recipes
+
+proc flags*(baseType: BaseTypeData): seq[string] {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of BaseTypeData type
+  ##
+  ## * baseType - the BaseTypeData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  baseType.recipes
+
+proc description*(baseType: BaseTypeData): BaseTypeDesc {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of BaseTypeData type
+  ##
+  ## * baseType - the BaseTypeData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  baseType.description
 
 var basesTypesList*: Table[BaseType, BaseTypeData] = initTable[BaseType,
     BaseTypeData]()
