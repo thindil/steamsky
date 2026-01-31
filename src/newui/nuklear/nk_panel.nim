@@ -127,7 +127,7 @@ proc nkFreePanel*(context; pan: ref Panel) {.raises: [], tags: [], contractual.}
     pd: ptr PageData = nkContainerOf(`ptr` = pan.addr, `type` = PageData, member = "")
     pe: ptr PageElement = nkContainerOf(`ptr` = pd,
         `type` = PageElement, member = "data")
-#  nkFreePageElement(context = context, elem = pe)
+  nkFreePageElement(context = context, elem = pe)
 
 proc nkCreatePanel*(context): ref Panel {.raises: [], tags: [
     RootEffect], contractual.} =

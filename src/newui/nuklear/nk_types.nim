@@ -1508,7 +1508,7 @@ type
   PageElement* = object
     ## Used to store memory page's elements
     data*: PageData
-    next*, prev*: ref PageElement
+    next*, prev*: ptr PageElement
   Str* = object
     ## Used to store string, replace it later with normal string
     buffer*: Buffer
@@ -1654,7 +1654,7 @@ type
     seq*, count*: uint
     memory*: Buffer
     usePool*: bool
-    freeList*: ref PageElement
+    freeList*: ptr PageElement
     clip*: Clipboard
     lastWidgetState*: nk_flags
     buttonBehavior*: ButtonBehavior

@@ -38,7 +38,7 @@ using
 # -------------------
 # High level bindings
 # -------------------
-proc nkLinkPageElementIntoFreelist*(context; elem: ref PageElement)
+proc nkLinkPageElementIntoFreelist*(context; elem: ptr PageElement)
   {.raises: [], tags: [], contractual.} =
   ## Link the element into list of items to free
   ##
@@ -51,7 +51,7 @@ proc nkLinkPageElementIntoFreelist*(context; elem: ref PageElement)
     elem.next = context.freeList
     context.freeList = elem
 
-proc nkFreePageElement*(context; elem: ref PageElement) {.raises: [], tags: [],
+proc nkFreePageElement*(context; elem: ptr PageElement) {.raises: [], tags: [],
   contractual.} =
   ## Free memory used by the selected page element
   ##
