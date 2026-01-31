@@ -71,5 +71,7 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
           colorLabel(str = lbl.text, color = theme.helpColors[underlineHelpColor])
         of bold:
           colorLabel(str = lbl.text, color = theme.helpColors[boldHelpColor])
+        of italic:
+          colorLabel(str = lbl.text, color = theme.helpColors[italicHelpColor])
         else:
           label(str = lbl.text)
