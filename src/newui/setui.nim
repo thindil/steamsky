@@ -1536,7 +1536,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
         texts.add(y = uiText)
         break
     for index, accel in accelNames:
-      if tagText == "GameKey" & $index:
+      if tagText == "GameKey " & $index:
         uiText = try:
             HelpUIText(text: accel, tag: special, width: accel.getTextWidth)
           except:
@@ -1619,16 +1619,24 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't split text")
         return
+      var newIndex: Positive = index + 1
       for i in 1..splitText.high:
         if splitText[i] == "\n":
           texts.insert(item = HelpUIText(text: "\n", tag: none, width: 0),
-              i = index + i)
+              i = newIndex)
+          newIndex.inc
           continue
+        let addNewLine: bool = splitText[i].endsWith(suffix = "\n")
         splitText[i].stripLineEnd
         if splitText[i].len > 0:
           try:
             texts.insert(item = HelpUIText(text: splitText[i], tag: none,
-                width: splitText[i].getTextWidth), i = index + i)
+                width: splitText[i].getTextWidth), i = newIndex)
+            newIndex.inc
+            if addNewLine:
+              texts.insert(item = HelpUIText(text: "\n", tag: none, width: 0),
+                  i = newIndex)
+              newIndex.inc
           except:
             dialog = setError(message = "Can't insert text")
             return
