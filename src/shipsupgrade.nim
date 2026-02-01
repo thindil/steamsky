@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -166,9 +166,10 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
     findMatsAndTools()
     var upgradeProgress: int = upgradedModule.upgradeProgress - resultAmount
     upgradePoints -= resultAmount
-    updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-        upgradeMaterial].protoIndex, amount = -(materialCost),
-            quality = playerShip.cargo[upgradeMaterial].quality)
+    let material: InventoryData = playerShip.cargo[upgradeMaterial]
+    updateCargo(ship = playerShip, protoIndex = material.protoIndex, amount = -(
+        materialCost), quality = material.quality,
+        maxDurability = material.maxDurability, weight = material.weight)
     if upgradeProgress == 0:
       var weightGain: int = (modulesList[upgradedModule.protoIndex].weight /
           modulesList[upgradedModule.protoIndex].durability).int
