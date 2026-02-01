@@ -93,6 +93,26 @@ proc description*(baseType: BaseTypeData): BaseTypeDesc {.raises: [], tags: [],
   ## Returns the value of the selected field
   baseType.description
 
+proc initBaseTypeData(name: BaseTypeName = ""; color: Color = colWhite;
+    trades: Table[Positive, PricesArray] = initTable[Positive, PricesArray]();
+    recipes: seq[string] = @[]; flags: seq[string] = @[];
+    description: BaseTypeDesc = ""): BaseTypeData {.raises: [],
+    tags: [], contractual.} =
+  ## Create a new data structure for the bases' type data
+  ##
+  ## * name        - the name of the base type
+  ## * color       - the color used to show a base of that type on the map
+  ## * trades      - the list of items available to trade in the base type
+  ## * recipes     - the list of crafting recipes available on sale in the
+  ##                 base type
+  ## * flags       - additional flags for the base type like shipyard, barracs,
+  ##                 etc.
+  ## * description - the description of the base type, show in the new game screen
+  ##
+  ## Returns the new structure with information about the selected career
+  return BaseTypeData(name: name, color: color, trades: trades,
+      recipes: recipes, flags: flags, description: description)
+
 var basesTypesList*: Table[BaseType, BaseTypeData] = initTable[BaseType,
     BaseTypeData]()
   ## The list of all available bases types in the game
@@ -138,9 +158,9 @@ proc loadBasesTypes*(fileName: Path) {.raises: [DataLoadingError],
           try:
             basesTypesList[baseTypeIndex]
           except KeyError:
-            BaseTypeData()
+            initBaseTypeData()
         else:
-          BaseTypeData()
+          initBaseTypeData()
       var attribute: string = baseTypeNode.attr(name = "name")
       if attribute.len() > 0:
         baseType.name = attribute
