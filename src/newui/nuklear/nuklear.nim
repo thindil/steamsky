@@ -1553,7 +1553,7 @@ proc nkPopupBegin(context; pType: PopupType; title: string; flags: set[PanelFlag
     context.memory.allocated = allocated
     context.current = win
     nkFreePanel(context = context, pan = popup.layout)
-#    popup.layout = nil
+    popup.layout = nil
     return false
 
 proc createPopup(pType2: PopupType; title2: cstring;
@@ -1569,14 +1569,16 @@ proc createPopup(pType2: PopupType; title2: cstring;
   return nk_popup_begin(ctx = ctx, pType = pType2, title = title2,
       flags = flags2, rect = new_nk_rect(x = x2, y = y2, w = w2, h = h2))
 
-#proc createPopup(pType2: PopupType; title2: string; flags2: set[PanelFlags];
-#  x2, y2, w2, h2: float): bool {.raises: [NuklearException],
-#  tags: [RootEffect], contractual.} =
-#  ## Create a new Nuklear popup window, internal use only, temporary code
-#  ##
-#  ## Returns true if the popup was successfully created, otherwise false.
-#  return nkPopupBegin(ctx = ctx, pType = pType2, title = title2,
-#    flags = flags2, x = x2, y = y2, w = w2, h = h2)
+proc createPopup(pType2: PopupType; title2: string; flags2: set[PanelFlags];
+  x2, y2, w2, h2: float): bool {.raises: [NuklearException],
+  tags: [RootEffect], contractual.} =
+  ## Create a new Nuklear popup window, internal use only, temporary code
+  ##
+  ## Returns true if the popup was successfully created, otherwise false.
+  var con: ref Context
+  con[] = context
+  return nkPopupBegin(context = con, pType = pType2, title = title2,
+    flags = flags2, x = x2, y = y2, w = w2, h = h2)
 
 proc createNonBlocking(flags2: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises: [], tags: [], contractual, discardable.} =
   ## Create a new Nuklear non-blocking popup window, internal use only,
