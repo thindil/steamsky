@@ -35,7 +35,7 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   setLayoutRowDynamic(height = gameSettings.topicsPosition.float, cols = 1)
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpFont],
-      fontSize = gameSettings.interfaceFontSize + 10)
+      fontSize = gameSettings.helpFontSize + 10)
   group(title = "TopicsGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = 25, cols = 1)
     var index: Natural = 0
@@ -72,22 +72,22 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
         of underline:
           colorLabel(str = lbl.text, color = theme.helpColors[underlineHelpColor])
         of bold:
-          nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpBoldFont],
-              fontSize = gameSettings.interfaceFontSize + 10)
+          nuklearSetDefaultFont(defaultFont = fonts[helpBoldFont],
+              fontSize = gameSettings.helpFontSize + 10)
           colorLabel(str = lbl.text, color = theme.helpColors[boldHelpColor])
           nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpFont],
-              fontSize = gameSettings.interfaceFontSize + 10)
+              fontSize = gameSettings.helpFontSize + 10)
         of italic:
-          nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpItalicFont],
+          nuklearSetDefaultFont(defaultFont = fonts[helpItalicFont],
               fontSize = gameSettings.interfaceFontSize + 10)
           colorLabel(str = lbl.text, color = theme.helpColors[italicHelpColor])
           nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpFont],
-              fontSize = gameSettings.interfaceFontSize + 10)
+              fontSize = gameSettings.helpFontSize + 10)
         of special:
-          nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpBoldFont],
+          nuklearSetDefaultFont(defaultFont = fonts[helpBoldFont],
               fontSize = gameSettings.interfaceFontSize + 10)
           colorLabel(str = lbl.text, color = theme.helpColors[specialHelpColor])
           nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpFont],
-              fontSize = gameSettings.interfaceFontSize + 10)
+              fontSize = gameSettings.helpFontSize + 10)
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
