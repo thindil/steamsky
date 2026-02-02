@@ -151,6 +151,7 @@ type
 
   XmlAttribute* = string ## Used to read the game data from XML files
   FactionIndex* = string ## Used to store in-game factions indexes
+  RecipeIndex* = string ## Used to store in-game crafting recipes indexes
   BaseType* = string ## Used to store types of bases
   ObjectName* = string ## Used to store names of objects (items)
   MessageText* = string ## Used to store the text of a message
