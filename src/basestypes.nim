@@ -135,7 +135,7 @@ proc loadBasesTypes*(fileName: Path) {.raises: [DataLoadingError],
       if baseTypeNode.kind != xnElement:
         continue
       let
-        baseTypeIndex: string = baseTypeNode.attr(name = "index")
+        baseTypeIndex: BaseType = baseTypeNode.attr(name = "index")
         baseTypeAction: DataAction = try:
             parseEnum[DataAction](s = baseTypeNode.attr(
                 name = "action").toLowerAscii)
@@ -161,7 +161,7 @@ proc loadBasesTypes*(fileName: Path) {.raises: [DataLoadingError],
             initBaseTypeData()
         else:
           initBaseTypeData()
-      var attribute: string = baseTypeNode.attr(name = "name")
+      var attribute: XmlAttribute = baseTypeNode.attr(name = "name")
       if attribute.len() > 0:
         baseType.name = attribute
       attribute = baseTypeNode.attr(name = "color")
@@ -180,7 +180,7 @@ proc loadBasesTypes*(fileName: Path) {.raises: [DataLoadingError],
           baseType.description = childNode.innerText()
         of "item":
           let
-            itemIndex: int = try:
+            itemIndex: Natural = try:
                 childNode.attr(name = "index").parseInt()
               except ValueError:
                 raise newException(exceptn = DataLoadingError,
@@ -220,7 +220,7 @@ proc loadBasesTypes*(fileName: Path) {.raises: [DataLoadingError],
             baseType.trades[itemIndex] = [1: sellPrice, 2: buyPrice]
         of "recipe":
           let
-            recipeIndex: string = childNode.attr(name = "index")
+            recipeIndex: RecipeIndex = childNode.attr(name = "index")
             subAction: DataAction = try:
                 parseEnum[DataAction](s = childNode.attr(
                     name = "action").toLowerAscii)
@@ -239,7 +239,7 @@ proc loadBasesTypes*(fileName: Path) {.raises: [DataLoadingError],
             baseType.recipes.add(y = recipeIndex)
         of "flag":
           let
-            flagName: string = childNode.attr(name = "name")
+            flagName: XmlAttribute = childNode.attr(name = "name")
             subAction: DataAction = try:
                 parseEnum[DataAction](s = childNode.attr(
                     name = "action").toLowerAscii)
