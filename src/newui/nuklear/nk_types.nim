@@ -1388,7 +1388,9 @@ type
     width*: TextWidthF
     when defined(nkIncludeVertexBufferOutput):
       query*: QueryFontGlyphF
+        ## Procedure to execute when parsing user font
       texture*: Handle
+        ## Texture used for user font
   StyleText* = object
     ## Used to store Nuklear style data for text widgets
     padding*: Vec2
@@ -1533,7 +1535,9 @@ type
     preferredX*: float
     undo*: TextUndoState
   PluginPaste* = proc(handle: Handle; edit: TextEdit)
+    ## Used to execute plugin code when pasting a text
   PluginCopy* = proc(handle: Handle; text: string; len: int)
+    ## Used to execute plugin code when copying a text
   Clipboard* = object
     ## Used to store clipboard data
     userData*: Handle

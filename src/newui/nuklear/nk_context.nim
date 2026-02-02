@@ -38,6 +38,7 @@ var
   ctx*: PContext = nil
     ## Pointer to the Nuklear context
   context*: Context = Context()
+    ## Nuklear context, Nim version
 
 # -------
 # General
