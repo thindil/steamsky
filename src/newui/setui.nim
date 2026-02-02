@@ -1500,6 +1500,21 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     texts: TextsSeq = @[]
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpFont],
       fontSize = gameSettings.helpFontSize + 10)
+
+  proc setFont(tag: TextTags) {.raises: [], tags: [], contractual.} =
+    ## Set the font for help for count the length of a text
+    ##
+    ## * tag - the text formatting tag, like bold, italic, etc
+    if tag == bold:
+      nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpBoldFont],
+          fontSize = gameSettings.helpFontSize + 10)
+    elif tag == italic:
+      nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpItalicFont],
+          fontSize = gameSettings.helpFontSize + 10)
+    else:
+      nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpFont],
+          fontSize = gameSettings.helpFontSize + 10)
+
   while true:
     var
       startIndex: int = content.find(sub = '{', start = oldIndex)
@@ -1548,10 +1563,9 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
             return
         texts.add(y = uiText)
         break
-    nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpFont],
-        fontSize = gameSettings.helpFontSize + 10)
     for tag in fontTags:
       if tagText == tag.tag:
+        setFont(tag = tag.textTag)
         startIndex = content.find(sub = '{', start = endIndex) - 1
         uiText = try:
             HelpUIText(text: content[endIndex + 2..startIndex],
@@ -1563,6 +1577,8 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
         texts.add(y = uiText)
         endIndex = content.find(sub = '}', start = startIndex) - 1
         break
+    nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpFont],
+        fontSize = gameSettings.helpFontSize + 10)
     for tag in flagsTags:
       if tagText == tag:
         var factionsWithFlag: string = ""
