@@ -1498,6 +1498,8 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
   var
     oldIndex: int = 0
     texts: TextsSeq = @[]
+  nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpFont],
+      fontSize = gameSettings.helpFontSize + 10)
   while true:
     var
       startIndex: int = content.find(sub = '{', start = oldIndex)
@@ -1525,6 +1527,8 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     texts.add(y = uiText)
     var endIndex: int = content.find(sub = '}', start = startIndex) - 1
     let tagText: string = content[startIndex + 1..endIndex]
+    nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpBoldFont],
+        fontSize = gameSettings.helpFontSize + 10)
     for variable in variables:
       if tagText == variable.name:
         uiText = try:
@@ -1544,6 +1548,8 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
             return
         texts.add(y = uiText)
         break
+    nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpFont],
+        fontSize = gameSettings.helpFontSize + 10)
     for tag in fontTags:
       if tagText == tag.tag:
         startIndex = content.find(sub = '{', start = endIndex) - 1
@@ -1690,6 +1696,8 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       helpContent.add(y = row)
       row = @[]
       width = windowWidth - 35
+  nuklearSetDefaultFont(defaultFont = fonts[UIFont],
+      fontSize = gameSettings.interfaceFontSize + 10)
 
 proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
     tags: [RootEffect], contractual.} =
