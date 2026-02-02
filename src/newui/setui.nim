@@ -1632,6 +1632,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
       try:
         let addNewLine: bool = splitText[0].endsWith(suffix = "\n")
         splitText[0].stripLineEnd
+        setFont(tag = texts[index].tag)
         texts[index] = HelpUIText(text: splitText[0], tag: texts[index].tag,
             width: splitText[0].getTextWidth)
         if addNewLine:
@@ -1642,6 +1643,8 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't split text")
         return
       var newIndex: Positive = index + 1
+      nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpFont],
+          fontSize = gameSettings.helpFontSize + 10)
       for i in 1..splitText.high:
         if splitText[i] == "\n":
           texts.insert(item = HelpUIText(text: "\n", tag: none, width: 0),
@@ -1684,6 +1687,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
           index].text.len.float).Positive
       if endIndex >= texts[index].text.len:
         endIndex = texts[index].text.len - 1
+      setFont(tag = texts[index].tag)
       var textWidth: float = try:
             texts[index].text[0..endIndex].getTextWidth
           except:
