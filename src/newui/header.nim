@@ -531,7 +531,13 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
           state = previousState
         else:
           previousState = state
-          setHelp(dialog = dialog)
+          case state
+          of crafting:
+            setHelp(dialog = dialog, helpIndex = 6)
+          of knowledgeLists:
+            setHelp(dialog = dialog, helpIndex = 12)
+          else:
+            setHelp(dialog = dialog)
           state = help
           mapPreview = false
         dialog = none
