@@ -116,12 +116,12 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.raises: [
     if "sentientships" in factionsList[ship.crew[0].faction].flags:
       for module in ship.modules:
         if module.mType == ModuleType2.hull:
-          newSpeed += (newSpeed.float * ((module.maxModules * 2).float /
+          newSpeed += (newSpeed.abs.float * ((module.maxModules * 2).float /
               300.0)).int
     else:
       for member in ship.crew:
         if member.order == pilot:
-          newSpeed += (newSpeed.float * (getSkillLevel(member = member,
+          newSpeed += (newSpeed.abs.float * (getSkillLevel(member = member,
               skillIndex = pilotingSkill).float / 300.0)).int
   var shipSetSpeed: ShipSpeed = ship.speed
   if ship.name == playerShip.name and ship.speed in {docked, fullStop} and infoOnly:
