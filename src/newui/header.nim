@@ -536,6 +536,12 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
             setHelp(dialog = dialog, helpIndex = 6)
           of knowledgeLists:
             setHelp(dialog = dialog, helpIndex = 12)
+          of trade:
+            setHelp(dialog = dialog, helpIndex = 4)
+          of recruits:
+            setHelp(dialog = dialog, helpIndex = 11)
+          of combat:
+            setHelp(dialog = dialog, helpIndex = 5)
           else:
             setHelp(dialog = dialog)
           state = help
