@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -28,7 +28,7 @@ proc waitForRest*() {.raises: [KeyError, IOError, Exception],
   for index, member in playerShip.crew:
     if member.tired > 0 and member.order == rest:
       var tempTimeNeeded: Natural = 0
-      let cabinIndex: int = findCabin(memberIndex = index)
+      let cabinIndex: ExtendedNatural = findCabin(memberIndex = index)
       if cabinIndex > -1:
         let damage: float = 1.0 - (playerShip.modules[
             cabinIndex].durability.float / playerShip.modules[
