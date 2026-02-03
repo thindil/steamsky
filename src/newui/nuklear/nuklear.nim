@@ -1166,13 +1166,13 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer; bounds: var
     result = nkDoButton(state = state, `out` = `out`, r = bounds, style = style,
       `in` = `in`, behavior = behavior, content = content)
     try:
-      style.drawBegin(b = `out`, style.userData)
+      style.drawBegin(b = `out`, userData = style.userData)
     except:
       discard
     nkDrawButtonSymbol(`out` = `out`, bounds = bounds, content = content,
       state = state, style = style, `type` = symbol, font = font)
     try:
-      style.drawEnd(b = `out`, style.userdata)
+      style.drawEnd(b = `out`, userData = style.userdata)
     except:
       discard
 
