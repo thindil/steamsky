@@ -28,7 +28,7 @@ type
         loadingGame, newGame, map, endGame, combat, boarding, trade, school,
         recruits, healWounded, repairShip, buyRecipes, shipyard, baseMissions,
         loot, shipInfo, crafting, lastMessages, knowledgeLists, gameStatistics,
-        help
+        help, options
 
   GameDialog* = enum
     ## Used to show any in-game dialog window
