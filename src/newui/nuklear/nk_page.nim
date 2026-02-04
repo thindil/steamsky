@@ -86,7 +86,7 @@ proc nkCreatePageElement*(context;
     context.freeList = result.next
   elif context.usePool:
     # Allocate page element from memory pool
-    result = nkPoolAlloc(pool = context.pool, pageType = pageType)
+    result = nkPoolAlloc(pool = context.pool)
   else:
     # Allocate new page element from back of fixed size memory buffer
     let

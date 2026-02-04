@@ -28,7 +28,7 @@
 import contracts
 import nk_types
 
-proc nkPoolAlloc*(pool: var Pool; pageType: PageDataType): PageElement {.raises: [
+proc nkPoolAlloc*(pool: var Pool): PageElement {.raises: [
     ], tags: [RootEffect], contractual.} =
   ## Allocate page element from the pool
   ##

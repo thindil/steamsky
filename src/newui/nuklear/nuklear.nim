@@ -975,13 +975,12 @@ proc nkButtonBehavior(state: var nk_flags; r: Rect; i: Input;
   elif isMousePrevHovering(rect = r):
     state = state or widgetStateLeft.ord
 
-proc nkDoButton(state: var nk_flags; `out`: var CommandBuffer; r: Rect;
+proc nkDoButton(state: var nk_flags; r: Rect;
   style: StyleButton; `in`: Input; behavior: ButtonBehavior;
   content: var Rect): bool {.raises: [], tags: [], contractual.} =
   ## Draw a button. Internal use only
   ##
   ## * state    - the state of the button
-  ## * out      - the command buffer in which the button will be drawn
   ## * r        - the bounds of the button
   ## * style    - the style of the button
   ## * in       - the user input
@@ -1163,7 +1162,7 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer; bounds: var
   ## Returns true if button was properly drawn, otherwise false
   body:
     var content: Rect = Rect()
-    result = nkDoButton(state = state, `out` = `out`, r = bounds, style = style,
+    result = nkDoButton(state = state, r = bounds, style = style,
       `in` = `in`, behavior = behavior, content = content)
     try:
       style.drawBegin(b = `out`, userData = style.userData)
@@ -1453,11 +1452,10 @@ proc nkPanelBegin(context; title: string; panelType: PanelType): bool {.raises: 
 # ------
 # Popups
 # ------
-proc nkStartPopup(context; win: ref Window) {.raises: [], tags: [],
+proc nkStartPopup(win: ref Window) {.raises: [], tags: [],
     contractual.} =
   ## Start setting a popup window. Internal use only
   ##
-  ## * context - the Nuklear context
   ## * win     - the window of a popup
   body:
     var buf: PopupBuffer = win.popup.buf
@@ -1526,7 +1524,7 @@ proc nkPopupBegin(context; pType: PopupType; title: string; flags: set[PanelFlag
     {.ruleOn: "assignments".}
 
     popup.buffer = win.buffer
-    nkStartPopup(context = context, win = win)
+    nkStartPopup(win = win)
     var allocated: nk_size = ctx.memory.allocated
     nkPushScissor(b = popup.buffer, r = nkNullRect)
 
