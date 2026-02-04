@@ -30,7 +30,7 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
         playerShip.skyY].baseIndex
     population: Positive = (if getBasePopulation(baseIndex = baseIndex) >
         empty: skyBases[baseIndex].population else: 1)
-  var chance: int = (if population < 150: 5 elif population <
+  var chance: Natural = (if population < 150: 5 elif population <
       300: 10 else: 15)
   chance += daysDifference(dateToCompare = skyBases[baseIndex].visited)
   if skyBases[baseIndex].cargo.len == 0:
@@ -200,7 +200,7 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
   let
     baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex
-    itemIndex: int = if protoIndex > 0:
+    itemIndex: ExtendedNatural = if protoIndex > 0:
         findBaseCargo(protoIndex = protoIndex, durability = durability,
             quality = quality, maxDurability = maxDurability, weight = weight)
       else:
@@ -239,8 +239,8 @@ proc getLootData*(itemIndex: int): tuple[protoIndex, maxAmount,
   ## Returns tuple with trade data: proto index of the item, max amount of item
   ## to get, max amount item to drop, its quality, maximum durability and weight
   var
-    cargoIndex: int = -1
-    baseCargoIndex: int = 0
+    cargoIndex: ExtendedNatural = -1
+    baseCargoIndex: ExtendedNatural = 0
   if itemIndex < 0:
     baseCargoIndex = (itemIndex + 1).abs
   else:
@@ -272,8 +272,8 @@ proc getLootData*(itemIndex: int): tuple[protoIndex, maxAmount,
         maxDurability = result.maxDurability, weight = result.weight)
   result.maxAmount = (if baseCargoIndex > -1: skyBases[baseIndex].cargo[
       baseCargoIndex].amount else: 0)
-  let freeAmount: int = (if baseCargoIndex > -1: (freeCargo(amount = 0).float /
-      itemsList[skyBases[baseIndex].cargo[
+  let freeAmount: range[-100_000..100_000] = (if baseCargoIndex > -1: (
+      freeCargo(amount = 0).float / itemsList[skyBases[baseIndex].cargo[
       baseCargoIndex].protoIndex].weight.float).Natural else: 0)
   result.cargoMaxAmount = (if cargoIndex > -1: playerShip.cargo[
       cargoIndex].amount.Natural else: 0)
