@@ -1739,3 +1739,7 @@ proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
     index.inc
   setHelpContent(content = content, dialog = dialog)
   dialog = none
+
+proc setOptions*() {.raises: [], tags: [], contractual.} =
+  ## Set the data for the game options screen
+  currentTab = 0
