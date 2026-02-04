@@ -17,8 +17,8 @@
 
 ## Provides code related to the game's options, like showing it, etc.
 
-import contracts
-import coreui, header
+import contracts, nuklear/nuklear_sdl_renderer
+import coreui, errordialog, header, setui
 
 proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -31,3 +31,20 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = previous, state = state):
     return
+  # Show tab buttons
+  changeStyle(field = spacing, x = 0, y = 0):
+    changeStyle(field = buttonRounding, value = 0):
+      const tabs: array[7, string] = ["General", "Movement keys", "Menu keys",
+          "Map keys", "General keys", "Interface", "Info"]
+      setLayoutRowDynamic(height = 30, cols = tabs.len)
+      for index, tab in tabs:
+        try:
+          if currentTab == index:
+            changeStyle(src = active, dest = normal):
+              labelButton(title = tab):
+                discard
+          else:
+            labelButton(title = tab):
+              currentTab = index.cint
+        except:
+          dialog = setError(message = "Can't set the tabs buttons.")
