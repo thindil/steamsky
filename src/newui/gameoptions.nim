@@ -48,3 +48,13 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
               currentTab = index.cint
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
+  setLayoutRowDynamic(height = 30, cols = 2)
+  case currentTab
+  # General options
+  of 0:
+    label(str = "Auto rest when crew is tired:")
+    label(str = "Default speed after undocking:")
+    label(str = "Auto center map after set destination:")
+    label(str = "Auto set base after finished mission:")
+  else:
+    discard
