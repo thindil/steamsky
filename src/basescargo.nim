@@ -141,7 +141,7 @@ proc findBaseCargo*(protoIndex: Natural;
     ## not found
     result = -1
     for index, item in localBaseCargo:
-      if durability < ItemsDurability.high or quality != normal:
+      if durability < maxDurability or quality != normal:
         if item.protoIndex == protoIndex and item.durability == durability and
             item.quality == quality and item.maxDurability == maxDurability and
             item.weight == weight:
