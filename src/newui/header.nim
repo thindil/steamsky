@@ -548,7 +548,14 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
           mapPreview = false
         dialog = none
       labelButton(title = "Game options"):
-        discard
+        if state == options:
+          state = previousState
+        else:
+          previousState = state
+          setOptions()
+          state = options
+          mapPreview = false
+        dialog = none
       labelButton(title = "Quit from game"):
         dialog = setQuestion(question = "Are you sure want to quit?",
             qType = quitGame)
