@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Counting profit from selling items
 - Using materials during upgrading the player's ship's modules
 - Counting bonus to the player's ship's speed from the crew members' skills
+- Crash when buying items
 
 ## [11.9] - 2026-01-25
 
