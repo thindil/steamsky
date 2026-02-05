@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -31,8 +31,8 @@ type SkyCell* = object
   ## * missionIndex - Index of the mission which takes place in the cell
   baseIndex*: ExtendedBasesRange
   visited*: bool
-  eventIndex*: int
-  missionIndex*: int
+  eventIndex*: ExtendedNatural
+  missionIndex*: ExtendedNatural
 
 {.push ruleOff: "varDeclared".}
 var skyMap*: array[MapXRange, array[MapYRange, SkyCell]] ## The list of all map's cells
