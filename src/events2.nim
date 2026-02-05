@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -95,6 +95,8 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
     of 21..23:
       var traders: seq[Positive] = @[]
       generateTraders(ships = traders)
+      if traders.len == 0:
+        return false
       eventsList.add(y = EventData(eType: trader, skyX: playerShip.skyX,
           skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
           shipIndex: traders[getRandom(min = traders.low, max = traders.high)]))
@@ -107,6 +109,8 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
     of 24..30:
       var friendlyShips: seq[Positive] = @[]
       generateFriendlyShips(ships = friendlyShips)
+      if friendlyShips.len == 0:
+        return false
       eventsList.add(y = EventData(eType: friendlyShip, skyX: playerShip.skyX,
           skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
           shipIndex: friendlyShips[getRandom(min = friendlyShips.low,
