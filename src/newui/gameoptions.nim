@@ -53,6 +53,9 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # General options
   of 0:
     label(str = "Auto rest when crew is tired:")
+    var checked: bool = generalOptions[0].bool
+    checkbox(label = "", checked = checked)
+    generalOptions[0] = checked.ord
     label(str = "Default speed after undocking:")
     label(str = "Auto center map after set destination:")
     label(str = "Auto set base after finished mission:")
