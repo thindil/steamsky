@@ -57,6 +57,9 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     checkbox(label = "", checked = checked)
     generalOptions[0] = checked.ord
     label(str = "Default speed after undocking:")
+    var selected: Natural = generalOptions[1] - 1
+    generalOptions[1] = (comboList(items = shipSpeeds, selected = selected,
+        itemHeight = 25, x = 350, y = 200) + 1)
     label(str = "Auto center map after set destination:")
     label(str = "Auto set base after finished mission:")
   else:
