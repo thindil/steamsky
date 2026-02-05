@@ -80,20 +80,20 @@ proc nkCreatePageElement*(context;
   ##
   ## Returns the newly created element
   result = PageElement(data: PageData(pageDataType: pageType))
-  if context.freeList != nil:
-    # Unlink page element from free list
-    result = context.freeList[]
-    context.freeList = result.next
-  elif context.usePool:
-    # Allocate page element from memory pool
-    result = nkPoolAlloc(pool = context.pool)
-  else:
+  if context.freeList == nil:
     # Allocate new page element from back of fixed size memory buffer
     let
       size: nk_size = PageElement.sizeof
       align: nk_size = PageElement.alignof
     result = cast[PageElement](nkBufferAlloc(b = context.memory,
         bufferAlloc = bufferBack, size = size, align = align))
+  elif context.usePool:
+    # Allocate page element from memory pool
+    result = nkPoolAlloc(pool = context.pool)
+  else:
+    # Unlink page element from free list
+    result = context.freeList[]
+    context.freeList = result.next
   nkZero(pData = result.addr, size = PageElement.sizeof)
   result.next = nil
   result.prev = nil

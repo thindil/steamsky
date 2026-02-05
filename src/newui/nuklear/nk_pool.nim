@@ -38,18 +38,15 @@ proc nkPoolAlloc*(pool: var Pool): PageElement {.raises: [
   if pool.pages == nil or pool.pages.size >= pool.capacity:
     var page: Page = Page()
     if pool.aType == bufferFixed:
-      if pool.pages == nil:
-        return
       return
-    else:
-      var size: nk_size = Page.sizeof
-      size += ((pool.capacity - 1) * PageElement.sizeof.uint).nk_size
-      try:
-        page = cast[Page](pool.alloc.alloc(handle = pool.alloc.userData,
-            old = nil, size = size))
-        page.next = pool.pages
-        page.size = 0
-      except:
-        discard
+    var size: nk_size = Page.sizeof
+    size += ((pool.capacity - 1) * PageElement.sizeof.uint).nk_size
+    try:
+      page = cast[Page](pool.alloc.alloc(handle = pool.alloc.userData,
+          old = nil, size = size))
+      page.next = pool.pages
+      page.size = 0
+    except:
+      discard
   result = pool.pages.win[pool.pages.size]
   pool.pages.size.inc
