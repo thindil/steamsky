@@ -43,9 +43,16 @@ type
       takeDialog, dropDialog, moveDialog, giveDialog, dropCargoDialog
 
 const
-  dtime*: float = 20.0        ## The length in miliseconds of one game's frame
-  menuWidth*: Positive = 600  ## The width of the game's main window
-  menuHeight*: Positive = 400 ## The height of the game's main window
+  dtime*: float = 20.0
+    ## The length in miliseconds of one game's frame
+  menuWidth*: Positive = 600
+    ## The width of the game's main window
+  menuHeight*: Positive = 400
+    ## The height of the game's main window
+  shipSpeeds*: array[4, string] = ["Full stop", "Quarter speed",
+    "Half speed", "Full speed"]
+    ## The list of player's ship's speed
+
 
 var
   fonts*: array[FontsNames, ptr nk_font] = [nil, nil, nil, nil, nil] ## The list of fonts used by the game

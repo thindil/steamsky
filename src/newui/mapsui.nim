@@ -319,9 +319,6 @@ proc showMapMenu(bounds: Rect) {.raises: [], tags: [RootEffect],
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
 
-const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
-    "Half speed", "Full speed"]
-
 proc updateCoordinates(newX, newY: var int) {.raises: [], tags: [],
     contractual.} =
   ## Update the new coordinates after move the player's ship
