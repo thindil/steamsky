@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Using materials during upgrading the player's ship's modules
 - Counting bonus to the player's ship's speed from the crew members' skills
 - Crash when buying items
+- Possible crash when meeting a friendly ship
 
 ## [11.9] - 2026-01-25
 
