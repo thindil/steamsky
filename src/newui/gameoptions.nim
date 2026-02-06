@@ -48,19 +48,31 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
               currentTab = index.cint
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
-  setLayoutRowDynamic(height = 30, cols = 2)
-  case currentTab
-  # General options
-  of 0:
-    label(str = "Auto rest when crew is tired:")
-    var checked: bool = generalOptions[0].bool
-    checkbox(label = "", checked = checked)
-    generalOptions[0] = checked.ord
-    label(str = "Default speed after undocking:")
-    var selected: Natural = generalOptions[1] - 1
-    generalOptions[1] = (comboList(items = shipSpeeds, selected = selected,
-        itemHeight = 25, x = 350, y = 200) + 1)
-    label(str = "Auto center map after set destination:")
-    label(str = "Auto set base after finished mission:")
-  else:
-    discard
+  setLayoutRowDynamic(height = windowHeight - 75, cols = 1)
+  group(title = "OptionsGroup", flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = 30, cols = 2)
+    case currentTab
+    # General options
+    of 0:
+      label(str = "Auto rest when crew is tired:")
+      var checked: bool = generalOptions[0].bool
+      checkbox(label = "", checked = checked)
+      generalOptions[0] = checked.ord
+      label(str = "Default speed after undocking:")
+      var selected: Natural = generalOptions[1] - 1
+      generalOptions[1] = (comboList(items = shipSpeeds, selected = selected,
+          itemHeight = 25, x = 350, y = 200) + 1)
+      label(str = "Auto center map after set destination:")
+      checked = generalOptions[2].bool
+      checkbox(label = "", checked = checked)
+      generalOptions[2] = checked.ord
+      label(str = "Auto set base after finished mission:")
+      checked = generalOptions[3].bool
+      checkbox(label = "", checked = checked)
+      generalOptions[3] = checked.ord
+      label(str = "Auto set destination after accepting mission:")
+      label(str = "Auto finish mission:")
+      label(str = "Auto ask for bases:")
+      label(str = "Auto ask for events:")
+    else:
+      discard
