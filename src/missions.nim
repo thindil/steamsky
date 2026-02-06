@@ -229,21 +229,17 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
           break
     mission.targetX = missionX
     mission.targetY = missionY
-    let
-      diffX: Natural = (playerShip.skyX - missionX).abs
-      diffY: Natural = (playerShip.skyY - missionY).abs
+    let timeBonus: float = sqrt(x = (((playerShip.skyX - missionX).abs ^ 2) + ((
+        playerShip.skyY - missionY).abs ^ 2)).float)
     case mission.mType
     of deliver:
-      mission.time = (90.0 * sqrt(x = ((diffX ^ 2) + (diffY ^
-          2)).float)).Positive
+      mission.time = (90.0 * timeBonus).Positive
       mission.reward = (mission.time / 4).Positive
     of destroy, passenger:
-      mission.time = (180.0 * sqrt(x = ((diffX ^ 2) + (diffY ^
-          2)).float)).Positive
+      mission.time = (180.0 * timeBonus).Positive
       mission.reward = (mission.time / 4).Positive
     of patrol, explore:
-      mission.time = (180.0 * sqrt(x = ((diffX ^ 2) + (diffY ^
-          2)).float)).Positive
+      mission.time = (180.0 * timeBonus).Positive
       mission.reward = (mission.time / 5).Positive
     mission.startBase = baseIndex
     mission.finished = false
