@@ -71,8 +71,20 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       checkbox(label = "", checked = checked)
       generalOptions[3] = checked.ord
       label(str = "Auto set destination after accepting mission:")
+      checked = generalOptions[4].bool
+      checkbox(label = "", checked = checked)
+      generalOptions[4] = checked.ord
       label(str = "Auto finish mission:")
+      checked = generalOptions[5].bool
+      checkbox(label = "", checked = checked)
+      generalOptions[5] = checked.ord
       label(str = "Auto ask for bases:")
+      checked = generalOptions[6].bool
+      checkbox(label = "", checked = checked)
+      generalOptions[6] = checked.ord
       label(str = "Auto ask for events:")
+      checked = generalOptions[7].bool
+      checkbox(label = "", checked = checked)
+      generalOptions[7] = checked.ord
     else:
       discard
