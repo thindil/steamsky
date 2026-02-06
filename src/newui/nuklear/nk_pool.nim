@@ -46,7 +46,7 @@ proc nkPoolAlloc*(pool: var Pool): PageElement {.raises: [
           old = nil, size = size))
       page.next = pool.pages
       page.size = 0
-    except:
+    except Exception:
       discard
   result = pool.pages.win[pool.pages.size]
   pool.pages.size.inc
