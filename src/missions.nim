@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -234,7 +234,7 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
       diffY: Natural = (playerShip.skyY - missionY).abs
     case mission.mType
     of deliver:
-      mission.time = (80.0 * sqrt(x = ((diffX ^ 2) + (diffY ^
+      mission.time = (90.0 * sqrt(x = ((diffX ^ 2) + (diffY ^
           2)).float)).Positive
       mission.reward = (mission.time / 4).Positive
     of destroy, passenger:
