@@ -50,41 +50,38 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           dialog = setError(message = "Can't set the tabs buttons.")
   setLayoutRowDynamic(height = windowHeight - 75, cols = 1)
   group(title = "OptionsGroup", flags = {windowNoFlags}):
+
+    proc addCheckbox(label: string; option: var Natural) {.raises: [], tags: [],
+        contractual.} =
+      ## Add a checkbox to the list of options
+      ##
+      ## * label  - the text to show on the checkbox
+      ## * option - the value for the selected checkbox
+      ##
+      ## Returns the modified parameter option
+      label(str = label)
+      var checked: bool = option.bool
+      checkbox(label = "", checked = checked)
+      option = checked.ord
+
     setLayoutRowDynamic(height = 30, cols = 2)
     case currentTab
     # General options
     of 0:
-      label(str = "Auto rest when crew is tired:")
-      var checked: bool = generalOptions[0].bool
-      checkbox(label = "", checked = checked)
-      generalOptions[0] = checked.ord
+      addCheckbox(label = "Auto rest when crew is tired:",
+          option = generalOptions[0])
       label(str = "Default speed after undocking:")
       var selected: Natural = generalOptions[1] - 1
       generalOptions[1] = (comboList(items = shipSpeeds, selected = selected,
           itemHeight = 25, x = 350, y = 200) + 1)
-      label(str = "Auto center map after set destination:")
-      checked = generalOptions[2].bool
-      checkbox(label = "", checked = checked)
-      generalOptions[2] = checked.ord
-      label(str = "Auto set base after finished mission:")
-      checked = generalOptions[3].bool
-      checkbox(label = "", checked = checked)
-      generalOptions[3] = checked.ord
-      label(str = "Auto set destination after accepting mission:")
-      checked = generalOptions[4].bool
-      checkbox(label = "", checked = checked)
-      generalOptions[4] = checked.ord
-      label(str = "Auto finish mission:")
-      checked = generalOptions[5].bool
-      checkbox(label = "", checked = checked)
-      generalOptions[5] = checked.ord
-      label(str = "Auto ask for bases:")
-      checked = generalOptions[6].bool
-      checkbox(label = "", checked = checked)
-      generalOptions[6] = checked.ord
-      label(str = "Auto ask for events:")
-      checked = generalOptions[7].bool
-      checkbox(label = "", checked = checked)
-      generalOptions[7] = checked.ord
+      addCheckbox(label = "Auto center map after set destination:",
+          option = generalOptions[2])
+      addCheckbox(label = "Auto set base after finished mission:",
+          option = generalOptions[3])
+      addCheckbox(label = "Auto set destination after accepting mission:",
+          option = generalOptions[4])
+      addCheckbox(label = "Auto finish mission:", option = generalOptions[5])
+      addCheckbox(label = "Auto ask for bases:", option = generalOptions[6])
+      addCheckbox(label = "Auto ask for events:", option = generalOptions[7])
     else:
       discard
