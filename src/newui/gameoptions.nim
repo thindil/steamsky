@@ -18,6 +18,7 @@
 ## Provides code related to the game's options, like showing it, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
+import ../config
 import coreui, errordialog, header, setui
 
 proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
@@ -51,14 +52,17 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = windowHeight - 75, cols = 1)
   group(title = "OptionsGroup", flags = {windowNoFlags}):
 
-    proc addCheckbox(label: string; option: var Natural) {.raises: [], tags: [],
-        contractual.} =
+    proc addCheckbox(label: string; option: var Natural;
+        tooltip: string) {.raises: [], tags: [], contractual.} =
       ## Add a checkbox to the list of options
       ##
-      ## * label  - the text to show on the checkbox
-      ## * option - the value for the selected checkbox
+      ## * label   - the text to show on the checkbox
+      ## * option  - the value for the selected checkbox
+      ## * tooltip - the text to show as tooltip for the checkbox
       ##
       ## Returns the modified parameter option
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = tooltip)
       label(str = label)
       var checked: bool = option.bool
       checkbox(label = "", checked = checked)
@@ -68,20 +72,20 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     case currentTab
     # General options
     of 0:
-      addCheckbox(label = "Auto rest when crew is tired:",
-          option = generalOptions[0])
+      addCheckbox(label = "Auto rest when crew is tired:", option = generalOptions[0], tooltip = "Wait for crew is rested when pilot or engineer are too tired to work.")
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = "Default speed of ship after undock from base.")
       label(str = "Default speed after undocking:")
       var selected: Natural = generalOptions[1] - 1
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = "Default speed of ship after undock from base.")
       generalOptions[1] = (comboList(items = shipSpeeds, selected = selected,
           itemHeight = 25, x = 350, y = 200) + 1)
-      addCheckbox(label = "Auto center map after set destination:",
-          option = generalOptions[2])
-      addCheckbox(label = "Auto set base after finished mission:",
-          option = generalOptions[3])
-      addCheckbox(label = "Auto set destination after accepting mission:",
-          option = generalOptions[4])
-      addCheckbox(label = "Auto finish mission:", option = generalOptions[5])
-      addCheckbox(label = "Auto ask for bases:", option = generalOptions[6])
-      addCheckbox(label = "Auto ask for events:", option = generalOptions[7])
+      addCheckbox(label = "Auto center map after set destination:", option = generalOptions[2], tooltip = "After set destination for ship, center map on ship.")
+      addCheckbox(label = "Auto set base after finished mission:", option = generalOptions[3], tooltip = "After finished mission, set skybase from which mission was taken as a destination for ship.")
+      addCheckbox(label = "Auto set destination after accepting mission:", option = generalOptions[4], tooltip = "")
+      addCheckbox(label = "Auto finish mission:", option = generalOptions[5], tooltip = "")
+      addCheckbox(label = "Auto ask for bases:", option = generalOptions[6], tooltip = "")
+      addCheckbox(label = "Auto ask for events:", option = generalOptions[7], tooltip = "")
     else:
       discard
