@@ -1337,7 +1337,9 @@ proc nkPanelBegin(context; title: string; panelType: PanelType): bool {.raises: 
     var
       win: ref Window = context.current
       layout: ref Panel = win.layout
+    {.ruleOff: "varUplevel"}
     var  `out`: CommandBuffer = win.buffer
+    {.ruleOn: "varUplevel"}
     var `in`: Input = (if (win.flags and windowNoInput.cint) ==
           1: Input() else: context.input)
     when defined(nkIncludeCommandUserdata):

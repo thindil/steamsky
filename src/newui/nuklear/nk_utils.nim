@@ -25,7 +25,7 @@
 
 ## Provides code for various utility code
 
-import contracts
+import contracts, nimalyzer
 import nk_types
 
 proc nkMemSet*(pData: pointer; c0: int; size: nk_size) {.raises: [], tags: [],
@@ -46,6 +46,7 @@ proc nkMemSet*(pData: pointer; c0: int; size: nk_size) {.raises: [], tags: [],
     if nkWsize > 2:
       c = (c shl 16) or c # at least 32-bits
 
+  {.ruleOff: "assignments".}
   # too small of a word count
   var dst: ptr nk_byte = cast[ptr nk_byte](pData)
   var localSize: nk_size = size
@@ -65,6 +66,7 @@ proc nkMemSet*(pData: pointer; c0: int; size: nk_size) {.raises: [], tags: [],
       dst[] = c0.nk_byte
       dst = dst + 1
       t.dec
+  {.ruleOn: "assignments".}
 
   # fill word
   t = (size / nkWsize).nk_size
