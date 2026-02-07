@@ -1744,7 +1744,7 @@ proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
 # Setting the options UI
 ########################
 
-var generalOptions*: array[8, Natural] = [0, 0, 0, 0, 0, 0, 0, 0]
+var generalOptions*: array[12, Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 proc setOptions*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the game options screen
@@ -1757,3 +1757,7 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   generalOptions[5] = gameSettings.autoFinish.ord
   generalOptions[6] = gameSettings.autoAskForBases.ord
   generalOptions[7] = gameSettings.autoAskForEvents.ord
+  generalOptions[8] = gameSettings.lowFuel
+  generalOptions[9] = gameSettings.lowDrinks
+  generalOptions[10] = gameSettings.lowFood
+  generalOptions[11] = gameSettings.autoMoveStop.ord
