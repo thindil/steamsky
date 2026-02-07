@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Counting bonus to the player's ship's speed from the crew members' skills
 - Crash when buying items
 - Possible crash when meeting a friendly ship
+- Sometimes game doesn't generate missions in bases
 
 ## [11.9] - 2026-01-25
 
