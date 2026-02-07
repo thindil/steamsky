@@ -432,8 +432,7 @@ proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
     # Generate the game's world
     for x in MapXRange.low..MapXRange.high:
       for y in MapYRange.low..MapYRange.high:
-        skyMap[x][y] = SkyCell(baseIndex: 0, visited: false, eventIndex: -1,
-            missionIndex: -1)
+        skyMap[x][y] = initSkyCell()
     var
       maxSpawnRoll: Natural = 0
       basesArray: Table[string, seq[Positive]] = initTable[string, seq[
@@ -492,8 +491,7 @@ proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
             validLocation = false
           if validLocation:
             break
-        skyMap[posX][posY] = SkyCell(baseIndex: faction, visited: false,
-            eventIndex: -1, missionIndex: -1)
+        skyMap[posX][posY] = initSkyCell(baseIndex = faction)
         skyBases[faction].skyX = posX
         skyBases[faction].skyY = posY
     # Place the player's ship in a random large base
