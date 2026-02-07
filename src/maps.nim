@@ -108,13 +108,29 @@ type SkyCell* = object
 #  ## Returns the modified SkyCell object
 #  skyCell.missionIndex = value
 
+proc initSkyCell*(baseIndex: ExtendedBasesRange = 0; visited: bool = false;
+    eventIndex: ExtendedNatural = -1;
+    missionIndex: ExtendedNatural = -1): SkyCell {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for the map cell
+  ##
+  ## * baseIndex    - the index of the base in that cell
+  ## * visited      - if true, the cell was visited by the player
+  ## * eventIndex   - the index of the event in that cell
+  ## * missionIndex - the index of the mission in that cell
+  ##
+  ## Returns the new structure with information about the selected map cell
+  return SkyCell(baseIndex: baseIndex, visited: visited, eventIndex: eventIndex,
+      missionIndex: missionIndex)
+
 {.push ruleOff: "varDeclared".}
-var skyMap*: array[MapXRange, array[MapYRange,
-    SkyCell]] ## The list of all map's cells
+var
+  skyMap*: array[MapXRange, array[MapYRange, SkyCell]]
+    ## The list of all map's cells
 {.push ruleOn: "varDeclared".}
 
-proc normalizeCoord*(coord: var int; isXAxis: bool = true) {.raises: [], tags: [],
-    contractual.} =
+proc normalizeCoord*(coord: var int; isXAxis: bool = true) {.raises: [], tags: [
+    ], contractual.} =
   ## Normalize (fix to be in range of) the map's coordinates
   ##
   ## * coord   - The coordinate which will be normalized
