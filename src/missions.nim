@@ -169,7 +169,8 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
     generateEnemies(enemies = enemies)
   var missionX, missionY: int = 1
   const qualitiesArray: array[10, int] = [1, 11, 21, 31, 41, 51, 61, 71, 81, 91]
-  for i in 1..missionsAmount:
+  var index: Natural = missionsAmount
+  while index > 0:
     var mission: MissionData = MissionData(time: 1, reward: 1, startBase: 1)
     let mType: MissionsTypes = getRandom(min = MissionsTypes.low.int,
         max = MissionsTypes.high.int).MissionsTypes
@@ -244,6 +245,7 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
     mission.startBase = baseIndex
     mission.finished = false
     skyBases[baseIndex].missions.add(y = mission)
+    index.dec
   skyBases[baseIndex].missionsDate = gameDate
 
 proc updateMissions*(minutes: Positive) {.raises: [KeyError, ReputationError],
