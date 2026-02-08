@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -209,7 +209,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
     height: float = 400
 
   let
-    recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
+    recruit: RecruitData = skyBases[setui.baseIndex].recruits[recruitIndex]
     windowName: string = recruit.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
@@ -355,7 +355,7 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
     height: float = 400
 
   let
-    recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
+    recruit: RecruitData = skyBases[setui.baseIndex].recruits[recruitIndex]
     windowName: string = "Negotiate with " & recruit.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
@@ -505,19 +505,19 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if currentRow < startRow:
         currentRow.inc
         continue
-      addButton(label = skyBases[baseIndex].recruits[index].name,
+      addButton(label = skyBases[setui.baseIndex].recruits[index].name,
           tooltip = "Show the recruit's details.", data = index,
           code = setRecruitInfo, dialog = dialog)
-      addButton(label = (if skyBases[baseIndex].recruits[index].gender ==
+      addButton(label = (if skyBases[setui.baseIndex].recruits[index].gender ==
           'F': "Female" else: "Male"), tooltip = "Show recruit's details",
           data = index, code = setRecruitInfo, dialog = dialog)
       try:
-        addButton(label = factionsList[skyBases[baseIndex].recruits[
+        addButton(label = factionsList[skyBases[setui.baseIndex].recruits[
             index].faction].name, tooltip = "Show recruit's details",
             data = index, code = setRecruitInfo, dialog = dialog)
       except:
         dialog = setError(message = "Can't get the recruit faction.")
-      addButton(label = $skyBases[baseIndex].recruits[index].price,
+      addButton(label = $skyBases[setui.baseIndex].recruits[index].price,
           tooltip = "Show recruit's details", data = index,
           code = setRecruitInfo, dialog = dialog)
       addButton(label = getHighestAttribute(baseIndex = baseIndex,

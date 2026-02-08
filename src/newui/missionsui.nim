@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -118,7 +118,7 @@ proc sortMissions(sortAsc, sortDesc: MissionsSortOrders;
   else:
     missionsSortOrder = sortAsc
   var localMissions: seq[LocalMissionData] = @[]
-  for index, mission in skyBases[baseIndex].missions:
+  for index, mission in skyBases[setui.baseIndex].missions:
     try:
       localMissions.add(y = LocalMissionData(mType: mission.mType,
           distance: countDistance(destinationX = mission.targetX,
@@ -171,7 +171,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
     height: float = 300
 
   let
-    mission: MissionData = skyBases[baseIndex].missions[missionIndex]
+    mission: MissionData = skyBases[setui.baseIndex].missions[missionIndex]
     windowName: string = "More info about " & getMissionType(
         mType = mission.mType)
   updateDialog(width = width, height = height)
@@ -299,7 +299,7 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
     height: float = 200
 
   let
-    mission: MissionData = skyBases[baseIndex].missions[missionIndex]
+    mission: MissionData = skyBases[setui.baseIndex].missions[missionIndex]
     windowName: string = "Accept " & getMissionType(mType = mission.mType)
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
@@ -330,7 +330,7 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
     imageLabelButton(image = images[negotiateColoredIcon], text = "Accept",
         alignment = right):
       dialog = none
-      skyBases[baseIndex].missions[missionIndex].multiplier = (
+      skyBases[setui.baseIndex].missions[missionIndex].multiplier = (
         missionPercent.float / 100.0)
       try:
         acceptMission(missionIndex = missionIndex)
@@ -406,7 +406,7 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       var
         canAccept: bool = true
         cabinTaken: bool = false
-        mission: MissionData = skyBases[baseIndex].missions[index]
+        mission: MissionData = skyBases[setui.baseIndex].missions[index]
       if mission.mType == passenger:
         canAccept = false
         for module in playerShip.modules:
@@ -437,7 +437,7 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       case mission.mType
       of deliver:
         try:
-          addButton(label = itemsList[skyBases[baseIndex].missions[
+          addButton(label = itemsList[skyBases[setui.baseIndex].missions[
               index].itemIndex].name & " to " & skyBases[skyMap[
               mission.targetX][mission.targetY].baseIndex].name,
               tooltip = "Show more info about the mission", data = index,
@@ -459,7 +459,7 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
             return
           mission.shipIndex = enemies[getRandom(min = enemies.low,
               max = enemies.high)]
-          skyBases[baseIndex].missions[index].shipIndex = mission.shipIndex
+          skyBases[setui.baseIndex].missions[index].shipIndex = mission.shipIndex
         try:
           addButton(label = protoShipsList[mission.shipIndex].name,
               tooltip = "Show more info about the mission", data = index,
