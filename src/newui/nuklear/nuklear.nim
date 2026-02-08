@@ -1575,7 +1575,7 @@ proc createPopup(pType2: PopupType; title2: string; flags2: set[PanelFlags];
   ## Create a new Nuklear popup window, internal use only, temporary code
   ##
   ## Returns true if the popup was successfully created, otherwise false.
-  var con: ref Context
+  var con: ref Context = nil
   con[] = context
   return nkPopupBegin(context = con, pType = pType2, title = title2,
     flags = flags2, x = x2, y = y2, w = w2, h = h2)
