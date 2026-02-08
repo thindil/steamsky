@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -819,9 +819,12 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
           mType = tradeMessage)
     except:
       return showError(message = "Can't show message.")
-    updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-        itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount),
-        quality = playerShip.cargo[itemIndex].quality)
+    try:
+      updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
+          itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount),
+          quality = playerShip.cargo[itemIndex].quality)
+    except:
+      return showError(message = "Can't update the ship' cargo.")
   else:
     try:
       gainRep(baseIndex = baseIndex, points = (playerShip.cargo[

@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -595,9 +595,13 @@ proc deliverMedicines(dialog: var GameDialog; forFree: bool = true) {.raises: [
     except:
       dialog = setError(message = "Can't show message.")
       return
-    updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-        itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount),
-        quality = playerShip.cargo[itemIndex].quality)
+    try:
+      updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
+          itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount),
+          quality = playerShip.cargo[itemIndex].quality)
+    except:
+      dialog = setError(message = "Can't update the ship's cargo.")
+      return
   else:
     try:
       gainRep(baseIndex = baseIndex, points = (playerShip.cargo[

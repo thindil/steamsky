@@ -444,9 +444,12 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
             maxDurability = item.maxDurability, weight = item.weight)
       except:
         return showError(message = "Can't update the base's cargo2.")
-    updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = -amount,
-        durability = item.durability, quality = item.quality,
-        maxDurability = item.maxDurability, weight = item.weight)
+    try:
+      updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = -amount,
+          durability = item.durability, quality = item.quality,
+          maxDurability = item.maxDurability, weight = item.weight)
+    except:
+      return showError(message = "Can't update the ship's cargo")
     try:
       addMessage(message = "You drop " & $amount & " " & itemsList[
           protoIndex].name & ".", mType = orderMessage)
@@ -467,13 +470,19 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't count free cargo.")
     let item: BaseCargo = skyBases[baseIndex].cargo[baseCargoIndex]
     if cargoIndex > -1:
-      updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = amount,
-          durability = item.durability, quality = item.quality,
-          maxDurability = item.maxDurability, weight = item.weight)
+      try:
+        updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = amount,
+            durability = item.durability, quality = item.quality,
+            maxDurability = item.maxDurability, weight = item.weight)
+      except:
+        return showError(message = "Can't update the ship' cargo2.")
     else:
-      updateCargo(ship = playerShip, protoIndex = protoIndex, amount = amount,
-          durability = item.durability, quality = item.quality,
-          maxDurability = item.maxDurability, weight = item.weight)
+      try:
+        updateCargo(ship = playerShip, protoIndex = protoIndex, amount = amount,
+            durability = item.durability, quality = item.quality,
+            maxDurability = item.maxDurability, weight = item.weight)
+      except:
+        return showError(message = "Can't update the ship' cargo3.")
     try:
       updateBaseCargo(cargoIndex = baseCargoIndex, amount = -(amount),
           durability = item.durability, quality = item.quality,

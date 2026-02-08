@@ -424,8 +424,11 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
         maxDurability = item.maxDurability, weight = item.weight)
   except:
     return showError(message = "Can't update the member's inventory.")
-  updateCargo(ship = playerShip, amount = -amount, cargoIndex = itemIndex,
-      price = item.price, quality = item.quality)
+  try:
+    updateCargo(ship = playerShip, amount = -amount, cargoIndex = itemIndex,
+        price = item.price, quality = item.quality)
+  except:
+    return showError(message = "Can't update the ship' cargo.")
   discard closeDialogCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["CloseDialog", ".itemdialog"].allocCStringArray)
   updateHeader()
@@ -501,10 +504,13 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
   if dropAmount > 0:
     addMessage(message = "You dropped " & $dropAmount & " " & getItemName(
         item = item) & ".", mtype = otherMessage)
-    updateCargo(ship = playerShip, protoIndex = item.protoIndex,
-        amount = -dropAmount, durability = item.durability, price = item.price,
-        quality = item.quality, maxDurability = item.maxDurability,
-        weight = item.weight)
+    try:
+      updateCargo(ship = playerShip, protoIndex = item.protoIndex,
+          amount = -dropAmount, durability = item.durability, price = item.price,
+          quality = item.quality, maxDurability = item.maxDurability,
+          weight = item.weight)
+    except:
+      return showError(message = "Can't update the ship' cargo.")
   discard closeDialogCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["CloseDialog", ".itemdialog"].allocCStringArray)
   updateHeader()
