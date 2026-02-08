@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Crash when buying items
 - Possible crash when meeting a friendly ship
 - Sometimes game doesn't generate missions in bases
+- Buying items in bases doesn't stack items in the player's ship's cargo
 
 ## [11.9] - 2026-01-25
 
