@@ -72,18 +72,27 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     case currentTab
     # General options
     of 0:
-      addCheckbox(label = "Auto rest when crew is tired:", option = generalOptions[0], tooltip = "Wait for crew is rested when pilot or engineer are too tired to work.")
+      addCheckbox(label = "Auto rest when crew is tired:",
+          option = generalOptions[0],
+          tooltip = "Wait for crew is rested when pilot or engineer are too tired to work.")
       if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Default speed of ship after undock from base.")
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Default speed of ship after undock from base.")
       label(str = "Default speed after undocking:")
       var selected: Natural = generalOptions[1] - 1
       if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Default speed of ship after undock from base.")
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Default speed of ship after undock from base.")
       generalOptions[1] = (comboList(items = shipSpeeds, selected = selected,
           itemHeight = 25, x = 350, y = 200) + 1)
-      addCheckbox(label = "Auto center map after set destination:", option = generalOptions[2], tooltip = "After set destination for ship, center map on ship.")
-      addCheckbox(label = "Auto set base after finished mission:", option = generalOptions[3], tooltip = "After finished mission, set skybase from which mission was taken as a destination for ship.")
-      addCheckbox(label = "Auto set destination after accepting mission:", option = generalOptions[4], tooltip = "")
+      addCheckbox(label = "Auto center map after set destination:",
+          option = generalOptions[2],
+          tooltip = "After set destination for ship, center map on ship.")
+      addCheckbox(label = "Auto set base after finished mission:",
+          option = generalOptions[3],
+          tooltip = "After finished mission, set skybase from which mission was taken as a destination for ship.")
+      addCheckbox(label = "Auto set destination after accepting mission:",
+          option = generalOptions[4], tooltip = "")
       addCheckbox(label = "Auto finish mission:", option = generalOptions[5], tooltip = "")
       addCheckbox(label = "Auto ask for bases:", option = generalOptions[6], tooltip = "")
       addCheckbox(label = "Auto ask for events:", option = generalOptions[7], tooltip = "")
