@@ -92,9 +92,12 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           option = generalOptions[3],
           tooltip = "After finished mission, set skybase from which mission was taken as a destination for ship.")
       addCheckbox(label = "Auto set destination after accepting mission:",
-          option = generalOptions[4], tooltip = "")
-      addCheckbox(label = "Auto finish mission:", option = generalOptions[5], tooltip = "")
-      addCheckbox(label = "Auto ask for bases:", option = generalOptions[6], tooltip = "")
-      addCheckbox(label = "Auto ask for events:", option = generalOptions[7], tooltip = "")
+          option = generalOptions[4], tooltip = "After accepting a mission, set its target as a destination for ship.")
+      addCheckbox(label = "Auto finish mission:", option = generalOptions[5],
+          tooltip = "Auto finish missions when ship is near corresponding skybase. Missions will not be finished if there is no trader on position or when there is Double Price event in the base.")
+      addCheckbox(label = "Auto ask for bases:", option = generalOptions[6],
+          tooltip = "Auto ask for bases when ship end docking to bases.")
+      addCheckbox(label = "Auto ask for events:", option = generalOptions[7],
+          tooltip = "Auto ask for events when ship end docking to bases.")
     else:
       discard
