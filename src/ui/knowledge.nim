@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -198,14 +198,14 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
     """)
     var comboValues: string = " {Any}"
     for baseType in basesTypesList.values:
-      comboValues.add(y = " { " & baseType.name & "}")
+      comboValues.add(y = " {" & baseType.name & "}")
     var comboBox: string = knowledgeCanvas & ".frame.options.types"
     tclEval(script = comboBox & " configure -values [list" & comboValues & "]")
     tclEval(script = comboBox & " current 0")
     comboValues = " {Any}"
     comboBox = knowledgeCanvas & ".frame.options.owner"
     for faction in factionsList.values:
-      comboValues.add(y = " { " & faction.name & "}")
+      comboValues.add(y = " {" & faction.name & "}")
     tclEval(script = comboBox & " configure -values [list" & comboValues & "]")
     tclEval(script = comboBox & " current 0")
   elif tclEval2(script = "winfo ismapped " & knowledgeFrame) == "1" and argc == 1:
