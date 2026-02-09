@@ -68,6 +68,25 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       checkbox(label = "", checked = checked)
       option = checked.ord
 
+    proc addProperty(label, tooltip: string; min, max: Natural;
+        value: var Natural) {.raises: [], tags: [], contractual.} =
+      ## Add a property to the list of options
+      ##
+      ## * label   - the text to show on the property
+      ## * tooltip - the text to show as tooltip for the property
+      ## * min     - the minimal value to set on the property
+      ## * max     - the maximum value to set on the property
+      ## * value   - the current value set on the property
+      ##
+      ## Returns the modified parameter value
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = tooltip)
+      label(str = label)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = tooltip)
+      value = property2(name = "#", min = min, val = value, max = max, step = 1,
+          incPerPixel = 1)
+
     setLayoutRowDynamic(height = 30, cols = 2)
     case currentTab
     # General options
@@ -99,5 +118,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip = "Auto ask for bases when ship end docking to bases.")
       addCheckbox(label = "Auto ask for events:", option = generalOptions[7],
           tooltip = "Auto ask for events when ship end docking to bases.")
+      addProperty(label = "Low level of fuel:",
+          tooltip = "Amount of fuel below which you will see warning about low level of. Enter value between 1 and 10 000.",
+          min = 1, max = 10_000, value = generalOptions[8])
     else:
       discard
