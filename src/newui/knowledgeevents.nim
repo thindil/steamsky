@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -41,7 +41,7 @@ proc setTargetEvent(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   closePopup()
   dialog = none
-  let event = eventsList[eventIndex]
+  let event = eventsList[setui.eventIndex]
   if event.skyX == playerShip.skyX and event.skyY == playerShip.skyY:
     dialog = setMessage(message = "You are at this location now.",
         title = "Can't set destination")
@@ -60,7 +60,7 @@ proc showEvent(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   closePopup()
-  let event = eventsList[eventIndex]
+  let event = eventsList[setui.eventIndex]
   centerX = event.skyX
   centerY = event.skyY
   dialog = none
@@ -75,16 +75,16 @@ proc showEventInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  eventIndex = data
-  let baseIndex: ExtendedBasesRange = skyMap[eventsList[eventIndex].skyX][eventsList[
-        eventIndex].skyY].baseIndex
-  var eventInfo: string = "X: {gold}" & $eventsList[eventIndex].skyX &
-      "{/gold} Y: {gold}" & $eventsList[eventIndex].skyY & "{/gold}"
-  case eventsList[eventIndex].eType
+  setui.eventIndex = data
+  let baseIndex: ExtendedBasesRange = skyMap[eventsList[setui.eventIndex].skyX][eventsList[
+        setui.eventIndex].skyY].baseIndex
+  var eventInfo: string = "X: {gold}" & $eventsList[setui.eventIndex].skyX &
+      "{/gold} Y: {gold}" & $eventsList[setui.eventIndex].skyY & "{/gold}"
+  case eventsList[setui.eventIndex].eType
   of enemyShip, enemyPatrol, trader, friendlyShip:
     try:
       eventInfo.add(y = "\nShip type: {gold}" & protoShipsList[eventsList[
-          eventIndex].shipIndex].name & "{/gold}")
+          setui.eventIndex].shipIndex].name & "{/gold}")
     except:
       dialog = setError(message = "Can't get the ship info")
       return
@@ -94,7 +94,7 @@ proc showEventInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     eventInfo.add(y = "\nBase name: {gold}" & skyBases[baseIndex].name & "{/gold}")
     try:
       eventInfo.add(y = "\nItem: {gold}" & itemsList[eventsList[
-          eventIndex].itemIndex].name & "{/gold}")
+          setui.eventIndex].itemIndex].name & "{/gold}")
     except:
       dialog = setError(message = "Can't get the item info")
   of EventsTypes.none, baseRecovery:
