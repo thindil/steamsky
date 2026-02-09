@@ -64,6 +64,19 @@ proc hasMouseClickInRect*(id: Buttons; rect: Rect): bool {.raises: [],
   return nkInbox(px = btn.clicked_pos.x, py = btn.clicked_pos.y, x = rect.x,
     y = rect.y, w = rect.w, h = rect.h)
 
+proc hasMouseClickInRect2*(id: Buttons; rect: Rect): bool {.raises: [],
+  tags: [], contractual.} =
+  ## Check if the mouse button was clicked in the selected rectangle
+  ##
+  ## * id   - the mouse button which will be checked
+  ## * rect - the rectangle in which the mouse button will be checked
+  ##
+  ## Returns true if the mouse button was checked in the selected rectangle,
+  ## otherwise false
+  let btn: MouseButton = context.input.mouse.buttons[id]
+  return nkInbox(px = btn.clickedPos.x, py = btn.clickedPos.y, x = rect.x,
+    y = rect.y, w = rect.w, h = rect.h)
+
 proc hasMouseClickDownInRect*(id: Buttons; rect: Rect; down: bool): bool
   {.raises: [], tags: [], contractual.} =
   ## Check if the mouse button is clicked down in the selected rectangle
@@ -79,5 +92,18 @@ proc hasMouseClickDownInRect*(id: Buttons; rect: Rect; down: bool): bool
     buttons: ButtonsArray = cast[ButtonsArray](ctx.input.mouse.buttons)
     btn: nk_mouse_button = buttons[id]
   return hasMouseClickInRect(id = id, rect = Rect(x: rect.x, y: rect.y,
+    w: rect.w, h: rect.h)) and btn.down == down
+
+proc hasMouseClickDownInRect2*(id: Buttons; rect: Rect; down: bool): bool
+  {.raises: [], tags: [], contractual.} =
+  ## Check if the mouse button is clicked down in the selected rectangle
+  ##
+  ## * id   - the mouse button which will be checked
+  ## * rect - the rectangle in which the mouse button will be checked
+  ## * down - if true, the button is clicked down
+  ##
+  ## Returns true if the mouse button was checked in the selected rectangle, otherwise false
+  let btn: MouseButton = context.input.mouse.buttons[id]
+  return hasMouseClickInRect2(id = id, rect = Rect(x: rect.x, y: rect.y,
     w: rect.w, h: rect.h)) and btn.down == down
 

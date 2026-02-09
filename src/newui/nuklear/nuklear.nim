@@ -962,7 +962,7 @@ proc nkButtonBehavior(state: var nk_flags; r: Rect; i: Input;
     state = widgetStateHovered.nk_flags
     if isMouseDown(id = left):
       state = widgetStateActive.nk_flags
-      if hasMouseClickDownInRect(id = left, rect = r, down = nkTrue):
+      if hasMouseClickDownInRect2(id = left, rect = r, down = nkTrue):
         if behavior == default:
           when defined(nkButtonTriggerOnRelease):
             result = isMouseReleased(id = left)
@@ -1366,7 +1366,7 @@ proc nkPanelBegin(context; title: string; panelType: PanelType): bool {.raises: 
       let
         leftMouseDown: bool = buttons[Buttons.left].down
         leftMouseClicked: bool = buttons[Buttons.left].clicked == 1
-        leftMouseClickInCursor: bool = hasMouseClickDownInRect(id = left, rect = header, down = nkTrue)
+        leftMouseClickInCursor: bool = hasMouseClickDownInRect2(id = left, rect = header, down = nkTrue)
         cursors: CursorsArray = cast[CursorsArray](ctx.style.cursors)
       if leftMouseDown and leftMouseClickInCursor and not leftMouseClicked:
         win.bounds.x += `in`.mouse.delta.x
