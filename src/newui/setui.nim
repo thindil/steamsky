@@ -1744,8 +1744,12 @@ proc setHelp*(dialog: var GameDialog; helpIndex: Natural = 0) {.raises: [],
 # Setting the options UI
 ########################
 
-var generalOptions*: array[17, Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0]
+var
+  generalOptions*: array[17, Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0]
+    ## The list of general options
+  movementKeysOptions*: array[4, string] = ["", "", "", ""]
+    ## The list of movement keys options
 
 proc setOptions*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the game options screen
@@ -1767,3 +1771,7 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   generalOptions[14] = gameSettings.messagesOrder.ord
   generalOptions[15] = gameSettings.autoSave.ord
   generalOptions[16] = gameSettings.waitMinutes
+  movementKeysOptions[0] = mapAccelerators[5]
+  movementKeysOptions[1] = mapAccelerators[6]
+  movementKeysOptions[2] = mapAccelerators[7]
+  movementKeysOptions[3] = mapAccelerators[8]
