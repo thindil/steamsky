@@ -87,6 +87,25 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       value = property2(name = "#", min = min, val = value, max = max, step = 1,
           incPerPixel = 1)
 
+
+    proc addComboList(label, tooltip: string; items: openArray[string];
+        value: var Natural) {.raises: [], tags: [], contractual.} =
+      ## Add a combo list to the list of options
+      ##
+      ## * label   - the text to show on the combo list
+      ## * tooltip - the text to show as tooltip for the combo list
+      ## * item    - the list of items to show in the combo list
+      ## * value   - the currently selected value on the list
+      ##
+      ## Returns the modified parameter value
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = tooltip)
+      label(str = label)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = tooltip)
+      value = comboList(items = shipSpeeds, selected = value, itemHeight = 25,
+          x = 350, y = 200)
+
     setLayoutRowDynamic(height = 30, cols = 2)
     case currentTab
     # General options
@@ -94,16 +113,11 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addCheckbox(label = "Auto rest when crew is tired:",
           option = generalOptions[0],
           tooltip = "Wait for crew is rested when pilot or engineer are too tired to work.")
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Default speed of ship after undock from base.")
-      label(str = "Default speed after undocking:")
       var selected: Natural = generalOptions[1] - 1
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Default speed of ship after undock from base.")
-      generalOptions[1] = (comboList(items = shipSpeeds, selected = selected,
-          itemHeight = 25, x = 350, y = 200) + 1)
+      addComboList(label = "Default speed after undocking:",
+          tooltip = "Default speed of ship after undock from base.",
+          items = shipSpeeds, value = selected)
+      generalOptions[1] = selected + 1
       addCheckbox(label = "Auto center map after set destination:",
           option = generalOptions[2],
           tooltip = "After set destination for ship, center map on ship.")
