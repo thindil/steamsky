@@ -121,5 +121,11 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addProperty(label = "Low level of fuel:",
           tooltip = "Amount of fuel below which you will see warning about low level of. Enter value between 1 and 10 000.",
           min = 1, max = 10_000, value = generalOptions[8])
+      addProperty(label = "Low level of drinks:",
+          tooltip = "Amount of drinks below which you will see warning about low level of. Enter value between 1 and 10 000.",
+          min = 1, max = 10_000, value = generalOptions[9])
+      addProperty(label = "Low level of food:",
+          tooltip = "Amount of food below which you will see warning about low level of. Enter value between 1 and 10 000.",
+          min = 1, max = 10_000, value = generalOptions[10])
     else:
       discard
