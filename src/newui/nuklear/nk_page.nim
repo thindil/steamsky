@@ -64,7 +64,7 @@ proc nkFreePageElement*(context; elem: ptr PageElement) {.raises: [], tags: [],
   # if possible remove last element from back of fixed memory buffer
   let
     elemEnd: pointer = elem.addr + 1
-    bufferEnd: pointer = ctx.memory.memory.`ptr` + ctx.memory.size
+    bufferEnd: pointer = context.memory.memory.memPtr.addr + context.memory.size
   if elemEnd == bufferEnd:
     context.memory.size -= elem.sizeOf
   else:
