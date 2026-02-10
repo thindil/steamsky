@@ -103,7 +103,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = label)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = tooltip)
-      value = comboList(items = shipSpeeds, selected = value, itemHeight = 25,
+      value = comboList(items = items, selected = value, itemHeight = 25,
           x = 350, y = 200)
 
     setLayoutRowDynamic(height = 30, cols = 2)
@@ -141,5 +141,10 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addProperty(label = "Low level of food:",
           tooltip = "Amount of food below which you will see warning about low level of. Enter value between 1 and 10 000.",
           min = 1, max = 10_000, value = generalOptions[10])
+      const autoMoveList: array[4, string] = ["Never", "Any ship",
+          "Friendly ship", "Enemy ship"]
+      addComboList(label = "Stop auto movement:",
+          tooltip = "Set when auto move ship should stop: never, on meet any ship, on meet friendly ship or on meet enemy ship.",
+          items = autoMoveList, value = generalOptions[11])
     else:
       discard
