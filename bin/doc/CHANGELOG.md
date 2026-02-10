@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Sometimes game doesn't generate missions in bases
 - Buying items in bases doesn't stack items in the player's ship's cargo
 - Setting lists of bases types and owners in the knownledge screen
+- Showing bases of the selected type in the knowledge screen
 
 ## [11.9] - 2026-01-25
 
