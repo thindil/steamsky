@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -61,7 +61,12 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
     tclEval(script = searchEntry & " delete 0 end")
     tclEval(script = searchEntry & " configure -validatecommand {ShowBases %P}")
   var comboBox: string = basesFrame & ".options.types"
-  let basesType: string = tclEval2(script = comboBox & " get")
+  var basesType: string = tclEval2(script = comboBox & " get")
+  if basesType != "Any":
+    for index, base in basesTypesList:
+      if base.name == basesType:
+        basesType = index
+        break
   comboBox = basesFrame & ".options.status"
   let basesStatus: string = tclEval2(script = comboBox & " get")
   comboBox = basesFrame & ".options.owner"
@@ -82,6 +87,8 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
       continue
     if skyBases[index].visited.year == 0 and (basesType != "Any" or
         basesOwner != "Any"):
+      continue
+    if basesType != "Any" and skyBases[index].baseType != basesType:
       continue
     if currentRow < startRow:
       currentRow.inc
