@@ -1748,7 +1748,7 @@ var
   generalOptions*: array[17, Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0]
     ## The list of general options
-  movementKeysOptions*: array[4, string] = ["", "", "", ""]
+  movementKeysOptions*: array[8, string] = ["", "", "", "", "", "", "", ""]
     ## The list of movement keys options
 
 proc setOptions*() {.raises: [], tags: [], contractual.} =
@@ -1775,3 +1775,7 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   movementKeysOptions[1] = mapAccelerators[6]
   movementKeysOptions[2] = mapAccelerators[7]
   movementKeysOptions[3] = mapAccelerators[8]
+  movementKeysOptions[4] = mapAccelerators[10]
+  movementKeysOptions[5] = mapAccelerators[9]
+  movementKeysOptions[6] = mapAccelerators[11]
+  movementKeysOptions[7] = mapAccelerators[12]
