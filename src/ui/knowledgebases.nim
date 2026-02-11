@@ -60,8 +60,9 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
     tclEval(script = searchEntry & " configure -validatecommand {}")
     tclEval(script = searchEntry & " delete 0 end")
     tclEval(script = searchEntry & " configure -validatecommand {ShowBases %P}")
-  var comboBox: string = basesFrame & ".options.types"
-  var basesType: string = tclEval2(script = comboBox & " get")
+  var
+    comboBox: string = basesFrame & ".options.types"
+    basesType: string = tclEval2(script = comboBox & " get")
   if basesType != "Any":
     for index, base in basesTypesList:
       if base.name == basesType:
@@ -70,7 +71,12 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
   comboBox = basesFrame & ".options.status"
   let basesStatus: string = tclEval2(script = comboBox & " get")
   comboBox = basesFrame & ".options.owner"
-  let basesOwner: string = tclEval2(script = comboBox & " get")
+  var basesOwner: string = tclEval2(script = comboBox & " get")
+  if basesOwner != "Any":
+    for index, faction in factionsList:
+      if faction.name == basesOwner:
+        basesOwner = index
+        break
   rows = 0
   let startRow: Natural = ((page - 1) * gameSettings.listsLimit) + 1
   tclEval(script = "grid configure " & basesTable.canvas & " -row 2")
@@ -89,6 +95,8 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
         basesOwner != "Any"):
       continue
     if basesType != "Any" and skyBases[index].baseType != basesType:
+      continue
+    if basesOwner != "Any" and skyBases[index].owner != basesOwner:
       continue
     if currentRow < startRow:
       currentRow.inc
