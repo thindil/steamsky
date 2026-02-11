@@ -998,7 +998,8 @@ type
     button_behavior*: ButtonBehavior
     stacks*: nk_configuration_stacks
     when defined(nkIncludeCommandUserData):
-      userdata*: nk_handle ## Interna Nuklear data
+      userdata*: nk_handle
+        ## Interna Nuklear data
     when defined(nkIncludeVertexBufferOutput):
       draw_list*: nk_draw_list
         ## Internal Nuklear type

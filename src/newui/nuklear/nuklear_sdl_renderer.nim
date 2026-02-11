@@ -1,4 +1,4 @@
-# Copyright © 2023-2025 Bartek Jasicki
+# Copyright © 2023-2026 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -254,7 +254,7 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   let scaleY: cfloat = renderH.cfloat / windowH.cfloat
   SDL_RenderSetScale(renderer = renderer, scaleX = scaleX, scaleY = scaleY)
   fontScale = scaleY
-  setContext(context = nk_sdl_init(win = win, renderer = renderer))
+  setContext(newContext = nk_sdl_init(win = win, renderer = renderer))
   return getContext()
 
 proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =

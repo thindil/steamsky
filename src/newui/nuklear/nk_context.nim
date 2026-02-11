@@ -43,11 +43,11 @@ var
 # -------
 # General
 # -------
-proc setContext*(context: PContext) {.raises: [], tags: [], contractual.} =
+proc setContext*(newContext: PContext) {.raises: [], tags: [], contractual.} =
   ## Set the Nuklear lib context
   ##
-  ## * context - the pointer to the Nuklear context
-  ctx = context
+  ## * newContext - the pointer to the Nuklear context
+  ctx = newContext
 
 proc getContext*(): PContext {.raises: [], tags: [], contractual.} =
   ## Get the Nuklear lib context, temporary code
