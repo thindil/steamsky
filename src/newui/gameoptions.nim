@@ -146,5 +146,11 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addComboList(label = "Stop auto movement:",
           tooltip = "Set when auto move ship should stop: never, on meet any ship, on meet friendly ship or on meet enemy ship.",
           items = autoMoveList, value = generalOptions[11])
+      addProperty(label = "Messages limit:",
+          tooltip = "Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.",
+          min = 1, max = 5_000, value = generalOptions[12])
+      addProperty(label = "Saved messages:",
+          tooltip = "Maximum amount of last messages saved to file. Enter value between 5 and 200.",
+          min = 1, max = 200, value = generalOptions[13])
     else:
       discard
