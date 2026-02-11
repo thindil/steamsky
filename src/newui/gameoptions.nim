@@ -110,6 +110,12 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     case currentTab
     # General options
     of 0:
+      const
+        autoMoveList: array[4, string] = ["Never", "Any ship",
+          "Friendly ship", "Enemy ship"]
+        messagesOrderList: array[2, string] = ["Older messages first", "Newer messages first"]
+        autoSaveList: array[6, string] = ["Never", "After dock to base", "After undock from base", "Every game day", "Every game month", "Every game year"]
+
       addCheckbox(label = "Auto rest when crew is tired:",
           option = generalOptions[0],
           tooltip = "Wait for crew is rested when pilot or engineer are too tired to work.")
@@ -132,6 +138,15 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip = "Auto ask for bases when ship end docking to bases.")
       addCheckbox(label = "Auto ask for events:", option = generalOptions[7],
           tooltip = "Auto ask for events when ship end docking to bases.")
+      addComboList(label = "Stop auto movement:",
+          tooltip = "Set when auto move ship should stop: never, on meet any ship, on meet friendly ship or on meet enemy ship.",
+          items = autoMoveList, value = generalOptions[11])
+      addComboList(label = "Messages order:",
+          tooltip = "In what order show messages in game. If Older first will be select, then older messages will appear at top\nof the lists. Otherwise newer messages will be at top.",
+          items = messagesOrderList, value = generalOptions[14])
+      addComboList(label = "Auto save:",
+          tooltip = "How often game should be automatically saved to disk.",
+          items = autoSaveList, value = generalOptions[15])
       addProperty(label = "Low level of fuel:",
           tooltip = "Amount of fuel below which you will see warning about low level of. Enter value between 1 and 10 000.",
           min = 1, max = 10_000, value = generalOptions[8])
@@ -141,11 +156,6 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addProperty(label = "Low level of food:",
           tooltip = "Amount of food below which you will see warning about low level of. Enter value between 1 and 10 000.",
           min = 1, max = 10_000, value = generalOptions[10])
-      const autoMoveList: array[4, string] = ["Never", "Any ship",
-          "Friendly ship", "Enemy ship"]
-      addComboList(label = "Stop auto movement:",
-          tooltip = "Set when auto move ship should stop: never, on meet any ship, on meet friendly ship or on meet enemy ship.",
-          items = autoMoveList, value = generalOptions[11])
       addProperty(label = "Messages limit:",
           tooltip = "Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.",
           min = 1, max = 5_000, value = generalOptions[12])
