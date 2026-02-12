@@ -114,7 +114,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         autoMoveList: array[4, string] = ["Never", "Any ship",
           "Friendly ship", "Enemy ship"]
         messagesOrderList: array[2, string] = ["Older messages first", "Newer messages first"]
-        autoSaveList: array[6, string] = ["Never", "After dock to base", "After undock from base", "Every game day", "Every game month", "Every game year"]
+        autoSaveList: array[6, string] = ["Never", "After dock to base",
+            "After undock from base", "Every game day", "Every game month", "Every game year"]
 
       addCheckbox(label = "Auto rest when crew is tired:",
           option = generalOptions[0],
