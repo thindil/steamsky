@@ -679,9 +679,9 @@ proc toggleInventoryItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       isUsed = itemIsUsed(memberIndex = memberIndex, itemIndex = index)
       if equip and not isUsed:
         discard setUseItemCommand(clientData = clientData, interp = interp,
-            argc = 2, argv = @["SetUseItem", $index].allocCStringArray)
-    elif not equip and isUsed:
-      takeOffItem(memberIndex = memberIndex, itemIndex = index)
+            argc = 2, argv = @["SetUseItem", $(index + 1)].allocCStringArray)
+      elif not equip and isUsed:
+        takeOffItem(memberIndex = memberIndex, itemIndex = index)
   resetSelection()
   return sortCrewInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SortCrewInventory", "-1"].allocCStringArray)
