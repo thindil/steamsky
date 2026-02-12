@@ -21,6 +21,8 @@ All notable changes to this project will be documented in this file.
 - Buying items in bases doesn't stack items in the player's ship's cargo
 - Setting lists of bases types and owners in the knownledge screen
 - Showing bases of the selected type or owner in the knowledge screen
+- Equipping or taking off multiple items in the player's ship's crew members'
+  inventory
 
 ## [11.9] - 2026-01-25
 
