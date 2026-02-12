@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -121,8 +121,8 @@ proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
   require:
     memberIndex < ship.crew.len
   body:
-    var newMorale, newLoyalty, newValue: int = 0
-    let factionIndex: string = ship.crew[memberIndex].faction
+    var newMorale, newLoyalty, newValue: range[-1_000..1_000] = 0
+    let factionIndex: FactionIndex = ship.crew[memberIndex].faction
     if "nomorale" in factionsList[factionIndex].flags:
       return
     newValue = value
@@ -234,7 +234,7 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
   ## Returns modified parameter ship and true if tools exists, otherwise false.
   body:
     var
-      toolsIndex: int = -1
+      toolsIndex: ExtendedNatural = -1
       requiredTool: string = ""
     toolsIndex = ship.crew[memberIndex].equipment[EquipmentLocations.tool]
     if toolsIndex > 0 and itemsList[ship.crew[memberIndex].inventory[
