@@ -26,7 +26,7 @@
 import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
 import nk_button, nk_colors, nk_context, nk_draw, nk_input, nk_layout, nk_math,
-  nk_page, nk_panel, nk_tooltip, nk_types, nk_utf, nk_utils, nk_widget
+  nk_panel, nk_tooltip, nk_types, nk_utf, nk_utils, nk_widget
 export nk_button, nk_colors, nk_context, nk_input, nk_layout, nk_tooltip,
   nk_types, nk_widget
 
@@ -454,10 +454,8 @@ proc createWindow*(context): Window {.raises: [],
   ## * context - the Nuklear context
   ##
   ## Returns the newly created widget
-  var elem: PageElement = nkCreatePageElement(context = context,
-    pageType = windowType)
-  elem.data.win.seq = context.seq
-  return elem.data.win
+  result = Window()
+  result.seq = context.seq
 
 # ----
 # Misc
@@ -1517,7 +1515,7 @@ proc nkPopupBegin(context; pType: PopupType; title: string; flags: set[PanelFlag
     popup.parent = win
     popup.bounds = Rect(x: localX, y: localY, w: w, h: h)
     popup.seq = ctx.seq
-    popup.layout = nkCreatePanel(context = context)
+#    popup.layout = nkCreatePanel(context = context)
     popup.flags = winSetToInt(nimFlags = flags)
     {.ruleOff: "assignments".}
     popup.flags = popup.flags or windowBorder.cint
@@ -1552,7 +1550,6 @@ proc nkPopupBegin(context; pType: PopupType; title: string; flags: set[PanelFlag
     win.popup.active = nkFalse
     context.memory.allocated = allocated
     context.current = win
-    nkFreePanel(context = context, pan = popup.layout)
     popup.layout = nil
     return false
 

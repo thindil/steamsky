@@ -1638,19 +1638,6 @@ type
     when defined(nkIncludeCommandUserData):
       userdata*: Handle
         ## Internal Nuklear type
-  Page* = object
-    ## Used to store data for page memory
-    size*: uint
-    next*: ref Page
-    win*: array[1, PageElement]
-  Pool* = object
-    ## Used to store data for memory pool
-    alloc*: Allocator
-    aType*: AllocationType
-    pageCount*, capacity*: uint
-    pages*: ref Page
-    freeList*: PageElement
-    size*, cap*: nk_size
   Context* = object
     ## The main context of the Nuklear library
     style*: Style
@@ -1658,8 +1645,6 @@ type
     begin*, last*, current*, active*: ref Window
     seq*, count*: uint
     memory*: Buffer
-    usePool*: bool
-    freeList*: ptr PageElement
     clip*: Clipboard
     lastWidgetState*: nk_flags
     buttonBehavior*: ButtonBehavior
@@ -1673,7 +1658,6 @@ type
     textEdit*: TextEdit
     overlay*: CommandBuffer
     build*: int
-    pool*: Pool
   Text* = object
     ## Used to store data for text
     padding*: Vec2
