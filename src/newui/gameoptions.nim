@@ -19,7 +19,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
-import coreui, errordialog, header, setui
+import coreui, errordialog, header, setui, themes
 
 proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -106,7 +106,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       value = comboList(items = items, selected = value, itemHeight = 25,
           x = 350, y = 200)
 
-    proc addAccelerator(label, tooltip: string; value: var string) {.raises: [], tags: [], contractual.} =
+    proc addAccelerator(label, tooltip: string; value: var string) {.raises: [],
+        tags: [], contractual.} =
       ## Add an entry with a keyboard accelerator info and option to modify it
       ##
       ## * label   - the text to show on the accelerator
@@ -114,12 +115,22 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       ## * value   - the current value of the selected accelerator
       ##
       ## Returns the modified parameter value
-      discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = tooltip)
+      label(str = label)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = tooltip)
+      label(str = value)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Set the new keyboard shortcut for the action")
+      imageButton(image = images[moreOptionsIcon]):
+        discard
 
-    setLayoutRowDynamic(height = 30, cols = 2)
     case currentTab
     # General options
     of 0:
+      setLayoutRowDynamic(height = 30, cols = 2)
       const
         autoMoveList: array[4, string] = ["Never", "Any ship",
           "Friendly ship", "Enemy ship"]
@@ -177,4 +188,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip = "How much minutes will pass after press the Wait button.. Enter value between 1 and 1440.",
           min = 1, max = 1_440, value = generalOptions[16])
     else:
-      discard
+      setLayoutRowDynamic(height = 30, cols = 3)
+      addAccelerator(label = "Move ship up/left:",
+          tooltip = "Key used to move ship up and left.",
+          value = movementKeysOptions[0])
