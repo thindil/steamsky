@@ -106,6 +106,16 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       value = comboList(items = items, selected = value, itemHeight = 25,
           x = 350, y = 200)
 
+    proc addAccelerator(label, tooltip: string; value: var string) {.raises: [], tags: [], contractual.} =
+      ## Add an entry with a keyboard accelerator info and option to modify it
+      ##
+      ## * label   - the text to show on the accelerator
+      ## * tooltip - the text to show as tooltip for the entry
+      ## * value   - the current value of the selected accelerator
+      ##
+      ## Returns the modified parameter value
+      discard
+
     setLayoutRowDynamic(height = 30, cols = 2)
     case currentTab
     # General options
