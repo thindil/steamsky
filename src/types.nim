@@ -157,6 +157,7 @@ type
   MessageText* = string ## Used to store the text of a message
   CareerName* = string ## The name of a career
   ErrorMessage* = string ## Used to store errors info
+  ToolName* = string ## Used to store names of tools
 
   ModuleData* = object
     ## Used to store information about ships' modules
@@ -407,7 +408,7 @@ type
     description*: string
     foodTypes*: seq[string]
     drinksTypes*: seq[string]
-    healingTools*: string
+    healingTools*: ToolName
     healingSkill*: Natural
     flags*: seq[string]
     careers*: Table[string, CareerData]
@@ -635,7 +636,7 @@ type
     skill*: Natural = 0
     time*: Positive = 1
     difficulty*: Positive = 1
-    tool*: string = ""
+    tool*: ToolName = ""
     reputation*: ReputationRange = 0
     toolQuality*: Positive = 1
 
