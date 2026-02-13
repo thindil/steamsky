@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Showing bases of the selected type or owner in the knowledge screen
 - Equipping or taking off multiple items in the player's ship's crew members'
   inventory
+- Loading and deleting saved games on Windows
 
 ## [11.9] - 2026-01-25
 
