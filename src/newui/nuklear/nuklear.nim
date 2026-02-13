@@ -455,7 +455,7 @@ proc createWindow*(context): Window {.raises: [],
   ##
   ## Returns the newly created widget
   result = Window()
-  result.seq = context.seq
+  result.seq = context.seq.uint
 
 # ----
 # Misc
@@ -1525,7 +1525,6 @@ proc nkPopupBegin(context; pType: PopupType; title: string; flags: set[PanelFlag
 
     popup.buffer = win.buffer
     nkStartPopup(win = win)
-    var allocated: nk_size = ctx.memory.allocated
     nkPushScissor(b = popup.buffer, r = nkNullRect)
 
     # popup is running therefore invalidate parent panels
@@ -1548,7 +1547,6 @@ proc nkPopupBegin(context; pType: PopupType; title: string; flags: set[PanelFlag
       root = root.parent
     win.popup.buf.active = nkFalse
     win.popup.active = nkFalse
-    context.memory.allocated = allocated
     context.current = win
     popup.layout = nil
     return false

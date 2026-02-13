@@ -1499,19 +1499,6 @@ type
     scrollH*, scrollV: StyleScrollbar
     tab*: StyleTab
     combo*: StyleCombo
-  PageData* = object
-    ## Used to store memory page's data
-    case pageDataType*: PageDataType
-    of tableType:
-      tbl*: NkTable
-    of panelType:
-      pan*: ref Panel
-    of windowType:
-      win*: Window
-  PageElement* = object
-    ## Used to store memory page's elements
-    data*: PageData
-    next*, prev*: ptr PageElement
   Str* = object
     ## Used to store string, replace it later with normal string
     buffer*: Buffer
@@ -1643,8 +1630,7 @@ type
     style*: Style
     input*: Input
     begin*, last*, current*, active*: ref Window
-    seq*, count*: uint
-    memory*: Buffer
+    seq*, count*: Natural
     clip*: Clipboard
     lastWidgetState*: nk_flags
     buttonBehavior*: ButtonBehavior
@@ -1657,7 +1643,7 @@ type
         ## Internal Nuklear type
     textEdit*: TextEdit
     overlay*: CommandBuffer
-    build*: int
+    build*: bool
   Text* = object
     ## Used to store data for text
     padding*: Vec2
