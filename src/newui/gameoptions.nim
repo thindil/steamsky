@@ -18,8 +18,17 @@
 ## Provides code related to the game's options, like showing it, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
+import ../[config, types]
 import coreui, errordialog, header, setui, themes
+
+type
+  KeysType = enum
+    none, movementKeys, menuKeys, mapKeys, generalKeys
+
+var
+  keyLabel: string = ""
+  keyIndex: ExtendedNatural = -1
+  keyType: KeysType = none
 
 proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -106,13 +115,15 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       value = comboList(items = items, selected = value, itemHeight = 25,
           x = 350, y = 200)
 
-    proc addAccelerator(label, tooltip: string; value: var string) {.raises: [],
-        tags: [], contractual.} =
+    proc addAccelerator(label, tooltip: string; value: var string;
+        index: Natural; kType: KeysType) {.raises: [], tags: [], contractual.} =
       ## Add an entry with a keyboard accelerator info and option to modify it
       ##
       ## * label   - the text to show on the accelerator
       ## * tooltip - the text to show as tooltip for the entry
       ## * value   - the current value of the selected accelerator
+      ## * index   - the index of the key to set
+      ## * kType   - the type of key to set
       ##
       ## Returns the modified parameter value
       if gameSettings.showTooltips:
@@ -125,7 +136,9 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         addTooltip(bounds = getWidgetBounds(),
             text = "Set the new keyboard shortcut for the action")
       imageButton(image = images[moreOptionsIcon]):
-        discard
+        keyLabel = label
+        keyIndex = index
+        keyType = kType
 
     case currentTab
     # General options
@@ -188,7 +201,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip = "How much minutes will pass after press the Wait button.. Enter value between 1 and 1440.",
           min = 1, max = 1_440, value = generalOptions[16])
     else:
-      setLayoutRowDynamic(height = 30, cols = 3)
+      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.15, 0.05])
       addAccelerator(label = "Move ship up/left:",
           tooltip = "Key used to move ship up and left.",
-          value = movementKeysOptions[0])
+          value = movementKeysOptions[0], index = 0, kType = movementKeys)
