@@ -213,7 +213,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           keyType = none
         try:
           popup(pType = staticPopup, title = "Set Key", flags = {windowNoFlags},
-              x = windowWidth / 3, y = windowHeight / 3, w = 220, h = 120):
+              x = windowWidth / 4, y = windowHeight / 4, w = windowWidth / 2, h = 120):
             setLayoutRowDynamic(height = 100, cols = 1)
             wrapLabel(str = "Press a key or keys combination to set it as a new value for " &
                 keyLabel & ". Press Escape to cancel.")
