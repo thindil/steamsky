@@ -205,3 +205,17 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addAccelerator(label = "Move ship up/left:",
           tooltip = "Key used to move ship up and left.",
           value = movementKeysOptions[0], index = 0, kType = movementKeys)
+      # Start setting the selected key
+      if keyIndex > -1:
+        if isKeyPressed(key = keyEscape):
+          keyIndex = -1
+          keyLabel = ""
+          keyType = none
+        try:
+          popup(pType = staticPopup, title = "Set Key", flags = {windowNoFlags},
+              x = windowWidth / 3, y = windowHeight / 3, w = 220, h = 120):
+            setLayoutRowDynamic(height = 100, cols = 1)
+            wrapLabel(str = "Press a key or keys combination to set it as a new value for " &
+                keyLabel & ". Press Escape to cancel.")
+        except NuklearException:
+          dialog = setError(message = "Can't create a popup")
