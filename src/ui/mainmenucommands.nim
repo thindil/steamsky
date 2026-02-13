@@ -541,10 +541,10 @@ proc showLoadGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "bind " & button & " <Tab> {focus " & loadMenu & ".load;break}")
       tclEval(script = "focus " & button)
 
-  addButton(name = ".load", label = "Load the game", command = "LoadGame " &
-      $argv[1])
+  addButton(name = ".load", label = "Load the game", command = "LoadGame {" &
+      $argv[1] & "}")
   addButton(name = ".delete", label = "Delete the game",
-      command = "DeleteGame " & $argv[1])
+      command = "DeleteGame {" & $argv[1] & "}")
   addButton(name = ".close", label = "Close", command = "")
   showDialog(dialog = loadMenu, parentFrame = ".")
   return tclOk
@@ -691,18 +691,18 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = loadTable, text = save.playerName,
         tooltip = "Press mouse " & (
         if gameSettings.rightButton: "right" else: "left") &
-        " button to show available option", command = "ShowLoadGameMenu " &
-        save.fileName, column = 1)
+        " button to show available option", command = "ShowLoadGameMenu {" &
+        save.fileName & "}", column = 1)
     addButton(table = loadTable, text = save.shipName,
         tooltip = "Press mouse " & (
         if gameSettings.rightButton: "right" else: "left") &
-        " button to show available option", command = "ShowLoadGameMenu " &
-        save.fileName, column = 2)
+        " button to show available option", command = "ShowLoadGameMenu {" &
+        save.fileName & "}", column = 2)
     addButton(table = loadTable, text = save.saveTime,
         tooltip = "Press mouse " & (
         if gameSettings.rightButton: "right" else: "left") &
-        " button to show available option", command = "ShowLoadGameMenu " &
-        save.fileName, column = 3, newRow = true)
+        " button to show available option", command = "ShowLoadGameMenu {" &
+        save.fileName & "}", column = 3, newRow = true)
   updateTable(table = loadTable)
   if loadTable.row == 1:
     tclEval(script = "bind . <Alt-b> {}")
