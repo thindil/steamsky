@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -1608,6 +1608,9 @@ proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     startUpgrading(moduleIndex = ($argv[2]).parseInt() - 1, upgradeType = (
         $argv[1]).parseInt)
+  except ShipUpgradeError:
+    showMessage(text = getCurrentExceptionMsg(),
+        title = "Can't upgrade the module")
   except:
     showError(message = "Can't set upgrade for the module.")
   try:
