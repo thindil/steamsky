@@ -30760,6 +30760,15 @@ nk_tooltipfv(struct nk_context *ctx, const char *fmt, va_list args)
 #endif
 
 
+/* Temporary code needed for Nim */
+NK_API const char* nk_get_input_text(struct nk_context *ctx)
+{
+  return ctx->input.keyboard.text;
+}
+NK_API int nk_get_input_text_len(struct nk_context *ctx)
+{
+  return ctx->input.keyboard.text_len;
+}
 
 #endif /* NK_IMPLEMENTATION */
 

@@ -107,3 +107,12 @@ proc hasMouseClickDownInRect2*(id: Buttons; rect: Rect; down: bool): bool
   return hasMouseClickInRect2(id = id, rect = Rect(x: rect.x, y: rect.y,
     w: rect.w, h: rect.h)) and btn.down == down
 
+proc getInputText*(): string {.raises: [], tags: [], contractual.} =
+  ## Get the text inserted by the user
+  ##
+  ## Returns string with the text inserted by the user
+  proc nk_get_input_text(ctx): pointer {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function.
+  proc nk_get_input_text_len(ctx): cint {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function.
+  return $nk_get_input_text_len(ctx = ctx)
