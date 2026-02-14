@@ -149,15 +149,26 @@ type
   AttributesArray* = array[1..2, Natural] ## 1 - Attribute level, 2 - Attribute experience
   EquipmentArray* = array[EquipmentLocations, ExtendedNatural] ## The equipment of mobs
 
-  XmlAttribute* = string ## Used to read the game data from XML files
-  FactionIndex* = string ## Used to store in-game factions indexes
-  RecipeIndex* = string ## Used to store in-game crafting recipes indexes
-  BaseType* = string ## Used to store types of bases
-  ObjectName* = string ## Used to store names of objects (items)
-  MessageText* = string ## Used to store the text of a message
-  CareerName* = string ## The name of a career
-  ErrorMessage* = string ## Used to store errors info
-  ToolName* = string ## Used to store names of tools
+  XmlAttribute* = string
+    ## Used to read the game data from XML files
+  FactionIndex* = string
+    ## Used to store in-game factions indexes
+  RecipeIndex* = string
+    ## Used to store in-game crafting recipes indexes
+  BaseType* = string
+    ## Used to store types of bases
+  ObjectName* = string
+    ## Used to store names of objects (items)
+  MessageText* = string
+    ## Used to store the text of a message
+  CareerName* = string
+    ## The name of a career
+  ErrorMessage* = string
+    ## Used to store errors info
+  SettingString* = string
+    ## Used to store in-game settings, like money, tools names, etc
+  ToolName* = string
+    ## Used to store names of tools
 
   ModuleData* = object
     ## Used to store information about ships' modules

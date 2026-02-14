@@ -39,8 +39,6 @@ type
     ## The description of an attribute
   VersionString = string
     ## The version of the game
-  SettingString = string
-    ## Used to store in-game settings, like money, tools names, etc
 
   ToolQuality = object
     ## Store data related to quality of tools needed for train a skill
