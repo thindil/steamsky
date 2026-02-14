@@ -115,4 +115,6 @@ proc getInputText*(): string {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function.
   proc nk_get_input_text_len(ctx): cint {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function.
-  return $nk_get_input_text_len(ctx = ctx)
+  let textLen: Natural = nk_get_input_text_len(ctx = ctx)
+  if textLen == 0:
+    return ""
