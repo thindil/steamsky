@@ -111,10 +111,6 @@ proc getInputText*(): string {.raises: [], tags: [], contractual.} =
   ## Get the text inserted by the user
   ##
   ## Returns string with the text inserted by the user
-  proc nk_get_input_text(ctx): pointer {.importc, nodecl, raises: [], tags: [], contractual.}
+  proc nk_get_input_text(ctx): cstring {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function.
-  proc nk_get_input_text_len(ctx): cint {.importc, nodecl, raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function.
-  let textLen: Natural = nk_get_input_text_len(ctx = ctx)
-  if textLen == 0:
-    return ""
+  return $nk_get_input_text(ctx = ctx)
