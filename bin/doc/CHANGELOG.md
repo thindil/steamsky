@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Equipping or taking off multiple items in the player's ship's crew members'
   inventory
 - Loading and deleting saved games on Windows
+- Crash when trying to upgrade the player's ship's modules without materials
 
 ## [11.9] - 2026-01-25
 
