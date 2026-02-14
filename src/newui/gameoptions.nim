@@ -211,6 +211,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           keyIndex = -1
           keyLabel = ""
           keyType = none
+        echo getInputText()
         try:
           popup(pType = staticPopup, title = "Set Key", flags = {windowNoFlags},
               x = windowWidth / 4, y = windowHeight / 4, w = windowWidth / 2, h = 120):
