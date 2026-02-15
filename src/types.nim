@@ -167,8 +167,6 @@ type
     ## Used to store errors info
   SettingString* = string
     ## Used to store in-game settings, like money, tools names, etc
-  ToolName* = string
-    ## Used to store names of tools
 
   ModuleData* = object
     ## Used to store information about ships' modules
@@ -419,7 +417,7 @@ type
     description*: string
     foodTypes*: seq[string]
     drinksTypes*: seq[string]
-    healingTools*: ToolName
+    healingTools*: SettingString
     healingSkill*: Natural
     flags*: seq[string]
     careers*: Table[string, CareerData]
@@ -647,7 +645,7 @@ type
     skill*: Natural = 0
     time*: Positive = 1
     difficulty*: Positive = 1
-    tool*: ToolName = ""
+    tool*: SettingString = ""
     reputation*: ReputationRange = 0
     toolQuality*: Positive = 1
 
