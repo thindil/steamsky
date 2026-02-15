@@ -116,7 +116,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           x = 350, y = 200)
 
     proc addAccelerator(label, tooltip: string; value: var string;
-        index: Natural; kType: KeysType) {.raises: [], tags: [], contractual.} =
+        index: Natural; kType: KeysType; dialog: var GameDialog) {.raises: [],
+        tags: [], contractual.} =
       ## Add an entry with a keyboard accelerator info and option to modify it
       ##
       ## * label   - the text to show on the accelerator
@@ -139,6 +140,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         keyLabel = label
         keyIndex = index
         keyType = kType
+        dialog = setKeyDialog
 
     case currentTab
     # General options
@@ -204,14 +206,10 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.15, 0.05])
       addAccelerator(label = "Move ship up/left:",
           tooltip = "Key used to move ship up and left.",
-          value = movementKeysOptions[0], index = 0, kType = movementKeys)
+          value = movementKeysOptions[0], index = 0, kType = movementKeys,
+          dialog = dialog)
       # Start setting the selected key
-      if keyIndex > -1:
-        if isKeyPressed(key = keyEscape):
-          keyIndex = -1
-          keyLabel = ""
-          keyType = none
-        echo getInputText()
+      if dialog == setKeyDialog:
         try:
           popup(pType = staticPopup, title = "Set Key", flags = {windowNoFlags},
               x = windowWidth / 4, y = windowHeight / 4, w = windowWidth / 2, h = 120):
@@ -220,3 +218,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 keyLabel & ". Press Escape to cancel.")
         except NuklearException:
           dialog = setError(message = "Can't create a popup")
+        if isKeyPressed(key = keyEscape):
+          keyIndex = -1
+          keyLabel = ""
+          keyType = none
+          dialog = none
