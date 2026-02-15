@@ -82,7 +82,7 @@ proc flags*(baseType: BaseTypeData): seq[string] {.raises: [], tags: [],
   ## * baseType - the BaseTypeData object which field will be get
   ##
   ## Returns the value of the selected field
-  baseType.recipes
+  baseType.flags
 
 proc description*(baseType: BaseTypeData): BaseTypeDesc {.raises: [], tags: [],
     contractual.} =
