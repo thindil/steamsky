@@ -40,7 +40,8 @@ type
       assignAmmoDialog, assignSkillDialog, recipeDialog, setRecipeDialog,
       baseDialog, missionActionDialog, baseActionDialog, ordersDialog,
       destinationDialog, messageDialog, infoDialog, buyDialog, sellDialog,
-      takeDialog, dropDialog, moveDialog, giveDialog, dropCargoDialog
+      takeDialog, dropDialog, moveDialog, giveDialog, dropCargoDialog,
+      setKeyDialog
 
 const
   dtime*: float = 20.0
