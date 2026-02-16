@@ -167,6 +167,8 @@ type
     ## Used to store errors info
   SettingString* = string
     ## Used to store in-game settings, like money, tools names, etc
+  MobName* = string
+    ## Used to store a mob's name
 
   ModuleData* = object
     ## Used to store information about ships' modules
@@ -310,7 +312,7 @@ type
     ## * faction        - The faction index to which the member belongs
     attributes*: seq[MobAttributeRecord] = @[]
     skills*: seq[SkillInfo] = @[]
-    name*: string = ""
+    name*: MobName = ""
     gender*: char = 'M'
     health*: SkillRange = 100
     tired*: range[0..150] = 0
