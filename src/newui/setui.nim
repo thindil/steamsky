@@ -1751,7 +1751,7 @@ var
   movementKeysOptions*: array[14, string] = ["", "", "", "", "", "", "", "", "",
       "", "", "", "", ""]
     ## The list of movement keys options
-  menuKeysOptions*: array[11, string] = ["", "", "", "", "", "", "", "", "", "", ""]
+  menuKeysOptions*: array[12, string] = ["", "", "", "", "", "", "", "", "", "", "", ""]
     ## The list of menu keys options
 
 proc setOptions*() {.raises: [], tags: [], contractual.} =
@@ -1799,3 +1799,4 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   menuKeysOptions[8] = menuAccelerators[9]
   menuKeysOptions[9] = menuAccelerators[10]
   menuKeysOptions[10] = menuAccelerators[11]
+  menuKeysOptions[11] = mapAccelerators[1]
