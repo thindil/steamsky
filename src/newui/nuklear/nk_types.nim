@@ -133,7 +133,7 @@ type
       keyTextEnd, keyTextUndo, keyTextRedo,
       keyTextSelectAll, keyTextWordLeft, keyTextWordRight,
       keyScrollStart, keyScrollEnd, keyScrollDown,
-      keyScrollUp, keyEscape, keyMax
+      keyScrollUp, keyEscape, keyAlt, keyHome, keyEnd, keyMax
   StyleCursor* = enum
     ## Types of cursor's styles
     cursorArrow, cursorText, cursorMove, cursorResizeVertical,
