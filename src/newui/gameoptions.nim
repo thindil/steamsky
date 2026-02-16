@@ -218,7 +218,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 keyLabel & ". Press Escape to cancel.")
         except NuklearException:
           dialog = setError(message = "Can't create a popup")
-        if isKeyPressed(key = keyEscape):
+        if isKeyPressed(key = keyEscape) or getInputTextLen() > 0:
           keyIndex = -1
           keyLabel = ""
           keyType = none
