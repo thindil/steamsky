@@ -19,7 +19,7 @@
 ## accepted by the player, updating or deleting missions, etc.
 
 import std/[math, tables]
-import contracts
+import contracts, nimalyzer
 import bases, config, events, game, maps, messages, shipscrew, shipscargo,
     types, utils
 
@@ -75,7 +75,9 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [
         gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
       let freeSpace: int = freeCargo(amount = -(rewardAmount))
       if freeSpace < 0:
-        rewardAmount += freeSpace
+        {.ruleOff: "assignments".}
+        rewardAmount = rewardAmount + freeSpace
+        {.ruleOn: "assignments".}
       if rewardAmount > 0:
         addMessage(message = "You received " & $rewardAmount & " " & moneyName &
             " for finishing your mission.", mType = missionMessage)
