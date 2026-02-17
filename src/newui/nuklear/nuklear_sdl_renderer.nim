@@ -81,7 +81,8 @@ type
     SDL_BUTTON_LEFT = 1, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT
 
 const SDLK_SCANCODE_MASK = 1 shl 30
-proc SDL_ScancodeToKeycode(code: SDL_Scancode): uint {.raises: [], tags: [], contractual.} =
+proc SDL_ScancodeToKeycode(code: SDL_Scancode): uint {.raises: [], tags: [],
+    contractual.} =
   ## Converts SDL scancode to keycode
   ##
   ## * code - the scancode to convert
