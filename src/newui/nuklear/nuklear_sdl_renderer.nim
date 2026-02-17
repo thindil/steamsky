@@ -80,6 +80,15 @@ type
   SDL_Mouse_Buttons = enum
     SDL_BUTTON_LEFT = 1, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT
 
+const SDLK_SCANCODE_MASK = 1 shl 30
+proc SDL_ScancodeToKeycode(code: SDL_Scancode): uint {.raises: [], tags: [], contractual.} =
+  ## Converts SDL scancode to keycode
+  ##
+  ## * code - the scancode to convert
+  ##
+  ## Returns SDL keycode for the selectec scancode
+  (code.cint or SDLK_SCANCODE_MASK).uint
+
 const
   SDL_INIT_VIDEO: cint = 0x00000020
   SDL_WINDOWPOS_CENTERED: cint = 0x2FFF0000 or 0
@@ -91,8 +100,8 @@ const
   SDLK_LSHIFT: uint = 0x400000e1u
   SDLK_LALT: uint = 0x400000e2u
   SDLK_RALT: uint = 0x400000e6u
-  SDLK_LCTRL: uint = 0x400000e0u
-  SDLK_RCTRL: uint = 0x400000e4u
+  SDLK_LCTRL: uint = SDL_ScancodeToKeycode(code = SDL_SCANCODE_LCTRL)
+  SDLK_RCTRL: uint = SDL_ScancodeToKeycode(code = SDL_SCANCODE_RCTRL)
   SDLK_DELETE: uint = 0x0000007fu
   SDLK_RETURN: uint = 0x0000000du
   SDLK_TAB: uint = 0x00000009u
