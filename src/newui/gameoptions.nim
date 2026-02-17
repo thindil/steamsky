@@ -218,13 +218,13 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 keyLabel & ". Press Escape to cancel.")
         except NuklearException:
           dialog = setError(message = "Can't create a popup")
-        var keyPressed: bool = false
+        var keyPressed: Keys = keyNone
         const keys: array[2, Keys] = [keyEscape, keyHome]
         for key in keys:
           if isKeyPressed(key = key):
-            keyPressed = true
+            keyPressed = key
             break
-        if keyPressed or getInputTextLen() > 0:
+        if keyPressed != keyNone or getInputTextLen() > 0:
           if getInputTextLen() > 0:
             case keyType
             of movementKeys:
@@ -233,10 +233,10 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 movementKeysOptions[keyIndex] = "Ctrl-" & movementKeysOptions[keyIndex]
               if isKeyPressed(key = keyAlt):
                 movementKeysOptions[keyIndex] = "Alt-" & movementKeysOptions[keyIndex]
-              if isKeyPressed(key = keyHome):
-                movementKeysOptions[keyIndex] = "Home"
             else:
               discard
+          elif keyPressed == keyHome:
+            movementKeysOptions[keyIndex] = "Home"
           keyIndex = -1
           keyLabel = ""
           keyType = none
