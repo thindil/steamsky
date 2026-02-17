@@ -266,7 +266,8 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
                 itemType = requiredTool, quality = toolQuality,
                     itemQuality = any)
             if toolsIndex > -1:
-              ship.crew[memberIndex].equipment[EquipmentLocations.tool] = toolsIndex
+              ship.crew[memberIndex].equipment[
+                  EquipmentLocations.tool] = toolsIndex
           else:
             ship.crew[memberIndex].equipment[EquipmentLocations.tool] = -1
         if toolsIndex == -1:
@@ -386,7 +387,8 @@ proc giveRestOrder(ship: var ShipRecord; memberIndex: Natural) {.raises: [
   body:
     ship.crew[memberIndex].previousOrder = rest
     if ship.crew[memberIndex].order in [repair, clean, upgrading, train]:
-      var toolsIndex: ExtendedNatural = ship.crew[memberIndex].equipment[EquipmentLocations.tool]
+      var toolsIndex: ExtendedNatural = ship.crew[memberIndex].equipment[
+          EquipmentLocations.tool]
       if toolsIndex > -1:
         updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
             toolsIndex].protoIndex, amount = 1, durability = ship.crew[
@@ -426,7 +428,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
                 return
       else:
         return
-    let memberName: string = ship.crew[memberIndex].name
+    let memberName: MobName = ship.crew[memberIndex].name
     if givenOrder != rest and ((ship.crew[memberIndex].morale[1] < 11 and
         getRandom(min = 1, max = 100) < 50) or ship.crew[memberIndex].loyalty < 20):
       if ship.crew == playerShip.crew:
@@ -450,7 +452,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       if not freePosition:
         giveOrders(ship = ship, memberIndex = ship.modules[moduleIndex].owner[
             0], givenOrder = rest, moduleIndex = -1, checkPriorities = false)
-    var moduleIndex2: int = -1
+    var moduleIndex2: ExtendedNatural = -1
     if moduleIndex == -1 and givenOrder in [pilot, engineer, rest]:
       let mType: ModuleType = case givenOrder
         of pilot:
@@ -512,7 +514,7 @@ proc updatePosition(ship: var ShipRecord; order: CrewOrders;
   ## Returns true if order was updated, otherwise false
   var
     orderIndex: Natural = 0
-    memberIndex, moduleIndex: int = -1
+    memberIndex, moduleIndex: ExtendedNatural = -1
   orderIndex = (if order < defend: (order.ord + 1) else: order.ord)
   if maxPriority:
     for index, member in ship.crew:
@@ -637,7 +639,7 @@ proc setOrdersConditions(havePilot, haveEngineer, haveUpgrade, haveTrader,
           break
   if skyMap[ship.skyX][ship.skyY].baseIndex > 0:
     needTrader = true
-  let eventIndex: int = skyMap[ship.skyX][ship.skyY].eventIndex
+  let eventIndex: ExtendedNatural = skyMap[ship.skyX][ship.skyY].eventIndex
   if not needTrader and eventIndex > 0 and eventsList[eventIndex].eType in [
       trader, friendlyShip]:
     needTrader = true
@@ -776,8 +778,8 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
     if attributeIndex == Natural.high:
       return
     var
-      skillExp, newAmount, skillLevel: int = 0
-      skillIndex: int = -1
+      skillExp, newAmount, skillLevel: range[-100_000..100_000] = 0
+      skillIndex: ExtendedNatural = -1
 
     proc gainExpInAttribute(attribute: Natural) {.raises: [],
         tags: [], contractual.} =
@@ -794,7 +796,7 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
         if memberAttribute.level == 50:
           return
         var
-          attributeExp: int = memberAttribute.experience + newAmount
+          attributeExp: range[-100_000..100_000] = memberAttribute.experience + newAmount
           attributeLevel: Natural = memberAttribute.level
         if attributeExp >= attributeLevel * 250:
           attributeExp -= (attributeLevel * 250)
