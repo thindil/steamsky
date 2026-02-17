@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -19,7 +19,7 @@
 ## It is an incomplete binding, only things needed by the game are ported.
 
 import std/strutils
-import contracts
+import contracts, nimalyzer
 
 # Set names of Tcl/Tk libraries
 # On Windows
@@ -57,10 +57,6 @@ type
     ## Types of result used by Tcl
     tclOk, tclError, tclReturn, tclBreak, tclContinue
 
-  TclError* = object of CatchableError
-    ## Used to raise exceptions related to the Tcl/Tk, like failed
-    ## initialization, etc.
-
   TclCmdProc* = proc (clientData: cint; interp: PInterp; argc: cint;
       argv: cstringArray): TclResults {.cdecl.}
     ## Procedure which will be executed as Tcl command
@@ -78,8 +74,15 @@ type
     ##
     ## * clientData - the additional data passed to the procedure
 
+{.push ruleOff: "objects".}
+type
+  TclError* = object of CatchableError
+    ## Used to raise exceptions related to the Tcl/Tk, like failed
+    ## initialization, etc.
+
   AddingCommandError* = object of CatchableError
     ## Raised when there is problem with adding a Tcl command
+{.push ruleOn: "objects".}
 
 var currentTclInterp: PInterp = nil
   ## Stores the current Tcl interpreter
