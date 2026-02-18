@@ -219,7 +219,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         except NuklearException:
           dialog = setError(message = "Can't create a popup")
         var keyPressed: Keys = keyNone
-        const keys: array[3, Keys] = [keyEscape, keyHome, keyEnd]
+        const keys: array[7, Keys] = [keyEscape, keyHome, keyEnd, keyKP1,
+            keyKP2, keyKP3, keyKP7]
         for key in keys:
           if isKeyPressed(key = key):
             keyPressed = key
@@ -244,6 +245,14 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
               movementKeysOptions[keyIndex] = "Home"
             of keyEnd:
               movementKeysOptions[keyIndex] = "End"
+            of keyKP7:
+              movementKeysOptions[keyIndex] = "KP_Home"
+            of keyKP1:
+              movementKeysOptions[keyIndex] = "KP_End"
+            of keyKP2:
+              movementKeysOptions[keyIndex] = "KP_Down"
+            of keyKP3:
+              movementKeysOptions[keyIndex] = "KP_PgDown"
             else:
               discard
           keyIndex = -1
