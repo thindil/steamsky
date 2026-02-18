@@ -219,24 +219,33 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         except NuklearException:
           dialog = setError(message = "Can't create a popup")
         var keyPressed: Keys = keyNone
-        const keys: array[2, Keys] = [keyEscape, keyHome]
+        const keys: array[3, Keys] = [keyEscape, keyHome, keyEnd]
         for key in keys:
           if isKeyPressed(key = key):
             keyPressed = key
             break
         if keyPressed != keyNone or getInputTextLen() > 0:
           if getInputTextLen() > 0:
+            var key: SettingString = getInputText()
+            if isKeyPressed(key = keyCtrl):
+              key = "Ctrl-" & key
+            if isKeyPressed(key = keyAlt):
+              key = "Alt-" & key
             case keyType
             of movementKeys:
-              movementKeysOptions[keyIndex] = getInputText()
-              if isKeyPressed(key = keyCtrl):
-                movementKeysOptions[keyIndex] = "Ctrl-" & movementKeysOptions[keyIndex]
-              if isKeyPressed(key = keyAlt):
-                movementKeysOptions[keyIndex] = "Alt-" & movementKeysOptions[keyIndex]
+              movementKeysOptions[keyIndex] = key
+            of menuKeys:
+              menuKeysOptions[keyIndex] = key
             else:
               discard
-          elif keyPressed == keyHome:
-            movementKeysOptions[keyIndex] = "Home"
+          elif keyPressed != keyNone:
+            case keyPressed
+            of keyHome:
+              movementKeysOptions[keyIndex] = "Home"
+            of keyEnd:
+              movementKeysOptions[keyIndex] = "End"
+            else:
+              discard
           keyIndex = -1
           keyLabel = ""
           keyType = none
