@@ -80,7 +80,7 @@ type
   SDL_Mouse_Buttons = enum
     SDL_BUTTON_LEFT = 1, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT
 
-const SDLK_SCANCODE_MASK = 1 shl 30
+const SDLK_SCANCODE_MASK: cint = 1 shl 30
 proc SDL_ScancodeToKeycode(code: SDL_Scancode): uint {.raises: [], tags: [],
     contractual.} =
   ## Converts SDL scancode to keycode
@@ -108,6 +108,8 @@ const
   SDLK_TAB: uint = 0x00000009u
   SDLK_BACKSPACE: uint = 0x00000008u
   SDLK_HOME: uint = 0x4000004au
+  SDLK_KP_7: uint = 0x4000005fu
+  SDLK_KP_1: uint = 0x40000059u
   SDLK_END: uint = 0x4000004du
   SDLK_PAGEDOWN: uint = 0x4000004eu
   SDLK_PAGEUP: uint = 0x4000004bu
@@ -358,6 +360,10 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
         nk_input_key(ctx = ctx, key = keyAlt, down = down)
       of SDLK_RCTRL.cuint, SDLK_LCTRL.cuint:
         nk_input_key(ctx = ctx, key = keyCtrl, down = down)
+      of SDLK_KP_7.cuint:
+        nk_input_key(ctx = ctx, key = keyKP7, down = down)
+      of SDLK_KP_1.cuint:
+        nk_input_key(ctx = ctx, key = keyKP1, down = down)
       else:
         result = noEvent
     of SDL_MOUSEBUTTONDOWN.cuint, SDL_MOUSEBUTTONUP.cuint:
