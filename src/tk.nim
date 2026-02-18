@@ -46,9 +46,12 @@ type
 
   TclInterp* = object
     ## Represents Tcl interpreter
-    result*: cstring ## the string with result's value returned by the last Tcl command
-    freeProc*: TFreeProc ## the procedure which will be run during freeing the result value
-    errorLine*: cint ## the number of the line where error occured. Set only when error happened
+    result: cstring
+      ## the string with result's value returned by the last Tcl command
+    freeProc: TFreeProc
+      ## the procedure which will be run during freeing the result value
+    errorLine: cint
+      ## the number of the line where error occured. Set only when error happened
 
   PInterp* = ptr TclInterp
     ## Pointer to the Tcl interpreter
