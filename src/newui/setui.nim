@@ -1753,6 +1753,8 @@ var
     ## The list of movement keys options
   menuKeysOptions*: array[12, string] = ["", "", "", "", "", "", "", "", "", "", "", ""]
     ## The list of menu keys options
+  mapKeysOptions*: array[4, string] = ["", "", "", ""]
+    ## The list of map keys options
 
 proc setOptions*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the game options screen
@@ -1800,3 +1802,7 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   menuKeysOptions[9] = menuAccelerators[10]
   menuKeysOptions[10] = menuAccelerators[11]
   menuKeysOptions[11] = mapAccelerators[1]
+  mapKeysOptions[0] = mapAccelerators[15]
+  mapKeysOptions[1] = mapAccelerators[16]
+  mapKeysOptions[2] = mapAccelerators[21]
+  mapKeysOptions[3] = mapAccelerators[22]
