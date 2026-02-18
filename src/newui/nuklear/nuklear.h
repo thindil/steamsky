@@ -793,6 +793,10 @@ enum nk_keys {
     NK_KEY_ALT,
     NK_KEY_HOME,
     NK_KEY_END,
+    NK_KEY_KP7,
+    NK_KEY_KP1,
+    NK_KEY_KP2,
+    NK_KEY_KP3,
     NK_KEY_MAX,
 };
 enum nk_buttons {
