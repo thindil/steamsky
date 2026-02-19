@@ -38,13 +38,14 @@ else:
     tclDllName = "libtcl8.6.so(|.1|.0)"
     tkDllName = "libtk8.6.so(|.1|.0)"
 
+{.push ruleOff: "objects".}
 type
   TFreeProc* = proc (theBlock: pointer) {.cdecl.}
     ## Procedure which will be run during freeing the result value
     ##
     ## * theBlock - the pointer to the value to free
 
-  TclInterp* = object
+  TclInterp = object
     ## Represents Tcl interpreter
     result: cstring
       ## the string with result's value returned by the last Tcl command
@@ -77,8 +78,6 @@ type
     ##
     ## * clientData - the additional data passed to the procedure
 
-{.push ruleOff: "objects".}
-type
   TclError* = object of CatchableError
     ## Used to raise exceptions related to the Tcl/Tk, like failed
     ## initialization, etc.
