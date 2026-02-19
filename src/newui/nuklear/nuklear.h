@@ -799,6 +799,8 @@ enum nk_keys {
     NK_KEY_KP3,
     NK_KEY_KP4,
     NK_KEY_KP5,
+    NK_KEY_KP6,
+    NK_KEY_KP8,
     NK_KEY_MAX,
 };
 enum nk_buttons {
