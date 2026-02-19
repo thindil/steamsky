@@ -111,6 +111,8 @@ const
   SDLK_KP_1: uint = 0x40000059u
   SDLK_KP_2: uint = 0x4000005au
   SDLK_KP_3: uint = 0x4000005bu
+  SDLK_KP_4: uint = 0x4000005cu
+  SDLK_KP_5: uint = 0x4000005du
   SDLK_KP_7: uint = 0x4000005fu
   SDLK_END: uint = 0x4000004du
   SDLK_PAGEDOWN: uint = 0x4000004eu
@@ -368,6 +370,10 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
         nk_input_key(ctx = ctx, key = keyKP2, down = down)
       of SDLK_KP_3.cuint:
         nk_input_key(ctx = ctx, key = keyKP3, down = down)
+      of SDLK_KP_4.cuint:
+        nk_input_key(ctx = ctx, key = keyKP4, down = down)
+      of SDLK_KP_5.cuint:
+        nk_input_key(ctx = ctx, key = keyKP5, down = down)
       of SDLK_KP_7.cuint:
         nk_input_key(ctx = ctx, key = keyKP7, down = down)
       else:
