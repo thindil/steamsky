@@ -135,7 +135,7 @@ type
       keyScrollStart, keyScrollEnd, keyScrollDown,
       keyScrollUp, keyEscape, keyAlt, keyHome, keyEnd,
       keyKP7, keyKP1, keyKP2, keyKP3, keyKP4, keyKP5, keyKP6,
-      keyKP8, keyMax
+      keyKP8, keyKP9, keyKP0, keyMax
   StyleCursor* = enum
     ## Types of cursor's styles
     cursorArrow, cursorText, cursorMove, cursorResizeVertical,

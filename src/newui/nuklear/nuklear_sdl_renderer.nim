@@ -116,6 +116,8 @@ const
   SDLK_KP_6: uint = 0x4000005eu
   SDLK_KP_7: uint = 0x4000005fu
   SDLK_KP_8: uint = 0x40000060u
+  SDLK_KP_9: uint = 0x40000061u
+  SDLK_KP_0: uint = 0x40000062u
   SDLK_END: uint = 0x4000004du
   SDLK_PAGEDOWN: uint = 0x4000004eu
   SDLK_PAGEUP: uint = 0x4000004bu
@@ -382,6 +384,10 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
         nk_input_key(ctx = ctx, key = keyKP7, down = down)
       of SDLK_KP_8.cuint:
         nk_input_key(ctx = ctx, key = keyKP8, down = down)
+      of SDLK_KP_9.cuint:
+        nk_input_key(ctx = ctx, key = keyKP9, down = down)
+      of SDLK_KP_0.cuint:
+        nk_input_key(ctx = ctx, key = keyKP0, down = down)
       else:
         result = noEvent
     of SDL_MOUSEBUTTONDOWN.cuint, SDL_MOUSEBUTTONUP.cuint:
