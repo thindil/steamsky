@@ -1753,7 +1753,7 @@ var
     ## The list of movement keys options
   menuKeysOptions*: array[12, string] = ["", "", "", "", "", "", "", "", "", "", "", ""]
     ## The list of menu keys options
-  mapKeysOptions*: array[4, string] = ["", "", "", ""]
+  mapKeysOptions*: array[8, string] = ["", "", "", "", "", "", "", ""]
     ## The list of map keys options
 
 proc setOptions*() {.raises: [], tags: [], contractual.} =
@@ -1806,3 +1806,7 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   mapKeysOptions[1] = mapAccelerators[16]
   mapKeysOptions[2] = mapAccelerators[21]
   mapKeysOptions[3] = mapAccelerators[22]
+  mapKeysOptions[4] = mapAccelerators[18]
+  mapKeysOptions[5] = mapAccelerators[23]
+  mapKeysOptions[6] = mapAccelerators[17]
+  mapKeysOptions[7] = mapAccelerators[19]
