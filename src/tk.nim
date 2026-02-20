@@ -137,14 +137,6 @@ proc tclEval*(interp: PInterp = getInterp();
       ## Nim binding to Tcl Tcl_Eval C API
   return interp.tclEval(script = script.cstring)
 
-proc tclGetResult*(interp: PInterp): cstring {.cdecl, dynlib: tclDllName,
-    importc: "Tcl_GetStringResult", raises: [], tags: [], contractual.}
-  ## Get the string with the result of the last evaluated Tcl command
-  ##
-  ## * interp - The Tcl interpreter from which the result will be taken
-  ##
-  ## Returns the string with the result of the last evaluated Tcl command
-
 proc tclGetResult2*(interp: PInterp = getInterp()): string {.raises: [], tags: [
     ], contractual.} =
   ## Get the string with the result of the last evaluated Tcl command
@@ -152,6 +144,9 @@ proc tclGetResult2*(interp: PInterp = getInterp()): string {.raises: [], tags: [
   ## * interp - The Tcl interpreter from which the result will be taken
   ##
   ## Returns the string with the result of the last evaluated Tcl command
+  proc tclGetResult(interp: PInterp): cstring {.cdecl, dynlib: tclDllName,
+      importc: "Tcl_GetStringResult", raises: [], tags: [], contractual.}
+      ## Nim binding to Tcl Tcl_GetStringResult
   return $interp.tclGetResult
 
 proc tclEval2*(interp: PInterp = getInterp();
@@ -164,7 +159,7 @@ proc tclEval2*(interp: PInterp = getInterp();
   ##
   ## Returns the result of the evaluation of the code as Nim string
   interp.tclEval(script = script)
-  return $(interp.tclGetResult)
+  return interp.tclGetResult2
 
 proc tclCreateCommand*(interp: PInterp; cmdName: cstring; cproc: TclCmdProc;
     clientData: cint; deleteProc: TclCmdDeleteProc): pointer {.cdecl,
@@ -268,6 +263,6 @@ proc deleteWidgets*(startIndex, endIndex: int; frame: string) {.raises: [],
   for i in startIndex..endIndex:
     if tclEval(script = "grid slaves " & frame & " -row " & $i) == tclError:
       return
-    let tclResult: string = $interp.tclGetResult()
+    let tclResult: string = interp.tclGetResult2
     for widget in tclResult.split():
       tclEval(script = "destroy " & widget)
