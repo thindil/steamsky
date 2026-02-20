@@ -125,14 +125,14 @@ type
     bufferFixed, bufferDynamic
   Keys* = enum
     ## Special keys
-    keyNone, keyShift, keyCtrl, keyDel, keyEnter, keyTab, keyBackspace, keyCopy,
+    keyNone, keyShift, keyCtrl, keyEnter, keyTab, keyBackspace, keyCopy,
       keyCut, keyPaste, keyUp, keyDown, keyLeft, keyRight, keyTextInsertMode,
       keyTextReplaceMode, keyTextResetMode, keyTextLineStart, keyTextLineEnd,
       keyTextStart, keyTextEnd, keyTextUndo, keyTextRedo, keyTextSelectAll,
       keyTextWordLeft, keyTextWordRight, keyScrollStart, keyScrollEnd,
       keyScrollDown, keyScrollUp, keyEscape, keyAlt, keyHome, keyEnd, keyKP7,
       keyKP1, keyKP2, keyKP3, keyKP4, keyKP5, keyKP6, keyKP8, keyKP9, keyKP0,
-      keyKPPeriod, keyInsert, keyMax
+      keyKPPeriod, keyInsert, keyDel, keyMax
   StyleCursor* = enum
     ## Types of cursor's styles
     cursorArrow, cursorText, cursorMove, cursorResizeVertical,

@@ -760,7 +760,6 @@ enum nk_keys {
     NK_KEY_NONE,
     NK_KEY_SHIFT,
     NK_KEY_CTRL,
-    NK_KEY_DEL,
     NK_KEY_ENTER,
     NK_KEY_TAB,
     NK_KEY_BACKSPACE,
@@ -805,6 +804,7 @@ enum nk_keys {
     NK_KEY_KP0,
     NK_KEY_KP_PERIOD,
     NK_KEY_INSERT,
+    NK_KEY_DEL,
     NK_KEY_MAX,
 };
 enum nk_buttons {
