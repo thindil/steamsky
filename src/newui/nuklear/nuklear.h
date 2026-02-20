@@ -803,6 +803,7 @@ enum nk_keys {
     NK_KEY_KP8,
     NK_KEY_KP9,
     NK_KEY_KP0,
+    NK_KEY_KP_PERIOD,
     NK_KEY_MAX,
 };
 enum nk_buttons {
