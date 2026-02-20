@@ -103,6 +103,7 @@ const
   SDLK_RALT: uint = 0x400000e6u
   SDLK_LCTRL: uint = SDL_ScancodeToKeycode(code = SDL_SCANCODE_LCTRL)
   SDLK_RCTRL: uint = SDL_ScancodeToKeycode(code = SDL_SCANCODE_RCTRL)
+  SDLK_INSERT: uint = 0x40000049u
   SDLK_DELETE: uint = 0x0000007fu
   SDLK_RETURN: uint = 0x0000000du
   SDLK_TAB: uint = 0x00000009u
@@ -391,6 +392,8 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
         nk_input_key(ctx = ctx, key = keyKP0, down = down)
       of SDLK_KP_PERIOD.cuint:
         nk_input_key(ctx = ctx, key = keyKPPeriod, down = down)
+      of SDLK_INSERT.cuint:
+        nk_input_key(ctx = ctx, key = keyInsert, down = down)
       else:
         result = noEvent
     of SDL_MOUSEBUTTONDOWN.cuint, SDL_MOUSEBUTTONUP.cuint:
