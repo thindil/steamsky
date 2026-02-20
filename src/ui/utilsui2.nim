@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -42,7 +42,7 @@ proc showScreen*(newScreenName: string) {.raises: [], tags: [], contractual.} =
   if tclEval(script = mainPaned & " panes") == tclError:
     return
   let
-    tclResult: string = $interp.tclGetResult()
+    tclResult: string = interp.tclGetResult2()
     oldSubWindow: string = tclResult.split()[0]
     subWindow: string = mainPaned & "." & $newScreenName
   if tclEval(script = mainPaned & " forget " & oldSubWindow) == tclError:
@@ -57,7 +57,7 @@ proc showScreen*(newScreenName: string) {.raises: [], tags: [], contractual.} =
     if newScreenName != "mapframe":
       if tclEval(script = "winfo height " & mainPaned) == tclError:
         return
-      let newPos: string = $interp.tclGetResult()
+      let newPos: string = interp.tclGetResult2()
       if tclEval(script = mainPaned & " sashpos 0 " & newPos) == tclError:
         return
   else:
