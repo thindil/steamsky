@@ -219,7 +219,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         except NuklearException:
           dialog = setError(message = "Can't create a popup")
         var keyPressed: Keys = keyNone
-        const keys: set[Keys] = {keyEscape..keyDel}
+        const keys: set[Keys] = {keyScrollDown..keyDel}
         for key in keys:
           if isKeyPressed(key = key):
             keyPressed = key
@@ -240,10 +240,10 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
               discard
           elif keyPressed != keyNone:
             case keyPressed
-            of keyInsert:
-              movementKeysOptions[keyIndex] = "Insert"
-            of keyDel:
-              movementKeysOptions[keyIndex] = "Delete"
+            of keyScrollDown:
+              movementKeysOptions[keyIndex] = "Next"
+            of keyScrollUp:
+              movementKeysOptions[keyIndex] = "Prior"
             of keyHome:
               movementKeysOptions[keyIndex] = "Home"
             of keyEnd:
@@ -270,6 +270,10 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
               movementKeysOptions[keyIndex] = "KP_Insert"
             of keyKPPeriod:
               movementKeysOptions[keyIndex] = "KP_Delete"
+            of keyInsert:
+              movementKeysOptions[keyIndex] = "Insert"
+            of keyDel:
+              movementKeysOptions[keyIndex] = "Delete"
             else:
               discard
           keyIndex = -1
