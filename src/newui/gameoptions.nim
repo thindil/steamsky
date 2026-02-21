@@ -236,6 +236,22 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip = "Key used to move ship down.",
           value = movementKeysOptions[7], index = 7, kType = movementKeys,
           dialog = dialog)
+      addAccelerator(label = "Move ship down/right:",
+          tooltip = "Key used to move ship down and right.",
+          value = movementKeysOptions[8], index = 8, kType = movementKeys,
+          dialog = dialog)
+      addAccelerator(label = "Move ship to destination:",
+          tooltip = "Key used to move ship its destination.",
+          value = movementKeysOptions[9], index = 9, kType = movementKeys,
+          dialog = dialog)
+      addAccelerator(label = "Set full stop for ship:",
+          tooltip = "Key used to set full stop for the ship.",
+          value = movementKeysOptions[10], index = 10, kType = movementKeys,
+          dialog = dialog)
+      addAccelerator(label = "Set quarter speed for ship:",
+          tooltip = "Key used to set quarter speed for the ship.",
+          value = movementKeysOptions[11], index = 11, kType = movementKeys,
+          dialog = dialog)
       # Start setting the selected key
       if dialog == setKeyDialog:
         try:
@@ -256,7 +272,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if getInputTextLen() > 0:
             var key: SettingString = getInputText()
             if isKeyPressed(key = keyCtrl):
-              key = "Ctrl-" & key
+              key = "Control-" & key
             if isKeyPressed(key = keyAlt):
               key = "Alt-" & key
             case keyType
