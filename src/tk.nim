@@ -84,6 +84,9 @@ type
 
   AddingCommandError* = object of CatchableError
     ## Raised when there is problem with adding a Tcl command
+
+  TclResult* = string
+    ## Used to store Tcl commands result's message
 {.push ruleOn: "objects".}
 
 var currentTclInterp: PInterp = nil
@@ -137,7 +140,7 @@ proc tclEval*(interp: PInterp = getInterp();
       ## Nim binding to Tcl Tcl_Eval C API
   return interp.tclEval(script = script.cstring)
 
-proc tclGetResult2*(interp: PInterp = getInterp()): string {.raises: [], tags: [
+proc tclGetResult2*(interp: PInterp = getInterp()): TclResult {.raises: [], tags: [
     ], contractual.} =
   ## Get the string with the result of the last evaluated Tcl command
   ##
@@ -263,6 +266,6 @@ proc deleteWidgets*(startIndex, endIndex: int; frame: string) {.raises: [],
   for i in startIndex..endIndex:
     if tclEval(script = "grid slaves " & frame & " -row " & $i) == tclError:
       return
-    let tclResult: string = interp.tclGetResult2
+    let tclResult: TclResult = interp.tclGetResult2
     for widget in tclResult.split():
       tclEval(script = "destroy " & widget)
