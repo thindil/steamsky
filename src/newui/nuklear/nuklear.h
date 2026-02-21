@@ -766,10 +766,6 @@ enum nk_keys {
     NK_KEY_COPY,
     NK_KEY_CUT,
     NK_KEY_PASTE,
-    NK_KEY_UP,
-    NK_KEY_DOWN,
-    NK_KEY_LEFT,
-    NK_KEY_RIGHT,
     /* Shortcuts: text field */
     NK_KEY_TEXT_INSERT_MODE,
     NK_KEY_TEXT_REPLACE_MODE,
@@ -805,6 +801,10 @@ enum nk_keys {
     NK_KEY_KP_PERIOD,
     NK_KEY_INSERT,
     NK_KEY_DEL,
+    NK_KEY_UP,
+    NK_KEY_DOWN,
+    NK_KEY_LEFT,
+    NK_KEY_RIGHT,
     NK_KEY_MAX,
 };
 enum nk_buttons {
