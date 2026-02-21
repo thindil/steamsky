@@ -17,6 +17,7 @@
 
 ## Provides code related to the game's options, like showing it, etc.
 
+import std/strutils
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, types]
 import coreui, errordialog, header, setui, themes
@@ -271,6 +272,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if keyPressed != keyNone or getInputTextLen() > 0:
           if getInputTextLen() > 0:
             var key: SettingString = getInputText()
+            if isUpperAscii(c = key[0]):
+              key = "Shift-" & key.toLowerAscii()
             if isKeyPressed(key = keyCtrl):
               key = "Control-" & key
             if isKeyPressed(key = keyAlt):
