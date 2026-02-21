@@ -220,6 +220,22 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip = "Key used to move ship left.",
           value = movementKeysOptions[3], index = 3, kType = movementKeys,
           dialog = dialog)
+      addAccelerator(label = "Wait in place or move 1 field:",
+          tooltip = "Key used to wait 1 minute or move 1 field.",
+          value = movementKeysOptions[4], index = 4, kType = movementKeys,
+          dialog = dialog)
+      addAccelerator(label = "Move ship right:",
+          tooltip = "Key used to move ship right.",
+          value = movementKeysOptions[5], index = 5, kType = movementKeys,
+          dialog = dialog)
+      addAccelerator(label = "Move ship down/left:",
+          tooltip = "Key used to move ship down and left.",
+          value = movementKeysOptions[6], index = 6, kType = movementKeys,
+          dialog = dialog)
+      addAccelerator(label = "Move ship down:",
+          tooltip = "Key used to move ship down.",
+          value = movementKeysOptions[7], index = 7, kType = movementKeys,
+          dialog = dialog)
       # Start setting the selected key
       if dialog == setKeyDialog:
         try:
