@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Added some time for deliver items to bases missions
+- Updated README.md
 
 ### Fixed
 - Updating the list of items for trade after buying or selling when the list
