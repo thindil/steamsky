@@ -264,8 +264,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         except NuklearException:
           dialog = setError(message = "Can't create a popup")
         var keyPressed: Keys = keyNone
-        const keys: set[Keys] = {keyScrollDown..keyDel}
-        for key in keys:
+        for key in keyScrollDown..keyDel:
           if isKeyPressed(key = key):
             keyPressed = key
             break
