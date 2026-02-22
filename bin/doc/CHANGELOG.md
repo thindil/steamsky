@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [12.0] - 2026-02-22
 
 ### Changed
 - Added some time for deliver items to bases missions
