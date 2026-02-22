@@ -722,7 +722,7 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       tooltip::tooltip $mapoptions.cursordown \
          "Key used to move cursor down. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
       bind $mapoptions.cursordown <KeyRelease> {SetShortcut %W %K}
-      grid [ttk::label $mapoptions.lbl18 -text {Move cursor donw/right:}] -sticky w
+      grid [ttk::label $mapoptions.lbl18 -text {Move cursor down/right:}] -sticky w
       tooltip::tooltip $mapoptions.lbl18 \
          "Key used to move cursor down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
       grid [ttk::entry $mapoptions.cursordownright -width 15] -row 17 -column 1 \
