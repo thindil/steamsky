@@ -1,8 +1,8 @@
-name: Continuous Integration - development version
+name: Continuous Integration - stable version
 
 on:
   push:
-    branches: [ master ]
+    branches: [ 12.0 ]
 
 jobs:
 
