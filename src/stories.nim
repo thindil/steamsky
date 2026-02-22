@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -30,6 +30,9 @@ type
     ## Types of requirements to finish a story step
     askInBase, destroyShip, explore, any, loot
 
+  StepDataString* = string
+    ## Used to store a story step data values
+
   StepTextData = object
     ## Used to store stories' steps' texts
     ##
@@ -43,7 +46,8 @@ type
     ##
     ## * name  - the name of the data
     ## * value - the data's value
-    name, value: string
+    name: string
+    value: StepDataString
 
   StepData* = object
     ## Used to store information about stories' steps
@@ -383,7 +387,7 @@ proc selectBase*(value: string): string {.raises: [], tags: [],
       return skyBases[baseIndex].name
 
 proc getStepData*(finishData: seq[StepFinishData];
-    name: string): string {.raises: [], tags: [], contractual.} =
+    name: string): StepDataString {.raises: [], tags: [], contractual.} =
   ## Get the finishing data of the selected step based on its name
   ##
   ## * finishData - the list of the step's data
