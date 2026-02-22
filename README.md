@@ -13,12 +13,12 @@ closed. Any code propositions should go to the [Fossil](https://www.laeran.pl.eu
 
 There are currently 2 versions of the game:
 
-* 11.0.x: "stable" version of game. This version will receive bug fixes but
-  no new features. Source code for this version is in the *11.0* branch.
-* 11.x: "development" version of game, future version 12.0. This is where
+* 12.0.x: "stable" version of game. This version will receive bug fixes but
+  no new features. Source code for this version is in the *12.0* branch. **This** version.
+* 12.x: "development" version of game, future version 13.0. This is where
   game feature updates happen. Due to new features, save compatibility
   will typically break between releases. Use this version at your own risk.
-  Source code for this version is in the *trunk* branch. **This** version.
+  Source code for this version is in the *trunk* branch.
 
 ## Build game from sources
 
@@ -141,8 +141,8 @@ of the game, you can also use all of this starting parameters.
 Here are available testing versions of the game. You can find them
 in [GitHub Actions](https://github.com/thindil/steamsky/actions/workflows/ada-devel.yml).
 Just select option from the list of results to see Artifacts list.
-To use them, first you must download normal release. Then unpack files
-(replace existing) to the proper location where the game is installed.
+To use them, first you must download normal development release. Then unpack
+files (replace existing) to the proper location where the game is installed.
 
 * steamsky-development-windows.tar contains Windows 64-bit version of the game.
 
