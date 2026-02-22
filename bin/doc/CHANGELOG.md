@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to upgrade the player's ship's modules without materials
 - No option for buying/selling modules in shipyards
 - Crash on finishing missions when the player's ship's cargo is full
+- Typo in the game options' screen
 
 ## [11.9] - 2026-01-25
 
