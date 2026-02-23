@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -36,7 +36,7 @@ proc progressStory*(nextStep: bool = false): bool {.raises: [
         storiesList[currentStory.index].steps[currentStory.currentStep]
       else:
         storiesList[currentStory.index].finalStep
-    finishCondition: string = getStepData(finishData = step.finishData,
+    finishCondition: StepDataString = getStepData(finishData = step.finishData,
         name = "condition")
   let maxRandom: Positive = if step.finishCondition == destroyShip and nextStep:
         1
@@ -45,10 +45,10 @@ proc progressStory*(nextStep: bool = false): bool {.raises: [
   if finishCondition == "random" and getRandom(min = 1, max = maxRandom) > 1:
     updateGame(minutes = 10)
     return false
-  var chance: int = 0
+  var chance: Natural = 0
   case step.finishCondition
   of askInBase:
-    let traderIndex: int = findMember(order = talk)
+    let traderIndex: ExtendedNatural = findMember(order = talk)
     if traderIndex > -1:
       chance = getSkillLevel(member = playerShip.crew[traderIndex],
           skillIndex = findSkillIndex(skillName = finishCondition))
@@ -73,7 +73,7 @@ proc progressStory*(nextStep: bool = false): bool {.raises: [
   if finishCondition != "random":
     case step.finishCondition
     of askInBase:
-      let traderIndex: int = findMember(order = talk)
+      let traderIndex: ExtendedNatural = findMember(order = talk)
       if traderIndex > -1:
         gainExp(amount = 10, skillNumber = findSkillIndex(
             skillName = finishCondition), crewIndex = traderIndex)
