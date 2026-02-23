@@ -69,7 +69,7 @@ proc generateMemberName*(gender: char; factionIndex: string): string {.raises: [
     result &= femalesSyllablesEndList[getRandom(min = 0, max = (
         femalesSyllablesEndList.len - 1))]
 
-proc getSkillLevel*(member: MemberData; skillIndex: Positive): int {.raises: [
+proc getSkillLevel*(member: MemberData; skillIndex: Positive): Natural {.raises: [
     KeyError], tags: [], contractual.} =
   ## Get the real level of the selected skill of the selected crew member.
   ##
