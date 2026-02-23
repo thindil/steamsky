@@ -672,7 +672,7 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
   setFonts(newSize = gameSettings.helpFontSize, fontType = helpFont)
   setFonts(newSize = gameSettings.interfaceFontSize, fontType = interfaceFont)
   const versionLabel: string = ".mainmenu.version"
-  tclEval(script = versionLabel & " configure -text {" & gameVersion & "}")
+  tclEval(script = versionLabel & " configure -text {" & gameVersion & " development}")
   try:
     dataError = loadGameData()
   except:
