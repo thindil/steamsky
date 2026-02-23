@@ -269,65 +269,66 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
             keyPressed = key
             break
         if keyPressed != keyNone or getInputTextLen() > 0:
+          var key: SettingString = ""
           if getInputTextLen() > 0:
-            var key: SettingString = getInputText()
+            key = getInputText()
             if isUpperAscii(c = key[0]):
               key = "Shift-" & key.toLowerAscii()
-            if isKeyPressed(key = keyCtrl):
-              key = "Control-" & key
-            if isKeyPressed(key = keyAlt):
-              key = "Alt-" & key
-            case keyType
-            of movementKeys:
-              movementKeysOptions[keyIndex] = key
-            of menuKeys:
-              menuKeysOptions[keyIndex] = key
-            else:
-              discard
           elif keyPressed != keyNone:
             case keyPressed
             of keyScrollDown:
-              movementKeysOptions[keyIndex] = "Next"
+              key = "Next"
             of keyScrollUp:
-              movementKeysOptions[keyIndex] = "Prior"
+              key = "Prior"
             of keyHome:
-              movementKeysOptions[keyIndex] = "Home"
+              key = "Home"
             of keyEnd:
-              movementKeysOptions[keyIndex] = "End"
+              key = "End"
             of keyKP1:
-              movementKeysOptions[keyIndex] = "KP_End"
+              key = "KP_End"
             of keyKP2:
-              movementKeysOptions[keyIndex] = "KP_Down"
+              key = "KP_Down"
             of keyKP3:
-              movementKeysOptions[keyIndex] = "KP_Next"
+              key = "KP_Next"
             of keyKP4:
-              movementKeysOptions[keyIndex] = "KP_Left"
+              key = "KP_Left"
             of keyKP5:
-              movementKeysOptions[keyIndex] = "KP_Begin"
+              key = "KP_Begin"
             of keyKP6:
-              movementKeysOptions[keyIndex] = "KP_Right"
+              key = "KP_Right"
             of keyKP7:
-              movementKeysOptions[keyIndex] = "KP_Home"
+              key = "KP_Home"
             of keyKP8:
-              movementKeysOptions[keyIndex] = "KP_Up"
+              key = "KP_Up"
             of keyKP9:
-              movementKeysOptions[keyIndex] = "KP_Prior"
+              key = "KP_Prior"
             of keyKP0:
-              movementKeysOptions[keyIndex] = "KP_Insert"
+              key = "KP_Insert"
             of keyKPPeriod:
-              movementKeysOptions[keyIndex] = "KP_Delete"
+              key = "KP_Delete"
             of keyInsert:
-              movementKeysOptions[keyIndex] = "Insert"
+              key = "Insert"
             of keyDel:
-              movementKeysOptions[keyIndex] = "Delete"
+              key = "Delete"
             of keyEnter:
-              movementKeysOptions[keyIndex] = "Enter"
+              key = "Enter"
             of keyTab:
-              movementKeysOptions[keyIndex] = "Tab"
+              key = "Tab"
             of keyBackspace:
-              movementKeysOptions[keyIndex] = "Backspace"
+              key = "Backspace"
             else:
               discard
+          if isKeyPressed(key = keyCtrl):
+            key = "Control-" & key
+          if isKeyPressed(key = keyAlt):
+            key = "Alt-" & key
+          case keyType
+          of movementKeys:
+            movementKeysOptions[keyIndex] = key
+          of menuKeys:
+            menuKeysOptions[keyIndex] = key
+          else:
+            discard
           keyIndex = -1
           keyLabel = ""
           keyType = none
