@@ -81,6 +81,8 @@ var
   menuAccelerators*: array[1..11, string] = ["s", "o", "r", "m", "k", "w",
       "g", "F1", "p", "q", "x"]
     ## The game menu keyboard shortcuts
+  generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
+    ## The list of keyboard shortcuts used in some places
 
 {.push ruleOff: "varDeclared".}
 var images*: array[menuIcon..IconsNames.high,
