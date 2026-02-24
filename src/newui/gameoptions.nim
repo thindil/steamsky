@@ -274,61 +274,20 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
             key = getInputText()
             if isUpperAscii(c = key[0]):
               key = "Shift-" & key.toLowerAscii()
-          elif keyPressed != keyNone:
-            case keyPressed
-            of keyScrollDown:
-              key = "Next"
-            of keyScrollUp:
-              key = "Prior"
-            of keyHome:
-              key = "Home"
-            of keyEnd:
-              key = "End"
-            of keyKP1:
-              key = "KP_End"
-            of keyKP2:
-              key = "KP_Down"
-            of keyKP3:
-              key = "KP_Next"
-            of keyKP4:
-              key = "KP_Left"
-            of keyKP5:
-              key = "KP_Begin"
-            of keyKP6:
-              key = "KP_Right"
-            of keyKP7:
-              key = "KP_Home"
-            of keyKP8:
-              key = "KP_Up"
-            of keyKP9:
-              key = "KP_Prior"
-            of keyKP0:
-              key = "KP_Insert"
-            of keyKPPeriod:
-              key = "KP_Delete"
-            of keyInsert:
-              key = "Insert"
-            of keyDel:
-              key = "Delete"
-            of keyEnter:
-              key = "Enter"
-            of keyTab:
-              key = "Tab"
-            of keyBackspace:
-              key = "Backspace"
-            else:
-              discard
+          elif keyPressed notin {keyNone, keyEscape, keyTab}:
+            key = $keyPressed
           if isKeyPressed(key = keyCtrl):
             key = "Control-" & key
           if isKeyPressed(key = keyAlt):
             key = "Alt-" & key
-          case keyType
-          of movementKeys:
-            movementKeysOptions[keyIndex] = key
-          of menuKeys:
-            menuKeysOptions[keyIndex] = key
-          else:
-            discard
+          if key.len > 0:
+            case keyType
+            of movementKeys:
+              movementKeysOptions[keyIndex] = key
+            of menuKeys:
+              menuKeysOptions[keyIndex] = key
+            else:
+              discard
           keyIndex = -1
           keyLabel = ""
           keyType = none
