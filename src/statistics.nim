@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -23,13 +23,16 @@ import contracts
 import config, game, types
 
 type
+  StatisticIndex* = string
+    ## Used to store index of a statistic
+
   StatisticsData* = object
     ## Used to store detailed information about some the player's game's
     ## statistics
     ##
     ## * index  - The index of the prototype object
     ## * amount - The amount of the object
-    index*: string = ""
+    index*: StatisticIndex = ""
     amount*: Positive = 1
 
   GameStatsData = object
@@ -59,7 +62,7 @@ type
 var gameStats*: GameStatsData = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
 
-proc updateCraftingOrders*(index: string) {.raises: [], tags: [],
+proc updateCraftingOrders*(index: StatisticIndex) {.raises: [], tags: [],
     contractual.} =
   ## Update the list of finished crafting orders in the game statistics
   ##
@@ -77,7 +80,7 @@ proc updateCraftingOrders*(index: string) {.raises: [], tags: [],
       gameStats.craftingOrders.add(y = StatisticsData(index: index, amount: 1))
     gameStats.points += 5
 
-proc updateFinishedGoals*(index: string) {.raises: [], tags: [],
+proc updateFinishedGoals*(index: StatisticIndex) {.raises: [], tags: [],
     contractual.} =
   ## Update the list of finished goals in the game statistics
   ##
@@ -127,7 +130,7 @@ proc getGamePoints*(): Natural {.raises: [], tags: [],
     pointsBonus = 0.01
   return (gameStats.points.float * pointsBonus).Natural
 
-proc updateFinishedMissions*(mType: string) {.raises: [], tags: [],
+proc updateFinishedMissions*(mType: StatisticIndex) {.raises: [], tags: [],
     contractual.} =
   ## Update the list of finished missions in the game statistics
   ##
@@ -161,7 +164,7 @@ proc clearGameStats*() {.raises: [], tags: [], contractual.} =
     gameStats.killedMobs = @[]
     gameStats.points = 0
 
-proc updateKilledMobs*(mob: MemberData; factionName: string) {.raises: [], tags: [], contractual.} =
+proc updateKilledMobs*(mob: MemberData; factionName: StatisticIndex) {.raises: [], tags: [], contractual.} =
   ## Update the list of killed mobs in the game statistics
   ##
   ## * mob         - the killed mobile data, needed to count the gained points
