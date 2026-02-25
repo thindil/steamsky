@@ -1672,6 +1672,9 @@ type
     ## Used to store data for text
     padding*: Vec2
     background*, text*: NkColor
+  FontAtlas* = object
+    ## Used to store data about user fonts
+    pixel*, texWidth, texHeight: int
 
 # ---------
 # Constants
