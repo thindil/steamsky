@@ -201,39 +201,12 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip = "How much minutes will pass after press the Wait button.. Enter value between 1 and 1440.",
           min = 1, max = 1_440, value = generalOptions[16])
     of 1:
-      const keysTexts: array[14, KeyTexts] = [KeyTexts(label: "Move ship up/left", tooltip: "move ship up and left."), KeyTexts(label: "Move ship up", tooltip: "move ship up."), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: "")]
+      const keysTexts: array[14, KeyTexts] = [KeyTexts(label: "Move ship up/left", tooltip: "move ship up and left."), KeyTexts(label: "Move ship up", tooltip: "move ship up."), KeyTexts(label: "Move ship up/right", tooltip: "move ship up and right."), KeyTexts(label: "Move ship left", tooltip: "move ship left."), KeyTexts(label: "Wait in place or move 1 field", tooltip: "wait 1 minute or move 1 field."), KeyTexts(label: "Move ship right", tooltip: "move ship right."), KeyTexts(label: "Move ship down/left", tooltip: "move ship down and left."), KeyTexts(label: "Move ship down", tooltip: "move ship down."), KeyTexts(label: "Move ship down/right", tooltip: "move ship down and right."), KeyTexts(label: "Move ship to destination", tooltip: "move ship its destination."), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "Move ship down/left", tooltip: ""), KeyTexts(label: "", tooltip: "")]
       setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.15, 0.05])
       for index, key in movementKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
             tooltip = "Key used to " & keysTexts[index].tooltip,
             value = key, index = index, dialog = dialog)
-      addAccelerator(label = "Move ship up",
-          tooltip = "Key used to move ship up.",
-          value = movementKeysOptions[1], index = 1, dialog = dialog)
-      addAccelerator(label = "Move ship up/right:",
-          tooltip = "Key used to move ship up and right.",
-          value = movementKeysOptions[2], index = 2, dialog = dialog)
-      addAccelerator(label = "Move ship left:",
-          tooltip = "Key used to move ship left.",
-          value = movementKeysOptions[3], index = 3, dialog = dialog)
-      addAccelerator(label = "Wait in place or move 1 field:",
-          tooltip = "Key used to wait 1 minute or move 1 field.",
-          value = movementKeysOptions[4], index = 4, dialog = dialog)
-      addAccelerator(label = "Move ship right:",
-          tooltip = "Key used to move ship right.",
-          value = movementKeysOptions[5], index = 5, dialog = dialog)
-      addAccelerator(label = "Move ship down/left:",
-          tooltip = "Key used to move ship down and left.",
-          value = movementKeysOptions[6], index = 6, dialog = dialog)
-      addAccelerator(label = "Move ship down:",
-          tooltip = "Key used to move ship down.",
-          value = movementKeysOptions[7], index = 7, dialog = dialog)
-      addAccelerator(label = "Move ship down/right:",
-          tooltip = "Key used to move ship down and right.",
-          value = movementKeysOptions[8], index = 8, dialog = dialog)
-      addAccelerator(label = "Move ship to destination:",
-          tooltip = "Key used to move ship its destination.",
-          value = movementKeysOptions[9], index = 9, dialog = dialog)
       addAccelerator(label = "Set full stop for ship:",
           tooltip = "Key used to set full stop for the ship.",
           value = movementKeysOptions[10], index = 10, dialog = dialog)
