@@ -22,14 +22,9 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, types]
 import coreui, errordialog, header, setui, themes
 
-type
-  KeysType = enum
-    none, movementKeys, menuKeys, mapKeys, generalKeys
-
 var
   keyLabel: string = ""
   keyIndex: ExtendedNatural = -1
-  keyType: KeysType = none
 
 proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -117,7 +112,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           x = 350, y = 200)
 
     proc addAccelerator(label, tooltip: string; value: var string;
-        index: Natural; kType: KeysType; dialog: var GameDialog) {.raises: [],
+        index: Natural; dialog: var GameDialog) {.raises: [],
         tags: [], contractual.} =
       ## Add an entry with a keyboard accelerator info and option to modify it
       ##
@@ -125,7 +120,6 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       ## * tooltip - the text to show as tooltip for the entry
       ## * value   - the current value of the selected accelerator
       ## * index   - the index of the key to set
-      ## * kType   - the type of key to set
       ##
       ## Returns the modified parameter value
       if gameSettings.showTooltips:
@@ -140,7 +134,6 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       imageButton(image = images[moreOptionsIcon]):
         keyLabel = label
         keyIndex = index
-        keyType = kType
         dialog = setKeyDialog
 
     case currentTab
@@ -203,92 +196,90 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addProperty(label = "Wait time:",
           tooltip = "How much minutes will pass after press the Wait button.. Enter value between 1 and 1440.",
           min = 1, max = 1_440, value = generalOptions[16])
-    else:
+    of 1:
       setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.15, 0.05])
       addAccelerator(label = "Move ship up/left:",
           tooltip = "Key used to move ship up and left.",
-          value = movementKeysOptions[0], index = 0, kType = movementKeys,
-          dialog = dialog)
+          value = movementKeysOptions[0], index = 0, dialog = dialog)
       addAccelerator(label = "Move ship up",
           tooltip = "Key used to move ship up.",
-          value = movementKeysOptions[1], index = 1, kType = movementKeys,
-          dialog = dialog)
+          value = movementKeysOptions[1], index = 1, dialog = dialog)
       addAccelerator(label = "Move ship up/right:",
           tooltip = "Key used to move ship up and right.",
-          value = movementKeysOptions[2], index = 2, kType = movementKeys,
-          dialog = dialog)
+          value = movementKeysOptions[2], index = 2, dialog = dialog)
       addAccelerator(label = "Move ship left:",
           tooltip = "Key used to move ship left.",
-          value = movementKeysOptions[3], index = 3, kType = movementKeys,
-          dialog = dialog)
+          value = movementKeysOptions[3], index = 3, dialog = dialog)
       addAccelerator(label = "Wait in place or move 1 field:",
           tooltip = "Key used to wait 1 minute or move 1 field.",
-          value = movementKeysOptions[4], index = 4, kType = movementKeys,
-          dialog = dialog)
+          value = movementKeysOptions[4], index = 4, dialog = dialog)
       addAccelerator(label = "Move ship right:",
           tooltip = "Key used to move ship right.",
-          value = movementKeysOptions[5], index = 5, kType = movementKeys,
-          dialog = dialog)
+          value = movementKeysOptions[5], index = 5, dialog = dialog)
       addAccelerator(label = "Move ship down/left:",
           tooltip = "Key used to move ship down and left.",
-          value = movementKeysOptions[6], index = 6, kType = movementKeys,
-          dialog = dialog)
+          value = movementKeysOptions[6], index = 6, dialog = dialog)
       addAccelerator(label = "Move ship down:",
           tooltip = "Key used to move ship down.",
-          value = movementKeysOptions[7], index = 7, kType = movementKeys,
-          dialog = dialog)
+          value = movementKeysOptions[7], index = 7, dialog = dialog)
       addAccelerator(label = "Move ship down/right:",
           tooltip = "Key used to move ship down and right.",
-          value = movementKeysOptions[8], index = 8, kType = movementKeys,
-          dialog = dialog)
+          value = movementKeysOptions[8], index = 8, dialog = dialog)
       addAccelerator(label = "Move ship to destination:",
           tooltip = "Key used to move ship its destination.",
-          value = movementKeysOptions[9], index = 9, kType = movementKeys,
-          dialog = dialog)
+          value = movementKeysOptions[9], index = 9, dialog = dialog)
       addAccelerator(label = "Set full stop for ship:",
           tooltip = "Key used to set full stop for the ship.",
-          value = movementKeysOptions[10], index = 10, kType = movementKeys,
-          dialog = dialog)
+          value = movementKeysOptions[10], index = 10, dialog = dialog)
       addAccelerator(label = "Set quarter speed for ship:",
           tooltip = "Key used to set quarter speed for the ship.",
-          value = movementKeysOptions[11], index = 11, kType = movementKeys,
-          dialog = dialog)
-      # Start setting the selected key
-      if dialog == setKeyDialog:
-        try:
-          popup(pType = staticPopup, title = "Set Key", flags = {windowNoFlags},
-              x = windowWidth / 4, y = windowHeight / 4, w = windowWidth / 2, h = 120):
-            setLayoutRowDynamic(height = 100, cols = 1)
-            wrapLabel(str = "Press a key or keys combination to set it as a new value for " &
-                keyLabel & ". Press Escape to cancel.")
-        except NuklearException:
-          dialog = setError(message = "Can't create a popup")
-        var keyPressed: Keys = keyNone
-        for key in keyScrollDown..keyBackspace:
-          if isKeyPressed(key = key):
-            keyPressed = key
-            break
-        if keyPressed != keyNone or getInputTextLen() > 0:
-          var key: SettingString = ""
-          if getInputTextLen() > 0:
-            key = getInputText()
-            if isUpperAscii(c = key[0]):
-              key = "Shift-" & key.toLowerAscii()
-          elif keyPressed notin {keyNone, keyEscape, keyTab}:
-            key = $keyPressed
-          if isKeyPressed(key = keyCtrl):
-            key = "Control-" & key
-          if isKeyPressed(key = keyAlt):
-            key = "Alt-" & key
-          if key.len > 0:
-            case keyType
-            of movementKeys:
-              movementKeysOptions[keyIndex] = key
-            of menuKeys:
-              menuKeysOptions[keyIndex] = key
-            else:
-              discard
-          keyIndex = -1
-          keyLabel = ""
-          keyType = none
-          dialog = none
+          value = movementKeysOptions[11], index = 11, dialog = dialog)
+      addAccelerator(label = "Set half speed for ship:",
+          tooltip = "Key used to set half speed for the ship.",
+          value = movementKeysOptions[12], index = 12, dialog = dialog)
+      addAccelerator(label = "Set full speed for ship:",
+          tooltip = "Key used to set full speed for the ship.",
+          value = movementKeysOptions[13], index = 13, dialog = dialog)
+      setLayoutRowDynamic(height = 30, cols = 1)
+      labelButton(title = "Reset movement keys to default"):
+        discard
+    else:
+      discard
+    # Start setting the selected key
+    if dialog == setKeyDialog:
+      try:
+        popup(pType = staticPopup, title = "Set Key", flags = {windowNoFlags},
+            x = windowWidth / 4, y = windowHeight / 4, w = windowWidth / 2, h = 120):
+          setLayoutRowDynamic(height = 100, cols = 1)
+          wrapLabel(str = "Press a key or keys combination to set it as a new value for " &
+              keyLabel & ". Press Escape to cancel.")
+      except NuklearException:
+        dialog = setError(message = "Can't create a popup")
+      var keyPressed: Keys = keyNone
+      for key in keyScrollDown..keyBackspace:
+        if isKeyPressed(key = key):
+          keyPressed = key
+          break
+      if keyPressed != keyNone or getInputTextLen() > 0:
+        var key: SettingString = ""
+        if getInputTextLen() > 0:
+          key = getInputText()
+          if isUpperAscii(c = key[0]):
+            key = "Shift-" & key.toLowerAscii()
+        elif keyPressed notin {keyNone, keyEscape, keyTab}:
+          key = $keyPressed
+        if isKeyPressed(key = keyCtrl):
+          key = "Control-" & key
+        if isKeyPressed(key = keyAlt):
+          key = "Alt-" & key
+        if key.len > 0:
+          case currentTab
+          of 1:
+            movementKeysOptions[keyIndex] = key
+          of 2:
+            menuKeysOptions[keyIndex] = key
+          else:
+            discard
+        keyIndex = -1
+        keyLabel = ""
+        dialog = none
