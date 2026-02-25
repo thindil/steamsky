@@ -136,6 +136,10 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         keyIndex = index
         dialog = setKeyDialog
 
+    type
+      KeyTexts = object
+        label, tooltip: string
+
     case currentTab
     # General options
     of 0:
@@ -197,10 +201,12 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip = "How much minutes will pass after press the Wait button.. Enter value between 1 and 1440.",
           min = 1, max = 1_440, value = generalOptions[16])
     of 1:
+      const keysTexts: array[14, KeyTexts] = [KeyTexts(label: "Move ship up/left", tooltip: "move ship up and left."), KeyTexts(label: "Move ship up", tooltip: "move ship up."), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: ""), KeyTexts(label: "", tooltip: "")]
       setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.15, 0.05])
-      addAccelerator(label = "Move ship up/left:",
-          tooltip = "Key used to move ship up and left.",
-          value = movementKeysOptions[0], index = 0, dialog = dialog)
+      for index, key in movementKeysOptions.mpairs:
+        addAccelerator(label = keysTexts[index].label & ":",
+            tooltip = "Key used to " & keysTexts[index].tooltip,
+            value = key, index = index, dialog = dialog)
       addAccelerator(label = "Move ship up",
           tooltip = "Key used to move ship up.",
           value = movementKeysOptions[1], index = 1, dialog = dialog)
