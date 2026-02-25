@@ -59,6 +59,24 @@ type
     killedMobs*: seq[StatisticsData]
     points*: Natural
 
+proc index*(statData: StatisticsData): StatisticIndex {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of StatisticData type
+  ##
+  ## * statData - the StatisticData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  statData.index
+
+proc amount*(statData: StatisticsData): Positive {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of StatisticData type
+  ##
+  ## * statData - the StatisticData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  statData.amount
+
 var gameStats*: GameStatsData = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
 
@@ -164,7 +182,8 @@ proc clearGameStats*() {.raises: [], tags: [], contractual.} =
     gameStats.killedMobs = @[]
     gameStats.points = 0
 
-proc updateKilledMobs*(mob: MemberData; factionName: StatisticIndex) {.raises: [], tags: [], contractual.} =
+proc updateKilledMobs*(mob: MemberData; factionName: StatisticIndex) {.raises: [],
+    tags: [], contractual.} =
   ## Update the list of killed mobs in the game statistics
   ##
   ## * mob         - the killed mobile data, needed to count the gained points
