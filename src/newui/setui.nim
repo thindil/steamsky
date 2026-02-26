@@ -1757,6 +1757,23 @@ var
       "", "", "", "", "", "", "", "", "", "", ""]
     ## The list of map keys options
 
+proc setMovementKeys*() {.raises: [], tags: [], contractual.} =
+  ## Set data for momevemnt keys in the game options screen
+  movementKeysOptions[0] = mapAccelerators[5]
+  movementKeysOptions[1] = mapAccelerators[6]
+  movementKeysOptions[2] = mapAccelerators[7]
+  movementKeysOptions[3] = mapAccelerators[8]
+  movementKeysOptions[4] = mapAccelerators[9]
+  movementKeysOptions[5] = mapAccelerators[10]
+  movementKeysOptions[6] = mapAccelerators[11]
+  movementKeysOptions[7] = mapAccelerators[12]
+  movementKeysOptions[8] = mapAccelerators[13]
+  movementKeysOptions[9] = mapAccelerators[14]
+  movementKeysOptions[10] = mapAccelerators[34]
+  movementKeysOptions[11] = mapAccelerators[35]
+  movementKeysOptions[12] = mapAccelerators[36]
+  movementKeysOptions[13] = mapAccelerators[37]
+
 proc setOptions*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the game options screen
   currentTab = 0
@@ -1777,20 +1794,7 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   generalOptions[14] = gameSettings.messagesOrder.ord
   generalOptions[15] = gameSettings.autoSave.ord
   generalOptions[16] = gameSettings.waitMinutes
-  movementKeysOptions[0] = mapAccelerators[5]
-  movementKeysOptions[1] = mapAccelerators[6]
-  movementKeysOptions[2] = mapAccelerators[7]
-  movementKeysOptions[3] = mapAccelerators[8]
-  movementKeysOptions[4] = mapAccelerators[9]
-  movementKeysOptions[5] = mapAccelerators[10]
-  movementKeysOptions[6] = mapAccelerators[11]
-  movementKeysOptions[7] = mapAccelerators[12]
-  movementKeysOptions[8] = mapAccelerators[13]
-  movementKeysOptions[9] = mapAccelerators[14]
-  movementKeysOptions[10] = mapAccelerators[34]
-  movementKeysOptions[11] = mapAccelerators[35]
-  movementKeysOptions[12] = mapAccelerators[36]
-  movementKeysOptions[13] = mapAccelerators[37]
+  setMovementKeys()
   menuKeysOptions[0] = menuAccelerators[1]
   menuKeysOptions[1] = menuAccelerators[2]
   menuKeysOptions[2] = menuAccelerators[3]
