@@ -230,7 +230,20 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
             value = key, index = index, dialog = dialog)
       setLayoutRowDynamic(height = 30, cols = 1)
       labelButton(title = "Reset movement keys to default"):
-        discard
+        mapAccelerators[5] = "KP_Home"
+        mapAccelerators[6] = "KP_Up"
+        mapAccelerators[7] = "KP_Prior"
+        mapAccelerators[8] = "KP_Left"
+        mapAccelerators[9] = "KP_Begin"
+        mapAccelerators[10] = "KP_Right"
+        mapAccelerators[11] = "KP_End"
+        mapAccelerators[12] = "KP_Down"
+        mapAccelerators[13] = "KP_Next"
+        mapAccelerators[14] = "KP_Divide"
+        mapAccelerators[34] = "Control-a"
+        mapAccelerators[35] = "Control-b"
+        mapAccelerators[36] = "Control-c"
+        mapAccelerators[37] = "Control-d"
     else:
       discard
     # Start setting the selected key
