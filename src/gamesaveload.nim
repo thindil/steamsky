@@ -392,20 +392,20 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
     gameStats.acceptedMissions = stat.attr(name = "acceptedmissions").parseInt
     gameStats.points = stat.attr(name = "points").parseInt
   for item in savedGame.findAll(tag = "destroyedships"):
-    gameStats.destroyedShips.add(y = StatisticsData(index: item.attr(
-        name = "index"), amount: item.attr(name = "amount").parseInt))
+    gameStats.destroyedShips.add(y = initStatisticsData(index = item.attr(
+        name = "index"), amount = item.attr(name = "amount").parseInt))
   for item in savedGame.findAll(tag = "finishedcrafts"):
-    gameStats.craftingOrders.add(y = StatisticsData(index: item.attr(
-        name = "index"), amount: item.attr(name = "amount").parseInt))
+    gameStats.craftingOrders.add(y = initStatisticsData(index = item.attr(
+        name = "index"), amount = item.attr(name = "amount").parseInt))
   for item in savedGame.findAll(tag = "finishedmissions"):
-    gameStats.finishedMissions.add(y = StatisticsData(index: item.attr(
-        name = "index"), amount: item.attr(name = "amount").parseInt))
+    gameStats.finishedMissions.add(y = initStatisticsData(index = item.attr(
+        name = "index"), amount = item.attr(name = "amount").parseInt))
   for item in savedGame.findAll(tag = "finishedgoals"):
-    gameStats.finishedGoals.add(y = StatisticsData(index: item.attr(
-        name = "index"), amount: item.attr(name = "amount").parseInt))
+    gameStats.finishedGoals.add(y = initStatisticsData(index = item.attr(
+        name = "index"), amount = item.attr(name = "amount").parseInt))
   for item in savedGame.findAll(tag = "killedmobs"):
-    gameStats.killedMobs.add(y = StatisticsData(index: item.attr(
-        name = "index"), amount: item.attr(name = "amount").parseInt))
+    gameStats.killedMobs.add(y = initStatisticsData(index = item.attr(
+        name = "index"), amount = item.attr(name = "amount").parseInt))
   logMessage(message = "done", messageLevel = lvlInfo)
   # Load the player's current goal
   logMessage(message = "Loading game current goal...", messageLevel = lvlInfo)
