@@ -61,7 +61,7 @@ type
 
 proc index*(statData: StatisticsData): StatisticIndex {.raises: [], tags: [],
     contractual.} =
-  ## The getter of a field of StatisticData type
+  ## The getter of a field of StatisticsData type
   ##
   ## * statData - the StatisticData object which field will be get
   ##
@@ -70,12 +70,24 @@ proc index*(statData: StatisticsData): StatisticIndex {.raises: [], tags: [],
 
 proc amount*(statData: StatisticsData): Positive {.raises: [], tags: [],
     contractual.} =
-  ## The getter of a field of StatisticData type
+  ## The getter of a field of StatisticsData type
   ##
   ## * statData - the StatisticData object which field will be get
   ##
   ## Returns the value of the selected field
   statData.amount
+
+proc initStatisticsData*(index: StatisticIndex = "";
+    amount: Positive = 1): StatisticsData {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for the statistics' type data
+  ##
+  ## * index  - the index of the statistic
+  ## * amount - the amount of the statistic, like destroyed ships, visited
+  ##            bases, etc
+  ##
+  ## Returns the new structure with information about the selected statistic
+  return StatisticsData(index: index, amount: amount)
 
 var gameStats*: GameStatsData = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
@@ -95,7 +107,7 @@ proc updateCraftingOrders*(index: StatisticIndex) {.raises: [], tags: [],
         updated = true
         break
     if not updated:
-      gameStats.craftingOrders.add(y = StatisticsData(index: index, amount: 1))
+      gameStats.craftingOrders.add(y = initStatisticsData(index = index))
     gameStats.points += 5
 
 proc updateFinishedGoals*(index: StatisticIndex) {.raises: [], tags: [],
@@ -119,7 +131,8 @@ proc updateFinishedGoals*(index: StatisticIndex) {.raises: [], tags: [],
     if not updated:
       for goal in goalsList.values:
         if goal.index == index:
-          gameStats.finishedGoals.add(y = StatisticsData(index: goal.index, amount: 1))
+          gameStats.finishedGoals.add(y = initStatisticsData(
+              index = goal.index))
 
 proc getGamePoints*(): Natural {.raises: [], tags: [],
     contractual.} =
@@ -163,7 +176,7 @@ proc updateFinishedMissions*(mType: StatisticIndex) {.raises: [], tags: [],
         updated = true
         break
     if not updated:
-      gameStats.finishedMissions.add(y = StatisticsData(index: mType, amount: 1))
+      gameStats.finishedMissions.add(y = initStatisticsData(index = mType))
     gameStats.points += 50
 
 proc clearGameStats*() {.raises: [], tags: [], contractual.} =
@@ -182,8 +195,8 @@ proc clearGameStats*() {.raises: [], tags: [], contractual.} =
     gameStats.killedMobs = @[]
     gameStats.points = 0
 
-proc updateKilledMobs*(mob: MemberData; factionName: StatisticIndex) {.raises: [],
-    tags: [], contractual.} =
+proc updateKilledMobs*(mob: MemberData; factionName: StatisticIndex) {.raises: [
+    ], tags: [], contractual.} =
   ## Update the list of killed mobs in the game statistics
   ##
   ## * mob         - the killed mobile data, needed to count the gained points
@@ -227,4 +240,4 @@ proc updateDestroyedShips*(shipName: string) {.raises: [], tags: [],
         updated = true
         break
     if not updated:
-      gameStats.destroyedShips.add(y = StatisticsData(index: $shipIndex, amount: 1))
+      gameStats.destroyedShips.add(y = initStatisticsData(index = $shipIndex))
