@@ -200,6 +200,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addProperty(label = "Wait time:",
           tooltip = "How much minutes will pass after press the Wait button.. Enter value between 1 and 1440.",
           min = 1, max = 1_440, value = generalOptions[16])
+    # Movement keys
     of 1:
       const keysTexts: array[14, KeyTexts] = [KeyTexts(
           label: "Move ship up/left", tooltip: "move ship up and left."),
@@ -244,6 +245,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         mapAccelerators[35] = "Control-b"
         mapAccelerators[36] = "Control-c"
         mapAccelerators[37] = "Control-d"
+        setMovementKeys()
     else:
       discard
     # Start setting the selected key
