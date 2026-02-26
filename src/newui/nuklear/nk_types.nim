@@ -126,7 +126,7 @@ type
   Keys* = enum
     ## Special keys
     keyNone, keyShift,
-    keyCtrl = "Ctrl",
+    keyCtrl = "Control",
     keyCopy, keyCut, keyPaste, keyTextInsertMode, keyTextReplaceMode,
       keyTextResetMode, keyTextLineStart, keyTextLineEnd, keyTextStart,
       keyTextEnd, keyTextUndo, keyTextRedo, keyTextSelectAll, keyTextWordLeft,
