@@ -246,6 +246,21 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         mapAccelerators[36] = "Control-c"
         mapAccelerators[37] = "Control-d"
         setMovementKeys()
+    # Menu keys
+    of 2:
+      const keysTexts: array[4, KeyTexts] = [KeyTexts(label: "Ship information",
+          tooltip: "show ship info screen."), KeyTexts(label: "Ship orders",
+          tooltip: "show ship orders menu."), KeyTexts(label: "Crafting orders",
+          tooltip: "show crafting screen."), KeyTexts(label: "Last messages",
+          tooltip: "show messages screen.")]
+      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.15, 0.05])
+      for index, key in menuKeysOptions.mpairs:
+        addAccelerator(label = keysTexts[index].label & ":",
+            tooltip = "Key used to " & keysTexts[index].tooltip,
+            value = key, index = index, dialog = dialog)
+      setLayoutRowDynamic(height = 30, cols = 1)
+      labelButton(title = "Reset menu keys to default"):
+        discard
     else:
       discard
     # Start setting the selected key
