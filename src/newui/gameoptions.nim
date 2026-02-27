@@ -248,15 +248,20 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         setMovementKeys()
     # Menu keys
     of 2:
-      const keysTexts: array[8, KeyTexts] = [KeyTexts(label: "Ship information",
-          tooltip: "show ship info screen."), KeyTexts(label: "Ship orders",
-          tooltip: "show ship orders menu."), KeyTexts(label: "Crafting orders",
-          tooltip: "show crafting screen."), KeyTexts(label: "Last messages",
-          tooltip: "show messages screen."), KeyTexts(label: "Knowledge list",
-          tooltip: "show knowledge screen."), KeyTexts(label: "Wait orders",
-          tooltip: "show wait orders menu."), KeyTexts(label: "Game statistics",
+      const keysTexts: array[12, KeyTexts] = [KeyTexts(
+          label: "Ship information", tooltip: "show ship info screen."),
+          KeyTexts(label: "Ship orders", tooltip: "show ship orders menu."),
+          KeyTexts(label: "Crafting orders", tooltip: "show crafting screen."),
+          KeyTexts(label: "Last messages", tooltip: "show messages screen."),
+          KeyTexts(label: "Knowledge list", tooltip: "show knowledge screen."),
+          KeyTexts(label: "Wait orders", tooltip: "show wait orders menu."),
+          KeyTexts(label: "Game statistics",
           tooltip: "show game statistics screen."), KeyTexts(label: "Help",
-          tooltip: "show help screen.")]
+          tooltip: "show help screen."), KeyTexts(label: "Game options",
+          tooltip: "show game options screen."), KeyTexts(
+          label: "Quit from game", tooltip: "quit from the game"), KeyTexts(
+          label: "Resign from game", tooltip: "resign from the game."),
+          KeyTexts(label: "Show menu", tooltip: "show main menu.")]
       setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.15, 0.05])
       for index, key in menuKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
