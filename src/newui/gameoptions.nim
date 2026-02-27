@@ -269,7 +269,19 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
             value = key, index = index, dialog = dialog)
       setLayoutRowDynamic(height = 30, cols = 1)
       labelButton(title = "Reset menu keys to default"):
-        discard
+        menuAccelerators[1] = "s"
+        menuAccelerators[2] = "o"
+        menuAccelerators[3] = "r"
+        menuAccelerators[4] = "m"
+        menuAccelerators[5] = "k"
+        menuAccelerators[6] = "w"
+        menuAccelerators[7] = "g"
+        menuAccelerators[8] = "F1"
+        menuAccelerators[9] = "p"
+        menuAccelerators[10] = "q"
+        menuAccelerators[11] = "x"
+        mapAccelerators[1] = "e"
+        setMenuKeys()
     # Map keys
     of 3:
       const keysTexts: array[4, KeyTexts] = [KeyTexts(label: "", tooltip: ""),
