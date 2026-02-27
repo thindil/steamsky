@@ -32,8 +32,8 @@ type
     ##
     ## * index  - The index of the prototype object
     ## * amount - The amount of the object
-    index*: StatisticIndex = ""
-    amount*: Positive = 1
+    index: StatisticIndex = ""
+    amount: Positive = 1
 
   GameStatsData = object
     ## Used to store information about the player's game's statistics
