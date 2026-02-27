@@ -1774,6 +1774,21 @@ proc setMovementKeys*() {.raises: [], tags: [], contractual.} =
   movementKeysOptions[12] = mapAccelerators[36]
   movementKeysOptions[13] = mapAccelerators[37]
 
+proc setMenuKeys*() {.raises: [], tags: [], contractual.} =
+  ## Set data for menu keys in the game options screen
+  menuKeysOptions[0] = menuAccelerators[1]
+  menuKeysOptions[1] = menuAccelerators[2]
+  menuKeysOptions[2] = menuAccelerators[3]
+  menuKeysOptions[3] = menuAccelerators[4]
+  menuKeysOptions[4] = menuAccelerators[5]
+  menuKeysOptions[5] = menuAccelerators[6]
+  menuKeysOptions[6] = menuAccelerators[7]
+  menuKeysOptions[7] = menuAccelerators[8]
+  menuKeysOptions[8] = menuAccelerators[9]
+  menuKeysOptions[9] = menuAccelerators[10]
+  menuKeysOptions[10] = menuAccelerators[11]
+  menuKeysOptions[11] = mapAccelerators[1]
+
 proc setOptions*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the game options screen
   currentTab = 0
@@ -1795,18 +1810,7 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   generalOptions[15] = gameSettings.autoSave.ord
   generalOptions[16] = gameSettings.waitMinutes
   setMovementKeys()
-  menuKeysOptions[0] = menuAccelerators[1]
-  menuKeysOptions[1] = menuAccelerators[2]
-  menuKeysOptions[2] = menuAccelerators[3]
-  menuKeysOptions[3] = menuAccelerators[4]
-  menuKeysOptions[4] = menuAccelerators[5]
-  menuKeysOptions[5] = menuAccelerators[6]
-  menuKeysOptions[6] = menuAccelerators[7]
-  menuKeysOptions[7] = menuAccelerators[8]
-  menuKeysOptions[8] = menuAccelerators[9]
-  menuKeysOptions[9] = menuAccelerators[10]
-  menuKeysOptions[10] = menuAccelerators[11]
-  menuKeysOptions[11] = mapAccelerators[1]
+  setMenuKeys()
   mapKeysOptions[0] = mapAccelerators[15]
   mapKeysOptions[1] = mapAccelerators[16]
   mapKeysOptions[2] = mapAccelerators[20]
