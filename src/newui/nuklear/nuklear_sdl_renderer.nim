@@ -238,6 +238,16 @@ type
     ## Used to store data about an application's font
     path*: string
     size*: Positive = 14
+  NkSDLDevice = object
+    cmds: seq[int]
+    texNull: DrawNullTexture
+    fontTex: SDL_Texture
+  NkSdl = object
+    win: SDL_Window
+    renderer: SDL_Renderer
+    ogl: NkSDLDevice
+    ctx: Context
+    atlas: FontAtlas
 
 var
   win: WindowPtr = nil        ## The main X window of the program
