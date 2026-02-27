@@ -66,12 +66,17 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
   saveTree.add(son = dateElement)
   logMessage(message = "done", messageLevel = lvlInfo)
   logMessage(message = "Saving map...", messageLevel = lvlInfo)
+  var
+    mapElement: XmlNode = newElement(tag = "visitedmap")
+    visited: string = ""
   for x in MapXRange.low..MapXRange.high:
     for y in MapYRange.low..MapYRange.high:
       if skyMap[x][y].visited:
-        var fieldElement: XmlNode = newElement(tag = "field")
-        fieldElement.attrs = {"x": $x, "y": $y}.toXmlAttributes
-        saveTree.add(son = fieldElement)
+        if visited.len > 0:
+          visited &= ";"
+        visited &= $x & "," & $y
+  mapElement.add(son = newText(text = visited))
+  saveTree.add(son = mapElement)
   logMessage(message = "done", messageLevel = lvlInfo)
   logMessage(message = "Saving bases...", messageLevel = lvlInfo)
   saveBases(saveData = saveTree)
@@ -283,6 +288,15 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
       skyMap[x][y].baseIndex = 0
       skyMap[x][y].eventIndex = -1
       skyMap[x][y].visited = false
+  let mapNode: XmlNode = savedGame.child(name = "visitedmap")
+  if mapNode != nil:
+    for field in mapNode.innerText.split(sep = ';'):
+      let
+        coords: seq[string] = field.split(sep = ',')
+        x: MapXRange = coords[0].parseInt
+        y: MapYRange = coords[1].parseInt
+      skyMap[x][y].visited = true
+  # Backward compatibility code
   for field in savedGame.findAll(tag = "field"):
     let
       x: MapXRange = field.attr(name = "x").parseInt
