@@ -1789,6 +1789,30 @@ proc setMenuKeys*() {.raises: [], tags: [], contractual.} =
   menuKeysOptions[10] = menuAccelerators[11]
   menuKeysOptions[11] = mapAccelerators[1]
 
+proc setMapKeys*() {.raises: [], tags: [], contractual.} =
+  ## Set data for map keys in the game options screen
+  mapKeysOptions[0] = mapAccelerators[15]
+  mapKeysOptions[1] = mapAccelerators[16]
+  mapKeysOptions[2] = mapAccelerators[20]
+  mapKeysOptions[3] = mapAccelerators[21]
+  mapKeysOptions[4] = mapAccelerators[18]
+  mapKeysOptions[5] = mapAccelerators[23]
+  mapKeysOptions[6] = mapAccelerators[17]
+  mapKeysOptions[7] = mapAccelerators[19]
+  mapKeysOptions[8] = mapAccelerators[22]
+  mapKeysOptions[9] = mapAccelerators[24]
+  mapKeysOptions[10] = mapAccelerators[26]
+  mapKeysOptions[11] = mapAccelerators[27]
+  mapKeysOptions[12] = mapAccelerators[28]
+  mapKeysOptions[13] = mapAccelerators[29]
+  mapKeysOptions[14] = mapAccelerators[30]
+  mapKeysOptions[15] = mapAccelerators[31]
+  mapKeysOptions[16] = mapAccelerators[32]
+  mapKeysOptions[17] = mapAccelerators[33]
+  mapKeysOptions[18] = mapAccelerators[3]
+  mapKeysOptions[19] = mapAccelerators[4]
+  mapKeysOptions[20] = mapAccelerators[2]
+
 proc setOptions*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the game options screen
   currentTab = 0
@@ -1811,24 +1835,4 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   generalOptions[16] = gameSettings.waitMinutes
   setMovementKeys()
   setMenuKeys()
-  mapKeysOptions[0] = mapAccelerators[15]
-  mapKeysOptions[1] = mapAccelerators[16]
-  mapKeysOptions[2] = mapAccelerators[20]
-  mapKeysOptions[3] = mapAccelerators[21]
-  mapKeysOptions[4] = mapAccelerators[18]
-  mapKeysOptions[5] = mapAccelerators[23]
-  mapKeysOptions[6] = mapAccelerators[17]
-  mapKeysOptions[7] = mapAccelerators[19]
-  mapKeysOptions[8] = mapAccelerators[22]
-  mapKeysOptions[9] = mapAccelerators[24]
-  mapKeysOptions[10] = mapAccelerators[26]
-  mapKeysOptions[11] = mapAccelerators[27]
-  mapKeysOptions[12] = mapAccelerators[28]
-  mapKeysOptions[13] = mapAccelerators[29]
-  mapKeysOptions[14] = mapAccelerators[30]
-  mapKeysOptions[15] = mapAccelerators[31]
-  mapKeysOptions[16] = mapAccelerators[32]
-  mapKeysOptions[17] = mapAccelerators[33]
-  mapKeysOptions[18] = mapAccelerators[3]
-  mapKeysOptions[19] = mapAccelerators[4]
-  mapKeysOptions[20] = mapAccelerators[2]
+  setMapKeys()
