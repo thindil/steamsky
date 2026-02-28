@@ -89,6 +89,42 @@ proc initStatisticsData*(index: StatisticIndex = "";
   ## Returns the new structure with information about the selected statistic
   return StatisticsData(index: index, amount: amount)
 
+proc destroyedShips*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
+    ], tags: [], contractual.} =
+  ## The getter of a field of GameStatsData type
+  ##
+  ## * gameStats - the GameStatsData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  gameStats.destroyedShips
+
+proc basesVisited*(gameStats: GameStatsData): BasesRange {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of GameStatsData type
+  ##
+  ## * gameStats - the GameStatsData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  gameStats.basesVisited
+
+proc mapVisited*(gameStats: GameStatsData): Positive {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of GameStatsData type
+  ##
+  ## * gameStats - the GameStatsData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  gameStats.mapVisited
+
+proc distanceTraveled*(gameStats: GameStatsData): Natural {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of GameStatsData type
+  ##
+  ## * gameStats - the GameStatsData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  gameStats.distanceTraveled
+
 var gameStats*: GameStatsData = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
 
