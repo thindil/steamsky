@@ -143,6 +143,10 @@ const
   SDLK_F6: uint = 0x4000003fu
   SDLK_F7: uint = 0x40000040u
   SDLK_F8: uint = 0x40000041u
+  SDLK_F9: uint = 0x40000042u
+  SDLK_F10: uint = 0x40000043u
+  SDLK_F11: uint = 0x40000044u
+  SDLK_F12: uint = 0x40000045u
   IMG_INIT_PNG: cint = 0x00000002
   windowCentered*: cint = SDL_WINDOWPOS_CENTERED ## The centered position of a window
 
@@ -428,6 +432,14 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
         nk_input_key(ctx = ctx, key = keyF7, down = down)
       of SDLK_F8.cuint:
         nk_input_key(ctx = ctx, key = keyF8, down = down)
+      of SDLK_F9.cuint:
+        nk_input_key(ctx = ctx, key = keyF9, down = down)
+      of SDLK_F10.cuint:
+        nk_input_key(ctx = ctx, key = keyF10, down = down)
+      of SDLK_F11.cuint:
+        nk_input_key(ctx = ctx, key = keyF11, down = down)
+      of SDLK_F12.cuint:
+        nk_input_key(ctx = ctx, key = keyF12, down = down)
       else:
         result = noEvent
     of SDL_MOUSEBUTTONDOWN.cuint, SDL_MOUSEBUTTONUP.cuint:

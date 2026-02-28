@@ -165,6 +165,10 @@ type
     keyF6 = "F6",
     keyF7 = "F7",
     keyF8 = "F8",
+    keyF9 = "F9",
+    keyF10 = "F10",
+    keyF11 = "F11",
+    keyF12 = "F12",
     keyMax
   StyleCursor* = enum
     ## Types of cursor's styles
