@@ -284,13 +284,18 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         setMenuKeys()
     # Map keys
     of 3:
-      const keysTexts: array[4, KeyTexts] = [KeyTexts(
+      const keysTexts: array[8, KeyTexts] = [KeyTexts(
           label: "Center map on player ship",
           tooltip: "center map on player ship."), KeyTexts(
           label: "Center map on home base",
           tooltip: "center map on home base."), KeyTexts(
           label: "Move map to left", tooltip: "move map left."), KeyTexts(
-          label: "Move map to right", tooltip: "move map right.")]
+          label: "Move map to right", tooltip: "move map right."), KeyTexts(
+          label: "Move map up", tooltip: "move map up."), KeyTexts(
+          label: "Move map down", tooltip: "move map down."), KeyTexts(
+          label: "Move map up/left", tooltip: "move map up and left."),
+          KeyTexts(label: "Move map up/right",
+          tooltip: "move map up and right.")]
       setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.15, 0.05])
       for index, key in mapKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
