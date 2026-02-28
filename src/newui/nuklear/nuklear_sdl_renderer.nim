@@ -139,6 +139,10 @@ const
   SDLK_F2: uint = 0x4000003bu
   SDLK_F3: uint = 0x4000003cu
   SDLK_F4: uint = 0x4000003du
+  SDLK_F5: uint = 0x4000003eu
+  SDLK_F6: uint = 0x4000003fu
+  SDLK_F7: uint = 0x40000040u
+  SDLK_F8: uint = 0x40000041u
   IMG_INIT_PNG: cint = 0x00000002
   windowCentered*: cint = SDL_WINDOWPOS_CENTERED ## The centered position of a window
 
@@ -308,7 +312,7 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
   result = noEvent
   while SDL_PollEvent(event = evt) != 0:
     case evt.`type`
-    of SDL_QUIT.cuint:
+    of SDL_QUIT.ord:
       return quitEvent
     of SDL_WINDOWEVENT.cuint:
       let wEvt: SDL_WindowEvt = cast[SDL_WindowEvt](evt)
@@ -416,6 +420,14 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
         nk_input_key(ctx = ctx, key = keyF3, down = down)
       of SDLK_F4.cuint:
         nk_input_key(ctx = ctx, key = keyF4, down = down)
+      of SDLK_F5.cuint:
+        nk_input_key(ctx = ctx, key = keyF5, down = down)
+      of SDLK_F6.cuint:
+        nk_input_key(ctx = ctx, key = keyF6, down = down)
+      of SDLK_F7.cuint:
+        nk_input_key(ctx = ctx, key = keyF7, down = down)
+      of SDLK_F8.cuint:
+        nk_input_key(ctx = ctx, key = keyF8, down = down)
       else:
         result = noEvent
     of SDL_MOUSEBUTTONDOWN.cuint, SDL_MOUSEBUTTONUP.cuint:

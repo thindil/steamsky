@@ -809,6 +809,10 @@ enum nk_keys {
     NK_KEY_F2,
     NK_KEY_F3,
     NK_KEY_F4,
+    NK_KEY_F5,
+    NK_KEY_F6,
+    NK_KEY_F7,
+    NK_KEY_F8,
     NK_KEY_MAX,
 };
 enum nk_buttons {
