@@ -805,6 +805,10 @@ enum nk_keys {
     NK_KEY_ENTER,
     NK_KEY_TAB,
     NK_KEY_BACKSPACE,
+    NK_KEY_F1,
+    NK_KEY_F2,
+    NK_KEY_F3,
+    NK_KEY_F4,
     NK_KEY_MAX,
 };
 enum nk_buttons {

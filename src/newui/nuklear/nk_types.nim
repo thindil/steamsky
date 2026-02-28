@@ -157,6 +157,10 @@ type
     keyEnter = "Enter",
     keyTab = "Tab",
     keyBackspace = "Backspace",
+    keyF1 = "F1",
+    keyF2 = "F2",
+    keyF3 = "F3",
+    keyF4 = "F4",
     keyMax
   StyleCursor* = enum
     ## Types of cursor's styles
