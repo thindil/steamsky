@@ -284,7 +284,33 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         setMenuKeys()
     # Map keys
     of 3:
-      const keysTexts: array[16, KeyTexts] = [KeyTexts( label: "Center map on player ship", tooltip: "center map on player ship."), KeyTexts( label: "Center map on home base", tooltip: "center map on home base."), KeyTexts( label: "Move map to left", tooltip: "move map left."), KeyTexts( label: "Move map to right", tooltip: "move map right."), KeyTexts( label: "Move map up", tooltip: "move map up."), KeyTexts( label: "Move map down", tooltip: "move map down."), KeyTexts( label: "Move map up/left", tooltip: "move map up and left."), KeyTexts(label: "Move map up/right", tooltip: "move map up and right."), KeyTexts( label: "Move map down/left", tooltip: "move map down and left."), KeyTexts(label: "Move map down/right", tooltip: "move map down and left."), KeyTexts( label: "Move cursor up/left", tooltip: "move cursor up and left."), KeyTexts(label: "Move cursor up", tooltip: "move cursor up."), KeyTexts(label: "Move cursor up/right", tooltip: "move cursor up and right."), KeyTexts(label: "Move cursor left", tooltip: "move cursor left."), KeyTexts(label: "Move cursor right", tooltip: "move cursor right."), KeyTexts(label: "Move cursor down/left", tooltip: "move cursor down left.")]
+      const keysTexts: array[20, KeyTexts] = [KeyTexts(
+          label: "Center map on player ship",
+          tooltip: "center map on player ship."), KeyTexts(
+          label: "Center map on home base",
+          tooltip: "center map on home base."), KeyTexts(
+          label: "Move map to left", tooltip: "move map left."), KeyTexts(
+          label: "Move map to right", tooltip: "move map right."), KeyTexts(
+          label: "Move map up", tooltip: "move map up."), KeyTexts(
+          label: "Move map down", tooltip: "move map down."), KeyTexts(
+          label: "Move map up/left", tooltip: "move map up and left."),
+          KeyTexts(label: "Move map up/right",
+          tooltip: "move map up and right."), KeyTexts(
+          label: "Move map down/left", tooltip: "move map down and left."),
+          KeyTexts(label: "Move map down/right",
+          tooltip: "move map down and left."), KeyTexts(
+          label: "Move cursor up/left", tooltip: "move cursor up and left."),
+          KeyTexts(label: "Move cursor up", tooltip: "move cursor up."),
+          KeyTexts(label: "Move cursor up/right",
+          tooltip: "move cursor up and right."), KeyTexts(
+          label: "Move cursor left", tooltip: "move cursor left."), KeyTexts(
+          label: "Move cursor right", tooltip: "move cursor right."), KeyTexts(
+          label: "Move cursor down/left", tooltip: "move cursor down left."),
+          KeyTexts(label: "Move cursor down", tooltip: "move cursor down."),
+          KeyTexts(label: "Move cursor down/right",
+          tooltip: "move cursor down and right."), KeyTexts(
+          label: "Press mouse button", tooltip: "emulate mouse button."),
+          KeyTexts(label: "Zoom in map", tooltip: "zoom in map.")]
       setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.15, 0.05])
       for index, key in mapKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
