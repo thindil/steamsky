@@ -125,6 +125,42 @@ proc distanceTraveled*(gameStats: GameStatsData): Natural {.raises: [], tags: []
   ## Returns the value of the selected field
   gameStats.distanceTraveled
 
+proc craftingOrders*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
+    ], tags: [], contractual.} =
+  ## The getter of a field of GameStatsData type
+  ##
+  ## * gameStats - the GameStatsData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  gameStats.craftingOrders
+
+#proc acceptedMissions*(gameStats: GameStatsData): Natural {.raises: [], tags: [],
+#    contractual.} =
+#  ## The getter of a field of GameStatsData type
+#  ##
+#  ## * gameStats - the GameStatsData object which field will be get
+#  ##
+#  ## Returns the value of the selected field
+#  gameStats.acceptedMissions
+
+proc finishedMissions*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
+    ], tags: [], contractual.} =
+  ## The getter of a field of GameStatsData type
+  ##
+  ## * gameStats - the GameStatsData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  gameStats.finishedMissions
+
+proc finishedGoals*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
+    ], tags: [], contractual.} =
+  ## The getter of a field of GameStatsData type
+  ##
+  ## * gameStats - the GameStatsData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  gameStats.finishedGoals
+
 var gameStats*: GameStatsData = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
 
