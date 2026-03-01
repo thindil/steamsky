@@ -73,7 +73,7 @@ type
       doublePriceIcon, mapTraderIcon, friendlyShipIcon, notVisitedBaseIcon
   ThemeData* = object
     ## Stores data about the game's theme
-    name: string
+    name*: string
     fileName: string
     icons*: array[IconsNames, string]
     colors*: array[ColorsNames, Color]
