@@ -127,13 +127,15 @@ type
     ## Special bonuses set during crafting items
     none = "None",
     lighter = "Lighter",
-    moreDurable = "More durable"
+    moreDurable = "More durable",
+    lessBreakable = "Less breakable"
 
   CraftMaluses* = enum
     ## Special maluses set during crafting items
     none = "None",
     heavier = "Heavier",
-    lessDurable = "Less durable"
+    lessDurable = "Less durable",
+    moreBreakable = "More breakable"
 
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
