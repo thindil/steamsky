@@ -250,19 +250,9 @@ type
     ## Used to store data about an application's font
     path*: string
     size*: Positive = 14
-  NkSDLDevice = object
-    cmds: seq[int]
-    texNull: DrawNullTexture
-    fontTex: SDL_Texture
-  NkSdl = object
-    win: SDL_Window
-    renderer: SDL_Renderer
-    ogl: NkSDLDevice
-    ctx: Context
-    atlas: FontAtlas
 
 var
-  win: WindowPtr = nil        ## The main X window of the program
+  win: WindowPtr = nil        ## The main SDL window of the program
   renderer: RendererPtr = nil ## The SDL renderer
   fontScale: cfloat = 0.0     ## The scale used to resize a font
 
