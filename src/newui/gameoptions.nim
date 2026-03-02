@@ -320,7 +320,28 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
             value = key, index = index, dialog = dialog)
       setLayoutRowDynamic(height = 30, cols = 1)
       labelButton(title = "Reset map keys to default"):
-        discard
+        mapAccelerators[15] = "Shift-Return"
+        mapAccelerators[16] = "Shift-h"
+        mapAccelerators[20] = "Shift-KP_Left"
+        mapAccelerators[21] = "Shift_KP_Right"
+        mapAccelerators[18] = "Shift-KP_Up"
+        mapAccelerators[23] = "Shift-KP_Down"
+        mapAccelerators[17] = "Shift-KP_Home"
+        mapAccelerators[19] = "Shift-KP_Prior"
+        mapAccelerators[22] = "Shift-KP_End"
+        mapAccelerators[24] = "Shift-KP_Next"
+        mapAccelerators[25] = ""
+        mapAccelerators[26] = ""
+        mapAccelerators[27] = ""
+        mapAccelerators[28] = ""
+        mapAccelerators[29] = ""
+        mapAccelerators[30] = ""
+        mapAccelerators[31] = ""
+        mapAccelerators[32] = ""
+        mapAccelerators[33] = ""
+        mapAccelerators[3] = "-"
+        mapAccelerators[4] = "+"
+        mapAccelerators[2] = "v"
     else:
       discard
     # Start setting the selected key
