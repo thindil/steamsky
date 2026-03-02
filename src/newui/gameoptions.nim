@@ -224,7 +224,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip: "set half speed for the ship."), KeyTexts(
           label: "Set full speed for ship",
           tooltip: "set full speed for the ship.")]
-      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.15, 0.05])
+      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
       for index, key in movementKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
             tooltip = "Key used to " & keysTexts[index].tooltip,
@@ -262,7 +262,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           label: "Quit from game", tooltip: "quit from the game"), KeyTexts(
           label: "Resign from game", tooltip: "resign from the game."),
           KeyTexts(label: "Show menu", tooltip: "show main menu.")]
-      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.15, 0.05])
+      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
       for index, key in menuKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
             tooltip = "Key used to " & keysTexts[index].tooltip,
@@ -284,7 +284,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         setMenuKeys()
     # Map keys
     of 3:
-      const keysTexts: array[20, KeyTexts] = [KeyTexts(
+      const keysTexts: array[22, KeyTexts] = [KeyTexts(
           label: "Center map on player ship",
           tooltip: "center map on player ship."), KeyTexts(
           label: "Center map on home base",
@@ -310,8 +310,10 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           KeyTexts(label: "Move cursor down/right",
           tooltip: "move cursor down and right."), KeyTexts(
           label: "Press mouse button", tooltip: "emulate mouse button."),
-          KeyTexts(label: "Zoom in map", tooltip: "zoom in map.")]
-      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.15, 0.05])
+          KeyTexts(label: "Zoom in map", tooltip: "zoom in map."), KeyTexts(
+          label: "zoom out map.", tooltip: "zoom out map."), KeyTexts(
+          label: "Show move map options", tooltip: "show move map options.")]
+      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
       for index, key in mapKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
             tooltip = "Key used to " & keysTexts[index].tooltip,
