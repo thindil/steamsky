@@ -727,7 +727,7 @@ proc setMissions*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       10
     else:
       0)
-  for mission in acceptedMissions:
+  for mission in missions.acceptedMissions:
     if mission.startBase == baseIndex:
       missionsLimit.dec
       if missionsLimit == 0:
@@ -1241,7 +1241,7 @@ proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't set an event info")
   # Set the list of accepted missions
   missionsUIList = @[]
-  for index, mission in acceptedMissions:
+  for index, mission in missions.acceptedMissions:
     try:
       var missionTime: string = ""
       minutesToDate(minutes = mission.time, infoText = missionTime)
@@ -1753,8 +1753,8 @@ var
     ## The list of movement keys options
   menuKeysOptions*: array[12, string] = ["", "", "", "", "", "", "", "", "", "", "", ""]
     ## The list of menu keys options
-  mapKeysOptions*: array[21, string] = ["", "", "", "", "", "", "", "", "", "",
-      "", "", "", "", "", "", "", "", "", "", ""]
+  mapKeysOptions*: array[22, string] = ["", "", "", "", "", "", "", "", "", "",
+      "", "", "", "", "", "", "", "", "", "", "", ""]
     ## The list of map keys options
   interfaceThemes*: seq[string] = @[]
     ## The list of interface options
@@ -1811,9 +1811,10 @@ proc setMapKeys*() {.raises: [], tags: [], contractual.} =
   mapKeysOptions[15] = mapAccelerators[31]
   mapKeysOptions[16] = mapAccelerators[32]
   mapKeysOptions[17] = mapAccelerators[33]
-  mapKeysOptions[18] = mapAccelerators[3]
-  mapKeysOptions[19] = mapAccelerators[4]
-  mapKeysOptions[20] = mapAccelerators[2]
+  mapKeysOptions[18] = mapAccelerators[34]
+  mapKeysOptions[19] = mapAccelerators[3]
+  mapKeysOptions[20] = mapAccelerators[4]
+  mapKeysOptions[21] = mapAccelerators[2]
 
 proc setOptions*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the game options screen
