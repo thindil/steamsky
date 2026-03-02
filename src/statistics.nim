@@ -134,14 +134,14 @@ proc craftingOrders*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
   ## Returns the value of the selected field
   gameStats.craftingOrders
 
-#proc acceptedMissions*(gameStats: GameStatsData): Natural {.raises: [], tags: [],
-#    contractual.} =
-#  ## The getter of a field of GameStatsData type
-#  ##
-#  ## * gameStats - the GameStatsData object which field will be get
-#  ##
-#  ## Returns the value of the selected field
-#  gameStats.acceptedMissions
+proc acceptedMissions*(gameStats: GameStatsData): Natural {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of GameStatsData type
+  ##
+  ## * gameStats - the GameStatsData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  gameStats.acceptedMissions
 
 proc finishedMissions*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
     ], tags: [], contractual.} =
