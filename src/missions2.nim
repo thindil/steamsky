@@ -123,7 +123,7 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
       10
     else:
       0
-  for mission in acceptedMissions:
+  for mission in missions.acceptedMissions:
     if mission.startBase == baseIndex:
       missionsLimit.dec
     if missionsLimit <= 0:
@@ -213,7 +213,7 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
         break
     mission.data = playerShip.crew.high
   skyBases[baseIndex].missions.delete(i = missionIndex)
-  acceptedMissions.add(y = mission)
+  missions.acceptedMissions.add(y = mission)
   skyMap[mission.targetX][mission.targetY].missionIndex = acceptedMissions.high
   if gameSettings.autoDestination:
     playerShip.destinationX = mission.targetX

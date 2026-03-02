@@ -256,7 +256,7 @@ proc endGame*(save: bool) {.raises: [KeyError, IOError, OSError],
   messagesList = @[]
   knownRecipes = @[]
   eventsList = @[]
-  acceptedMissions = @[]
+  missions.acceptedMissions = @[]
 
 proc createPlayerShip(randomBase: Positive;
     playerFaction: FactionData) {.raises: [ValueError], tags: [],

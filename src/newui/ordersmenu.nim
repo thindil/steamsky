@@ -44,7 +44,7 @@ proc countMissionHeight(baseIndex: ExtendedBasesRange;
         10
       else:
         0
-    for mission in acceptedMissions:
+    for mission in missions.acceptedMissions:
       if (mission.finished and mission.startBase == baseIndex) or (
           mission.targetX == playerShip.skyX and mission.targetY ==
           playerShip.skyY):
@@ -141,12 +141,12 @@ proc countHeight(baseIndex: ExtendedBasesRange;
       if baseIndex > 0:
         if skyBases[baseIndex].reputation.level > -25:
           result += 35
-        for mission in acceptedMissions:
+        for mission in missions.acceptedMissions:
           if haveTrader and mission.targetX == playerShip.skyX and
               mission.targetY == playerShip.skyY and mission.finished:
             result += 35
       else:
-        for mission in acceptedMissions:
+        for mission in missions.acceptedMissions:
           if mission.targetX == playerShip.skyX and mission.targetY ==
               playerShip.skyY and not mission.finished:
             if mission.mType notin {deliver, passenger}:
@@ -389,7 +389,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
           10
         else:
           0
-      for mission in acceptedMissions:
+      for mission in missions.acceptedMissions:
         if (mission.finished and mission.startBase == baseIndex) or (
             mission.targetX == playerShip.skyX and mission.targetY ==
             playerShip.skyY):
@@ -512,7 +512,7 @@ proc startMission(dialog: var GameDialog; state: var GameState) {.raises: [],
   var startsCombat, uMission: bool = false
   closePopup()
   dialog = none
-  for mission in acceptedMissions:
+  for mission in missions.acceptedMissions:
     if mission.targetX == playerShip.skyX and mission.targetY ==
         playerShip.skyY and not mission.finished:
       case mission.mType
@@ -747,7 +747,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
               else:
                 labelButton(title = "Dock"):
                   dockingOrder(dialog = dialog, state = state)
-            for mission in acceptedMissions:
+            for mission in missions.acceptedMissions:
               if haveTrader and mission.targetX == playerShip.skyX and
                   mission.targetY == playerShip.skyY and mission.finished:
                 case mission.mType
@@ -777,7 +777,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
                   labelButton(title = "Complete Transport passenger mission"):
                     completeMission(dialog = dialog)
           else:
-            for mission in acceptedMissions:
+            for mission in missions.acceptedMissions:
               if mission.targetX == playerShip.skyX and mission.targetY ==
                   playerShip.skyY and not mission.finished:
                 case mission.mType

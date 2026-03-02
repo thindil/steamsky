@@ -195,7 +195,7 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
     saveTree.add(son = storyNode)
   logMessage(message = "done", messageLevel = lvlInfo)
   logMessage(message = "Saving accepted missions...", messageLevel = lvlInfo)
-  for mission in acceptedMissions:
+  for mission in missions.acceptedMissions:
     var
       missionElement: XmlNode = newElement(tag = "acceptedmission")
       attrs2: seq[tuple[key, val: string]] = @[]
@@ -394,7 +394,7 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
     let multiplier: string = mission.attr(name = "multiplier")
     if multiplier.len > 0:
       tmpMission.multiplier = multiplier.parseFloat
-    acceptedMissions.add(y = tmpMission)
+    missions.acceptedMissions.add(y = tmpMission)
     skyMap[tmpMission.targetX][tmpMission.targetY].missionIndex = index
   logMessage(message = "done", messageLevel = lvlInfo)
   # Load game statistics
