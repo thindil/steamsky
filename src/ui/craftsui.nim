@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -1336,29 +1336,35 @@ proc setBonusesCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     bonusesBox: string = ".craftdialog.special.special1"
     malusesBox: string = ".craftdialog.special.special2"
-    malusIndex: Natural = try:
-        tclEval2(script = malusesBox & " current").parseInt
-      except:
-        showError(message = "Can't get the malus index.")
-        return tclOk
+    malusValue: string = tclEval2(script = malusesBox & " get")
+    bonusValue: string = tclEval2(script = bonusesBox & " get")
   var
     bonuses: string = ""
-    index: Natural = 0
+    index, bonusIndex, malusIndex: Natural = 0
+  for malus in CraftMaluses:
+    if $malus == malusValue:
+      malusIndex = index
+      break
+    index.inc
+  index = 0
   for bonus in CraftBonuses:
+    if $bonus == bonusValue:
+      bonusIndex = index
     if index > 0 and malusIndex == index:
       index.inc
       continue
     bonuses &= " {" & $bonus & "}"
     index.inc
   tclEval(script = bonusesBox & " configure -values [list" & bonuses & "]")
-  tclEval(script = bonusesBox & " current " & (if malusIndex >
-      0: "1" else: "0"))
+  if malusIndex > 0 and bonusIndex == 0:
+    tclEval(script = bonusesBox & " current " & $(bonusIndex + 1))
   if malusIndex == 0:
     var maluses: string = ""
     for malus in CraftMaluses:
       maluses &= " {" & $malus & "}"
     tclEval(script = malusesBox & " configure -values [list" & maluses & "]")
     tclEval(script = malusesBox & " current 0")
+    tclEval(script = bonusesBox & " current 0")
   return tclOk
 
 proc setMalusesCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -1379,29 +1385,35 @@ proc setMalusesCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     malusesBox: string = ".craftdialog.special.special2"
     bonusesBox: string = ".craftdialog.special.special1"
-    bonusIndex: Natural = try:
-        tclEval2(script = bonusesBox & " current").parseInt
-      except:
-        showError(message = "Can't get the bonus index.")
-        return tclOk
+    malusValue: string = tclEval2(script = malusesBox & " get")
+    bonusValue: string = tclEval2(script = bonusesBox & " get")
   var
     maluses: string = ""
-    index: Natural = 0
+    index, malusIndex, bonusIndex: Natural = 0
+  for bonus in CraftBonuses:
+    if $bonus == bonusValue:
+      bonusIndex = index
+      break
+    index.inc
+  index = 0
   for malus in CraftMaluses:
+    if $malus == malusValue:
+      malusIndex = index
     if index > 0 and bonusIndex == index:
       index.inc
       continue
     maluses &= " {" & $malus & "}"
     index.inc
   tclEval(script = malusesBox & " configure -values [list" & maluses & "]")
-  tclEval(script = malusesBox & " current " & (if bonusIndex >
-      0: "1" else: "0"))
+  if bonusIndex > 0 and malusIndex == 0:
+    tclEval(script = malusesBox & " current " & $(malusIndex + 1))
   if bonusIndex == 0:
     var bonuses: string = ""
     for bonus in CraftBonuses:
       bonuses &= " {" & $bonus & "}"
     tclEval(script = bonusesBox & " configure -values [list" & bonuses & "]")
     tclEval(script = bonusesBox & " current 0")
+    tclEval(script = malusesBox & " current 0")
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
