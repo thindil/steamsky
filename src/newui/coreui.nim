@@ -68,7 +68,7 @@ var
   mapPreview*: bool = false        ## If true, the map is in the preview mode
   previousState*: GameState = map  ## The previous screen in the game
   updateData*: bool = false        ## If true, update the data needed for the selected screen
-  mapAccelerators*: array[1..37, string] = ["e", "v", "plus", "minus",
+  mapAccelerators*: array[1..37, string] = ["e", "v", "+", "-",
       "KP_Home", "KP_Up", "KP_Prior", "KP_Left", "KP_Begin", "KP_Right",
       "KP_End", "KP_Down", "KP_Next", "KP_Divide", "Shift-Return", "Shift-h",
       "Shift-KP_Home", "Shift-KP_Up", "Shift-KP_Prior", "Shift-KP_Left",
