@@ -161,6 +161,24 @@ proc finishedGoals*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
   ## Returns the value of the selected field
   gameStats.finishedGoals
 
+proc killedMobs*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
+    ], tags: [], contractual.} =
+  ## The getter of a field of GameStatsData type
+  ##
+  ## * gameStats - the GameStatsData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  gameStats.killedMobs
+
+proc points*(gameStats: GameStatsData): Natural {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of GameStatsData type
+  ##
+  ## * gameStats - the GameStatsData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  gameStats.points
+
 var gameStats*: GameStatsData = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
 
