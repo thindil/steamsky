@@ -57,8 +57,8 @@ suite "Unit tests for missions2 module":
   resetReputations()
 
   test "Finish an accepted mission":
-    acceptedMissions = @[]
-    acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
+    missions.acceptedMissions = @[]
+    missions.acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
         targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
     finishMission(0)
     check:
@@ -72,7 +72,7 @@ suite "Unit tests for missions2 module":
       experience: 0), MobAttributeRecord(level: 3, experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0)], contractLength: 1000))
-    acceptedMissions.add(y = MissionData(mType: passenger, time: 1000,
+    missions.acceptedMissions.add(y = MissionData(mType: passenger, time: 1000,
         targetX: 1, targetY: 1, reward: 1, startBase: 1, finished: false,
             multiplier: 1.0, data: 2))
     finishMission(0)
@@ -80,8 +80,8 @@ suite "Unit tests for missions2 module":
       acceptedMissions.len == 0
 
   test "Auto finish a mission.":
-    acceptedMissions = @[]
-    acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
+    missions.acceptedMissions = @[]
+    missions.acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
         targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
     check:
       autoFinishMissions().len == 0 and acceptedMissions.len == 0
@@ -91,7 +91,7 @@ suite "Unit tests for missions2 module":
     skyBases[1].missions.add(y = MissionData(mType: explore, time: 1000,
         targetX: 2, targetY: 2, reward: 1, startBase: 1, finished: true,
             multiplier: 1.0, target: 0))
-    acceptedMissions = @[]
+    missions.acceptedMissions = @[]
     acceptMission(0)
     check:
-      acceptedMissions.len == 1
+      missions.acceptedMissions.len == 1
