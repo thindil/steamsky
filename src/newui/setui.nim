@@ -1756,6 +1756,8 @@ var
   mapKeysOptions*: array[22, string] = ["", "", "", "", "", "", "", "", "", "",
       "", "", "", "", "", "", "", "", "", "", "", ""]
     ## The list of map keys options
+  generalKeysOptions*: array[4, string] = ["", "", "", ""]
+    ## The list of general keys options
   interfaceThemes*: seq[string] = @[]
     ## The list of interface options
 
@@ -1816,6 +1818,13 @@ proc setMapKeys*() {.raises: [], tags: [], contractual.} =
   mapKeysOptions[20] = mapAccelerators[4]
   mapKeysOptions[21] = mapAccelerators[2]
 
+proc setGeneralKeys*() {.raises: [], tags: [], contractual.} =
+  ## Set data for general keys in the game options screen
+  generalKeysOptions[0] = mapAccelerators[34]
+  generalKeysOptions[1] = mapAccelerators[35]
+  generalKeysOptions[2] = mapAccelerators[36]
+  generalKeysOptions[3] = mapAccelerators[37]
+
 proc setOptions*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the game options screen
   currentTab = 0
@@ -1839,5 +1848,6 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   setMovementKeys()
   setMenuKeys()
   setMapKeys()
+  setGeneralKeys()
   for theme in themesList.values:
     interfaceThemes.add(y = theme.name)
