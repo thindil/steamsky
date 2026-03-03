@@ -311,7 +311,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip: "move cursor down and right."), KeyTexts(
           label: "Press mouse button", tooltip: "emulate mouse button."),
           KeyTexts(label: "Zoom in map", tooltip: "zoom in map."), KeyTexts(
-          label: "zoom out map.", tooltip: "zoom out map."), KeyTexts(
+          label: "Zoom out map", tooltip: "zoom out map."), KeyTexts(
           label: "Show move map options", tooltip: "show move map options.")]
       setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
       for index, key in mapKeysOptions.mpairs:
@@ -339,9 +339,10 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         mapAccelerators[31] = "Control-KP_Down"
         mapAccelerators[32] = "Control-KP_Next"
         mapAccelerators[33] = "Control-Return"
-        mapAccelerators[3] = "-"
-        mapAccelerators[4] = "+"
+        mapAccelerators[3] = "+"
+        mapAccelerators[4] = "-"
         mapAccelerators[2] = "v"
+        setMapKeys()
     else:
       discard
     # Start setting the selected key
