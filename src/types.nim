@@ -263,6 +263,7 @@ type
     ## * quality       - The quality of the item
     ## * weight        - The weight of the item, if 0, then the same as a proto
     ##                   item
+    ## * breakChance   - The chance to break the item on use
     protoIndex*: Natural = 0
     amount*: Positive = 1
     name*: string
@@ -270,6 +271,7 @@ type
     price*: Natural = 0
     quality*: ObjectQuality = normal
     weight*: Natural = 0
+    breakChance*: Natural = 0
 
   MobAttributeRecord* = object
     ## Used to store information about the crew member's attributes
@@ -440,6 +442,7 @@ type
     ## * showType    - The item's type to show to the player instead of the itemType
     ## * description - The description of the item
     ## * reputation  - The minumal reputation which is needed to buy that item
+    ## * breakChance - The chance to break the item on use
     name*: ObjectName
     weight*: Positive
     itemType*: string
@@ -448,6 +451,7 @@ type
     showType*: string
     description*: string
     reputation*: ReputationRange
+    breakChance*: Natural
 
   RecruitItem* = object
     ## Used to store information about a recruit's inventory
@@ -492,12 +496,14 @@ type
     ## * quality       - The quality of the item
     ## * weight        - The weight of the item, if 0, then the same as a proto
     ##                   item
+    ## * breakChance   - The chance to break the item on use
     protoIndex*: Natural
     amount*: Natural
     durability*, maxDurability*: ItemsDurability = 100
     price*: Natural
     quality*: ObjectQuality = normal
     weight*: Natural
+    breakChance*: Natural
 
   DateRecord* = object
     ## Used to store the game's time
