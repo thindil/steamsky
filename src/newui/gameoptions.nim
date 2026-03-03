@@ -330,15 +330,15 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         mapAccelerators[19] = "Shift-KP_Prior"
         mapAccelerators[22] = "Shift-KP_End"
         mapAccelerators[24] = "Shift-KP_Next"
-        mapAccelerators[25] = ""
-        mapAccelerators[26] = ""
-        mapAccelerators[27] = ""
-        mapAccelerators[28] = ""
-        mapAccelerators[29] = ""
-        mapAccelerators[30] = ""
-        mapAccelerators[31] = ""
-        mapAccelerators[32] = ""
-        mapAccelerators[33] = ""
+        mapAccelerators[25] = "Control-KP_Home"
+        mapAccelerators[26] = "Control-KP_Up"
+        mapAccelerators[27] = "Control-KP_Prior"
+        mapAccelerators[28] = "Control-KP_Left"
+        mapAccelerators[29] = "Control-KP_Right"
+        mapAccelerators[30] = "Control-KP_End"
+        mapAccelerators[31] = "Control-KP_Down"
+        mapAccelerators[32] = "Control-KP_Next"
+        mapAccelerators[33] = "Control-Return"
         mapAccelerators[3] = "-"
         mapAccelerators[4] = "+"
         mapAccelerators[2] = "v"
@@ -377,6 +377,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
             movementKeysOptions[keyIndex] = key
           of 2:
             menuKeysOptions[keyIndex] = key
+          of 3:
+            mapKeysOptions[keyIndex] = key
           else:
             discard
         keyIndex = -1
