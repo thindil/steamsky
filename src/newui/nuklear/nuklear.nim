@@ -26,9 +26,9 @@
 import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
 import nk_button, nk_colors, nk_context, nk_draw, nk_input, nk_layout, nk_math,
-  nk_panel, nk_tooltip, nk_types, nk_utf, nk_utils, nk_widget
-export nk_button, nk_colors, nk_context, nk_input, nk_layout, nk_tooltip,
-  nk_types, nk_widget
+    nk_panel, nk_style, nk_tooltip, nk_types, nk_utf, nk_utils, nk_widget
+export nk_button, nk_colors, nk_context, nk_input, nk_layout, nk_style,
+    nk_tooltip, nk_types, nk_widget
 
 ## Provides code for Nuklear binding
 
@@ -2431,12 +2431,6 @@ proc styleFromTable*(table: openArray[NkColor]) {.raises: [], tags: [],
     newTable[index] = nk_rgba(r = color.r.cint, g = color.g.cint,
         b = color.b.cint, a = color.a.cint)
   nk_style_from_table(ctx = ctx, table = newTable.addr)
-
-proc defaultStyle*() {.raises: [], tags: [], contractual.} =
-  ## Reset the UI colors to the default Nuklear setting
-  proc nk_style_default(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  nk_style_default(ctx = ctx)
 
 proc stylePopFloat() {.raises: [], tags: [], contractual.} =
   ## Reset the UI float setting to the default Nuklear setting
