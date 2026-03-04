@@ -343,6 +343,25 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         mapAccelerators[4] = "-"
         mapAccelerators[2] = "v"
         setMapKeys()
+    # General keys
+    of 4:
+      const keysTexts: array[4, KeyTexts] = [KeyTexts(
+          label: "Resize first section",
+          tooltip: "resize (maximize or minimize) the first section of information (like ship info, knowledge or in combat)."),
+          KeyTexts(label: "Resize second section",
+          tooltip: "resize (maximize or minimize) the second section of information (like ship info, knowledge or in combat)."),
+          KeyTexts(label: "Resize third section",
+          tooltip: "resize (maximize or minimize) the third section of information (like ship info, knowledge or in combat)."),
+          KeyTexts(label: "Resize fourth section",
+          tooltip: "resize (maximize or minimize) the fourth section of information (like ship info, knowledge or in combat).")]
+      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
+      for index, key in generalKeysOptions.mpairs:
+        addAccelerator(label = keysTexts[index].label & ":",
+            tooltip = "Key used to " & keysTexts[index].tooltip,
+            value = key, index = index, dialog = dialog)
+      setLayoutRowDynamic(height = 30, cols = 1)
+      labelButton(title = "Reset general keys to default"):
+        discard
     else:
       discard
     # Start setting the selected key
@@ -380,6 +399,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
             menuKeysOptions[keyIndex] = key
           of 3:
             mapKeysOptions[keyIndex] = key
+          of 4:
+            generalKeysOptions[keyIndex] = key
           else:
             discard
         keyIndex = -1
