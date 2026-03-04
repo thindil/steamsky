@@ -366,6 +366,11 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         mapAccelerators[36] = "Control-c"
         mapAccelerators[37] = "Control-d"
         setGeneralKeys()
+    # Interface options
+    of 5:
+      setLayoutRowDynamic(height = 30, cols = 2)
+      addComboList(label = "Interace theme:", tooltip = "Select UI theme.",
+          items = interfaceThemes, value = interfaceOptions[0])
     else:
       discard
     # Start setting the selected key
