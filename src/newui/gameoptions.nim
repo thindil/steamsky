@@ -361,7 +361,11 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
             value = key, index = index, dialog = dialog)
       setLayoutRowDynamic(height = 30, cols = 1)
       labelButton(title = "Reset general keys to default"):
-        discard
+        mapAccelerators[34] = "Control-a"
+        mapAccelerators[35] = "Control-b"
+        mapAccelerators[36] = "Control-c"
+        mapAccelerators[37] = "Control-d"
+        setGeneralKeys()
     else:
       discard
     # Start setting the selected key
