@@ -279,8 +279,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         except OSError, IOError, Exception:
           echo "Can't close configuration file parser. Reason: " &
               getCurrentExceptionMsg()
-      themesList[themeDir.lastPathPart] = localTheme
-      localTheme = defaultTheme
+        themesList[themeDir.lastPathPart] = localTheme
+        localTheme = defaultTheme
   except:
     discard
   if gameSettings.interfaceTheme notin themesList:
