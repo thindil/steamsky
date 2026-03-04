@@ -1,4 +1,4 @@
-# Copyright © 2025 Bartek Jasicki
+# Copyright © 2025-2026 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -47,6 +47,9 @@ proc nk_input_button*(ctx; id: Buttons; x, y: cint; down: nk_bool) {.importc,
     nodecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
+# ------------------
+# Low level bindings
+# ------------------
 proc hasMouseClickInRect*(id: Buttons; rect: Rect): bool {.raises: [],
   tags: [], contractual.} =
   ## Check if the mouse button was clicked in the selected rectangle

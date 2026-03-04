@@ -25,14 +25,21 @@
 
 ## Provides code related to Nuklear styles
 
-import contracts
-import nk_context
+import contracts, nimalyzer
+import nk_context, nk_types
 
 # ---------------------
 # Procedures parameters
 # ---------------------
 using
   ctx: PContext
+
+# ------------------
+# High level bindings
+# ------------------
+{.push ruleOff: "varDeclared".}
+var defaultColorStyle: array[countColors, NkColor]
+{.push ruleOn: "varDeclared".}
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
