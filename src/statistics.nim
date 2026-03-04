@@ -35,6 +35,9 @@ type
     index: StatisticIndex = ""
     amount: Positive = 1
 
+  StatsSeq = seq[StatisticsData]
+    ## Used to store data for various in-game statistics
+
   GameStatsData = object
     ## Used to store information about the player's game's statistics
     ##
@@ -48,15 +51,15 @@ type
     ## * finishedGoals    - The list of finished goals
     ## * killedMobs       - The list of enemies killed
     ## * points           - The amount of points gained in the game's session
-    destroyedShips*: seq[StatisticsData]
+    destroyedShips*: StatsSeq
     basesVisited*: BasesRange
     mapVisited*: Positive
     distanceTraveled*: Natural
-    craftingOrders*: seq[StatisticsData]
+    craftingOrders*: StatsSeq
     acceptedMissions*: Natural
-    finishedMissions*: seq[StatisticsData]
-    finishedGoals*: seq[StatisticsData]
-    killedMobs*: seq[StatisticsData]
+    finishedMissions*: StatsSeq
+    finishedGoals*: StatsSeq
+    killedMobs*: StatsSeq
     points*: Natural
 
 proc index*(statData: StatisticsData): StatisticIndex {.raises: [], tags: [],
@@ -89,7 +92,7 @@ proc initStatisticsData*(index: StatisticIndex = "";
   ## Returns the new structure with information about the selected statistic
   return StatisticsData(index: index, amount: amount)
 
-proc destroyedShips*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
+proc destroyedShips*(gameStats: GameStatsData): StatsSeq {.raises: [
     ], tags: [], contractual.} =
   ## The getter of a field of GameStatsData type
   ##
@@ -125,7 +128,7 @@ proc distanceTraveled*(gameStats: GameStatsData): Natural {.raises: [], tags: []
   ## Returns the value of the selected field
   gameStats.distanceTraveled
 
-proc craftingOrders*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
+proc craftingOrders*(gameStats: GameStatsData): StatsSeq {.raises: [
     ], tags: [], contractual.} =
   ## The getter of a field of GameStatsData type
   ##
@@ -143,7 +146,7 @@ proc acceptedMissions*(gameStats: GameStatsData): Natural {.raises: [], tags: []
   ## Returns the value of the selected field
   gameStats.acceptedMissions
 
-proc finishedMissions*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
+proc finishedMissions*(gameStats: GameStatsData): StatsSeq {.raises: [
     ], tags: [], contractual.} =
   ## The getter of a field of GameStatsData type
   ##
@@ -152,7 +155,7 @@ proc finishedMissions*(gameStats: GameStatsData): seq[StatisticsData] {.raises: 
   ## Returns the value of the selected field
   gameStats.finishedMissions
 
-proc finishedGoals*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
+proc finishedGoals*(gameStats: GameStatsData): StatsSeq {.raises: [
     ], tags: [], contractual.} =
   ## The getter of a field of GameStatsData type
   ##
@@ -161,7 +164,7 @@ proc finishedGoals*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
   ## Returns the value of the selected field
   gameStats.finishedGoals
 
-proc killedMobs*(gameStats: GameStatsData): seq[StatisticsData] {.raises: [
+proc killedMobs*(gameStats: GameStatsData): StatsSeq {.raises: [
     ], tags: [], contractual.} =
   ## The getter of a field of GameStatsData type
   ##
