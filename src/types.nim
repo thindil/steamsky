@@ -271,7 +271,7 @@ type
     price*: Natural = 0
     quality*: ObjectQuality = normal
     weight*: Natural = 0
-    breakChance*: Natural = 0
+    breakChance*: ExtendedNatural = -1
 
   MobAttributeRecord* = object
     ## Used to store information about the crew member's attributes
@@ -503,7 +503,7 @@ type
     price*: Natural
     quality*: ObjectQuality = normal
     weight*: Natural
-    breakChance*: Natural
+    breakChance*: ExtendedNatural
 
   DateRecord* = object
     ## Used to store the game's time
