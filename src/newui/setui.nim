@@ -1760,6 +1760,8 @@ var
     ## The list of general keys options
   interfaceThemes*: seq[string] = @[]
     ## The list of interface options
+  interfaceOptions*: array[4, Natural] = [0, 0, 0, 0]
+    ## The list of interface options
 
 proc setMovementKeys*() {.raises: [], tags: [], contractual.} =
   ## Set data for momevemnt keys in the game options screen
@@ -1849,5 +1851,12 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   setMenuKeys()
   setMapKeys()
   setGeneralKeys()
-  for theme in themesList.values:
+  var themeIndex: Natural = 0
+  for index, theme in themesList:
     interfaceThemes.add(y = theme.name)
+    if index == gameSettings.interfaceTheme:
+      interfaceOptions[0] = themeIndex
+    themeIndex.inc
+  interfaceOptions[1] = gameSettings.rightButton.ord
+  interfaceOptions[2] = gameSettings.showTooltips.ord
+  interfaceOptions[3] = gameSettings.showLastMessages.ord
