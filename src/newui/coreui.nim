@@ -83,6 +83,8 @@ var
     ## The game menu keyboard shortcuts
   generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
     ## The list of keyboard shortcuts used in some places
+  fullScreenAccel*: string = "Control-f"
+    ## The keyboard shortcut for switch full screen mode for the game
 
 {.push ruleOff: "varDeclared".}
 var images*: array[menuIcon..IconsNames.high,
