@@ -112,3 +112,9 @@ suite "Unit tests for items module":
     updateMoney(0, -10, any)
     check:
       moneyAmount(playerShip.crew[0].inventory) == 1
+
+  test "Setting breakChance field":
+    setToolsList()
+    setBreakChance()
+    check:
+      itemsList[47].breakChance == 10
