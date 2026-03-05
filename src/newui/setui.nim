@@ -1760,7 +1760,7 @@ var
     ## The list of general keys options
   interfaceThemes*: seq[string] = @[]
     ## The list of interface options
-  interfaceOptions*: array[4, Natural] = [0, 0, 0, 0]
+  interfaceOptions*: array[5, Natural] = [0, 0, 0, 0, 0]
     ## The list of interface options
 
 proc setMovementKeys*() {.raises: [], tags: [], contractual.} =
@@ -1860,3 +1860,4 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   interfaceOptions[1] = gameSettings.rightButton.ord
   interfaceOptions[2] = gameSettings.showTooltips.ord
   interfaceOptions[3] = gameSettings.showLastMessages.ord
+  interfaceOptions[4] = gameSettings.fullScreen.ord
