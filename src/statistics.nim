@@ -119,8 +119,8 @@ proc mapVisited*(gameStats: GameStatsData): Positive {.raises: [], tags: [],
   ## Returns the value of the selected field
   gameStats.mapVisited
 
-proc distanceTraveled*(gameStats: GameStatsData): Natural {.raises: [], tags: [],
-    contractual.} =
+proc distanceTraveled*(gameStats: GameStatsData): Natural {.raises: [], tags: [
+    ], contractual.} =
   ## The getter of a field of GameStatsData type
   ##
   ## * gameStats - the GameStatsData object which field will be get
@@ -137,8 +137,8 @@ proc craftingOrders*(gameStats: GameStatsData): StatsSeq {.raises: [
   ## Returns the value of the selected field
   gameStats.craftingOrders
 
-proc acceptedMissions*(gameStats: GameStatsData): Natural {.raises: [], tags: [],
-    contractual.} =
+proc acceptedMissions*(gameStats: GameStatsData): Natural {.raises: [], tags: [
+    ], contractual.} =
   ## The getter of a field of GameStatsData type
   ##
   ## * gameStats - the GameStatsData object which field will be get
@@ -181,6 +181,32 @@ proc points*(gameStats: GameStatsData): Natural {.raises: [], tags: [],
   ##
   ## Returns the value of the selected field
   gameStats.points
+
+proc initGameStatsData*(destroyedShips: StatsSeq = @[];
+    basesVisited: BasesRange = 1; mapVisited: Positive = 1;
+    distanceTraveled: Natural = 0; craftingOrders: StatsSeq = @[];
+    acceptedMissions: Natural = 0; finishedMissions: StatsSeq = @[];
+    finishedGoals: StatsSeq = @[]; killedMobs: StatsSeq = @[];
+    points: Natural = 0): GameStatsData {.raises: [], tags: [], contractual.} =
+  ## Create a new data structure for the game statistics' type data
+  ##
+  ## * destroyedShips   - the list of destroyed ships
+  ## * basesVisted      - the amount of visited bases
+  ## * mapVisited       - the amount of map fields visited
+  ## * distanceTraveled - the distance traveled via ship
+  ## * craftingOrders   - the list of crafing orders finished
+  ## * acceptedMissions - the amount of accepted missions
+  ## * finishedMissions - the list of finished missions
+  ## * finishedGoals    - the list of finished goals
+  ## * killedMobs       - the list of killed mobs
+  ## * points           - the amount of points gained during the game
+  ##
+  ## Returns the new structure with information about the game statistic
+  return GameStatsData(destroyedShips: destroyedShips,
+      basesVisited: basesVisited, mapVisited: mapVisited,
+      distanceTraveled: distanceTraveled, craftingOrders: craftingOrders,
+      acceptedMissions: acceptedMissions, finishedMissions: finishedMissions,
+      finishedGoals: finishedGoals, killedMobs: killedMobs, points: points)
 
 var gameStats*: GameStatsData = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
