@@ -380,6 +380,9 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addCheckbox(label = "Show last messages:",
           option = interfaceOptions[3],
           tooltip = "Show last messages window in every place in the game.")
+      addCheckbox(label = "Full screen mode:",
+          option = interfaceOptions[4],
+          tooltip = "Run the game in full screen mode.")
     else:
       discard
     # Start setting the selected key
