@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -537,3 +537,20 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
           cargoIndex = mIndex, quality = quality)
   {.ruleOn: "varDeclared".}
 
+proc setBreakChance*() {.raises: [KeyError], tags: [], contractual.} =
+  ## Set the break chance for some items
+  for weapon in weaponsList:
+    itemsList[weapon].breakChance = itemsList[weapon].value[1]
+  for shield in shieldsList:
+    itemsList[shield].breakChance = itemsList[shield].value[1]
+  for armor in headArmorsList:
+    itemsList[armor].breakChance = itemsList[armor].value[1]
+  for armor in chestArmorsList:
+    itemsList[armor].breakChance = itemsList[armor].value[1]
+  for armor in armsArmorsList:
+    itemsList[armor].breakChance = itemsList[armor].value[1]
+  for armor in legsArmorsList:
+    itemsList[armor].breakChance = itemsList[armor].value[1]
+  for item in itemsList.mvalues:
+    if item.itemType in toolsList:
+      item.breakChance = item.value[1]

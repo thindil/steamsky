@@ -240,6 +240,7 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
     if result.len > 0:
       return
   setToolsList()
+  setBreakChance()
 
 proc endGame*(save: bool) {.raises: [KeyError, IOError, OSError],
     tags: [WriteIOEffect, RootEffect], contractual.} =
