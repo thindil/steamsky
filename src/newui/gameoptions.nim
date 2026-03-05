@@ -371,6 +371,15 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       setLayoutRowDynamic(height = 30, cols = 2)
       addComboList(label = "Interace theme:", tooltip = "Select UI theme.",
           items = interfaceThemes, value = interfaceOptions[0])
+      addCheckbox(label = "Use right mouse button:",
+          option = interfaceOptions[1],
+          tooltip = "Use right mouse button to show various menus in the game.")
+      addCheckbox(label = "Show tooltips:",
+          option = interfaceOptions[2],
+          tooltip = "Show help tooltips for various game elements.")
+      addCheckbox(label = "Show last messages:",
+          option = interfaceOptions[3],
+          tooltip = "Show last messages window in every place in the game.")
     else:
       discard
     # Start setting the selected key
