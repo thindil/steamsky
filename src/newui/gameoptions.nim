@@ -387,6 +387,19 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addAccelerator(label = "Full screen shortcut:",
           tooltip = "Key used to switch full screen mode.",
           value = fullScreenAccel, index = 0, dialog = dialog)
+      setLayoutRowDynamic(height = 30, cols = 2)
+      addProperty(label = "Close messages after:",
+          tooltip = "Auto close game messages after that amount of seconds.",
+          min = 1, max = 60, value = interfaceOptions[5])
+      addCheckbox(label = "Show numeric values:",
+          option = interfaceOptions[6],
+          tooltip = "Show numeric values of many statistics, like crew abilities, weapons strength, etc.")
+      addProperty(label = "Amount items on lists:",
+          tooltip = "The amount of items displayed on various lists in the game like crew members, modules, etc.",
+          min = 5, max = 100, value = interfaceOptions[7])
+      addProperty(label = "Size of map font:",
+          tooltip = "Size (in pixels) of font used to draw game map.",
+          min = 3, max = 50, value = interfaceOptions[8])
     else:
       discard
     # Start setting the selected key
