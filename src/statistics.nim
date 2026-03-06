@@ -110,6 +110,16 @@ proc basesVisited*(gameStats: GameStatsData): BasesRange {.raises: [], tags: [],
   ## Returns the value of the selected field
   gameStats.basesVisited
 
+proc `basesVisited=`*(gameStats: var GameStatsData, value: BasesRange) {.raises: [],
+    tags: [], contractual.} =
+  ## The setter of a field of GameStatsData type
+  ##
+  ## * skyCell - the GameStatsData object which field will be modified
+  ## * value   - the new value for the field
+  ##
+  ## Returns the modified GameStatsData object
+  gameStats.basesVisited = value
+
 proc mapVisited*(gameStats: GameStatsData): Positive {.raises: [], tags: [],
     contractual.} =
   ## The getter of a field of GameStatsData type
@@ -119,6 +129,16 @@ proc mapVisited*(gameStats: GameStatsData): Positive {.raises: [], tags: [],
   ## Returns the value of the selected field
   gameStats.mapVisited
 
+proc `mapVisited=`*(gameStats: var GameStatsData, value: Positive) {.raises: [],
+    tags: [], contractual.} =
+  ## The setter of a field of GameStatsData type
+  ##
+  ## * skyCell - the GameStatsData object which field will be modified
+  ## * value   - the new value for the field
+  ##
+  ## Returns the modified GameStatsData object
+  gameStats.mapVisited = value
+
 proc distanceTraveled*(gameStats: GameStatsData): Natural {.raises: [], tags: [
     ], contractual.} =
   ## The getter of a field of GameStatsData type
@@ -127,6 +147,16 @@ proc distanceTraveled*(gameStats: GameStatsData): Natural {.raises: [], tags: [
   ##
   ## Returns the value of the selected field
   gameStats.distanceTraveled
+
+proc `distanceTraveled=`*(gameStats: var GameStatsData, value: Natural) {.raises: [],
+    tags: [], contractual.} =
+  ## The setter of a field of GameStatsData type
+  ##
+  ## * skyCell - the GameStatsData object which field will be modified
+  ## * value   - the new value for the field
+  ##
+  ## Returns the modified GameStatsData object
+  gameStats.distanceTraveled = value
 
 proc craftingOrders*(gameStats: GameStatsData): StatsSeq {.raises: [
     ], tags: [], contractual.} =
@@ -145,6 +175,16 @@ proc acceptedMissions*(gameStats: GameStatsData): Natural {.raises: [], tags: [
   ##
   ## Returns the value of the selected field
   gameStats.acceptedMissions
+
+proc `acceptedMissions=`*(gameStats: var GameStatsData, value: Natural) {.raises: [],
+    tags: [], contractual.} =
+  ## The setter of a field of GameStatsData type
+  ##
+  ## * skyCell - the GameStatsData object which field will be modified
+  ## * value   - the new value for the field
+  ##
+  ## Returns the modified GameStatsData object
+  gameStats.acceptedMissions = value
 
 proc finishedMissions*(gameStats: GameStatsData): StatsSeq {.raises: [
     ], tags: [], contractual.} =
@@ -181,6 +221,16 @@ proc points*(gameStats: GameStatsData): Natural {.raises: [], tags: [],
   ##
   ## Returns the value of the selected field
   gameStats.points
+
+proc `points=`*(gameStats: var GameStatsData, value: Natural) {.raises: [],
+    tags: [], contractual.} =
+  ## The setter of a field of GameStatsData type
+  ##
+  ## * skyCell - the GameStatsData object which field will be modified
+  ## * value   - the new value for the field
+  ##
+  ## Returns the modified GameStatsData object
+  gameStats.points = value
 
 proc initGameStatsData*(destroyedShips: StatsSeq = @[];
     basesVisited: BasesRange = 1; mapVisited: Positive = 1;
