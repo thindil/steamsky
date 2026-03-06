@@ -1760,7 +1760,7 @@ var
     ## The list of general keys options
   interfaceThemes*: seq[string] = @[]
     ## The list of interface options
-  interfaceOptions*: array[9, Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+  interfaceOptions*: array[11, Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ## The list of interface options
 
 proc setMovementKeys*() {.raises: [], tags: [], contractual.} =
@@ -1865,3 +1865,5 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   interfaceOptions[6] = gameSettings.showNumbers.ord
   interfaceOptions[7] = gameSettings.listsLimit.ord
   interfaceOptions[8] = gameSettings.mapFontSize.ord
+  interfaceOptions[9] = gameSettings.helpFontSize.ord
+  interfaceOptions[10] = gameSettings.interfaceFontSize.ord
