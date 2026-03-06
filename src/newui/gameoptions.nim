@@ -383,6 +383,10 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addCheckbox(label = "Full screen mode:",
           option = interfaceOptions[4],
           tooltip = "Run the game in full screen mode.")
+      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
+      addAccelerator(label = "Full screen shortcut:",
+          tooltip = "Key used to switch full screen mode.",
+          value = fullScreenAccel, index = 0, dialog = dialog)
     else:
       discard
     # Start setting the selected key
@@ -422,6 +426,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
             mapKeysOptions[keyIndex] = key
           of 4:
             generalKeysOptions[keyIndex] = key
+          of 5:
+            fullScreenAccel = key
           else:
             discard
         keyIndex = -1
