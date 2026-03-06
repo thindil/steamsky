@@ -400,6 +400,15 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addProperty(label = "Size of map font:",
           tooltip = "Size (in pixels) of font used to draw game map.",
           min = 3, max = 50, value = interfaceOptions[8])
+      addProperty(label = "Size of help font:",
+          tooltip = "Size (in pixels) of font used mainly in help.",
+          min = 3, max = 50, value = interfaceOptions[9])
+      addProperty(label = "Size of interface font:",
+          tooltip = "Size (in pixels) of font used in interface (for example, here).",
+          min = 3, max = 50, value = interfaceOptions[10])
+      setLayoutRowDynamic(height = 30, cols = 1)
+      labelButton(title = "Set default size for fonts"):
+        discard
     else:
       discard
     # Start setting the selected key
