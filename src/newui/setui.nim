@@ -1762,6 +1762,9 @@ var
     ## The list of interface options
   interfaceOptions*: array[11, Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ## The list of interface options
+  pathsOptions*: array[4, string] = ["", "", "", ""]
+    ## The list of paths used by the game
+
 
 proc setMovementKeys*() {.raises: [], tags: [], contractual.} =
   ## Set data for momevemnt keys in the game options screen
@@ -1870,4 +1873,8 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   interfaceOptions[5] = gameSettings.autoCloseMessagesTime.ord
   interfaceOptions[6] = gameSettings.showNumbers.ord
   interfaceOptions[7] = gameSettings.listsLimit
+  pathsOptions[0] = dataDirectory.string
+  pathsOptions[1] = saveDirectory.string
+  pathsOptions[2] = docDirectory.string
+  pathsOptions[3] = modsDirectory.string
   setFontsSizes()
