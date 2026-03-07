@@ -412,6 +412,25 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         gameSettings.helpFontSize = 14
         gameSettings.interfaceFontSize = 14
         setFontsSizes()
+    # Paths information
+    of 6:
+      const pathsTexts: array[4, KeyTexts] = [KeyTexts(
+          label: "Data directory path:",
+          tooltip: "Place where all standard game data are."),
+          KeyTexts(label: "Save directory path:",
+          tooltip: "Place where all game saves and configuration files are."),
+          KeyTexts(label: "Documentation directory path:",
+          tooltip: "Place where are game documentation files."),
+          KeyTexts(label: "Modifications directory path:",
+          tooltip: "Place where you should put all modifications files.")]
+      setLayoutRowDynamic(height = 30, cols = 2)
+      for index, path in pathsOptions:
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(), text = pathsTexts[index].tooltip)
+        label(str = pathsTexts[index].label)
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(), text = pathsTexts[index].tooltip)
+        label(str = path)
     else:
       discard
     # Start setting the selected key
