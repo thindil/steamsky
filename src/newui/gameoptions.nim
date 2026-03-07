@@ -408,7 +408,10 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           min = 3, max = 50, value = interfaceOptions[10])
       setLayoutRowDynamic(height = 30, cols = 1)
       labelButton(title = "Set default size for fonts"):
-        discard
+        gameSettings.mapFontSize = 16
+        gameSettings.helpFontSize = 14
+        gameSettings.interfaceFontSize = 14
+        setFontsSizes()
     else:
       discard
     # Start setting the selected key
