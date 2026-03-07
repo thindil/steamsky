@@ -1339,9 +1339,11 @@ proc setBonusesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## SetBonuses
   let
     bonusesBox: string = ".craftdialog.special.special1"
+    bonusValue: string = tclEval2(script = bonusesBox & " get")
+    bonusesValues: string = tclEval2(script = bonusesBox & " configure -value")
     malusesBox: string = ".craftdialog.special.special2"
     malusValue: string = tclEval2(script = malusesBox & " get")
-    bonusValue: string = tclEval2(script = bonusesBox & " get")
+    malusesValues: string = tclEval2(script = malusesBox & " configure -value")
   var
     bonuses: string = ""
     index, bonusIndex, malusIndex: Natural = 0
@@ -1351,7 +1353,7 @@ proc setBonusesCommand(clientData: cint; interp: PInterp; argc: cint;
       break
     index.inc
   index = 0
-  for bonus in CraftBonuses:
+  for bonus in {CraftBonuses.none..moreDurable}:
     if $bonus == bonusValue:
       bonusIndex = index
     if index > 0 and malusIndex == index:
@@ -1359,13 +1361,19 @@ proc setBonusesCommand(clientData: cint; interp: PInterp; argc: cint;
       continue
     bonuses &= " {" & $bonus & "}"
     index.inc
+  if bonusesValues.contains(sub = $lessBreakable):
+    if bonusValue == $lessBreakable:
+      bonusIndex = index
+    bonuses &= " {" & $lessBreakable & "}"
   tclEval(script = bonusesBox & " configure -values [list" & bonuses & "]")
   if malusIndex > 0 and bonusIndex == 0:
     tclEval(script = bonusesBox & " current " & $(bonusIndex + 1))
   if malusIndex == 0:
     var maluses: string = ""
-    for malus in CraftMaluses:
+    for malus in {CraftMaluses.none..lessDurable}:
       maluses &= " {" & $malus & "}"
+    if malusesValues.contains(sub = $moreBreakable):
+      maluses &= " {" & $moreBreakable & "}"
     tclEval(script = malusesBox & " configure -values [list" & maluses & "]")
     tclEval(script = malusesBox & " current 0")
     tclEval(script = bonusesBox & " current 0")
@@ -1388,9 +1396,11 @@ proc setMalusesCommand(clientData: cint; interp: PInterp; argc: cint;
 
   let
     malusesBox: string = ".craftdialog.special.special2"
-    bonusesBox: string = ".craftdialog.special.special1"
     malusValue: string = tclEval2(script = malusesBox & " get")
+    malusesValues: string = tclEval2(script = malusesBox & " configure -value")
+    bonusesBox: string = ".craftdialog.special.special1"
     bonusValue: string = tclEval2(script = bonusesBox & " get")
+    bonusesValues: string = tclEval2(script = bonusesBox & " configure -value")
   var
     maluses: string = ""
     index, malusIndex, bonusIndex: Natural = 0
@@ -1400,7 +1410,7 @@ proc setMalusesCommand(clientData: cint; interp: PInterp; argc: cint;
       break
     index.inc
   index = 0
-  for malus in CraftMaluses:
+  for malus in {CraftMaluses.none..lessDurable}:
     if $malus == malusValue:
       malusIndex = index
     if index > 0 and bonusIndex == index:
@@ -1408,13 +1418,19 @@ proc setMalusesCommand(clientData: cint; interp: PInterp; argc: cint;
       continue
     maluses &= " {" & $malus & "}"
     index.inc
+  if malusesValues.contains(sub = $moreBreakable):
+    if malusValue == $moreBreakable:
+      malusIndex = index
+    maluses &= " {" & $moreBreakable & "}"
   tclEval(script = malusesBox & " configure -values [list" & maluses & "]")
   if bonusIndex > 0 and malusIndex == 0:
     tclEval(script = malusesBox & " current " & $(malusIndex + 1))
   if bonusIndex == 0:
     var bonuses: string = ""
-    for bonus in CraftBonuses:
+    for bonus in {CraftBonuses.none..moreDurable}:
       bonuses &= " {" & $bonus & "}"
+    if bonusesValues.contains(sub = $lessBreakable):
+      bonuses &= " {" & $lessBreakable & "}"
     tclEval(script = bonusesBox & " configure -values [list" & bonuses & "]")
     tclEval(script = bonusesBox & " current 0")
     tclEval(script = malusesBox & " current 0")
