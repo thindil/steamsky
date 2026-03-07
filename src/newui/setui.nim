@@ -1827,6 +1827,12 @@ proc setGeneralKeys*() {.raises: [], tags: [], contractual.} =
   generalKeysOptions[2] = mapAccelerators[36]
   generalKeysOptions[3] = mapAccelerators[37]
 
+proc setFontsSizes*() {.raises: [], tags: [], contractual.} =
+  ## Set the data for the game's fonts sizes
+  interfaceOptions[8] = gameSettings.mapFontSize
+  interfaceOptions[9] = gameSettings.helpFontSize
+  interfaceOptions[10] = gameSettings.interfaceFontSize
+
 proc setOptions*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the game options screen
   currentTab = 0
@@ -1863,7 +1869,5 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   interfaceOptions[4] = gameSettings.fullScreen.ord
   interfaceOptions[5] = gameSettings.autoCloseMessagesTime.ord
   interfaceOptions[6] = gameSettings.showNumbers.ord
-  interfaceOptions[7] = gameSettings.listsLimit.ord
-  interfaceOptions[8] = gameSettings.mapFontSize.ord
-  interfaceOptions[9] = gameSettings.helpFontSize.ord
-  interfaceOptions[10] = gameSettings.interfaceFontSize.ord
+  interfaceOptions[7] = gameSettings.listsLimit
+  setFontsSizes()
