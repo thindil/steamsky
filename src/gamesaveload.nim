@@ -406,19 +406,19 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
     gameStats.acceptedMissions = stat.attr(name = "acceptedmissions").parseInt
     gameStats.points = stat.attr(name = "points").parseInt
   for item in savedGame.findAll(tag = "destroyedships"):
-    gameStats.destroyedShips.add(y = initStatisticsData(index = item.attr(
+    gameStats.addDestroyedShip(value = initStatisticsData(index = item.attr(
         name = "index"), amount = item.attr(name = "amount").parseInt))
   for item in savedGame.findAll(tag = "finishedcrafts"):
-    gameStats.craftingOrders.add(y = initStatisticsData(index = item.attr(
+    gameStats.addCraftingOrder(value = initStatisticsData(index = item.attr(
         name = "index"), amount = item.attr(name = "amount").parseInt))
   for item in savedGame.findAll(tag = "finishedmissions"):
-    gameStats.finishedMissions.add(y = initStatisticsData(index = item.attr(
+    gameStats.addFinishedMission(value = initStatisticsData(index = item.attr(
         name = "index"), amount = item.attr(name = "amount").parseInt))
   for item in savedGame.findAll(tag = "finishedgoals"):
-    gameStats.finishedGoals.add(y = initStatisticsData(index = item.attr(
+    gameStats.addFinishedGoal(value = initStatisticsData(index = item.attr(
         name = "index"), amount = item.attr(name = "amount").parseInt))
   for item in savedGame.findAll(tag = "killedmobs"):
-    gameStats.killedMobs.add(y = initStatisticsData(index = item.attr(
+    gameStats.addKilledMob(value = initStatisticsData(index = item.attr(
         name = "index"), amount = item.attr(name = "amount").parseInt))
   logMessage(message = "done", messageLevel = lvlInfo)
   # Load the player's current goal
