@@ -265,6 +265,8 @@ proc closeScreen(close: CloseDestination; state: var GameState) {.raises: [],
     state = previousState
   of none:
     discard
+  if previousState == options:
+    updateOptions()
 
 proc showShipInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     tags: [RootEffect], contractual.} =
