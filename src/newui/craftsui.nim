@@ -49,6 +49,38 @@ var
   worker, bonus, malus: Natural = 0
   workshopsSortOrder: WorkshopsSortOrders = defaultWorkshopsSortOrder
 
+proc setBonuses(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Set the list of special bonuses for items
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified when an error
+  ## occured.
+  bonuses = @[]
+  for bonus in {CraftBonuses.none..moreDurable}:
+    bonuses.add(y = $bonus)
+  try:
+    if itemsList[craft.resultIndex].breakChance > 0:
+      bonuses.add(y = $lessBreakable)
+  except KeyError:
+    dialog = setError(message = "Can't set bonuses list")
+
+proc setMaluses(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Set the list of special maluses for items
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified when an error
+  ## occured.
+  maluses = @[]
+  for malus in {CraftMaluses.none..lessDurable}:
+    maluses.add(y = $malus)
+  try:
+    if itemsList[craft.resultIndex].breakChance > 0:
+      maluses.add(y = $moreBreakable)
+  except KeyError:
+    dialog = setError(message = "Can't set maluses list")
+
 proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected recipe information
@@ -221,13 +253,9 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
             workers.add(y = member.name & getSkillMarks(
                 skillIndex = craft.skill, memberIndex = index))
         bonus = 0
-        bonuses = @[]
-        for bonus in CraftBonuses:
-          bonuses.add(y = $bonus)
+        setBonuses(dialog = dialog)
         malus = 0
-        maluses = @[]
-        for malus in CraftMaluses:
-          maluses.add(y = $malus)
+        setMaluses(dialog = dialog)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -292,9 +320,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
             continue
           maluses.add(y = $malus)
         if bonus == 0:
-          bonuses = @[]
-          for bonus in CraftBonuses:
-            bonuses.add(y = $bonus)
+          setBonuses(dialog = dialog)
       label(str = "<=>", alignment = centered)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -310,9 +336,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
             continue
           bonuses.add(y = $bonus)
         if malus == 0:
-          maluses = @[]
-          for malus in CraftMaluses:
-            maluses.add(y = $malus)
+          setMaluses(dialog = dialog)
     setLayoutRowDynamic(height = 30, cols = 1)
     # Show workshop setting if needed
     if workshops.len > 1:
