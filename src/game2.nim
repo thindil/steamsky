@@ -84,8 +84,8 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.raises: [KeyError,
       playerShip.skyY].baseIndex
   if baseIndex > 0:
     if skyBases[baseIndex].visited.year == 0:
-      gameStats.basesVisited.inc
-      gameStats.points.inc
+      gameStats.basesVisited = gameStats.basesVisited + 1
+      gameStats.points = gameStats.points + 1
       updateGoal(goalType = visit, targetIndex = skyBases[baseIndex].owner)
     skyBases[baseIndex].visited = gameDate
     if not skyBases[baseIndex].known:
@@ -99,8 +99,8 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.raises: [KeyError,
     updatePrices()
     updateOrders(ship = playerShip)
   if not skyMap[playerShip.skyX][playerShip.skyY].visited:
-    gameStats.mapVisited.inc
-    gameStats.points.inc
+    gameStats.mapVisited = gameStats.mapVisited + 1
+    gameStats.points = gameStats.points + 1
     updateGoal(goalType = discover, targetIndex = "")
     skyMap[playerShip.skyX][playerShip.skyY].visited = true
   updateEvents(minutes = minutes)

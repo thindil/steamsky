@@ -392,5 +392,5 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
       if not gameSettings.autoRest:
         return 7
       return 8
-  gameStats.distanceTraveled.inc
+  gameStats.distanceTraveled = gameStats.distanceTraveled + 1
   return 1

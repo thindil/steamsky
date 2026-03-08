@@ -95,7 +95,7 @@ proc finishStory*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Finish the current player's story. Give experience and ask about
   ## finishing the game
-  gameStats.points += (10_000 * currentStory.maxSteps)
+  gameStats.points = gameStats.points + (10_000 * currentStory.maxSteps)
   clearCurrentStory()
   try:
     showQuestion(question = storiesList[currentStory.index].endText &

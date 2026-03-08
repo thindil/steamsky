@@ -224,5 +224,5 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
   addMessage(message = acceptMessage, mType = missionMessage)
   let traderIndex: ExtendedNatural = findMember(order = talk)
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-  gameStats.acceptedMissions.inc
+  gameStats.acceptedMissions = gameStats.acceptedMissions + 1
   updateGame(minutes = 5)

@@ -441,7 +441,7 @@ proc finishStory(): GameDialog {.raises: [], tags: [WriteIOEffect, TimeEffect,
   ## finishing the game
   ##
   ## Returns current dialog of the game.
-  gameStats.points += (10_000 * currentStory.maxSteps)
+  gameStats.points = gameStats.points + (10_000 * currentStory.maxSteps)
   clearCurrentStory()
   try:
     result = setQuestion(question = storiesList[currentStory.index].endText &
