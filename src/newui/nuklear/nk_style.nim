@@ -38,7 +38,7 @@ using
 # High level bindings
 # ------------------
 {.push ruleOff: "varDeclared".}
-let defaultColorStyle {.used.}: array[12, NkColor] = [textColor: NkColor(r: 175,
+let defaultColorStyle {.used.}: array[16, NkColor] = [textColor: NkColor(r: 175,
     g: 175, b: 175, a: 255), windowColor: NkColor(r: 45, g: 45, b: 45, a: 255),
     headerColor: NkColor(r: 40, g: 40, b: 40, a: 255), borderColor: NkColor(
     r: 65, g: 65, b: 65, a: 255), buttonColor: NkColor(r: 65, g: 65, b: 65,
@@ -48,7 +48,11 @@ let defaultColorStyle {.used.}: array[12, NkColor] = [textColor: NkColor(r: 175,
     toggleHoverColor: NkColor(r: 120, g: 120, b: 120, a: 255),
     toggleCursorColor: NkColor(r: 45, g: 45, b: 45, a: 255),
     selectColor: NkColor(r: 45, g: 45, b: 45, a: 255),
-    selectActiveColor: NkColor(r: 35, g: 35, b: 35, a: 255)]
+    selectActiveColor: NkColor(r: 35, g: 35, b: 35, a: 255),
+    sliderColor: NkColor(r: 38, g: 38, b: 38, a: 255),
+    sliderCursorColor: NkColor(r: 100, g: 100, b: 100, a: 255),
+    sliderCursorHoverColor: NkColor(r: 120, g: 120, b: 120, a: 255),
+    sliderCursorActiveColor: NkColor(r: 150, g: 150, b: 150, a: 255)]
 {.push ruleOn: "varDeclared".}
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
