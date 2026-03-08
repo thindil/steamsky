@@ -1878,3 +1878,23 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   pathsOptions[2] = docDirectory.string
   pathsOptions[3] = modsDirectory.string
   setFontsSizes()
+
+proc updateOptions*() {.raises: [], tags: [], contractual.} =
+  ## Update the game options based on the player's setting
+  gameSettings.autoRest = generalOptions[0].bool
+  gameSettings.undockSpeed = generalOptions[1].ShipSpeed
+  gameSettings.autoCenter = generalOptions[2].bool
+  gameSettings.autoReturn = generalOptions[3].bool
+  gameSettings.autoDestination = generalOptions[4].bool
+  gameSettings.autoFinish = generalOptions[5].bool
+  gameSettings.autoAskForBases = generalOptions[6].bool
+  gameSettings.autoAskForEvents = generalOptions[7].bool
+  gameSettings.lowFuel = generalOptions[8]
+  gameSettings.lowDrinks = generalOptions[9]
+  gameSettings.lowFood = generalOptions[10]
+  gameSettings.autoMoveStop = generalOptions[11].AutoMoveBreak
+  gameSettings.messagesLimit = generalOptions[12]
+  gameSettings.savedMessages = generalOptions[13]
+  gameSettings.messagesOrder = generalOptions[14].MessagesOrder
+  gameSettings.autoSave = generalOptions[15].AutoSaveTime
+  gameSettings.waitMinutes = generalOptions[16]
