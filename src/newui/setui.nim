@@ -1765,7 +1765,6 @@ var
   pathsOptions*: array[4, string] = ["", "", "", ""]
     ## The list of paths used by the game
 
-
 proc setMovementKeys*() {.raises: [], tags: [], contractual.} =
   ## Set data for momevemnt keys in the game options screen
   movementKeysOptions[0] = mapAccelerators[5]
@@ -1898,3 +1897,17 @@ proc updateOptions*() {.raises: [], tags: [], contractual.} =
   gameSettings.messagesOrder = generalOptions[14].MessagesOrder
   gameSettings.autoSave = generalOptions[15].AutoSaveTime
   gameSettings.waitMinutes = generalOptions[16]
+  mapAccelerators[5] = movementKeysOptions[0]
+  mapAccelerators[6] = movementKeysOptions[1]
+  mapAccelerators[7] = movementKeysOptions[2]
+  mapAccelerators[8] = movementKeysOptions[3]
+  mapAccelerators[9] = movementKeysOptions[4]
+  mapAccelerators[10] = movementKeysOptions[5]
+  mapAccelerators[11] = movementKeysOptions[6]
+  mapAccelerators[12] = movementKeysOptions[7]
+  mapAccelerators[13] = movementKeysOptions[8]
+  mapAccelerators[14] = movementKeysOptions[9]
+  mapAccelerators[34] = movementKeysOptions[10]
+  mapAccelerators[35] = movementKeysOptions[11]
+  mapAccelerators[36] = movementKeysOptions[12]
+  mapAccelerators[37] = movementKeysOptions[13]
