@@ -51,16 +51,16 @@ type
     ## * finishedGoals    - The list of finished goals
     ## * killedMobs       - The list of enemies killed
     ## * points           - The amount of points gained in the game's session
-    destroyedShips*: StatsSeq
-    basesVisited*: BasesRange
-    mapVisited*: Positive
-    distanceTraveled*: Natural
-    craftingOrders*: StatsSeq
-    acceptedMissions*: Natural
-    finishedMissions*: StatsSeq
-    finishedGoals*: StatsSeq
-    killedMobs*: StatsSeq
-    points*: Natural
+    destroyedShips: StatsSeq
+    basesVisited: BasesRange
+    mapVisited: Positive
+    distanceTraveled: Natural
+    craftingOrders: StatsSeq
+    acceptedMissions: Natural
+    finishedMissions: StatsSeq
+    finishedGoals: StatsSeq
+    killedMobs: StatsSeq
+    points: Natural
 
 proc index*(statData: StatisticsData): StatisticIndex {.raises: [], tags: [],
     contractual.} =
