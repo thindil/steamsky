@@ -1,7 +1,8 @@
 import std/paths
-import ../src/[careers, crafts, factions, game, goals, items, mobs,
-    shipmodules, ships, statistics, types]
+import ../src/[careers, crafts, factions, goals, items, mobs,
+    shipmodules, ships]
 import unittest2
+include ../src/statistics
 
 suite "Unit tests for statistics module":
 
