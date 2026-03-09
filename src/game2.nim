@@ -20,7 +20,7 @@
 ## avoid circular dependencies.
 
 import std/[logging, os, paths, strutils, tables, xmlparser, xmltree]
-import contracts
+import contracts, nimalyzer
 import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
     events, factions, game, gamesaveload, goals, help, items, log, maps,
     messages, missions, mobs, reputation, shipmodules, ships, shipscrew,
@@ -84,8 +84,10 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.raises: [KeyError,
       playerShip.skyY].baseIndex
   if baseIndex > 0:
     if skyBases[baseIndex].visited.year == 0:
+      {.ruleOff: "assignments".}
       gameStats.basesVisited = gameStats.basesVisited + 1
       gameStats.points = gameStats.points + 1
+      {.ruleOn: "assignments".}
       updateGoal(goalType = visit, targetIndex = skyBases[baseIndex].owner)
     skyBases[baseIndex].visited = gameDate
     if not skyBases[baseIndex].known:
@@ -99,8 +101,10 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.raises: [KeyError,
     updatePrices()
     updateOrders(ship = playerShip)
   if not skyMap[playerShip.skyX][playerShip.skyY].visited:
+    {.ruleOff: "assignments".}
     gameStats.mapVisited = gameStats.mapVisited + 1
     gameStats.points = gameStats.points + 1
+    {.ruleOn: "assignments".}
     updateGoal(goalType = discover, targetIndex = "")
     skyMap[playerShip.skyX][playerShip.skyY].visited = true
   updateEvents(minutes = minutes)
