@@ -49,7 +49,8 @@ var
   worker, bonus, malus: Natural = 0
   workshopsSortOrder: WorkshopsSortOrders = defaultWorkshopsSortOrder
 
-proc setBonuses(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc setBonuses(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the list of special bonuses for items
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -65,7 +66,8 @@ proc setBonuses(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contra
   except KeyError:
     dialog = setError(message = "Can't set bonuses list")
 
-proc setMaluses(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc setMaluses(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the list of special maluses for items
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -315,10 +317,16 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
         bonus = newBonus
         malus = (if bonus > 0: 1 else: 0)
         maluses = @[]
-        for malus in CraftMaluses:
+        for malus in {CraftMaluses.none..lessDurable}:
           if newBonus > 0 and malus.ord == newBonus:
             continue
           maluses.add(y = $malus)
+        try:
+          if itemsList[craft.resultIndex].breakChance > 0 and newBonus !=
+              lessBreakable.ord:
+            maluses.add(y = $moreBreakable)
+        except KeyError:
+          dialog = setError(message = "Can't set maluses list2.")
         if bonus == 0:
           setBonuses(dialog = dialog)
       label(str = "<=>", alignment = centered)
@@ -331,10 +339,16 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
         malus = newMalus
         bonus = (if malus > 0: 1 else: 0)
         bonuses = @[]
-        for bonus in CraftBonuses:
+        for bonus in {CraftBonuses.none..moreDurable}:
           if newMalus > 0 and bonus.ord == newMalus:
             continue
           bonuses.add(y = $bonus)
+        try:
+          if itemsList[craft.resultIndex].breakChance > 0 and newMalus !=
+              moreBreakable.ord:
+            bonuses.add(y = $lessBreakable)
+        except KeyError:
+          dialog = setError(message = "Can't set bonuses list2.")
         if malus == 0:
           setMaluses(dialog = dialog)
     setLayoutRowDynamic(height = 30, cols = 1)
