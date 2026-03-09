@@ -19,7 +19,7 @@
 ## counting a ship's speed, docking or undocking, etc.
 
 import std/[strutils, tables]
-import contracts
+import contracts, nimalyzer
 import bases, bases2, config, crewinventory, game, game2, gamesaveload, items,
     maps, messages, ships, shipscargo, shipscrew, shipscrew2, statistics, types, utils
 
@@ -392,5 +392,7 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
       if not gameSettings.autoRest:
         return 7
       return 8
+  {.ruleOff: "assignments".}
   gameStats.distanceTraveled = gameStats.distanceTraveled + 1
+  {.ruleOn: "assignments".}
   return 1
