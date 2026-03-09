@@ -1949,3 +1949,19 @@ proc updateOptions*() {.raises: [], tags: [], contractual.} =
   mapAccelerators[35] = generalKeysOptions[1]
   mapAccelerators[36] = generalKeysOptions[2]
   mapAccelerators[37] = generalKeysOptions[3]
+  var themeIndex: Natural = 0
+  for index, theme in themesList:
+    if themeIndex == interfaceOptions[0]:
+      gameSettings.interfaceTheme = index
+      break
+    themeIndex.inc
+  gameSettings.rightButton = interfaceOptions[1].bool
+  gameSettings.showTooltips = interfaceOptions[2].bool
+  gameSettings.showLastMessages = interfaceOptions[3].bool
+  gameSettings.fullScreen = interfaceOptions[4].bool
+  gameSettings.autoCloseMessagesTime = interfaceOptions[5]
+  gameSettings.showNumbers = interfaceOptions[6].bool
+  gameSettings.listsLimit = interfaceOptions[7]
+  gameSettings.mapFontSize = interfaceOptions[8]
+  gameSettings.helpFontSize = interfaceOptions[9]
+  gameSettings.interfaceFontSize = interfaceOptions[10]
