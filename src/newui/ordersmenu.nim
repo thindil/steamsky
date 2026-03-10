@@ -596,9 +596,9 @@ proc deliverMedicines(dialog: var GameDialog; forFree: bool = true) {.raises: [
       dialog = setError(message = "Can't show message.")
       return
     try:
-      updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-          itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount),
-          quality = playerShip.cargo[itemIndex].quality)
+      let item: InventoryData = playerShip.cargo[itemIndex]
+      updateCargo(ship = playerShip, protoIndex = item.protoIndex, amount = -(
+          item.amount), quality = item.quality, breakChance = item.breakChance)
     except:
       dialog = setError(message = "Can't update the ship's cargo.")
       return
