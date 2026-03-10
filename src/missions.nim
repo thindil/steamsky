@@ -44,7 +44,7 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [
       gainRep(baseIndex = mission.startBase, points = -reputation)
       updateMorale(ship = playerShip, memberIndex = 0, value = getRandom(
           min = -10, max = -5))
-      var messageText: string = "You failed your mission to "
+      var messageText: MessageText = "You failed your mission to "
       case mission.mType
       of deliver:
         messageText.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'.")
@@ -66,14 +66,14 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [
       else:
         gainRep(baseIndex = mission.startBase, points = reputation)
       updateMorale(ship = playerShip, memberIndex = 0, value = 1)
-      let traderIndex: int = findMember(order = talk)
+      let traderIndex: ExtendedNatural = findMember(order = talk)
       var rewardAmount: Natural = (mission.reward.float *
           mission.multiplier).Natural
       countPrice(price = rewardAmount, traderIndex = traderIndex,
           reduce = false)
       if traderIndex > -1:
         gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-      let freeSpace: int = freeCargo(amount = -(rewardAmount))
+      let freeSpace: -1_000_000..1_000_000 = freeCargo(amount = -(rewardAmount))
       if freeSpace < 0:
         {.ruleOff: "assignments".}
         rewardAmount = rewardAmount + freeSpace
@@ -82,7 +82,7 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [
         addMessage(message = "You received " & $rewardAmount & " " & moneyName &
             " for finishing your mission.", mType = missionMessage)
         updateCargo(ship = playerShip, protoIndex = moneyIndex,
-            amount = rewardAmount, quality = normal)
+            amount = rewardAmount, quality = normal, breakChance = 0)
     skyMap[mission.targetX][mission.targetY].missionIndex = -1
     skyMap[skyBases[mission.startBase].skyX][skyBases[
         mission.startBase].skyY].missionIndex = -1
@@ -91,7 +91,7 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [
     {.warning[UnsafeSetLen]: on.}
     if mission.mType == deliver:
       updateCargo(ship = playerShip, protoIndex = mission.itemIndex,
-          amount = -1, quality = normal)
+          amount = -1, quality = normal, breakChance = 0)
     elif mission.mType == passenger and mission.data < playerShip.crew.len:
       {.warning[UnsafeSetLen]: off.}
       playerShip.crew.delete(i = mission.data)

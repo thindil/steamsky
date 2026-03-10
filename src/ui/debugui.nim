@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -568,7 +568,8 @@ proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = tclEval2(
         script = itemBox & " get").parseInt, quality = tclEval2(
-        script = itemCombo & " current").parseInt.ObjectQuality)
+        script = itemCombo & " current").parseInt.ObjectQuality,
+        breakChance = itemsList[itemIndex].breakChance)
   except:
     return showError(message = "Can't update the cargo.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
@@ -602,7 +603,7 @@ proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
         " current").parseInt.ObjectQuality
     updateCargo(ship = playerShip, amount = tclEval2(script = itemBox &
         " get").parseInt, cargoIndex = itemIndex, quality = playerShip.cargo[
-            itemIndex].quality)
+            itemIndex].quality, breakChance = playerShip.cargo[itemIndex].breakChance)
   except:
     return showError(message = "Can't update the cargo.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)

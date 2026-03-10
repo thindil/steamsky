@@ -169,7 +169,8 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
     let material: InventoryData = playerShip.cargo[upgradeMaterial]
     updateCargo(ship = playerShip, protoIndex = material.protoIndex, amount = -(
         materialCost), quality = material.quality,
-        maxDurability = material.maxDurability, weight = material.weight)
+        maxDurability = material.maxDurability, weight = material.weight,
+        breakChance = material.breakChance)
     if upgradeProgress == 0:
       var weightGain: int = (modulesList[upgradedModule.protoIndex].weight /
           modulesList[upgradedModule.protoIndex].durability).int

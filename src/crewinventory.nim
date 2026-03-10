@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -237,7 +237,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
   if item.amount > 1:
     inventory.add(y = InventoryData(protoIndex: item.protoIndex,
         amount: item.amount - 1, name: item.name, durability: item.durability,
-        price: item.price, quality: item.quality))
+        price: item.price, quality: item.quality, breakChance: item.breakChance))
     item.amount = 1
   if item.durability > ItemsDurability.low:
     item.durability.dec
@@ -245,7 +245,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
   if item.durability == 0:
     if memberIndex == -1:
       updateCargo(ship = ship, cargoIndex = itemIndex, amount = -1,
-          quality = any)
+          quality = any, breakChance = item.breakChance)
     else:
       updateInventory(memberIndex = memberIndex, amount = -1,
           inventoryIndex = itemIndex, ship = ship, quality = item.quality)
@@ -258,9 +258,9 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
           i].durability == inventory[j].durability and i != j:
         if memberIndex == -1:
           updateCargo(ship = ship, cargoIndex = j, amount = 0 - inventory[
-              j].amount, quality = any)
+              j].amount, quality = any, breakChance = inventory[j].breakChance)
           updateCargo(ship = ship, cargoIndex = i, amount = inventory[j].amount,
-              quality = any)
+              quality = any, breakChance = inventory[j].breakChance)
         else:
           updateInventory(memberIndex = memberIndex, amount = 0 - inventory[
               j].amount, inventoryIndex = j, ship = ship,

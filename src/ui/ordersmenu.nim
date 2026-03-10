@@ -822,7 +822,8 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
           itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount),
-          quality = playerShip.cargo[itemIndex].quality)
+          quality = playerShip.cargo[itemIndex].quality,
+              breakChance = playerShip.cargo[itemIndex].breakChance)
     except:
       return showError(message = "Can't update the ship' cargo.")
   else:

@@ -242,7 +242,8 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
       updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
           toolsIndex].protoIndex, amount = 1, durability = ship.crew[
           memberIndex].inventory[toolsIndex].durability, quality = ship.crew[
-          memberIndex].inventory[toolsIndex].quality)
+          memberIndex].inventory[toolsIndex].quality, breakChance = ship.crew[
+              memberIndex].inventory[toolsIndex].breakChance)
       updateInventory(memberIndex = memberIndex, amount = -1,
           inventoryIndex = toolsIndex, ship = ship, quality = ship.crew[
           memberIndex].inventory[toolsIndex].quality)
@@ -295,7 +296,9 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
               memberIndex].inventory[toolsIndex].protoIndex, amount = 1,
               durability = ship.crew[memberIndex].inventory[
               toolsIndex].durability, quality = ship.crew[
-              memberIndex].inventory[toolsIndex].quality)
+              memberIndex].inventory[toolsIndex].quality,
+                  breakChance = ship.crew[memberIndex].inventory[
+                  toolsIndex].breakChance)
           updateInventory(memberIndex = memberIndex, amount = -1,
               inventoryIndex = toolsIndex, ship = ship, quality = ship.crew[
               memberIndex].inventory[toolsIndex].quality)
@@ -393,7 +396,8 @@ proc giveRestOrder(ship: var ShipRecord; memberIndex: Natural) {.raises: [
         updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
             toolsIndex].protoIndex, amount = 1, durability = ship.crew[
             memberIndex].inventory[toolsIndex].durability, quality = ship.crew[
-            memberIndex].inventory[toolsIndex].quality)
+            memberIndex].inventory[toolsIndex].quality, breakChance = ship.crew[
+            memberIndex].inventory[toolsIndex].breakChance)
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = toolsIndex, ship = ship, quality = ship.crew[
             memberIndex].inventory[toolsIndex].quality)

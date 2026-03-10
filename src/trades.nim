@@ -169,7 +169,8 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
           weight: playerItem.weight))
     updateCargo(ship = playerShip, cargoIndex = itemIndex, amount = -sellAmount,
         price = playerItem.price, quality = playerItem.quality,
-        maxDurability = playerItem.maxDurability, weight = playerItem.weight)
+        maxDurability = playerItem.maxDurability, weight = playerItem.weight,
+        breakChance = playerItem.breakChance)
     updateMoney(memberIndex = -1, amount = profit, quality = normal)
     if baseIndex > 0:
       updateBaseCargo(protoIndex = moneyIndex, amount = -profit, quality = normal)
@@ -236,7 +237,8 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     let item: BaseCargo = skyBases[baseIndex].cargo[baseItemIndex]
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
         durability = item.durability, price = price, quality = item.quality,
-        maxDurability = item.maxDurability, weight = item.weight)
+        maxDurability = item.maxDurability, weight = item.weight,
+        breakChance = item.breakChance)
     updateBaseCargo(cargoIndex = baseItemIndex.cint, amount = -buyAmount,
         durability = item.durability, quality = item.quality,
         maxDurability = item.maxDurability, weight = item.weight)
@@ -245,7 +247,8 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     let item: BaseCargo = traderCargo[baseItemIndex]
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
         durability = item.durability, price = price, quality = item.quality,
-        maxDurability = item.maxDurability, weight = item.weight)
+        maxDurability = item.maxDurability, weight = item.weight,
+        breakChance = item.breakChance)
     traderCargo[baseItemIndex].amount -= buyAmount
     if traderCargo[baseItemIndex].amount == 0:
       traderCargo.delete(i = baseItemIndex)

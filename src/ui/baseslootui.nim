@@ -447,7 +447,8 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = -amount,
           durability = item.durability, quality = item.quality,
-          maxDurability = item.maxDurability, weight = item.weight)
+          maxDurability = item.maxDurability, weight = item.weight,
+          breakChance = item.breakChance)
     except:
       return showError(message = "Can't update the ship's cargo")
     try:
@@ -473,14 +474,16 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
       try:
         updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = amount,
             durability = item.durability, quality = item.quality,
-            maxDurability = item.maxDurability, weight = item.weight)
+            maxDurability = item.maxDurability, weight = item.weight,
+            breakChance = item.breakChance)
       except:
         return showError(message = "Can't update the ship' cargo2.")
     else:
       try:
         updateCargo(ship = playerShip, protoIndex = protoIndex, amount = amount,
             durability = item.durability, quality = item.quality,
-            maxDurability = item.maxDurability, weight = item.weight)
+            maxDurability = item.maxDurability, weight = item.weight,
+            breakChance = item.breakChance)
       except:
         return showError(message = "Can't update the ship' cargo3.")
     try:

@@ -1,6 +1,5 @@
 import std/paths
-import ../src/[careers, crafts, factions, goals, items, mobs,
-    shipmodules, ships]
+import ../src/[careers, crafts, factions, goals, items, mobs, shipmodules, ships]
 import unittest2
 include ../src/statistics
 
@@ -57,8 +56,10 @@ suite "Unit tests for statistics module":
         homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
         1, 0, 0], order: upgrading, loyalty: 100, skills: @[SkillInfo(index: 4,
         level: 4,
-        experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
-        MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
+        experience: 0)], attributes: @[MobAttributeRecord(level: 3,
+            experience: 0),
+        MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(
+        level: 3,
         experience: 0), MobAttributeRecord(level: 3, experience: 0)]), "POLEIS")
     check:
       gameStats.killedMobs.len == 1

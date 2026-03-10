@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -71,7 +71,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
     generateTraderCargo(protoIndex = enemyIndex)
     for item in traderCargo:
       updateCargo(ship = enemyShip, protoIndex = item.protoIndex,
-          amount = item.amount, quality = item.quality)
+          amount = item.amount, quality = item.quality, breakChance = item.breakChance)
     traderCargo = @[]
   var minFreeSpace: int = 0
   for module in enemyShip.modules:
@@ -226,7 +226,7 @@ proc finishCombat() {.raises: [KeyError, ValueError, CrewOrderError,
     addMessage(message = "You looted " & $lootAmount & " " & moneyName &
         " from " & enemyName & ".", mType = combatMessage)
     updateCargo(ship = playerShip, protoIndex = moneyIndex,
-        amount = lootAmount, quality = normal)
+        amount = lootAmount, quality = normal, breakChance = 0)
   shipFreeSpace = freeCargo(amount = 0)
   if wasBoarded and shipFreeSpace > 0:
     var message: string = "Additionally, your boarding party takes from " &
@@ -242,7 +242,7 @@ proc finishCombat() {.raises: [KeyError, ValueError, CrewOrderError,
         if item != game.enemy.ship.cargo[0]:
           message &= ","
         updateCargo(ship = playerShip, protoIndex = item.protoIndex,
-            amount = lootAmount, quality = item.quality)
+            amount = lootAmount, quality = item.quality, breakChance = item.breakChance)
         message = message & " " & $lootAmount & " " & itemsList[
             item.protoIndex].name
         shipFreeSpace = freeCargo(amount = 0)
@@ -265,7 +265,7 @@ proc finishCombat() {.raises: [KeyError, ValueError, CrewOrderError,
           if progressStory():
             if step.finishCondition == loot:
               updateCargo(ship = playerShip, protoIndex = stepData[
-                  0].parseInt, amount = 1, quality = normal)
+                  0].parseInt, amount = 1, quality = normal, breakChance = 0)
   for mIndex, member in playerShip.crew:
     if member.order in {boarding, defend}:
       giveOrders(ship = playerShip, memberIndex = mIndex, givenOrder = rest)
@@ -828,7 +828,7 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
         addMessage(message = shootMessage, mType = combatMessage, color = cyan)
     if ammoIndex > -1:
       updateCargo(ship = ship, cargoIndex = ammoIndex, amount = -1,
-          quality = ship.cargo[ammoIndex].quality)
+          quality = ship.cargo[ammoIndex].quality, breakChance = 0)
     if ship.crew == playerShip.crew and gunnerIndex > -1:
       gainExp(amount = 2, skillNumber = gunnerySkill,
           crewIndex = gunnerIndex)

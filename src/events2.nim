@@ -79,7 +79,8 @@ proc checkForOpenSpaceEvents(roll: Positive): bool {.raises: [KeyError, IOError,
         timePassed = 1
       gainExp(amount = 1, skillNumber = pilotingSkill, crewIndex = pilotIndex)
       updateCargo(ship = playerShip, protoIndex = findProtoItem(
-          itemType = fuelType), amount = countFuelNeeded(), quality = any)
+          itemType = fuelType), amount = countFuelNeeded(), quality = any,
+              breakChance = 0)
       updateGame(minutes = timePassed)
   # Friendly trader
   of 21..23:
@@ -175,7 +176,8 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
           $lostCargo & " " & getItemName(item = playerShip.cargo[roll2]) &
           ".", mType = otherMessage, color = red)
       updateCargo(ship = playerShip, amount = 0 - lostCargo,
-          cargoIndex = roll2, quality = playerShip.cargo[roll2].quality)
+          cargoIndex = roll2, quality = playerShip.cargo[roll2].quality,
+              breakChance = playerShip.cargo[roll2].breakChance)
   # Events outside a base
   else:
     if roll in 21..30 and skyBases[baseIndex].reputation.level == -100:
