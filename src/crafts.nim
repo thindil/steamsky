@@ -323,14 +323,13 @@ proc resetOrder(module: var ModuleData; moduleOwner, toolIndex,
   ##
   ## Returns the modified parameter module
   if toolIndex in 0..playerShip.crew[crafterIndex].inventory.high:
-    updateCargo(ship = playerShip, protoIndex = playerShip.crew[
-        crafterIndex].inventory[toolIndex].protoIndex, amount = 1,
-        durability = playerShip.crew[crafterIndex].inventory[
-        toolIndex].durability, quality = playerShip.crew[
-        crafterIndex].inventory[toolIndex].quality)
+    let item: InventoryData = playerShip.crew[crafterIndex].inventory[toolIndex]
+    updateCargo(ship = playerShip, protoIndex = item.protoIndex, amount = 1,
+        durability = item.durability, quality = item.quality,
+        breakChance = item.breakChance)
     updateInventory(memberIndex = crafterIndex, amount = -1,
         inventoryIndex = toolIndex, ship = playerShip,
-        quality = playerShip.crew[crafterIndex].inventory[toolIndex].quality)
+        quality = item.quality)
   var haveWorker: bool = false
   for i in module.owner.low..module.owner.high:
     if module.owner[i] == moduleOwner or moduleOwner == -1:
@@ -460,12 +459,13 @@ proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
     return true
   if module.craftingIndex.len > 11 and module.craftingIndex[0..10] == "Deconstruct":
     updateCargo(ship = playerShip, protoIndex = recipe.resultIndex,
-        amount = resultAmount, quality = quality)
+        amount = resultAmount, quality = quality, breakChance = itemsList[recipe.resultIndex].breakChance)
   else:
     updateCargo(ship = playerShip, protoIndex = recipesList[
         module.craftingIndex].resultIndex, amount = resultAmount,
         quality = quality, durability = maxDurability,
-        maxDurability = maxDurability, weight = weight)
+        maxDurability = maxDurability, weight = weight, breakChance = itemsList[recipesList[
+        module.craftingIndex].resultIndex].breakChance)
   for key, protoRecipe in recipesList:
     if protoRecipe.resultIndex == recipe.resultIndex:
       updateCraftingOrders(index = key)

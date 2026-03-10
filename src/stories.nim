@@ -519,7 +519,7 @@ proc startStory*(factionName: string; condition: StartConditionType) {.raises: [
             maxSteps: getRandom(min = story.minSteps, max = story.maxSteps),
             showText: true, data: step, finishedStep: any)
         updateCargo(ship = playerShip, protoIndex = story.startData[0].parseInt,
-            amount = 1, quality = normal)
+            amount = 1, quality = normal, breakChance = 0)
         finishedStories.add(y = FinishedStoryData(index: currentStory.index,
             stepsAmount: currentStory.maxSteps, stepsTexts: @[]))
         return

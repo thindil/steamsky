@@ -302,14 +302,13 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
           result].protoIndex
       if itemsList[protoIndex].itemType != itemType or itemsList[
           protoIndex].value[1] < toolQuality:
+        let item: InventoryData = playerShip.crew[memberIndex].inventory[result]
         updateCargo(ship = playerShip, protoIndex = protoIndex, amount = 1,
-            durability = playerShip.crew[memberIndex].inventory[
-            result].durability, quality = playerShip.crew[
-            memberIndex].inventory[result].quality)
+            durability = item.durability, quality = item.quality,
+            breakChance = item.breakChance)
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = result, ship = playerShip,
-            quality = playerShip.crew[
-            memberIndex].inventory[result].quality)
+            quality = item.quality)
         result = -1
     result = findItem(inventory = playerShip.crew[memberIndex].inventory,
         itemType = itemType, quality = toolQuality, itemQuality = any)
@@ -318,12 +317,12 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
           quality = toolQuality, itemQuality = any)
       if result > -1:
         try:
+          let item: InventoryData = playerShip.cargo[result]
           updateInventory(memberIndex = memberIndex, amount = 1,
-              protoIndex = playerShip.cargo[result].protoIndex,
-              durability = playerShip.cargo[result].durability,
-                  ship = playerShip, quality = playerShip.cargo[result].quality)
+              protoIndex = item.protoIndex, durability = item.durability,
+              ship = playerShip, quality = item.quality)
           updateCargo(ship = playerShip, amount = -1, cargoIndex = result,
-              quality = playerShip.cargo[result].quality)
+              quality = item.quality, breakChance = item.breakChance)
           result = findItem(inventory = playerShip.crew[memberIndex].inventory,
               itemType = itemType, quality = toolQuality, itemQuality = any)
         except CrewNoSpaceError:
@@ -522,7 +521,8 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
             quality = newQuality)
       else:
         updateCargo(ship = playerShip, protoIndex = moneyIndex,
-            amount = newAmount, cargoIndex = mIndex, quality = newQuality)
+            amount = newAmount, cargoIndex = mIndex, quality = newQuality,
+            breakChance = playerShip.cargo[mIndex].breakChance)
   else:
     for index, item in inventory:
       if item.protoIndex == moneyIndex and item.quality == quality:
@@ -534,7 +534,8 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
           quality = quality)
     else:
       updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = amount,
-          cargoIndex = mIndex, quality = quality)
+          cargoIndex = mIndex, quality = quality,
+          breakChance = playerShip.cargo[mIndex].breakChance)
   {.ruleOn: "varDeclared".}
 
 proc setBreakChance*() {.raises: [KeyError], tags: [], contractual.} =

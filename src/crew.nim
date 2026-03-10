@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -254,7 +254,8 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
               healAmount = needAmount
             updateCargo(ship = playerShip, amount = -(needAmount),
                 cargoIndex = toolIndex, quality = playerShip.cargo[
-                toolIndex].quality)
+                toolIndex].quality, breakChance = playerShip.cargo[
+                    toolIndex].breakChance)
           else:
             toolIndex = findItem(inventory = playerShip.crew[
                 memberIndex].inventory, itemType = faction.healingTools,
@@ -399,7 +400,7 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
           itemsList[item.protoIndex].value[2] + countItemBonus(
           value = itemsList[item.protoIndex].value[2], quality = item.quality)))
     updateCargo(ship = playerShip, protoIndex = item.protoIndex, amount = -1,
-        quality = item.quality)
+        quality = item.quality, breakChance = item.breakChance)
     return
   itemIndex = findItem(inventory = playerShip.crew[memberIndex].inventory,
       itemType = itemType, itemQuality = any)
@@ -492,14 +493,15 @@ proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
       member.previousOrder = member.order
       member.order = rest
       member.orderTime = 15
+      let item: InventoryData = member.inventory[member.equipment[
+          EquipmentLocations.tool]]
       if member.equipment[EquipmentLocations.tool] > -1:
-        updateCargo(ship = playerShip, protoIndex = member.inventory[
-            member.equipment[EquipmentLocations.tool]].protoIndex, amount = 1,
-            durability = member.inventory[member.equipment[EquipmentLocations.tool]].durability,
-            quality = member.inventory[member.equipment[EquipmentLocations.tool]].quality)
+        updateCargo(ship = playerShip, protoIndex = item.protoIndex, amount = 1,
+            durability = item.durability, quality = item.quality,
+            breakChance = item.breakChance)
         updateInventory(memberIndex = memberIndex, amount = -1,
-            inventoryIndex = member.equipment[EquipmentLocations.tool], ship = playerShip,
-                quality = member.inventory[member.equipment[EquipmentLocations.tool]].quality)
+            inventoryIndex = member.equipment[EquipmentLocations.tool],
+            ship = playerShip, quality = item.quality)
         member.equipment[EquipmentLocations.tool] = -1
       addMessage(message = member.name &
           " is too tired to work, they're going to rest.",

@@ -182,7 +182,7 @@ proc moveItem*(itemIndex: Natural; amount: Positive;
     updateCargo(ship = playerShip, protoIndex = item.protoIndex,
         amount = amount, durability = item.durability, price = item.price,
         quality = item.quality, maxDurability = item.maxDurability,
-        weight = item.weight)
+        weight = item.weight, breakChance = item.breakChance)
     updateInventory(memberIndex = memberIndex, amount = -amount,
         inventoryIndex = itemIndex, ship = playerShip,
         quality = item.quality)

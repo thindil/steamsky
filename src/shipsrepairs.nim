@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -68,8 +68,9 @@ proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
                       mType = orderMessage, color = red)
                 repairStopped = true
                 return
-              var repairMaterial: ExtendedNatural = findItem(inventory = playerShip.cargo,
-                  itemType = modulesList[playerShip.modules[
+              var repairMaterial: ExtendedNatural = findItem(
+                  inventory = playerShip.cargo, itemType = modulesList[
+                  playerShip.modules[
                   moduleIndex].protoIndex].repairMaterial, itemQuality = any)
               if repairMaterial > -1 and playerShip.cargo[
                   repairMaterial].amount < repairPoints:
@@ -111,7 +112,8 @@ proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
                   value = repairValue, quality = materialsQuality)
               updateCargo(ship = playerShip, cargoIndex = repairMaterial,
                   amount = -(materialCost), quality = playerShip.cargo[
-                      repairMaterial].quality)
+                  repairMaterial].quality, breakChance = playerShip.cargo[
+                  repairMaterial].breakChance)
               playerShip.modules[moduleIndex].durability += repairValue
               if repairValue > crewRepairPoints[pointsIndex]:
                 repairValue = crewRepairPoints[pointsIndex]
