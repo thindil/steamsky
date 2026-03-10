@@ -158,7 +158,7 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
   of deliver:
     acceptMessage.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'")
     updateCargo(ship = playerShip, protoIndex = mission.itemIndex, amount = 1,
-        quality = normal)
+        quality = normal, breakChance = 0)
   of destroy:
     acceptMessage.add(y = "'Destroy " & protoShipsList[mission.shipIndex].name & "'")
   of patrol:
@@ -224,5 +224,7 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
   addMessage(message = acceptMessage, mType = missionMessage)
   let traderIndex: ExtendedNatural = findMember(order = talk)
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+  {.ruleOff: "assignments".}
   gameStats.acceptedMissions = gameStats.acceptedMissions + 1
+  {.ruleOn: "assignments".}
   updateGame(minutes = 5)
