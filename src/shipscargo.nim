@@ -25,8 +25,9 @@ import config, game, types
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
     price: Natural = 0; quality: ObjectQuality;
-    maxDurability: ItemsDurability = defaultItemDurability;
-    weight: Natural = 0) {.raises: [KeyError], tags: [], contractual.} =
+    maxDurability: ItemsDurability = defaultItemDurability; weight: Natural = 0;
+    breakChance: Natural) {.raises: [KeyError], tags: [],
+    contractual.} =
   ## Updated the selected ship cargo, add or remove items to it
   ##
   ## * ship          - The ship which cargo will be updated
@@ -40,6 +41,7 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
   ## * quality       - The quality of the item which will be modified
   ## * maxDurability - The maximum durability of the item to modify. Can be empty
   ## * weight        - The weight of the item. Can be empty
+  ## * breakChance   - The chance for item to break during using
   ##
   ## Returns the modified ship parameter
   require:
@@ -51,7 +53,7 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
         if item.protoIndex == protoIndex and item.durability == durability and
             item.quality == quality and item.maxDurability == maxDurability and
             (item.weight == weight or (weight == 0 and itemsList[
-            protoIndex].weight == item.weight)):
+            protoIndex].weight == item.weight)) and item.breakChance == breakChance:
           itemIndex = index
           break
     else:
