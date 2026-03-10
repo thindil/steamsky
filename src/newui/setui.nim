@@ -1878,8 +1878,14 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   pathsOptions[3] = modsDirectory.string
   setFontsSizes()
 
-proc updateOptions*() {.raises: [], tags: [], contractual.} =
+proc updateOptions*(dialog: var GameDialog) {.raises: [], tags: [WriteIOEffect,
+    RootEffect], contractual.} =
   ## Update the game options based on the player's setting
+  ##
+  ## * dialog    - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   gameSettings.autoRest = generalOptions[0].bool
   gameSettings.undockSpeed = generalOptions[1].ShipSpeed
   gameSettings.autoCenter = generalOptions[2].bool
@@ -1965,3 +1971,7 @@ proc updateOptions*() {.raises: [], tags: [], contractual.} =
   gameSettings.mapFontSize = interfaceOptions[8]
   gameSettings.helpFontSize = interfaceOptions[9]
   gameSettings.interfaceFontSize = interfaceOptions[10]
+  try:
+    saveConfig()
+  except OSError, IOError, KeyError:
+    dialog = setError(message = "Can't save the configuration.")
