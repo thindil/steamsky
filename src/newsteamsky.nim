@@ -22,10 +22,11 @@ import std/[os, parseopt, paths, strutils, tables, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
 import newui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
-    basesui, combatui, coreui, craftsui, dialogs, errordialog, gameoptions,
-    goalsui, header, helpui, knowledge, knowledgebases, knowledgemissions,
-    mainmenu, mapsui, messagesui, missionsui, shipsui, shipsuicrew,
-    shipsuicrewinventory, shipsuimodules, statisticsui, themes, tradesui, waitmenu]
+    basesui, combatui, coreui, craftsui, debugui, dialogs, errordialog,
+    gameoptions, goalsui, header, helpui, knowledge, knowledgebases,
+    knowledgemissions, mainmenu, mapsui, messagesui, missionsui, shipsui,
+    shipsuicrew, shipsuicrewinventory, shipsuimodules, statisticsui, themes,
+    tradesui, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -191,6 +192,11 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         updateData = showManipulateItem(dialog = dialog)
       elif dialog == gameMenuDialog:
         showGameMenu(dialog = dialog, state = state)
+
+      # Show debug UI if needed
+      if debugMode == menu and state notin {
+          GameState.mainMenu..GameState.newGame}:
+        showDebugUI(dialog = dialog)
 
       # The main window
       window(name = "Main", x = 0, y = 0, w = windowWidth,
