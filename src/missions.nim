@@ -145,6 +145,7 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
   for index, item in itemsList:
     if item.itemType == missionItemsType:
       missionsItems.add(y = index)
+  {.ruleOff: "varDeclared".}
   var minX: int = playerShip.skyX - 100
   normalizeCoord(coord = minX)
   var maxX: int = playerShip.skyX + 100
@@ -152,6 +153,7 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
   var minY: int = playerShip.skyY - 100
   normalizeCoord(coord = minY, isXAxis = false)
   var maxY: int = playerShip.skyY + 100
+  {.ruleOn: "varDeclared".}
   normalizeCoord(coord = maxY, isXAxis = false)
   var basesInRange: seq[Positive] = @[]
   for index, base in skyBases:
