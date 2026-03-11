@@ -26,7 +26,7 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
     price: Natural = 0; quality: ObjectQuality;
     maxDurability: ItemsDurability = defaultItemDurability; weight: Natural = 0;
-    breakChance: Natural) {.raises: [KeyError], tags: [],
+    breakChance: ExtendedNatural) {.raises: [KeyError], tags: [],
     contractual.} =
   ## Updated the selected ship cargo, add or remove items to it
   ##
