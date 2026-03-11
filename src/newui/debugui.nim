@@ -20,6 +20,8 @@
 import contracts, nuklear/nuklear_sdl_renderer
 import coreui
 
+var debugTab: Positive = 1
+
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the debug dialog with various development options
@@ -37,7 +39,19 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     group(title = "debugButtons", flags = {windowNoScrollbar}):
       setLayoutRowDynamic(height = 30, cols = 1)
       labelButton(title = "Ship"):
+        debugTab = 1
+      labelButton(title = "Crew"):
+        debugTab = 2
+      labelButton(title = "Cargo"):
+        debugTab = 3
+      labelButton(title = "Bases"):
+        debugTab = 4
+      labelButton(title = "World"):
+        debugTab = 5
+      labelButton(title = "Refresh"):
+        discard
+      labelButton(title = "Save game"):
         discard
     group(title = "debugMenus", flags = {windowNoFlags}):
-      discard
+      label(str = "here")
   windowSetFocus(name = "Debug options")
