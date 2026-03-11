@@ -17,8 +17,10 @@ suite "Unit tests for crafts module":
       durability: 100))
   playerShip.modules.add(ModuleData(mType: ModuleType2.cargoRoom, protoIndex: 7,
       durability: 100))
-  updateCargo(playerShip, 6, 10, quality = normal)
-  updateCargo(playerShip, 50, 1, quality = normal)
+  updateCargo(ship = playerShip, protoIndex = 6, amount = 10, quality = normal,
+      breakChance = 0)
+  updateCargo(ship = playerShip, protoIndex = 50, amount = 1, quality = normal,
+      breakChance = 5)
 
   test "Set the amount for a crafting order.":
     setRecipe(0, 10, "1")
@@ -84,6 +86,7 @@ suite "Unit tests for crafts module":
 
   test "Testing study recipe prerequisities":
     var canCraft, hasWorkplace, hasTool: bool = false
-    checkStudyPrerequisities(canCraft = canCraft, hasTool = hasTool, hasWorkplace = hasWorkplace)
+    checkStudyPrerequisities(canCraft = canCraft, hasTool = hasTool,
+        hasWorkplace = hasWorkplace)
     check:
       not canCraft and not hasTool and hasWorkplace
