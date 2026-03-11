@@ -25,8 +25,8 @@ import game, shipscargo, types, utils
 proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
     itemType: string = ""; durability: ItemsDurability = defaultItemDurability;
     quality: Positive = 100; itemQuality: ObjectQuality;
-    maxDurability: ItemsDurability = defaultItemDurability;
-    weight: Natural = 0): ExtendedNatural {.raises: [], tags: [],
+    maxDurability: ItemsDurability = defaultItemDurability; weight: Natural = 0;
+    breakChance: ExtendedNatural = -1): ExtendedNatural {.raises: [], tags: [],
     contractual.} =
   ## Find the index of the selected item in the selected inventory
   ##
@@ -40,6 +40,7 @@ proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
   ## * itemQuality   - the quality of the item to find (good, normal, poor, etc).
   ## * maxDurability - The maximum durability of the item to modify. Can be empty
   ## * weight        - The weight of the item. Can be empty
+  ## * breakChance   - The chance to break for the item when used. Can be empty
   ##
   ## Returns the index of the item in the selected inventory which meet searching
   ## criteria or -1 if item not found.
@@ -60,6 +61,8 @@ proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
               continue
             if weight > 0 and item.weight != weight:
               continue
+            if breakChance > -1 and item.breakChance != breakChance:
+              continue
             return index
       elif itemType.len > 0:
         for index, item in inventory:
@@ -72,6 +75,8 @@ proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
             if maxDurability != defaultItemDurability and item.maxDurability != maxDurability:
               continue
             if weight > 0 and item.weight != weight:
+              continue
+            if breakChance > -1 and item.breakChance != breakChance:
               continue
             return index
     except KeyError:
@@ -237,7 +242,8 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
   if item.amount > 1:
     inventory.add(y = InventoryData(protoIndex: item.protoIndex,
         amount: item.amount - 1, name: item.name, durability: item.durability,
-        price: item.price, quality: item.quality, breakChance: item.breakChance))
+        price: item.price, quality: item.quality,
+        breakChance: item.breakChance))
     item.amount = 1
   if item.durability > ItemsDurability.low:
     item.durability.dec
