@@ -239,14 +239,13 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
     toolsIndex = ship.crew[memberIndex].equipment[EquipmentLocations.tool]
     if toolsIndex > 0 and itemsList[ship.crew[memberIndex].inventory[
         toolsIndex].protoIndex].itemType != requiredTool:
-      updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
-          toolsIndex].protoIndex, amount = 1, durability = ship.crew[
-          memberIndex].inventory[toolsIndex].durability, quality = ship.crew[
-          memberIndex].inventory[toolsIndex].quality, breakChance = ship.crew[
-              memberIndex].inventory[toolsIndex].breakChance)
+      let item: InventoryData = ship.crew[memberIndex].inventory[toolsIndex]
+      updateCargo(ship = ship, protoIndex = item.protoIndex, amount = 1,
+          durability = item.durability, quality = item.quality,
+          breakChance = item.breakChance)
       updateInventory(memberIndex = memberIndex, amount = -1,
-          inventoryIndex = toolsIndex, ship = ship, quality = ship.crew[
-          memberIndex].inventory[toolsIndex].quality)
+          inventoryIndex = toolsIndex, ship = ship, quality = item.quality,
+          breakChance = item.breakChance)
       toolsIndex = -1
     var toolQuality: ItemsDurability = defaultItemDurability
     if givenOrder in [upgrading, repair, clean, train]:
@@ -292,16 +291,13 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
       if ship.crew[memberIndex].order in [repair, clean, upgrading, train]:
         toolsIndex = ship.crew[memberIndex].equipment[EquipmentLocations.tool]
         if toolsIndex > -1:
-          updateCargo(ship = ship, protoIndex = ship.crew[
-              memberIndex].inventory[toolsIndex].protoIndex, amount = 1,
-              durability = ship.crew[memberIndex].inventory[
-              toolsIndex].durability, quality = ship.crew[
-              memberIndex].inventory[toolsIndex].quality,
-                  breakChance = ship.crew[memberIndex].inventory[
-                  toolsIndex].breakChance)
+          let item: InventoryData = ship.crew[memberIndex].inventory[toolsIndex]
+          updateCargo(ship = ship, protoIndex = item.protoIndex, amount = 1,
+              durability = item.durability, quality = item.quality,
+              breakChance = item.breakChance)
           updateInventory(memberIndex = memberIndex, amount = -1,
-              inventoryIndex = toolsIndex, ship = ship, quality = ship.crew[
-              memberIndex].inventory[toolsIndex].quality)
+              inventoryIndex = toolsIndex, ship = ship, quality = item.quality,
+              breakChance = item.breakChance)
     return true
 
 proc showOrderMessage(givenOrder: CrewOrders; memberName: string;
@@ -393,14 +389,13 @@ proc giveRestOrder(ship: var ShipRecord; memberIndex: Natural) {.raises: [
       var toolsIndex: ExtendedNatural = ship.crew[memberIndex].equipment[
           EquipmentLocations.tool]
       if toolsIndex > -1:
-        updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
-            toolsIndex].protoIndex, amount = 1, durability = ship.crew[
-            memberIndex].inventory[toolsIndex].durability, quality = ship.crew[
-            memberIndex].inventory[toolsIndex].quality, breakChance = ship.crew[
-            memberIndex].inventory[toolsIndex].breakChance)
+        let item: InventoryData = ship.crew[memberIndex].inventory[toolsIndex]
+        updateCargo(ship = ship, protoIndex = item.protoIndex, amount = 1,
+            durability = item.durability, quality = item.quality,
+            breakChance = item.breakChance)
         updateInventory(memberIndex = memberIndex, amount = -1,
-            inventoryIndex = toolsIndex, ship = ship, quality = ship.crew[
-            memberIndex].inventory[toolsIndex].quality)
+            inventoryIndex = toolsIndex, ship = ship, quality = item.quality,
+            breakChance = item.breakChance)
 
 proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int = -1;

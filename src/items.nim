@@ -308,7 +308,7 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
             breakChance = item.breakChance)
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = result, ship = playerShip,
-            quality = item.quality)
+            quality = item.quality, breakChance = item.breakChance)
         result = -1
     result = findItem(inventory = playerShip.crew[memberIndex].inventory,
         itemType = itemType, quality = toolQuality, itemQuality = any)
@@ -320,7 +320,7 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
           let item: InventoryData = playerShip.cargo[result]
           updateInventory(memberIndex = memberIndex, amount = 1,
               protoIndex = item.protoIndex, durability = item.durability,
-              ship = playerShip, quality = item.quality)
+              ship = playerShip, quality = item.quality, breakChance = item.breakChance)
           updateCargo(ship = playerShip, amount = -1, cargoIndex = result,
               quality = item.quality, breakChance = item.breakChance)
           result = findItem(inventory = playerShip.crew[memberIndex].inventory,
@@ -518,7 +518,7 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
       if memberIndex > -1:
         updateInventory(memberIndex = memberIndex, amount = newAmount,
             protoIndex = moneyIndex, inventoryIndex = mIndex, ship = playerShip,
-            quality = newQuality)
+            quality = newQuality, breakChance = playerShip.crew[memberIndex].inventory[mIndex].breakChance)
       else:
         updateCargo(ship = playerShip, protoIndex = moneyIndex,
             amount = newAmount, cargoIndex = mIndex, quality = newQuality,
@@ -531,7 +531,7 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
     if memberIndex > -1:
       updateInventory(memberIndex = memberIndex, amount = amount,
           protoIndex = moneyIndex, inventoryIndex = mIndex, ship = playerShip,
-          quality = quality)
+          quality = quality, breakChance = playerShip.crew[memberIndex].inventory[mIndex].breakChance)
     else:
       updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = amount,
           cargoIndex = mIndex, quality = quality,

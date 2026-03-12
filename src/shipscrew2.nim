@@ -185,7 +185,7 @@ proc moveItem*(itemIndex: Natural; amount: Positive;
         weight = item.weight, breakChance = item.breakChance)
     updateInventory(memberIndex = memberIndex, amount = -amount,
         inventoryIndex = itemIndex, ship = playerShip,
-        quality = item.quality)
+        quality = item.quality, breakChance = item.breakChance)
     if (playerShip.crew[memberIndex].order == clean and findItem(
         inventory = playerShip.crew[memberIndex].inventory,
         itemType = cleaningTools, itemQuality = item.quality) == -1) or (

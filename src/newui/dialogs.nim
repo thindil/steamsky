@@ -813,7 +813,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
                   amount = manipulateData.amount, protoIndex = item.protoIndex,
                   durability = item.durability, price = item.price,
                   ship = playerShip, quality = item.quality,
-                  maxDurability = item.maxDurability, weight = item.weight)
+                  maxDurability = item.maxDurability, weight = item.weight,
+                  breakChance = item.breakChance)
             except:
               dialog = setError(message = "Can't update the member's inventory.")
               return
