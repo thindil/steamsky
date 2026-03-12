@@ -33,7 +33,7 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     width: float = 700
     height: float = 500
   updateDialog(width = width, height = height)
-  window(name = "Debug options", x = 40, y = 20, w = width, h = height,
+  window(name = "Debug options", x = 40, y = 0, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMinimizable, windowMovable}):
     setLayoutRowStatic(height = height, cols = 2, ratio = [140.cfloat, 530])
     group(title = "debugButtons", flags = {windowNoScrollbar}):
