@@ -171,7 +171,9 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
     generateEnemies(enemies = enemies, withTraders = false)
   else:
     generateEnemies(enemies = enemies)
-  var missionX, missionY: int = 1
+  var
+    missionX: MapXRange = 1
+    missionY: MapYRange = 1
   const qualitiesArray: array[10, int] = [1, 11, 21, 31, 41, 51, 61, 71, 81, 91]
   var index: Natural = missionsAmount
   while index > 0:
@@ -259,7 +261,7 @@ proc updateMissions*(minutes: Positive) {.raises: [KeyError, ReputationError],
   ## * minutes - the amount of minutes passed in the game
   var i: Natural = acceptedMissions.low
   while i < acceptedMissions.len:
-    let time: int = acceptedMissions[i].time - minutes
+    let time: -100_000..100_000 = acceptedMissions[i].time - minutes
     if time < 1:
       deleteMission(missionIndex = i)
     else:
@@ -298,7 +300,8 @@ proc updateMission*(missionIndex: Natural) {.raises: [KeyError],
     acceptedMissions[missionIndex].finished = true
     skyMap[skyBases[mission.startBase].skyX][skyBases[
         mission.startBase].skyY].missionIndex = missionIndex
-    var messageText: string = "Return to " & skyBases[mission.startBase].name & " to finish mission "
+    var messageText: MessageText = "Return to " & skyBases[
+        mission.startBase].name & " to finish mission "
     case mission.mType
     of deliver:
       messageText.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'.")
