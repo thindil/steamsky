@@ -135,9 +135,9 @@ proc updateInventory*(memberIndex: Natural; amount: int;
     protoIndex: Natural = 0; durability: ItemsDurability = 0;
     inventoryIndex: int = -1; price: Natural = 0; ship: var ShipRecord;
     quality: ObjectQuality;
-    maxDurability: ItemsDurability = defaultItemDurability;
-    weight: Natural = 0) {.raises: [CrewNoSpaceError, KeyError], tags: [],
-    contractual.} =
+    maxDurability: ItemsDurability = defaultItemDurability; weight: Natural = 0;
+    breakChance: ExtendedNatural) {.raises: [CrewNoSpaceError, KeyError],
+    tags: [], contractual.} =
   ## Update the inventory of the selected crew member.
   ##
   ## * memberIndex    - the index of the crew member which inventory will be updated
@@ -154,6 +154,7 @@ proc updateInventory*(memberIndex: Natural; amount: int;
   ## * quality        - the quality of the item to update (good, normal, poor, etc).
   ## * maxDurability  - The maximum durability of the item to modify. Can be empty
   ## * weight         - The weight of the item. Can be empty
+  ## * breakChance    - The chance for item to break during usage
   ##
   ## Returns the updated ship argument
   require:
@@ -165,11 +166,11 @@ proc updateInventory*(memberIndex: Natural; amount: int;
         itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
             protoIndex = protoIndex, durability = durability,
             itemQuality = quality, maxDurability = maxDurability,
-            weight = weight)
+            weight = weight, breakChance = breakChance)
       else:
         itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
             protoIndex = protoIndex, itemQuality = quality,
-            maxDurability = maxDurability, weight = weight)
+            maxDurability = maxDurability, weight = weight, breakChance = breakChance)
     else:
       itemIndex = inventoryIndex
     if amount > 0:
@@ -254,7 +255,8 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
           quality = any, breakChance = item.breakChance)
     else:
       updateInventory(memberIndex = memberIndex, amount = -1,
-          inventoryIndex = itemIndex, ship = ship, quality = item.quality)
+          inventoryIndex = itemIndex, ship = ship, quality = item.quality,
+          breakChance = item.breakChance)
     return
   inventory[itemIndex] = item
   var i: int = 0
@@ -270,10 +272,10 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
         else:
           updateInventory(memberIndex = memberIndex, amount = 0 - inventory[
               j].amount, inventoryIndex = j, ship = ship,
-              quality = item.quality)
+              quality = item.quality, breakChance = item.breakChance)
           updateInventory(memberIndex = memberIndex, amount = inventory[
               j].amount, inventoryIndex = i, ship = ship,
-              quality = item.quality)
+              quality = item.quality, breakChance = item.breakChance)
         i.dec
         break
     i.inc
