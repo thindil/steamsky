@@ -35,7 +35,7 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   updateDialog(width = width, height = height)
   window(name = "Debug options", x = 40, y = 0, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMinimizable, windowMovable}):
-    setLayoutRowStatic(height = height, cols = 2, ratio = [140.cfloat, 530])
+    setLayoutRowDynamic(height = height, cols = 2)
     group(title = "debugButtons", flags = {windowNoScrollbar}):
       setLayoutRowDynamic(height = 30, cols = 1)
       labelButton(title = "Ship"):
@@ -53,5 +53,6 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
       labelButton(title = "Save game"):
         discard
     group(title = "debugMenus", flags = {windowNoFlags}):
+      setLayoutRowDynamic(height = 30, cols = 1)
       label(str = "here")
   windowSetFocus(name = "Debug options")
