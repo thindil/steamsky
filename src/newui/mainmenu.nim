@@ -989,8 +989,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             x += widgetWidth
           except:
             dialog = setError(message = "Can't set the tabs buttons.")
-  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = (
-      if currentTab == 0: 17 else: 20)):
+  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 2):
     row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
       # Player settings
       if currentTab == 0:
