@@ -41,18 +41,21 @@ suite "Unit tests for crewinventory module":
       not itemIsUsed(0, 1)
 
   test "Adding an item to the player's inventory.":
-    updateInventory(0, 1, 1, ship = playerShip, quality = normal)
+    updateInventory(0, 1, 1, ship = playerShip, quality = normal,
+        breakChance = -1)
     check:
       playerShip.crew[0].inventory[0].amount == 2
 
   test "Removing an item from the player's inventory.":
-    updateInventory(0, -1, 1, ship = playerShip, quality = normal)
+    updateInventory(0, -1, 1, ship = playerShip, quality = normal,
+        breakChance = -1)
     check:
       playerShip.crew[0].inventory[0].amount == 1
 
   test "Adding too much items to the player's inventory.":
     expect CrewNoSpaceError:
-      updateInventory(0, 10_000, 1, ship = playerShip, quality = normal)
+      updateInventory(0, 10_000, 1, ship = playerShip, quality = normal,
+          breakChance = -1)
     check:
       playerShip.crew[0].inventory[0].amount == 1
 
