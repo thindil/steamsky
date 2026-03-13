@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Debug build
       run: |
@@ -27,7 +27,7 @@ jobs:
       run: /root/.nimble/bin/nimalyzer others/nimalyzer.cfg
 
     - name: Upload the log
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       if: failure()
       with:
          name: nimalyzer.log
@@ -44,7 +44,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Build the program
       run: |
@@ -55,7 +55,7 @@ jobs:
       run: tar -cf steamsky-development-linux.tar -C release steamsky-linux
 
     - name: Upload the artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
          name: steamsky-development-linux.tar
          path: steamsky-development-linux.tar
@@ -71,7 +71,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Build the program
       run: |
@@ -84,7 +84,7 @@ jobs:
       run: tar -cf steamsky-development-windows.tar -C release steamsky-windows
 
     - name: Upload the artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
          name: steamsky-development-windows.tar
          path: steamsky-development-windows.tar
