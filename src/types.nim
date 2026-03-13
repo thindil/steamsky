@@ -503,7 +503,7 @@ type
     price*: Natural
     quality*: ObjectQuality = normal
     weight*: Natural
-    breakChance*: ExtendedNatural
+    breakChance*: ExtendedNatural = -1
 
   DateRecord* = object
     ## Used to store the game's time
