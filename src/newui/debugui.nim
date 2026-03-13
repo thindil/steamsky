@@ -22,6 +22,14 @@ import coreui
 
 var debugTab: Positive = 1
 
+proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the tab which allows changes in the player's ship
+  setLayoutRowDynamic(height = 30, cols = 5)
+  labelButton(title = "Move ship"):
+    discard
+  label(str = "X:")
+  label(str = "Y:")
+
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the debug dialog with various development options
@@ -32,12 +40,13 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   const
     width: float = 700
     height: float = 500
+    groupHeight: float = height - 90
   updateDialog(width = width, height = height)
   window(name = "Debug options", x = 40, y = 0, w = width, h = height, flags = {
       windowBorder, windowTitle, windowMinimizable, windowMovable,
       windowNoScrollbar}):
-    layoutSpaceStatic(height = height - 90.0, widgetsCount = 2):
-      row(x = 0, y = 0, w = width * 0.25, h = height - 90.0):
+    layoutSpaceStatic(height = groupHeight, widgetsCount = 2):
+      row(x = 0, y = 0, w = width * 0.25, h = groupHeight):
         group(title = "debugButtons", flags = {windowNoScrollbar}):
           setLayoutRowDynamic(height = 30, cols = 1)
           labelButton(title = "Ship"):
@@ -54,8 +63,11 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
             discard
           labelButton(title = "Save game"):
             discard
-      row(x = width * 0.25, y = 0, w = width * 0.70, h = height - 90):
+      row(x = width * 0.25, y = 0, w = width * 0.70, h = groupHeight):
         group(title = "debugMenus", flags = {windowNoFlags}):
-          setLayoutRowDynamic(height = 30, cols = 1)
-          label(str = "here")
+          case debugTab
+          of 1:
+            showShipTab()
+          else:
+            discard
   windowSetFocus(name = "Debug options")
