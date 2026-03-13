@@ -115,8 +115,9 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
 
 proc findBaseCargo*(protoIndex: Natural;
     durability: ItemsDurability = defaultItemDurability; quality: ObjectQuality;
-    maxDurability: ItemsDurability = defaultItemDurability;
-    weight: Natural = 0): int {.raises: [], tags: [], contractual.} =
+    maxDurability: ItemsDurability = defaultItemDurability; weight: Natural = 0;
+    breakChance: ExtendedNatural = -1): int {.raises: [], tags: [],
+    contractual.} =
   ## Find the selected item in the currently visited base's cargo
   ##
   ## * protoIndex    - the index of the prototype to search
@@ -125,6 +126,7 @@ proc findBaseCargo*(protoIndex: Natural;
   ## * quality       - the quality of the item to search.
   ## * maxDurability - The maximum durability of the item to modify. Can be empty
   ## * weight        - The weight of the item. Can be empty
+  ## * breakChance   - The chance for item to break during usage
   ##
   ## The index of the item with the selected prototype index or -1 if nothing
   ## found.
@@ -144,7 +146,7 @@ proc findBaseCargo*(protoIndex: Natural;
       if durability < maxDurability or quality != normal:
         if item.protoIndex == protoIndex and item.durability == durability and
             item.quality == quality and item.maxDurability == maxDurability and
-            item.weight == weight:
+            item.weight == weight and item.breakChance == breakChance:
           return index
       else:
         if item.protoIndex == protoIndex:
