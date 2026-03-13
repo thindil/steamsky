@@ -18,9 +18,15 @@
 ## Provides code related to showing debug interface.
 
 import contracts, nuklear/nuklear_sdl_renderer
+import ../game
 import coreui
 
-var debugTab: Positive = 1
+var debugTab, shipX, shipY: Positive = 1
+
+proc setDebugData*() {.raises: [], tags: [], contractual.} =
+  ## Set the data for the debug UI
+  shipX = playerShip.skyX
+  shipY = playerShip.skyY
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -41,12 +47,14 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     width: float = 700
     height: float = 500
     groupHeight: float = height - 90
+    groupOneWidth: float = width * 0.25
+    groupTwoWidth: float = width * 0.72
   updateDialog(width = width, height = height)
   window(name = "Debug options", x = 40, y = 0, w = width, h = height, flags = {
       windowBorder, windowTitle, windowMinimizable, windowMovable,
       windowNoScrollbar}):
     layoutSpaceStatic(height = groupHeight, widgetsCount = 2):
-      row(x = 0, y = 0, w = width * 0.25, h = groupHeight):
+      row(x = 0, y = 0, w = groupOneWidth, h = groupHeight):
         group(title = "debugButtons", flags = {windowNoScrollbar}):
           setLayoutRowDynamic(height = 30, cols = 1)
           labelButton(title = "Ship"):
@@ -60,10 +68,10 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
           labelButton(title = "World"):
             debugTab = 5
           labelButton(title = "Refresh"):
-            discard
+            setDebugData()
           labelButton(title = "Save game"):
             discard
-      row(x = width * 0.25, y = 0, w = width * 0.70, h = groupHeight):
+      row(x = groupOneWidth, y = 0, w = groupTwoWidth, h = groupHeight):
         group(title = "debugMenus", flags = {windowNoFlags}):
           case debugTab
           of 1:
