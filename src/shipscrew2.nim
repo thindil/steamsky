@@ -74,7 +74,7 @@ proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
     memberIndex < ship.crew.len
     reason.len > 0
   body:
-    let memberName: string = ship.crew[memberIndex].name
+    let memberName: MobName = ship.crew[memberIndex].name
     if ship.crew == playerShip.crew:
       if memberIndex == 0:
         addMessage(message = "You died from " & reason & ".",
