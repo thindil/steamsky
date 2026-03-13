@@ -33,26 +33,29 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     width: float = 700
     height: float = 500
   updateDialog(width = width, height = height)
-  window(name = "Debug options", x = 40, y = 0, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowMinimizable, windowMovable}):
-    setLayoutRowDynamic(height = height, cols = 2)
-    group(title = "debugButtons", flags = {windowNoScrollbar}):
-      setLayoutRowDynamic(height = 30, cols = 1)
-      labelButton(title = "Ship"):
-        debugTab = 1
-      labelButton(title = "Crew"):
-        debugTab = 2
-      labelButton(title = "Cargo"):
-        debugTab = 3
-      labelButton(title = "Bases"):
-        debugTab = 4
-      labelButton(title = "World"):
-        debugTab = 5
-      labelButton(title = "Refresh"):
-        discard
-      labelButton(title = "Save game"):
-        discard
-    group(title = "debugMenus", flags = {windowNoFlags}):
-      setLayoutRowDynamic(height = 30, cols = 1)
-      label(str = "here")
+  window(name = "Debug options", x = 40, y = 0, w = width, h = height, flags = {
+      windowBorder, windowTitle, windowMinimizable, windowMovable,
+      windowNoScrollbar}):
+    layoutSpaceStatic(height = height - 90.0, widgetsCount = 2):
+      row(x = 0, y = 0, w = width * 0.25, h = height - 90.0):
+        group(title = "debugButtons", flags = {windowNoScrollbar}):
+          setLayoutRowDynamic(height = 30, cols = 1)
+          labelButton(title = "Ship"):
+            debugTab = 1
+          labelButton(title = "Crew"):
+            debugTab = 2
+          labelButton(title = "Cargo"):
+            debugTab = 3
+          labelButton(title = "Bases"):
+            debugTab = 4
+          labelButton(title = "World"):
+            debugTab = 5
+          labelButton(title = "Refresh"):
+            discard
+          labelButton(title = "Save game"):
+            discard
+      row(x = width * 0.25, y = 0, w = width * 0.70, h = height - 90):
+        group(title = "debugMenus", flags = {windowNoFlags}):
+          setLayoutRowDynamic(height = 30, cols = 1)
+          label(str = "here")
   windowSetFocus(name = "Debug options")
