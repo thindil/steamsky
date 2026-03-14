@@ -32,9 +32,18 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
   setLayoutRowDynamic(height = 30, cols = 5)
   labelButton(title = "Move ship"):
-    discard
+    playerShip.skyX = shipX
+    playerShip.skyY = shipY
   label(str = "X:")
+  var newValue: Positive = property2(name = "#", min = 1, val = shipX,
+      max = 1_024, step = 1, incPerPixel = 1)
+  if newValue != shipX:
+    shipX = newValue
   label(str = "Y:")
+  newValue = property2(name = "#", min = 1, val = shipY, max = 1_024, step = 1,
+      incPerPixel = 1)
+  if newValue != shipX:
+    shipY = newValue
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
