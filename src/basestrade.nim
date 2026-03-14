@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -129,10 +129,12 @@ proc buyRecipe*(recipeIndex: string) {.raises: [CantBuyError,
       cost = 1
     countPrice(price = cost, traderIndex = traderIndex)
     let
-      recipeName: ObjectName = itemsList[recipesList[recipeIndex].resultIndex].name
+      recipeName: ObjectName = itemsList[recipesList[
+          recipeIndex].resultIndex].name
     checkMoney(price = cost, message = recipeName)
     updateMoney(memberIndex = -1, amount = -cost, quality = any)
-    updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
+    updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal,
+        breakChance = -1)
     knownRecipes.add(y = recipeIndex)
     addMessage(message = "You bought the recipe for " & recipeName & " for " &
         $cost & " of " & moneyName & ".", mType = tradeMessage)
@@ -212,7 +214,8 @@ proc healWounded*(memberIndex: int) {.raises: [CantHealError,
           $cost & " " & moneyName & ".", mType = tradeMessage)
     checkMoney(price = cost)
     updateMoney(memberIndex = -1, amount = -cost, quality = any)
-    updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
+    updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal,
+        breakChance = -1)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     let baseIndex: BasesRange = skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex
@@ -283,7 +286,8 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
       gainExp(amount = gainedExp, skillNumber = skillIndex,
           crewIndex = memberIndex)
       updateMoney(memberIndex = -1, amount = -cost, quality = any)
-      updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
+      updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal,
+          breakChance = -1)
       if traderIndex > -1:
         gainExp(amount = 5, skillNumber = talkingSkill, crewIndex = traderIndex)
       gainRep(baseIndex = baseIndex, points = 5)

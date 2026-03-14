@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -71,7 +71,8 @@ proc repairShip*(moduleIndex: int) {.raises: [NothingToRepairError,
       addMessage(message = "You bought an entire ship repair for " & $cost &
           " " & moneyName & ".", mType = tradeMessage)
     updateMoney(memberIndex = -1, amount = -cost, quality = any)
-    updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal)
+    updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal,
+        breakChance = -1)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 1)
     updateGame(minutes = time)
@@ -129,7 +130,8 @@ proc installModule(moduleIndex, traderIndex, moneyAmount, hullIndex: int;
         raise newException(exceptn = InstallationError,
             message = "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.")
     updateMoney(memberIndex = -1, amount = -price, quality = any)
-    updateBaseCargo(protoIndex = moneyIndex, amount = price, quality = normal)
+    updateBaseCargo(protoIndex = moneyIndex, amount = price, quality = normal,
+        breakChance = -1)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = baseIndex, points = 1)
     updateGame(minutes = modulesList[moduleIndex].installTime)
@@ -328,7 +330,8 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
             giveOrders(ship = playerShip, memberIndex = owner,
                 givenOrder = rest, checkPriorities = false)
       updateMoney(memberIndex = -1, amount = price, quality = any)
-      updateBaseCargo(protoIndex = moneyIndex, amount = price, quality = normal)
+      updateBaseCargo(protoIndex = moneyIndex, amount = price, quality = normal,
+          breakChance = -1)
       gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
       gainRep(baseIndex = baseIndex, points = 1)
       updateGame(minutes = modulesList[playerShip.modules[

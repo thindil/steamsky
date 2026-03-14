@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -52,7 +52,7 @@ proc payForDock*() {.raises: [KeyError, ReputationError, NoFreeSpaceError],
   except CrewNoSpaceError:
     discard
   updateBaseCargo(protoIndex = moneyIndex, amount = dockingCost,
-      quality = normal)
+      quality = normal, breakChance = -1)
   addMessage(message = "You pay " & $dockingCost & " " & moneyName &
       " docking fee.", mType = otherMessage)
   if traderIndex > -1:
