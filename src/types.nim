@@ -171,6 +171,8 @@ type
     ## Used to store in-game settings, like money, tools names, etc
   MobName* = string
     ## Used to store a mob's name
+  ModuleName* = string
+    ## Used to store a module name
 
   ModuleData* = object
     ## Used to store information about ships' modules
@@ -206,13 +208,13 @@ type
     ## * duration         - The duration bonus of the harpoon gun
     ## * harpoonIndex     - The index of item from ship's cargo used as harpoon
     ## * data             - Various data for module, depends on module
-    name*: string
+    name*: ModuleName
     protoIndex*: Natural
     weight*: Natural
     durability*: Natural
     maxDurability*: Natural
     owner*: seq[int]
-    upgradeProgress*: int
+    upgradeProgress*: ExtendedNatural
     upgradeAction*: ShipUpgrade
     case mType*: ModuleType2
     of ModuleType2.engine:
@@ -223,15 +225,15 @@ type
       cleanliness*: Natural
       quality*: Natural
     of ModuleType2.turret:
-      gunIndex*: int
+      gunIndex*: ExtendedNatural
     of ModuleType2.gun:
       damage*: Positive
-      ammoIndex*: int
+      ammoIndex*: ExtendedNatural
     of ModuleType2.hull:
       installedModules*: Natural
       maxModules*: Positive
     of ModuleType2.workshop:
-      craftingIndex*: string
+      craftingIndex*: RecipeIndex
       craftingTime*: Natural
       craftingAmount*: Natural
       craftingQuality*: ObjectQuality = normal
@@ -244,7 +246,7 @@ type
       coolingDown*: bool
     of ModuleType2.harpoonGun:
       duration*: Positive
-      harpoonIndex*: int
+      harpoonIndex*: ExtendedNatural
     of ModuleType2.any:
       data*: array[1..3, int]
     else:
