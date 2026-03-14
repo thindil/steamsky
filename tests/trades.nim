@@ -72,5 +72,6 @@ suite "Unit tests for trades module":
 
   test "Buying an item.":
     generateCargo()
-    updateBaseCargo(skyBases[1].cargo[2].protoIndex, 2, quality = normal)
+    updateBaseCargo(skyBases[1].cargo[2].protoIndex, 2, quality = normal,
+        breakChance = -1)
     buyItems(2, "1")

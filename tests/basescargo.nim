@@ -60,13 +60,14 @@ suite "Unit tests for basescargo module.":
     let
       amount = skyBases[1].cargo[0].amount - 1
       protoIndex = skyBases[1].cargo[0].protoIndex
-    updateBaseCargo(protoIndex, -1, quality = normal)
+    updateBaseCargo(protoIndex, -1, quality = normal, breakChance = -1)
     check:
       skyBases[1].cargo[0].amount == amount
 
   test "Remove an item from a base's cargo with amount":
     let
       amount = skyBases[1].cargo[0].amount - 1
-    updateBaseCargo(cargoIndex = 0, amount = -1, quality = normal)
+    updateBaseCargo(cargoIndex = 0, amount = -1, quality = normal,
+        breakChance = -1)
     check:
       skyBases[1].cargo[0].amount == amount
