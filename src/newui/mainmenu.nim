@@ -21,8 +21,8 @@
 import std/[algorithm, colors, math, os, sequtils, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[basestypes, config, game, game2, gamesaveload, goals,
-    halloffame, shipscrew, ships2, utils]
-import coreui, dialogs, errordialog, goalsui, mapsui, themes
+    halloffame, log, shipscrew, ships2, utils]
+import coreui, debugui, dialogs, errordialog, goalsui, mapsui, themes
 
 var
   menuImages: array[4, PImage] = [nil, nil, nil, nil]
@@ -573,6 +573,8 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   try:
     saveName = saveClicked
     loadGame()
+    if debugMode == menu:
+      setDebugData()
   except:
     state = loadGame
     dialog = setError(message = "Can't load this game.")
@@ -945,6 +947,8 @@ proc startGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   newGameSettings.pricesBonus = diffSettings[7].float / 100.0
   try:
     newGame()
+    if debugMode == menu:
+      setDebugData()
   except:
     dialog = setError(message = "Can't start the new game.")
 
