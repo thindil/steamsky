@@ -25,7 +25,7 @@ import coreui
 var
   debugTab, shipX, shipY, weight, maxDurability: Positive = 1
   playerModules, protoModules: seq[string] = @[]
-  moduleSelected, protoSelected, durability: Natural = 0
+  moduleSelected, protoSelected, durability, upgradeProgress: Natural = 0
 
 proc setSelectedModule() {.raises: [], tags: [], contractual.} =
   ## Set the data of the selected module in the player's ship
@@ -44,10 +44,8 @@ proc setSelectedModule() {.raises: [], tags: [], contractual.} =
     except:
       discard
   durability = playerShip.modules[moduleSelected].durability
-  if playerShip.modules[moduleSelected].maxDurability > 0:
-    maxDurability = playerShip.modules[moduleSelected].weight
-  else:
-    maxDurability = defaultItemDurability
+  maxDurability = playerShip.modules[moduleSelected].maxDurability
+  upgradeProgress = playerShip.modules[moduleSelected].upgradeProgress
 
 proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the debug UI
@@ -89,8 +87,13 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   durability = property2(name = "#", min = 1, val = durability, max = maxDurability,
       step = 1, incPerPixel = 1)
   label(str = "Max durability:")
-  maxDurability = property2(name = "#", min = 1, val = maxDurability, max = 150,
+  maxDurability = property2(name = "#", min = 1, val = maxDurability, max = 1_000,
       step = 1, incPerPixel = 1)
+  label(str = "Upgrade progress:")
+  upgradeProgress = property2(name = "#", min = 1, val = upgradeProgress, max = 100,
+      step = 1, incPerPixel = 1)
+  labelButton(title = "Change"):
+    discard
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
