@@ -23,18 +23,26 @@ import ../game
 import coreui
 
 var
-  debugTab, shipX, shipY: Positive = 1
+  debugTab, shipX, shipY, moduleWeight: Positive = 1
   playerModules, protoModules: seq[string] = @[]
   moduleSelected, protoSelected: Natural = 0
 
-proc setModuleType() {.raises: [], tags: [], contractual.} =
-  ## Set the type of the selected module in the player's ship
+proc setSelectedModule() {.raises: [], tags: [], contractual.} =
+  ## Set the data of the selected module in the player's ship
   var mIndex: Natural = 0
+  let protoIndex: Natural = playerShip.modules[moduleSelected].protoIndex
   for index, module in modulesList:
     protoModules.add(y = module.name)
-    if playerShip.modules[moduleSelected].protoIndex == index:
+    if protoIndex == index:
       protoSelected = mIndex
     mIndex.inc
+  if playerShip.modules[moduleSelected].weight > 0:
+    moduleWeight = playerShip.modules[moduleSelected].weight
+  else:
+    try:
+      moduleWeight = modulesList[protoIndex].weight
+    except:
+      discard
 
 proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the debug UI
@@ -45,7 +53,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
     playerModules.add(y = module.name)
   moduleSelected = 0
   protoModules = @[]
-  setModuleType()
+  setSelectedModule()
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -54,25 +62,24 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
     playerShip.skyX = shipX
     playerShip.skyY = shipY
   label(str = "X:")
-  var newValue: Positive = property2(name = "#", min = 1, val = shipX,
-      max = 1_024, step = 1, incPerPixel = 1)
-  if newValue != shipX:
-    shipX = newValue
-  label(str = "Y:")
-  newValue = property2(name = "#", min = 1, val = shipY, max = 1_024, step = 1,
+  shipX = property2(name = "#", min = 1, val = shipX, max = 1_024, step = 1,
       incPerPixel = 1)
-  if newValue != shipX:
-    shipY = newValue
+  label(str = "Y:")
+  shipY = property2(name = "#", min = 1, val = shipY, max = 1_024, step = 1,
+      incPerPixel = 1)
   setLayoutRowDynamic(height = 30, cols = 2)
   label(str = "Module:")
   let newModule = comboList(items = playerModules, selected = moduleSelected,
       itemHeight = 25, x = 235, y = 125)
   if newModule != moduleSelected:
     moduleSelected = newModule
-    setModuleType()
+    setSelectedModule()
   label(str = "Prototype:")
   protoSelected = comboList(items = protoModules, selected = protoSelected,
       itemHeight = 25, x = 235, y = 125)
+  label(str = "Weight:")
+  moduleWeight = property2(name = "#", min = 1, val = moduleWeight,
+      max = 1_00_000, step = 1, incPerPixel = 1)
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
