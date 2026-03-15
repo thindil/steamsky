@@ -18,6 +18,7 @@
 ## Provides various types for the game, like ships' data structure, etc.
 
 import std/tables
+import contracts
 
 type
 
@@ -218,8 +219,8 @@ type
     upgradeAction*: ShipUpgrade
     case mType*: ModuleType2
     of ModuleType2.engine:
-      fuelUsage*: Positive
-      power*: Positive
+      fuelUsage*: Positive = 1
+      power*: Positive = 1
       disabled*: bool
     of ModuleType2.cabin:
       cleanliness*: Natural
@@ -227,11 +228,11 @@ type
     of ModuleType2.turret:
       gunIndex*: ExtendedNatural
     of ModuleType2.gun:
-      damage*: Positive
+      damage*: Positive = 1
       ammoIndex*: ExtendedNatural
     of ModuleType2.hull:
       installedModules*: Natural
-      maxModules*: Positive
+      maxModules*: Positive = 1
     of ModuleType2.workshop:
       craftingIndex*: RecipeIndex
       craftingTime*: Natural
@@ -242,16 +243,73 @@ type
     of ModuleType2.trainingRoom:
       trainedSkill*: Natural
     of ModuleType2.batteringRam:
-      damage2*: Positive
+      damage2*: Positive = 1
       coolingDown*: bool
     of ModuleType2.harpoonGun:
-      duration*: Positive
+      duration*: Positive = 1
       harpoonIndex*: ExtendedNatural
     of ModuleType2.any:
       data*: array[1..3, int]
     else:
       discard
 
+proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
+    durability, maxDurability: Natural; owner: seq[int];
+    upgradeProgress: ExtendedNatural;
+    upgradeAction: ShipUpgrade): ModuleData {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for the player's ship's module data
+  ##
+  ## * mType            - The type of the module
+  ## * name             - The name of the module
+  ## * protoIndex       - The index of the prototype module
+  ## * weight           - The weight of the module
+  ## * durability       - The current durability of the module
+  ## * maxDurability    - The max durability of the module
+  ## * owner            - The list of owners of the module
+  ## * upgradeProgress  - The upgrade progess of the module
+  ## * upgradeAction    - The current upgrade type for the module
+  ##
+  ## Returns the new structure with information about the selected module
+  case mType
+  of ModuleType2.engine:
+    result = ModuleData(mType: ModuleType2.engine)
+  of ModuleType2.cabin:
+    result = ModuleData(mType: ModuleType2.cabin)
+  of ModuleType2.turret:
+    result = ModuleData(mType: ModuleType2.turret)
+  of ModuleType2.gun:
+    result = ModuleData(mType: ModuleType2.gun)
+  of ModuleType2.hull:
+    result = ModuleData(mType: ModuleType2.hull)
+  of ModuleType2.workshop:
+    result = ModuleData(mType: ModuleType2.workshop)
+  of ModuleType2.trainingRoom:
+    result = ModuleData(mType: ModuleType2.trainingRoom)
+  of ModuleType2.batteringRam:
+    result = ModuleData(mType: ModuleType2.batteringRam)
+  of ModuleType2.harpoonGun:
+    result = ModuleData(mType: ModuleType2.harpoonGun)
+  of ModuleType2.medicalRoom:
+    result = ModuleData(mType: ModuleType2.medicalRoom)
+  of ModuleType2.cockpit:
+    result = ModuleData(mType: ModuleType2.cockpit)
+  of ModuleType2.cargoRoom:
+    result = ModuleData(mType: ModuleType2.cargoRoom)
+  of ModuleType2.armor:
+    result = ModuleData(mType: ModuleType2.armor)
+  of ModuleType2.any:
+    result = ModuleData(mType: ModuleType2.any)
+  result.name = name
+  result.protoIndex = protoIndex
+  result.weight = weight
+  result.durability = durability
+  result.maxDurability = maxDurability
+  result.owner = owner
+  result.upgradeProgress = upgradeProgress
+  result.upgradeAction = upgradeAction
+
+type
   InventoryData* = object
     ## Used to store information about items in various inventories (cargo, crew
     ## inventory, ect)
