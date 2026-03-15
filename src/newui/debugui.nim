@@ -27,6 +27,15 @@ var
   playerModules, protoModules: seq[string] = @[]
   moduleSelected, protoSelected: Natural = 0
 
+proc setModuleType() {.raises: [], tags: [], contractual.} =
+  ## Set the type of the selected module in the player's ship
+  var mIndex: Natural = 0
+  for index, module in modulesList:
+    protoModules.add(y = module.name)
+    if playerShip.modules[moduleSelected].protoIndex == index:
+      protoSelected = mIndex
+    mIndex.inc
+
 proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the debug UI
   shipX = playerShip.skyX
@@ -36,12 +45,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
     playerModules.add(y = module.name)
   moduleSelected = 0
   protoModules = @[]
-  var mIndex: Natural = 0
-  for index, module in modulesList:
-    protoModules.add(y = module.name)
-    if playerShip.modules[moduleSelected].protoIndex == index:
-      protoSelected = mIndex
-    mIndex.inc
+  setModuleType()
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -65,6 +69,7 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
       itemHeight = 25, x = 235, y = 125)
   if newModule != moduleSelected:
     moduleSelected = newModule
+    setModuleType()
   label(str = "Prototype:")
   protoSelected = comboList(items = protoModules, selected = protoSelected,
       itemHeight = 25, x = 235, y = 125)
