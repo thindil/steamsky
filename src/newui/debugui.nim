@@ -17,23 +17,31 @@
 
 ## Provides code related to showing debug interface.
 
+import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
 import ../game
 import coreui
 
 var
   debugTab, shipX, shipY: Positive = 1
-  modulesList: seq[string] = @[]
-  moduleSelected: Natural = 0
+  playerModules, protoModules: seq[string] = @[]
+  moduleSelected, protoSelected: Natural = 0
 
 proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the debug UI
   shipX = playerShip.skyX
   shipY = playerShip.skyY
-  modulesList = @[]
+  playerModules = @[]
   for module in playerShip.modules:
-    modulesList.add(y = module.name)
+    playerModules.add(y = module.name)
   moduleSelected = 0
+  protoModules = @[]
+  var mIndex: Natural = 0
+  for index, module in modulesList:
+    protoModules.add(y = module.name)
+    if playerShip.modules[moduleSelected].protoIndex == index:
+      protoSelected = mIndex
+    mIndex.inc
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -53,10 +61,13 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
     shipY = newValue
   setLayoutRowDynamic(height = 30, cols = 2)
   label(str = "Module:")
-  let newModule = comboList(items = modulesList, selected = moduleSelected,
+  let newModule = comboList(items = playerModules, selected = moduleSelected,
       itemHeight = 25, x = 235, y = 125)
   if newModule != moduleSelected:
     moduleSelected = newModule
+  label(str = "Prototype:")
+  protoSelected = comboList(items = protoModules, selected = protoSelected,
+      itemHeight = 25, x = 235, y = 125)
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
