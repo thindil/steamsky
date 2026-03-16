@@ -218,34 +218,34 @@ type
     upgradeProgress*: ExtendedNatural
     upgradeAction*: ShipUpgrade
     case mType*: ModuleType2
-    of ModuleType2.engine:
+    of engine:
       fuelUsage*: Positive = 1
       power*: Positive = 1
       disabled*: bool
-    of ModuleType2.cabin:
+    of cabin:
       cleanliness*: Natural
       quality*: Natural
-    of ModuleType2.turret:
+    of turret:
       gunIndex*: ExtendedNatural
-    of ModuleType2.gun:
+    of gun:
       damage*: Positive = 1
       ammoIndex*: ExtendedNatural
-    of ModuleType2.hull:
+    of hull:
       installedModules*: Natural
       maxModules*: Positive = 1
-    of ModuleType2.workshop:
+    of workshop:
       craftingIndex*: RecipeIndex
       craftingTime*: Natural
       craftingAmount*: Natural
       craftingQuality*: ObjectQuality = normal
       craftingBonus*: CraftBonuses
       craftingMalus*: CraftMaluses
-    of ModuleType2.trainingRoom:
+    of trainingRoom:
       trainedSkill*: Natural
-    of ModuleType2.batteringRam:
+    of batteringRam:
       damage2*: Positive = 1
       coolingDown*: bool
-    of ModuleType2.harpoonGun:
+    of harpoonGun:
       duration*: Positive = 1
       harpoonIndex*: ExtendedNatural
     of ModuleType2.any:
@@ -255,9 +255,10 @@ type
 
 proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
     durability, maxDurability: Natural; owner: seq[int];
-    upgradeProgress: ExtendedNatural;
-    upgradeAction: ShipUpgrade): ModuleData {.raises: [], tags: [],
-    contractual.} =
+    upgradeProgress: ExtendedNatural; upgradeAction: ShipUpgrade;
+    fuelUsage: Positive = 1; power: Positive = 1; disabled: bool = false;
+    cleanliness: Natural = 0; quality: Natural = 0): ModuleData {.raises: [],
+    tags: [], contractual.} =
   ## Create a new data structure for the player's ship's module data
   ##
   ## * mType            - The type of the module
@@ -269,34 +270,39 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
   ## * owner            - The list of owners of the module
   ## * upgradeProgress  - The upgrade progess of the module
   ## * upgradeAction    - The current upgrade type for the module
+  ## * fuelUsage        - The fuel usage for engines modules
+  ## * power            - The power of the engines modules
+  ## * disabled         - If true, the engine is disabled
+  ## * cleanliness      - The cleanliness level of the cabin
+  ## * quality          - The quality level of the cabin
   ##
   ## Returns the new structure with information about the selected module
   case mType
-  of ModuleType2.engine:
+  of engine:
     result = ModuleData(mType: ModuleType2.engine)
-  of ModuleType2.cabin:
+  of cabin:
     result = ModuleData(mType: ModuleType2.cabin)
-  of ModuleType2.turret:
+  of turret:
     result = ModuleData(mType: ModuleType2.turret)
-  of ModuleType2.gun:
+  of gun:
     result = ModuleData(mType: ModuleType2.gun)
-  of ModuleType2.hull:
+  of hull:
     result = ModuleData(mType: ModuleType2.hull)
-  of ModuleType2.workshop:
+  of workshop:
     result = ModuleData(mType: ModuleType2.workshop)
-  of ModuleType2.trainingRoom:
+  of trainingRoom:
     result = ModuleData(mType: ModuleType2.trainingRoom)
-  of ModuleType2.batteringRam:
+  of batteringRam:
     result = ModuleData(mType: ModuleType2.batteringRam)
-  of ModuleType2.harpoonGun:
+  of harpoonGun:
     result = ModuleData(mType: ModuleType2.harpoonGun)
-  of ModuleType2.medicalRoom:
+  of medicalRoom:
     result = ModuleData(mType: ModuleType2.medicalRoom)
-  of ModuleType2.cockpit:
+  of cockpit:
     result = ModuleData(mType: ModuleType2.cockpit)
-  of ModuleType2.cargoRoom:
+  of cargoRoom:
     result = ModuleData(mType: ModuleType2.cargoRoom)
-  of ModuleType2.armor:
+  of armor:
     result = ModuleData(mType: ModuleType2.armor)
   of ModuleType2.any:
     result = ModuleData(mType: ModuleType2.any)
@@ -308,6 +314,16 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
   result.owner = owner
   result.upgradeProgress = upgradeProgress
   result.upgradeAction = upgradeAction
+  case mType
+  of engine:
+    result.fuelUsage = fuelUsage
+    result.power = power
+    result.disabled = disabled
+  of cabin:
+    result.cleanliness = cleanliness
+    result.quality = quality
+  else:
+    discard
 
 type
   InventoryData* = object
