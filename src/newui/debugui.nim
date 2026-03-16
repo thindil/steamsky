@@ -52,7 +52,9 @@ proc setSelectedModule() {.raises: [], tags: [], contractual.} =
 proc setSelectedMember() {.raises: [], tags: [], contractual.} =
   ## Set the data of the selected member in the player's ship's crew
   let member: MemberData = playerShip.crew[crewSelected]
-  memberProperties = [member.health.Natural, 0, 0, 0, 0, 0]
+  memberProperties = [member.health.Natural, member.thirst.Natural,
+      member.hunger.Natural, member.tired.Natural, member.morale[1],
+      member.loyalty.Natural]
 
 proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the debug UI
@@ -130,11 +132,12 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
     label(str = "Health")
     memberProperties[0] = property2(name = "#", min = 1, val = memberProperties[
         0], max = 100, step = 1, incPerPixel = 1)
-    const labelTexts: array[1..5, string] = ["Thirst", "Hunger", "Tired", "Morale", "Loyalty"]
+    const labelTexts: array[1..5, string] = ["Thirst", "Hunger", "Tired",
+        "Morale", "Loyalty"]
     for i in 1..5:
       label(str = labelTexts[i])
-      memberProperties[i] = property2(name = "#", min = 0, val = memberProperties[
-          i], max = 100, step = 1, incPerPixel = 1)
+      memberProperties[i] = property2(name = "#", min = 0,
+          val = memberProperties[i], max = 100, step = 1, incPerPixel = 1)
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
