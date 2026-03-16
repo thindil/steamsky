@@ -19,13 +19,15 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../game
+import ../[game, types]
 import coreui
 
 var
   debugTab, shipX, shipY, weight, maxDurability: Positive = 1
   playerModules, protoModules, crewList: seq[string] = @[]
-  moduleSelected, protoSelected, durability, upgradeProgress, crewSelected: Natural = 0
+  moduleSelected, protoSelected, durability, upgradeProgress,
+    crewSelected: Natural = 0
+  memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
 
 proc setSelectedModule() {.raises: [], tags: [], contractual.} =
   ## Set the data of the selected module in the player's ship
@@ -47,6 +49,11 @@ proc setSelectedModule() {.raises: [], tags: [], contractual.} =
   maxDurability = playerShip.modules[moduleSelected].maxDurability
   upgradeProgress = playerShip.modules[moduleSelected].upgradeProgress
 
+proc setSelectedMember() {.raises: [], tags: [], contractual.} =
+  ## Set the data of the selected member in the player's ship's crew
+  let member: MemberData = playerShip.crew[crewSelected]
+  memberProperties = [member.health.Natural, 0, 0, 0, 0, 0]
+
 proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the debug UI
   shipX = playerShip.skyX
@@ -61,6 +68,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   for member in playerShip.crew:
     crewList.add(y = member.name)
   crewSelected = 0
+  setSelectedMember()
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -88,14 +96,14 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   weight = property2(name = "#", min = 1, val = weight, max = 1_00_000,
       step = 1, incPerPixel = 1)
   label(str = "Durability:")
-  durability = property2(name = "#", min = 1, val = durability, max = maxDurability,
-      step = 1, incPerPixel = 1)
+  durability = property2(name = "#", min = 1, val = durability,
+      max = maxDurability, step = 1, incPerPixel = 1)
   label(str = "Max durability:")
-  maxDurability = property2(name = "#", min = 1, val = maxDurability, max = 1_000,
-      step = 1, incPerPixel = 1)
+  maxDurability = property2(name = "#", min = 1, val = maxDurability,
+      max = 1_000, step = 1, incPerPixel = 1)
   label(str = "Upgrade progress:")
-  upgradeProgress = property2(name = "#", min = 1, val = upgradeProgress, max = 100,
-      step = 1, incPerPixel = 1)
+  upgradeProgress = property2(name = "#", min = 1, val = upgradeProgress,
+      max = 100, step = 1, incPerPixel = 1)
   labelButton(title = "Change"):
     for index, module in modulesList:
       if protoModules[protoSelected] == module.name:
@@ -114,6 +122,12 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
       itemHeight = 25, x = 235, y = 125)
   if newMember != crewSelected:
     crewSelected = newMember
+  setLayoutRowDynamic(height = 30, cols = 3)
+  group(title = "memberProperties", flags = {windowNoScrollbar}):
+    setLayoutRowDynamic(height = 30, cols = 2)
+    label(str = "Health")
+    memberProperties[0] = property2(name = "#", min = 1, val = memberProperties[
+        0], max = 100, step = 1, incPerPixel = 1)
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
