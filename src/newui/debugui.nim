@@ -104,6 +104,7 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Upgrade progress:")
   upgradeProgress = property2(name = "#", min = 1, val = upgradeProgress,
       max = 100, step = 1, incPerPixel = 1)
+  setLayoutRowDynamic(height = 30, cols = 1)
   labelButton(title = "Change"):
     for index, module in modulesList:
       if protoModules[protoSelected] == module.name:
@@ -122,12 +123,18 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
       itemHeight = 25, x = 235, y = 125)
   if newMember != crewSelected:
     crewSelected = newMember
-  setLayoutRowDynamic(height = 30, cols = 3)
+    setSelectedMember()
+  setLayoutRowDynamic(height = 370, cols = 3)
   group(title = "memberProperties", flags = {windowNoScrollbar}):
     setLayoutRowDynamic(height = 30, cols = 2)
     label(str = "Health")
     memberProperties[0] = property2(name = "#", min = 1, val = memberProperties[
         0], max = 100, step = 1, incPerPixel = 1)
+    const labelTexts: array[1..5, string] = ["Thirst", "Hunger", "Tired", "Morale", "Loyalty"]
+    for i in 1..5:
+      label(str = labelTexts[i])
+      memberProperties[i] = property2(name = "#", min = 0, val = memberProperties[
+          i], max = 100, step = 1, incPerPixel = 1)
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
@@ -139,7 +146,7 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   const
     width: float = 700
     height: float = 500
-    groupHeight: float = height - 90
+    groupHeight: float = height - 70
     groupOneWidth: float = width * 0.25
     groupTwoWidth: float = width * 0.72
   updateDialog(width = width, height = height)
