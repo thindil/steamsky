@@ -93,7 +93,14 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   upgradeProgress = property2(name = "#", min = 1, val = upgradeProgress, max = 100,
       step = 1, incPerPixel = 1)
   labelButton(title = "Change"):
-    discard
+    for index, module in modulesList:
+      if protoModules[protoSelected] == module.name:
+        playerShip.modules[moduleSelected].protoIndex = index
+        break
+    playerShip.modules[moduleSelected].weight = weight
+    playerShip.modules[moduleSelected].durability = durability
+    playerShip.modules[moduleSelected].maxDurability = maxDurability
+    playerShip.modules[moduleSelected].upgradeProgress = upgradeProgress
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
