@@ -24,8 +24,8 @@ import coreui
 
 var
   debugTab, shipX, shipY, weight, maxDurability: Positive = 1
-  playerModules, protoModules: seq[string] = @[]
-  moduleSelected, protoSelected, durability, upgradeProgress: Natural = 0
+  playerModules, protoModules, crewList: seq[string] = @[]
+  moduleSelected, protoSelected, durability, upgradeProgress, crewSelected: Natural = 0
 
 proc setSelectedModule() {.raises: [], tags: [], contractual.} =
   ## Set the data of the selected module in the player's ship
@@ -57,6 +57,10 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   moduleSelected = 0
   protoModules = @[]
   setSelectedModule()
+  crewList = @[]
+  for member in playerShip.crew:
+    crewList.add(y = member.name)
+  crewSelected = 0
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -102,6 +106,15 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
     playerShip.modules[moduleSelected].maxDurability = maxDurability
     playerShip.modules[moduleSelected].upgradeProgress = upgradeProgress
 
+proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the tab which allows changes to the player's ship's crew members
+  setLayoutRowDynamic(height = 30, cols = 2)
+  label(str = "Member:")
+  let newMember = comboList(items = crewList, selected = crewSelected,
+      itemHeight = 25, x = 235, y = 125)
+  if newMember != crewSelected:
+    crewSelected = newMember
+
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the debug dialog with various development options
@@ -142,6 +155,8 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
           case debugTab
           of 1:
             showShipTab()
+          of 2:
+            showCrewTab()
           else:
             discard
   windowSetFocus(name = "Debug options")
