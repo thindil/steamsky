@@ -257,8 +257,10 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
     durability, maxDurability: Natural; owner: seq[int];
     upgradeProgress: ExtendedNatural; upgradeAction: ShipUpgrade;
     fuelUsage: Positive = 1; power: Positive = 1; disabled: bool = false;
-    cleanliness: Natural = 0; quality: Natural = 0): ModuleData {.raises: [],
-    tags: [], contractual.} =
+    cleanliness: Natural = 0; quality: Natural = 0;
+    gunIndex: ExtendedNatural = -1; damage: Positive = 1;
+    ammoIndex: ExtendedNatural = -1): ModuleData {.raises: [], tags: [],
+    contractual.} =
   ## Create a new data structure for the player's ship's module data
   ##
   ## * mType            - The type of the module
@@ -275,6 +277,9 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
   ## * disabled         - If true, the engine is disabled
   ## * cleanliness      - The cleanliness level of the cabin
   ## * quality          - The quality level of the cabin
+  ## * gunIndex         - The index of the module used as gun in the turret
+  ## * damage           - The damage of the gun
+  ## * ammoIndex        - The index of item from ship's cargo used as ammunition
   ##
   ## Returns the new structure with information about the selected module
   case mType
@@ -322,6 +327,11 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
   of cabin:
     result.cleanliness = cleanliness
     result.quality = quality
+  of turret:
+    result.gunIndex = gunIndex
+  of gun:
+    result.damage = damage
+    result.ammoIndex = ammoIndex
   else:
     discard
 
