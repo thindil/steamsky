@@ -29,9 +29,9 @@ type
 
 var
   debugTab, shipX, shipY, weight, maxDurability: Positive = 1
-  playerModules, protoModules, crewList: seq[string] = @[]
+  playerModules, protoModules, crewList, availableSkills: seq[string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress,
-    crewSelected: Natural = 0
+    crewSelected, skillSelected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
 
@@ -66,12 +66,19 @@ proc setSelectedMember() {.raises: [], tags: [], contractual.} =
     memberAttribs.add(y = AttributeData(name: attributesList[index].name,
         value: attrib.level))
   memberSkills = @[]
+  var skillsIndexes: seq[Natural] = @[]
   for index, skill in member.skills:
     try:
       memberSkills.add(y = AttributeData(name: skillsList[skill.index].name,
           value: skill.level))
+      skillsIndexes.add(y = index)
     except:
       echo getCurrentExceptionMsg()
+  availableSkills = @[]
+  for index, skill in skillsList:
+    if index notin skillsIndexes:
+      availableSkills.add(y = skill.name)
+  skillSelected = 0
 
 proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the debug UI
@@ -171,6 +178,11 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
           val = skill.value, max = 100, step = 1, incPerPixel = 1)
       if newVal != skill.value:
         memberSkills[index].value = newVal
+  setLayoutRowDynamic(height = 30, cols = 3)
+  labelButton(title = "Change"):
+    discard
+  labelButton(title = "Add skill"):
+    discard
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
@@ -182,9 +194,9 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   const
     width: float = 700
     height: float = 500
-    groupHeight: float = height - 70
+    groupHeight: float = height - 40
     groupOneWidth: float = width * 0.25
-    groupTwoWidth: float = width * 0.72
+    groupTwoWidth: float = width * 0.74
   updateDialog(width = width, height = height)
   window(name = "Debug options", x = 40, y = 0, w = width, h = height, flags = {
       windowBorder, windowTitle, windowMinimizable, windowMovable,
