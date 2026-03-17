@@ -33,7 +33,7 @@ var
   moduleSelected, protoSelected, durability, upgradeProgress,
     crewSelected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
-  memberAttribs: seq[AttributeData] = @[]
+  memberAttribs, memberSkills: seq[AttributeData] = @[]
 
 proc setSelectedModule() {.raises: [], tags: [], contractual.} =
   ## Set the data of the selected module in the player's ship
@@ -50,7 +50,7 @@ proc setSelectedModule() {.raises: [], tags: [], contractual.} =
     try:
       weight = modulesList[protoIndex].weight
     except:
-      discard
+      echo getCurrentExceptionMsg()
   durability = playerShip.modules[moduleSelected].durability
   maxDurability = playerShip.modules[moduleSelected].maxDurability
   upgradeProgress = playerShip.modules[moduleSelected].upgradeProgress
@@ -65,6 +65,13 @@ proc setSelectedMember() {.raises: [], tags: [], contractual.} =
   for index, attrib in member.attributes:
     memberAttribs.add(y = AttributeData(name: attributesList[index].name,
         value: attrib.level))
+  memberSkills = @[]
+  for index, skill in member.skills:
+    try:
+      memberSkills.add(y = AttributeData(name: skillsList[skill.index].name,
+          value: skill.level))
+    except:
+      echo getCurrentExceptionMsg()
 
 proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the debug UI
@@ -156,6 +163,14 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
           val = attrib.value, max = 100, step = 1, incPerPixel = 1)
       if newVal != attrib.value:
         memberAttribs[index].value = newVal
+  group(title = "memberAttribs", flags = {windowNoScrollbar}):
+    setLayoutRowDynamic(height = 30, cols = 2)
+    for index, skill in memberSkills:
+      label(str = skill.name)
+      let newVal: SkillRange = property2(name = "#", min = 1,
+          val = skill.value, max = 100, step = 1, incPerPixel = 1)
+      if newVal != skill.value:
+        memberSkills[index].value = newVal
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
