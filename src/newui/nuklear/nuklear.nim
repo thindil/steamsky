@@ -2425,10 +2425,10 @@ proc styleFromTable*(table: openArray[NkColor]) {.raises: [], tags: [],
       tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   {.ruleOff: "varDeclared".}
-  var newTable: array[countColors.ord, nk_color]
+  var newTable: array[StyleColors, nk_color]
   {.ruleOn: "varDeclared".}
   for index, color in table:
-    newTable[index] = nk_rgba(r = color.r.cint, g = color.g.cint,
+    newTable[index.StyleColors] = nk_rgba(r = color.r.cint, g = color.g.cint,
         b = color.b.cint, a = color.a.cint)
   nk_style_from_table(ctx = ctx, table = newTable.addr)
 

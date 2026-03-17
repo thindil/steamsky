@@ -38,7 +38,7 @@ using
 # High level bindings
 # ------------------
 {.push ruleOff: "varDeclared".}
-let defaultColorStyle {.used.}: array[countColors, NkColor] = [
+let defaultColorStyle {.used.}: array[StyleColors, NkColor] = [
   textColor: NkColor(r: 175, g: 175, b: 175, a: 255), windowColor: NkColor(
     r: 45, g: 45, b: 45, a: 255), headerColor: NkColor(r: 40, g: 40, b: 40,
     a: 255), borderColor: NkColor(r: 65, g: 65, b: 65, a: 255),

@@ -293,8 +293,7 @@ type
       buttonHoverTextColor, buttonActiveTextColor, editTextColor,
       comboTextColor, tooltipColor, tooltipBorderColor, groupBorderColor,
       headerTextColor, groupTextColor, selectActiveTextColor, propertyTextColor,
-      popupColor, popupBorderColor, progressbarColor, progressbarBorderColor,
-      countColors
+      popupColor, popupBorderColor, progressbarColor, progressbarBorderColor
   PanelType* = enum
     ## The types of panels
     panelNone = 0,
