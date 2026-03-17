@@ -22,12 +22,18 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[game, types]
 import coreui
 
+type
+  AttributeData = object
+    name: string
+    value: SkillRange
+
 var
   debugTab, shipX, shipY, weight, maxDurability: Positive = 1
   playerModules, protoModules, crewList: seq[string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress,
     crewSelected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
+  memberAttribs: seq[AttributeData] = @[]
 
 proc setSelectedModule() {.raises: [], tags: [], contractual.} =
   ## Set the data of the selected module in the player's ship
@@ -55,6 +61,10 @@ proc setSelectedMember() {.raises: [], tags: [], contractual.} =
   memberProperties = [member.health.Natural, member.thirst.Natural,
       member.hunger.Natural, member.tired.Natural, member.morale[1],
       member.loyalty.Natural]
+  memberAttribs = @[]
+  for index, attrib in member.attributes:
+    memberAttribs.add(y = AttributeData(name: attributesList[index].name,
+        value: attrib.level))
 
 proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the debug UI
@@ -138,6 +148,14 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
       label(str = labelTexts[i])
       memberProperties[i] = property2(name = "#", min = 0,
           val = memberProperties[i], max = 100, step = 1, incPerPixel = 1)
+  group(title = "memberAttribs", flags = {windowNoScrollbar}):
+    setLayoutRowDynamic(height = 30, cols = 2)
+    for index, attrib in memberAttribs:
+      label(str = attrib.name)
+      let newVal: SkillRange = property2(name = "#", min = 1,
+          val = attrib.value, max = 100, step = 1, incPerPixel = 1)
+      if newVal != attrib.value:
+        memberAttribs[index].value = newVal
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
