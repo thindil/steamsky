@@ -6,3 +6,4 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated README.md
 - Reduced size of saved games files
+- Updated help
