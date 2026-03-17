@@ -286,7 +286,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   if gameSettings.interfaceTheme notin themesList:
     gameSettings.interfaceTheme = "steamsky"
   {.ruleOff: "varDeclared".}
-  var table: array[countColors, NkColor]
+  var table: array[StyleColors, NkColor]
   {.ruleOn: "varDeclared".}
 
   proc setColor(colorName: StyleColors; index: ColorsNames) {.raises: [],
