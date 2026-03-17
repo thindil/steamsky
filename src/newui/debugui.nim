@@ -55,6 +55,18 @@ proc setSelectedModule() {.raises: [], tags: [], contractual.} =
   maxDurability = playerShip.modules[moduleSelected].maxDurability
   upgradeProgress = playerShip.modules[moduleSelected].upgradeProgress
 
+proc setAvailableSkills() {.raises: [], tags: [], contractual.} =
+  ## Set the list of available skills for the selected crew member
+  let member: MemberData = playerShip.crew[crewSelected]
+  var skillsIndexes: seq[Natural] = @[]
+  for skill in member.skills:
+      skillsIndexes.add(y = skill.index)
+  availableSkills = @[]
+  for index, skill in skillsList:
+    if index notin skillsIndexes:
+      availableSkills.add(y = skill.name)
+  skillSelected = 0
+
 proc setSelectedMember() {.raises: [], tags: [], contractual.} =
   ## Set the data of the selected member in the player's ship's crew
   let member: MemberData = playerShip.crew[crewSelected]
@@ -74,11 +86,7 @@ proc setSelectedMember() {.raises: [], tags: [], contractual.} =
       skillsIndexes.add(y = index)
     except:
       echo getCurrentExceptionMsg()
-  availableSkills = @[]
-  for index, skill in skillsList:
-    if index notin skillsIndexes:
-      availableSkills.add(y = skill.name)
-  skillSelected = 0
+  setAvailableSkills()
 
 proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the debug UI
@@ -170,7 +178,7 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
           val = attrib.value, max = 100, step = 1, incPerPixel = 1)
       if newVal != attrib.value:
         memberAttribs[index].value = newVal
-  group(title = "memberAttribs", flags = {windowNoScrollbar}):
+  group(title = "memberSkills", flags = {windowNoScrollbar}):
     setLayoutRowDynamic(height = 30, cols = 2)
     for index, skill in memberSkills:
       label(str = skill.name)
@@ -182,7 +190,9 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
   labelButton(title = "Change"):
     discard
   labelButton(title = "Add skill"):
-    discard
+    memberSkills.add(y = AttributeData(name: availableSkills[skillSelected], value: 1))
+  skillSelected = comboList(items = availableSkills, selected = skillSelected,
+      itemHeight = 25, x = 235, y = 125)
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
