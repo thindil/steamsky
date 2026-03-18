@@ -20,15 +20,18 @@
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[game, types]
-import coreui
+import coreui, themes
 
 type
   AttributeData = object
     name: string
     value: SkillRange
 
+const
+  itemQualities: array[5, string] = ["Poor", "Low", "Normal", "Good", "Excellent"]
+
 var
-  debugTab, shipX, shipY, weight, maxDurability: Positive = 1
+  debugTab, shipX, shipY, weight, maxDurability, itemAmount: Positive = 1
   playerModules, protoModules, crewList, availableSkills, itemsNames: seq[
       string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress,
@@ -108,6 +111,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   for item in itemsList.values:
     itemsNames.add(y = item.name)
   itemName = ""
+  itemAmount = 1
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -219,12 +223,16 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
 
 proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes to the player's ship's cargo
-  setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.6, 0.2])
+  setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.7, 0.1])
   labelButton(title = "Add:"):
     discard
   editString(text = itemName, maxLen = 64)
-  labelButton(title = "List"):
+  imageButton(image = images[assignCrewIcon]):
     discard
+  setLayoutRowDynamic(height = 30, cols = 2)
+  label(str = "Amount:")
+  itemAmount = property2(name = "#", min = 1, val = itemAmount, max = 1_000_000,
+      step = 1, incPerPixel = 1)
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
