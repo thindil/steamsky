@@ -29,7 +29,8 @@ type
 
 var
   debugTab, shipX, shipY, weight, maxDurability: Positive = 1
-  playerModules, protoModules, crewList, availableSkills: seq[string] = @[]
+  playerModules, protoModules, crewList, availableSkills, itemsNames: seq[
+      string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress,
     crewSelected, skillSelected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
@@ -102,6 +103,9 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
     crewList.add(y = member.name)
   crewSelected = 0
   setSelectedMember()
+  itemsNames = @[]
+  for item in itemsList.values:
+    itemsNames.add(y = item.name)
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -211,6 +215,12 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
   skillSelected = comboList(items = availableSkills, selected = skillSelected,
       itemHeight = 25, x = 235, y = 125)
 
+proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the tab which allows changes to the player's ship's cargo
+  setLayoutRowDynamic(height = 30, cols = 3)
+  labelButton(title = "Add:"):
+    discard
+
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the debug dialog with various development options
@@ -253,6 +263,8 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
             showShipTab()
           of 2:
             showCrewTab()
+          of 3:
+            showCargoTab()
           else:
             discard
   windowSetFocus(name = "Debug options")
