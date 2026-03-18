@@ -367,6 +367,8 @@ const
     ## The size of the stack of user fonts
   nkInputMax*: Positive = 16
     ## The max size of the user's input
+  nkWidgetDisabledFactor*: float = 0.5
+    ## Default color factor for disabled widgets
 
 # -------
 # Objects

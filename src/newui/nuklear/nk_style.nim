@@ -85,6 +85,17 @@ let defaultColorStyle {.used.}: array[StyleColors, NkColor] = [
     b: 100, a: 255), progressbarBorderColor: NkColor(r: 38, g: 38, b: 38, a: 255)]
 {.push ruleOn: "varDeclared".}
 
+proc nkStyleFromTable*(table: array[StyleColors, NkColor]) {.raises: [], tags: [],
+    contractual.} =
+  ## Set the Nuklear style colors from the table
+  ##
+  ## * table - the colors table which will be set
+  # default text
+  context.style.text.color = table[textColor]
+  context.style.text.padding = Vec2(x: 0, y: 0)
+  context.style.text.colorFactor = 1.0
+  context.style.text.disabledFactor = nkWidgetDisabledFactor
+
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
   proc nk_style_default(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
