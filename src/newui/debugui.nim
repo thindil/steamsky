@@ -57,13 +57,14 @@ proc setSelectedModule() {.raises: [], tags: [], contractual.} =
 
 proc setAvailableSkills() {.raises: [], tags: [], contractual.} =
   ## Set the list of available skills for the selected crew member
-  let member: MemberData = playerShip.crew[crewSelected]
-  var skillsIndexes: seq[Natural] = @[]
-  for skill in member.skills:
-      skillsIndexes.add(y = skill.index)
   availableSkills = @[]
-  for index, skill in skillsList:
-    if index notin skillsIndexes:
+  for skill in skillsList.values:
+    var added: bool = false
+    for mSkill in memberSkills:
+      if skill.name == mSkill.name:
+        added = true
+        break
+    if not added:
       availableSkills.add(y = skill.name)
   skillSelected = 0
 
@@ -78,12 +79,10 @@ proc setSelectedMember() {.raises: [], tags: [], contractual.} =
     memberAttribs.add(y = AttributeData(name: attributesList[index].name,
         value: attrib.level))
   memberSkills = @[]
-  var skillsIndexes: seq[Natural] = @[]
   for index, skill in member.skills:
     try:
       memberSkills.add(y = AttributeData(name: skillsList[skill.index].name,
           value: skill.level))
-      skillsIndexes.add(y = index)
     except:
       echo getCurrentExceptionMsg()
   setAvailableSkills()
@@ -190,7 +189,9 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
   labelButton(title = "Change"):
     discard
   labelButton(title = "Add skill"):
-    memberSkills.add(y = AttributeData(name: availableSkills[skillSelected], value: 1))
+    memberSkills.add(y = AttributeData(name: availableSkills[skillSelected],
+        value: 1))
+    setAvailableSkills()
   skillSelected = comboList(items = availableSkills, selected = skillSelected,
       itemHeight = 25, x = 235, y = 125)
 
