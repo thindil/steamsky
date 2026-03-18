@@ -35,6 +35,7 @@ var
     crewSelected, skillSelected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
+  itemName: string = ""
 
 proc setSelectedModule() {.raises: [], tags: [], contractual.} =
   ## Set the data of the selected module in the player's ship
@@ -106,6 +107,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   itemsNames = @[]
   for item in itemsList.values:
     itemsNames.add(y = item.name)
+  itemName = ""
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -217,8 +219,11 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
 
 proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes to the player's ship's cargo
-  setLayoutRowDynamic(height = 30, cols = 3)
+  setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.6, 0.2])
   labelButton(title = "Add:"):
+    discard
+  editString(text = itemName, maxLen = 64)
+  labelButton(title = "List"):
     discard
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
