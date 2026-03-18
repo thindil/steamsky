@@ -259,8 +259,13 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
     fuelUsage: Positive = 1; power: Positive = 1; disabled: bool = false;
     cleanliness: Natural = 0; quality: Natural = 0;
     gunIndex: ExtendedNatural = -1; damage: Positive = 1;
-    ammoIndex: ExtendedNatural = -1): ModuleData {.raises: [], tags: [],
-    contractual.} =
+    ammoIndex: ExtendedNatural = -1; installedModules: Natural = 0;
+    maxModules: Positive = 1; craftingIndex: RecipeIndex = "";
+    craftingTime: Natural = 0; craftingAmount: Natural = 0;
+    craftingQuality: ObjectQuality = normal;
+    craftingBonus: CraftBonuses = CraftBonuses.none;
+    craftingMalus: CraftMaluses = CraftMaluses.none): ModuleData {.raises: [],
+    tags: [], contractual.} =
   ## Create a new data structure for the player's ship's module data
   ##
   ## * mType            - The type of the module
@@ -332,6 +337,16 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
   of gun:
     result.damage = damage
     result.ammoIndex = ammoIndex
+  of hull:
+    result.installedModules = installedModules
+    result.maxModules = maxModules
+  of workshop:
+    result.craftingIndex = craftingIndex
+    result.craftingTime = craftingTime
+    result.craftingAmount = craftingAmount
+    result.craftingQuality = craftingQuality
+    result.craftingBonus = craftingBonus
+    result.craftingMalus = craftingMalus
   else:
     discard
 
