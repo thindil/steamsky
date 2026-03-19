@@ -37,7 +37,7 @@ var
   playerModules, protoModules, crewList, availableSkills, itemsNames: seq[
       string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress,
-    crewSelected, skillSelected, itemQuality: Natural = 0
+    crewSelected, skillSelected, itemQuality, itemSelected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
   itemName: string = ""
@@ -116,6 +116,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   itemName = ""
   itemAmount = 1
   itemQuality = 2
+  itemSelected = 1
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -244,7 +245,11 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be added to the player's
   ## ship's cargo
-  discard
+  popup(pType = staticPopup, title = "Add item", flags = {windowNoFlags},
+      x = 20, y = 100, w = 220, h = 90):
+    setLayoutRowDynamic(height = 25, cols = 1)
+    itemSelected = comboList(items = itemsNames, selected = itemSelected,
+        itemHeight = 25, x = 235, y = 125)
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
