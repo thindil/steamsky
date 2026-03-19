@@ -245,12 +245,16 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be added to the player's
   ## ship's cargo
-  window(name = "Items list", x = 300, y = 80, w = 300, h = 100, flags = {windowBorder}):
+  window(name = "Item to add", x = 300, y = 100, w = 300, h = 120, flags = {
+      windowBorder, windowTitle}):
     setLayoutRowDynamic(height = 25, cols = 1)
     itemSelected = comboList(items = itemsNames, selected = itemSelected,
         itemHeight = 25, x = 290, y = 200)
+    labelButton(title = "Add"):
+      itemName = itemsNames[itemSelected]
+      debugDialog = none
 
-  windowSetFocus(name = "Items list")
+  windowSetFocus(name = "Item to add")
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
