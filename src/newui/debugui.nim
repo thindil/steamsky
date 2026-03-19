@@ -26,6 +26,8 @@ type
   AttributeData = object
     name: string
     value: SkillRange
+  DebugDialogs = enum
+    none, addItem
 
 const
   itemQualities: array[5, string] = ["Poor", "Low", "Normal", "Good", "Excellent"]
@@ -35,10 +37,11 @@ var
   playerModules, protoModules, crewList, availableSkills, itemsNames: seq[
       string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress,
-    crewSelected, skillSelected: Natural = 0
+    crewSelected, skillSelected, itemQuality: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
   itemName: string = ""
+  debugDialog: DebugDialogs = none
 
 proc setSelectedModule() {.raises: [], tags: [], contractual.} =
   ## Set the data of the selected module in the player's ship
@@ -112,6 +115,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
     itemsNames.add(y = item.name)
   itemName = ""
   itemAmount = 1
+  itemQuality = 2
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -228,11 +232,19 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
     discard
   editString(text = itemName, maxLen = 64)
   imageButton(image = images[assignCrewIcon]):
-    discard
+    debugDialog = addItem
   setLayoutRowDynamic(height = 30, cols = 2)
   label(str = "Amount:")
   itemAmount = property2(name = "#", min = 1, val = itemAmount, max = 1_000_000,
       step = 1, incPerPixel = 1)
+  label(str = "Quality:")
+  itemQuality = comboList(items = itemQualities, selected = itemQuality,
+      itemHeight = 25, x = 235, y = 125)
+
+proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the dialog with list of items which can be added to the player's
+  ## ship's cargo
+  discard
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
@@ -278,6 +290,8 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
             showCrewTab()
           of 3:
             showCargoTab()
+            if debugDialog == addItem:
+              showAddItemDialog()
           else:
             discard
   windowSetFocus(name = "Debug options")
