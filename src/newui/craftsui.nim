@@ -58,11 +58,11 @@ proc setBonuses(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified when an error
   ## occured.
   bonuses = @[]
-  for bonus in {CraftBonuses.none..moreDurable}:
+  for bonus in {CraftBonuses.none..CraftBonuses.moreDurable}:
     bonuses.add(y = $bonus)
   try:
     if itemsList[craft.resultIndex].breakChance > 0:
-      bonuses.add(y = $lessBreakable)
+      bonuses.add(y = $CraftBonuses.lessBreakable)
   except KeyError:
     dialog = setError(message = "Can't set bonuses list")
 
@@ -75,11 +75,11 @@ proc setMaluses(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified when an error
   ## occured.
   maluses = @[]
-  for malus in {CraftMaluses.none..lessDurable}:
+  for malus in {CraftMaluses.none..CraftMaluses.lessDurable}:
     maluses.add(y = $malus)
   try:
     if itemsList[craft.resultIndex].breakChance > 0:
-      maluses.add(y = $moreBreakable)
+      maluses.add(y = $CraftMaluses.moreBreakable)
   except KeyError:
     dialog = setError(message = "Can't set maluses list")
 
@@ -317,14 +317,14 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
         bonus = newBonus
         malus = (if bonus > 0: 1 else: 0)
         maluses = @[]
-        for malus in {CraftMaluses.none..lessDurable}:
+        for malus in {CraftMaluses.none..CraftMaluses.lessDurable}:
           if newBonus > 0 and malus.ord == newBonus:
             continue
           maluses.add(y = $malus)
         try:
           if itemsList[craft.resultIndex].breakChance > 0 and newBonus !=
-              lessBreakable.ord:
-            maluses.add(y = $moreBreakable)
+              CraftBonuses.lessBreakable.ord:
+            maluses.add(y = $CraftMaluses.moreBreakable)
         except KeyError:
           dialog = setError(message = "Can't set maluses list2.")
         if bonus == 0:
@@ -339,14 +339,14 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
         malus = newMalus
         bonus = (if malus > 0: 1 else: 0)
         bonuses = @[]
-        for bonus in {CraftBonuses.none..moreDurable}:
+        for bonus in {CraftBonuses.none..CraftBonuses.moreDurable}:
           if newMalus > 0 and bonus.ord == newMalus:
             continue
           bonuses.add(y = $bonus)
         try:
           if itemsList[craft.resultIndex].breakChance > 0 and newMalus !=
-              moreBreakable.ord:
-            bonuses.add(y = $lessBreakable)
+              CraftMaluses.moreBreakable.ord:
+            bonuses.add(y = $CraftBonuses.lessBreakable)
         except KeyError:
           dialog = setError(message = "Can't set bonuses list2.")
         if malus == 0:
