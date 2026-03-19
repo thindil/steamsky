@@ -264,8 +264,10 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
     craftingTime: Natural = 0; craftingAmount: Natural = 0;
     craftingQuality: ObjectQuality = normal;
     craftingBonus: CraftBonuses = CraftBonuses.none;
-    craftingMalus: CraftMaluses = CraftMaluses.none): ModuleData {.raises: [],
-    tags: [], contractual.} =
+    craftingMalus: CraftMaluses = CraftMaluses.none; trainedSkill: Natural = 0;
+    damage2: Positive = 1;
+    coolingDown: bool = false): ModuleData {.raises: [], tags: [],
+    contractual.} =
   ## Create a new data structure for the player's ship's module data
   ##
   ## * mType            - The type of the module
@@ -285,6 +287,17 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
   ## * gunIndex         - The index of the module used as gun in the turret
   ## * damage           - The damage of the gun
   ## * ammoIndex        - The index of item from ship's cargo used as ammunition
+  ## * installedModules - The amount of installed modules in the hull
+  ## * maxModules       - The max amount of modules which the hull can hold
+  ## * craftingIndex    - The index of currently crafted recipe
+  ## * craftingTime     - The amount of time needed to finish the order
+  ## * craftingAmount   - How many times repeat the crafting order
+  ## * craftingQuality  - The desired quality of crafted item
+  ## * craftingBonus    - The special bonus for crafted item
+  ## * craftingMalus    - The special malus for crafted item
+  ## * trainedSkill     - The index of trained skill
+  ## * damage2          - The damage of the battering ram
+  ## * coolingDown      - If true, the battering ram can't attack now
   ##
   ## Returns the new structure with information about the selected module
   case mType
@@ -347,6 +360,11 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
     result.craftingQuality = craftingQuality
     result.craftingBonus = craftingBonus
     result.craftingMalus = craftingMalus
+  of trainingRoom:
+    result.trainedSkill = trainedSkill
+  of batteringRam:
+    result.damage2 = damage2
+    result.coolingDown = coolingDown
   else:
     discard
 
