@@ -85,8 +85,8 @@ let defaultColorStyle {.used.}: array[StyleColors, NkColor] = [
     b: 100, a: 255), progressbarBorderColor: NkColor(r: 38, g: 38, b: 38, a: 255)]
 {.push ruleOn: "varDeclared".}
 
-proc nkStyleFromTable*(table: array[StyleColors, NkColor]) {.raises: [], tags: [],
-    contractual.} =
+proc nkStyleFromTable*(table: array[StyleColors, NkColor]) {.raises: [], tags: [
+    ], contractual.} =
   ## Set the Nuklear style colors from the table
   ##
   ## * table - the colors table which will be set
@@ -95,6 +95,17 @@ proc nkStyleFromTable*(table: array[StyleColors, NkColor]) {.raises: [], tags: [
   context.style.text.padding = Vec2(x: 0, y: 0)
   context.style.text.colorFactor = 1.0
   context.style.text.disabledFactor = nkWidgetDisabledFactor
+
+  # default button
+  context.style.button.normal = StyleItem(iType: itemColor, data: StyleItemData(
+      itype: itemColor, color: table[buttonColor]))
+  context.style.button.hover = StyleItem(iType: itemColor, data: StyleItemData(
+      itype: itemColor, color: table[buttonHoverColor]))
+  context.style.button.active = StyleItem(iType: itemColor, data: StyleItemData(
+      itype: itemColor, color: table[buttonActiveColor]))
+  context.style.button.borderColor = table[StyleColors.borderColor]
+  context.style.button.textBackground = table[buttonColor]
+  context.style.button.textNormal = table[buttonTextColor]
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
