@@ -395,6 +395,7 @@ type
     ## * weight        - The weight of the item, if 0, then the same as a proto
     ##                   item
     ## * breakChance   - The chance to break the item on use
+    ## * craftFeature  - The special feature of the item set during crafting it
     protoIndex*: Natural = 0
     amount*: Positive = 1
     name*: string
@@ -403,6 +404,7 @@ type
     quality*: ObjectQuality = normal
     weight*: Natural = 0
     breakChance*: ExtendedNatural = -1
+    craftFeature*: CraftFeatures = CraftFeatures.none
 
   MobAttributeRecord* = object
     ## Used to store information about the crew member's attributes
@@ -628,6 +630,7 @@ type
     ## * weight        - The weight of the item, if 0, then the same as a proto
     ##                   item
     ## * breakChance   - The chance to break the item on use
+    ## * craftFeature  - The special feature of the item set during crafting it
     protoIndex*: Natural
     amount*: Natural
     durability*, maxDurability*: ItemsDurability = 100
@@ -635,6 +638,7 @@ type
     quality*: ObjectQuality = normal
     weight*: Natural
     breakChance*: ExtendedNatural = -1
+    craftFeature*: CraftFeatures = CraftFeatures.none
 
   DateRecord* = object
     ## Used to store the game's time
