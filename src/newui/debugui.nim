@@ -19,7 +19,7 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[game, gamesaveload, shipscargo, types]
+import ../[game, gamesaveload, items, shipscargo, types]
 import coreui, errordialog, themes
 
 type
@@ -34,10 +34,10 @@ const
 
 var
   debugTab, shipX, shipY, weight, maxDurability, itemAmount: Positive = 1
-  playerModules, protoModules, crewList, availableSkills, itemsNames: seq[
-      string] = @[]
-  moduleSelected, protoSelected, durability, upgradeProgress,
-    crewSelected, skillSelected, itemQuality, itemSelected: Natural = 0
+  playerModules, protoModules, crewList, availableSkills, itemsNames,
+    cargoNames: seq[string] = @[]
+  moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
+    skillSelected, itemQuality, itemSelected, cargoSelected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
   itemName: string = ""
@@ -95,6 +95,14 @@ proc setSelectedMember() {.raises: [], tags: [], contractual.} =
       echo getCurrentExceptionMsg()
   setAvailableSkills()
 
+proc setCargoData() {.raises: [], tags: [], contractual.} =
+  ## Set the data of the player's ship's cargo
+  cargoNames = @[]
+  for item in playerShip.cargo:
+    cargoNames.add(y = getItemName(item = item, damageInfo = false,
+        toLower = false))
+  cargoSelected = 0
+
 proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the debug UI
   shipX = playerShip.skyX
@@ -117,6 +125,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   itemAmount = 1
   itemQuality = 2
   itemSelected = 0
+  setCargoData()
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -239,6 +248,7 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
       updateCargo(ship = playerShip, protoIndex = protoIndex,
           amount = itemAmount, quality = itemQuality.ObjectQuality,
           breakChance = itemsList[protoIndex].breakChance)
+      setCargoData()
     except:
       discard
   editString(text = itemName, maxLen = 64)
