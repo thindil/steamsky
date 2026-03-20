@@ -27,7 +27,7 @@ type
     name: string
     value: SkillRange
   DebugDialogs = enum
-    none, addItem
+    none, addItem, updateItem
 
 const
   itemQualities: array[5, string] = ["Poor", "Low", "Normal", "Good", "Excellent"]
@@ -272,13 +272,13 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
     discard
   editString(text = cargoName, maxLen = 64)
   imageButton(image = images[assignCrewIcon]):
-    discard
+    debugDialog = updateItem
   setLayoutRowDynamic(height = 30, cols = 2)
   label(str = "Amount:")
   itemAmount = property2(name = "#", min = 1, val = cargoAmount,
       max = 1_000_000, step = 1, incPerPixel = 1)
   label(str = "Quality:")
-  itemQuality = comboList(items = itemQualities, selected = cargoQuality,
+  cargoQuality = comboList(items = itemQualities, selected = cargoQuality,
       itemHeight = 25, x = 235, y = 125)
 
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
@@ -294,6 +294,23 @@ proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
       debugDialog = none
 
   windowSetFocus(name = "Item to add")
+
+proc showUpdateItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the dialog with list of items which can be updated in the player's
+  ## ship's cargo
+  window(name = "Item to update", x = 300, y = 100, w = 300, h = 120, flags = {
+      windowBorder, windowTitle}):
+    setLayoutRowDynamic(height = 25, cols = 1)
+    cargoSelected = comboList(items = cargoNames, selected = cargoSelected,
+        itemHeight = 25, x = 290, y = 200)
+    labelButton(title = "Update"):
+      cargoName = cargoNames[cargoSelected]
+      let item = playerShip.cargo[cargoSelected]
+      cargoAmount = item.amount
+      cargoQuality = item.quality.ord
+      debugDialog = none
+
+  windowSetFocus(name = "Item to update")
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
@@ -344,7 +361,10 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
             showCargoTab()
           else:
             discard
-  if debugDialog == addItem:
+  case debugDialog
+  of addItem:
     showAddItemDialog()
-  else:
+  of updateItem:
+    showUpdateItemDialog()
+  of none:
     windowSetFocus(name = "Debug options")
