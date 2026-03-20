@@ -19,8 +19,8 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[game, shipscargo, types]
-import coreui, themes
+import ../[game, gamesaveload, shipscargo, types]
+import coreui, errordialog, themes
 
 type
   AttributeData = object
@@ -300,7 +300,10 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
           labelButton(title = "Refresh"):
             setDebugData()
           labelButton(title = "Save game"):
-            discard
+            try:
+              saveGame(prettyPrint = true)
+            except:
+              dialog = setError(message = "Can't save the game")
       row(x = groupOneWidth, y = 0, w = groupTwoWidth, h = groupHeight):
         group(title = "debugMenus", flags = {windowNoFlags}):
           case debugTab
