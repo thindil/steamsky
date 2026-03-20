@@ -269,9 +269,9 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
     craftingQuality: ObjectQuality = normal;
     craftingBonus: CraftBonuses = CraftBonuses.none;
     craftingMalus: CraftMaluses = CraftMaluses.none; trainedSkill: Natural = 0;
-    damage2: Positive = 1;
-    coolingDown: bool = false): ModuleData {.raises: [], tags: [],
-    contractual.} =
+    damage2: Positive = 1; coolingDown: bool = false; duration: Positive = 1;
+    harpoonIndex: ExtendedNatural = -1; data: array[1..3,
+    int] = [0, 0, 0]): ModuleData {.raises: [], tags: [], contractual.} =
   ## Create a new data structure for the player's ship's module data
   ##
   ## * mType            - The type of the module
@@ -302,6 +302,9 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
   ## * trainedSkill     - The index of trained skill
   ## * damage2          - The damage of the battering ram
   ## * coolingDown      - If true, the battering ram can't attack now
+  ## * duration         - The duration bonus of the harpoon gun
+  ## * harpoonIndex     - The index of item from ship's cargo used as harpoon
+  ## * data             - Various data for module, depends on module
   ##
   ## Returns the new structure with information about the selected module
   case mType
@@ -369,6 +372,11 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
   of batteringRam:
     result.damage2 = damage2
     result.coolingDown = coolingDown
+  of harpoonGun:
+    result.duration = duration
+    result.harpoonIndex = harpoonIndex
+  of ModuleType2.any:
+    result.data = data
   else:
     discard
 
