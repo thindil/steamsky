@@ -106,6 +106,13 @@ proc nkStyleFromTable*(table: array[StyleColors, NkColor]) {.raises: [], tags: [
   context.style.button.borderColor = table[StyleColors.borderColor]
   context.style.button.textBackground = table[buttonColor]
   context.style.button.textNormal = table[buttonTextColor]
+  context.style.button.textHover = table[buttonHoverTextColor]
+  context.style.button.textActive = table[buttonActiveTextColor]
+  context.style.button.padding = Vec2(x: 2.0, y: 2.0)
+  context.style.button.imagePadding = Vec2(x: 0.0, y: 0.0)
+  context.style.button.touchPadding = Vec2(x: 0.0, y: 0.0)
+  context.style.button.userData = Handle(handleType: handleInt, intValue: 0)
+  context.style.button.alignment = centered
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting

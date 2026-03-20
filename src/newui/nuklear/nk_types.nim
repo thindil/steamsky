@@ -1163,7 +1163,7 @@ type
     keyboard*: Keyboard
   Handle* = object
     ## Used to store a handle to various elements
-    case handleType: HandleType
+    case handleType*: HandleType
     of handlePtr:
       ptrValue*: pointer
     of handleInt:
@@ -1376,7 +1376,7 @@ type
     rounding*, border*, colorFactorBackground*, colorFactorText*,
       disabledFactor*: float
     padding*, imagePadding*, touchPadding*: Vec2
-    alignment*: nk_flags
+    alignment*: TextAlignment
     userData*: Handle
     drawBegin*, drawEnd*: DrawF
   StyleWindowHeader* = object
