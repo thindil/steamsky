@@ -19,7 +19,7 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[game, types]
+import ../[game, shipscargo, types]
 import coreui, themes
 
 type
@@ -116,7 +116,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   itemName = ""
   itemAmount = 1
   itemQuality = 2
-  itemSelected = 1
+  itemSelected = 0
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -230,7 +230,17 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes to the player's ship's cargo
   setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.7, 0.1])
   labelButton(title = "Add:"):
-    discard
+    try:
+      var protoIndex: Positive = 1
+      for index, item in itemsList:
+        if item.name == itemsNames[itemSelected]:
+          protoIndex = index
+          break
+      updateCargo(ship = playerShip, protoIndex = protoIndex,
+          amount = itemAmount, quality = itemQuality.ObjectQuality,
+          breakChance = itemsList[protoIndex].breakChance)
+    except:
+      discard
   editString(text = itemName, maxLen = 64)
   imageButton(image = images[assignCrewIcon]):
     debugDialog = addItem
