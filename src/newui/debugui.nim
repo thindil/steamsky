@@ -33,14 +33,16 @@ const
   itemQualities: array[5, string] = ["Poor", "Low", "Normal", "Good", "Excellent"]
 
 var
-  debugTab, shipX, shipY, weight, maxDurability, itemAmount: Positive = 1
+  debugTab, shipX, shipY, weight, maxDurability, itemAmount,
+    cargoAmount: Positive = 1
   playerModules, protoModules, crewList, availableSkills, itemsNames,
     cargoNames: seq[string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
-    skillSelected, itemQuality, itemSelected, cargoSelected: Natural = 0
+    skillSelected, itemQuality, itemSelected, cargoSelected,
+    cargoQuality: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
-  itemName: string = ""
+  itemName, cargoName: string = ""
   debugDialog: DebugDialogs = none
 
 proc setSelectedModule() {.raises: [], tags: [], contractual.} =
@@ -102,6 +104,10 @@ proc setCargoData() {.raises: [], tags: [], contractual.} =
     cargoNames.add(y = getItemName(item = item, damageInfo = false,
         toLower = false))
   cargoSelected = 0
+  let item: InventoryData = playerShip.cargo[cargoSelected]
+  cargoName = getItemName(item = item, damageInfo = false, toLower = false)
+  cargoAmount = item.amount
+  cargoQuality = item.quality.ord
 
 proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the debug UI
@@ -260,6 +266,19 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
       step = 1, incPerPixel = 1)
   label(str = "Quality:")
   itemQuality = comboList(items = itemQualities, selected = itemQuality,
+      itemHeight = 25, x = 235, y = 125)
+  setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.7, 0.1])
+  labelButton(title = "Update:"):
+    discard
+  editString(text = cargoName, maxLen = 64)
+  imageButton(image = images[assignCrewIcon]):
+    discard
+  setLayoutRowDynamic(height = 30, cols = 2)
+  label(str = "Amount:")
+  itemAmount = property2(name = "#", min = 1, val = cargoAmount,
+      max = 1_000_000, step = 1, incPerPixel = 1)
+  label(str = "Quality:")
+  itemQuality = comboList(items = itemQualities, selected = cargoQuality,
       itemHeight = 25, x = 235, y = 125)
 
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
