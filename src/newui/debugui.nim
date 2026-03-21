@@ -28,22 +28,24 @@ type
     value: SkillRange
   DebugDialogs = enum
     none, addItem, updateItem
+  DebugTabs = enum
+    ship, crew, cargo, bases, world
 
 const
   itemQualities: array[5, string] = ["Poor", "Low", "Normal", "Good", "Excellent"]
 
 var
-  debugTab, shipX, shipY, weight, maxDurability, itemAmount,
-    cargoAmount: Positive = 1
+  shipX, shipY, weight, maxDurability, itemAmount, cargoAmount: Positive = 1
   playerModules, protoModules, crewList, availableSkills, itemsNames,
-    cargoNames: seq[string] = @[]
+    cargoNames, basesNames: seq[string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
     skillSelected, itemQuality, itemSelected, cargoSelected,
-    cargoQuality: Natural = 0
+    cargoQuality, baseSelected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
-  itemName, cargoName: string = ""
+  itemName, cargoName, baseName: string = ""
   debugDialog: DebugDialogs = none
+  debugTab: DebugTabs = ship
 
 proc setSelectedModule() {.raises: [], tags: [], contractual.} =
   ## Set the data of the selected module in the player's ship
@@ -132,6 +134,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   itemQuality = 2
   itemSelected = 0
   setCargoData()
+  basesNames = @[]
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -313,6 +316,11 @@ proc showUpdateItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
 
   windowSetFocus(name = "Item to update")
 
+proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the tab which allows changes to the sky bases
+  setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.7, 0.1])
+  label(str = "Base:")
+
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the debug dialog with various development options
@@ -335,15 +343,15 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
         group(title = "debugButtons", flags = {windowNoScrollbar}):
           setLayoutRowDynamic(height = 30, cols = 1)
           labelButton(title = "Ship"):
-            debugTab = 1
+            debugTab = ship
           labelButton(title = "Crew"):
-            debugTab = 2
+            debugTab = crew
           labelButton(title = "Cargo"):
-            debugTab = 3
+            debugTab = cargo
           labelButton(title = "Bases"):
-            debugTab = 4
+            debugTab = bases
           labelButton(title = "World"):
-            debugTab = 5
+            debugTab = world
           labelButton(title = "Refresh"):
             setDebugData()
           labelButton(title = "Save game"):
@@ -354,12 +362,14 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
       row(x = groupOneWidth, y = 0, w = groupTwoWidth, h = groupHeight):
         group(title = "debugMenus", flags = {windowNoFlags}):
           case debugTab
-          of 1:
+          of ship:
             showShipTab()
-          of 2:
+          of crew:
             showCrewTab()
-          of 3:
+          of cargo:
             showCargoTab()
+          of bases:
+            showBasesTab()
           else:
             discard
   case debugDialog
