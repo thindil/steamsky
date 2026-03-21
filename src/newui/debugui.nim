@@ -269,13 +269,14 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
       itemHeight = 25, x = 235, y = 125)
   setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.7, 0.1])
   labelButton(title = "Update:"):
-    discard
+    playerShip.cargo[cargoSelected].amount = cargoAmount
+    playerShip.cargo[cargoSelected].quality = cargoQuality.ObjectQuality
   editString(text = cargoName, maxLen = 64)
   imageButton(image = images[assignCrewIcon]):
     debugDialog = updateItem
   setLayoutRowDynamic(height = 30, cols = 2)
   label(str = "Amount:")
-  itemAmount = property2(name = "#", min = 1, val = cargoAmount,
+  cargoAmount = property2(name = "#", min = 1, val = cargoAmount,
       max = 1_000_000, step = 1, incPerPixel = 1)
   label(str = "Quality:")
   cargoQuality = comboList(items = itemQualities, selected = cargoQuality,
