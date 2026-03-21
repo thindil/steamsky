@@ -345,14 +345,11 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
         itemHeight = 25, x = 290, y = 200)
     labelButton(title = "Select"):
       baseName = basesNames[baseSelected]
-      let base: BaseRecord = skyBases[baseSelected]
-      for index, baseType in basesTypesList:
-        if baseType.name == base.baseType:
-          try:
-            baseTypeSelected = index.parseInt
-          except ValueError:
-            discard
-          break
+      let base: BaseRecord = skyBases[baseSelected + 1]
+      try:
+        baseTypeSelected = base.baseType.parseInt
+      except:
+        discard
       debugDialog = none
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
