@@ -380,6 +380,25 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
   else:
     discard
 
+proc name*(module: ModuleData): ModuleName {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of ModuleData type
+  ##
+  ## * module - the ModuleData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  module.name
+
+proc `name=`*(module: var ModuleData, value: ModuleName) {.raises: [],
+    tags: [], contractual.} =
+  ## The setter of a field of ModuleData type
+  ##
+  ## * module - the ModuleData object which field will be modified
+  ## * value  - the new value for the field
+  ##
+  ## Returns the modified ModuleData object
+  module.name = value
+
 type
   InventoryData* = object
     ## Used to store information about items in various inventories (cargo, crew
