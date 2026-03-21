@@ -138,10 +138,6 @@ type
     lessDurable = "Less durable",
     moreBreakable = "More breakable"
 
-  CraftFeatures* = enum
-    ## Special crafting features, bonuses and maluses together
-    none, lighter, moreDurable, lessBreakable, heavier, lessDurable, moreBreakable
-
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ItemsDurability* = range[0..121] ## The range of the items durability
@@ -423,7 +419,8 @@ type
     quality*: ObjectQuality = normal
     weight*: Natural = 0
     breakChance*: ExtendedNatural = -1
-    craftFeature*: CraftFeatures = CraftFeatures.none
+    craftBonus*: CraftBonuses = CraftBonuses.none
+    craftMalus*: CraftMaluses = CraftMaluses.none
 
   MobAttributeRecord* = object
     ## Used to store information about the crew member's attributes
@@ -657,7 +654,8 @@ type
     quality*: ObjectQuality = normal
     weight*: Natural
     breakChance*: ExtendedNatural = -1
-    craftFeature*: CraftFeatures = CraftFeatures.none
+    craftBonus*: CraftBonuses = CraftBonuses.none
+    craftMalus*: CraftMaluses = CraftMaluses.none
 
   DateRecord* = object
     ## Used to store the game's time
