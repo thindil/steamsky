@@ -17,7 +17,7 @@
 
 ## Provides code related to showing debug interface.
 
-import std/tables
+import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basestypes, game, gamesaveload, items, shipscargo, types]
 import coreui, errordialog, themes
@@ -332,6 +332,9 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
   imageButton(image = images[assignCrewIcon]):
     debugDialog = setBase
   setLayoutRowDynamic(height = 30, cols = 2)
+  label(str = "Type:")
+  baseTypeSelected = comboList(items = basesTypesNames,
+      selected = baseTypeSelected, itemHeight = 25, x = 290, y = 200)
 
 proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases which can be set
@@ -342,6 +345,14 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
         itemHeight = 25, x = 290, y = 200)
     labelButton(title = "Select"):
       baseName = basesNames[baseSelected]
+      let base: BaseRecord = skyBases[baseSelected]
+      for index, baseType in basesTypesList:
+        if baseType.name == base.baseType:
+          try:
+            baseTypeSelected = index.parseInt
+          except ValueError:
+            discard
+          break
       debugDialog = none
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
