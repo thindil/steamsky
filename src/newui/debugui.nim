@@ -19,7 +19,7 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[game, gamesaveload, items, shipscargo, types]
+import ../[basestypes, game, gamesaveload, items, shipscargo, types]
 import coreui, errordialog, themes
 
 type
@@ -27,7 +27,7 @@ type
     name: string
     value: SkillRange
   DebugDialogs = enum
-    none, addItem, updateItem
+    none, addItem, updateItem, setBase
   DebugTabs = enum
     ship, crew, cargo, bases, world
 
@@ -37,10 +37,10 @@ const
 var
   shipX, shipY, weight, maxDurability, itemAmount, cargoAmount: Positive = 1
   playerModules, protoModules, crewList, availableSkills, itemsNames,
-    cargoNames, basesNames: seq[string] = @[]
+    cargoNames, basesNames, basesTypesNames: seq[string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
     skillSelected, itemQuality, itemSelected, cargoSelected,
-    cargoQuality, baseSelected: Natural = 0
+    cargoQuality, baseSelected, baseTypeSelected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
   itemName, cargoName, baseName: string = ""
@@ -135,6 +135,14 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   itemSelected = 0
   setCargoData()
   basesNames = @[]
+  for base in skyBases:
+    basesNames.add(y = base.name)
+  baseName = ""
+  baseSelected = 0
+  basesTypesNames = @[]
+  for baseType in basesTypesList.values:
+    basesTypesNames.add(y = baseType.name)
+  baseTypeSelected = 0
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -320,6 +328,21 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes to the sky bases
   setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.7, 0.1])
   label(str = "Base:")
+  editString(text = baseName, maxLen = 64)
+  imageButton(image = images[assignCrewIcon]):
+    debugDialog = setBase
+  setLayoutRowDynamic(height = 30, cols = 2)
+
+proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the dialog with list of bases which can be set
+  window(name = "Bases", x = 300, y = 100, w = 300, h = 120, flags = {
+      windowBorder, windowTitle}):
+    setLayoutRowDynamic(height = 25, cols = 1)
+    baseSelected = comboList(items = basesNames, selected = baseSelected,
+        itemHeight = 25, x = 290, y = 200)
+    labelButton(title = "Select"):
+      baseName = basesNames[baseSelected]
+      debugDialog = none
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
@@ -377,5 +400,7 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     showAddItemDialog()
   of updateItem:
     showUpdateItemDialog()
+  of setBase:
+    showSetBaseDialog()
   of none:
     windowSetFocus(name = "Debug options")
