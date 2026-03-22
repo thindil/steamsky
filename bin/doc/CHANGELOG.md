@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [12.1] - 2026-03-22
 
 ### Added
 - New special feature for crafted items: more (malus) or less (bonus) breakable
