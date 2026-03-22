@@ -41,12 +41,13 @@ var
   moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
     skillSelected, itemQuality, itemSelected, cargoSelected, cargoQuality,
     baseSelected, baseTypeSelected, ownerSelected, sizeSelected,
-    population: Natural = 0
+    population, money: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
   itemName, cargoName, baseName: string = ""
   debugDialog: DebugDialogs = none
   debugTab: DebugTabs = ship
+  reputation: ReputationRange = 0
 
 proc setSelectedModule() {.raises: [], tags: [], contractual.} =
   ## Set the data of the selected module in the player's ship
@@ -150,6 +151,8 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ownerSelected = 0
   sizeSelected = 0
   population = 0
+  reputation = 0
+  money = 0
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -352,6 +355,12 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Population:")
   population = property2(name = "#", min = 0, val = population, max = 10_000, step = 1,
       incPerPixel = 1)
+  label(str = "Reputation:")
+  reputation = property2(name = "#", min = -100, val = reputation, max = 100, step = 1,
+      incPerPixel = 1)
+  label(str = "Money:")
+  money = property2(name = "#", min = 0, val = money, max = 1_000_000, step = 1,
+      incPerPixel = 1)
 
 proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases which can be set
@@ -376,6 +385,11 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
       debugDialog = none
       sizeSelected = base.size.ord
       population = base.population
+      reputation = base.reputation.level
+      if base.cargo.len > 0:
+        money = base.cargo[0].amount
+      else:
+        money = 0
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
