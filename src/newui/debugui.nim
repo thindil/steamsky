@@ -37,10 +37,10 @@ const
 var
   shipX, shipY, weight, maxDurability, itemAmount, cargoAmount: Positive = 1
   playerModules, protoModules, crewList, availableSkills, itemsNames,
-    cargoNames, basesNames, basesTypesNames: seq[string] = @[]
+    cargoNames, basesNames, basesTypesNames, ownersNames: seq[string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
     skillSelected, itemQuality, itemSelected, cargoSelected,
-    cargoQuality, baseSelected, baseTypeSelected: Natural = 0
+    cargoQuality, baseSelected, baseTypeSelected, ownerSelected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
   itemName, cargoName, baseName: string = ""
@@ -143,6 +143,10 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   for baseType in basesTypesList.values:
     basesTypesNames.add(y = baseType.name)
   baseTypeSelected = 0
+  ownersNames = @[]
+  for faction in factionsList.values:
+    ownersNames.add(y = faction.name)
+  ownerSelected = 0
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -335,6 +339,9 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Type:")
   baseTypeSelected = comboList(items = basesTypesNames,
       selected = baseTypeSelected, itemHeight = 25, x = 290, y = 200)
+  label(str = "Owner:")
+  ownerSelected = comboList(items = ownersNames, selected = ownerSelected,
+      itemHeight = 25, x = 290, y = 200)
 
 proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases which can be set
@@ -350,6 +357,12 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
         baseTypeSelected = base.baseType.parseInt
       except:
         discard
+      var index: Natural = 0
+      for i in factionsList.keys:
+        if i == base.owner:
+          ownerSelected = index
+          break
+        index.inc
       debugDialog = none
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
