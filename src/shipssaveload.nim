@@ -137,6 +137,9 @@ proc savePlayerShip*(saveData: var XmlNode) {.raises: [], tags: [],
       attrs.add(y = ("maxdurability", $item.maxDurability))
     if item.weight > 0:
       attrs.add(y = ("weight", $item.weight))
+    if item.craftBonus != none:
+      attrs.add(y = ("craftbonus", $item.craftBonus))
+      attrs.add(y = ("craftmalus", $item.craftMalus))
     var itemElement: XmlNode = newElement(tag = "cargo")
     itemElement.attrs = attrs.toXmlAttributes
     shipTree.add(son = itemElement)
@@ -378,8 +381,9 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
             craftingAmount = craftingAmount, craftingQuality = craftingQuality,
             craftingBonus = craftingBonus, craftingMalus = craftingMalus))
       of medicalRoom:
-        playerShip.modules.add(y = initModuleData(mType = medicalRoom, name = name,
-            protoIndex = protoIndex, weight = weight, durability = modDur,
+        playerShip.modules.add(y = initModuleData(mType = medicalRoom,
+            name = name, protoIndex = protoIndex, weight = weight,
+            durability = modDur,
             maxDurability = maxDur, owner = owners,
             upgradeProgress = upgradeProgress, upgradeAction = upgradeAction))
       of trainingRoom:
@@ -388,8 +392,9 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           if dataIndex == 1:
             trainedSkill = modData.attr(name = "value").parseInt
           dataIndex.inc
-        playerShip.modules.add(y = initModuleData(mType = trainingRoom, name = name,
-            protoIndex = protoIndex, weight = weight, durability = modDur,
+        playerShip.modules.add(y = initModuleData(mType = trainingRoom,
+            name = name, protoIndex = protoIndex, weight = weight,
+            durability = modDur,
             maxDurability = maxDur, owner = owners,
             upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
             trainedSkill = trainedSkill))
@@ -423,8 +428,9 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
             upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
             damage = damage, ammoIndex = ammoIndex))
       of cargoRoom:
-        playerShip.modules.add(y = initModuleData(mType = cargoRoom, name = name,
-            protoIndex = protoIndex, weight = weight, durability = modDur,
+        playerShip.modules.add(y = initModuleData(mType = cargoRoom,
+            name = name, protoIndex = protoIndex, weight = weight,
+            durability = modDur,
             maxDurability = maxDur, owner = owners,
             upgradeProgress = upgradeProgress, upgradeAction = upgradeAction))
       of hull:
@@ -454,8 +460,9 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           if dataIndex == 1:
             damage = modData.attr(name = "value").parseInt
           dataIndex.inc
-        playerShip.modules.add(y = initModuleData(mType = batteringRam, name = name,
-            protoIndex = protoIndex, weight = weight, durability = modDur,
+        playerShip.modules.add(y = initModuleData(mType = batteringRam,
+            name = name, protoIndex = protoIndex, weight = weight,
+            durability = modDur,
             maxDurability = maxDur, owner = owners,
             upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
             damage2 = damage, coolingDown = false))
@@ -472,8 +479,9 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           else:
             discard
           dataIndex.inc
-        playerShip.modules.add(y = initModuleData(mType = harpoonGun, name = name,
-            protoIndex = protoIndex, weight = weight, durability = modDur,
+        playerShip.modules.add(y = initModuleData(mType = harpoonGun,
+            name = name, protoIndex = protoIndex, weight = weight,
+            durability = modDur,
             maxDurability = maxDur, owner = owners,
             upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
             duration = duration, harpoonIndex = harpoonIndex))
@@ -493,9 +501,16 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
             name = "maxdurability").parseInt)
         weight: Natural = (if cargo.attr(name = "weight").len == 0: itemsList[
             protoIndex].weight else: cargo.attr(name = "weight").parseInt)
+        bonus: CraftBonuses = (if cargo.attr(name = "craftbonus").len ==
+            0: CraftBonuses.none else: parseEnum[CraftBonuses](s = cargo.attr(
+            name = "craftbonus")))
+        malus: CraftMaluses = (if cargo.attr(name = "craftmalus").len ==
+            0: CraftMaluses.none else: parseEnum[CraftMaluses](s = cargo.attr(
+            name = "craftmalus")))
       playerShip.cargo.add(y = InventoryData(protoIndex: protoIndex,
           amount: amount, name: name, durability: itemDurability, price: price,
-          quality: quality, maxDurability: maxDurability, weight: weight))
+          quality: quality, maxDurability: maxDurability, weight: weight,
+          craftBonus: bonus, craftMalus: malus))
     for crew in shipNode.findAll(tag = "member"):
       var member: MemberData = MemberData()
       member.name = crew.attr(name = "name")
