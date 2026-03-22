@@ -126,7 +126,7 @@ proc savePlayerShip*(saveData: var XmlNode) {.raises: [], tags: [],
     shipTree.add(son = moduleTree)
   for item in playerShip.cargo:
     var attrs: seq[tuple[key, val: string]] = @[("index", $item.protoIndex), (
-        "amount", $item.amount), ("durability", $item.durability) ]
+        "amount", $item.amount), ("durability", $item.durability)]
     if item.name.len > 0:
       attrs.add(y = ("name", item.name))
     if item.price > 0:
@@ -298,11 +298,10 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
         for modData in module.findAll(tag = "data"):
           data[dataIndex] = modData.attr(name = "value").parseInt
           dataIndex.inc
-        playerShip.modules.add(y = ModuleData(mType: ModuleType2.any,
-            name: name, protoIndex: protoIndex, weight: weight,
-            durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction, data: data))
+        playerShip.modules.add(y = initModuleData(mType = ModuleType2.any,
+            name = name, protoIndex = protoIndex, weight = weight,
+            durability = modDur, maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction, data = data))
       of engine:
         var
           fuelUsage, power: int = 0
@@ -318,11 +317,11 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           else:
             discard
           dataIndex.inc
-        playerShip.modules.add(y = ModuleData(mType: engine, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
-            fuelUsage: fuelUsage, power: power, disabled: disabled))
+        playerShip.modules.add(y = initModuleData(mType = engine, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
+            fuelUsage = fuelUsage, power = power, disabled = disabled))
       of cabin:
         var cleanliness, quality: int = 0
         for modData in module.findAll(tag = "data"):
@@ -334,16 +333,16 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           else:
             discard
           dataIndex.inc
-        playerShip.modules.add(y = ModuleData(mType: cabin, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
-            cleanliness: cleanliness, quality: quality))
+        playerShip.modules.add(y = initModuleData(mType = cabin, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
+            cleanliness = cleanliness, quality = quality))
       of cockpit:
-        playerShip.modules.add(y = ModuleData(mType: cockpit, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction))
+        playerShip.modules.add(y = initModuleData(mType = cockpit, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction))
       of workshop:
         var
           craftingIndex: string = ""
@@ -371,40 +370,40 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           else:
             discard
           dataIndex.inc
-        playerShip.modules.add(y = ModuleData(mType: workshop, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
-            craftingIndex: craftingIndex, craftingTime: craftingTime,
-            craftingAmount: craftingAmount, craftingQuality: craftingQuality,
-            craftingBonus: craftingBonus, craftingMalus: craftingMalus))
+        playerShip.modules.add(y = initModuleData(mType = workshop, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
+            craftingIndex = craftingIndex, craftingTime = craftingTime,
+            craftingAmount = craftingAmount, craftingQuality = craftingQuality,
+            craftingBonus = craftingBonus, craftingMalus = craftingMalus))
       of medicalRoom:
-        playerShip.modules.add(y = ModuleData(mType: medicalRoom, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction))
+        playerShip.modules.add(y = initModuleData(mType = medicalRoom, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction))
       of trainingRoom:
         var trainedSkill: int = 0
         for modData in module.findAll(tag = "data"):
           if dataIndex == 1:
             trainedSkill = modData.attr(name = "value").parseInt
           dataIndex.inc
-        playerShip.modules.add(y = ModuleData(mType: trainingRoom, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
-            trainedSkill: trainedSkill))
+        playerShip.modules.add(y = initModuleData(mType = trainingRoom, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
+            trainedSkill = trainedSkill))
       of turret:
         var gunIndex: int = -1
         for modData in module.findAll(tag = "data"):
           if dataIndex == 1:
             gunIndex = modData.attr(name = "value").parseInt - 1
           dataIndex.inc
-        playerShip.modules.add(y = ModuleData(mType: turret, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
-            gunIndex: gunIndex))
+        playerShip.modules.add(y = initModuleData(mType = turret, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
+            gunIndex = gunIndex))
       of gun:
         var
           damage: int = 0
@@ -418,16 +417,16 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           else:
             discard
           dataIndex.inc
-        playerShip.modules.add(y = ModuleData(mType: gun, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
-            damage: damage, ammoIndex: ammoIndex))
+        playerShip.modules.add(y = initModuleData(mType = gun, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
+            damage = damage, ammoIndex = ammoIndex))
       of cargoRoom:
-        playerShip.modules.add(y = ModuleData(mType: cargoRoom, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction))
+        playerShip.modules.add(y = initModuleData(mType = cargoRoom, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction))
       of hull:
         var installedModules, maxModules: int = 0
         for modData in module.findAll(tag = "data"):
@@ -439,27 +438,27 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           else:
             discard
           dataIndex.inc
-        playerShip.modules.add(y = ModuleData(mType: hull, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
-            installedModules: installedModules, maxModules: maxModules))
+        playerShip.modules.add(y = initModuleData(mType = hull, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
+            installedModules = installedModules, maxModules = maxModules))
       of armor:
-        playerShip.modules.add(y = ModuleData(mType: armor, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction))
+        playerShip.modules.add(y = initModuleData(mType = armor, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction))
       of batteringRam:
         var damage: Natural = 0
         for modData in module.findAll(tag = "data"):
           if dataIndex == 1:
             damage = modData.attr(name = "value").parseInt
           dataIndex.inc
-        playerShip.modules.add(y = ModuleData(mType: batteringRam, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
-            damage2: damage, coolingDown: false))
+        playerShip.modules.add(y = initModuleData(mType = batteringRam, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
+            damage2 = damage, coolingDown = false))
       of harpoonGun:
         var
           duration: Natural = 0
@@ -473,11 +472,11 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           else:
             discard
           dataIndex.inc
-        playerShip.modules.add(y = ModuleData(mType: harpoonGun, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
-            maxDurability: maxDur, owner: owners,
-            upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
-            duration: duration, harpoonIndex: harpoonIndex))
+        playerShip.modules.add(y = initModuleData(mType = harpoonGun, name = name,
+            protoIndex = protoIndex, weight = weight, durability = modDur,
+            maxDurability = maxDur, owner = owners,
+            upgradeProgress = upgradeProgress, upgradeAction = upgradeAction,
+            duration = duration, harpoonIndex = harpoonIndex))
     for cargo in shipNode.findAll(tag = "cargo"):
       let
         protoIndex: int = cargo.attr(name = "index").parseInt
