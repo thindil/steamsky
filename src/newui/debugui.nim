@@ -40,7 +40,8 @@ var
     cargoNames, basesNames, basesTypesNames, ownersNames: seq[string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
     skillSelected, itemQuality, itemSelected, cargoSelected, cargoQuality,
-    baseSelected, baseTypeSelected, ownerSelected, sizeSelected: Natural = 0
+    baseSelected, baseTypeSelected, ownerSelected, sizeSelected,
+    population: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
   itemName, cargoName, baseName: string = ""
@@ -148,6 +149,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
     ownersNames.add(y = faction.name)
   ownerSelected = 0
   sizeSelected = 0
+  population = 0
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -347,6 +349,9 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Size:")
   sizeSelected = comboList(items = sizesNames, selected = sizeSelected,
       itemHeight = 25, x = 290, y = 200)
+  label(str = "Population:")
+  population = property2(name = "#", min = 0, val = population, max = 10_000, step = 1,
+      incPerPixel = 1)
 
 proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases which can be set
@@ -370,6 +375,7 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
         index.inc
       debugDialog = none
       sizeSelected = base.size.ord
+      population = base.population
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
