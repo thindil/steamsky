@@ -19,7 +19,7 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestypes, game, gamesaveload, items, shipscargo, types]
+import ../[basescargo, basestypes, game, gamesaveload, items, shipscargo, types]
 import coreui, errordialog, themes
 
 type
@@ -353,14 +353,32 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
   sizeSelected = comboList(items = sizesNames, selected = sizeSelected,
       itemHeight = 25, x = 290, y = 200)
   label(str = "Population:")
-  population = property2(name = "#", min = 0, val = population, max = 10_000, step = 1,
-      incPerPixel = 1)
+  population = property2(name = "#", min = 0, val = population, max = 10_000,
+      step = 1, incPerPixel = 1)
   label(str = "Reputation:")
-  reputation = property2(name = "#", min = -100, val = reputation, max = 100, step = 1,
-      incPerPixel = 1)
+  reputation = property2(name = "#", min = -100, val = reputation, max = 100,
+      step = 1, incPerPixel = 1)
   label(str = "Money:")
   money = property2(name = "#", min = 0, val = money, max = 1_000_000, step = 1,
       incPerPixel = 1)
+  setLayoutRowDynamic(height = 30, cols = 1)
+  labelButton(title = "Update"):
+    let baseIndex: BasesRange = baseSelected + 1
+    skyBases[baseIndex].baseType = $baseTypeSelected
+    var index: Natural = 0
+    for i in factionsList.keys:
+      if index == ownerSelected:
+        skyBases[baseIndex].owner = i
+        break
+      index.inc
+    skyBases[baseIndex].size = sizeSelected.BasesSize
+    skyBases[baseIndex].population = population
+    skyBases[baseIndex].reputation.level = reputation
+    try:
+      updateBaseCargo(protoIndex = moneyIndex, amount = money, quality = normal,
+          breakChance = -1)
+    except:
+      discard
 
 proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases which can be set
@@ -382,7 +400,6 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
           ownerSelected = index
           break
         index.inc
-      debugDialog = none
       sizeSelected = base.size.ord
       population = base.population
       reputation = base.reputation.level
@@ -390,6 +407,7 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
         money = base.cargo[0].amount
       else:
         money = 0
+      debugDialog = none
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
