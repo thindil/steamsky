@@ -39,8 +39,8 @@ var
   playerModules, protoModules, crewList, availableSkills, itemsNames,
     cargoNames, basesNames, basesTypesNames, ownersNames: seq[string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
-    skillSelected, itemQuality, itemSelected, cargoSelected,
-    cargoQuality, baseSelected, baseTypeSelected, ownerSelected: Natural = 0
+    skillSelected, itemQuality, itemSelected, cargoSelected, cargoQuality,
+    baseSelected, baseTypeSelected, ownerSelected, sizeSelected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
   itemName, cargoName, baseName: string = ""
@@ -147,6 +147,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   for faction in factionsList.values:
     ownersNames.add(y = faction.name)
   ownerSelected = 0
+  sizeSelected = 0
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -342,6 +343,10 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Owner:")
   ownerSelected = comboList(items = ownersNames, selected = ownerSelected,
       itemHeight = 25, x = 290, y = 200)
+  const sizesNames: array[3, string] = ["Small", "Medium", "Big"]
+  label(str = "Size:")
+  sizeSelected = comboList(items = sizesNames, selected = sizeSelected,
+      itemHeight = 25, x = 290, y = 200)
 
 proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases which can be set
@@ -364,6 +369,7 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
           break
         index.inc
       debugDialog = none
+      sizeSelected = base.size.ord
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
