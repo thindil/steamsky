@@ -25,7 +25,7 @@
 
 ## Provides code related to Nuklear styles
 
-import contracts, nimalyzer
+import contracts
 import nk_context, nk_types
 
 # ---------------------
@@ -37,8 +37,7 @@ using
 # ------------------
 # High level bindings
 # ------------------
-{.push ruleOff: "varDeclared".}
-let defaultColorStyle {.used.}: array[StyleColors, NkColor] = [
+const defaultColorStyle: array[StyleColors, NkColor] = [
   textColor: NkColor(r: 175, g: 175, b: 175, a: 255), windowColor: NkColor(
     r: 45, g: 45, b: 45, a: 255), headerColor: NkColor(r: 40, g: 40, b: 40,
     a: 255), borderColor: NkColor(r: 65, g: 65, b: 65, a: 255),
@@ -83,10 +82,9 @@ let defaultColorStyle {.used.}: array[StyleColors, NkColor] = [
     popupColor: NkColor(r: 45, g: 45, b: 45, a: 255), popupBorderColor: NkColor(
     r: 65, g: 65, b: 65, a: 255), progressbarColor: NkColor(r: 100, g: 100,
     b: 100, a: 255), progressbarBorderColor: NkColor(r: 38, g: 38, b: 38, a: 255)]
-{.push ruleOn: "varDeclared".}
 
-proc nkStyleFromTable*(table: array[StyleColors, NkColor]) {.raises: [], tags: [
-    ], contractual.} =
+proc nkStyleFromTable*(table: array[StyleColors,
+    NkColor] = defaultColorStyle) {.raises: [], tags: [], contractual.} =
   ## Set the Nuklear style colors from the table
   ##
   ## * table - the colors table which will be set
@@ -133,6 +131,15 @@ proc nkStyleFromTable*(table: array[StyleColors, NkColor]) {.raises: [], tags: [
   context.style.contextualButton.textNormal = table[buttonTextColor]
   context.style.contextualButton.textHover = table[buttonHoverTextColor]
   context.style.contextualButton.textActive = table[buttonActiveTextColor]
+  context.style.contextualButton.border = 0.0
+  context.style.contextualButton.rounding = 0.0
+  context.style.contextualButton.colorFactorText = 1.0
+  context.style.contextualButton.colorFactorBackground = 1.0
+  context.style.contextualButton.disabledFactor = nkWidgetDisabledFactor
+  context.style.contextualButton.drawBegin = nil
+  context.style.contextualButton.drawEnd = nil
+
+  # menu button
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
