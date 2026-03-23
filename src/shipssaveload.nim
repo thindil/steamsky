@@ -184,6 +184,9 @@ proc savePlayerShip*(saveData: var XmlNode) {.raises: [], tags: [],
         attrs.add(y = ("name", item.name))
       if item.price > 0:
         attrs.add(y = ("price", $item.price))
+      if item.craftBonus != none:
+        attrs.add(y = ("craftbonus", $item.craftBonus))
+        attrs.add(y = ("craftmalus", $item.craftMalus))
       itemElement.attrs = attrs.toXmlAttributes
       memberTree.add(son = itemElement)
     for item in member.equipment:
@@ -555,8 +558,15 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           itemDurability: int = item.attr(name = "durability").parseInt
           price: int = (if item.attr(name = "price").len > 0: item.attr(
               name = "price").parseInt else: 0)
+          bonus: CraftBonuses = (if item.attr(name = "craftbonus").len ==
+              0: CraftBonuses.none else: parseEnum[CraftBonuses](s = item.attr(
+              name = "craftbonus")))
+          malus: CraftMaluses = (if item.attr(name = "craftmalus").len ==
+              0: CraftMaluses.none else: parseEnum[CraftMaluses](s = item.attr(
+              name = "craftmalus")))
         member.inventory.add(y = InventoryData(protoIndex: itemIndex,
-            amount: amount, name: itemName, durability: itemDurability, price: price))
+            amount: amount, name: itemName, durability: itemDurability,
+            price: price, craftBonus: bonus, craftMalus: malus))
       var equipmentIndex: int = 1
       for item in crew.findAll(tag = "equipment"):
         member.equipment[(equipmentIndex - 1).EquipmentLocations] = item.attr(
