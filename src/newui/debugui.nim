@@ -19,7 +19,8 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basescargo, basestypes, game, gamesaveload, items, shipscargo, types]
+import ../[basescargo, basestypes, events, game, gamesaveload, items, maps,
+    shipscargo, types]
 import coreui, errordialog, themes
 
 type
@@ -161,7 +162,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   shipSelected = 0
   ship2X = 1
   ship2Y = 1
-  shipDuration = 1
+  shipDuration = 60
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -434,6 +435,30 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
     label(str = "Y:")
     ship2Y = property2(name = "#", min = 1, val = ship2Y, max = 1_024, step = 1,
         incPerPixel = 1)
+    label(str = "Duration:")
+    shipDuration = property2(name = "#", min = 60, val = shipDuration,
+        max = 1_000, step = 1, incPerPixel = 1)
+    setLayoutRowDynamic(height = 25, cols = 1)
+    labelButton(title = "Add ship"):
+      var friendlyShips: seq[Positive] = @[]
+      try:
+        generateFriendlyShips(ships = friendlyShips)
+      except:
+        discard
+      var traders: seq[Positive] = @[]
+      generateTraders(ships = traders)
+      for index, ship in protoShipsList:
+        if ship.name == shipName:
+          if index in traders:
+            eventsList.add(y = EventData(skyX: ship2X, skyY: ship2Y,
+                time: shipDuration, eType: trader, shipIndex: index))
+          elif index in friendlyShips:
+            eventsList.add(y = EventData(skyX: ship2X, skyY: ship2Y,
+                time: shipDuration, eType: friendlyShip, shipIndex: index))
+          else:
+            eventsList.add(y = EventData(skyX: ship2X, skyY: ship2Y,
+                time: shipDuration, eType: enemyShip, shipIndex: index))
+          skyMap[ship2X][ship2Y].eventIndex = eventsList.high
 
 proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of proto ships which can be set
