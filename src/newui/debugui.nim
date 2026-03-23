@@ -27,7 +27,7 @@ type
     name: string
     value: SkillRange
   DebugDialogs = enum
-    none, addItem, updateItem, setBase
+    none, addItem, updateItem, setBase, setShip
   DebugTabs = enum
     ship, crew, cargo, bases, world
 
@@ -37,14 +37,15 @@ const
 var
   shipX, shipY, weight, maxDurability, itemAmount, cargoAmount: Positive = 1
   playerModules, protoModules, crewList, availableSkills, itemsNames,
-    cargoNames, basesNames, basesTypesNames, ownersNames: seq[string] = @[]
+    cargoNames, basesNames, basesTypesNames, ownersNames, shipsNames: seq[
+      string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
     skillSelected, itemQuality, itemSelected, cargoSelected, cargoQuality,
     baseSelected, baseTypeSelected, ownerSelected, sizeSelected,
     population, money: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
-  itemName, cargoName, baseName: string = ""
+  itemName, cargoName, baseName, shipName: string = ""
   debugDialog: DebugDialogs = none
   debugTab: DebugTabs = ship
   reputation: ReputationRange = 0
@@ -153,6 +154,9 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   population = 0
   reputation = 0
   money = 0
+  for ship in protoShipsList.values:
+    shipsNames.add(y = ship.name)
+  shipName = ""
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -409,6 +413,22 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
         money = 0
       debugDialog = none
 
+proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the tab which allows changes to the world's events
+  setLayoutRowDynamic(height = 370, cols = 2)
+  group(title = "shipProperties", flags = {windowNoScrollbar}):
+    setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.6, 0.2])
+    label(str = "Ship:")
+    editString(text = shipName, maxLen = 64)
+    imageButton(image = images[assignCrewIcon]):
+      debugDialog = setShip
+
+proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the dialog with list of proto ships which can be set
+  window(name = "Ships", x = 300, y = 100, w = 300, h = 120, flags = {
+      windowBorder, windowTitle}):
+    setLayoutRowDynamic(height = 25, cols = 1)
+
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the debug dialog with various development options
@@ -458,8 +478,8 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
             showCargoTab()
           of bases:
             showBasesTab()
-          else:
-            discard
+          of world:
+            showWorldTab()
   case debugDialog
   of addItem:
     showAddItemDialog()
@@ -467,5 +487,7 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     showUpdateItemDialog()
   of setBase:
     showSetBaseDialog()
+  of setShip:
+    showSetShipDialog()
   of none:
     windowSetFocus(name = "Debug options")
