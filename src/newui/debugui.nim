@@ -37,7 +37,7 @@ const
 
 var
   shipX, shipY, weight, maxDurability, itemAmount, cargoAmount, ship2X, ship2Y,
-    shipDuration: Positive = 1
+    shipDuration, eventDuration: Positive = 1
   playerModules, protoModules, crewList, availableSkills, itemsNames,
     cargoNames, basesNames, basesTypesNames, ownersNames, shipsNames: seq[
       string] = @[]
@@ -169,6 +169,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   base2Name = ""
   eventSelected = 0
   item2Selected = 0
+  eventDuration = 15
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -480,6 +481,27 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
       label(str = "Item:")
       item3Selected = comboList(items = itemsNames, selected = item3Selected,
           itemHeight = 25, x = 290, y = 200)
+    label(str = "Duration:")
+    eventDuration = property2(name = "#", min = 15, val = eventDuration,
+        max = 12_000, step = 1, incPerPixel = 1)
+    setLayoutRowDynamic(height = 25, cols = 1)
+    labelButton(title = "Add event"):
+      case eventSelected
+      of 0:
+        eventsList.add(y = EventData(skyX: skyBases[base2Selected].skyX, skyY: skyBases[
+            base2Selected].skyY, time: eventDuration, eType: disease))
+      of 1:
+        eventsList.add(y = EventData(skyX: skyBases[base2Selected].skyX,
+            skyY: skyBases[base2Selected].skyY, time: eventDuration, eType: doublePrice,
+            itemIndex: item3Selected))
+      of 2:
+        eventsList.add(y = EventData(skyX: skyBases[base2Selected].skyX, skyY: skyBases[
+            base2Selected].skyY, time: eventDuration, eType: fullDocks))
+      else:
+        discard
+      skyMap[skyBases[base2Selected].skyX][skyBases[
+          base2Selected].skyY].eventIndex = eventsList.high
+      discard
 
 proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of proto ships which can be set
