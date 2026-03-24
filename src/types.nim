@@ -254,8 +254,8 @@ type
       discard
 
 proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
-    durability, maxDurability: Natural; owner: seq[int];
-    upgradeProgress: ExtendedNatural; upgradeAction: ShipUpgrade;
+    durability, maxDurability: Natural; owner: seq[int] = @[];
+    upgradeProgress: ExtendedNatural = -1; upgradeAction: ShipUpgrade = none;
     fuelUsage: Positive = 1; power: Positive = 1; disabled: bool = false;
     cleanliness: Natural = 0; quality: Natural = 0;
     gunIndex: ExtendedNatural = -1; damage: Positive = 1;
