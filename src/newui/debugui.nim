@@ -501,7 +501,6 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
         discard
       skyMap[skyBases[base2Selected].skyX][skyBases[
           base2Selected].skyY].eventIndex = eventsList.high
-      discard
 
 proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of proto ships which can be set
@@ -523,6 +522,7 @@ proc showSetBaseEventDialog() {.raises: [], tags: [RootEffect], contractual.} =
         itemHeight = 25, x = 290, y = 200)
     labelButton(title = "Select"):
       base2Name = basesNames[base2Selected]
+      base2Selected.inc
       debugDialog = none
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
