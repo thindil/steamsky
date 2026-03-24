@@ -28,7 +28,7 @@ type
     name: string
     value: SkillRange
   DebugDialogs = enum
-    none, addItem, updateItem, setBase, setShip
+    none, addItem, updateItem, setBase, setShip, setBaseEvent
   DebugTabs = enum
     ship, crew, cargo, bases, world
 
@@ -43,11 +43,11 @@ var
       string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
     skillSelected, itemQuality, itemSelected, cargoSelected, cargoQuality,
-    baseSelected, baseTypeSelected, ownerSelected, sizeSelected,
-    population, money, shipSelected: Natural = 0
+    baseSelected, baseTypeSelected, ownerSelected, sizeSelected, population,
+    money, shipSelected, base2Selected, item2Selected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
-  itemName, cargoName, baseName, shipName: string = ""
+  itemName, cargoName, baseName, shipName, base2Name: string = ""
   debugDialog: DebugDialogs = none
   debugTab: DebugTabs = ship
   reputation: ReputationRange = 0
@@ -163,6 +163,9 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   ship2X = 1
   ship2Y = 1
   shipDuration = 60
+  base2Selected = 0
+  item2Selected = 0
+  base2Name = ""
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -459,6 +462,12 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
             eventsList.add(y = EventData(skyX: ship2X, skyY: ship2Y,
                 time: shipDuration, eType: enemyShip, shipIndex: index))
           skyMap[ship2X][ship2Y].eventIndex = eventsList.high
+  group(title = "baseProperties", flags = {windowNoScrollbar}):
+    setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.6, 0.2])
+    label(str = "Base:")
+    editString(text = base2Name, maxLen = 64)
+    imageButton(image = images[assignCrewIcon]):
+      debugDialog = setBaseEvent
 
 proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of proto ships which can be set
@@ -467,8 +476,19 @@ proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
     setLayoutRowDynamic(height = 25, cols = 1)
     shipSelected = comboList(items = shipsNames, selected = shipSelected,
         itemHeight = 25, x = 290, y = 200)
-    labelButton(title = "Add"):
+    labelButton(title = "Select"):
       shipName = shipsNames[shipSelected]
+      debugDialog = none
+
+proc showSetBaseEventDialog() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the dialog with list of bases for an event
+  window(name = "Bases", x = 300, y = 100, w = 300, h = 120, flags = {
+      windowBorder, windowTitle}):
+    setLayoutRowDynamic(height = 25, cols = 1)
+    base2Selected = comboList(items = basesNames, selected = base2Selected,
+        itemHeight = 25, x = 290, y = 200)
+    labelButton(title = "Select"):
+      base2Name = basesNames[base2Selected]
       debugDialog = none
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
@@ -531,5 +551,7 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     showSetBaseDialog()
   of setShip:
     showSetShipDialog()
+  of setBaseEvent:
+    showSetBaseEventDialog()
   of none:
     windowSetFocus(name = "Debug options")
