@@ -44,7 +44,8 @@ var
   moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
     skillSelected, itemQuality, itemSelected, cargoSelected, cargoQuality,
     baseSelected, baseTypeSelected, ownerSelected, sizeSelected, population,
-    money, shipSelected, base2Selected, item2Selected: Natural = 0
+    money, shipSelected, base2Selected, item2Selected,
+    eventSelected, item3Selected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
   itemName, cargoName, baseName, shipName, base2Name: string = ""
@@ -166,6 +167,8 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   base2Selected = 0
   item2Selected = 0
   base2Name = ""
+  eventSelected = 0
+  item2Selected = 0
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -468,6 +471,15 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
     editString(text = base2Name, maxLen = 64)
     imageButton(image = images[assignCrewIcon]):
       debugDialog = setBaseEvent
+    setLayoutRowDynamic(height = 25, cols = 2)
+    label(str = "Event:")
+    const eventsNames: array[3, string] = ["Disease", "Double price", "Full docks"]
+    eventSelected = comboList(items = eventsNames, selected = eventSelected,
+        itemHeight = 25, x = 290, y = 200)
+    if eventSelected == 1:
+      label(str = "Item:")
+      item3Selected = comboList(items = itemsNames, selected = item3Selected,
+          itemHeight = 25, x = 290, y = 200)
 
 proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of proto ships which can be set
