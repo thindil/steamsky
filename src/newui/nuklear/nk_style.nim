@@ -140,6 +140,17 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.contextualButton.drawEnd = nil
 
   # menu button
+  context.style.menuButton.normal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[windowColor]))
+  context.style.menuButton.hover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[windowColor]))
+  context.style.menuButton.active = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[windowColor]))
+  context.style.menuButton.borderColor = table[windowColor]
+  context.style.menuButton.textBackground = table[windowColor]
+  context.style.menuButton.textNormal = table[textColor]
+  context.style.menuButton.textHover = table[textColor]
+  context.style.menuButton.textActive = table[textColor]
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
