@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -138,6 +138,9 @@ proc saveBases*(saveData: var XmlNode) {.raises: [KeyError], tags: [],
           attrs.add(y = ("maxdurability", $item.maxDurability))
         if item.weight != itemsList[item.protoIndex].weight:
           attrs.add(y = ("weight", $item.weight))
+        if item.craftBonus != none:
+          attrs.add(y = ("craftbonus", $item.craftBonus))
+          attrs.add(y = ("craftmalus", $item.craftMalus))
         itemElement.attrs = attrs.toXmlAttributes
         baseTree.add(son = itemElement)
       saveData.add(son = baseTree)
@@ -307,6 +310,14 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
           item.weight = baseItem.attr(name = "weight").parseInt
         else:
           item.weight = 0
+        if baseItem.attr(name = "craftbonus").len > 0:
+          item.craftBonus = parseEnum[CraftBonuses](s = baseItem.attr(
+              name = "craftbonus"))
+          item.craftMalus = parseEnum[CraftMaluses](s = baseItem.attr(
+              name = "craftmalus"))
+        else:
+          item.craftBonus = none
+          item.craftMalus = none
         skyBases[baseIndex].cargo.add(y = item)
       skyMap[skyBases[baseIndex].skyX][skyBases[
           baseIndex].skyY].baseIndex = baseIndex
