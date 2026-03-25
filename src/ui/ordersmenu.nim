@@ -820,10 +820,10 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't show message.")
     try:
-      updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-          itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount),
-          quality = playerShip.cargo[itemIndex].quality,
-              breakChance = playerShip.cargo[itemIndex].breakChance)
+      let item: InventoryData = playerShip.cargo[itemIndex]
+      updateCargo(ship = playerShip, protoIndex = item.protoIndex, amount = -(
+          item.amount), quality = item.quality, craftBonus = item.craftBonus,
+          craftMalus = item.craftMalus)
     except:
       return showError(message = "Can't update the ship' cargo.")
   else:

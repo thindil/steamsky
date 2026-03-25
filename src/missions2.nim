@@ -158,7 +158,7 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
   of deliver:
     acceptMessage.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'")
     updateCargo(ship = playerShip, protoIndex = mission.itemIndex, amount = 1,
-        quality = normal, breakChance = 0)
+        quality = normal, craftBonus = none, craftMalus = none)
   of destroy:
     acceptMessage.add(y = "'Destroy " & protoShipsList[mission.shipIndex].name & "'")
   of patrol:

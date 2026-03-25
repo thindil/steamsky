@@ -427,7 +427,8 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't update the member's inventory.")
   try:
     updateCargo(ship = playerShip, amount = -amount, cargoIndex = itemIndex,
-        price = item.price, quality = item.quality, breakChance = item.breakChance)
+        price = item.price, quality = item.quality, craftBonus = item.craftBonus,
+        craftMalus = item.craftMalus)
   except:
     return showError(message = "Can't update the ship' cargo.")
   discard closeDialogCommand(clientData = clientData, interp = interp, argc = 2,
@@ -507,9 +508,9 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
         item = item) & ".", mtype = otherMessage)
     try:
       updateCargo(ship = playerShip, protoIndex = item.protoIndex,
-          amount = -dropAmount, durability = item.durability, price = item.price,
-          quality = item.quality, maxDurability = item.maxDurability,
-          weight = item.weight, breakChance = item.breakChance)
+          amount = -dropAmount, durability = item.durability,
+          price = item.price, quality = item.quality,
+          craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     except:
       return showError(message = "Can't update the ship' cargo.")
   discard closeDialogCommand(clientData = clientData, interp = interp, argc = 2,
