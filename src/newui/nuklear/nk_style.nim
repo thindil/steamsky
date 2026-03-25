@@ -151,6 +151,19 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.menuButton.textNormal = table[textColor]
   context.style.menuButton.textHover = table[textColor]
   context.style.menuButton.textActive = table[textColor]
+  context.style.menuButton.padding = Vec2(x: 2.0, y: 2.0)
+  context.style.menuButton.touchPadding = Vec2(x: 0.0, y: 0.0)
+  context.style.menuButton.userData = Handle(handleType: handleInt, intValue: 0)
+  context.style.menuButton.alignment = centered
+  context.style.menuButton.border = 0.0
+  context.style.menuButton.rounding = 1.0
+  context.style.menuButton.colorFactorText = 1.0
+  context.style.menuButton.colorFactorBackground = 1.0
+  context.style.menuButton.disabledFactor = nkWidgetDisabledFactor
+  context.style.menuButton.drawBegin = nil
+  context.style.menuButton.drawEnd = nil
+
+  # checkbox toggle
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
