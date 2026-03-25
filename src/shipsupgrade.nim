@@ -179,14 +179,16 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
       var upgradeValue, localMaxValue: int = 0
       case upgradedModule.upgradeAction
       of durability:
+        {.ruleOff: "assignments".}
         if (modulesList[upgradedModule.protoIndex].durability / 20).int > 0:
           upgradedModule.maxDurability += (modulesList[
               upgradedModule.protoIndex].durability / 20).int
-          upgradedModule.weight += (weightGain * (modulesList[
-              upgradedModule.protoIndex].durability / 20).int)
+          upgradedModule.weight = upgradedModule.weight + (weightGain * (
+              modulesList[upgradedModule.protoIndex].durability / 20).int)
         else:
           upgradedModule.maxDurability.inc
-          upgradedModule.weight += weightGain
+          upgradedModule.weight = upgradedModule.weight + weightGain
+        {.ruleOn: "assignments".}
         addMessage(message = playerShip.crew[workerIndex].name &
             " has upgraded the durability of " & upgradedModule.name & ".",
             mType = orderMessage, color = green)
@@ -241,7 +243,9 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
           weightGain *= 10
           upgradedModule.fuelUsage.dec
           upgradeValue = upgradedModule.fuelUsage
-        upgradedModule.weight += weightGain
+        {.ruleOff: "assignments".}
+        upgradedModule.weight = upgradedModule.weight + weightGain
+        {.ruleOn: "assignments".}
         addMessage(message = playerShip.crew[workerIndex].name &
             " has upgraded " & upgradedModule.name & ".", mType = orderMessage, color = green)
         localMaxValue = (modulesList[upgradedModule.protoIndex].value.float / 2.0).int
