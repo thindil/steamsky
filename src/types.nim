@@ -209,9 +209,9 @@ type
     ## * duration         - The duration bonus of the harpoon gun
     ## * harpoonIndex     - The index of item from ship's cargo used as harpoon
     ## * data             - Various data for module, depends on module
-    name*: ModuleName
-    protoIndex*: Natural
-    weight*: Natural
+    name: ModuleName
+    protoIndex: Natural
+    weight: Natural
     durability*: Natural
     maxDurability*: Natural
     owner*: seq[int]
@@ -394,6 +394,44 @@ proc `name=`*(module: var ModuleData, value: ModuleName) {.raises: [],
   ##
   ## Returns the modified ModuleData object
   module.name = value
+
+proc protoIndex*(module: ModuleData): Natural {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of ModuleData type
+  ##
+  ## * module - the ModuleData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  module.protoIndex
+
+proc `protoIndex=`*(module: var ModuleData, value: Natural) {.raises: [],
+    tags: [], contractual.} =
+  ## The setter of a field of ModuleData type
+  ##
+  ## * module - the ModuleData object which field will be modified
+  ## * value  - the new value for the field
+  ##
+  ## Returns the modified ModuleData object
+  module.protoIndex = value
+
+proc weight*(module: ModuleData): Natural {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of ModuleData type
+  ##
+  ## * module - the ModuleData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  module.weight
+
+proc `weight=`*(module: var ModuleData, value: Natural) {.raises: [],
+    tags: [], contractual.} =
+  ## The setter of a field of ModuleData type
+  ##
+  ## * module - the ModuleData object which field will be modified
+  ## * value  - the new value for the field
+  ##
+  ## Returns the modified ModuleData object
+  module.weight = value
 
 type
   InventoryData* = object
