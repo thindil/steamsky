@@ -24,10 +24,8 @@ import config, game, types
 
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
-    price: Natural = 0; quality: ObjectQuality;
-    maxDurability: ItemsDurability = defaultItemDurability; weight: Natural = 0;
-    breakChance: ExtendedNatural) {.raises: [KeyError], tags: [],
-    contractual.} =
+    price: Natural = 0; quality: ObjectQuality; craftBonus: CraftBonuses;
+    craftMalus: CraftMaluses) {.raises: [], tags: [], contractual.} =
   ## Updated the selected ship cargo, add or remove items to it
   ##
   ## * ship          - The ship which cargo will be updated
@@ -39,9 +37,8 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
   ##                   be empty if protoIndex is set
   ## * price         - The price of the item which will be modified
   ## * quality       - The quality of the item which will be modified
-  ## * maxDurability - The maximum durability of the item to modify. Can be empty
-  ## * weight        - The weight of the item. Can be empty
-  ## * breakChance   - The chance for item to break during using
+  ## * craftBonus    - The crafting bonus for the item
+  ## * craftMalus    - The crafting malus for the item
   ##
   ## Returns the modified ship parameter
   require:
@@ -51,9 +48,8 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     if protoIndex > 0 and cargoIndex < 0:
       for index, item in ship.cargo:
         if item.protoIndex == protoIndex and item.durability == durability and
-            item.quality == quality and item.maxDurability == maxDurability and
-            (item.weight == weight or (weight == 0 and itemsList[
-            protoIndex].weight == item.weight)) and item.breakChance == breakChance:
+            item.quality == quality and item.craftBonus == craftBonus and
+            item.craftMalus == craftMalus:
           itemIndex = index
           break
     else:
@@ -63,7 +59,7 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     if itemIndex == -1:
       ship.cargo.add(y = InventoryData(protoIndex: protoIndex, amount: amount,
           name: "", durability: durability, price: price, quality: quality,
-          maxDurability: maxDurability, weight: weight))
+          craftBonus: craftBonus, craftMalus: craftMalus))
       return
     {.ruleOff: "varDeclared".}
     let newAmount: int = ship.cargo[itemIndex].amount + amount
