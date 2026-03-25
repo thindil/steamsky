@@ -326,7 +326,7 @@ proc resetOrder(module: var ModuleData; moduleOwner, toolIndex,
     let item: InventoryData = playerShip.crew[crafterIndex].inventory[toolIndex]
     updateCargo(ship = playerShip, protoIndex = item.protoIndex, amount = 1,
         durability = item.durability, quality = item.quality,
-        breakChance = item.breakChance)
+        craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     updateInventory(memberIndex = crafterIndex, amount = -1,
         inventoryIndex = toolIndex, ship = playerShip,
         quality = item.quality, breakChance = item.breakChance)
@@ -460,14 +460,13 @@ proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
     return true
   if module.craftingIndex.len > 11 and module.craftingIndex[0..10] == "Deconstruct":
     updateCargo(ship = playerShip, protoIndex = recipe.resultIndex,
-        amount = resultAmount, quality = quality, breakChance = itemsList[
-            recipe.resultIndex].breakChance)
+        amount = resultAmount, quality = quality, craftBonus = none,
+        craftMalus = none)
   else:
     updateCargo(ship = playerShip, protoIndex = recipesList[
         module.craftingIndex].resultIndex, amount = resultAmount,
         quality = quality, durability = maxDurability,
-        maxDurability = maxDurability, weight = weight,
-        breakChance = breakChance)
+        craftBonus = module.craftingBonus, craftMalus = module.craftingMalus)
   for key, protoRecipe in recipesList:
     if protoRecipe.resultIndex == recipe.resultIndex:
       updateCraftingOrders(index = key)

@@ -112,8 +112,9 @@ proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
                   value = repairValue, quality = materialsQuality)
               updateCargo(ship = playerShip, cargoIndex = repairMaterial,
                   amount = -(materialCost), quality = playerShip.cargo[
-                  repairMaterial].quality, breakChance = playerShip.cargo[
-                  repairMaterial].breakChance)
+                  repairMaterial].quality, craftBonus = playerShip.cargo[
+                  repairMaterial].craftBonus, craftMalus = playerShip.cargo[
+                  repairMaterial].craftMalus)
               playerShip.modules[moduleIndex].durability += repairValue
               if repairValue > crewRepairPoints[pointsIndex]:
                 repairValue = crewRepairPoints[pointsIndex]

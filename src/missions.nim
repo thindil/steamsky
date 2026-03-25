@@ -82,7 +82,8 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [
         addMessage(message = "You received " & $rewardAmount & " " & moneyName &
             " for finishing your mission.", mType = missionMessage)
         updateCargo(ship = playerShip, protoIndex = moneyIndex,
-            amount = rewardAmount, quality = normal, breakChance = 0)
+            amount = rewardAmount, quality = normal, craftBonus = none,
+            craftMalus = none)
     skyMap[mission.targetX][mission.targetY].missionIndex = -1
     skyMap[skyBases[mission.startBase].skyX][skyBases[
         mission.startBase].skyY].missionIndex = -1
@@ -91,7 +92,7 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [
     {.warning[UnsafeSetLen]: on.}
     if mission.mType == deliver:
       updateCargo(ship = playerShip, protoIndex = mission.itemIndex,
-          amount = -1, quality = normal, breakChance = 0)
+          amount = -1, quality = normal, craftBonus = none, craftMalus = none)
     elif mission.mType == passenger and mission.data < playerShip.crew.len:
       {.warning[UnsafeSetLen]: off.}
       playerShip.crew.delete(i = mission.data)

@@ -254,8 +254,9 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
               healAmount = needAmount
             updateCargo(ship = playerShip, amount = -(needAmount),
                 cargoIndex = toolIndex, quality = playerShip.cargo[
-                toolIndex].quality, breakChance = playerShip.cargo[
-                    toolIndex].breakChance)
+                toolIndex].quality, craftBonus = playerShip.cargo[
+                toolIndex].craftBonus, craftMalus = playerShip.cargo[
+                toolIndex].craftMalus)
           else:
             toolIndex = findItem(inventory = playerShip.crew[
                 memberIndex].inventory, itemType = faction.healingTools,
@@ -399,7 +400,7 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
           itemsList[item.protoIndex].value[2] + countItemBonus(
           value = itemsList[item.protoIndex].value[2], quality = item.quality)))
     updateCargo(ship = playerShip, protoIndex = item.protoIndex, amount = -1,
-        quality = item.quality, breakChance = item.breakChance)
+        quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     return
   itemIndex = findItem(inventory = playerShip.crew[memberIndex].inventory,
       itemType = itemType, itemQuality = any)
@@ -498,7 +499,7 @@ proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
       if member.equipment[EquipmentLocations.tool] > -1:
         updateCargo(ship = playerShip, protoIndex = item.protoIndex, amount = 1,
             durability = item.durability, quality = item.quality,
-            breakChance = item.breakChance)
+            craftBonus = item.craftBonus, craftMalus = item.craftMalus)
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = member.equipment[EquipmentLocations.tool],
             ship = playerShip, quality = item.quality,
