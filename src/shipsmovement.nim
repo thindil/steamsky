@@ -49,9 +49,10 @@ proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError,
         mType = otherMessage, color = red)
     death(memberIndex = 0, reason = "fall of the ship", ship = playerShip)
     return
-  updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-      fuelIndex].protoIndex, amount = fuelNeeded, quality = playerShip.cargo[
-      fuelIndex].quality, breakChance = playerShip.cargo[fuelIndex].breakChance)
+  let fuel: InventoryData = playerShip.cargo[fuelIndex]
+  updateCargo(ship = playerShip, protoIndex = fuel.protoIndex,
+      amount = fuelNeeded, quality = fuel.quality, craftBonus = fuel.craftBonus,
+      craftMalus = fuel.craftMalus)
 
 proc haveOrderRequirements(): ErrorMessage {.raises: [KeyError], tags: [],
     contractual.} =
@@ -344,9 +345,10 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
     return 0
   playerShip.skyX = newX
   playerShip.skyY = newY
-  updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-      fuelIndex].protoIndex, amount = fuelNeeded, quality = playerShip.cargo[
-          fuelIndex].quality, breakChance = playerShip.cargo[fuelIndex].breakChance)
+  let fuel: InventoryData = playerShip.cargo[fuelIndex]
+  updateCargo(ship = playerShip, protoIndex = fuel.protoIndex,
+      amount = fuelNeeded, quality = fuel.quality, craftBonus = fuel.craftBonus,
+      craftMalus = fuel.craftMalus)
   var timePassed: Natural = (100.0 / speed).int
   if timePassed > 0:
     case playerShip.speed

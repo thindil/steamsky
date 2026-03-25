@@ -569,7 +569,7 @@ proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = tclEval2(
         script = itemBox & " get").parseInt, quality = tclEval2(
         script = itemCombo & " current").parseInt.ObjectQuality,
-        breakChance = itemsList[itemIndex].breakChance)
+        craftBonus = none, craftMalus = none)
   except:
     return showError(message = "Can't update the cargo.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
@@ -603,7 +603,8 @@ proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
         " current").parseInt.ObjectQuality
     updateCargo(ship = playerShip, amount = tclEval2(script = itemBox &
         " get").parseInt, cargoIndex = itemIndex, quality = playerShip.cargo[
-            itemIndex].quality, breakChance = playerShip.cargo[itemIndex].breakChance)
+            itemIndex].quality, craftBonus = playerShip.cargo[itemIndex].craftBonus,
+            craftMalus = playerShip.cargo[itemIndex].craftMalus)
   except:
     return showError(message = "Can't update the cargo.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
