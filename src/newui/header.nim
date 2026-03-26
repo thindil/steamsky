@@ -18,7 +18,7 @@
 ## Provides code related to the game's header, like showing buttons and icons
 ## on it, the game's menu, etc.
 
-import std/[colors, math, tables]
+import std/[colors, math, tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, messages, shipscargo, shipsmovement, types]
 import coreui, dialogs, errordialog, ordersmenu, setui, themes, waitmenu
@@ -462,11 +462,16 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       needRepairs = needRepairs, needWorker = needWorker,
       haveWorker = haveWorker, needCleaning = needCleaning, faction = faction)
   if getInputTextLen() > 0:
-    const screens: array[7, GameState] = [shipInfo, crafting, lastMessages,
-        knowledgeLists, gameStatistics, help, GameState.options]
-    let screenIndex: ExtendedNatural = menuAccelerators.find(item = getInputText())
-    if screenIndex > -1:
-      state = screens[screenIndex]
+    var key: string = ""
+    if isKeyPressed(key = keyShift):
+      key = "Shift-"
+    elif isKeyPressed(key = keyCtrl):
+      key = "Ctrl-"
+    elif isKeyPressed(key = keyAlt):
+      key = "Alt-"
+    key &= getInputText().toLowerAscii
+    if key == menuAccelerators[1]:
+      showShipInfo(dialog = dialog, state = state)
   return showDialogs(dialog = dialog, state = state, oldState = oldState)
 
 proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
