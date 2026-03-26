@@ -1445,6 +1445,7 @@ type
     textAlignment*: nk_flags
     padding*, touchPadding*: Vec2
     spacing*, border*, colorFactor*, disabledFactor*: float
+    userData*: Handle
   StyleSelectable* = object
     ## Used to store Nuklear style data for selectable widgets
     normal*, hover*, pressed*, normalActive*, hoverActive*,

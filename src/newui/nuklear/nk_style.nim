@@ -164,6 +164,17 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.menuButton.drawEnd = nil
 
   # checkbox toggle
+  context.style.checkbox.normal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[toggleColor]))
+  context.style.checkbox.hover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[toggleHoverColor]))
+  context.style.checkbox.active = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[toggleHoverColor]))
+  context.style.checkbox.cursorNormal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[toggleCursorColor]))
+  context.style.checkbox.cursorHover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[toggleCursorColor]))
+  context.style.checkbox.userData = Handle(handleType: handleInt, intValue: 0)
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
