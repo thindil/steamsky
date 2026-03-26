@@ -170,7 +170,8 @@ proc updateInventory*(memberIndex: Natural; amount: int;
       else:
         itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
             protoIndex = protoIndex, itemQuality = quality,
-            maxDurability = maxDurability, weight = weight, breakChance = breakChance)
+            maxDurability = maxDurability, weight = weight,
+                breakChance = breakChance)
     else:
       itemIndex = inventoryIndex
     if amount > 0:
@@ -252,7 +253,8 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
   if item.durability == 0:
     if memberIndex == -1:
       updateCargo(ship = ship, cargoIndex = itemIndex, amount = -1,
-          quality = any, breakChance = item.breakChance)
+          quality = any, craftBonus = item.craftBonus,
+          craftMalus = item.craftMalus)
     else:
       updateInventory(memberIndex = memberIndex, amount = -1,
           inventoryIndex = itemIndex, ship = ship, quality = item.quality,
@@ -266,9 +268,11 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
           i].durability == inventory[j].durability and i != j:
         if memberIndex == -1:
           updateCargo(ship = ship, cargoIndex = j, amount = 0 - inventory[
-              j].amount, quality = any, breakChance = inventory[j].breakChance)
+              j].amount, quality = any, craftBonus = inventory[j].craftBonus,
+                  craftMalus = inventory[j].craftMalus)
           updateCargo(ship = ship, cargoIndex = i, amount = inventory[j].amount,
-              quality = any, breakChance = inventory[j].breakChance)
+              quality = any, craftBonus = inventory[j].craftBonus,
+                  craftMalus = inventory[j].craftMalus)
         else:
           updateInventory(memberIndex = memberIndex, amount = 0 - inventory[
               j].amount, inventoryIndex = j, ship = ship,

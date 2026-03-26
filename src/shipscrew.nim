@@ -242,7 +242,7 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
       let item: InventoryData = ship.crew[memberIndex].inventory[toolsIndex]
       updateCargo(ship = ship, protoIndex = item.protoIndex, amount = 1,
           durability = item.durability, quality = item.quality,
-          breakChance = item.breakChance)
+          craftBonus = item.craftBonus,craftMalus = item.craftMalus)
       updateInventory(memberIndex = memberIndex, amount = -1,
           inventoryIndex = toolsIndex, ship = ship, quality = item.quality,
           breakChance = item.breakChance)
@@ -294,7 +294,7 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
           let item: InventoryData = ship.crew[memberIndex].inventory[toolsIndex]
           updateCargo(ship = ship, protoIndex = item.protoIndex, amount = 1,
               durability = item.durability, quality = item.quality,
-              breakChance = item.breakChance)
+              craftBonus = item.craftBonus, craftMalus = item.craftMalus)
           updateInventory(memberIndex = memberIndex, amount = -1,
               inventoryIndex = toolsIndex, ship = ship, quality = item.quality,
               breakChance = item.breakChance)
@@ -392,7 +392,7 @@ proc giveRestOrder(ship: var ShipRecord; memberIndex: Natural) {.raises: [
         let item: InventoryData = ship.crew[memberIndex].inventory[toolsIndex]
         updateCargo(ship = ship, protoIndex = item.protoIndex, amount = 1,
             durability = item.durability, quality = item.quality,
-            breakChance = item.breakChance)
+            craftBonus = item.craftBonus, craftMalus = item.craftMalus)
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = toolsIndex, ship = ship, quality = item.quality,
             breakChance = item.breakChance)

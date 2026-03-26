@@ -722,13 +722,13 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             if cargoIndex > -1:
               updateCargo(ship = playerShip, cargoIndex = cargoIndex,
                   amount = manipulateData.amount, durability = item.durability,
-                  quality = item.quality, maxDurability = item.maxDurability,
-                  weight = item.weight, breakChance = item.breakChance)
+                  quality = item.quality, craftBonus = item.craftBonus,
+                  craftMalus = item.craftMalus)
             else:
               updateCargo(ship = playerShip, protoIndex = protoIndex,
                   amount = manipulateData.amount, durability = item.durability,
-                  quality = item.quality, maxDurability = item.maxDurability,
-                  weight = item.weight, breakChance = item.breakChance)
+                  quality = item.quality, craftBonus = item.craftBonus,
+                  craftMalus = item.craftMalus)
             try:
               updateBaseCargo(cargoIndex = baseCargoIndex,
                   amount = -manipulateData.amount, durability = item.durability,
@@ -767,8 +767,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
                 return
             updateCargo(ship = playerShip, cargoIndex = cargoIndex,
                 amount = -manipulateData.amount, durability = item.durability,
-                quality = item.quality, maxDurability = item.maxDurability,
-                weight = item.weight, breakChance = item.breakChance)
+                quality = item.quality, craftBonus = item.craftBonus,
+                craftMalus = item.craftMalus)
             try:
               addMessage(message = "You drop " & $manipulateData.amount & " " &
                   itemsList[protoIndex].name & ".", mType = orderMessage)
@@ -822,8 +822,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
               return
             updateCargo(ship = playerShip, amount = -manipulateData.amount,
                 cargoIndex = manipulateData.itemIndex, price = item.price,
-                quality = item.quality, maxDurability = item.maxDurability,
-                weight = item.weight, breakChance = item.breakChance)
+                quality = item.quality, craftBonus = item.craftBonus,
+                craftMalus = item.craftMalus)
           of dropCargoDialog:
             var dropAmount, dropAmount2: Natural = manipulateData.amount
             let itemIndex: Natural = manipulateData.itemIndex
@@ -851,8 +851,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
               updateCargo(ship = playerShip, protoIndex = item.protoIndex,
                 amount = -dropAmount, durability = item.durability,
                 price = item.price, quality = item.quality,
-                maxDurability = item.maxDurability, weight = item.weight,
-                breakChance = item.breakChance)
+                craftBonus = item.craftBonus, craftMalus = item.craftMalus)
           else:
             return false
           dialog = none

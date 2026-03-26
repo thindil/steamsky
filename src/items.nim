@@ -305,7 +305,7 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
         let item: InventoryData = playerShip.crew[memberIndex].inventory[result]
         updateCargo(ship = playerShip, protoIndex = protoIndex, amount = 1,
             durability = item.durability, quality = item.quality,
-            breakChance = item.breakChance)
+            craftBonus = item.craftBonus, craftMalus = item.craftMalus)
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = result, ship = playerShip,
             quality = item.quality, breakChance = item.breakChance)
@@ -322,7 +322,7 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
               protoIndex = item.protoIndex, durability = item.durability,
               ship = playerShip, quality = item.quality, breakChance = item.breakChance)
           updateCargo(ship = playerShip, amount = -1, cargoIndex = result,
-              quality = item.quality, breakChance = item.breakChance)
+              quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
           result = findItem(inventory = playerShip.crew[memberIndex].inventory,
               itemType = itemType, quality = toolQuality, itemQuality = any)
         except CrewNoSpaceError:
@@ -522,7 +522,7 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
       else:
         updateCargo(ship = playerShip, protoIndex = moneyIndex,
             amount = newAmount, cargoIndex = mIndex, quality = newQuality,
-            breakChance = playerShip.cargo[mIndex].breakChance)
+            craftBonus = playerShip.cargo[mIndex].craftBonus, craftMalus = playerShip.cargo[mIndex].craftMalus)
   else:
     for index, item in inventory:
       if item.protoIndex == moneyIndex and item.quality == quality:
@@ -535,7 +535,7 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
     else:
       updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = amount,
           cargoIndex = mIndex, quality = quality,
-          breakChance = playerShip.cargo[mIndex].breakChance)
+          craftBonus = playerShip.cargo[mIndex].craftBonus, craftMalus = playerShip.cargo[mIndex].craftMalus)
   {.ruleOn: "varDeclared".}
 
 proc setBreakChance*() {.raises: [KeyError], tags: [], contractual.} =

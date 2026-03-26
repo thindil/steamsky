@@ -291,7 +291,7 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
           break
       updateCargo(ship = playerShip, protoIndex = protoIndex,
           amount = itemAmount, quality = itemQuality.ObjectQuality,
-          breakChance = itemsList[protoIndex].breakChance)
+          craftBonus = none, craftMalus = none)
       setCargoData()
     except:
       discard
