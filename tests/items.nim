@@ -10,7 +10,8 @@ suite "Unit tests for items module":
   loadCareers("bin/data/careers.dat".Path)
   loadFactions("bin/data/factions.dat".Path)
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7))
+  playerShip.modules.add(y = initModuleData(mType = cargoRoom, protoIndex = 7,
+      durability = 100, maxDurability = 100, name = "Cargo", weight = 1))
   playerShip.cargo = @[]
   playerShip.cargo.add(InventoryData(protoIndex: 53, amount: 1))
   playerShip.crew = @[]

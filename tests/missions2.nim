@@ -32,17 +32,17 @@ suite "Unit tests for missions2 module":
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0)]))
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.engine, protoIndex: 3,
-      durability: 100, fuelUsage: 4, power: 2000, disabled: false,
-      maxDurability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.cockpit, protoIndex: 5,
-      durability: 100, maxDurability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.cabin, protoIndex: 4,
-      durability: 100, owner: @[0]))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.cabin, protoIndex: 4,
-      durability: 100, owner: @[1]))
+  playerShip.modules.add(y = initModuleData(mType = cargoRoom, protoIndex = 7,
+      durability = 100, maxDurability = 100, name = "Cargo", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.engine, protoIndex = 3,
+      durability = 100, fuelUsage = 4, power = 2000, disabled = false,
+      maxDurability = 100, name = "Engine", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.cockpit, protoIndex = 5,
+      durability = 100, maxDurability = 100, name = "Cockpit", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.cabin, protoIndex = 4,
+      durability = 100, owner = @[0], maxDurability = 100, name = "Cabin", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.cabin, protoIndex = 4,
+      durability = 100, owner = @[1], maxDurability = 100, name = "Cabin", weight = 1))
   playerShip.cargo = @[]
   playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
       durability: 100))
