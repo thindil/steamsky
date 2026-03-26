@@ -17,17 +17,17 @@ suite "Unit tests for shipsmovement module":
   loadShips("bin/data/ships.dat".Path)
 
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: ModuleType2.engine, protoIndex: 3,
-      durability: 100, fuelUsage: 4, power: 2000, disabled: false,
-      maxDurability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.cockpit, protoIndex: 5,
-      durability: 100, maxDurability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.armor, protoIndex: 57,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.turret, protoIndex: 86,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 160,
-      durability: 100, damage: 100, owner: @[-1]))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.engine, protoIndex = 3,
+      durability = 100, fuelUsage = 4, power = 2000, disabled = false,
+      maxDurability = 100, name = "Engine", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.cockpit, protoIndex = 5,
+      durability = 100, maxDurability = 100, name = "Cockpit", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.armor, protoIndex = 57,
+      durability = 100, maxDurability = 100, name = "Armor", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.turret, protoIndex = 86,
+      durability = 100, maxDurability = 100, name = "Turret", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.gun, protoIndex = 160,
+      durability = 100, damage = 100, owner = @[-1], maxDurability = 100, name = "Gun", weight = 1))
   playerShip.cargo = @[]
   playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100, durability: 100))
   playerShip.crew = @[]

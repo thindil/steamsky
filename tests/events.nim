@@ -27,12 +27,12 @@ suite "Unit tests for events module":
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
       1, 0, 0], order: gunner, loyalty: 100))
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: ModuleType2.armor, protoIndex: 57,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.turret, protoIndex: 86,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 160,
-      durability: 100, damage: 100))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.armor, protoIndex = 57,
+      durability = 100, maxDurability = 100, name = "Armor", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.turret, protoIndex = 86,
+      durability = 100, maxDurability = 100, name = "Turret", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.gun, protoIndex = 160,
+      durability = 100, damage = 100, maxDurability = 100, name = "Gun", weight = 1))
   skyMap[1][1].baseIndex = 1
   eventsList = @[]
 

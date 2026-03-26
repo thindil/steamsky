@@ -27,8 +27,8 @@ suite "Unit tests for crew module":
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: ModuleType2.cabin, protoIndex: 4,
-      durability: 100, owner: @[0]))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.cabin, protoIndex = 4,
+      durability = 100, owner = @[0], name = "Cabin", maxDurability = 100, weight = 1))
   skyMap[1][1].baseIndex = 1
 
   test "Testing daily payment.":

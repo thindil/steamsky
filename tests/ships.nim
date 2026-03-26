@@ -20,8 +20,8 @@ suite "Unit tests for ships module":
 
   test "Damaging the player's ship module.":
     playerShip.modules = @[]
-    playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
-        durability: 100))
+    playerShip.modules.add(y = initModuleData(mType = cargoRoom, protoIndex = 7,
+        durability = 100, maxDurability = 100, name = "Cargo", weight = 1))
     damageModule(playerShip, 0, 10, "during tests")
     check:
       playerShip.modules[0].durability == 90

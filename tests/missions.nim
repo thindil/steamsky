@@ -26,8 +26,8 @@ suite "Unit tests for missions module":
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
       1, 0, 0], order: gunner, loyalty: 100))
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
-      durability: 100))
+  playerShip.modules.add(y = initModuleData(mType = cargoRoom, protoIndex = 7,
+      durability = 100, weight = 1, maxDurability = 100, name = "Cargo"))
   playerShip.cargo = @[]
   playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
       durability: 100))
