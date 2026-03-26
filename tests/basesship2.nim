@@ -43,18 +43,18 @@ suite "Unit tests for basesship2 module":
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: ModuleType2.hull, protoIndex: 1,
-      durability: 100, maxDurability: 100, maxModules: 10))
-  playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.armor, protoIndex: 57,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.turret, protoIndex: 86,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 160,
-      durability: 100, damage: 100, owner: @[-1], maxDurability: 100))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.hull, protoIndex = 1,
+      durability = 100, maxDurability = 100, maxModules = 10, name = "Hull", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = cargoRoom, protoIndex = 7,
+      durability = 100, maxDurability = 100, name = "Cargo", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = cargoRoom, protoIndex = 7,
+      durability = 100, maxDurability = 100, name = "Cargo", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.armor, protoIndex = 57,
+      durability = 100, maxDurability = 100, name = "Armor", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.turret, protoIndex = 86,
+      durability = 100, maxDurability = 100, name = "Turret", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.gun, protoIndex = 160,
+      durability = 100, damage = 100, owner = @[-1], maxDurability = 100, name = "Gun", weight = 1))
   playerShip.cargo = @[]
   playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 2000,
       durability: 100))
@@ -83,13 +83,13 @@ suite "Unit tests for basesship2 module":
   resetReputations()
 
   test "Repairing the player's ship's module in the base.":
-    playerShip.modules[0].durability -= 5
+    playerShip.modules[0].durability = playerShip.modules[0].durability -  5
     repairShip(0)
     check:
       playerShip.modules[0].durability == playerShip.modules[0].maxDurability
 
   test "Repairing the whole player's ship in the base.":
-    playerShip.modules[0].durability -= 5
+    playerShip.modules[0].durability = playerShip.modules[0].durability -  5
     repairShip(-1)
     check:
       playerShip.modules[0].durability == playerShip.modules[0].maxDurability

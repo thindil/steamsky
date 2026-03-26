@@ -25,8 +25,8 @@ suite "Unit tests for basesship module":
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: ModuleType2.hull, protoIndex: 1,
-      durability: 100, maxDurability: 100, maxModules: 10))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.hull, protoIndex = 1,
+      durability = 100, maxDurability = 100, maxModules = 10, name = "Hull", weight = 1))
   playerShip.cargo = @[]
   playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
       durability: 100))
@@ -45,7 +45,7 @@ suite "Unit tests for basesship module":
 
   test "Counting repair cost for the selected module.":
     var cost, time: Natural = 0
-    playerShip.modules[0].durability -= 5
+    playerShip.modules[0].durability = playerShip.modules[0].durability - 5
     repairCost(cost, time, 0)
     check:
       cost > 0 and time > 0

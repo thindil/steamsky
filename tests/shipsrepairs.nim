@@ -13,9 +13,9 @@ suite "Unit tests for shipsrepairs module":
   loadModules("bin/data/shipmodules.dat".Path)
 
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: ModuleType2.engine, protoIndex: 3,
-      durability: 99, fuelUsage: 4, power: 2000, disabled: false,
-      maxDurability: 100))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.engine, protoIndex = 3,
+      durability = 99, fuelUsage = 4, power = 2000, disabled = false,
+      maxDurability = 100, name = "Engine", weight = 1))
   playerShip.cargo = @[]
   playerShip.cargo.add(InventoryData(protoIndex: 61, amount: 5,
       durability: 100))
