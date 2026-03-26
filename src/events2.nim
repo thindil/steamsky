@@ -19,7 +19,7 @@
 ## from events module to avoid circular dependencies.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import bases, basestypes, combat, events, factions, game, game2, items, maps,
     messages, shipscargo, shipscrew, shipscrew2, shipsmovement, types, utils
 
@@ -60,7 +60,9 @@ proc checkForOpenSpaceEvents(roll: Positive): bool {.raises: [KeyError, IOError,
             engines.add(y = index)
         let engineIndex: Natural = engines[getRandom(min = 0,
             max = engines.high)]
-        playerShip.modules[engineIndex].durability.dec
+        {.ruleOff: "assignments".}
+        playerShip.modules[engineIndex].durability = playerShip.modules[engineIndex].durability - 1
+        {.ruleOn: "assignments".}
         updateOrders(ship = playerShip)
       else:
         addMessage(message = playerShip.crew[engineerIndex].name &

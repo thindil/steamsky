@@ -20,7 +20,7 @@
 ## a new ship, etc.
 
 import std/[logging, paths, strutils, tables, xmlparser, xmltree]
-import contracts
+import contracts, nimalyzer
 import game, log, maps, mobs, shipscrew2, types, utils
 
 proc getCabinQuality*(quality: Natural): string {.raises: [], tags: [],
@@ -519,7 +519,9 @@ proc damageModule*(ship: var ShipRecord; moduleIndex: Natural; damage: Positive;
         ship.modules[moduleIndex].durability
       else:
         damage
-    ship.modules[moduleIndex].durability -= realDamage
+    {.ruleOff: "assignments".}
+    ship.modules[moduleIndex].durability = ship.modules[moduleIndex].durability - realDamage
+    {.ruleOn: "assignments".}
     if ship.modules[moduleIndex].durability == 0:
       case modulesList[ship.modules[moduleIndex].protoIndex].mType
       of ModuleType.hull, ModuleType.engine:

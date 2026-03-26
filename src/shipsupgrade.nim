@@ -180,12 +180,12 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
       of durability:
         {.ruleOff: "assignments".}
         if (modulesList[upgradedModule.protoIndex].durability / 20).int > 0:
-          upgradedModule.maxDurability += (modulesList[
-              upgradedModule.protoIndex].durability / 20).int
+          upgradedModule.maxDurability = upgradedModule.maxDurability + (
+              modulesList[upgradedModule.protoIndex].durability / 20).int
           upgradedModule.weight = upgradedModule.weight + (weightGain * (
               modulesList[upgradedModule.protoIndex].durability / 20).int)
         else:
-          upgradedModule.maxDurability.inc
+          upgradedModule.maxDurability = upgradedModule.maxDurability + 1
           upgradedModule.weight = upgradedModule.weight + weightGain
         {.ruleOn: "assignments".}
         addMessage(message = playerShip.crew[workerIndex].name &

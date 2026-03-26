@@ -19,7 +19,7 @@
 ## amount of time
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import crewinventory, game, items, messages, shipscargo, shipscrew, types
 
 proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
@@ -115,7 +115,9 @@ proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
                   repairMaterial].quality, craftBonus = playerShip.cargo[
                   repairMaterial].craftBonus, craftMalus = playerShip.cargo[
                   repairMaterial].craftMalus)
-              playerShip.modules[moduleIndex].durability += repairValue
+              {.ruleOff: "assignments".}
+              playerShip.modules[moduleIndex].durability = playerShip.modules[moduleIndex].durability + repairValue
+              {.ruleOn: "assignments".}
               if repairValue > crewRepairPoints[pointsIndex]:
                 repairValue = crewRepairPoints[pointsIndex]
                 repairPoints = 0
