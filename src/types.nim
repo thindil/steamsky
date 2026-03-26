@@ -212,8 +212,8 @@ type
     name: ModuleName
     protoIndex: Natural
     weight: Natural
-    durability*: Natural
-    maxDurability*: Natural
+    durability: Natural
+    maxDurability: Natural
     owner*: seq[int]
     upgradeProgress*: ExtendedNatural
     upgradeAction*: ShipUpgrade
@@ -432,6 +432,44 @@ proc `weight=`*(module: var ModuleData, value: Natural) {.raises: [],
   ##
   ## Returns the modified ModuleData object
   module.weight = value
+
+proc durability*(module: ModuleData): Natural {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of ModuleData type
+  ##
+  ## * module - the ModuleData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  module.durability
+
+proc `durability=`*(module: var ModuleData, value: Natural) {.raises: [],
+    tags: [], contractual.} =
+  ## The setter of a field of ModuleData type
+  ##
+  ## * module - the ModuleData object which field will be modified
+  ## * value  - the new value for the field
+  ##
+  ## Returns the modified ModuleData object
+  module.durability = value
+
+proc maxDurability*(module: ModuleData): Natural {.raises: [], tags: [],
+    contractual.} =
+  ## The getter of a field of ModuleData type
+  ##
+  ## * module - the ModuleData object which field will be get
+  ##
+  ## Returns the value of the selected field
+  module.maxDurability
+
+proc `maxDurability=`*(module: var ModuleData, value: Natural) {.raises: [],
+    tags: [], contractual.} =
+  ## The setter of a field of ModuleData type
+  ##
+  ## * module - the ModuleData object which field will be modified
+  ## * value  - the new value for the field
+  ##
+  ## Returns the modified ModuleData object
+  module.maxDurability = value
 
 type
   InventoryData* = object
