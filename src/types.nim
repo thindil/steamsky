@@ -376,100 +376,35 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
   else:
     discard
 
-proc name*(module: ModuleData): ModuleName {.raises: [], tags: [],
-    contractual.} =
-  ## The getter of a field of ModuleData type
+template moduleGetterSetter(name: untyped; typ: typedesc) =
+  ## Set the getter for a field of ModuleData type
   ##
-  ## * module - the ModuleData object which field will be get
-  ##
-  ## Returns the value of the selected field
-  module.name
+  ## * name - the name of the field for which the getter will be set
+  ## * typ  - the type of the value of the field
+  proc `name`*(module: ModuleData): `typ` {.sideEffect, raises: [], tags: [],
+      contractual.} =
+    ## The getter of a field of ModuleData type
+    ##
+    ## * module - the data of the selected module
+    ##
+    ## Returns the value of the selected field
+    module.`name`
 
-proc `name=`*(module: var ModuleData, value: ModuleName) {.raises: [],
-    tags: [], contractual.} =
-  ## The setter of a field of ModuleData type
-  ##
-  ## * module - the ModuleData object which field will be modified
-  ## * value  - the new value for the field
-  ##
-  ## Returns the modified ModuleData object
-  module.name = value
+  proc `name=`*(module: var ModuleData; value: `typ`) {.sideEffect, raises: [],
+      tags: [], contractual.} =
+    ## The setter of a field of ModuleData type
+    ##
+    ## * module - the data of the selected module
+    ## * value  - the new value for the selected field
+    ##
+    ## Returns modified options of the selected module
+    module.`name` = value
 
-proc protoIndex*(module: ModuleData): Natural {.raises: [], tags: [],
-    contractual.} =
-  ## The getter of a field of ModuleData type
-  ##
-  ## * module - the ModuleData object which field will be get
-  ##
-  ## Returns the value of the selected field
-  module.protoIndex
-
-proc `protoIndex=`*(module: var ModuleData, value: Natural) {.raises: [],
-    tags: [], contractual.} =
-  ## The setter of a field of ModuleData type
-  ##
-  ## * module - the ModuleData object which field will be modified
-  ## * value  - the new value for the field
-  ##
-  ## Returns the modified ModuleData object
-  module.protoIndex = value
-
-proc weight*(module: ModuleData): Natural {.raises: [], tags: [],
-    contractual.} =
-  ## The getter of a field of ModuleData type
-  ##
-  ## * module - the ModuleData object which field will be get
-  ##
-  ## Returns the value of the selected field
-  module.weight
-
-proc `weight=`*(module: var ModuleData, value: Natural) {.raises: [],
-    tags: [], contractual.} =
-  ## The setter of a field of ModuleData type
-  ##
-  ## * module - the ModuleData object which field will be modified
-  ## * value  - the new value for the field
-  ##
-  ## Returns the modified ModuleData object
-  module.weight = value
-
-proc durability*(module: ModuleData): Natural {.raises: [], tags: [],
-    contractual.} =
-  ## The getter of a field of ModuleData type
-  ##
-  ## * module - the ModuleData object which field will be get
-  ##
-  ## Returns the value of the selected field
-  module.durability
-
-proc `durability=`*(module: var ModuleData, value: Natural) {.raises: [],
-    tags: [], contractual.} =
-  ## The setter of a field of ModuleData type
-  ##
-  ## * module - the ModuleData object which field will be modified
-  ## * value  - the new value for the field
-  ##
-  ## Returns the modified ModuleData object
-  module.durability = value
-
-proc maxDurability*(module: ModuleData): Natural {.raises: [], tags: [],
-    contractual.} =
-  ## The getter of a field of ModuleData type
-  ##
-  ## * module - the ModuleData object which field will be get
-  ##
-  ## Returns the value of the selected field
-  module.maxDurability
-
-proc `maxDurability=`*(module: var ModuleData, value: Natural) {.raises: [],
-    tags: [], contractual.} =
-  ## The setter of a field of ModuleData type
-  ##
-  ## * module - the ModuleData object which field will be modified
-  ## * value  - the new value for the field
-  ##
-  ## Returns the modified ModuleData object
-  module.maxDurability = value
+moduleGetterSetter(name = name, typ = ModuleName)
+moduleGetterSetter(name = protoIndex, typ = Natural)
+moduleGetterSetter(name = weight, typ = Natural)
+moduleGetterSetter(name = durability, typ = Natural)
+moduleGetterSetter(name = maxDurability, typ = Natural)
 
 type
   InventoryData* = object
