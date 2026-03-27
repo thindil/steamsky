@@ -288,6 +288,23 @@ proc showShipInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     mapPreview = false
   dialog = none
 
+proc showCraftScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the crafting screen
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state   - the current state of the game
+  ##
+  ## Returns the modified parameters dialog and state.
+  if state == crafting:
+    state = previousState
+  else:
+    previousState = state
+    setCrafting(dialog = dialog)
+    state = crafting
+    mapPreview = false
+  dialog = none
+
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     state: var GameState; options: bool = false): bool {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -461,6 +478,7 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       haveRepairman = haveRepairman, haveGunner = haveGunner,
       needRepairs = needRepairs, needWorker = needWorker,
       haveWorker = haveWorker, needCleaning = needCleaning, faction = faction)
+  # Keyboard shortcuts
   if getInputTextLen() > 0:
     var key: string = ""
     if isKeyPressed(key = keyShift):
@@ -472,6 +490,12 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     key &= getInputText().toLowerAscii
     if key == menuAccelerators[1]:
       showShipInfo(dialog = dialog, state = state)
+    if playerShip.crew[0].health > 0 and not inCombat:
+      if key == menuAccelerators[2]:
+        setDialog()
+        dialog = ordersDialog
+      elif key == menuAccelerators[3]:
+        showCraftScreen(dialog = dialog, state = state)
   return showDialogs(dialog = dialog, state = state, oldState = oldState)
 
 proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
@@ -502,14 +526,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
         setDialog()
         dialog = ordersDialog
       labelButton(title = "Crafting"):
-        if state == crafting:
-          state = previousState
-        else:
-          previousState = state
-          setCrafting(dialog = dialog)
-          state = crafting
-          mapPreview = false
-        dialog = none
+        showCraftScreen(dialog = dialog, state = state)
     labelButton(title = "Last messages"):
       if state == lastMessages:
         state = previousState
