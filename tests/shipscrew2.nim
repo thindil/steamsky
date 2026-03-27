@@ -27,8 +27,8 @@ suite "Unit tests for shipscrew2 module":
   playerShip.crew[0].inventory.add(InventoryData(amount: 1, protoIndex: 1, durability: 100))
   playerShip.crew[0].inventory.add(InventoryData(amount: 1, protoIndex: 2, durability: 100))
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
-      durability: 100, maxDurability: 100))
+  playerShip.modules.add(y = initModuleData(mType = cargoRoom, protoIndex = 7,
+      durability = 100, maxDurability = 100, name = "Cargo", weight = 1))
   playerShip.cargo = @[]
   playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
       durability: 100))

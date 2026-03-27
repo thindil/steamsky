@@ -12,8 +12,8 @@ suite "Unit tests for shipscargo module":
   loadModules("bin/data/shipmodules.dat".Path)
 
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
-      durability: 100, maxDurability: 100))
+  playerShip.modules.add(y = initModuleData(mType = cargoRoom, protoIndex = 7,
+      durability = 100, maxDurability = 100, name = "Cargo", weight = 1))
   playerShip.cargo = @[]
   playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
       durability: 100))
@@ -29,15 +29,18 @@ suite "Unit tests for shipscargo module":
       experience: 0)], health: 100))
 
   test "Remove an item from the player's ship cargo":
-    updateCargo(playerShip, 1, -1, quality = normal, breakChance = -1)
+    updateCargo(playerShip, 1, -1, quality = normal, craftBonus = none,
+        craftMalus = none)
     check:
       playerShip.cargo[0].amount == 99
 
   test "Add an item to the player's ship cargo":
-    updateCargo(playerShip, 1, 1, quality = normal, breakChance = -1)
+    updateCargo(playerShip, 1, 1, quality = normal, craftBonus = none,
+        craftMalus = none)
     check:
       playerShip.cargo[0].amount == 100
-    updateCargo(playerShip, 40, -1, quality = normal, breakChance = -1)
+    updateCargo(playerShip, 40, -1, quality = normal, craftBonus = none,
+        craftMalus = none)
 
   test "Checking a free space in the player's ship cargo.":
     check:
