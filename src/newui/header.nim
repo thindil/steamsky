@@ -305,6 +305,39 @@ proc showCraftScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
     mapPreview = false
   dialog = none
 
+proc showLastMessagesScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the last messages screen
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state   - the current state of the game
+  ##
+  ## Returns the modified parameters dialog and state.
+  if state == lastMessages:
+    state = previousState
+  else:
+    previousState = state
+    state = lastMessages
+    mapPreview = false
+  dialog = none
+
+proc showKnowledgeScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the knowledge screen
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state   - the current state of the game
+  ##
+  ## Returns the modified parameters dialog and state.
+  if state == knowledgeLists:
+    state = previousState
+  else:
+    previousState = state
+    setKnowledge(dialog = dialog)
+    state = knowledgeLists
+    mapPreview = false
+  dialog = none
+
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     state: var GameState; options: bool = false): bool {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -490,12 +523,20 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     key &= getInputText().toLowerAscii
     if key == menuAccelerators[1]:
       showShipInfo(dialog = dialog, state = state)
-    if playerShip.crew[0].health > 0 and not inCombat:
+    elif key == menuAccelerators[4]:
+      showLastMessagesScreen(dialog = dialog, state = state)
+    elif key == menuAccelerators[5]:
+      showKnowledgeScreen(dialog = dialog, state = state)
+    elif playerShip.crew[0].health > 0 and not inCombat:
       if key == menuAccelerators[2]:
         setDialog()
         dialog = ordersDialog
       elif key == menuAccelerators[3]:
         showCraftScreen(dialog = dialog, state = state)
+      elif key == menuAccelerators[6]:
+        setDialog()
+        setWaitMenu()
+        dialog = waitDialog
   return showDialogs(dialog = dialog, state = state, oldState = oldState)
 
 proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
@@ -528,22 +569,9 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
       labelButton(title = "Crafting"):
         showCraftScreen(dialog = dialog, state = state)
     labelButton(title = "Last messages"):
-      if state == lastMessages:
-        state = previousState
-      else:
-        previousState = state
-        state = lastMessages
-        mapPreview = false
-      dialog = none
+      showLastMessagesScreen(dialog = dialog, state = state)
     labelButton(title = "Knowledge lists"):
-      if state == knowledgeLists:
-        state = previousState
-      else:
-        previousState = state
-        setKnowledge(dialog = dialog)
-        state = knowledgeLists
-        mapPreview = false
-      dialog = none
+      showKnowledgeScreen(dialog = dialog, state = state)
     if playerShip.crew[0].health > 0 and not inCombat:
       labelButton(title = "Wait orders"):
         setDialog()
