@@ -245,7 +245,7 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
           craftBonus = item.craftBonus,craftMalus = item.craftMalus)
       updateInventory(memberIndex = memberIndex, amount = -1,
           inventoryIndex = toolsIndex, ship = ship, quality = item.quality,
-          breakChance = item.breakChance)
+          craftBonus = item.craftBonus, craftMalus = item.craftMalus)
       toolsIndex = -1
     var toolQuality: ItemsDurability = defaultItemDurability
     if givenOrder in [upgrading, repair, clean, train]:
@@ -297,7 +297,7 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
               craftBonus = item.craftBonus, craftMalus = item.craftMalus)
           updateInventory(memberIndex = memberIndex, amount = -1,
               inventoryIndex = toolsIndex, ship = ship, quality = item.quality,
-              breakChance = item.breakChance)
+              craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     return true
 
 proc showOrderMessage(givenOrder: CrewOrders; memberName: string;
@@ -395,7 +395,7 @@ proc giveRestOrder(ship: var ShipRecord; memberIndex: Natural) {.raises: [
             craftBonus = item.craftBonus, craftMalus = item.craftMalus)
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = toolsIndex, ship = ship, quality = item.quality,
-            breakChance = item.breakChance)
+            craftBonus = item.craftBonus, craftMalus = item.craftMalus)
 
 proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int = -1;

@@ -329,7 +329,7 @@ proc resetOrder(module: var ModuleData; moduleOwner, toolIndex,
         craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     updateInventory(memberIndex = crafterIndex, amount = -1,
         inventoryIndex = toolIndex, ship = playerShip,
-        quality = item.quality, breakChance = item.breakChance)
+        quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
   var haveWorker: bool = false
   for i in module.owner.low..module.owner.high:
     if module.owner[i] == moduleOwner or moduleOwner == -1:

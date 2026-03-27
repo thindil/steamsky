@@ -273,7 +273,7 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
                 healAmount = needAmount
               updateInventory(memberIndex = memberIndex, amount = -(needAmount),
                   inventoryIndex = toolIndex, ship = playerShip,
-                      quality = item.quality, breakChance = item.breakChance)
+                      quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
         if healAmount > 0:
           for index, member in playerShip.crew.mpairs:
             if member.health < 100 and index != memberIndex:
@@ -417,7 +417,7 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
           value = itemsList[item.protoIndex].value[2], quality = item.quality)))
     updateInventory(memberIndex = memberIndex, amount = -1,
         inventoryIndex = itemIndex, ship = playerShip, quality = item.quality,
-        breakChance = item.breakChance)
+        craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     return
   return 0
 
@@ -503,7 +503,7 @@ proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = member.equipment[EquipmentLocations.tool],
             ship = playerShip, quality = item.quality,
-                breakChance = item.breakChance)
+                craftBonus = item.craftBonus, craftMalus = item.craftMalus)
         member.equipment[EquipmentLocations.tool] = -1
       addMessage(message = member.name &
           " is too tired to work, they're going to rest.",

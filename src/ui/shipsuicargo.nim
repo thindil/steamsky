@@ -421,8 +421,7 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
     updateInventory(memberIndex = memberIndex, amount = amount,
         protoIndex = item.protoIndex, durability = item.durability,
         price = item.price, ship = playerShip, quality = item.quality,
-        maxDurability = item.maxDurability, weight = item.weight,
-        breakChance = item.breakChance)
+        craftBonus = item.craftBonus, craftMalus = item.craftMalus)
   except:
     return showError(message = "Can't update the member's inventory.")
   try:
