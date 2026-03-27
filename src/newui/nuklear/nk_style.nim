@@ -175,6 +175,10 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.checkbox.cursorHover = StyleItem(iType: itemColor,
       data: StyleItemData(itype: itemColor, color: table[toggleCursorColor]))
   context.style.checkbox.userData = Handle(handleType: handleInt, intValue: 0)
+  context.style.checkbox.textBackground = table[windowColor]
+  context.style.checkbox.textNormal = table[textColor]
+  context.style.checkbox.textHover = table[textColor]
+  context.style.checkbox.textActive = table[textColor]
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
