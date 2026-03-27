@@ -31,12 +31,12 @@ suite "Unit tests for events2 module":
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
       1, 0, 0], order: gunner, loyalty: 100))
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: ModuleType2.armor, protoIndex: 57,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.turret, protoIndex: 86,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 9,
-      durability: 100, damage: 100))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.armor, protoIndex = 57,
+      durability = 100, maxDurability = 100, name = "Armor", weight = 100))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.turret, protoIndex = 86,
+      durability = 100, maxDurability = 100, name = "Turret", weight = 100))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.gun, protoIndex = 9,
+      durability = 100, damage = 100, maxDurability = 100, name = "Gun", weight = 100))
   playerShip.cargo = @[]
   playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 2000,
       durability: 100))

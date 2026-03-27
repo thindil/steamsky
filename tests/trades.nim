@@ -34,16 +34,16 @@ suite "Unit tests for trades module":
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: ModuleType2.hull, protoIndex: 1,
-      durability: 100, maxModules: 10))
-  playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
-      durability: 100, maxDurability: 100))
-  playerShip.modules.add(ModuleData(mType: turret, protoIndex: 8,
-      durability: 100, maxDurability: 100, gunIndex: 3))
-  playerShip.modules.add(ModuleData(mType: gun, protoIndex: 9, durability: 100,
-      maxDurability: 100, damage: 10, owner: @[1]))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.cabin, protoIndex: 4,
-      durability: 100, owner: @[0]))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.hull, protoIndex = 1,
+      durability = 100, maxModules = 10, maxDurability = 100, name = "Hull", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = cargoRoom, protoIndex = 7,
+      durability = 100, maxDurability = 100, name = "Cargo", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = turret, protoIndex = 8,
+      durability = 100, maxDurability = 100, gunIndex = 3, name = "Turret", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = gun, protoIndex = 9, durability = 100,
+      maxDurability = 100, damage = 10, owner = @[1], name = "Gun", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.cabin, protoIndex = 4,
+      durability = 100, owner = @[0], name = "Cabin", weight = 1, maxDurability = 100))
   playerShip.cargo = @[]
   playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
       durability: 100))

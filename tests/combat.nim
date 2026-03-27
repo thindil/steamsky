@@ -26,12 +26,12 @@ suite "Unit tests for combat module":
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0)], health: 100, name: "Laeran"))
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: ModuleType2.armor, protoIndex: 57,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.turret, protoIndex: 86,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 160,
-      durability: 100, damage: 100, owner: @[-1]))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.armor, protoIndex = 57,
+      durability = 100, maxDurability = 100, name = "Armor", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.turret, protoIndex = 86,
+      durability = 100, maxDurability = 100, name = "Turret", weight = 1))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.gun, protoIndex = 160,
+      durability = 100, damage = 100, owner = @[-1], maxDurability = 100, name = "Gun", weight = 1))
 
   test "Starting combat.":
     discard startCombat(2)

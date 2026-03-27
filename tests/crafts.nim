@@ -13,14 +13,14 @@ suite "Unit tests for crafts module":
   loadModules("bin/data/shipmodules.dat".Path)
 
   playerShip.modules = @[]
-  playerShip.modules.add(ModuleData(mType: ModuleType2.workshop, protoIndex: 6,
-      durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.cargoRoom, protoIndex: 7,
-      durability: 100))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.workshop, protoIndex = 6,
+      durability = 100, maxDurability = 100, name = "Workshop", weight = 100))
+  playerShip.modules.add(y = initModuleData(mType = ModuleType2.cargoRoom, protoIndex = 7,
+      durability = 100, maxDurability = 100, name = "Cargo", weight = 100))
   updateCargo(ship = playerShip, protoIndex = 6, amount = 10, quality = normal,
-      breakChance = 0)
+      craftBonus = none, craftMalus = none)
   updateCargo(ship = playerShip, protoIndex = 50, amount = 1, quality = normal,
-      breakChance = 5)
+      craftBonus = none, craftMalus = none)
 
   test "Set the amount for a crafting order.":
     setRecipe(0, 10, "1")
