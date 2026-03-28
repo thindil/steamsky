@@ -338,6 +338,23 @@ proc showKnowledgeScreen(dialog: var GameDialog; state: var GameState) {.raises:
     mapPreview = false
   dialog = none
 
+proc showStatsScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the game statistics screen
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state   - the current state of the game
+  ##
+  ## Returns the modified parameters dialog and state.
+  if state == gameStatistics:
+    state = previousState
+  else:
+    previousState = state
+    setStatistics(dialog = dialog)
+    state = gameStatistics
+    mapPreview = false
+  dialog = none
+
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     state: var GameState; options: bool = false): bool {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -527,6 +544,8 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       showLastMessagesScreen(dialog = dialog, state = state)
     elif key == menuAccelerators[5]:
       showKnowledgeScreen(dialog = dialog, state = state)
+    elif key == menuAccelerators[7]:
+      showStatsScreen(dialog = dialog, state = state)
     elif playerShip.crew[0].health > 0 and not inCombat:
       if key == menuAccelerators[2]:
         setDialog()
@@ -578,14 +597,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
         setWaitMenu()
         dialog = waitDialog
     labelButton(title = "Game statistics"):
-      if state == gameStatistics:
-        state = previousState
-      else:
-        previousState = state
-        setStatistics(dialog = dialog)
-        state = gameStatistics
-        mapPreview = false
-      dialog = none
+      showStatsScreen(dialog = dialog, state = state)
     if playerShip.crew[0].health > 0:
       labelButton(title = "Help"):
         if state == help:
