@@ -384,6 +384,8 @@ proc showHelpScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
     mapPreview = false
   dialog = none
 
+var key: string = ""
+
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     state: var GameState; options: bool = false): bool {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -558,14 +560,15 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       needRepairs = needRepairs, needWorker = needWorker,
       haveWorker = haveWorker, needCleaning = needCleaning, faction = faction)
   # Keyboard shortcuts
+  if isKeyPressed(key = keyShift):
+    key = "Shift-"
+  elif isKeyPressed(key = keyCtrl):
+    key = "Ctrl-"
+  elif isKeyPressed(key = keyAlt):
+    key = "Alt-"
+  elif isKeyPressed(key = keyEscape):
+    key = ""
   if getInputTextLen() > 0:
-    var key: string = ""
-    if isKeyPressed(key = keyShift):
-      key = "Shift-"
-    elif isKeyPressed(key = keyCtrl):
-      key = "Ctrl-"
-    elif isKeyPressed(key = keyAlt):
-      key = "Alt-"
     key &= getInputText().toLowerAscii
     if key == menuAccelerators[1]:
       showShipInfo(dialog = dialog, state = state)
@@ -588,6 +591,7 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
           setDialog()
           setWaitMenu()
           dialog = waitDialog
+    key = ""
   return showDialogs(dialog = dialog, state = state, oldState = oldState)
 
 proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
