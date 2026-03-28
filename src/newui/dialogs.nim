@@ -732,8 +732,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             try:
               updateBaseCargo(cargoIndex = baseCargoIndex,
                   amount = -manipulateData.amount, durability = item.durability,
-                  quality = item.quality, maxDurability = item.maxDurability,
-                  weight = item.weight, breakChance = item.breakChance)
+                  quality = item.quality, craftBonus = item.craftBonus,
+                  craftMalus = item.craftMalus)
             except:
               dialog = setError(message = "Can't update the base's cargo3.")
               return
@@ -750,8 +750,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
                 updateBaseCargo(cargoIndex = baseCargoIndex,
                     amount = manipulateData.amount,
                     durability = item.durability, quality = item.quality,
-                    maxDurability = item.maxDurability, weight = item.weight,
-                    breakChance = item.breakChance)
+                    craftBonus = item.craftBonus, craftMalus = item.craftMalus)
               except:
                 dialog = setError(message = "Can't update the base's cargo.")
                 return
@@ -760,8 +759,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
                 updateBaseCargo(protoIndex = protoIndex,
                     amount = manipulateData.amount,
                     durability = item.durability, quality = item.quality,
-                    maxDurability = item.maxDurability, weight = item.weight,
-                    breakChance = item.breakChance)
+                    craftBonus = item.craftBonus, craftMalus = item.craftMalus)
               except:
                 dialog = setError(message = "Can't update the base's cargo2.")
                 return

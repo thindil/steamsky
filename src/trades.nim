@@ -146,8 +146,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
         raise newException(exceptn = NoMoneyInBaseError, message = itemName)
       updateBaseCargo(protoIndex = protoIndex, amount = sellAmount,
         durability = playerItem.durability, quality = playerItem.quality,
-        maxDurability = playerItem.maxDurability, weight = playerItem.weight,
-        breakChance = playerItem.breakChance)
+        craftBonus = playerItem.craftBonus, craftMalus = playerItem.craftMalus)
     else:
       if profit > traderCargo[0].amount:
         raise newException(exceptn = NoMoneyInBaseError, message = itemName)
@@ -173,7 +172,8 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
         craftBonus = playerItem.craftBonus, craftMalus = playerItem.craftMalus)
     updateMoney(memberIndex = -1, amount = profit, quality = normal)
     if baseIndex > 0:
-      updateBaseCargo(protoIndex = moneyIndex, amount = -profit, quality = normal, breakChance = -1)
+      updateBaseCargo(protoIndex = moneyIndex, amount = -profit, quality = normal,
+        craftBonus = none, craftMalus = none)
       gainRep(baseIndex = baseIndex, points = 1)
       if itemsList[protoIndex].reputation > skyBases[
           baseIndex].reputation.level:
@@ -230,7 +230,8 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     raise newException(exceptn = NotEnoughMoneyError, message = itemName)
   updateMoney(memberIndex = -1, amount = -cost, quality = any)
   if baseIndex > 0:
-    updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal, breakChance = -1)
+    updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal,
+      craftBonus = none, craftMalus = none)
   else:
     traderCargo[0].amount += cost
   if baseIndex > 0:
@@ -240,8 +241,7 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
         craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     updateBaseCargo(cargoIndex = baseItemIndex.cint, amount = -buyAmount,
         durability = item.durability, quality = item.quality,
-        maxDurability = item.maxDurability, weight = item.weight,
-        breakChance = item.breakChance)
+        craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     gainRep(baseIndex = baseIndex, points = 1)
   else:
     let item: BaseCargo = traderCargo[baseItemIndex]

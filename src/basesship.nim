@@ -52,7 +52,7 @@ proc payForDock*() {.raises: [KeyError, ReputationError, NoFreeSpaceError],
   except CrewNoSpaceError:
     discard
   updateBaseCargo(protoIndex = moneyIndex, amount = dockingCost,
-      quality = normal, breakChance = -1)
+      quality = normal, craftBonus = none, craftMalus = none)
   addMessage(message = "You pay " & $dockingCost & " " & moneyName &
       " docking fee.", mType = otherMessage)
   if traderIndex > -1:

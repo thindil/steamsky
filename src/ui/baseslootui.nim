@@ -434,16 +434,14 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
       try:
         updateBaseCargo(cargoIndex = baseCargoIndex, amount = amount,
             durability = item.durability, quality = item.quality,
-            maxDurability = item.maxDurability, weight = item.weight,
-            breakChance = item.breakChance)
+            craftBonus = item.craftBonus, craftMalus = item.craftMalus)
       except:
         return showError(message = "Can't update the base's cargo.")
     else:
       try:
         updateBaseCargo(protoIndex = protoIndex, amount = amount,
             durability = item.durability, quality = item.quality,
-            maxDurability = item.maxDurability, weight = item.weight,
-            breakChance = item.breakChance)
+            craftBonus = item.craftBonus, craftMalus = item.craftMalus)
       except:
         return showError(message = "Can't update the base's cargo2.")
     try:
@@ -488,8 +486,7 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       updateBaseCargo(cargoIndex = baseCargoIndex, amount = -(amount),
           durability = item.durability, quality = item.quality,
-          maxDurability = item.maxDurability, weight = item.weight,
-          breakChance = item.breakChance)
+          craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     except:
       return showError(message = "Can't update the base's cargo3.")
     try:

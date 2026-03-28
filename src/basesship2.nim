@@ -72,7 +72,7 @@ proc repairShip*(moduleIndex: int) {.raises: [NothingToRepairError,
           " " & moneyName & ".", mType = tradeMessage)
     updateMoney(memberIndex = -1, amount = -cost, quality = any)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal,
-        breakChance = -1)
+        craftBonus = none, craftMalus = none)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 1)
     updateGame(minutes = time)
@@ -131,7 +131,7 @@ proc installModule(moduleIndex, traderIndex, moneyAmount, hullIndex: int;
             message = "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.")
     updateMoney(memberIndex = -1, amount = -price, quality = any)
     updateBaseCargo(protoIndex = moneyIndex, amount = price, quality = normal,
-        breakChance = -1)
+        craftBonus = none, craftMalus = none)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = baseIndex, points = 1)
     updateGame(minutes = modulesList[moduleIndex].installTime)
@@ -331,7 +331,7 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
                 givenOrder = rest, checkPriorities = false)
       updateMoney(memberIndex = -1, amount = price, quality = any)
       updateBaseCargo(protoIndex = moneyIndex, amount = price, quality = normal,
-          breakChance = -1)
+          craftBonus = none, craftMalus = none)
       gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
       gainRep(baseIndex = baseIndex, points = 1)
       updateGame(minutes = modulesList[playerShip.modules[

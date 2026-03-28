@@ -134,7 +134,7 @@ proc buyRecipe*(recipeIndex: string) {.raises: [CantBuyError,
     checkMoney(price = cost, message = recipeName)
     updateMoney(memberIndex = -1, amount = -cost, quality = any)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal,
-        breakChance = -1)
+        craftBonus = none, craftMalus = none)
     knownRecipes.add(y = recipeIndex)
     addMessage(message = "You bought the recipe for " & recipeName & " for " &
         $cost & " of " & moneyName & ".", mType = tradeMessage)
@@ -215,7 +215,7 @@ proc healWounded*(memberIndex: int) {.raises: [CantHealError,
     checkMoney(price = cost)
     updateMoney(memberIndex = -1, amount = -cost, quality = any)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal,
-        breakChance = -1)
+        craftBonus = none, craftMalus = none)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     let baseIndex: BasesRange = skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex
@@ -287,7 +287,7 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
           crewIndex = memberIndex)
       updateMoney(memberIndex = -1, amount = -cost, quality = any)
       updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal,
-          breakChance = -1)
+          craftBonus = none, craftMalus = none)
       if traderIndex > -1:
         gainExp(amount = 5, skillNumber = talkingSkill, crewIndex = traderIndex)
       gainRep(baseIndex = baseIndex, points = 5)

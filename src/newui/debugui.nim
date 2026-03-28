@@ -393,7 +393,7 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
     skyBases[baseIndex].reputation.level = reputation
     try:
       updateBaseCargo(protoIndex = moneyIndex, amount = money, quality = normal,
-          breakChance = -1)
+          craftBonus = none, craftMalus = none)
     except:
       discard
 
