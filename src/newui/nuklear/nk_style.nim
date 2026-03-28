@@ -179,6 +179,15 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.checkbox.textNormal = table[textColor]
   context.style.checkbox.textHover = table[textColor]
   context.style.checkbox.textActive = table[textColor]
+  context.style.checkbox.padding = Vec2(x: 2.0, y: 2.0)
+  context.style.checkbox.touchPadding = Vec2(x: 0.0, y: 0.0)
+  context.style.checkbox.borderColor = NkColor(r: 0, g: 0, b: 0, a: 0)
+  context.style.checkbox.border = 0.0
+  context.style.checkbox.spacing = 4
+  context.style.checkbox.colorFactor = 1.0
+  context.style.checkbox.disabledFactor = nkWidgetDisabledFactor
+
+  # options toggle
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
