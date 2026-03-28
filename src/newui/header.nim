@@ -355,6 +355,35 @@ proc showStatsScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
     mapPreview = false
   dialog = none
 
+proc showHelpScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the in-game help screen
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state   - the current state of the game
+  ##
+  ## Returns the modified parameters dialog and state.
+  if state == help:
+    state = previousState
+  else:
+    previousState = state
+    case state
+    of crafting:
+      setHelp(dialog = dialog, helpIndex = 6)
+    of knowledgeLists:
+      setHelp(dialog = dialog, helpIndex = 12)
+    of trade:
+      setHelp(dialog = dialog, helpIndex = 4)
+    of recruits:
+      setHelp(dialog = dialog, helpIndex = 11)
+    of combat:
+      setHelp(dialog = dialog, helpIndex = 5)
+    else:
+      setHelp(dialog = dialog)
+    state = help
+    mapPreview = false
+  dialog = none
+
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     state: var GameState; options: bool = false): bool {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -546,16 +575,19 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       showKnowledgeScreen(dialog = dialog, state = state)
     elif key == menuAccelerators[7]:
       showStatsScreen(dialog = dialog, state = state)
-    elif playerShip.crew[0].health > 0 and not inCombat:
-      if key == menuAccelerators[2]:
-        setDialog()
-        dialog = ordersDialog
-      elif key == menuAccelerators[3]:
-        showCraftScreen(dialog = dialog, state = state)
-      elif key == menuAccelerators[6]:
-        setDialog()
-        setWaitMenu()
-        dialog = waitDialog
+    elif playerShip.crew[0].health > 0:
+      if key == menuAccelerators[8]:
+        showHelpScreen(dialog = dialog, state = state)
+      elif not inCombat:
+        if key == menuAccelerators[2]:
+          setDialog()
+          dialog = ordersDialog
+        elif key == menuAccelerators[3]:
+          showCraftScreen(dialog = dialog, state = state)
+        elif key == menuAccelerators[6]:
+          setDialog()
+          setWaitMenu()
+          dialog = waitDialog
   return showDialogs(dialog = dialog, state = state, oldState = oldState)
 
 proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
@@ -600,26 +632,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
       showStatsScreen(dialog = dialog, state = state)
     if playerShip.crew[0].health > 0:
       labelButton(title = "Help"):
-        if state == help:
-          state = previousState
-        else:
-          previousState = state
-          case state
-          of crafting:
-            setHelp(dialog = dialog, helpIndex = 6)
-          of knowledgeLists:
-            setHelp(dialog = dialog, helpIndex = 12)
-          of trade:
-            setHelp(dialog = dialog, helpIndex = 4)
-          of recruits:
-            setHelp(dialog = dialog, helpIndex = 11)
-          of combat:
-            setHelp(dialog = dialog, helpIndex = 5)
-          else:
-            setHelp(dialog = dialog)
-          state = help
-          mapPreview = false
-        dialog = none
+        showHelpScreen(dialog = dialog, state = state)
       labelButton(title = "Game options"):
         if state == options:
           state = previousState
