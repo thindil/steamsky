@@ -60,7 +60,8 @@ suite "Unit tests for basescargo module.":
     let
       amount = skyBases[1].cargo[0].amount - 1
       protoIndex = skyBases[1].cargo[0].protoIndex
-    updateBaseCargo(protoIndex, -1, quality = normal, breakChance = -1)
+    updateBaseCargo(protoIndex, -1, quality = normal, craftBonus = none,
+        craftMalus = none)
     check:
       skyBases[1].cargo[0].amount == amount
 
@@ -68,6 +69,6 @@ suite "Unit tests for basescargo module.":
     let
       amount = skyBases[1].cargo[0].amount - 1
     updateBaseCargo(cargoIndex = 0, amount = -1, quality = normal,
-        breakChance = -1)
+        craftBonus = none, craftMalus = none)
     check:
       skyBases[1].cargo[0].amount == amount
