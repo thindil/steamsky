@@ -215,9 +215,9 @@ type
     durability: Natural
     maxDurability: Natural
     owner*: seq[int]
-    upgradeProgress*: ExtendedNatural
-    upgradeAction*: ShipUpgrade
-    case mType*: ModuleType2
+    upgradeProgress: ExtendedNatural
+    upgradeAction: ShipUpgrade
+    case mType: ModuleType2
     of engine:
       fuelUsage*: Positive = 1
       power*: Positive = 1
@@ -405,6 +405,9 @@ moduleGetterSetter(name = protoIndex, typ = Natural)
 moduleGetterSetter(name = weight, typ = Natural)
 moduleGetterSetter(name = durability, typ = Natural)
 moduleGetterSetter(name = maxDurability, typ = Natural)
+moduleGetterSetter(name = upgradeProgress, typ = ExtendedNatural)
+moduleGetterSetter(name = upgradeAction, typ = ShipUpgrade)
+moduleGetterSetter(name = mType, typ = ModuleType2)
 
 type
   InventoryData* = object
