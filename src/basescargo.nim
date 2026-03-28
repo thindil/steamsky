@@ -180,9 +180,8 @@ proc countFreeCargo*(baseIndex: ExtendedBasesRange): Natural {.raises: [],
 
 proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
-    quality: ObjectQuality;
-    maxDurability: ItemsDurability = defaultItemDurability;
-    weight: Natural = 0; breakChance: ExtendedNatural) {.raises: [KeyError, NoFreeSpaceError], tags: [],
+    quality: ObjectQuality; craftBonus: CraftBonuses;
+    craftMalus: CraftMaluses) {.raises: [KeyError, NoFreeSpaceError], tags: [],
     contractual.} =
   ## Update the selected item amount in the cargo of the base where the player
   ## is
@@ -205,8 +204,7 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
         playerShip.skyY].baseIndex
     itemIndex: ExtendedNatural = if protoIndex > 0:
         findBaseCargo(protoIndex = protoIndex, durability = durability,
-            quality = quality, maxDurability = maxDurability, weight = weight,
-            breakChance = breakChance)
+            quality = quality, breakChance = -1)
       else:
         cargoIndex
   {.ruleOff: "assignments".}
@@ -217,8 +215,8 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
       skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: protoIndex,
           amount: amount, durability: durability, price: getPrice(
           baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex,
-          quality = quality), quality: quality, maxDurability: maxDurability,
-          weight: weight, breakChance: breakChance))
+          quality = quality), quality: quality, craftBonus: craftBonus,
+          craftMalus: craftMalus))
     else:
       skyBases[baseIndex].cargo[itemIndex].amount = skyBases[baseIndex].cargo[
           itemIndex].amount + amount
