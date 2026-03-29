@@ -126,6 +126,7 @@ type
 
   CraftBonuses* = enum
     ## Special bonuses set during crafting items
+    any,
     none = "None",
     lighter = "Lighter",
     moreDurable = "More durable",
@@ -133,6 +134,7 @@ type
 
   CraftMaluses* = enum
     ## Special maluses set during crafting items
+    any,
     none = "None",
     heavier = "Heavier",
     lessDurable = "Less durable",
