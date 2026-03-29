@@ -207,8 +207,10 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
           upgradeValue = upgradedModule.maxModules
         of ModuleType2.engine:
           weightGain = (modulesList[upgradedModule.protoIndex].maxValue / 40).int
-          upgradedModule.power += (modulesList[
+          {.ruleOff: "assignments".}
+          upgradedModule.power = upgradedModule.power + (modulesList[
               upgradedModule.protoIndex].maxValue / 20).int
+          {.ruleOn: "assignments".}
           upgradeValue = upgradedModule.power
         of ModuleType2.cabin:
           upgradedModule.quality += (modulesList[
@@ -240,7 +242,9 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
       of value:
         if upgradedModule.mType == ModuleType2.engine:
           weightGain *= 10
-          upgradedModule.fuelUsage.dec
+          {.ruleOff: "assignments".}
+          upgradedModule.fuelUsage = upgradedModule.fuelUsage - 1
+          {.ruleOn: "assignments".}
           upgradeValue = upgradedModule.fuelUsage
         {.ruleOff: "assignments".}
         upgradedModule.weight = upgradedModule.weight + weightGain
