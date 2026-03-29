@@ -560,13 +560,12 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       needRepairs = needRepairs, needWorker = needWorker,
       haveWorker = haveWorker, needCleaning = needCleaning, faction = faction)
   # Keyboard shortcuts
-  if isKeyPressed(key = keyShift):
-    key = "Shift-"
-  elif isKeyPressed(key = keyCtrl):
-    key = "Ctrl-"
-  elif isKeyPressed(key = keyAlt):
-    key = "Alt-"
-  elif isKeyPressed(key = keyEscape):
+  const specialKeys: set[Keys] = {keyShift, keyCtrl, keyAlt}
+  for sKey in specialKeys:
+    if isKeyPressed(key = sKey):
+      key = $sKey & "-"
+      break
+  if isKeyPressed(key = keyEscape):
     key = ""
   if getInputTextLen() > 0:
     key &= getInputText().toLowerAscii
