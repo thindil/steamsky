@@ -125,7 +125,8 @@ type
     bufferFixed, bufferDynamic
   Keys* = enum
     ## Special keys
-    keyNone, keyShift,
+    keyNone,
+    keyShift = "Shift",
     keyCtrl = "Control",
     keyCopy, keyCut, keyPaste, keyTextInsertMode, keyTextReplaceMode,
       keyTextResetMode, keyTextLineStart, keyTextLineEnd, keyTextStart,

@@ -188,6 +188,17 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.checkbox.disabledFactor = nkWidgetDisabledFactor
 
   # options toggle
+  context.style.option.normal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[toggleColor]))
+  context.style.option.hover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[toggleHoverColor]))
+  context.style.option.active = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[toggleHoverColor]))
+  context.style.option.cursorNormal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[toggleCursorColor]))
+  context.style.option.cursorHover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[toggleCursorColor]))
+  context.style.option.userData = Handle(handleType: handleInt, intValue: 0)
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
