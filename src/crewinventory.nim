@@ -25,8 +25,8 @@ import game, shipscargo, types, utils
 proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
     itemType: string = ""; durability: ItemsDurability = defaultItemDurability;
     quality: Positive = 100; itemQuality: ObjectQuality;
-    maxDurability: ItemsDurability = defaultItemDurability; weight: Natural = 0;
-    breakChance: ExtendedNatural = -1): ExtendedNatural {.raises: [], tags: [],
+    craftBonus: CraftBonuses;
+    craftMalus: CraftMaluses): ExtendedNatural {.raises: [], tags: [],
     contractual.} =
   ## Find the index of the selected item in the selected inventory
   ##
@@ -38,9 +38,8 @@ proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
   ## * durability    - the durability of the item to find. Can be empty
   ## * quality       - the quality of the item to find. Can be empty
   ## * itemQuality   - the quality of the item to find (good, normal, poor, etc).
-  ## * maxDurability - The maximum durability of the item to modify. Can be empty
-  ## * weight        - The weight of the item. Can be empty
-  ## * breakChance   - The chance to break for the item when used. Can be empty
+  ## * craftBonus    - The crafting bonus for the item
+  ## * craftMalus    - The crafting malus for the item
   ##
   ## Returns the index of the item in the selected inventory which meet searching
   ## criteria or -1 if item not found.
@@ -52,31 +51,20 @@ proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
       if protoIndex > 0:
         for index, item in inventory:
           if item.protoIndex == protoIndex and itemsList[protoIndex].value[1] <=
-              quality:
+              quality and item.craftBonus == craftBonus and item.craftMalus == craftMalus:
             if durability != defaultItemDurability and item.durability != durability:
               continue
             if itemQuality != any and item.quality != itemQuality:
-              continue
-            if maxDurability != defaultItemDurability and item.maxDurability != maxDurability:
-              continue
-            if weight > 0 and item.weight != weight:
-              continue
-            if breakChance > -1 and item.breakChance != breakChance:
               continue
             return index
       elif itemType.len > 0:
         for index, item in inventory:
           if itemsList[item.protoIndex].itemType == itemType and itemsList[
-              item.protoIndex].value[1] <= quality:
+              item.protoIndex].value[1] <= quality and item.craftBonus ==
+              craftBonus and item.craftMalus == craftMalus:
             if durability != defaultItemDurability and item.durability != durability:
               continue
             if itemQuality != any and item.quality != itemQuality:
-              continue
-            if maxDurability != defaultItemDurability and item.maxDurability != maxDurability:
-              continue
-            if weight > 0 and item.weight != weight:
-              continue
-            if breakChance > -1 and item.breakChance != breakChance:
               continue
             return index
     except KeyError:
@@ -163,11 +151,12 @@ proc updateInventory*(memberIndex: Natural; amount: int;
       if durability > 0:
         itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
             protoIndex = protoIndex, durability = durability,
-            itemQuality = quality, breakChance = -1)
+            itemQuality = quality, craftBonus = craftBonus,
+            craftMalus = craftMalus)
       else:
         itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
             protoIndex = protoIndex, itemQuality = quality,
-                breakChance = -1)
+            craftBonus = craftBonus, craftMalus = craftMalus)
     else:
       itemIndex = inventoryIndex
     if amount > 0:
@@ -272,10 +261,12 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
         else:
           updateInventory(memberIndex = memberIndex, amount = 0 - inventory[
               j].amount, inventoryIndex = j, ship = ship,
-              quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+              quality = item.quality, craftBonus = item.craftBonus,
+              craftMalus = item.craftMalus)
           updateInventory(memberIndex = memberIndex, amount = inventory[
               j].amount, inventoryIndex = i, ship = ship,
-              quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+              quality = item.quality, craftBonus = item.craftBonus,
+              craftMalus = item.craftMalus)
         i.dec
         break
     i.inc
