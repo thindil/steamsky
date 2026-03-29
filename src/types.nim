@@ -219,9 +219,9 @@ type
     upgradeAction: ShipUpgrade
     case mType: ModuleType2
     of engine:
-      fuelUsage*: Positive = 1
-      power*: Positive = 1
-      disabled*: bool
+      fuelUsage: Positive = 1
+      power: Positive = 1
+      disabled: bool
     of cabin:
       cleanliness*: Natural
       quality*: Natural
@@ -408,6 +408,9 @@ moduleGetterSetter(name = maxDurability, typ = Natural)
 moduleGetterSetter(name = upgradeProgress, typ = ExtendedNatural)
 moduleGetterSetter(name = upgradeAction, typ = ShipUpgrade)
 moduleGetterSetter(name = mType, typ = ModuleType2)
+moduleGetterSetter(name = fuelUsage, typ = Positive)
+moduleGetterSetter(name = power, typ = Positive)
+moduleGetterSetter(name = disabled, typ = bool)
 
 type
   InventoryData* = object
