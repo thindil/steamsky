@@ -82,7 +82,7 @@ proc checkForOpenSpaceEvents(roll: Positive): bool {.raises: [KeyError, IOError,
       gainExp(amount = 1, skillNumber = pilotingSkill, crewIndex = pilotIndex)
       updateCargo(ship = playerShip, protoIndex = findProtoItem(
           itemType = fuelType), amount = countFuelNeeded(), quality = any,
-              craftBonus = none, craftMalus = none)
+              craftBonus = any, craftMalus = any)
       updateGame(minutes = timePassed)
   # Friendly trader
   of 21..23:
