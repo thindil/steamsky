@@ -130,7 +130,8 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
               isMaterial = true
           if isMaterial:
             let cargoIndex: int = findItem(inventory = playerShip.cargo,
-                protoIndex = iIndex, itemQuality = any)
+                protoIndex = iIndex, itemQuality = any, craftBonus = any,
+                craftMalus = any)
             if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
                 craft.materialAmounts[mIndex]:
               colorLabel(str = $craft.materialAmounts[mIndex] & "x" &
@@ -153,7 +154,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
           if item.itemType == craft.tool and item.value[1] <= craft.toolQuality:
             let cargoIndex: int = findItem(inventory = playerShip.cargo,
                 protoIndex = iIndex, quality = craft.toolQuality,
-                itemQuality = any)
+                itemQuality = any, craftBonus = any, craftMalus = any)
             if cargoIndex > -1:
               haveTool = true
             colorLabel(str = $item.name, color = theme.colors[

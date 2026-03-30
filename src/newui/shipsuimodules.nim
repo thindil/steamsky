@@ -890,7 +890,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             label(str = " or ")
           colorLabel(str = item.name, color = theme.colors[(if findItem(
               inventory = playerShip.cargo, itemType = item.itemType,
-              itemQuality = any) == -1: redColor else: goldenColor)])
+              itemQuality = any, craftBonus = any, craftMalus = any) ==
+              -1: redColor else: goldenColor)])
           manyMaterials = true
       except:
         dialog = setError(message = "Can't count repair material.")
@@ -1007,7 +1008,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
                   module.protoIndex].value - 1]:
                 colorLabel(str = item.name, color = theme.colors[(if findItem(
                     inventory = playerShip.cargo, protoIndex = index,
-                    itemQuality = any) > -1: goldenColor else: redColor)])
+                    itemQuality = any, craftBonus = any, craftMalus = any) >
+                    -1: goldenColor else: redColor)])
                 mAmount.inc
             except:
               dialog = setError(message = "Can't find ammo.")
@@ -1082,7 +1084,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         try:
           if member.health < 100 and findItem(inventory = playerShip.cargo,
               itemType = factionsList[playerShip.crew[0].faction].healingTools,
-                  itemQuality = any) > -1:
+                  itemQuality = any, craftBonus = any, craftMalus = any) > -1:
             hasHealingTool = true
             break
         except:

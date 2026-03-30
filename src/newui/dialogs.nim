@@ -624,11 +624,13 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
         baseCargoIndex = manipulateData.itemIndex.abs
         if dialog == takeDialog:
           baseCargoIndex.dec
-        let baseIndex: int = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-        protoIndex = skyBases[baseIndex].cargo[baseCargoIndex].protoIndex
+        let
+          baseIndex: int = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+          item: BaseCargo = skyBases[baseIndex].cargo[baseCargoIndex]
+        protoIndex = item.protoIndex
         cargoIndex = findItem(inventory = playerShip.cargo,
-            protoIndex = protoIndex, itemQuality = skyBases[baseIndex].cargo[
-                baseCargoIndex].quality)
+            protoIndex = protoIndex, itemQuality = item.quality,
+            craftBonus = item.craftBonus, craftMalus = item.craftMalus)
       else:
         cargoIndex = manipulateData.itemIndex
         if dialog == dropDialog:

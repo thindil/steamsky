@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -279,7 +279,8 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
             if item.itemType == itemsTypesList[modulesList[playerShip.modules[
                 gun[1]].protoIndex].value - 1]:
               let ammoIndex: int = findItem(inventory = playerShip.cargo,
-                  protoIndex = itemIndex, itemQuality = any)
+                  protoIndex = itemIndex, itemQuality = any,
+                  craftBonus = any, craftMalus = any)
               if ammoIndex > -1:
                 ammoAmount += playerShip.cargo[ammoIndex].amount
           except:
