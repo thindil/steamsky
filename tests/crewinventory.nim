@@ -67,21 +67,23 @@ suite "Unit tests for crewinventory module":
 
   test "Find an item in inventory by proto index.":
     check:
-      findItem(inventory, 67, itemQuality = normal) == 1
+      findItem(inventory, 67, itemQuality = normal, craftBonus = any,
+          craftMalus = any) == 1
 
   test "Find an item in inventory by item type.":
     check:
       findItem(inventory = inventory, itemType = "Weapon",
-          itemQuality = normal) == 0
+          itemQuality = normal, craftBonus = any, craftMalus = any) == 0
 
   test "Not find an item in inventory by proto index.":
     check:
-      findItem(inventory, 500, itemQuality = normal) == -1
+      findItem(inventory, 500, itemQuality = normal, craftBonus = any,
+          craftMalus = any) == -1
 
   test "Not find an item in inventory with item type":
     check:
       findItem(inventory = inventory, itemType = "asdasdas",
-          itemQuality = normal) == -1
+          itemQuality = normal, craftBonus = any, craftMalus = any) == -1
 
   test "Getting quality of a training tool.":
     check:

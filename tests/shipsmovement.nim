@@ -37,28 +37,28 @@ suite "Unit tests for shipsmovement module":
       level: 4,
       experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
-      experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
+      experience: 0), MobAttributeRecord(level: 3, experience: 0)], name: "a"))
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 2, 0, 1, 1, 1, 1, 1, 1,
       1, 0, 0], order: engineer, loyalty: 100, skills: @[SkillInfo(index: 4,
       level: 4,
       experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
-      experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
+      experience: 0), MobAttributeRecord(level: 3, experience: 0)], name: "b"))
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
       1, 0, 0], order: pilot, loyalty: 100, skills: @[SkillInfo(index: 4,
       level: 4,
       experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
-      experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
+      experience: 0), MobAttributeRecord(level: 3, experience: 0)], name: "c"))
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
       1, 0, 0], order: engineer, loyalty: 100, skills: @[SkillInfo(index: 4,
       level: 4,
       experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
-      experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
+      experience: 0), MobAttributeRecord(level: 3, experience: 0)], name: "d"))
   skyMap[1][1].baseIndex = 1
   for base in skyBases.mitems:
     base.population = 100
