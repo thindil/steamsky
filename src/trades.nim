@@ -58,7 +58,8 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
       let
         quality: ObjectQuality = getQuality()
         cargoItemIndex: int = findItem(inventory = traderShip.cargo,
-          protoIndex = newItemIndex, itemQuality = quality)
+          protoIndex = newItemIndex, itemQuality = quality, craftBonus = none,
+          craftMalus = none)
       if cargoItemIndex > -1:
         traderCargo[cargoItemIndex].amount += itemAmount
         traderShip.cargo[cargoItemIndex].amount += itemAmount
@@ -324,11 +325,11 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
     else:
       result.price = getPrice(baseType = baseType, itemIndex = result.protoIndex, quality = result.quality)
   else:
-    itemIndex = findItem(inventory = playerShip.cargo,
-      protoIndex = result.protoIndex,
-      durability = (if baseIndex > 0: skyBases[ baseIndex].cargo[
-        baseCargoIndex].durability else: traderCargo[
-        baseCargoIndex].durability), itemQuality = result.quality)
+    let item: BaseCargo = (if baseIndex > 0: skyBases[baseIndex].cargo[baseCargoIndex]
+        else: traderCargo[baseCargoIndex])
+    itemIndex = findItem(inventory = playerShip.cargo, protoIndex = result.protoIndex,
+        durability = item.durability, itemQuality = result.quality,
+        craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     result.price = (if baseIndex > 0: skyBases[baseIndex].cargo[
         baseCargoIndex].price else: traderCargo[baseCargoIndex].price)
   if itemIndex > -1:

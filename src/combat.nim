@@ -97,7 +97,8 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
         else:
           getRandom(min = 1, max = 1000)
       cargoItemIndex: int = findItem(inventory = enemyShip.cargo,
-          protoIndex = newItemIndex, itemQuality = normal)
+          protoIndex = newItemIndex, itemQuality = normal, craftBonus = none,
+          craftMalus = none)
     if cargoItemIndex > -1:
       enemyShip.cargo[cargoItemIndex].amount += itemAmount
     else:
@@ -1194,7 +1195,7 @@ proc combatTurn*() {.raises: [KeyError, IOError, ValueError,
     ammoIndex2: int = -1
 
   if findItem(inventory = playerShip.cargo, itemType = fuelType,
-      itemQuality = any) == -1:
+      itemQuality = any, craftBonus = any, craftMalus = any) == -1:
     addMessage(message = "Ship fall from sky due to lack of fuel.",
         mType = otherMessage, color = red)
     death(memberIndex = 0, reason = "fall of the ship", ship = playerShip)

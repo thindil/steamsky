@@ -652,8 +652,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         if mAmount > 0:
           tclEval(script = moduleText & " insert end { or }")
         tclEval(script = moduleText & " insert end {" & item.name & "}" & (
-            if findItem(inventory = playerShip.cargo,
-                itemType = item.itemType, itemQuality = any) ==
+            if findItem(inventory = playerShip.cargo, itemType = item.itemType,
+                itemQuality = any, craftBonus = any, craftMalus = any) ==
             -1: " [list red]" else: " [list gold]"))
         mAmount.inc
     except:
@@ -843,7 +843,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
               tclEval(script = ammoText & " insert end { or } [list gold]")
             tclEval(script = ammoText & " insert end {" & item.name & "}" & (
                 if findItem(inventory = playerShip.cargo, protoIndex = index,
-                    itemQuality = any) >
+                    itemQuality = any, craftBonus = any, craftMalus = any) >
                 -1: " [list gold]" else: " [list red]"))
             mAmount.inc
         except:
@@ -961,7 +961,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       try:
         if member.health < 100 and findItem(inventory = playerShip.cargo,
             itemType = factionsList[playerShip.crew[0].faction].healingTools,
-                itemQuality = any) > -1:
+                itemQuality = any, craftBonus = any, craftMalus = any) > -1:
           hasHealingTool = true
           break
       except:
