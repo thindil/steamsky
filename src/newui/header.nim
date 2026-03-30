@@ -305,8 +305,8 @@ proc showCraftScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
     mapPreview = false
   dialog = none
 
-proc showLastMessagesScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
-    tags: [RootEffect], contractual.} =
+proc showLastMessagesScreen(dialog: var GameDialog;
+    state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the last messages screen
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -321,8 +321,8 @@ proc showLastMessagesScreen(dialog: var GameDialog; state: var GameState) {.rais
     mapPreview = false
   dialog = none
 
-proc showKnowledgeScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
-    tags: [RootEffect], contractual.} =
+proc showKnowledgeScreen(dialog: var GameDialog;
+    state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the knowledge screen
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -381,6 +381,23 @@ proc showHelpScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
     else:
       setHelp(dialog = dialog)
     state = help
+    mapPreview = false
+  dialog = none
+
+proc showOptionsScreen(dialog: var GameDialog; state: var GameState) {.raises: [
+    ], tags: [RootEffect], contractual.} =
+  ## Show the options screen
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state   - the current state of the game
+  ##
+  ## Returns the modified parameters dialog and state.
+  if state == options:
+    state = previousState
+  else:
+    previousState = state
+    setOptions()
+    state = options
     mapPreview = false
   dialog = none
 
@@ -580,6 +597,8 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     elif playerShip.crew[0].health > 0:
       if key == menuAccelerators[8]:
         showHelpScreen(dialog = dialog, state = state)
+      elif key == menuAccelerators[9]:
+        showOptionsScreen(dialog = dialog, state = state)
       elif not inCombat:
         if key == menuAccelerators[2]:
           setDialog()
@@ -637,14 +656,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
       labelButton(title = "Help"):
         showHelpScreen(dialog = dialog, state = state)
       labelButton(title = "Game options"):
-        if state == options:
-          state = previousState
-        else:
-          previousState = state
-          setOptions()
-          state = options
-          mapPreview = false
-        dialog = none
+        showOptionsScreen(dialog = dialog, state = state)
       labelButton(title = "Quit from game"):
         dialog = setQuestion(question = "Are you sure want to quit?",
             qType = quitGame)
