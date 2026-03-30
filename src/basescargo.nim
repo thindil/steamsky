@@ -271,7 +271,7 @@ proc getLootData*(itemIndex: int): tuple[protoIndex, maxAmount,
   else:
     cargoIndex = findItem(inventory = playerShip.cargo,
         protoIndex = result.protoIndex, itemQuality = result.quality,
-        maxDurability = result.maxDurability, weight = result.weight)
+        craftBonus = any, craftMalus = any)
   result.maxAmount = (if baseCargoIndex > -1: skyBases[baseIndex].cargo[
       baseCargoIndex].amount else: 0)
   let freeAmount: range[-100_000..100_000] = (if baseCargoIndex > -1: (

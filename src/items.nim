@@ -311,10 +311,12 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
             quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
         result = -1
     result = findItem(inventory = playerShip.crew[memberIndex].inventory,
-        itemType = itemType, quality = toolQuality, itemQuality = any)
+        itemType = itemType, quality = toolQuality, itemQuality = any,
+        craftBonus = any, craftMalus = any)
     if result == -1:
       result = findItem(inventory = playerShip.cargo, itemType = itemType,
-          quality = toolQuality, itemQuality = any)
+          quality = toolQuality, itemQuality = any, craftBonus = any,
+          craftMalus = any)
       if result > -1:
         try:
           let item: InventoryData = playerShip.cargo[result]
@@ -324,7 +326,8 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
           updateCargo(ship = playerShip, amount = -1, cargoIndex = result,
               quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
           result = findItem(inventory = playerShip.crew[memberIndex].inventory,
-              itemType = itemType, quality = toolQuality, itemQuality = any)
+              itemType = itemType, quality = toolQuality, itemQuality = any,
+              craftBonus = any, craftMalus = any)
         except CrewNoSpaceError:
           case order:
           of repair:
