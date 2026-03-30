@@ -56,19 +56,22 @@ proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
               continue
             if itemQuality != any and item.quality != itemQuality:
               continue
-            if item.craftBonus != any and item.craftBonus != craftBonus:
+            if craftBonus != any and item.craftBonus != craftBonus:
               continue
-            if item.craftMalus != any and item.craftMalus != craftMalus:
+            if craftMalus != any and item.craftMalus != craftMalus:
               continue
             return index
       elif itemType.len > 0:
         for index, item in inventory:
           if itemsList[item.protoIndex].itemType == itemType and itemsList[
-              item.protoIndex].value[1] <= quality and item.craftBonus ==
-              craftBonus and item.craftMalus == craftMalus:
+              item.protoIndex].value[1] <= quality:
             if durability != defaultItemDurability and item.durability != durability:
               continue
             if itemQuality != any and item.quality != itemQuality:
+              continue
+            if craftBonus != any and item.craftBonus != craftBonus:
+              continue
+            if craftMalus != any and item.craftMalus != craftMalus:
               continue
             return index
     except KeyError:
