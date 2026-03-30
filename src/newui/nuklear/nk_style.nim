@@ -199,6 +199,13 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.option.cursorHover = StyleItem(iType: itemColor,
       data: StyleItemData(itype: itemColor, color: table[toggleCursorColor]))
   context.style.option.userData = Handle(handleType: handleInt, intValue: 0)
+  context.style.option.textBackground = table[windowColor]
+  context.style.option.textNormal = table[textColor]
+  context.style.option.textHover = table[textColor]
+  context.style.option.textActive = table[textColor]
+  context.style.option.padding = Vec2(x: 3.0, y: 3.0)
+  context.style.option.touchPadding = Vec2(x: 0.0, y: 0.0)
+  context.style.option.borderColor = NkColor(r: 0, g: 0, b: 0, a: 0)
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
