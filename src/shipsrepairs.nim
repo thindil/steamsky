@@ -71,7 +71,8 @@ proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
               var repairMaterial: ExtendedNatural = findItem(
                   inventory = playerShip.cargo, itemType = modulesList[
                   playerShip.modules[
-                  moduleIndex].protoIndex].repairMaterial, itemQuality = any)
+                  moduleIndex].protoIndex].repairMaterial, itemQuality = any,
+                  craftBonus = any, craftMalus = any)
               if repairMaterial > -1 and playerShip.cargo[
                   repairMaterial].amount < repairPoints:
                 repairPoints = playerShip.cargo[repairMaterial].amount

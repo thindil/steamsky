@@ -241,7 +241,8 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
         if healAmount > 0:
           healAmount *= (-1)
           toolIndex = findItem(inventory = playerShip.cargo,
-              itemType = faction.healingTools, itemQuality = any)
+              itemType = faction.healingTools, itemQuality = any,
+              craftBonus = any, craftMalus = any)
           if toolIndex > -1:
             let item: InventoryData = playerShip.cargo[toolIndex]
             var needAmount: Natural = healAmount.abs - countItemBonus(
@@ -253,14 +254,12 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
             else:
               healAmount = needAmount
             updateCargo(ship = playerShip, amount = -(needAmount),
-                cargoIndex = toolIndex, quality = playerShip.cargo[
-                toolIndex].quality, craftBonus = playerShip.cargo[
-                toolIndex].craftBonus, craftMalus = playerShip.cargo[
-                toolIndex].craftMalus)
+                cargoIndex = toolIndex, quality = item.quality,
+                    craftBonus = item.craftBonus, craftMalus = item.craftMalus)
           else:
             toolIndex = findItem(inventory = playerShip.crew[
                 memberIndex].inventory, itemType = faction.healingTools,
-                itemQuality = any)
+                itemQuality = any, craftBonus = any, craftMalus = any)
             if toolIndex > -1:
               let item: InventoryData = playerShip.crew[memberIndex].inventory[toolIndex]
               var needAmount: Natural = healAmount.abs - countItemBonus(
@@ -273,7 +272,8 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
                 healAmount = needAmount
               updateInventory(memberIndex = memberIndex, amount = -(needAmount),
                   inventoryIndex = toolIndex, ship = playerShip,
-                      quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+                      quality = item.quality, craftBonus = item.craftBonus,
+                          craftMalus = item.craftMalus)
         if healAmount > 0:
           for index, member in playerShip.crew.mpairs:
             if member.health < 100 and index != memberIndex:
@@ -303,11 +303,12 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
         healAmount = 0
         var faction: FactionData = factionsList[member.faction]
         toolIndex = findItem(inventory = playerShip.cargo,
-            itemType = faction.healingTools, itemQuality = any)
+            itemType = faction.healingTools, itemQuality = any,
+            craftBonus = any, craftMalus = any)
         if toolIndex == -1:
           toolIndex = findItem(inventory = playerShip.crew[
               memberIndex].inventory, itemType = faction.healingTools,
-              itemQuality = any)
+              itemQuality = any, craftBonus = any, craftMalus = any)
           if toolIndex == -1:
             healAmount = -1
         break
@@ -387,7 +388,8 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
   ## Returns amount of bonus from the used consumable or 0 if nothing was
   ## consumed
   var itemIndex: int = findItem(inventory = playerShip.cargo,
-      itemType = itemType, itemQuality = any)
+      itemType = itemType, itemQuality = any, craftBonus = any,
+      craftMalus = any)
   if itemIndex > -1:
     let item: InventoryData = playerShip.cargo[itemIndex]
     result = itemsList[item.protoIndex].value[1]
@@ -400,10 +402,12 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
           itemsList[item.protoIndex].value[2] + countItemBonus(
           value = itemsList[item.protoIndex].value[2], quality = item.quality)))
     updateCargo(ship = playerShip, protoIndex = item.protoIndex, amount = -1,
-        quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+        quality = item.quality, craftBonus = item.craftBonus,
+        craftMalus = item.craftMalus)
     return
   itemIndex = findItem(inventory = playerShip.crew[memberIndex].inventory,
-      itemType = itemType, itemQuality = any)
+      itemType = itemType, itemQuality = any, craftBonus = any,
+      craftMalus = any)
   if itemIndex > -1:
     let item: InventoryData = playerShip.crew[memberIndex].inventory[itemIndex]
     result = itemsList[item.protoIndex].value[1]

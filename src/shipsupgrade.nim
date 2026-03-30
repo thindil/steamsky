@@ -43,7 +43,7 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
         order = upgrading)
     upgradeMaterial = findItem(inventory = playerShip.cargo,
         itemType = modulesList[upgradedModule.protoIndex].repairMaterial,
-            itemQuality = any)
+        itemQuality = any, craftBonus = any, craftMalus = any)
 
   proc maxUpgradeReached(messageText: string) {.raises: [KeyError,
       Exception], tags: [RootEffect], contractual.} =
@@ -372,7 +372,8 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.raises: [
     return
   let materialIndex: int = findItem(inventory = playerShip.cargo,
       itemType = modulesList[playerShip.modules[
-      moduleIndex].protoIndex].repairMaterial, itemQuality = any)
+      moduleIndex].protoIndex].repairMaterial, itemQuality = any,
+      craftBonus = any, craftMalus = any)
   if materialIndex == -1:
     for item in itemsList.values:
       if item.itemType == modulesList[playerShip.modules[

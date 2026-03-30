@@ -38,7 +38,8 @@ proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError,
   if getRandom(min = 1, max = 10) < (minutes mod 10):
     fuelNeeded = (fuelNeeded * baseFuelNeeded) * -1
   let fuelIndex: ExtendedNatural = findItem(inventory = playerShip.cargo,
-      itemType = fuelType, itemQuality = any)
+      itemType = fuelType, itemQuality = any, craftBonus = any,
+      craftMalus = any)
   if fuelIndex == -1:
     addMessage(message = "Ship falls from the sky due to a lack of fuel.",
         mType = otherMessage, color = red)
@@ -221,7 +222,8 @@ proc dockShip*(docking: bool; escape: bool = false): ErrorMessage {.raises: [
     else:
       if getBasePopulation(baseIndex = baseIndex) == empty:
         let fuelIndex: ExtendedNatural = findItem(inventory = playerShip.cargo,
-            itemType = fuelType, itemQuality = any)
+            itemType = fuelType, itemQuality = any, craftBonus = any,
+            craftMalus = any)
         if fuelIndex == -1:
           return "You can't undock from base because you don't have any fuel."
         addMessage(message = "Ship undocked from base " & skyBases[
@@ -249,7 +251,8 @@ proc dockShip*(docking: bool; escape: bool = false): ErrorMessage {.raises: [
           gainExp(amount = 1, skillNumber = talkingSkill,
               crewIndex = traderIndex)
         let fuelIndex: ExtendedNatural = findItem(inventory = playerShip.cargo,
-            itemType = fuelType, itemQuality = any)
+            itemType = fuelType, itemQuality = any, craftBonus = any,
+            craftMalus = any)
         if fuelIndex == -1:
           return "You can't undock from base because you don't have any fuel."
         addMessage(message = "Ship undocked from base " & skyBases[
@@ -325,7 +328,8 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
   if message.len > 0:
     return 0
   var fuelIndex: ExtendedNatural = findItem(inventory = playerShip.cargo,
-      itemType = fuelType, itemQuality = any)
+      itemType = fuelType, itemQuality = any, craftBonus = any,
+      craftMalus = any)
   if fuelIndex == -1:
     message = "You don't have any fuel."
     return 0
@@ -365,7 +369,7 @@ proc moveShip*(x, y: int; message: var string): Natural {.raises: [
       discard
     updateGame(minutes = timePassed)
     fuelIndex = findItem(inventory = playerShip.cargo, itemType = fuelType,
-        itemQuality = any)
+        itemQuality = any, craftBonus = any, craftMalus = any)
     if fuelIndex == -1:
       addMessage(message = "Ship falls from the sky due to a lack of fuel.",
           mType = otherMessage, color = red)
