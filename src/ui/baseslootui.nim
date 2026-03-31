@@ -144,7 +144,9 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
       protoIndex: int = playerShip.cargo[index].protoIndex
       baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
           durability = playerShip.cargo[index].durability,
-          quality = playerShip.cargo[index].quality)
+          quality = playerShip.cargo[index].quality,
+          craftBonus = playerShip.cargo[index].craftBonus,
+          craftMalus = playerShip.cargo[index].craftMalus)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
     let itemType: string = try:
@@ -418,7 +420,9 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
     protoIndex = playerShip.cargo[cargoIndex].protoIndex
     if baseCargoIndex == -1:
       baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
-          quality = playerShip.cargo[cargoIndex].quality)
+          quality = playerShip.cargo[cargoIndex].quality,
+          craftBonus = playerShip.cargo[cargoIndex].craftBonus,
+          craftMalus = playerShip.cargo[cargoIndex].craftMalus)
   else:
     protoIndex = skyBases[baseIndex].cargo[baseCargoIndex].protoIndex
   var amount: int = 0
@@ -617,7 +621,8 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     let
       protoIndex: int = item.protoIndex
       baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
-          durability = item.durability, quality = item.quality)
+          durability = item.durability, quality = item.quality,
+          craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
     try:

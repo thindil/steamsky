@@ -137,7 +137,8 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
     let
       protoIndex: Natural = item.protoIndex
       baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
-          durability = item.durability, quality = item.quality)
+          durability = item.durability, quality = item.quality,
+          craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     var price: int = 0
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
@@ -210,7 +211,9 @@ proc setBuyDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       protoIndex: Natural = playerShip.cargo[itemIndex].protoIndex
     baseCargoIndex = -findBaseCargo(protoIndex = protoIndex,
         durability = playerShip.cargo[itemIndex].durability,
-        quality = playerShip.cargo[itemIndex].quality)
+        quality = playerShip.cargo[itemIndex].quality,
+        craftBonus = playerShip.cargo[itemIndex].craftBonus,
+        craftMalus = playerShip.cargo[itemIndex].craftMalus)
   else:
     baseCargoIndex = itemIndex
   dialog = setManipulate(action = buyAction, iIndex = baseCargoIndex)
@@ -395,7 +398,7 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
       item: InventoryData = playerShip.cargo[i]
       baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
           durability = item.durability, quality = item.quality,
-          maxDurability = item.maxDurability, weight = item.maxDurability)
+          craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
     let itemType: string = try:
