@@ -206,6 +206,12 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.option.padding = Vec2(x: 3.0, y: 3.0)
   context.style.option.touchPadding = Vec2(x: 0.0, y: 0.0)
   context.style.option.borderColor = NkColor(r: 0, g: 0, b: 0, a: 0)
+  context.style.option.border = 0.0
+  context.style.option.spacing = 4
+  context.style.option.colorFactor = 1.0
+  context.style.option.disabledFactor = nkWidgetDisabledFactor
+
+  # selectable
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
