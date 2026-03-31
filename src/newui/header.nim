@@ -599,6 +599,12 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
         showHelpScreen(dialog = dialog, state = state)
       elif key == menuAccelerators[9]:
         showOptionsScreen(dialog = dialog, state = state)
+      elif key == menuAccelerators[10]:
+        dialog = setQuestion(question = "Are you sure want to quit?",
+            qType = quitGame)
+      elif key == menuAccelerators[11]:
+        dialog = setQuestion(question = "Are you sure want to resign from game?",
+            qType = resignGame)
       elif not inCombat:
         if key == menuAccelerators[2]:
           setDialog()
