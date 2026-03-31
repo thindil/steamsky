@@ -42,7 +42,9 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.raises: [KeyError,
     gameDate.day.inc
     for module in playerShip.modules.mitems:
       if module.mType == ModuleType2.cabin and module.cleanliness > 0:
-        module.cleanliness.dec
+        {.ruleOff: "assignments".}
+        module.cleanliness = module.cleanliness - 1
+        {.ruleOn: "assignments".}
         needCleaning = true
     if needCleaning:
       updateOrders(ship = playerShip)

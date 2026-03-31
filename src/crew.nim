@@ -341,7 +341,9 @@ proc memberClean(memberIndex: Natural; times: int) {.raises: [
           if module.cleanliness + times > module.quality:
             module.cleanliness = module.quality
           else:
-            module.cleanliness += times
+            {.ruleOff: "assignments".}
+            module.cleanliness = module.cleanliness + times
+            {.ruleOn: "assignments".}
           damageItem(inventory = playerShip.crew[memberIndex].inventory,
               itemIndex = toolIndex, memberIndex = memberIndex,
                   ship = playerShip)

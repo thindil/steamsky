@@ -213,8 +213,10 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
           {.ruleOn: "assignments".}
           upgradeValue = upgradedModule.power
         of ModuleType2.cabin:
-          upgradedModule.quality += (modulesList[
+          {.ruleOff: "assignments".}
+          upgradedModule.quality = upgradedModule.quality + (modulesList[
               upgradedModule.protoIndex].maxValue / 20).int
+          {.ruleOn: "assignments".}
           upgradeValue = upgradedModule.quality
         of ModuleType2.gun:
           if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:

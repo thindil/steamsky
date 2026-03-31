@@ -19,7 +19,7 @@
 ## Split from basesships module to avoid circular dependencies.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import bases, basescargo, basesship, game, game2, items, maps, messages,
     shipscargo, shipscrew, types
 
@@ -349,4 +349,6 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
         playerShip.upgradeModule.dec
       for module in playerShip.modules.mitems:
         if module.mType == ModuleType2.turret and module.gunIndex > shipModuleIndex:
-          module.gunIndex.dec
+          {.ruleOff: "assignments".}
+          module.gunIndex = module.gunIndex - 1
+          {.ruleOn: "assignments".}
