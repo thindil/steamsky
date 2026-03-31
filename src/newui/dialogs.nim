@@ -639,7 +639,9 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
         protoIndex = playerShip.cargo[cargoIndex].protoIndex
         if baseCargoIndex == -1 and dialog != moveDialog:
           baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
-              quality = playerShip.cargo[cargoIndex].quality)
+              quality = playerShip.cargo[cargoIndex].quality,
+              craftBonus = playerShip.cargo[cargoIndex].craftBonus,
+              craftMalus = playerShip.cargo[cargoIndex].craftMalus)
       setLayoutRowDynamic(height = 30, cols = 2)
       # Set target (give dialog only)
       if dialog == giveDialog:
