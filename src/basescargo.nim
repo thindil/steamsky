@@ -115,8 +115,7 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
 
 proc findBaseCargo*(protoIndex: Natural;
     durability: ItemsDurability = defaultItemDurability; quality: ObjectQuality;
-    maxDurability: ItemsDurability = defaultItemDurability; weight: Natural = 0;
-    breakChance: ExtendedNatural = -1): int {.raises: [], tags: [],
+    craftBonus: CraftBonuses; craftMalus: CraftMaluses): int {.raises: [], tags: [],
     contractual.} =
   ## Find the selected item in the currently visited base's cargo
   ##
@@ -124,9 +123,8 @@ proc findBaseCargo*(protoIndex: Natural;
   ## * durability    - the durability of the item to search. Can be empty. If not
   ##                   set, the items will not be checked against it.
   ## * quality       - the quality of the item to search.
-  ## * maxDurability - The maximum durability of the item to modify. Can be empty
-  ## * weight        - The weight of the item. Can be empty
-  ## * breakChance   - The chance for item to break during usage
+  ## * craftBonus    - The crafting bonus for the item
+  ## * craftMalus    - The crafting malus for the item
   ##
   ## The index of the item with the selected prototype index or -1 if nothing
   ## found.
@@ -143,10 +141,10 @@ proc findBaseCargo*(protoIndex: Natural;
     ## not found
     result = -1
     for index, item in localBaseCargo:
-      if durability < maxDurability or quality != normal:
+      if quality != normal or craftBonus != any or craftMalus != any:
         if item.protoIndex == protoIndex and item.durability == durability and
-            item.quality == quality and item.maxDurability == maxDurability and
-            item.weight == weight and item.breakChance == breakChance:
+            item.quality == quality and item.craftBonus == craftBonus and
+            item.craftMalus == craftMalus:
           return index
       else:
         if item.protoIndex == protoIndex:
@@ -196,15 +194,14 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
   ##                   updated. This argument or protoIndex argument must always
   ##                   be set, but only one of them.
   ## * quality       - the quality of the item to search
-  ## * maxDurability - The maximum durability of the item to modify. Can be empty
-  ## * weight        - The weight of the item. Can be empty
-  ## * breakChance   - The chance of item to break during usage
+  ## * craftBonus    - The crafting bonus for the item
+  ## * craftMalus    - The crafting malus for the item
   let
     baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex
     itemIndex: ExtendedNatural = if protoIndex > 0:
         findBaseCargo(protoIndex = protoIndex, durability = durability,
-            quality = quality, breakChance = -1)
+            quality = quality, craftBonus = craftBonus, craftMalus = craftMalus)
       else:
         cargoIndex
   {.ruleOff: "assignments".}
@@ -266,8 +263,7 @@ proc getLootData*(itemIndex: int): tuple[protoIndex, maxAmount,
         baseCargoIndex].weight)
   if cargoIndex > 0:
     baseCargoIndex = findBaseCargo(protoIndex = result.protoIndex,
-        quality = result.quality, maxDurability = result.maxDurability,
-        weight = result.weight)
+        quality = result.quality, craftBonus = any, craftMalus = any)
   else:
     cargoIndex = findItem(inventory = playerShip.cargo,
         protoIndex = result.protoIndex, itemQuality = result.quality,
