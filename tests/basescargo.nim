@@ -39,15 +39,18 @@ suite "Unit tests for basescargo module.":
     skyBases[1].cargo = @[]
     generateCargo()
     check:
-      findBaseCargo(1, quality = normal) == 0
+      findBaseCargo(1, quality = normal, craftBonus = none,
+          craftMalus = none) == 0
 
   test "Not find an existing item in a base's cargo":
     check:
-      findBaseCargo(40, quality = normal) == -1
+      findBaseCargo(40, quality = normal, craftBonus = none,
+          craftMalus = none) == -1
 
   test "Not find an non-existing item in a base's cargo":
     check:
-      findBaseCargo(490, quality = normal) == -1
+      findBaseCargo(490, quality = normal, craftBonus = none,
+          craftMalus = none) == -1
 
   test "Count the free cargo in a base's cargo":
     skyBases[1].cargo = @[]
