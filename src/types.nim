@@ -225,10 +225,10 @@ type
       power: Positive = 1
       disabled: bool
     of cabin:
-      cleanliness*: Natural
-      quality*: Natural
+      cleanliness: Natural
+      quality: Natural
     of turret:
-      gunIndex*: ExtendedNatural
+      gunIndex: ExtendedNatural
     of gun:
       damage*: Positive = 1
       ammoIndex*: ExtendedNatural
@@ -413,6 +413,9 @@ moduleGetterSetter(name = mType, typ = ModuleType2)
 moduleGetterSetter(name = fuelUsage, typ = Positive)
 moduleGetterSetter(name = power, typ = Positive)
 moduleGetterSetter(name = disabled, typ = bool)
+moduleGetterSetter(name = cleanliness, typ = Natural)
+moduleGetterSetter(name = quality, typ = Natural)
+moduleGetterSetter(name = gunIndex, typ = ExtendedNatural)
 
 type
   InventoryData* = object
