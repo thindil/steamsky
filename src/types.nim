@@ -230,11 +230,11 @@ type
     of turret:
       gunIndex: ExtendedNatural
     of gun:
-      damage*: Positive = 1
-      ammoIndex*: ExtendedNatural
+      damage: Positive = 1
+      ammoIndex: ExtendedNatural
     of hull:
-      installedModules*: Natural
-      maxModules*: Positive = 1
+      installedModules: Natural
+      maxModules: Positive = 1
     of workshop:
       craftingIndex*: RecipeIndex
       craftingTime*: Natural
@@ -416,6 +416,10 @@ moduleGetterSetter(name = disabled, typ = bool)
 moduleGetterSetter(name = cleanliness, typ = Natural)
 moduleGetterSetter(name = quality, typ = Natural)
 moduleGetterSetter(name = gunIndex, typ = ExtendedNatural)
+moduleGetterSetter(name = damage, typ = Positive)
+moduleGetterSetter(name = ammoIndex, typ = ExtendedNatural)
+moduleGetterSetter(name = installedModules, typ = Natural)
+moduleGetterSetter(name = maxModules, typ = Positive)
 
 type
   InventoryData* = object
