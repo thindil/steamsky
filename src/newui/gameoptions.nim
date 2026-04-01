@@ -135,6 +135,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         keyLabel = label
         keyIndex = index
         dialog = setKeyDialog
+        shortcutsEnabled = false
 
     type
       KeyTexts = object
@@ -477,3 +478,4 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         keyIndex = -1
         keyLabel = ""
         dialog = none
+        shortcutsEnabled = true
