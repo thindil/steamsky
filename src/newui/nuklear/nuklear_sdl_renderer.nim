@@ -148,6 +148,7 @@ const
   SDLK_F11: uint = 0x40000044u
   SDLK_F12: uint = 0x40000045u
   IMG_INIT_PNG: cint = 0x00000002
+  SDL_WINDOW_FULLSCREEN: cint = 0x00000001
   windowCentered*: cint = SDL_WINDOWPOS_CENTERED ## The centered position of a window
 
 proc SDL_SetHint(name, value: cstring) {.importc, nodecl, raises: [], tags: [], contractual.}
@@ -214,6 +215,9 @@ proc SDL_SetWindowResizable(window: WindowPtr; resizable: cint) {.importc,
   ## Internal SDL binding
 proc SDL_GetKeyboardState(numkeys: ptr int = nil): ptr array[512,
     uint8] {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL Image binding
+proc SDL_SetWindowFullscreen(window: WindowPtr; flags: cint): cint {.importc,
+    nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL Image binding
 proc IMG_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL Image binding
@@ -570,3 +574,12 @@ proc nuklearGetWindowSize*(): tuple[w: float; h: float] {.raises: [], tags: [],
   var winWidth, winHeight: cint = 0
   SDL_GetWindowSize(window = sdl.win, w = winWidth, h = winHeight)
   return (winWidth.float, winHeight.float)
+
+proc nuklearSetWindowFullScreen*(fullScreen: bool = true) {.raises: [], tags: [],
+    contractual.} =
+  ## Set or unset the full screen mode for the main window of the application
+  ##
+  ## * fullScreen - if true, set the main window in full screen mode, otherwise
+  ##                return to normal mode
+  discard SDL_SetWindowFullscreen(window = sdl.win, flags = (
+      if fullScreen: SDL_WINDOW_FULLSCREEN else: 0.cint))
