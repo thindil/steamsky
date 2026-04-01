@@ -1315,7 +1315,8 @@ type
     mode*, singleLine*: uint8
   EditState* = object
     ## Used to store Nuklear edit data
-    active*, prev*, cursor*, selStart*, selEnd*: int
+    active*: bool
+    prev*, cursor*, selStart*, selEnd*: int
     name*: nk_hash
   PropertyState* = object
     ## Used to store Nuklear property widget data

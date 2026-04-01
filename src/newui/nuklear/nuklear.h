@@ -30797,6 +30797,10 @@ NK_API int nk_get_input_text_len(struct nk_context *ctx)
 {
   return ctx->input.keyboard.text_len;
 }
+NK_API int nk_edit_is_active(struct nk_context *ctx)
+{
+  return ctx->current->edit.active;
+}
 #endif /* NK_IMPLEMENTATION */
 
 /*
