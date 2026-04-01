@@ -432,8 +432,7 @@ proc finishCrafting(recipe: CraftData; module: ModuleData; crafterIndex: int;
 
 proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
     recipeName: string; module: var ModuleData; owner, toolIndex,
-    crafterIndex: int; quality: ObjectQuality; maxDurability: ItemsDurability;
-    weight: Natural; breakChance: ExtendedNatural): bool {.raises: [KeyError,
+    crafterIndex: int; quality: ObjectQuality): bool {.raises: [KeyError,
     Exception], tags: [RootEffect], contractual.} =
   ## Craft or deconstruct the selected item
   ##
@@ -446,9 +445,6 @@ proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
   ## * toolIndex     - the index of the tool used for crafting
   ## * crafterIndex  - the index of the crew member who crafts currently
   ## * quality       - the quality of the crafted item
-  ## * maxDurability - the maximum durability of the crafted item
-  ## * weight        - the weight of the item
-  ## * breakChance   - the chance of the item to break during usage
   ##
   ## Returns the modified parameter amount. Additionally, returns true if the
   ## crafting should stop otherwise false
@@ -466,8 +462,8 @@ proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
   else:
     updateCargo(ship = playerShip, protoIndex = recipesList[
         module.craftingIndex].resultIndex, amount = resultAmount,
-        quality = quality, durability = maxDurability,
-        craftBonus = module.craftingBonus, craftMalus = module.craftingMalus)
+        quality = quality, craftBonus = module.craftingBonus,
+        craftMalus = module.craftingMalus)
   for key, protoRecipe in recipesList:
     if protoRecipe.resultIndex == recipe.resultIndex:
       updateCraftingOrders(index = key)
@@ -702,33 +698,10 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
           if module.craftingQuality != normal and quality >
               module.craftingQuality:
             quality = module.craftingQuality
-          let maxDurability: ItemsDurability = (if module.craftingBonus ==
-              moreDurable: (defaultItemDurability.float *
-              1.20).ItemsDurability elif module.craftingMalus == lessDurable: (
-              defaultItemDurability.float *
-              0.8).ItemsDurability else: defaultItemDurability)
-          var weight: Natural = itemsList[recipesList[
-              module.craftingIndex].resultIndex].weight
-          if module.craftingBonus == lighter:
-            weight = (weight.float * 0.8).Natural
-          elif module.craftingMalus == heavier:
-            weight = (weight.float * 1.2).Natural
-          else:
-            weight = 0
-          var breakChance: ExtendedNatural = itemsList[recipesList[
-              module.craftingIndex].resultIndex].breakChance
-          if module.craftingBonus == lessBreakable:
-            breakChance = (breakChance.float * 0.8).ExtendedNatural
-          elif module.craftingMalus == moreBreakable:
-            breakChance = (breakChance.float * 1.2).ExtendedNatural
-          else:
-            breakChance = -1
           if craftItem(amount = amount, recipe = recipe,
               resultAmount = resultAmount, recipeName = recipeName,
               module = module, owner = owner, toolIndex = toolIndex,
-              crafterIndex = crafterIndex, quality = quality,
-              maxDurability = maxDurability, weight = weight,
-              breakChance = breakChance):
+              crafterIndex = crafterIndex, quality = quality):
             break
         else:
           for key, recipe in recipesList:
