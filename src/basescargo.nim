@@ -141,13 +141,13 @@ proc findBaseCargo*(protoIndex: Natural;
     ## not found
     result = -1
     for index, item in localBaseCargo:
-      if quality != normal or craftBonus != any or craftMalus != any:
+      if quality == normal and craftBonus == any and craftMalus == any:
+        if item.protoIndex == protoIndex:
+          return index
+      else:
         if item.protoIndex == protoIndex and item.durability == durability and
             item.quality == quality and item.craftBonus == craftBonus and
             item.craftMalus == craftMalus:
-          return index
-      else:
-        if item.protoIndex == protoIndex:
           return index
 
   if baseIndex > 0:
