@@ -584,7 +584,7 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       break
   if isKeyPressed(key = keyEscape):
     key = ""
-  if getInputTextLen() > 0:
+  if getInputTextLen() > 0 and shortcutsEnabled:
     key &= getInputText().toLowerAscii
     if key == menuAccelerators[1]:
       showShipInfo(dialog = dialog, state = state)

@@ -85,6 +85,8 @@ var
     ## The list of keyboard shortcuts used in some places
   fullScreenAccel*: string = "Control-f"
     ## The keyboard shortcut for switch full screen mode for the game
+  shortcutsEnabled*: bool = true
+    ## If true, the keyboard shortcuts are enabled
 
 {.push ruleOff: "varDeclared".}
 var images*: array[menuIcon..IconsNames.high,
