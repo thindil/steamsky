@@ -203,7 +203,9 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
         case upgradedModule.mType
         of ModuleType2.hull:
           weightGain *= 10
-          upgradedModule.maxModules.inc
+          {.ruleOff: "assignments".}
+          upgradedModule.maxModules = upgradedModule.maxModules + 1
+          {.ruleOn: "assignments".}
           upgradeValue = upgradedModule.maxModules
         of ModuleType2.engine:
           weightGain = (modulesList[upgradedModule.protoIndex].maxValue / 40).int
@@ -219,11 +221,13 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
           {.ruleOn: "assignments".}
           upgradeValue = upgradedModule.quality
         of ModuleType2.gun:
+          {.ruleOff: "assignments".}
           if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:
-            upgradedModule.damage += (modulesList[
+            upgradedModule.damage = upgradedModule.damage + (modulesList[
                 upgradedModule.protoIndex].maxValue / 20).int
           else:
-            upgradedModule.damage.inc
+            upgradedModule.damage = upgradedModule.damage + 1
+          {.ruleOn: "assignments".}
           upgradeValue = upgradedModule.damage
         of ModuleType2.batteringRam:
           if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:

@@ -71,7 +71,9 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
       for module in ship.modules.mitems:
         if module.mType == ModuleType2.gun:
           if module.ammoIndex > itemIndex:
-            module.ammoIndex.dec
+            {.ruleOff: "assignments".}
+            module.ammoIndex = module.ammoIndex - 1
+            {.ruleOn: "assignments".}
           elif module.ammoIndex == itemIndex:
             module.ammoIndex = -1
       return
