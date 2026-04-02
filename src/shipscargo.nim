@@ -80,6 +80,24 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     ship.cargo[itemIndex].amount = newAmount
     ship.cargo[itemIndex].price = price
 
+proc getItemWeight*(item: InventoryData | BaseCargo): Positive {.raises: [KeyError],
+    tags: [], contractual.} =
+  ## Get the weight of the selected item
+  ##
+  ## * item - the item which weight will be get
+  ##
+  ## Returns the weight of the item
+  if item.craftBonus != lighter and item.craftMalus != heavier:
+    return itemsList[item.protoIndex].weight
+  var weight: Natural = 0
+  if item.craftBonus == lighter:
+    weight = (itemsList[item.protoIndex].weight.float * 0.8).Natural
+    if weight == 0:
+      weight = 1
+  if item.craftMalus == heavier:
+    weight = (itemsList[item.protoIndex].weight.float * 1.2).Natural
+  return weight
+
 proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.raises: [
     KeyError], tags: [], contractual.} =
   ## Get the amount of free space in the selected ship's cargo
@@ -94,7 +112,7 @@ proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.raises: [
     if module.mType == cargoRoom and module.durability > 0:
       result += modulesList[module.protoIndex].maxValue
   for item in ship.cargo:
-    result -= (itemsList[item.protoIndex].weight * item.amount)
+    result -= (getItemWeight(item = item) * item.amount)
   result += amount
 
 proc getItemAmount*(itemType: string): Natural {.raises: [KeyError],
