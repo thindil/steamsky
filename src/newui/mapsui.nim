@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -18,7 +18,7 @@
 ## Provides code related to the game's main map, like, creating the game's UI,
 ## etc.
 
-import std/[colors, math, tables, unicode]
+import std/[colors, math, strutils, tables, unicode]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basestypes, config, crew2, events2, game, game2, maps,
     messages, missions, missions2, shipscrew, shipscargo, shipsmovement,
@@ -687,6 +687,8 @@ proc showMission(mType: MissionsTypes): tuple[icon: string;
     result.icon = theme.mapIcons[passengerIcon]
     result.color = theme.mapColors[mapCyanColor]
 
+var key: string = ""
+
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the game's map
@@ -894,5 +896,16 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     # Draw last messages
     row(width = 0.75):
       showLastMessages(theme = theme, dialog = dialog, withButtons = false, height = 0)
+    # Draw movement buttons
     row(width = 0.25):
       showButtons(dialog = dialog)
+  # Keyboard shortcuts
+  const specialKeys: set[Keys] = {keyShift, keyCtrl, keyAlt}
+  for sKey in specialKeys:
+    if isKeyPressed(key = sKey):
+      key = $sKey & "-"
+      break
+  if isKeyPressed(key = keyEscape):
+    key = ""
+  if getInputTextLen() > 0 and shortcutsEnabled:
+    key &= getInputText().toLowerAscii
