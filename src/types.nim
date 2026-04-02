@@ -236,10 +236,10 @@ type
       installedModules: Natural
       maxModules: Positive = 1
     of workshop:
-      craftingIndex*: RecipeIndex
-      craftingTime*: Natural
-      craftingAmount*: Natural
-      craftingQuality*: ObjectQuality = normal
+      craftingIndex: RecipeIndex
+      craftingTime: Natural
+      craftingAmount: Natural
+      craftingQuality: ObjectQuality = normal
       craftingBonus*: CraftBonuses
       craftingMalus*: CraftMaluses
     of trainingRoom:
@@ -420,6 +420,10 @@ moduleGetterSetter(name = damage, typ = Positive)
 moduleGetterSetter(name = ammoIndex, typ = ExtendedNatural)
 moduleGetterSetter(name = installedModules, typ = Natural)
 moduleGetterSetter(name = maxModules, typ = Positive)
+moduleGetterSetter(name = craftingIndex, typ = RecipeIndex)
+moduleGetterSetter(name = craftingTime, typ = Natural)
+moduleGetterSetter(name = craftingAmount, typ = Natural)
+moduleGetterSetter(name = craftingQuality, typ = ObjectQuality)
 
 type
   InventoryData* = object
