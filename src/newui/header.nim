@@ -608,6 +608,10 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       elif key == menuAccelerators[11]:
         dialog = setQuestion(question = "Are you sure want to resign from game?",
             qType = resignGame)
+      elif key == mapAccelerators[1]:
+        if dialog == none:
+          setDialog(y = 20)
+          dialog = gameMenuDialog
       elif not inCombat:
         if key == menuAccelerators[2]:
           setDialog()
