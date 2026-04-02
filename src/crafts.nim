@@ -19,7 +19,7 @@
 ## a crafting recipe in a workshop, or checking a recipe's dependecies.
 
 import std/[logging, paths, strutils, tables, xmlparser, xmltree]
-import contracts
+import contracts, nimalyzer
 import config, crewinventory, game, goals, items, log, messages, shipscargo,
     shipscrew, statistics, types, utils
 
@@ -520,7 +520,9 @@ proc checkMaterials(materialIndexes: seq[Positive]; recipe: CraftData;
         toolIndex = toolIndex, crafterIndex = crafterIndex)
     return true
   craftedAmount += resultAmount
-  module.craftingAmount.dec
+  {.ruleOff: "assignments".}
+  module.craftingAmount = module.craftingAmount - 1
+  {.ruleOn: "assignments".}
   for j in 0..materialIndexes.high:
     var cargoIndex: Natural = 0
     while cargoIndex <= playerShip.cargo.high:
