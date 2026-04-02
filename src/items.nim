@@ -308,7 +308,8 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
             craftBonus = item.craftBonus, craftMalus = item.craftMalus)
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = result, ship = playerShip,
-            quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+            quality = item.quality, craftBonus = item.craftBonus,
+            craftMalus = item.craftMalus)
         result = -1
     result = findItem(inventory = playerShip.crew[memberIndex].inventory,
         itemType = itemType, quality = toolQuality, itemQuality = any,
@@ -322,9 +323,11 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
           let item: InventoryData = playerShip.cargo[result]
           updateInventory(memberIndex = memberIndex, amount = 1,
               protoIndex = item.protoIndex, durability = item.durability,
-              ship = playerShip, quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+              ship = playerShip, quality = item.quality,
+              craftBonus = item.craftBonus, craftMalus = item.craftMalus)
           updateCargo(ship = playerShip, amount = -1, cargoIndex = result,
-              quality = item.quality, craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+              quality = item.quality, craftBonus = item.craftBonus,
+              craftMalus = item.craftMalus)
           result = findItem(inventory = playerShip.crew[memberIndex].inventory,
               itemType = itemType, quality = toolQuality, itemQuality = any,
               craftBonus = any, craftMalus = any)
@@ -521,12 +524,15 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
       if memberIndex > -1:
         updateInventory(memberIndex = memberIndex, amount = newAmount,
             protoIndex = moneyIndex, inventoryIndex = mIndex, ship = playerShip,
-            quality = newQuality, craftBonus = playerShip.crew[memberIndex].inventory[mIndex].craftBonus,
-            craftMalus = playerShip.crew[memberIndex].inventory[mIndex].craftMalus)
+            quality = newQuality, craftBonus = playerShip.crew[
+                memberIndex].inventory[mIndex].craftBonus,
+            craftMalus = playerShip.crew[memberIndex].inventory[
+                mIndex].craftMalus)
       else:
         updateCargo(ship = playerShip, protoIndex = moneyIndex,
             amount = newAmount, cargoIndex = mIndex, quality = newQuality,
-            craftBonus = playerShip.cargo[mIndex].craftBonus, craftMalus = playerShip.cargo[mIndex].craftMalus)
+            craftBonus = playerShip.cargo[mIndex].craftBonus,
+                craftMalus = playerShip.cargo[mIndex].craftMalus)
   else:
     for index, item in inventory:
       if item.protoIndex == moneyIndex and item.quality == quality:
@@ -535,12 +541,15 @@ proc updateMoney*(memberIndex, amount: int; quality: ObjectQuality) {.raises: [
     if memberIndex > -1:
       updateInventory(memberIndex = memberIndex, amount = amount,
           protoIndex = moneyIndex, inventoryIndex = mIndex, ship = playerShip,
-          quality = quality, craftBonus = playerShip.crew[memberIndex].inventory[mIndex].craftBonus,
-            craftMalus = playerShip.crew[memberIndex].inventory[mIndex].craftMalus)
+          quality = quality, craftBonus = playerShip.crew[
+              memberIndex].inventory[mIndex].craftBonus,
+            craftMalus = playerShip.crew[memberIndex].inventory[
+                mIndex].craftMalus)
     else:
       updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = amount,
           cargoIndex = mIndex, quality = quality,
-          craftBonus = playerShip.cargo[mIndex].craftBonus, craftMalus = playerShip.cargo[mIndex].craftMalus)
+          craftBonus = playerShip.cargo[mIndex].craftBonus,
+              craftMalus = playerShip.cargo[mIndex].craftMalus)
   {.ruleOn: "varDeclared".}
 
 proc setBreakChance*() {.raises: [KeyError], tags: [], contractual.} =
