@@ -594,6 +594,9 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       showKnowledgeScreen(dialog = dialog, state = state)
     elif key == menuAccelerators[7]:
       showStatsScreen(dialog = dialog, state = state)
+    elif key == fullScreenAccel:
+      gameSettings.fullScreen = not gameSettings.fullScreen
+      nuklearSetWindowFullScreen(fullScreen = gameSettings.fullScreen)
     elif playerShip.crew[0].health > 0:
       if key == menuAccelerators[8]:
         showHelpScreen(dialog = dialog, state = state)
