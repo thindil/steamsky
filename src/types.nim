@@ -240,10 +240,10 @@ type
       craftingTime: Natural
       craftingAmount: Natural
       craftingQuality: ObjectQuality = normal
-      craftingBonus*: CraftBonuses
-      craftingMalus*: CraftMaluses
+      craftingBonus: CraftBonuses
+      craftingMalus: CraftMaluses
     of trainingRoom:
-      trainedSkill*: Natural
+      trainedSkill: Natural
     of batteringRam:
       damage2*: Positive = 1
       coolingDown*: bool
@@ -424,6 +424,9 @@ moduleGetterSetter(name = craftingIndex, typ = RecipeIndex)
 moduleGetterSetter(name = craftingTime, typ = Natural)
 moduleGetterSetter(name = craftingAmount, typ = Natural)
 moduleGetterSetter(name = craftingQuality, typ = ObjectQuality)
+moduleGetterSetter(name = craftingBonus, typ = CraftBonuses)
+moduleGetterSetter(name = craftingMalus, typ = CraftMaluses)
+moduleGetterSetter(name = trainedSkill, typ = Natural)
 
 type
   InventoryData* = object
