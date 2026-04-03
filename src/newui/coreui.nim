@@ -41,7 +41,7 @@ type
       baseDialog, missionActionDialog, baseActionDialog, ordersDialog,
       destinationDialog, messageDialog, infoDialog, buyDialog, sellDialog,
       takeDialog, dropDialog, moveDialog, giveDialog, dropCargoDialog,
-      setKeyDialog
+      setKeyDialog, mapMenuDialog
 
 const
   dtime*: float = 20.0
