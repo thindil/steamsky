@@ -92,7 +92,7 @@ proc freeInventory*(memberIndex: Natural; amount: int): int {.raises: [],
     result = 50 + playerShip.crew[memberIndex].attributes[strengthIndex].level
     for item in playerShip.crew[memberIndex].inventory:
       try:
-        result -= (itemsList[item.protoIndex].weight * item.amount)
+        result -= (getItemWeight(item = item) * item.amount)
       except KeyError:
         discard
     result += amount
