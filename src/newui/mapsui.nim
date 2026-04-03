@@ -909,3 +909,5 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     key = ""
   if getInputTextLen() > 0 and shortcutsEnabled:
     key &= getInputText().toLowerAscii
+    if key == mapAccelerators[2]:
+      showMapMenu(bounds = Rect(x: 0, y: 0, w: 10, h: 10))
