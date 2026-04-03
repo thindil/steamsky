@@ -38,10 +38,10 @@ type
       renameDialog, giveOrderDialog, memberDialog, renameMemberDialog,
       inventoryDialog, moduleInfoDialog, renameModuleDialog, assignCrewDialog,
       assignAmmoDialog, assignSkillDialog, recipeDialog, setRecipeDialog,
-      baseDialog, missionActionDialog, baseActionDialog, ordersDialog,
-      destinationDialog, messageDialog, infoDialog, buyDialog, sellDialog,
-      takeDialog, dropDialog, moveDialog, giveDialog, dropCargoDialog,
-      setKeyDialog, mapMenuDialog
+      baseDialog, missionActionDialog, mapMenuDialog, baseActionDialog,
+      ordersDialog, destinationDialog, messageDialog, infoDialog, buyDialog,
+      sellDialog, takeDialog, dropDialog, moveDialog, giveDialog,
+      dropCargoDialog, setKeyDialog
 
 const
   dtime*: float = 20.0
@@ -56,7 +56,8 @@ const
 
 
 var
-  fonts*: array[FontsNames, ptr nk_font] = [nil, nil, nil, nil, nil] ## The list of fonts used by the game
+  fonts*: array[FontsNames, ptr nk_font] = [nil, nil, nil, nil,
+      nil]                         ## The list of fonts used by the game
   windowWidth*: float = 800.0      ## The width of the main game window
   windowHeight*: float = 600.0     ## The height of the main game window
   dialogX*: float = 0              ## The X position of a dialog
