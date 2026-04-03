@@ -125,3 +125,14 @@ proc getInputTextLen*(): Natural {.raises: [], tags: [], contractual.} =
   proc nk_get_input_text_len(ctx): cint {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function.
   return nk_get_input_text_len(ctx = ctx).Natural
+
+proc inputButton*(id: Buttons; x, y: Natural; down: bool = false) {.raises: [],
+    tags: [], contractual.} =
+  ## Emulate pressing a mouse button
+  ##
+  ## * id   - the mouse button which will be emulated
+  ## * x    - the X-axis position where the button was clicked
+  ## * y    - the Y-axis position where the button was clicked
+  ## * down - if true, the button button is hold
+  nk_input_button(ctx = ctx, id = id, x = x.cint, y = y.cint,
+      down = down.nk_bool)
