@@ -293,7 +293,7 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     imageButton(image = images[arrowLeft]):
       centerX = (if centerX - (cols / 3).int < 1: (cols /
           3).int else: centerX - (cols / 3).int)
-    label(str = "")
+    label(str = "X:")
     imageButton(image = images[arrowRight]):
       centerX = (if centerX + (cols / 3).int > 1_024: (cols /
           3).int else: centerX + (cols / 3).int)
@@ -322,7 +322,7 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       centerX = moveX
       centerY = moveY
       closeMapMenu(dialog = dialog)
-    contextualItemLabel(label = "Close", align = centered):
+    labelButton(title = "Close"):
       closeMapMenu(dialog = dialog)
 
   windowSetFocus(name = windowName)
@@ -876,7 +876,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if gameSettings.showTooltips:
     addTooltip(bounds = bounds, text = "Show the map movement menu.")
   labelButton(title = "\uf85b"):
-    discard
+    dialog = mapMenuDialog
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Make the map smaller by one row.")
