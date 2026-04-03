@@ -244,22 +244,30 @@ var
   moveY: MapYRange = 1
   rows, cols: Positive = 1
 
-proc showMapMenu(bounds: Rect) {.raises: [], tags: [RootEffect],
+proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the map's menu
   ##
-  ## * bounds - the rectangle in which the player should click the mouse's
-  ##            button to show the menu
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
 
-  proc closeMapMenu() {.raises: [], tags: [], contractual.} =
+  proc closeMapMenu(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
     ## Close the menu, reset the position form
+    ## * dialog - the current in-game dialog displayed on the screen
+    ##
+    ## Returns the modified parameters dialog.
     moveX = 1
     moveY = 1
+    dialog = none
 
-  nuklearSetDefaultFont(defaultFont = fonts[UIFont],
-      fontSize = gameSettings.interfaceFontSize + 10)
-  contextualMenu(flags = {windowNoFlags}, x = 535, y = 190,
-      triggerBounds = bounds, button = left):
+  const
+    width: float = 540
+    height: float = 200
+    windowName: string = "Map Menu"
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY,
+      w = width, h = height, flags = {windowBorder, windowNoScrollbar, windowMovable}):
     setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35,
         135, 230])
     imageButton(image = images[arrowUpLeft]):
@@ -281,7 +289,7 @@ proc showMapMenu(bounds: Rect) {.raises: [], tags: [RootEffect],
     labelButton(title = "Center map on ship"):
       centerX = playerShip.skyX
       centerY = playerShip.skyY
-      closeMapMenu()
+      closeMapMenu(dialog = dialog)
     imageButton(image = images[arrowLeft]):
       centerX = (if centerX - (cols / 3).int < 1: (cols /
           3).int else: centerX - (cols / 3).int)
@@ -295,7 +303,7 @@ proc showMapMenu(bounds: Rect) {.raises: [], tags: [RootEffect],
     labelButton(title = "Center map on home base"):
       centerX = skyBases[playerShip.homeBase].skyX
       centerY = skyBases[playerShip.homeBase].skyY
-      closeMapMenu()
+      closeMapMenu(dialog = dialog)
     setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 230])
     imageButton(image = images[arrowDownLeft]):
       centerY = (if centerY + (rows / 3).int > 1_024: (rows /
@@ -313,11 +321,11 @@ proc showMapMenu(bounds: Rect) {.raises: [], tags: [RootEffect],
     labelButton(title = "Move map"):
       centerX = moveX
       centerY = moveY
-      closeMapMenu()
+      closeMapMenu(dialog = dialog)
     contextualItemLabel(label = "Close", align = centered):
-      closeMapMenu()
-  nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
-      fontSize = gameSettings.mapFontSize + 10)
+      closeMapMenu(dialog = dialog)
+
+  windowSetFocus(name = windowName)
 
 proc updateCoordinates(newX, newY: var int) {.raises: [], tags: [],
     contractual.} =
@@ -867,7 +875,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   let bounds: Rect = getWidgetBounds()
   if gameSettings.showTooltips:
     addTooltip(bounds = bounds, text = "Show the map movement menu.")
-  showMapMenu(bounds = bounds)
   labelButton(title = "\uf85b"):
     discard
   if gameSettings.showTooltips:
@@ -910,4 +917,4 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if getInputTextLen() > 0 and shortcutsEnabled:
     key &= getInputText().toLowerAscii
     if key == mapAccelerators[2]:
-      showMapMenu(bounds = Rect(x: 0, y: 0, w: 10, h: 10))
+      dialog = mapMenuDialog
