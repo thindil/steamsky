@@ -224,6 +224,12 @@ proc nkStyleFromTable*(table: array[StyleColors,
       data: StyleItemData(itype: itemColor, color: table[selectActiveColor]))
   context.style.selectable.pressedActive = StyleItem(iType: itemColor,
       data: StyleItemData(itype: itemColor, color: table[selectActiveColor]))
+  context.style.selectable.textNormal = table[textColor]
+  context.style.selectable.textHover = table[textColor]
+  context.style.selectable.textPressed = table[textColor]
+  context.style.selectable.textNormalActive = table[selectActiveTextColor]
+  context.style.selectable.textHoverActive = table[selectActiveTextColor]
+  context.style.selectable.textPressedActive = table[selectActiveTextColor]
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
