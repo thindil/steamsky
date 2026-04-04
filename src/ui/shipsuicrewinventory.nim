@@ -20,7 +20,7 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
-import ../[config, crewinventory, game, items, shipscrew2, tk, types]
+import ../[config, crewinventory, game, items, shipscrew2, shipscargo, tk, types]
 import coreui, dialogs, errordialog, table, utilsui2
 
 {.push ruleOff: "varDeclared".}
@@ -97,7 +97,7 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
         command = "ShowInventoryItemInfo " & $(item + 1), column = 5)
     try:
       addButton(table = inventoryTable, text = $(member.inventory[item].amount *
-          itemsList[member.inventory[item].protoIndex].weight) & " kg",
+          getItemWeight(item = member.inventory[item])) & " kg",
           tooltip = "The total weight of the items",
           command = "ShowInventoryItemInfo " & $(item + 1), column = 6, newRow = true)
     except:
@@ -330,8 +330,8 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
           memberIndex].inventory[index].protoIndex].itemType),
           amount: playerShip.crew[memberIndex].inventory[index].amount,
           weight: playerShip.crew[memberIndex].inventory[index].amount *
-          itemsList[playerShip.crew[memberIndex].inventory[
-          index].protoIndex].weight, used: itemIsUsed(memberIndex = memberIndex,
+          getItemWeight(item = playerShip.crew[memberIndex].inventory[
+          index]), used: itemIsUsed(memberIndex = memberIndex,
           itemIndex = index), id: index))
     except:
       return showError(message = "Can't add item to local inventory.")

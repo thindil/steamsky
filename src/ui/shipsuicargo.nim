@@ -124,9 +124,12 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = cargoTable, text = $item.amount,
         tooltip = "The amount of the selected item",
         command = "ShowCargoItemInfo " & $(index + 1), column = 5)
-    addButton(table = cargoTable, text = $(item.amount * protoItem.weight) &
-        " kg", tooltip = "The total weight of the selected item",
-        command = "ShowCargoItemInfo " & $(index + 1), column = 6, newRow = true)
+    try:
+      addButton(table = cargoTable, text = $(item.amount * getItemWeight(
+          item = item)) & " kg", tooltip = "The total weight of the selected item",
+          command = "ShowCargoItemInfo " & $(index + 1), column = 6, newRow = true)
+    except KeyError:
+      return showError(message = "Can't count items weight.")
     if cargoTable.row == gameSettings.listsLimit + 1:
       break
   if page > 1:
@@ -225,8 +228,8 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
           item.maxDurability.float), itemType: (if itemsList[
           item.protoIndex].showType.len > 0: itemsList[
           item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
-          amount: item.amount, weight: item.amount * itemsList[
-          item.protoIndex].weight, quality: item.quality, id: index))
+          amount: item.amount, weight: item.amount * getItemWeight(item = item),
+          quality: item.quality, id: index))
     except:
       return showError(message = "Can't add local item to cargo.")
 
@@ -407,8 +410,8 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't get the item's index.")
     item: InventoryData = playerShip.cargo[itemIndex]
   try:
-    if freeInventory(memberIndex = memberIndex, amount = -(itemsList[
-        item.protoIndex].weight * amount)) < 0:
+    if freeInventory(memberIndex = memberIndex, amount = -(getItemWeight(
+        item = item) * amount)) < 0:
       showMessage(text = "No free space in " & playerShip.crew[
           memberIndex].name & "'s inventory for that amount of " & getItemName(
           item = item), title = "Can't give item")
@@ -426,7 +429,8 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't update the member's inventory.")
   try:
     updateCargo(ship = playerShip, amount = -amount, cargoIndex = itemIndex,
-        price = item.price, quality = item.quality, craftBonus = item.craftBonus,
+        price = item.price, quality = item.quality,
+        craftBonus = item.craftBonus,
         craftMalus = item.craftMalus)
   except:
     return showError(message = "Can't update the ship' cargo.")
@@ -576,8 +580,8 @@ proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get the member's index.")
   var maxAmount: Natural = try:
-        (freeInventory(memberIndex = memberIndex, amount = 0).float / itemsList[
-            item.protoIndex].weight.float).Natural
+        (freeInventory(memberIndex = memberIndex, amount = 0).float /
+            getItemWeight(item = item).float).Natural
       except:
         return showError(message = "Can't count the max amount.")
   if item.amount < maxAmount:
