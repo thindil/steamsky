@@ -133,13 +133,13 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
         if getBasePopulation(baseIndex = baseIndex) > empty and skyBases[
             baseIndex].visited.year > 0:
           case skyBases[baseIndex].reputation.level
-          of -100.. -75:
+          of -100 .. -75:
             colorLabel(str = "You are hated here", color = theme.mapColors[mapRedColor])
-          of -74.. -50:
+          of -74 .. -50:
             colorLabel(str = "You are outlawed here", color = theme.mapColors[mapRedColor])
-          of -49.. -25:
+          of -49 .. -25:
             colorLabel(str = "You are disliked here", color = theme.mapColors[mapRedColor])
-          of -24.. -1:
+          of -24 .. -1:
             colorLabel(str = "They are unfriendly to you",
                 color = theme.mapColors[mapRedColor])
           of 0:
@@ -252,7 +252,8 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameters dialog.
 
-  proc closeMapMenu(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+  proc closeMapMenu(dialog: var GameDialog) {.raises: [], tags: [],
+      contractual.} =
     ## Close the menu, reset the position form
     ## * dialog - the current in-game dialog displayed on the screen
     ##
@@ -267,7 +268,8 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     windowName: string = "Map Menu"
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY,
-      w = width, h = height, flags = {windowBorder, windowNoScrollbar, windowMovable}):
+      w = width, h = height, flags = {windowBorder, windowTitle,
+          windowNoScrollbar, windowMovable}):
     setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35,
         135, 230])
     imageButton(image = images[arrowUpLeft]):
