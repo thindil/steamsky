@@ -244,6 +244,48 @@ var
   moveY: MapYRange = 1
   rows, cols: Positive = 1
 
+type
+  MapDirections = enum
+    north, northeast, east, southeast, south, southwest, west, northwest
+
+proc moveMap(direction: MapDirections) {.raises: [], tags: [], contractual.} =
+  ## Move the map in the selected direction
+  ##
+  ## * direction - the direction in which the map will be moved
+  case direction
+  of north:
+    centerY = (if centerY - (rows / 3).int < 1: (rows /
+        3).int else: centerY - (rows / 3).int)
+  of northeast:
+    centerY = (if centerY - (rows / 3).int < 1: (rows /
+        3).int else: centerY - (rows / 3).int)
+    centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+        3).int else: centerX + (cols / 3).int)
+  of east:
+    centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+        3).int else: centerX + (cols / 3).int)
+  of southeast:
+    centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+        3).int else: centerY + (rows / 3).int)
+    centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+        3).int else: centerX + (cols / 3).int)
+  of south:
+    centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+        3).int else: centerY + (rows / 3).int)
+  of southwest:
+    centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+        3).int else: centerY + (rows / 3).int)
+    centerX = (if centerX - (cols / 3).int < 1: (cols /
+        3).int else: centerX - (cols / 3).int)
+  of west:
+    centerX = (if centerX - (cols / 3).int < 1: (cols /
+        3).int else: centerX - (cols / 3).int)
+  of northwest:
+    centerY = (if centerY - (rows / 3).int < 1: (rows /
+        3).int else: centerY - (rows / 3).int)
+    centerX = (if centerX - (cols / 3).int < 1: (cols /
+        3).int else: centerX - (cols / 3).int)
+
 proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the map's menu
@@ -273,19 +315,12 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35,
         135, 230])
     imageButton(image = images[arrowUpLeft]):
-      centerY = (if centerY - (rows / 3).int < 1: (rows /
-          3).int else: centerY - (rows / 3).int)
-      centerX = (if centerX - (cols / 3).int < 1: (cols /
-          3).int else: centerX - (cols / 3).int)
+      moveMap(direction = northwest)
     imageButton(image = images[arrowUp]):
-      centerY = (if centerY - (rows / 3).int < 1: (rows /
-          3).int else: centerY - (rows / 3).int)
+      moveMap(direction = north)
     imageButton(image = images[arrowUpRight]):
-      centerY = (if centerY - (rows / 3).int < 1: (rows /
-          3).int else: centerY - (rows / 3).int)
-      centerX = (if centerX + (cols / 3).int > 1_024: (cols /
-          3).int else: centerX + (cols / 3).int)
-    label(str = "")
+      moveMap(direction = northeast)
+    label(str = "X:")
     property(name = "#", min = MapXRange.low, val = moveX,
         max = MapXRange.high, step = 1, incPerPixel = 1)
     labelButton(title = "Center map on ship"):
@@ -293,12 +328,10 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       centerY = playerShip.skyY
       closeMapMenu(dialog = dialog)
     imageButton(image = images[arrowLeft]):
-      centerX = (if centerX - (cols / 3).int < 1: (cols /
-          3).int else: centerX - (cols / 3).int)
-    label(str = "X:")
+      moveMap(direction = west)
+    label(str = "")
     imageButton(image = images[arrowRight]):
-      centerX = (if centerX + (cols / 3).int > 1_024: (cols /
-          3).int else: centerX + (cols / 3).int)
+      moveMap(direction = east)
     label(str = "Y:")
     property(name = "#", min = MapYRange.low, val = moveY,
         max = MapYRange.high, step = 1, incPerPixel = 1)
@@ -308,18 +341,11 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       closeMapMenu(dialog = dialog)
     setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 230])
     imageButton(image = images[arrowDownLeft]):
-      centerY = (if centerY + (rows / 3).int > 1_024: (rows /
-          3).int else: centerY + (rows / 3).int)
-      centerX = (if centerX - (cols / 3).int < 1: (cols /
-          3).int else: centerX - (cols / 3).int)
+      moveMap(direction = southwest)
     imageButton(image = images[arrowDown]):
-      centerY = (if centerY + (rows / 3).int > 1_024: (rows /
-          3).int else: centerY + (rows / 3).int)
+      moveMap(direction = south)
     imageButton(image = images[arrowDownRight]):
-      centerY = (if centerY + (rows / 3).int > 1_024: (rows /
-          3).int else: centerY + (rows / 3).int)
-      centerX = (if centerX + (cols / 3).int > 1_024: (cols /
-          3).int else: centerX + (cols / 3).int)
+      moveMap(direction = southeast)
     labelButton(title = "Move map"):
       centerX = moveX
       centerY = moveY
