@@ -227,21 +227,21 @@ proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
                 upgradedModule.protoIndex].maxValue / 20).int
           else:
             upgradedModule.damage = upgradedModule.damage + 1
-          {.ruleOn: "assignments".}
           upgradeValue = upgradedModule.damage
         of ModuleType2.batteringRam:
           if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:
-            upgradedModule.damage2 += (modulesList[
+            upgradedModule.damage2 = upgradedModule.damage2 + (modulesList[
                 upgradedModule.protoIndex].maxValue / 20).int
           else:
-            upgradedModule.damage2.inc
+            upgradedModule.damage2 = upgradedModule.damage2 + 1
           upgradeValue = upgradedModule.damage2
         of ModuleType2.harpoonGun:
           if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:
-            upgradedModule.duration += (modulesList[
+            upgradedModule.duration = upgradedModule.duration + (modulesList[
                 upgradedModule.protoIndex].maxValue / 20).int
           else:
-            upgradedModule.duration.inc
+            upgradedModule.duration = upgradedModule.duration + 1
+          {.ruleOn: "assignments".}
           upgradeValue = upgradedModule.duration
         else:
           discard
