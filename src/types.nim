@@ -245,11 +245,11 @@ type
     of trainingRoom:
       trainedSkill: Natural
     of batteringRam:
-      damage2*: Positive = 1
-      coolingDown*: bool
+      damage2: Positive = 1
+      coolingDown: bool
     of harpoonGun:
-      duration*: Positive = 1
-      harpoonIndex*: ExtendedNatural
+      duration: Positive = 1
+      harpoonIndex: ExtendedNatural
     of ModuleType2.any:
       data*: array[1..3, int]
     else:
@@ -427,6 +427,10 @@ moduleGetterSetter(name = craftingQuality, typ = ObjectQuality)
 moduleGetterSetter(name = craftingBonus, typ = CraftBonuses)
 moduleGetterSetter(name = craftingMalus, typ = CraftMaluses)
 moduleGetterSetter(name = trainedSkill, typ = Natural)
+moduleGetterSetter(name = damage2, typ = Positive)
+moduleGetterSetter(name = coolingDown, typ = bool)
+moduleGetterSetter(name = duration, typ = Positive)
+moduleGetterSetter(name = harpoonIndex, typ = ExtendedNatural)
 
 type
   InventoryData* = object
