@@ -285,7 +285,7 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           3).int else: centerY - (rows / 3).int)
       centerX = (if centerX + (cols / 3).int > 1_024: (cols /
           3).int else: centerX + (cols / 3).int)
-    label(str = "X:")
+    label(str = "")
     property(name = "#", min = MapXRange.low, val = moveX,
         max = MapXRange.high, step = 1, incPerPixel = 1)
     labelButton(title = "Center map on ship"):
@@ -878,6 +878,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if gameSettings.showTooltips:
     addTooltip(bounds = bounds, text = "Show the map movement menu.")
   labelButton(title = "\uf85b"):
+    setDialog(x = windowWidth / 5)
     dialog = mapMenuDialog
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
@@ -919,4 +920,5 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if getInputTextLen() > 0 and shortcutsEnabled:
     key &= getInputText().toLowerAscii
     if key == mapAccelerators[2]:
+      setDialog(x = windowWidth / 5)
       dialog = mapMenuDialog
