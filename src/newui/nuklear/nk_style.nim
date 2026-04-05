@@ -230,6 +230,17 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.selectable.textNormalActive = table[selectActiveTextColor]
   context.style.selectable.textHoverActive = table[selectActiveTextColor]
   context.style.selectable.textPressedActive = table[selectActiveTextColor]
+  context.style.selectable.padding = Vec2(x: 2.0, y: 2.0)
+  context.style.selectable.imagePadding = Vec2(x: 2.0, y: 2.0)
+  context.style.selectable.touchPadding = Vec2(x: 0.0, y: 0.0)
+  context.style.selectable.userData = Handle(handleType: handleInt, intValue: 0)
+  context.style.selectable.rounding = 0.0
+  context.style.selectable.colorFactor = 1.0
+  context.style.selectable.disabledFactor = nkWidgetDisabledFactor
+  context.style.selectable.drawBegin = nil
+  context.style.selectable.drawEnd = nil
+
+  # slider
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
