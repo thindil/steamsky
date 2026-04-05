@@ -948,3 +948,26 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if key == mapAccelerators[2]:
       setDialog(x = windowWidth / 5)
       dialog = mapMenuDialog
+    elif key == mapAccelerators[3]:
+      gameSettings.mapFontSize.inc
+      if gameSettings.mapFontSize > 50:
+        gameSettings.mapFontSize = 50
+      try:
+        fonts[FontsNames.mapFont] = nuklearLoadFont(font = FontData(
+            path: themesList[gameSettings.interfaceTheme].fonts[FontsNames.mapFont],
+            size: gameSettings.mapFontSize + 10), glyphsRanges = [0x0020.nk_rune,
+            0x00ff, 0x2000, 0xffff, 0])
+      except:
+        dialog = setError(message = "Can't reload the map font.")
+    elif key == mapAccelerators[4]:
+      gameSettings.mapFontSize.dec
+      if gameSettings.mapFontSize < 3:
+        gameSettings.mapFontSize = 3
+      try:
+        fonts[FontsNames.mapFont] = nuklearLoadFont(font = FontData(
+            path: themesList[gameSettings.interfaceTheme].fonts[FontsNames.mapFont],
+            size: gameSettings.mapFontSize + 10), glyphsRanges = [0x0020.nk_rune,
+            0x00ff, 0x2000, 0xffff, 0])
+      except:
+        dialog = setError(message = "Can't reload the map font.")
+    key = ""
