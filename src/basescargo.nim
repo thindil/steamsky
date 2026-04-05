@@ -115,7 +115,8 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
 
 proc findBaseCargo*(protoIndex: Natural;
     durability: ItemsDurability = defaultItemDurability; quality: ObjectQuality;
-    craftBonus: CraftBonuses; craftMalus: CraftMaluses): int {.raises: [], tags: [],
+    craftBonus: CraftBonuses; craftMalus: CraftMaluses): int {.raises: [],
+        tags: [],
     contractual.} =
   ## Find the selected item in the currently visited base's cargo
   ##
@@ -258,9 +259,10 @@ proc getLootData*(itemIndex: int): tuple[protoIndex, maxAmount,
   result.maxDurability = (if cargoIndex > -1: playerShip.cargo[
         cargoIndex].maxDurability else: skyBases[baseIndex].cargo[
         baseCargoIndex].maxDurability)
-  result.weight = (if cargoIndex > -1: playerShip.cargo[
-        cargoIndex].weight else: skyBases[baseIndex].cargo[
-        baseCargoIndex].weight)
+  if cargoIndex > -1:
+    result.weight = getItemWeight(item = playerShip.cargo[cargoIndex])
+  else:
+    result.weight = getItemWeight(item = skyBases[baseIndex].cargo[baseCargoIndex])
   if cargoIndex > 0:
     baseCargoIndex = findBaseCargo(protoIndex = result.protoIndex,
         quality = result.quality, craftBonus = any, craftMalus = any)
