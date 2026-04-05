@@ -21,7 +21,7 @@
 
 import std/[strutils, tables]
 import contracts
-import ../[config, crew, game, items, messages, shipscrew, shipsmovement, tk, types]
+import ../[config, crew, game, items, messages, shipscargo, shipscrew, shipsmovement, tk, types]
 import coreui, dialogs, errordialog
 
 type
@@ -290,8 +290,7 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
       else:
         maxDurability = (if item.maxDurability < defaultItemDurability: "Less"
           else: "More") & " durable"
-    if item.weight != 0:
-      weight = $item.weight
+    weight = $getItemWeight(item = item)
     if item.durability < item.maxDurability:
       itemInfo = getItemDamage(itemDurability = item.durability,
         withColors = true) & '\n'
@@ -305,13 +304,11 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
       else:
         maxDurability = (if item.maxDurability < defaultItemDurability: "Less"
           else: "More") & " durable"
-    if item.weight != 0:
-      weight = $item.weight
+    weight = $getItemWeight(item = item)
     if item.durability < item.maxDurability:
       itemInfo = getItemDamage(itemDurability = item.durability,
         withColors = true) & '\n'
-  itemInfo.add(y = "Weight: {gold}" & (if weight.len > 0: weight
-      else: $itemsList[protoIndex].weight) & " kg{/gold}")
+  itemInfo.add(y = "Weight: {gold}" & weight & " kg{/gold}")
   if itemsList[protoIndex].itemType == weaponType:
     itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[protoIndex].value[
         3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[

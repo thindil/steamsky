@@ -465,14 +465,14 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
           " get").parseInt else: ($argv[2]).parseInt)
       except:
         return showError(message = "Can't get take amount.")
+    let item: BaseCargo = skyBases[baseIndex].cargo[baseCargoIndex]
     try:
-      if freeCargo(amount = -(amount * itemsList[protoIndex].weight)) < 0:
+      if freeCargo(amount = -(amount * getItemWeight(item = item))) < 0:
         showMessage(text = "You can't take that much " & itemsList[
             protoIndex].name & ".", title = "Too much taken")
         return tclOk
     except:
       return showError(message = "Can't count free cargo.")
-    let item: BaseCargo = skyBases[baseIndex].cargo[baseCargoIndex]
     if cargoIndex > -1:
       try:
         updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = amount,

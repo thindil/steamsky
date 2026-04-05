@@ -241,7 +241,7 @@ proc showPlayersItems(currentItemIndex: var Natural; baseType: string;
         varName = "ttk::theme::" & gameSettings.interfaceTheme &
         "::colors(-green)") else: ""))
     try:
-      addButton(table = tradeTable, text = $itemsList[protoIndex].weight &
+      addButton(table = tradeTable, text = $getItemWeight(item = playerShip.cargo[i]) &
           " kg", tooltip = "Show available options for item",
           command = "ShowTradeItemInfo " & $(i + 1), column = 7)
     except:
@@ -347,8 +347,8 @@ proc showTraderItems(currentItemIndex: Natural; baseType: string;
         newRow = false, color = tclGetVar(varName = "ttk::theme::" &
         gameSettings.interfaceTheme & "::colors(-red)"))
     try:
-      addButton(table = tradeTable, text = $itemsList[protoIndex].weight &
-          " kg", tooltip = "Show available options for item",
+      addButton(table = tradeTable, text = $getItemWeight(item = baseCargo[itemsIndexes[
+        i]]) & " kg", tooltip = "Show available options for item",
           command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 7)
     except:
       showError(message = "Can't show item weight2.")
@@ -773,7 +773,7 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
           if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
           item.durability.float / item.maxDurability.float), price: price,
-          profit: price - item.price, weight: itemsList[protoIndex].weight,
+          profit: price - item.price, weight: getItemWeight(item = item),
           owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
           baseCargoIndex].amount else: 0), id: index, quality: item.quality))
     except:
@@ -798,7 +798,7 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
           item.durability.float / item.maxDurability.float), price: price,
-          profit: -price, weight: itemsList[protoIndex].weight, owned: 0,
+          profit: -price, weight: getItemWeight(item = item), owned: 0,
           available: item.amount, id: index, quality: item.quality))
     except:
       return showError(message = "Can't add item from the base's cargo.")
