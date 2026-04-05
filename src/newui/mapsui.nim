@@ -943,12 +943,12 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     addTooltip(bounds = getWidgetBounds(),
         text = "Zoom in the map.")
   labelButton(title = "+"):
-    gameSettings.mapFontSize += 2
+    zoomMap(dialog = dialog)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Zoom out the map.")
   labelButton(title = "-"):
-    gameSettings.mapFontSize -= 2
+    zoomMap(dialog = dialog, zoomIn = false)
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
   layoutDynamic(height = windowHeight - mapHeight - 75, cols = 2):
