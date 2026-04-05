@@ -251,7 +251,7 @@ type
       duration: Positive = 1
       harpoonIndex: ExtendedNatural
     of ModuleType2.any:
-      data*: array[1..3, int]
+      data: array[1..3, int]
     else:
       discard
 
@@ -431,6 +431,7 @@ moduleGetterSetter(name = damage2, typ = Positive)
 moduleGetterSetter(name = coolingDown, typ = bool)
 moduleGetterSetter(name = duration, typ = Positive)
 moduleGetterSetter(name = harpoonIndex, typ = ExtendedNatural)
+moduleGetterSetter(name = data, typ = array[1..3, int])
 
 type
   InventoryData* = object
