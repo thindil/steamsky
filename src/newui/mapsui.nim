@@ -723,6 +723,29 @@ proc showMission(mType: MissionsTypes): tuple[icon: string;
     result.icon = theme.mapIcons[passengerIcon]
     result.color = theme.mapColors[mapCyanColor]
 
+proc zoomMap(dialog: var GameDialog; zoomIn: bool = true) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Zoom in or zoom out the map
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns parameter dialog, modified if any error happened.
+  if zoomIn:
+    gameSettings.mapFontSize.inc
+    if gameSettings.mapFontSize > 50:
+      gameSettings.mapFontSize = 50
+  else:
+    gameSettings.mapFontSize.dec
+    if gameSettings.mapFontSize < 3:
+      gameSettings.mapFontSize = 3
+  try:
+    fonts[FontsNames.mapFont] = nuklearLoadFont(font = FontData(
+        path: themesList[gameSettings.interfaceTheme].fonts[FontsNames.mapFont],
+        size: gameSettings.mapFontSize + 10), glyphsRanges = [0x0020.nk_rune,
+        0x00ff, 0x2000, 0xffff, 0])
+  except:
+    dialog = setError(message = "Can't reload the map font.")
+
 var key: string = ""
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
@@ -949,25 +972,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       setDialog(x = windowWidth / 5)
       dialog = mapMenuDialog
     elif key == mapAccelerators[3]:
-      gameSettings.mapFontSize.inc
-      if gameSettings.mapFontSize > 50:
-        gameSettings.mapFontSize = 50
-      try:
-        fonts[FontsNames.mapFont] = nuklearLoadFont(font = FontData(
-            path: themesList[gameSettings.interfaceTheme].fonts[FontsNames.mapFont],
-            size: gameSettings.mapFontSize + 10), glyphsRanges = [0x0020.nk_rune,
-            0x00ff, 0x2000, 0xffff, 0])
-      except:
-        dialog = setError(message = "Can't reload the map font.")
+      zoomMap(dialog = dialog)
     elif key == mapAccelerators[4]:
-      gameSettings.mapFontSize.dec
-      if gameSettings.mapFontSize < 3:
-        gameSettings.mapFontSize = 3
-      try:
-        fonts[FontsNames.mapFont] = nuklearLoadFont(font = FontData(
-            path: themesList[gameSettings.interfaceTheme].fonts[FontsNames.mapFont],
-            size: gameSettings.mapFontSize + 10), glyphsRanges = [0x0020.nk_rune,
-            0x00ff, 0x2000, 0xffff, 0])
-      except:
-        dialog = setError(message = "Can't reload the map font.")
+      zoomMap(dialog = dialog, zoomIn = false)
     key = ""
