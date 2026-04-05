@@ -966,6 +966,9 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       break
   if isKeyPressed(key = keyEscape):
     key = ""
+  var
+    res: Natural = 0
+    message: string = ""
   if getInputTextLen() > 0 and shortcutsEnabled:
     key &= getInputText().toLowerAscii
     if key == mapAccelerators[2]:
@@ -975,4 +978,19 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       zoomMap(dialog = dialog)
     elif key == mapAccelerators[4]:
       zoomMap(dialog = dialog, zoomIn = false)
+    elif key == mapAccelerators[5]:
+      try:
+        res = moveShip(x = -1, y = -1, message = message)
+      except:
+        dialog = setError(message = "Can't move the ship.")
+    elif key == mapAccelerators[6]:
+        try:
+          res = moveShip(x = 0, y = -1, message = message)
+        except:
+          dialog = setError(message = "Can't move the ship.")
+    elif key == mapAccelerators[7]:
+        try:
+          res = moveShip(x = 1, y = -1, message = message)
+        except:
+          dialog = setError(message = "Can't move the ship.")
     key = ""
