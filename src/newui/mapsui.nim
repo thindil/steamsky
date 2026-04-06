@@ -964,13 +964,22 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if isKeyPressed(key = sKey):
       key = $sKey & "-"
       break
+  var keyPressed: Keys = keyNone
+  for key in keyScrollDown..keyBackspace:
+    if isKeyPressed(key = key):
+      keyPressed = key
+      break
   if isKeyPressed(key = keyEscape):
     key = ""
+    keyPressed = keyNone
   var
     res: Natural = 0
     message: string = ""
-  if getInputTextLen() > 0 and shortcutsEnabled:
-    key &= getInputText().toLowerAscii
+  if (getInputTextLen() > 0 or keyPressed != keyNone) and shortcutsEnabled:
+    if getInputTextLen() > 0:
+      key &= getInputText().toLowerAscii
+    elif keyPressed notin {keyEscape, keyTab}:
+      key = $keyPressed
     if key == mapAccelerators[2]:
       setDialog(x = windowWidth / 5)
       dialog = mapMenuDialog
@@ -984,13 +993,13 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't move the ship.")
     elif key == mapAccelerators[6]:
-        try:
-          res = moveShip(x = 0, y = -1, message = message)
-        except:
-          dialog = setError(message = "Can't move the ship.")
+      try:
+        res = moveShip(x = 0, y = -1, message = message)
+      except:
+        dialog = setError(message = "Can't move the ship.")
     elif key == mapAccelerators[7]:
-        try:
-          res = moveShip(x = 1, y = -1, message = message)
-        except:
-          dialog = setError(message = "Can't move the ship.")
+      try:
+        res = moveShip(x = 1, y = -1, message = message)
+      except:
+        dialog = setError(message = "Can't move the ship.")
     key = ""
