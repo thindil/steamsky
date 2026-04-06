@@ -18,10 +18,9 @@
 ## Provides various types for the game, like ships' data structure, etc.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 
 type
-
   CrewNoSpaceError* = object of CatchableError
     ## Raised when there is no space for new item in crew member inventory
 
@@ -177,6 +176,8 @@ type
   ModuleName* = string
     ## Used to store a module name
 
+{.push ruleOff: "objects".}
+type
   ModuleData* = object
     ## Used to store information about ships' modules
     ##
@@ -254,6 +255,7 @@ type
       data: array[1..3, int]
     else:
       discard
+{.pop ruleOn: "objects".}
 
 proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
     durability, maxDurability: Natural; owner: seq[int] = @[];
