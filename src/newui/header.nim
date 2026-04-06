@@ -592,7 +592,10 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     keyPressed = keyNone
     dialog = none
   if (getInputTextLen() > 0 or keyPressed != keyNone) and shortcutsEnabled:
-    key &= getInputText().toLowerAscii
+    if getInputTextLen() > 0:
+      key &= getInputText().toLowerAscii
+    elif keyPressed notin {keyEscape, keyTab}:
+      key = $keyPressed
     if key == menuAccelerators[1]:
       showShipInfo(dialog = dialog, state = state)
     elif key == menuAccelerators[4]:
