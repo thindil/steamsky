@@ -975,6 +975,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   var
     res: Natural = 0
     message: string = ""
+    newX, newY: int = 0
   if (getInputTextLen() > 0 or keyPressed != keyNone) and shortcutsEnabled:
     if getInputTextLen() > 0:
       key &= getInputText().toLowerAscii
@@ -1000,6 +1001,44 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     elif key == mapAccelerators[7]:
       try:
         res = moveShip(x = 1, y = -1, message = message)
+      except:
+        dialog = setError(message = "Can't move the ship.")
+    elif key == mapAccelerators[8]:
+      try:
+        res = moveShip(x = -1, y = 0, message = message)
+      except:
+        dialog = setError(message = "Can't move the ship.")
+    elif key == mapAccelerators[9]:
+      if playerShip.destinationX == 0:
+        res = 1
+        try:
+          updateGame(minutes = gameSettings.waitMinutes)
+          waitInPlace(minutes = gameSettings.waitMinutes)
+        except:
+          dialog = setError(message = "Can't update the game.")
+      else:
+        updateCoordinates(newX = newX, newY = newY)
+        res = try:
+            moveShip(x = newX, y = newY, message = message)
+          except:
+            dialog = setError(message = "Can't move the ship.")
+            return
+        if playerShip.destinationX == playerShip.skyX and
+            playerShip.destinationY == playerShip.skyY:
+          addMessage(message = "You reached your travel destination.",
+              mType = orderMessage)
+          playerShip.destinationX = 0
+          playerShip.destinationY = 0
+          if gameSettings.autoFinish:
+            message = try:
+                autoFinishMissions()
+              except:
+                dialog = setError(message = "Can't finish missions.")
+                return
+          res = 4
+    elif key == mapAccelerators[10]:
+      try:
+        res = moveShip(x = 1, y = 0, message = message)
       except:
         dialog = setError(message = "Can't move the ship.")
     key = ""
