@@ -484,8 +484,8 @@ proc updateMaxAmount(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     item: InventoryData = playerShip.cargo[manipulateData.itemIndex]
     memberIndex: Natural = manipulateData.data
   manipulateData.maxAmount = try:
-        (freeInventory(memberIndex = memberIndex, amount = 0).float / itemsList[
-            item.protoIndex].weight.float).Natural
+        (freeInventory(memberIndex = memberIndex, amount = 0).float /
+            getItemWeight(item = item).float).Natural
       except:
         dialog = setError(message = "Can't count the max amount.")
         return
@@ -800,7 +800,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             let item: InventoryData = playerShip.cargo[manipulateData.itemIndex]
             try:
               if freeInventory(memberIndex = manipulateData.data, amount = -(
-                  itemsList[item.protoIndex].weight * manipulateData.amount)) < 0:
+                  getItemWeight(item = item) * manipulateData.amount)) < 0:
                 dialog = setMessage(message = "No free space in " &
                     playerShip.crew[manipulateData.data].name &
                     "'s inventory for that amount of " & getItemName(
@@ -924,8 +924,7 @@ proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
       else:
         maxDurability = (if item.maxDurability < defaultItemDurability: "Less"
           else: "More") & " durable"
-    if item.weight != 0:
-      weight = $item.weight
+    weight = $getItemWeight(item = item)
     if item.durability < item.maxDurability:
       itemInfo = getItemDamage(itemDurability = playerShip.crew[
           memberIndex].inventory[itemIndex].durability, withColors = true) & '\n'
@@ -939,13 +938,11 @@ proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
       else:
         maxDurability = (if item.maxDurability < defaultItemDurability: "Less"
           else: "More") & " durable"
-    if item.weight != 0:
-      weight = $item.weight
+    weight = $getItemWeight(item = item)
     if item.durability < item.maxDurability:
       itemInfo = getItemDamage(itemDurability = playerShip.cargo[
           itemIndex].durability, withColors = true) & '\n'
-  itemInfo.add(y = "Weight: {gold}" & (if weight.len > 0: weight
-    else: $itemsList[protoIndex].weight) & " kg{/gold}")
+  itemInfo.add(y = "Weight: {gold}" & weight & " kg{/gold}")
   if itemsList[protoIndex].itemType == weaponType:
     itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[protoIndex].value[
         3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[

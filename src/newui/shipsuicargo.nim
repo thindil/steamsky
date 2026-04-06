@@ -21,7 +21,7 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, items, types]
+import ../[config, game, items, shipscargo, types]
 import coreui, dialogs, errordialog, setui, table, themes
 
 type CargoSortOrders = enum
@@ -67,8 +67,8 @@ proc sortCargo(sortAsc, sortDesc: CargoSortOrders;
           item.maxDurability.float), itemType: (if itemsList[
           item.protoIndex].showType.len > 0: itemsList[
           item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
-          amount: item.amount, weight: item.amount * itemsList[
-          item.protoIndex].weight, quality: item.quality, id: index))
+          amount: item.amount, weight: item.amount * getItemWeight(item = item),
+          quality: item.quality, id: index))
     except:
       dialog = setError(message = "Can't add local item to cargo.")
       return
@@ -263,9 +263,12 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         data = index, code = showItemInfo, dialog = dialog)
     addButton(label = $item.amount, tooltip = "The amount of the selected item",
         data = index, code = showItemInfo, dialog = dialog)
-    addButton(label = $(item.amount * protoItem.weight) & " kg",
-        tooltip = "The total weight of the selected item", data = index,
-        code = showItemInfo, dialog = dialog)
+    try:
+      addButton(label = $(item.amount * getItemWeight(item = item)) & " kg",
+          tooltip = "The total weight of the selected item", data = index,
+          code = showItemInfo, dialog = dialog)
+    except KeyError:
+      dialog = setError(message = "Can't show the item's weight.")
     row.inc
     if row == gameSettings.listsLimit + 1:
       break

@@ -20,7 +20,7 @@
 
 import std/[algorithm, sequtils, tables]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
-import ../[config, crewinventory, game, items, shipscrew2, types]
+import ../[config, crewinventory, game, items, shipscargo, shipscrew2, types]
 import coreui, dialogs, errordialog, setui, shipsuicrew, table, themes
 
 type
@@ -123,12 +123,12 @@ proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
       let item: InventoryData = playerShip.crew[crewIndex].inventory[data.index]
       localInventory.add(y = LocalItemData(selected: data.checked,
           name: getItemName(item = item, damageInfo = false, toLower = false),
-          damage: item.durability.float / item.maxDurability.float,
-          itemType: (if itemsList[item.protoIndex].showType.len > 0: itemsList[
+          damage: item.durability.float / item.maxDurability.float, itemType: (
+          if itemsList[item.protoIndex].showType.len > 0: itemsList[
           item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
-          amount: item.amount, weight: item.amount * itemsList[
-          item.protoIndex].weight, used: itemIsUsed(memberIndex = crewIndex,
-          itemIndex = data.index), id: data.index))
+          amount: item.amount, weight: item.amount * getItemWeight(item = item),
+          used: itemIsUsed(memberIndex = crewIndex, itemIndex = data.index),
+          id: data.index))
     except:
       dialog = setError(message = "Can't add item to local inventory.")
   localInventory.sort(cmp = sortItems)
@@ -367,7 +367,8 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
             code = setItemInfo, dialog = dialog)
         addProgressBar(tooltip = "The current durability level of the selected item.",
             value = member.inventory[data.index].durability,
-            maxValue = member.inventory[data.index].maxDurability, data = data.index,
+            maxValue = member.inventory[data.index].maxDurability,
+                data = data.index,
             code = setItemInfo, dialog = dialog)
         var
           checked: bool = false
@@ -387,8 +388,8 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
             tooltip = "The amount of the item owned by the crew member.",
             data = data.index, code = setItemInfo, dialog = dialog)
         try:
-          addButton(label = $(member.inventory[data.index].amount * itemsList[
-              member.inventory[data.index].protoIndex].weight) & " kg",
+          addButton(label = $(member.inventory[data.index].amount *
+              getItemWeight(item = member.inventory[data.index])) & " kg",
               tooltip = "The total weight of the items", data = data.index,
               code = setItemInfo, dialog = dialog)
         except:

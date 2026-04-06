@@ -20,7 +20,7 @@
 
 import std/[algorithm, math, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basescargo, basestypes, config, game, items, types, trades]
+import ../[basescargo, basestypes, config, game, items, shipscargo, types, trades]
 import coreui, dialogs, errordialog, header, messagesui, setui, table, themes
 
 var itemIndex: int = -1
@@ -160,7 +160,7 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
           protoIndex].itemType else: itemsList[protoIndex].showType),
               damage: (
           item.durability.float / item.maxDurability.float), price: price,
-          profit: price - item.price, weight: itemsList[protoIndex].weight,
+          profit: price - item.price, weight: getItemWeight(item = item),
           owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
           baseCargoIndex].amount else: 0), id: index, quality: item.quality))
     except:
@@ -187,7 +187,7 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
           protoIndex].itemType else: itemsList[protoIndex].showType),
               damage: (
           item.durability.float / item.maxDurability.float), price: price,
-          profit: -price, weight: itemsList[protoIndex].weight, owned: 0,
+          profit: -price, weight: getItemWeight(item = item), owned: 0,
           available: item.amount, id: index, quality: item.quality))
     except:
       dialog = setError(message = "Can't add item from the base's cargo.")
@@ -469,7 +469,7 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
         0: greenColor elif profit < 0: redColor else: tableTextColor))
     setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
     try:
-      addButton(label = $itemsList[protoIndex].weight & " kg",
+      addButton(label = $getItemWeight(item = item) & " kg",
         tooltip = "Show available options of item.", data = index,
         code = showItemInfo, dialog = dialog)
     except:
@@ -607,7 +607,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       var durability: int = (if baseIndex == 0: traderCargo[itemsIndexes[
           i]].durability else: skyBases[baseIndex].cargo[itemsIndexes[i]].durability)
       var maxDurability: int = (if baseIndex == 0: traderCargo[itemsIndexes[
-          i]].maxDurability else: skyBases[baseIndex].cargo[itemsIndexes[i]].maxDurability)
+          i]].maxDurability else: skyBases[baseIndex].cargo[itemsIndexes[
+              i]].maxDurability)
       addProgressBar(tooltip = (if baseCargo[itemsIndexes[i]].durability < 100:
         getItemDamage(itemDurability = baseCargo[itemsIndexes[i]].durability)
         else: "Unused"), value = durability,
@@ -624,7 +625,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         data = i, code = showItemInfo, dialog = dialog)
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       try:
-        addButton(label = $itemsList[protoIndex].weight & " kg",
+        addButton(label = $getItemWeight(item = baseCargo[itemsIndexes[i]]) & " kg",
           tooltip = "Show available options of item.", data = i,
           code = showItemInfo, dialog = dialog)
       except:
