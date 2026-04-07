@@ -972,15 +972,16 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if isKeyPressed(key = keyEscape):
     key = ""
     keyPressed = keyNone
-  var
-    res: Natural = 0
-    message: string = ""
-    newX, newY: int = 0
   if (getInputTextLen() > 0 or keyPressed != keyNone) and shortcutsEnabled:
     if getInputTextLen() > 0:
       key &= getInputText().toLowerAscii
     elif keyPressed notin {keyEscape, keyTab}:
       key = $keyPressed
+    var
+      res: Natural = 0
+      message: string = ""
+      newX, newY: int = 0
+      startsCombat: bool = false
     if key == mapAccelerators[2]:
       setDialog(x = windowWidth / 5)
       dialog = mapMenuDialog
@@ -1056,4 +1057,106 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
         res = moveShip(x = 1, y = 1, message = message)
       except:
         dialog = setError(message = "Can't move the ship.")
+    elif key == mapAccelerators[14]:
+      while true:
+        newX = 0
+        newY = 0
+        updateCoordinates(newX = newX, newY = newY)
+        res = try:
+            moveShip(x = newX, y = newY, message = message)
+          except:
+            showError(message = "Can't move the ship.")
+            return
+        if res == 0:
+          break
+        startsCombat = try:
+            checkForEvent()
+          except:
+            showError(message = "Can't check for events.")
+            return
+        if startsCombat:
+          res = 4
+          break
+        if res == 8:
+          try:
+            waitForRest()
+          except:
+            showError(message = "Can't wait for rest of the crew.")
+            return
+          try:
+            if "sentientships" notin factionsList[playerShip.crew[
+                0].faction].flags and (findMember(order = pilot) == -1 or
+                findMember(order = engineer) == 0):
+              try:
+                waitForRest()
+              except:
+                showError(message = "Can't wait for rest of the crew.")
+                return
+          except:
+            showError(message = "Can't check do faction has sentientships flag.")
+            return
+          res = 1
+          startsCombat = try:
+              checkForEvent()
+            except:
+              showError(message = "Can't check for events.")
+              return
+          if startsCombat:
+            res = 4
+            break
+        if gameSettings.autoMoveStop != never and skyMap[playerShip.skyX][
+            playerShip.skyY].eventIndex > -1:
+          let eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+          case gameSettings.autoMoveStop
+          of any:
+            if eventsList[eventIndex].eType in {enemyShip, trader, friendlyShip, enemyPatrol}:
+              res = 0
+              break
+          of friendly:
+            if eventsList[eventIndex].eType in {trader, friendlyShip}:
+              res = 0
+              break
+          of enemy:
+            if eventsList[eventIndex].eType in {enemyShip, enemyPatrol}:
+              res = 0
+              break
+          of never:
+            discard
+        const messageDialog: string = ".message"
+        if tclEval2(script = "winfo exists " & messageDialog) == "0":
+          try:
+            if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
+              showMessage(text = "Your fuel level is dangerously low.",
+                  title = "Low fuel level")
+              res = 4
+              break
+            elif getItemsAmount(iType = "Food") <= gameSettings.lowFood:
+              showMessage(text = "Your food level is dangerously low.",
+                  title = "Low food level")
+              res = 4
+              break
+            elif getItemsAmount(iType = "Drinks") <= gameSettings.lowDrinks:
+              showMessage(text = "Your drinks level is dangerously low.",
+                  title = "Low drinks level")
+              res = 4
+              break
+          except:
+            showError(message = "Can't check low level of items.")
+            return
+        if playerShip.destinationX == playerShip.skyX and
+            playerShip.destinationY == playerShip.skyY:
+          addMessage(message = "You reached your travel destination.",
+              mType = orderMessage)
+          playerShip.destinationX = 0
+          playerShip.destinationY = 0
+          if gameSettings.autoFinish:
+            message = try:
+                autoFinishMissions()
+              except:
+                showError(message = "Can't finish missions.")
+                return
+          res = 4
+          break
+        if res in 6 .. 7:
+          break
     key = ""
