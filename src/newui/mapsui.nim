@@ -1041,4 +1041,19 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
         res = moveShip(x = 1, y = 0, message = message)
       except:
         dialog = setError(message = "Can't move the ship.")
+    elif key == mapAccelerators[11]:
+      try:
+        res = moveShip(x = -1, y = 1, message = message)
+      except:
+        dialog = setError(message = "Can't move the ship.")
+    elif key == mapAccelerators[12]:
+      try:
+        res = moveShip(x = 0, y = 1, message = message)
+      except:
+        dialog = setError(message = "Can't move the ship.")
+    elif key == mapAccelerators[13]:
+      try:
+        res = moveShip(x = 1, y = 1, message = message)
+      except:
+        dialog = setError(message = "Can't move the ship.")
     key = ""
