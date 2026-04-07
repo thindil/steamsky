@@ -1065,14 +1065,14 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
         res = try:
             moveShip(x = newX, y = newY, message = message)
           except:
-            showError(message = "Can't move the ship.")
+            dialog = setError(message = "Can't move the ship.")
             return
         if res == 0:
           break
         startsCombat = try:
             checkForEvent()
           except:
-            showError(message = "Can't check for events.")
+            dialog = setError(message = "Can't check for events.")
             return
         if startsCombat:
           res = 4
@@ -1081,7 +1081,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
           try:
             waitForRest()
           except:
-            showError(message = "Can't wait for rest of the crew.")
+            dialog = setError(message = "Can't wait for rest of the crew.")
             return
           try:
             if "sentientships" notin factionsList[playerShip.crew[
@@ -1090,16 +1090,16 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               try:
                 waitForRest()
               except:
-                showError(message = "Can't wait for rest of the crew.")
+                dialog = setError(message = "Can't wait for rest of the crew.")
                 return
           except:
-            showError(message = "Can't check do faction has sentientships flag.")
+            dialog = setError(message = "Can't check do faction has sentientships flag.")
             return
           res = 1
           startsCombat = try:
               checkForEvent()
             except:
-              showError(message = "Can't check for events.")
+              dialog = setError(message = "Can't check for events.")
               return
           if startsCombat:
             res = 4
@@ -1122,26 +1122,25 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               break
           of never:
             discard
-        const messageDialog: string = ".message"
-        if tclEval2(script = "winfo exists " & messageDialog) == "0":
+        if dialog == none:
           try:
             if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
-              showMessage(text = "Your fuel level is dangerously low.",
+              dialog = setMessage(message = "Your fuel level is dangerously low.",
                   title = "Low fuel level")
               res = 4
               break
             elif getItemsAmount(iType = "Food") <= gameSettings.lowFood:
-              showMessage(text = "Your food level is dangerously low.",
+              dialog = setMessage(message = "Your food level is dangerously low.",
                   title = "Low food level")
               res = 4
               break
             elif getItemsAmount(iType = "Drinks") <= gameSettings.lowDrinks:
-              showMessage(text = "Your drinks level is dangerously low.",
+              dialog = setMessage(message = "Your drinks level is dangerously low.",
                   title = "Low drinks level")
               res = 4
               break
           except:
-            showError(message = "Can't check low level of items.")
+            dialog = setError(message = "Can't check low level of items.")
             return
         if playerShip.destinationX == playerShip.skyX and
             playerShip.destinationY == playerShip.skyY:
@@ -1153,7 +1152,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
             message = try:
                 autoFinishMissions()
               except:
-                showError(message = "Can't finish missions.")
+                dialog = setError(message = "Can't finish missions.")
                 return
           res = 4
           break
