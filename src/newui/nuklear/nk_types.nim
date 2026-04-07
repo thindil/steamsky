@@ -1461,9 +1461,9 @@ type
     drawBegin*, drawEnd*: DrawF
   StyleSlider* = object
     ## Used to store Nuklear style data for slider widgets
-    normal*, hover*, active*, barNormal*, barHover*, barActive*, cursorNormal*,
-      cursorHover*, cursorActive*: StyleItem
-    borderColor*, barFilled*: NkColor
+    normal*, hover*, active*, cursorNormal*, cursorHover*,
+      cursorActive*: StyleItem
+    barNormal*, barHover*, barActive*, borderColor*, barFilled*: NkColor
     border*, rounding*, barHeight*, colorFactor*, disabledFactor*: float
     padding*, spacing*, cursorSize*: Vec2
   StyleKnob* = object
