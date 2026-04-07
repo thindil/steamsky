@@ -176,6 +176,30 @@ type
   ModuleName* = string
     ## Used to store a module name
 
+template moduleGetterSetter(name: untyped; typ: typedesc) =
+  ## Set the getter for a field of ModuleData type
+  ##
+  ## * name - the name of the field for which the getter will be set
+  ## * typ  - the type of the value of the field
+  proc `name`*(module: ModuleData): `typ` {.sideEffect, raises: [], tags: [],
+      contractual.} =
+    ## The getter of a field of ModuleData type
+    ##
+    ## * module - the data of the selected module
+    ##
+    ## Returns the value of the selected field
+    module.`name`
+
+  proc `name=`*(module: var ModuleData; value: `typ`) {.sideEffect, raises: [],
+      tags: [], contractual.} =
+    ## The setter of a field of ModuleData type
+    ##
+    ## * module - the data of the selected module
+    ## * value  - the new value for the selected field
+    ##
+    ## Returns modified options of the selected module
+    module.`name` = value
+
 {.push ruleOff: "objects".}
 type
   ModuleData* = object
@@ -380,30 +404,6 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
   else:
     discard
 
-template moduleGetterSetter(name: untyped; typ: typedesc) =
-  ## Set the getter for a field of ModuleData type
-  ##
-  ## * name - the name of the field for which the getter will be set
-  ## * typ  - the type of the value of the field
-  proc `name`*(module: ModuleData): `typ` {.sideEffect, raises: [], tags: [],
-      contractual.} =
-    ## The getter of a field of ModuleData type
-    ##
-    ## * module - the data of the selected module
-    ##
-    ## Returns the value of the selected field
-    module.`name`
-
-  proc `name=`*(module: var ModuleData; value: `typ`) {.sideEffect, raises: [],
-      tags: [], contractual.} =
-    ## The setter of a field of ModuleData type
-    ##
-    ## * module - the data of the selected module
-    ## * value  - the new value for the selected field
-    ##
-    ## Returns modified options of the selected module
-    module.`name` = value
-
 moduleGetterSetter(name = name, typ = ModuleName)
 moduleGetterSetter(name = protoIndex, typ = Natural)
 moduleGetterSetter(name = weight, typ = Natural)
@@ -453,7 +453,7 @@ type
     ## * craftFeature  - The special feature of the item set during crafting it
     protoIndex*: Natural = 0
     amount*: Positive = 1
-    name*: string
+    name*: ObjectName
     durability*, maxDurability*: ItemsDurability = 100
     price*: Natural = 0
     quality*: ObjectQuality = normal
