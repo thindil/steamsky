@@ -71,7 +71,7 @@ var
   updateData*: bool = false        ## If true, update the data needed for the selected screen
   mapAccelerators*: array[1..37, string] = ["e", "v", "+", "-",
       "KP_Home", "KP_Up", "KP_Prior", "KP_Left", "KP_Begin", "KP_Right",
-      "KP_End", "KP_Down", "KP_Next", "KP_Divide", "Shift-Return", "Shift-h",
+      "KP_End", "KP_Down", "KP_Next", "/", "Shift-Return", "Shift-h",
       "Shift-KP_Home", "Shift-KP_Up", "Shift-KP_Prior", "Shift-KP_Left",
       "Shift-KP_Right", "Shift-KP_End", "Shift-KP_Down", "Shift-KP_Next",
       "Control-KP_Home", "Control-KP_Up", "Control-KP_Prior", "Control-KP_Left",
