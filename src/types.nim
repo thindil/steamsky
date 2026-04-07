@@ -447,8 +447,6 @@ type
     ## * maxDurability - The maximum durability of the item
     ## * price         - The price for which the item was bought
     ## * quality       - The quality of the item
-    ## * weight        - The weight of the item, if 0, then the same as a proto
-    ##                   item
     ## * breakChance   - The chance to break the item on use
     ## * craftFeature  - The special feature of the item set during crafting it
     protoIndex*: Natural = 0
@@ -457,7 +455,6 @@ type
     durability*, maxDurability*: ItemsDurability = 100
     price*: Natural = 0
     quality*: ObjectQuality = normal
-    weight*: Natural = 0
     breakChance*: ExtendedNatural = -1
     craftBonus*: CraftBonuses = CraftBonuses.none
     craftMalus*: CraftMaluses = CraftMaluses.none
@@ -683,8 +680,6 @@ type
     ## * maxDurability - The maximum durability of the item
     ## * price         - The price for which the item was bought
     ## * quality       - The quality of the item
-    ## * weight        - The weight of the item, if 0, then the same as a proto
-    ##                   item
     ## * breakChance   - The chance to break the item on use
     ## * craftFeature  - The special feature of the item set during crafting it
     protoIndex*: Natural
@@ -692,7 +687,6 @@ type
     durability*, maxDurability*: ItemsDurability = 100
     price*: Natural
     quality*: ObjectQuality = normal
-    weight*: Natural
     breakChance*: ExtendedNatural = -1
     craftBonus*: CraftBonuses = CraftBonuses.none
     craftMalus*: CraftMaluses = CraftMaluses.none
