@@ -39,7 +39,7 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
       traderCargo.add(y = BaseCargo(protoIndex: item.protoIndex,
           amount: item.amount, durability: defaultItemDurability,
           price: itemsList[item.protoIndex].price, quality: getQuality(),
-          maxDurability: defaultItemDurability, weight: 0))
+          maxDurability: defaultItemDurability, craftBonus: none, craftMalus: none))
     var cargoAmount: Natural = if traderShip.crew.len < 5: getRandom(min = 1, max = 3)
         elif traderShip.crew.len < 10: getRandom(min = 1, max = 5)
         else: getRandom(min = 1, max = 10)
@@ -157,8 +157,9 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
       for item in traderCargo.mitems:
         if item.protoIndex == protoIndex and item.durability ==
             playerItem.durability and item.quality == playerItem.quality and
-            item.maxDurability == playerItem.durability and item.weight ==
-            playerItem.weight:
+            item.maxDurability == playerItem.durability and
+            item.craftBonus == playerItem.craftBonus and
+            item.craftMalus == playerItem.craftMalus:
           item.amount += sellAmount
           cargoAdded = true
           break
@@ -169,7 +170,8 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
           price: itemsList[protoIndex].price,
           quality: playerItem.quality,
           maxDurability: playerItem.maxDurability,
-          weight: playerItem.weight))
+          craftBonus: playerItem.craftBonus,
+          craftMalus: playerItem.craftMalus))
     updateCargo(ship = playerShip, cargoIndex = itemIndex, amount = -sellAmount,
         price = playerItem.price, quality = playerItem.quality,
         craftBonus = playerItem.craftBonus, craftMalus = playerItem.craftMalus)

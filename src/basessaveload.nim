@@ -18,11 +18,11 @@
 ## Provides code related to saving and loading the sky bases data from
 ## a file.
 
-import std/[strutils, tables, xmltree]
+import std/[strutils, xmltree]
 import contracts
 import game, maps, types
 
-proc saveBases*(saveData: var XmlNode) {.raises: [KeyError], tags: [],
+proc saveBases*(saveData: var XmlNode) {.raises: [], tags: [],
     contractual.} =
   ## Save the bases from the current game into a file
   ##
@@ -136,8 +136,6 @@ proc saveBases*(saveData: var XmlNode) {.raises: [KeyError], tags: [],
           attrs.add(y = ("quality", $item.quality))
         if item.maxDurability != defaultItemDurability:
           attrs.add(y = ("maxdurability", $item.maxDurability))
-        if item.weight != itemsList[item.protoIndex].weight:
-          attrs.add(y = ("weight", $item.weight))
         if item.craftBonus != none:
           attrs.add(y = ("craftbonus", $item.craftBonus))
           attrs.add(y = ("craftmalus", $item.craftMalus))
@@ -306,10 +304,6 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
           item.maxDurability = baseItem.attr(name = "maxdurability").parseInt
         else:
           item.maxDurability = defaultItemDurability
-        if baseItem.attr(name = "weight").len > 0:
-          item.weight = baseItem.attr(name = "weight").parseInt
-        else:
-          item.weight = 0
         if baseItem.attr(name = "craftbonus").len > 0:
           item.craftBonus = parseEnum[CraftBonuses](s = baseItem.attr(
               name = "craftbonus"))
