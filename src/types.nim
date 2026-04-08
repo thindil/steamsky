@@ -448,7 +448,8 @@ type
     ## * price         - The price for which the item was bought
     ## * quality       - The quality of the item
     ## * breakChance   - The chance to break the item on use
-    ## * craftFeature  - The special feature of the item set during crafting it
+    ## * craftBonus    - The special crafting bonus for the item
+    ## * craftMalus    - The special crafting malus for the item
     protoIndex*: Natural = 0
     amount*: Positive = 1
     name*: ObjectName
@@ -459,6 +460,32 @@ type
     craftBonus*: CraftBonuses = CraftBonuses.none
     craftMalus*: CraftMaluses = CraftMaluses.none
 
+proc initInventoryData*(protoIndex: Natural; amount: Positive; name: ObjectName;
+    durability, maxDurability: ItemsDurability; price: Natural;
+    quality: ObjectQuality; breakChance: ExtendedNatural = -1;
+    craftBonus: CraftBonuses = none;
+    craftMalus: CraftMaluses = CraftMaluses.none): InventoryData {.raises: [],
+    tags: [], contractual.} =
+  ## Create a new data structure for the player's ship's module data
+  ##
+  ## * protoIndex       - The index of the prototype item
+  ## * amount        - The amount of the item in the inventory
+  ## * name          - The name of the item, if different than the default one
+  ## * durability    - The current durability of the item
+  ## * maxDurability - The maximum durability of the item
+  ## * price         - The price for which the item was bought
+  ## * quality       - The quality of the item
+  ## * breakChance   - The chance to break the item on use
+  ## * craftBonus    - The special crafting bonus for the item
+  ## * craftMalus    - The special crafting malus for the item
+  ##
+  ## Returns the new structure with information about the selected item
+  return InventoryData(protoIndex: protoIndex, amount: amount, name: name,
+      durability: durability, maxDurability: maxDurability, price: price,
+      quality: quality, breakChance: breakChance, craftBonus: craftBonus,
+      craftMalus: craftMalus)
+
+type
   MobAttributeRecord* = object
     ## Used to store information about the crew member's attributes
     ##
