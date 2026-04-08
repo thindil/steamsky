@@ -251,6 +251,12 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.slider.barHover = table[sliderColor]
   context.style.slider.barActive = table[sliderColor]
   context.style.slider.barFilled = table[sliderCursorColor]
+  context.style.slider.cursorNormal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[sliderCursorColor]))
+  context.style.slider.cursorHover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[sliderCursorHoverColor]))
+  context.style.slider.cursorActive = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[sliderCursorActiveColor]))
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
