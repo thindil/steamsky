@@ -1059,67 +1059,67 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't move the ship.")
     elif key == mapAccelerators[14]:
       res = moveShipOnMap(dialog = dialog)
-#    case res
-#    # Ship moved, check for events
-#    of 1:
-#      startsCombat = try:
-#          checkForEvent()
-#        except:
-#          dialog = setError(message = "Can't check for events.")
-#          return
-#      if not startsCombat and gameSettings.autoFinish:
-#        message = try:
-#            autoFinishMissions()
-#          except:
-#            dialog = setError(message = "Can't finish missions.")
-#            return
-#    # Ship moved, but pilot needs rest, confirm
-#    of 6:
-#      dialog = setQuestion(question = "You don't have pilot on duty. Do you want to wait until your pilot rest?",
-#          res = "nopilot")
-#      return
-#    # Ship moved, but engineer needs rest, confirm
-#    of 7:
-#      showQuestion(question = "You don't have engineer on duty. Do you want to wait until your pilot rest?",
-#          res = "nopilot")
-#      return
-#    # Ship moved, but crew needs rest, autorest
-#    of 8:
-#      startsCombat = try:
-#          checkForEvent()
-#        except:
-#          showError(message = "Can't check for events.")
-#          return
-#      if not startsCombat:
-#        try:
-#          waitForRest()
-#        except:
-#          showError(message = "Can't wait for rest of th crew.")
-#          return
-#        try:
-#          if "sentientships" notin factionsList[playerShip.crew[
-#              0].faction].flags and (findMember(order = pilot) == -1 or
-#                  findMember(
-#              order = engineer) == -1):
-#            waitForRest()
-#        except:
-#          showError(message = "Can't check do faction has sentientships flag.")
-#          return
-#        startsCombat = try:
-#            checkForEvent()
-#          except:
-#            showError(message = "Can't check for events.")
-#            return
-#      if not startsCombat and gameSettings.autoFinish:
-#        message = try:
-#            autoFinishMissions()
-#          except:
-#            showError(message = "Can't finish missions.")
-#            return
-#    else:
-#      discard
-#    if message.len > 0:
-#      showMessage(text = message, title = "Message")
-#    centerX = playerShip.skyX
-#    centerY = playerShip.skyY
+    case res
+    # Ship moved, check for events
+    of 1:
+      startsCombat = try:
+          checkForEvent()
+        except:
+          dialog = setError(message = "Can't check for events.")
+          return
+      if not startsCombat and gameSettings.autoFinish:
+        message = try:
+            autoFinishMissions()
+          except:
+            dialog = setError(message = "Can't finish missions.")
+            return
+    # Ship moved, but pilot needs rest, confirm
+    of 6:
+      dialog = setQuestion(question = "You don't have pilot on duty. Do you want to wait until your pilot rest?",
+          qType = noPilot)
+      return
+    # Ship moved, but engineer needs rest, confirm
+    of 7:
+      dialog = setQuestion(question = "You don't have engineer on duty. Do you want to wait until your engineer rest?",
+          qType = noPilot)
+      return
+    # Ship moved, but crew needs rest, autorest
+    of 8:
+      startsCombat = try:
+          checkForEvent()
+        except:
+          dialog = setError(message = "Can't check for events.")
+          return
+      if not startsCombat:
+        try:
+          waitForRest()
+        except:
+          dialog = setError(message = "Can't wait for rest of th crew.")
+          return
+        try:
+          if "sentientships" notin factionsList[playerShip.crew[
+              0].faction].flags and (findMember(order = pilot) == -1 or
+                  findMember(
+              order = engineer) == -1):
+            waitForRest()
+        except:
+          dialog = setError(message = "Can't check do faction has sentientships flag.")
+          return
+        startsCombat = try:
+            checkForEvent()
+          except:
+            dialog = setError(message = "Can't check for events.")
+            return
+      if not startsCombat and gameSettings.autoFinish:
+        message = try:
+            autoFinishMissions()
+          except:
+            dialog = setError(message = "Can't finish missions.")
+            return
+    else:
+      discard
+    if message.len > 0:
+      dialog = setMessage(message = message, title = "Message")
+    centerX = playerShip.skyX
+    centerY = playerShip.skyY
     key = ""
