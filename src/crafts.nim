@@ -460,10 +460,13 @@ proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
         amount = resultAmount, quality = quality, craftBonus = none,
         craftMalus = none)
   else:
+    let durability: ItemsDurability = if module.craftingBonus ==
+        moreDurable: 120 elif module.craftingMalus ==
+        lessDurable: 80 else: defaultItemDurability
     updateCargo(ship = playerShip, protoIndex = recipesList[
         module.craftingIndex].resultIndex, amount = resultAmount,
         quality = quality, craftBonus = module.craftingBonus,
-        craftMalus = module.craftingMalus)
+        craftMalus = module.craftingMalus, durability = durability)
   for key, protoRecipe in recipesList:
     if protoRecipe.resultIndex == recipe.resultIndex:
       updateCraftingOrders(index = key)
