@@ -19,16 +19,16 @@
 
 import std/[colors, os, math, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, basescargo, config, crewinventory, game, game2, items, maps,
-    messages, missions, shipscargo, shipscrew, shipscrew2, stories, types,
-    trades, utils]
+import ../[bases, basescargo, config, crew2, crewinventory, events2, game,
+    game2, items, maps, messages, missions, missions2, shipscargo, shipscrew,
+    shipscrew2, stories, types, trades, utils]
 import coreui, errordialog, setui, themes
 
 type
   QuestionType* = enum
     ## Types of questions, used to set actions to the player's response
     deleteSave, showDeadStats, quitGame, resignGame, homeBase, finishGame,
-      dismissMember, deleteMessages
+      dismissMember, deleteMessages, noPilot
   QuestionData = object
     question, data: string
     qType: QuestionType
@@ -244,6 +244,26 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
           clearMessages()
         of showDeadStats:
           discard
+        of noPilot:
+          try:
+            waitForRest()
+          except:
+            dialog = setError(message = "Can't wait for rest.")
+            return
+          let startsCombat: bool = try:
+              checkForEvent()
+            except:
+              dialog = setError(message = "Can't start a combat.")
+              return
+          var message: string = ""
+          if not startsCombat and gameSettings.autoFinish:
+            message = try:
+                autoFinishMissions()
+              except:
+                dialog = setError(message = "Can't autofinish mission.")
+                return
+          if message.len > 0:
+            dialog = setMessage(message = message, title = "Error")
       labelButton(title = "No"):
         if questionData.qType == showDeadStats:
           endGame(save = false)
