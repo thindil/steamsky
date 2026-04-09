@@ -243,7 +243,8 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
         of deleteMessages:
           clearMessages()
         of showDeadStats:
-          discard
+          setStatistics(dialog = dialog)
+          state = gameStatistics
         of noPilot:
           try:
             waitForRest()
