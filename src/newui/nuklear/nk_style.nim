@@ -257,6 +257,8 @@ proc nkStyleFromTable*(table: array[StyleColors,
       data: StyleItemData(itype: itemColor, color: table[sliderCursorHoverColor]))
   context.style.slider.cursorActive = StyleItem(iType: itemColor,
       data: StyleItemData(itype: itemColor, color: table[sliderCursorActiveColor]))
+  context.style.slider.incSymbol = triangleRight
+  context.style.slider.decSymbol = triangleLeft
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting

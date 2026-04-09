@@ -1466,6 +1466,7 @@ type
     barNormal*, barHover*, barActive*, borderColor*, barFilled*: NkColor
     border*, rounding*, barHeight*, colorFactor*, disabledFactor*: float
     padding*, spacing*, cursorSize*: Vec2
+    incSymbol*, decSymbol*: SymbolType
   StyleKnob* = object
     ## Used to store Nuklear style data for knob widgets
     normal*, hover*, active*: StyleItem
