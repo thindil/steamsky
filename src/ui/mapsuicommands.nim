@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -896,12 +896,12 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
           return
   # Ship moved, but pilot needs rest, confirm
   of 6:
-    showQuestion(question = "You don't have pilot on duty. Do you want to wait until your pilot rest?",
+    showQuestion(question = "You don't have a pilot on duty. Do you want to wait until your pilot rest?",
         res = "nopilot")
     return tclOk
   # Ship moved, but engineer needs rest, confirm
   of 7:
-    showQuestion(question = "You don't have engineer on duty. Do you want to wait until your pilot rest?",
+    showQuestion(question = "You don't have an engineer on duty. Do you want to wait until your engieneer rest?",
         res = "nopilot")
     return tclOk
   # Ship moved, but crew needs rest, autorest
