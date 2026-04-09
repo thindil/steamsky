@@ -372,7 +372,7 @@ proc updateCoordinates(newX, newY: var int) {.raises: [], tags: [],
   elif playerShip.destinationY < playerShip.skyY:
     newY = -1
 
-proc moveShipOnMap(dialog: var GameDialog): Natural {.raises: [],
+proc moveShipToDestination(dialog: var GameDialog): Natural {.raises: [],
   tags: [RootEffect], contractual.} =
   ## Move the player's ship on the map
   ##
@@ -513,7 +513,7 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         addTooltip(bounds = getWidgetBounds(),
             text = "Auto move your ship to its destination.")
       imageButton(image = images[moveToIcon]):
-        res = moveShipOnMap(dialog = dialog)
+        res = moveShipToDestination(dialog = dialog)
     setLayoutRowDynamic(height = 30, cols = 1)
     if playerShip.speed == docked:
       if gameSettings.showTooltips:
@@ -689,11 +689,11 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
       if playerShip.speed != docked:
         labelButton(title = "Set destination and move"):
           setDestination(dialog = dialog)
-          discard moveShipOnMap(dialog = dialog)
+          discard moveShipToDestination(dialog = dialog)
         if playerShip.destinationX > 0 and playerShip.destinationY > 0:
           labelButton(title = "Move to"):
             closeDialog(dialog = dialog)
-            discard moveShipOnMap(dialog = dialog)
+            discard moveShipToDestination(dialog = dialog)
       labelButton(title = "Close"):
         closeDialog(dialog = dialog)
   except:
@@ -1058,7 +1058,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't move the ship.")
     elif key == mapAccelerators[14]:
-      res = moveShipOnMap(dialog = dialog)
+      res = moveShipToDestination(dialog = dialog)
     case res
     # Ship moved, check for events
     of 1:
