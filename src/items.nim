@@ -181,17 +181,21 @@ proc findProtoItem*(itemType: string): Natural {.raises: [], tags: [
         return index
     return 0
 
-func getItemDamage*(itemDurability: ItemsDurability; toLower: bool = false;
+func getItemDamage*(item: InventoryData or BaseCargo; toLower: bool = false;
     withColors: bool = false): string {.raises: [], tags: [], contractual.} =
   ## Get the description of the item damage level
   ##
-  ## * itemDurability - the durability of the item which description will be get
-  ## * toLower        - if true, convert the description to lower letters
-  ## * withColors     - if true, add colors' tags to the description
+  ## * item       - the item which damage level will be check
+  ## * toLower    - if true, convert the description to lower letters
+  ## * withColors - if true, add colors' tags to the description
   ##
   ## Returns the description of the item damage level or empty string if the item isn't
   ## damaged
-  let damage: float = 1.0 - (itemDurability.float / 100.0)
+  let
+    maxDurability: float = (if item.craftBonus ==
+        moreDurable: 120.0 elif item.craftMalus ==
+        lessDurable: 80.0 else: defaultItemDurability.float)
+    damage: float = 1.0 - (item.durability.float / maxDurability)
   result = ""
   {.ruleOff: "ifstatements".}
   if damage < 0.2:
@@ -230,8 +234,7 @@ proc getItemName*(item: InventoryData; damageInfo: bool = true;
     except KeyError:
       return ""
   if damageInfo and item.durability < 100:
-    result = result & " (" & getItemDamage(itemDurability = item.durability,
-        toLower = toLower) & ")"
+    result = result & " (" & getItemDamage(item = item, toLower = toLower) & ")"
 
 proc getItemChanceToDamage*(itemData: Natural): string {.raises: [],
     tags: [], contractual.} =
