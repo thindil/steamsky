@@ -176,29 +176,32 @@ type
   ModuleName* = string
     ## Used to store a module name
 
-template moduleGetterSetter(name: untyped; typ: typedesc) =
+template typeGetterSetter(baseType: typedesc; varName, name: untyped;
+    typ: typedesc) =
   ## Set the getter for a field of ModuleData type
   ##
-  ## * name - the name of the field for which the getter will be set
-  ## * typ  - the type of the value of the field
-  proc `name`*(module: ModuleData): `typ` {.sideEffect, raises: [], tags: [],
+  ## * baseType - the type which getters and setters will be set
+  ## * varName  - the name of variable used in getter and setter
+  ## * name     - the name of the field for which the getter will be set
+  ## * typ      - the type of the value of the field
+  proc `name`*(`varName`: `baseType`): `typ` {.sideEffect, raises: [], tags: [],
       contractual.} =
-    ## The getter of a field of ModuleData type
+    ## The getter of a field of `baseType` type
     ##
-    ## * module - the data of the selected module
+    ## * `varName` - the data of the selected type
     ##
     ## Returns the value of the selected field
-    module.`name`
+    `varName`.`name`
 
-  proc `name=`*(module: var ModuleData; value: `typ`) {.sideEffect, raises: [],
-      tags: [], contractual.} =
-    ## The setter of a field of ModuleData type
+  proc `name=`*(`varName`: var `baseType`; value: `typ`) {.sideEffect, raises: [
+      ], tags: [], contractual.} =
+    ## The setter of a field of `baseType` type
     ##
-    ## * module - the data of the selected module
-    ## * value  - the new value for the selected field
+    ## * `varName` - the data of the selected `baseType`
+    ## * value     - the new value for the selected field
     ##
-    ## Returns modified options of the selected module
-    module.`name` = value
+    ## Returns modified options of the selected `baseType`
+    `varName`.`name` = value
 
 {.push ruleOff: "objects".}
 type
@@ -404,36 +407,55 @@ proc initModuleData*(mType: ModuleType2; name: ModuleName; protoIndex, weight,
   else:
     discard
 
-moduleGetterSetter(name = name, typ = ModuleName)
-moduleGetterSetter(name = protoIndex, typ = Natural)
-moduleGetterSetter(name = weight, typ = Natural)
-moduleGetterSetter(name = durability, typ = Natural)
-moduleGetterSetter(name = maxDurability, typ = Natural)
-moduleGetterSetter(name = upgradeProgress, typ = ExtendedNatural)
-moduleGetterSetter(name = upgradeAction, typ = ShipUpgrade)
-moduleGetterSetter(name = mType, typ = ModuleType2)
-moduleGetterSetter(name = fuelUsage, typ = Positive)
-moduleGetterSetter(name = power, typ = Positive)
-moduleGetterSetter(name = disabled, typ = bool)
-moduleGetterSetter(name = cleanliness, typ = Natural)
-moduleGetterSetter(name = quality, typ = Natural)
-moduleGetterSetter(name = gunIndex, typ = ExtendedNatural)
-moduleGetterSetter(name = damage, typ = Positive)
-moduleGetterSetter(name = ammoIndex, typ = ExtendedNatural)
-moduleGetterSetter(name = installedModules, typ = Natural)
-moduleGetterSetter(name = maxModules, typ = Positive)
-moduleGetterSetter(name = craftingIndex, typ = RecipeIndex)
-moduleGetterSetter(name = craftingTime, typ = Natural)
-moduleGetterSetter(name = craftingAmount, typ = Natural)
-moduleGetterSetter(name = craftingQuality, typ = ObjectQuality)
-moduleGetterSetter(name = craftingBonus, typ = CraftBonuses)
-moduleGetterSetter(name = craftingMalus, typ = CraftMaluses)
-moduleGetterSetter(name = trainedSkill, typ = Natural)
-moduleGetterSetter(name = damage2, typ = Positive)
-moduleGetterSetter(name = coolingDown, typ = bool)
-moduleGetterSetter(name = duration, typ = Positive)
-moduleGetterSetter(name = harpoonIndex, typ = ExtendedNatural)
-moduleGetterSetter(name = data, typ = array[1..3, int])
+typeGetterSetter(baseType = ModuleData, varName = module, name = name,
+    typ = ModuleName)
+typeGetterSetter(baseType = ModuleData, varName = module, name = protoIndex, typ = Natural)
+typeGetterSetter(baseType = ModuleData, varName = module, name = weight, typ = Natural)
+typeGetterSetter(baseType = ModuleData, varName = module, name = durability, typ = Natural)
+typeGetterSetter(baseType = ModuleData, varName = module, name = maxDurability, typ = Natural)
+typeGetterSetter(baseType = ModuleData, varName = module,
+    name = upgradeProgress, typ = ExtendedNatural)
+typeGetterSetter(baseType = ModuleData, varName = module, name = upgradeAction,
+    typ = ShipUpgrade)
+typeGetterSetter(baseType = ModuleData, varName = module, name = mType,
+    typ = ModuleType2)
+typeGetterSetter(baseType = ModuleData, varName = module, name = fuelUsage,
+    typ = Positive)
+typeGetterSetter(baseType = ModuleData, varName = module, name = power,
+    typ = Positive)
+typeGetterSetter(baseType = ModuleData, varName = module, name = disabled, typ = bool)
+typeGetterSetter(baseType = ModuleData, varName = module, name = cleanliness, typ = Natural)
+typeGetterSetter(baseType = ModuleData, varName = module, name = quality, typ = Natural)
+typeGetterSetter(baseType = ModuleData, varName = module, name = gunIndex,
+    typ = ExtendedNatural)
+typeGetterSetter(baseType = ModuleData, varName = module, name = damage,
+    typ = Positive)
+typeGetterSetter(baseType = ModuleData, varName = module, name = ammoIndex,
+    typ = ExtendedNatural)
+typeGetterSetter(baseType = ModuleData, varName = module,
+    name = installedModules, typ = Natural)
+typeGetterSetter(baseType = ModuleData, varName = module, name = maxModules,
+    typ = Positive)
+typeGetterSetter(baseType = ModuleData, varName = module, name = craftingIndex,
+    typ = RecipeIndex)
+typeGetterSetter(baseType = ModuleData, varName = module, name = craftingTime, typ = Natural)
+typeGetterSetter(baseType = ModuleData, varName = module, name = craftingAmount, typ = Natural)
+typeGetterSetter(baseType = ModuleData, varName = module,
+    name = craftingQuality, typ = ObjectQuality)
+typeGetterSetter(baseType = ModuleData, varName = module, name = craftingBonus,
+    typ = CraftBonuses)
+typeGetterSetter(baseType = ModuleData, varName = module, name = craftingMalus,
+    typ = CraftMaluses)
+typeGetterSetter(baseType = ModuleData, varName = module, name = trainedSkill, typ = Natural)
+typeGetterSetter(baseType = ModuleData, varName = module, name = damage2,
+    typ = Positive)
+typeGetterSetter(baseType = ModuleData, varName = module, name = coolingDown, typ = bool)
+typeGetterSetter(baseType = ModuleData, varName = module, name = duration,
+    typ = Positive)
+typeGetterSetter(baseType = ModuleData, varName = module, name = harpoonIndex,
+    typ = ExtendedNatural)
+typeGetterSetter(baseType = ModuleData, varName = module, name = data,
+    typ = array[1..3, int])
 
 type
   InventoryData* = object
