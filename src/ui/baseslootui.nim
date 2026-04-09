@@ -166,8 +166,8 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = lootTable, text = itemType, tooltip = tableTooltip,
         command = "ShowLootItemInfo " & $(index + 1), column = 2)
     let itemDurability: string = (if playerShip.cargo[index].durability <
-        100: getItemDamage(itemDurability = playerShip.cargo[
-        index].durability) else: "Unused")
+        100: getItemDamage(item = playerShip.cargo[
+        index]) else: "Unused")
     addProgressbar(table = lootTable, value = playerShip.cargo[
         index].durability, maxValue = playerShip.cargo[
         index].maxDurability,
@@ -221,8 +221,8 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
         command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 2)
     let itemDurability: string = (if currentBaseCargo[itemsIndexes[
         index]].durability < 100: getItemDamage(
-        itemDurability = currentBaseCargo[itemsIndexes[
-        index]].durability) else: "Unused")
+        item = currentBaseCargo[itemsIndexes[
+        index]]) else: "Unused")
     addProgressbar(table = lootTable, value = currentBaseCargo[itemsIndexes[
         index]].durability, maxValue = currentBaseCargo[itemsIndexes[
         index]].maxDurability,

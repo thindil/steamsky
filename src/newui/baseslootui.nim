@@ -406,7 +406,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = itemType, tooltip = "Show available options of item.",
         data = index, code = showItemInfo, dialog = dialog)
       addProgressBar(tooltip = (if playerShip.cargo[i].durability < 100:
-        getItemDamage(itemDurability = playerShip.cargo[i].durability)
+        getItemDamage(item = playerShip.cargo[i])
         else: "Unused"), value = playerShip.cargo[i].durability,
         maxValue = playerShip.cargo[i].maxDurability, data = index, code = showItemInfo,
         dialog = dialog)
@@ -457,7 +457,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
       var durability: int = (if baseIndex == 0: traderCargo[itemsIndexes[
           i]].durability else: skyBases[baseIndex].cargo[itemsIndexes[i]].durability)
       addProgressBar(tooltip = (if baseCargo[itemsIndexes[i]].durability < baseCargo[itemsIndexes[i]].maxDurability:
-        getItemDamage(itemDurability = baseCargo[itemsIndexes[i]].durability)
+        getItemDamage(item = baseCargo[itemsIndexes[i]])
         else: "Unused"), value = durability,
         maxValue = baseCargo[itemsIndexes[i]].maxDurability, data = i, code = showItemInfo,
         dialog = dialog)

@@ -221,8 +221,8 @@ proc showPlayersItems(currentItemIndex: var Natural; baseType: string;
         tooltip = "Show available options for item",
         command = "ShowTradeItemInfo " & $(i + 1), column = 2)
     let itemDurability: string = (if playerShip.cargo[i].durability <
-        100: getItemDamage(itemDurability = playerShip.cargo[
-        i].durability) else: "Unused")
+        100: getItemDamage(item = playerShip.cargo[
+        i]) else: "Unused")
     addProgressbar(table = tradeTable, value = playerShip.cargo[i].durability,
         maxValue = playerShip.cargo[i].maxDurability, tooltip = itemDurability,
         command = "ShowTradeItemInfo " & $(i + 1), column = 3)
@@ -327,8 +327,8 @@ proc showTraderItems(currentItemIndex: Natural; baseType: string;
         tooltip = "Show available options for item",
         command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 2)
     let itemDurability: string = (if baseCargo[itemsIndexes[i]].durability <
-        100: getItemDamage(itemDurability = baseCargo[itemsIndexes[
-        i]].durability) else: "Unused")
+        100: getItemDamage(item = baseCargo[itemsIndexes[
+        i]]) else: "Unused")
     addProgressbar(table = tradeTable, value = baseCargo[itemsIndexes[
         i]].durability, maxValue = baseCargo[itemsIndexes[
         i]].maxDurability,

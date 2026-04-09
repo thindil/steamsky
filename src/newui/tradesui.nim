@@ -454,7 +454,7 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
     addButton(label = itemType, tooltip = "Show available options of item.",
       data = index, code = showItemInfo, dialog = dialog)
     addProgressBar(tooltip = (if playerShip.cargo[i].durability < 100:
-      getItemDamage(itemDurability = item.durability)
+      getItemDamage(item = item)
       else: "Unused"), value = item.durability,
       maxValue = item.maxDurability, data = index, code = showItemInfo,
       dialog = dialog)
@@ -610,7 +610,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
           i]].maxDurability else: skyBases[baseIndex].cargo[itemsIndexes[
               i]].maxDurability)
       addProgressBar(tooltip = (if baseCargo[itemsIndexes[i]].durability < 100:
-        getItemDamage(itemDurability = baseCargo[itemsIndexes[i]].durability)
+        getItemDamage(item = baseCargo[itemsIndexes[i]])
         else: "Unused"), value = durability,
         maxValue = maxDurability, data = i, code = showItemInfo,
         dialog = dialog)

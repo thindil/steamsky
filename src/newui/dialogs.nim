@@ -946,8 +946,8 @@ proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
           else: "More") & " durable"
     weight = $getItemWeight(item = item)
     if item.durability < item.maxDurability:
-      itemInfo = getItemDamage(itemDurability = playerShip.crew[
-          memberIndex].inventory[itemIndex].durability, withColors = true) & '\n'
+      itemInfo = getItemDamage(item = playerShip.crew[
+          memberIndex].inventory[itemIndex], withColors = true) & '\n'
   else:
     let item: InventoryData = playerShip.cargo[itemIndex]
     protoIndex = item.protoIndex
@@ -960,8 +960,8 @@ proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
           else: "More") & " durable"
     weight = $getItemWeight(item = item)
     if item.durability < item.maxDurability:
-      itemInfo = getItemDamage(itemDurability = playerShip.cargo[
-          itemIndex].durability, withColors = true) & '\n'
+      itemInfo = getItemDamage(item = playerShip.cargo[
+          itemIndex], withColors = true) & '\n'
   itemInfo.add(y = "Weight: {gold}" & weight & " kg{/gold}")
   if itemsList[protoIndex].itemType == weaponType:
     itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[protoIndex].value[
