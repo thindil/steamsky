@@ -209,7 +209,7 @@ proc showDialogs(dialog: var GameDialog; state: var GameState;
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened or the game's menu is to show. Additionally, it returns true if
   ## the game's state changed, otherwise false.
-  if playerShip.crew[0].health == 0 and dialog == none:
+  if playerShip.crew[0].health == 0 and dialog == none and state != gameStatistics:
     dialog = setQuestion(question = "You are dead. Would you like to see your game statistics?",
         qType = showDeadStats)
   # Draw dialogs
