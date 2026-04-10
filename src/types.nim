@@ -483,8 +483,9 @@ type
     craftMalus*: CraftMaluses = CraftMaluses.none
 
 proc initInventoryData*(protoIndex: Natural; amount: Positive; name: ObjectName;
-    durability, maxDurability: ItemsDurability; price: Natural;
-    quality: ObjectQuality; breakChance: ExtendedNatural = -1;
+    durability: ItemsDurability; price: Natural;
+    quality: ObjectQuality = normal; breakChance: ExtendedNatural = -1;
+    maxDurability: ItemsDurability = 100;
     craftBonus: CraftBonuses = none;
     craftMalus: CraftMaluses = CraftMaluses.none): InventoryData {.raises: [],
     tags: [], contractual.} =
@@ -494,10 +495,10 @@ proc initInventoryData*(protoIndex: Natural; amount: Positive; name: ObjectName;
   ## * amount        - The amount of the item in the inventory
   ## * name          - The name of the item, if different than the default one
   ## * durability    - The current durability of the item
-  ## * maxDurability - The maximum durability of the item
   ## * price         - The price for which the item was bought
   ## * quality       - The quality of the item
   ## * breakChance   - The chance to break the item on use
+  ## * maxDurability - The maximum durability of the item
   ## * craftBonus    - The special crafting bonus for the item
   ## * craftMalus    - The special crafting malus for the item
   ##
