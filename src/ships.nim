@@ -747,8 +747,8 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange; y: MapYRange;
     for item in protoShip.cargo:
       let amount: Natural = (if item.maxAmount > 0: getRandom(
           min = item.minAmount, max = item.maxAmount) else: item.minAmount)
-      result.cargo.add(y = InventoryData(protoIndex: item.protoIndex,
-          amount: amount, name: "", durability: 100, price: 0))
+      result.cargo.add(y = initInventoryData(protoIndex = item.protoIndex,
+          amount = amount, name = "", durability = 100, price = 0))
     var
       gunAssigned: bool = false
       amount: Natural = 0

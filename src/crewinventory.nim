@@ -179,10 +179,10 @@ proc updateInventory*(memberIndex: Natural; amount: int;
       if itemIsUsed(memberIndex = memberIndex, itemIndex = itemIndex):
         takeOffItem(memberIndex = memberIndex, itemIndex = itemIndex)
     if itemIndex == -1:
-      ship.crew[memberIndex].inventory.add(y = InventoryData(
-          protoIndex: protoIndex, amount: amount, name: itemsList[
-          protoIndex].name, durability: durability, price: price,
-          quality: (if quality == any: normal else: quality)))
+      ship.crew[memberIndex].inventory.add(y = initInventoryData(
+          protoIndex = protoIndex, amount = amount, name = itemsList[
+          protoIndex].name, durability = durability, price = price,
+          quality = (if quality == any: ObjectQuality.normal else: quality)))
     else:
       let newAmount: Natural = ship.crew[memberIndex].inventory[
           itemIndex].amount + amount
@@ -234,10 +234,10 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
   if getRandom(min = 1, max = 100) > damageChance:
     return
   if item.amount > 1:
-    inventory.add(y = InventoryData(protoIndex: item.protoIndex,
-        amount: item.amount - 1, name: item.name, durability: item.durability,
-        price: item.price, quality: item.quality,
-        breakChance: item.breakChance))
+    inventory.add(y = initInventoryData(protoIndex = item.protoIndex,
+        amount = item.amount - 1, name = item.name, durability = item.durability,
+        price = item.price, quality = item.quality,
+        breakChance = item.breakChance))
     item.amount = 1
   if item.durability > ItemsDurability.low:
     item.durability.dec

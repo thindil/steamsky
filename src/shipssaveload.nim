@@ -506,10 +506,10 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
         malus: CraftMaluses = (if cargo.attr(name = "craftmalus").len ==
             0: CraftMaluses.none else: parseEnum[CraftMaluses](s = cargo.attr(
             name = "craftmalus")))
-      playerShip.cargo.add(y = InventoryData(protoIndex: protoIndex,
-          amount: amount, name: name, durability: itemDurability, price: price,
-          quality: quality, maxDurability: maxDurability,
-          craftBonus: bonus, craftMalus: malus))
+      playerShip.cargo.add(y = initInventoryData(protoIndex = protoIndex,
+          amount = amount, name = name, durability = itemDurability, price = price,
+          quality = quality, maxDurability = maxDurability,
+          craftBonus = bonus, craftMalus = malus))
     for crew in shipNode.findAll(tag = "member"):
       var member: MemberData = MemberData()
       member.name = crew.attr(name = "name")
@@ -560,9 +560,9 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           malus: CraftMaluses = (if item.attr(name = "craftmalus").len ==
               0: CraftMaluses.none else: parseEnum[CraftMaluses](s = item.attr(
               name = "craftmalus")))
-        member.inventory.add(y = InventoryData(protoIndex: itemIndex,
-            amount: amount, name: itemName, durability: itemDurability,
-            price: price, craftBonus: bonus, craftMalus: malus))
+        member.inventory.add(y = initInventoryData(protoIndex = itemIndex,
+            amount = amount, name = itemName, durability = itemDurability,
+            price = price, craftBonus = bonus, craftMalus = malus))
       var equipmentIndex: int = 1
       for item in crew.findAll(tag = "equipment"):
         member.equipment[(equipmentIndex - 1).EquipmentLocations] = item.attr(

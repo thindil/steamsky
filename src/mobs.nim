@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -323,8 +323,8 @@ proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises:
           getRandom(min = item.minAmount, max = item.maxAmount)
         else:
           item.minAmount
-      result.inventory.add(y = InventoryData(protoIndex: item.protoIndex,
-          amount: amount, name: "", durability: defaultItemDurability, price: 0))
+      result.inventory.add(y = initInventoryData(protoIndex = item.protoIndex,
+          amount = amount, name = "", durability = defaultItemDurability, price = 0))
     result.equipment = protoMob.equipment
     for i in weapon..legs:
       if result.equipment[i] == -1:
@@ -352,8 +352,8 @@ proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises:
               weaponSkillLevel = weaponSkillLevel,
               factionIndex = result.faction)
         if equipmentItemIndex > 0:
-          result.inventory.add(y = InventoryData(protoIndex: equipmentItemIndex,
-              amount: 1, name: "", durability: defaultItemDurability, price: 0))
+          result.inventory.add(y = initInventoryData(protoIndex = equipmentItemIndex,
+              amount = 1, name = "", durability = defaultItemDurability, price = 0))
           result.equipment[i] = result.inventory.high
     result.orders = protoMob.priorities
     result.order = protoMob.order

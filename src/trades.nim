@@ -69,9 +69,9 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
           traderCargo.add(y = BaseCargo(protoIndex: newItemIndex,
             amount: itemAmount, durability: defaultItemDurability,
             price: itemsList[ newItemIndex].price, quality: quality))
-          traderShip.cargo.add(y = InventoryData(protoIndex: newItemIndex,
-              amount: itemAmount, durability: defaultItemDurability, name: "",
-              price: 0, quality: quality))
+          traderShip.cargo.add(y = initInventoryData(protoIndex = newItemIndex,
+              amount = itemAmount, durability = defaultItemDurability, name = "",
+              price = 0, quality = quality))
         else:
           cargoAmount = 1
       cargoAmount.dec
