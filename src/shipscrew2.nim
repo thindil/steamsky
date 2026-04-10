@@ -87,8 +87,8 @@ proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
       addMessage(message = memberName & " died from " & reason & ".",
           mType = combatMessage, color = red)
     if createBody:
-      ship.cargo.add(y = InventoryData(protoIndex: corpseIndex, amount: 1,
-          name: memberName & "'s corpse", durability: 100, price: 0))
+      ship.cargo.add(y = initInventoryData(protoIndex = corpseIndex, amount = 1,
+          name = memberName & "'s corpse", durability = 100, price = 0))
     deleteMember(memberIndex = memberIndex, ship = ship)
     for index, _ in ship.crew:
       updateMorale(ship = ship, memberIndex = index, value = getRandom(

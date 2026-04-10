@@ -103,10 +103,10 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
       enemyShip.cargo[cargoItemIndex].amount += itemAmount
     else:
       if freeCargo(amount = 0 - (itemsList[newItemIndex].weight * itemAmount)) > -1:
-        enemyShip.cargo.add(y = InventoryData(protoIndex: newItemIndex,
-            amount: itemAmount, durability: defaultItemDurability, name: "",
-            price: 0,
-            quality: normal))
+        enemyShip.cargo.add(y = initInventoryData(protoIndex = newItemIndex,
+            amount = itemAmount, durability = defaultItemDurability, name = "",
+            price = 0,
+            quality = normal))
   var enemyGuns: seq[array[1..3, int]] = @[]
   for index, module in enemyShip.modules:
     if module.mType in {ModuleType2.gun, harpoonGun} and module.durability > 0:

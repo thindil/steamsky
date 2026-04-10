@@ -57,9 +57,9 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     if itemIndex == -1 and (protoIndex == 0 or amount < 0):
       return
     if itemIndex == -1:
-      ship.cargo.add(y = InventoryData(protoIndex: protoIndex, amount: amount,
-          name: "", durability: durability, price: price, quality: quality,
-          craftBonus: craftBonus, craftMalus: craftMalus))
+      ship.cargo.add(y = initInventoryData(protoIndex = protoIndex, amount = amount,
+          name = "", durability = durability, price = price, quality = quality,
+          craftBonus = craftBonus, craftMalus = craftMalus))
       return
     {.ruleOff: "varDeclared".}
     let newAmount: int = ship.cargo[itemIndex].amount + amount

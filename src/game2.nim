@@ -294,8 +294,8 @@ proc createPlayerShip(randomBase: Positive;
     for item in protoPlayer.inventory:
       let amount: Positive = (if item.maxAmount > 0: getRandom(
           min = item.minAmount, max = item.maxAmount) else: item.minAmount)
-      tmpInventory.add(y = InventoryData(protoIndex: item.protoIndex,
-          amount: amount, name: "", durability: defaultItemDurability, price: 0))
+      tmpInventory.add(y = initInventoryData(protoIndex = item.protoIndex,
+          amount = amount, name = "", durability = defaultItemDurability, price = 0))
     {.warning[UnsafeSetLen]: off.}
     playerShip.crew.insert(item = MemberData(name: newGameSettings.playerName,
         gender: newGameSettings.playerGender, health: 100, tired: 0,
