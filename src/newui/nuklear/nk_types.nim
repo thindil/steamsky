@@ -1467,6 +1467,8 @@ type
     border*, rounding*, barHeight*, colorFactor*, disabledFactor*: float
     padding*, spacing*, cursorSize*: Vec2
     incSymbol*, decSymbol*: SymbolType
+    userData*: Handle
+    drawBegin*, drawEnd*: DrawF
   StyleKnob* = object
     ## Used to store Nuklear style data for knob widgets
     normal*, hover*, active*: StyleItem
