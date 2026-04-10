@@ -483,6 +483,142 @@ proc moveShipToDestination(dialog: var GameDialog): Natural {.raises: [],
     if result in 6..7:
       break
 
+#type
+#  MoveDirections = enum
+#    north, northeast, east, southeast, south, southwest, west, northwest, moveOne, moveToDestination
+#
+#proc moveShipOnMap(direction: MoveDirection) {.raises: [], tags: [], contractual.} =
+#  ## Move ship in the selected direction
+#  ##
+#  ## * direction - the direction in which the ship should be moved
+#    elif key == mapAccelerators[5]:
+#      try:
+#        res = moveShip(x = -1, y = -1, message = message)
+#      except:
+#        dialog = setError(message = "Can't move the ship.")
+#    elif key == mapAccelerators[6]:
+#      try:
+#        res = moveShip(x = 0, y = -1, message = message)
+#      except:
+#        dialog = setError(message = "Can't move the ship.")
+#    elif key == mapAccelerators[7]:
+#      try:
+#        res = moveShip(x = 1, y = -1, message = message)
+#      except:
+#        dialog = setError(message = "Can't move the ship.")
+#    elif key == mapAccelerators[8]:
+#      try:
+#        res = moveShip(x = -1, y = 0, message = message)
+#      except:
+#        dialog = setError(message = "Can't move the ship.")
+#    elif key == mapAccelerators[9]:
+#      if playerShip.destinationX == 0:
+#        res = 1
+#        try:
+#          updateGame(minutes = gameSettings.waitMinutes)
+#          waitInPlace(minutes = gameSettings.waitMinutes)
+#        except:
+#          dialog = setError(message = "Can't update the game.")
+#      else:
+#        updateCoordinates(newX = newX, newY = newY)
+#        res = try:
+#            moveShip(x = newX, y = newY, message = message)
+#          except:
+#            dialog = setError(message = "Can't move the ship.")
+#            return
+#        if playerShip.destinationX == playerShip.skyX and
+#            playerShip.destinationY == playerShip.skyY:
+#          addMessage(message = "You reached your travel destination.",
+#              mType = orderMessage)
+#          playerShip.destinationX = 0
+#          playerShip.destinationY = 0
+#          if gameSettings.autoFinish:
+#            message = try:
+#                autoFinishMissions()
+#              except:
+#                dialog = setError(message = "Can't finish missions.")
+#                return
+#          res = 4
+#    elif key == mapAccelerators[10]:
+#      try:
+#        res = moveShip(x = 1, y = 0, message = message)
+#      except:
+#        dialog = setError(message = "Can't move the ship.")
+#    elif key == mapAccelerators[11]:
+#      try:
+#        res = moveShip(x = -1, y = 1, message = message)
+#      except:
+#        dialog = setError(message = "Can't move the ship.")
+#    elif key == mapAccelerators[12]:
+#      try:
+#        res = moveShip(x = 0, y = 1, message = message)
+#      except:
+#        dialog = setError(message = "Can't move the ship.")
+#    elif key == mapAccelerators[13]:
+#      try:
+#        res = moveShip(x = 1, y = 1, message = message)
+#      except:
+#        dialog = setError(message = "Can't move the ship.")
+#    elif key == mapAccelerators[14]:
+#      res = moveShipToDestination(dialog = dialog)
+#    case res
+#    # Ship moved, check for events
+#    of 1:
+#      startsCombat = try:
+#          checkForEvent()
+#        except:
+#          dialog = setError(message = "Can't check for events.")
+#          return
+#      if not startsCombat and gameSettings.autoFinish:
+#        message = try:
+#            autoFinishMissions()
+#          except:
+#            dialog = setError(message = "Can't finish missions.")
+#            return
+#    # Ship moved, but pilot needs rest, confirm
+#    of 6:
+#      dialog = setQuestion(question = "You don't have pilot on duty. Do you want to wait until your pilot rest?",
+#          qType = noPilot)
+#      return
+#    # Ship moved, but engineer needs rest, confirm
+#    of 7:
+#      dialog = setQuestion(question = "You don't have engineer on duty. Do you want to wait until your engineer rest?",
+#          qType = noPilot)
+#      return
+#    # Ship moved, but crew needs rest, autorest
+#    of 8:
+#      startsCombat = try:
+#          checkForEvent()
+#        except:
+#          dialog = setError(message = "Can't check for events.")
+#          return
+#      if not startsCombat:
+#        try:
+#          waitForRest()
+#        except:
+#          dialog = setError(message = "Can't wait for rest of th crew.")
+#          return
+#        try:
+#          if "sentientships" notin factionsList[playerShip.crew[
+#              0].faction].flags and (findMember(order = pilot) == -1 or
+#                  findMember(
+#              order = engineer) == -1):
+#            waitForRest()
+#        except:
+#          dialog = setError(message = "Can't check do faction has sentientships flag.")
+#          return
+#        startsCombat = try:
+#            checkForEvent()
+#          except:
+#            dialog = setError(message = "Can't check for events.")
+#            return
+#      if not startsCombat and gameSettings.autoFinish:
+#        message = try:
+#            autoFinishMissions()
+#          except:
+#            dialog = setError(message = "Can't finish missions.")
+#            return
+
 proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the buttons for manage the ship, like orders, movement or wait
