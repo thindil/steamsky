@@ -1313,6 +1313,8 @@ proc setStatistics*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
+  for value in statisticsValues.mitems:
+    value = ""
   statisticsValues[0] = $getGamePoints()
   let minutesDiff: int = (gameDate.minutes + (gameDate.hour * 60) + (
       gameDate.day * 1_440) + (gameDate.month * 43_200) + (gameDate.year *
