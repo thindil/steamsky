@@ -164,8 +164,6 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
         of deleteSave:
           try:
             removeFile(file = questionData.data)
-            closePopup()
-            dialog = none
           except:
             dialog = setError(message = "Can't remove the save file.")
         of quitGame:
@@ -177,8 +175,6 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
         of resignGame:
           try:
             death(memberIndex = 0, reason = "resignation", ship = playerShip)
-            closePopup()
-            dialog = none
           except:
             dialog = setError(message = "Can't kill the player.")
         of homeBase:
@@ -209,7 +205,6 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
           try:
             death(memberIndex = 0, reason = "retired after finished the game",
                 ship = playerShip)
-            closePopup()
             dialog = setQuestion(question = "You are dead. Would you like to see your game statistics?",
                 qType = showDeadStats)
           except:
