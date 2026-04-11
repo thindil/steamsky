@@ -482,8 +482,8 @@ type
     craftBonus*: CraftBonuses = CraftBonuses.none
     craftMalus*: CraftMaluses = CraftMaluses.none
 
-proc initInventoryData*(protoIndex: Natural; amount: Positive; name: ObjectName;
-    durability: ItemsDurability; price: Natural;
+proc initInventoryData*(protoIndex: Natural; amount: Positive; name: ObjectName = "";
+    durability: ItemsDurability = 100; price: Natural = 0;
     quality: ObjectQuality = normal; breakChance: ExtendedNatural = -1;
     maxDurability: ItemsDurability = 100;
     craftBonus: CraftBonuses = none;
