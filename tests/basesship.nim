@@ -28,8 +28,8 @@ suite "Unit tests for basesship module":
   playerShip.modules.add(y = initModuleData(mType = ModuleType2.hull, protoIndex = 1,
       durability = 100, maxDurability = 100, maxModules = 10, name = "Hull", weight = 1))
   playerShip.cargo = @[]
-  playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
-      durability: 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 1, amount = 100,
+      durability = 100))
   playerShip.speed = docked
   skyMap[1][1].baseIndex = 1
   skyBases[1].population = 100

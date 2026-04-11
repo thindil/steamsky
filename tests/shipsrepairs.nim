@@ -17,10 +17,10 @@ suite "Unit tests for shipsrepairs module":
       durability = 99, fuelUsage = 4, power = 2000, disabled = false,
       maxDurability = 100, name = "Engine", weight = 1))
   playerShip.cargo = @[]
-  playerShip.cargo.add(InventoryData(protoIndex: 61, amount: 5,
-      durability: 100))
-  playerShip.cargo.add(InventoryData(protoIndex: 5, amount: 100,
-      durability: 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 61, amount = 5,
+      durability = 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 5, amount = 100,
+      durability = 100))
   playerShip.crew = @[]
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1,

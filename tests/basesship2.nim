@@ -56,8 +56,8 @@ suite "Unit tests for basesship2 module":
   playerShip.modules.add(y = initModuleData(mType = ModuleType2.gun, protoIndex = 160,
       durability = 100, damage = 100, owner = @[-1], maxDurability = 100, name = "Gun", weight = 1))
   playerShip.cargo = @[]
-  playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 2000,
-      durability: 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 1, amount = 2000,
+      durability = 100))
   playerShip.speed = docked
   for x in 1 .. 1024:
     for y in 1 .. 1024:

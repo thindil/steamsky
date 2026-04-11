@@ -29,7 +29,7 @@ suite "Unit tests for shipsmovement module":
   playerShip.modules.add(y = initModuleData(mType = ModuleType2.gun, protoIndex = 160,
       durability = 100, damage = 100, owner = @[-1], maxDurability = 100, name = "Gun", weight = 1))
   playerShip.cargo = @[]
-  playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100, durability: 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 1, amount = 100, durability = 100))
   playerShip.crew = @[]
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [2.Natural, 0, 0, 1, 1, 1, 1, 1, 1,
