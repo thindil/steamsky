@@ -18,18 +18,18 @@ suite "Unit tests for items module":
   var member = MemberData(homeBase: 1)
   const attribute = MobAttributeRecord(level: 1, experience: 0)
   member.attributes = @[attribute, attribute, attribute, attribute]
-  member.inventory.add(InventoryData(amount: 1, protoIndex: 1))
-  member.inventory.add(InventoryData(amount: 1, protoIndex: 2))
+  member.inventory.add(y = initInventoryData(amount = 1, protoIndex = 1))
+  member.inventory.add(y = initInventoryData(amount = 1, protoIndex = 2))
   for index, _ in member.equipment.mpairs:
     member.equipment[index] = -1
   member.equipment[weapon] = 1
   playerShip.crew.add(member)
-  var item = InventoryData(protoIndex: 2, amount: 1, name: "", durability: 80, price: 0)
+  var item = initInventoryData(protoIndex = 2, amount = 1, name = "", durability = 80, price = 0)
   var inventory: seq[InventoryData]
-  inventory.add(InventoryData(protoIndex: 66, amount: 1, name: "",
-      durability: defaultItemDurability, price: 0))
-  inventory.add(InventoryData(protoIndex: 67, amount: 1, name: "",
-      durability: defaultItemDurability, price: 0))
+  inventory.add(y = initInventoryData(protoIndex = 66, amount = 1, name = "",
+      durability = defaultItemDurability, price = 0))
+  inventory.add(y = initInventoryData(protoIndex = 67, amount = 1, name = "",
+      durability = defaultItemDurability, price = 0))
 
 
   test "Find an existing item":
@@ -41,12 +41,14 @@ suite "Unit tests for items module":
       findProtoItem("sfdsfsdfsdf") == 0
 
   test "Get damage info":
+    let item = initInventoryData(protoIndex = 2, amount = 1, name = "", durability = 60, price = 0)
     check:
-      getItemDamage(60) == "Damaged"
+      getItemDamage(item = item) == "Damaged"
 
   test "Get damage info with lowercasing":
+    let item = initInventoryData(protoIndex = 2, amount = 1, name = "", durability = 60, price = 0)
     check:
-      getItemDamage(60, true) == "damaged"
+      getItemDamage(item = item, toLower = true) == "damaged"
 
   test "Get an item name with lowered damage info":
     check:
@@ -91,7 +93,7 @@ suite "Unit tests for items module":
     check:
       findTools(0, "sfewrwer", talk) == -1
 
-  test "Getting a random item.":
+  test "Getting a random item":
     let itemIndex = getRandomItem(weaponsList, weapon, 20, 20, "POLEIS")
     check:
       itemIndex > 0 and itemsList.hasKey(itemIndex)
@@ -119,3 +121,14 @@ suite "Unit tests for items module":
     setBreakChance()
     check:
       itemsList[47].breakChance == 10
+
+  test "Getting the normal item's max durability":
+    let item = initInventoryData(protoIndex = 2, amount = 1)
+    check:
+      getItemMaxDurability(item = item) == defaultItemDurability
+
+
+  test "Getting the special item's max durability":
+    let item = initInventoryData(protoIndex = 2, amount = 1, craftBonus = moreDurable)
+    check:
+      getItemMaxDurability(item = item) == 120
