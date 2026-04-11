@@ -181,6 +181,12 @@ proc findProtoItem*(itemType: string): Natural {.raises: [], tags: [
         return index
     return 0
 
+proc getItemMaxDurability*(item: InventoryData or
+    BaseCargo): ItemsDurability {.raises: [], tags: [], contractual.} =
+  ## Get the max durability of the selected item, based on its crafting bonuses
+  result = if item.craftBonus == moreDurable: 120 elif item.craftMalus ==
+      lessDurable: 80 else: defaultItemDurability
+
 func getItemDamage*(item: InventoryData or BaseCargo; toLower: bool = false;
     withColors: bool = false): string {.raises: [], tags: [], contractual.} =
   ## Get the description of the item damage level
@@ -192,9 +198,7 @@ func getItemDamage*(item: InventoryData or BaseCargo; toLower: bool = false;
   ## Returns the description of the item damage level or empty string if the item isn't
   ## damaged
   let
-    maxDurability: float = (if item.craftBonus ==
-        moreDurable: 120.0 elif item.craftMalus ==
-        lessDurable: 80.0 else: defaultItemDurability.float)
+    maxDurability: float = getItemMaxDurability(item = item).float
     damage: float = 1.0 - (item.durability.float / maxDurability)
   result = ""
   {.ruleOff: "ifstatements".}
