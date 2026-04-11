@@ -485,7 +485,7 @@ proc moveShipToDestination(dialog: var GameDialog): Natural {.raises: [],
 
 type
   MoveDirection = enum
-    north, northeast, east, southeast, south, southwest, west, northwest,
+    north, northEast, east, southEast, south, southWest, west, northWest,
       moveOne, moveToDestination
 
 proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog) {.raises: [],
@@ -502,7 +502,7 @@ proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog) {.raises: [
     newX, newY: int = 0
     startsCombat: bool = false
   case direction
-  of northwest:
+  of northWest:
     try:
       res = moveShip(x = -1, y = -1, message = message)
     except:
@@ -512,7 +512,7 @@ proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog) {.raises: [
       res = moveShip(x = 0, y = -1, message = message)
     except:
       dialog = setError(message = "Can't move the ship.")
-  of northeast:
+  of northEast:
     try:
       res = moveShip(x = 1, y = -1, message = message)
     except:
@@ -555,7 +555,7 @@ proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog) {.raises: [
       res = moveShip(x = 1, y = 0, message = message)
     except:
       dialog = setError(message = "Can't move the ship.")
-  of southwest:
+  of southWest:
     try:
       res = moveShip(x = -1, y = 1, message = message)
     except:
@@ -565,7 +565,7 @@ proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog) {.raises: [
       res = moveShip(x = 0, y = 1, message = message)
     except:
       dialog = setError(message = "Can't move the ship.")
-  of southeast:
+  of southEast:
     try:
       res = moveShip(x = 1, y = 1, message = message)
     except:
@@ -655,7 +655,6 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     var
       res: Natural = 0
       message: string = ""
-      newX, newY: int = 0
 
     if playerShip.speed != docked and playerShip.destinationX > 0:
       if gameSettings.showTooltips:
@@ -670,11 +669,7 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           text = if gameSettings.waitMinutes ==
               1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes.")
       imageButtonCentered(image = images[waitIcon]):
-        try:
-          updateGame(minutes = gameSettings.waitMinutes)
-          waitInPlace(minutes = gameSettings.waitMinutes)
-        except:
-          dialog = setError(message = "Can't update the game.")
+        moveShipOnMap(direction = moveOne, dialog = dialog)
     else:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -687,86 +682,45 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship up and left")
       imageButton(image = images[arrowUpLeft]):
-        try:
-          res = moveShip(x = -1, y = -1, message = message)
-        except:
-          dialog = setError(message = "Can't move the ship.")
+        moveShipOnMap(direction = northWest, dialog = dialog)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship up")
       imageButton(image = images[arrowUp]):
-        try:
-          res = moveShip(x = 0, y = -1, message = message)
-        except:
-          dialog = setError(message = "Can't move the ship.")
+        moveShipOnMap(direction = north, dialog = dialog)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship up and right")
       imageButton(image = images[arrowUpRight]):
-        try:
-          res = moveShip(x = 1, y = -1, message = message)
-        except:
-          dialog = setError(message = "Can't move the ship.")
+        moveShipOnMap(direction = northEast, dialog = dialog)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship left")
       imageButton(image = images[arrowLeft]):
-        try:
-          res = moveShip(x = -1, y = 0, message = message)
-        except:
-          dialog = setError(message = "Can't move the ship.")
+        moveShipOnMap(direction = west, dialog = dialog)
       if playerShip.destinationX == 0:
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
             text = if gameSettings.waitMinutes ==
                 1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes.")
         imageButton(image = images[waitIcon]):
-          res = 1
-          try:
-            updateGame(minutes = gameSettings.waitMinutes)
-            waitInPlace(minutes = gameSettings.waitMinutes)
-          except:
-            dialog = setError(message = "Can't update the game.")
+          moveShipOnMap(direction = moveOne, dialog = dialog)
       else:
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "Move ship one map field toward destination")
         imageButton(image = images[moveStepIcon]):
-          updateCoordinates(newX = newX, newY = newY)
-          res = try:
-              moveShip(x = newX, y = newY, message = message)
-            except:
-              dialog = setError(message = "Can't move the ship.")
-              return
-          if playerShip.destinationX == playerShip.skyX and
-              playerShip.destinationY == playerShip.skyY:
-            addMessage(message = "You reached your travel destination.",
-                mType = orderMessage)
-            playerShip.destinationX = 0
-            playerShip.destinationY = 0
-            if gameSettings.autoFinish:
-              message = try:
-                  autoFinishMissions()
-                except:
-                  dialog = setError(message = "Can't finish missions.")
-                  return
-            res = 4
+          moveShipOnMap(direction = moveOne, dialog = dialog)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship right")
       imageButton(image = images[arrowRight]):
-        try:
-          res = moveShip(x = 1, y = 0, message = message)
-        except:
-          dialog = setError(message = "Can't move the ship.")
+        moveShipOnMap(direction = east, dialog = dialog)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship down and left")
       imageButton(image = images[arrowDownLeft]):
-        try:
-          res = moveShip(x = -1, y = 1, message = message)
-        except:
-          dialog = setError(message = "Can't move the ship.")
+        moveShipOnMap(direction = southWest, dialog = dialog)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship down")
