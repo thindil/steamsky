@@ -1469,6 +1469,7 @@ type
     incSymbol*, decSymbol*: SymbolType
     userData*: Handle
     drawBegin*, drawEnd*: DrawF
+    showButtons*: bool
   StyleKnob* = object
     ## Used to store Nuklear style data for knob widgets
     normal*, hover*, active*: StyleItem
