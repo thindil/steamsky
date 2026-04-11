@@ -652,16 +652,12 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     labelButton(title = "Ship orders"):
       setDialog()
       dialog = ordersDialog
-    var
-      res: Natural = 0
-      message: string = ""
-
     if playerShip.speed != docked and playerShip.destinationX > 0:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Auto move your ship to its destination.")
       imageButton(image = images[moveToIcon]):
-        res = moveShipToDestination(dialog = dialog)
+        moveShipOnMap(direction = moveToDestination, dialog = dialog)
     setLayoutRowDynamic(height = 30, cols = 1)
     if playerShip.speed == docked:
       if gameSettings.showTooltips:
@@ -725,18 +721,12 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship down")
       imageButton(image = images[arrowDown]):
-        try:
-          res = moveShip(x = 0, y = 1, message = message)
-        except:
-          dialog = setError(message = "Can't move the ship.")
+        moveShipOnMap(direction = south, dialog = dialog)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship down and right")
       imageButton(image = images[arrowDownRight]):
-        try:
-          res = moveShip(x = 1, y = 1, message = message)
-        except:
-          dialog = setError(message = "Can't move the ship.")
+        moveShipOnMap(direction = southEast, dialog = dialog)
 
 var mapX, mapY: Natural = 0
 
