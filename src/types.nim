@@ -472,8 +472,8 @@ type
     ## * breakChance   - The chance to break the item on use
     ## * craftBonus    - The special crafting bonus for the item
     ## * craftMalus    - The special crafting malus for the item
-    protoIndex*: Natural = 0
-    amount*: Positive = 1
+    protoIndex: Natural = 0
+    amount: Positive = 1
     name*: ObjectName
     durability*, maxDurability*: ItemsDurability = 100
     price*: Natural = 0
@@ -507,6 +507,9 @@ proc initInventoryData*(protoIndex: Natural; amount: Positive; name: ObjectName 
       durability: durability, maxDurability: maxDurability, price: price,
       quality: quality, breakChance: breakChance, craftBonus: craftBonus,
       craftMalus: craftMalus)
+
+typeGetterSetter(baseType = InventoryData, varName = item, name = protoIndex, typ = Natural)
+typeGetterSetter(baseType = InventoryData, varName = item, name = amount, typ = Positive)
 
 type
   MobAttributeRecord* = object
