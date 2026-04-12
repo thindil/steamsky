@@ -44,8 +44,8 @@ suite "Unit tests for missions2 module":
   playerShip.modules.add(y = initModuleData(mType = ModuleType2.cabin, protoIndex = 4,
       durability = 100, owner = @[1], maxDurability = 100, name = "Cabin", weight = 1))
   playerShip.cargo = @[]
-  playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
-      durability: 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 1, amount = 100,
+      durability = 100))
   playerShip.speed = docked
   skyMap[1][1].baseIndex = 1
   skyMap[1][1].eventIndex = -1

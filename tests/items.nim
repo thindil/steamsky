@@ -13,7 +13,7 @@ suite "Unit tests for items module":
   playerShip.modules.add(y = initModuleData(mType = cargoRoom, protoIndex = 7,
       durability = 100, maxDurability = 100, name = "Cargo", weight = 1))
   playerShip.cargo = @[]
-  playerShip.cargo.add(InventoryData(protoIndex: 53, amount: 1))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 53, amount = 1))
   playerShip.crew = @[]
   var member = MemberData(homeBase: 1)
   const attribute = MobAttributeRecord(level: 1, experience: 0)
