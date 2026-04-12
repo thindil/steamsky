@@ -825,7 +825,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             except:
               dialog = setError(message = "Can't get the item.")
               return false
-            addMessage(message = "You gave " & $amount & " " & getItemName(
+            addMessage(message = "You gave " & $manipulateData.amount & " " & getItemName(
                 item = item) & " to " & playerShip.crew[
                 manipulateData.data].name & ".", mType = otherMessage)
             try:
