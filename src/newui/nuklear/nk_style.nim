@@ -264,6 +264,14 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.slider.spacing = Vec2(x: 2, y: 2)
   context.style.slider.userData = Handle(handleType: handleInt, intValue: 0)
   context.style.slider.showButtons = false
+  context.style.slider.barHeight = 8
+  context.style.slider.rounding = 0
+  context.style.slider.colorFactor = 1.0
+  context.style.slider.disabledFactor = nkWidgetDisabledFactor
+  context.style.slider.drawBegin = nil
+  context.style.slider.drawEnd = nil
+
+  # slider buttons
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
