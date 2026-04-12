@@ -107,7 +107,7 @@ var
     ## The minimum cost of training
   maxCost*: Natural = 0
     ## The maximum cost of training
-  amount*: Positive = 1
+  trainAmount*: Positive = 1
     ## The amount of training sessions
   timesCost*: Positive = 1
     ## The cost of all training
@@ -146,7 +146,7 @@ proc setTrainingCost*(dialog: var GameDialog){.raises: [], tags: [RootEffect],
     except:
       dialog = setError(message = "Can't count the training cost.")
       return
-  timesCost = oneTrainCost * amount
+  timesCost = oneTrainCost * trainAmount
   minCost = oneTrainCost
   if moneyAmount < 1:
     minCost = 0
