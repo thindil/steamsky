@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,7 +20,7 @@
 
 import std/[strutils, wordwrap]
 import contracts
-import ../[config, game, tk]
+import ../[config, game, tk, types]
 import coreui, errordialog
 
 type ButtonSettings* = object

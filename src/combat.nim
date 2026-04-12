@@ -19,7 +19,7 @@
 ## the player's ship and NPC's ship or combat between ships' crews.
 
 import std/[logging, math, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import bases, crewinventory, config, game, game2, goals, events, items, log,
     maps, messages, missions, ships, ships2, shipscargo, shipscrew, shipscrew2,
     shipsmovement, statistics, stories, stories2, trades, types, utils
@@ -100,7 +100,9 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
           protoIndex = newItemIndex, itemQuality = normal, craftBonus = none,
           craftMalus = none)
     if cargoItemIndex > -1:
-      enemyShip.cargo[cargoItemIndex].amount += itemAmount
+      {.ruleOff: "assigments".}
+      enemyShip.cargo[cargoItemIndex].amount = enemyShip.cargo[cargoItemIndex].amount + itemAmount
+      {.ruleOn: "assigments".}
     else:
       if freeCargo(amount = 0 - (itemsList[newItemIndex].weight * itemAmount)) > -1:
         enemyShip.cargo.add(y = initInventoryData(protoIndex = newItemIndex,

@@ -19,7 +19,7 @@
 ## selling items.
 
 import std/[math, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import bases, basescargo, basestypes, crewinventory, game, game2, items, maps,
   messages, ships, shipscargo, shipscrew, types, utils
 
@@ -62,7 +62,9 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
           craftMalus = none)
       if cargoItemIndex > -1:
         traderCargo[cargoItemIndex].amount += itemAmount
-        traderShip.cargo[cargoItemIndex].amount += itemAmount
+        {.ruleOff: "assignments".}
+        traderShip.cargo[cargoItemIndex].amount = traderShip.cargo[cargoItemIndex].amount + itemAmount
+        {.ruleOn: "assignments".}
       else:
         if freeCargo(amount = 0 - (itemsList[newItemIndex].weight *
             itemAmount)) > -1:
