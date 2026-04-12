@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -58,7 +58,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     labelButton(title = "Train"):
       try:
         trainSkill(memberIndex = crewIndex, skillIndex = skillsIndexes[
-            skillIndex], amount = amount, isAmount = tType == times)
+            skillIndex], amount = trainAmount, isAmount = tType == times)
       except NoMoneyError:
         dialog = setMessage(message = "You don't have any " & moneyName &
             " to pay for learning.", title = "Can't train")
@@ -100,11 +100,11 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Enter amount of training sessions between 1 and 100")
-    let newAmount: int = property2(name = "#", min = 1, val = amount, max = 100,
+    let newAmount: int = property2(name = "#", min = 1, val = trainAmount, max = 100,
         step = 1, incPerPixel = 1)
-    if newAmount != amount:
-      amount = newAmount
-      timesCost = oneTrainCost * amount
+    if newAmount != trainAmount:
+      trainAmount = newAmount
+      timesCost = oneTrainCost * trainAmount
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Minimal cost of training. The real cost can be higher that this.")
