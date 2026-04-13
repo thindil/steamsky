@@ -1097,6 +1097,12 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       moveShipOnMap(direction = southEast, dialog = dialog)
     elif key == mapAccelerators[14]:
       moveShipOnMap(direction = moveToDestination, dialog = dialog)
+    elif key == mapAccelerators[15]:
+      centerX = playerShip.skyX
+      centerY = playerShip.skyY
+    elif key == mapAccelerators[16]:
+      centerX = skyBases[playerShip.homeBase].skyX
+      centerY = skyBases[playerShip.homeBase].skyY
     else:
       discard
     centerX = playerShip.skyX
