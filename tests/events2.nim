@@ -38,12 +38,12 @@ suite "Unit tests for events2 module":
   playerShip.modules.add(y = initModuleData(mType = ModuleType2.gun, protoIndex = 9,
       durability = 100, damage = 100, maxDurability = 100, name = "Gun", weight = 100))
   playerShip.cargo = @[]
-  playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 2000,
-      durability: 100))
-  playerShip.cargo.add(InventoryData(protoIndex: 4, amount: 100,
-      durability: 100))
-  playerShip.cargo.add(InventoryData(protoIndex: 23, amount: 100,
-      durability: 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 1, amount = 2000,
+      durability = 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 4, amount = 100,
+      durability = 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 23, amount = 100,
+      durability = 100))
   skyMap[1][1].baseIndex = 1
   skyBases[1].population = 100
   skyBases[1].baseType = "1"

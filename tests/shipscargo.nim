@@ -15,10 +15,10 @@ suite "Unit tests for shipscargo module":
   playerShip.modules.add(y = initModuleData(mType = cargoRoom, protoIndex = 7,
       durability = 100, maxDurability = 100, name = "Cargo", weight = 1))
   playerShip.cargo = @[]
-  playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
-      durability: 100))
-  playerShip.cargo.add(InventoryData(protoIndex: 3, amount: 200,
-      durability: 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 1, amount = 100,
+      durability = 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 3, amount = 200,
+      durability = 100))
   playerShip.crew = @[]
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1,

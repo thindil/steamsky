@@ -45,10 +45,10 @@ suite "Unit tests for trades module":
   playerShip.modules.add(y = initModuleData(mType = ModuleType2.cabin, protoIndex = 4,
       durability = 100, owner = @[0], name = "Cabin", weight = 1, maxDurability = 100))
   playerShip.cargo = @[]
-  playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
-      durability: 100))
-  playerShip.cargo.add(InventoryData(protoIndex: 3, amount: 200,
-      durability: 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 1, amount = 100,
+      durability = 100))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 3, amount = 200,
+      durability = 100))
   playerShip.speed = docked
   skyMap[1][1].baseIndex = 1
   skyMap[1][1].eventIndex = -1
