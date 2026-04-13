@@ -301,11 +301,11 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
       result.quality = playerShip.cargo[cargoIndex].quality
   if iIndex < 0:
     if baseIndex == 0:
-      result.maxDurability = traderCargo[baseCargoIndex].maxDurability
+      result.maxDurability = getItemMaxDurability(item = traderCargo[baseCargoIndex])
     else:
-      result.maxDurability = skyBases[baseIndex].cargo[baseCargoIndex].maxDurability
+      result.maxDurability = getItemMaxDurability(item = skyBases[baseIndex].cargo[baseCargoIndex])
   else:
-      result.maxDurability = playerShip.cargo[cargoIndex].maxDurability
+      result.maxDurability = getItemMaxDurability(item = playerShip.cargo[cargoIndex])
   if iIndex < 0:
     if baseIndex == 0:
       result.weight = getItemWeight(item = traderCargo[baseCargoIndex])
