@@ -474,8 +474,8 @@ type
     ## * craftMalus    - The special crafting malus for the item
     protoIndex: Natural = 0
     amount: Positive = 1
-    name*: ObjectName
-    durability*, maxDurability*: ItemsDurability = 100
+    name: ObjectName
+    durability, maxDurability*: ItemsDurability = 100
     price*: Natural = 0
     quality*: ObjectQuality = normal
     breakChance*: ExtendedNatural = -1
@@ -510,6 +510,8 @@ proc initInventoryData*(protoIndex: Natural; amount: Positive; name: ObjectName 
 
 typeGetterSetter(baseType = InventoryData, varName = item, name = protoIndex, typ = Natural)
 typeGetterSetter(baseType = InventoryData, varName = item, name = amount, typ = Positive)
+typeGetterSetter(baseType = InventoryData, varName = item, name = name, typ = ObjectName)
+typeGetterSetter(baseType = InventoryData, varName = item, name = durability, typ = ItemsDurability)
 
 type
   MobAttributeRecord* = object
