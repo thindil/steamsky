@@ -187,7 +187,7 @@ proc getItemMaxDurability*(item: InventoryData or
   result = if item.craftBonus == moreDurable: 120 elif item.craftMalus ==
       lessDurable: 80 else: defaultItemDurability
 
-func getItemDamage*(item: InventoryData or BaseCargo; toLower: bool = false;
+proc getItemDamage*(item: InventoryData or BaseCargo; toLower: bool = false;
     withColors: bool = false): string {.raises: [], tags: [], contractual.} =
   ## Get the description of the item damage level
   ##

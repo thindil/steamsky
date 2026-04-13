@@ -19,7 +19,7 @@
 ## like finding items in them, counting free space, damaging items, etc.
 
 import std/[math, tables]
-import contracts
+import contracts, nimalyzer
 import game, shipscargo, types, utils
 
 proc findItem*(inventory: seq[InventoryData]; protoIndex: Natural = 0;
@@ -240,7 +240,9 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
         breakChance = item.breakChance))
     item.amount = 1
   if item.durability > ItemsDurability.low:
-    item.durability.dec
+    {.ruleOff: "assignments".}
+    item.durability = item.durability - 1
+    {.ruleOn: "assignments".}
   # Item destroyed
   if item.durability == 0:
     if memberIndex == -1:
