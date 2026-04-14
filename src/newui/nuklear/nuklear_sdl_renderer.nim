@@ -219,6 +219,8 @@ proc SDL_GetKeyboardState(numkeys: ptr int = nil): ptr array[512,
 proc SDL_SetWindowFullscreen(window: WindowPtr; flags: cint): cint {.importc,
     nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL Image binding
+proc SDL_WarpMouseInWindow(window: WindowPtr; x, y: cint) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL Image binding
 proc IMG_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL Image binding
 proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl, raises: [], tags: [], contractual.}
@@ -583,3 +585,10 @@ proc nuklearSetWindowFullScreen*(fullScreen: bool = true) {.raises: [], tags: []
   ##                return to normal mode
   discard SDL_SetWindowFullscreen(window = sdl.win, flags = (
       if fullScreen: SDL_WINDOW_FULLSCREEN else: 0.cint))
+
+proc nuklearWarpMouse*(x, y: int) {.raises: [], tags: [], contractual.} =
+  ## Move the mouse in the main application window to the selected position
+  ##
+  ## * x - the x coordinate where the mouse will be moved
+  ## * y - the y coordinate where the mouse will be moved
+  SDL_WarpMouseInWindow(window = sdl.win, x = x.cint, y = y.cint)
