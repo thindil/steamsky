@@ -281,31 +281,35 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
     protoIndex: Natural = 0
     itemInfo, quality, maxDurability, weight: string = ""
   if memberIndex > -1:
-    let item: InventoryData = playerShip.crew[memberIndex].inventory[itemIndex]
+    let
+      item: InventoryData = playerShip.crew[memberIndex].inventory[itemIndex]
+      itemMaxDur: ItemsDurability = getItemMaxDurability(item = item)
     protoIndex = item.protoIndex
     quality = $item.quality
-    if item.maxDurability != defaultItemDurability:
+    if itemMaxDur != defaultItemDurability:
       if gameSettings.showNumbers:
-        maxDurability = $item.maxDurability
+        maxDurability = $itemMaxDur
       else:
-        maxDurability = (if item.maxDurability < defaultItemDurability: "Less"
+        maxDurability = (if itemMaxDur < defaultItemDurability: "Less"
           else: "More") & " durable"
     weight = $getItemWeight(item = item)
-    if item.durability < item.maxDurability:
+    if item.durability < itemMaxDur:
       itemInfo = getItemDamage(item = item,
         withColors = true) & '\n'
   else:
-    let item: InventoryData = playerShip.cargo[itemIndex]
+    let
+      item: InventoryData = playerShip.cargo[itemIndex]
+      itemMaxDur: ItemsDurability = getItemMaxDurability(item = item)
     protoIndex = item.protoIndex
     quality = $item.quality
-    if item.maxDurability != defaultItemDurability:
+    if itemMaxDur != defaultItemDurability:
       if gameSettings.showNumbers:
-        maxDurability = $item.maxDurability
+        maxDurability = $itemMaxDur
       else:
-        maxDurability = (if item.maxDurability < defaultItemDurability: "Less"
+        maxDurability = (if itemMaxDur < defaultItemDurability: "Less"
           else: "More") & " durable"
     weight = $getItemWeight(item = item)
-    if item.durability < item.maxDurability:
+    if item.durability < itemMaxDur:
       itemInfo = getItemDamage(item = item,
         withColors = true) & '\n'
   itemInfo.add(y = "Weight: {gold}" & weight & " kg{/gold}")
