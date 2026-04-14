@@ -631,6 +631,8 @@ proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog) {.raises: [
           return
   else:
     discard
+  centerX = playerShip.skyX
+  centerY = playerShip.skyY
 
 proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -1121,6 +1123,4 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       moveMap(direction = southeast)
     else:
       discard
-    centerX = playerShip.skyX
-    centerY = playerShip.skyY
     key = ""
