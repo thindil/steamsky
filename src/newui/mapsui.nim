@@ -1058,9 +1058,9 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       key = $sKey & "-"
       break
   var keyPressed: Keys = keyNone
-  for key in keyScrollDown..keyBackspace:
-    if isKeyPressed(key = key):
-      keyPressed = key
+  for nkey in keyScrollDown..keyF12:
+    if isKeyPressed(key = nkey):
+      keyPressed = nkey
       break
   if isKeyPressed(key = keyEscape):
     key = ""
@@ -1069,7 +1069,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if getInputTextLen() > 0:
       key &= getInputText().toLowerAscii
     elif keyPressed notin {keyEscape, keyTab}:
-      key = $keyPressed
+      key &= $keyPressed
     if key == mapAccelerators[2]:
       setDialog(x = windowWidth / 5)
       dialog = mapMenuDialog
