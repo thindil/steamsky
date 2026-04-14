@@ -583,7 +583,7 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       key = $sKey & "-"
       break
   var keyPressed: Keys = keyNone
-  for key in keyScrollDown..keyBackspace:
+  for key in keyScrollDown..keyF12:
     if isKeyPressed(key = key):
       keyPressed = key
       break
