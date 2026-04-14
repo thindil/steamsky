@@ -475,8 +475,8 @@ type
     protoIndex: Natural = 0
     amount: Positive = 1
     name: ObjectName
-    durability, maxDurability*: ItemsDurability = 100
-    price*: Natural = 0
+    durability, maxDurability: ItemsDurability = 100
+    price: Natural = 0
     quality*: ObjectQuality = normal
     breakChance*: ExtendedNatural = -1
     craftBonus*: CraftBonuses = CraftBonuses.none
@@ -512,6 +512,8 @@ typeGetterSetter(baseType = InventoryData, varName = item, name = protoIndex, ty
 typeGetterSetter(baseType = InventoryData, varName = item, name = amount, typ = Positive)
 typeGetterSetter(baseType = InventoryData, varName = item, name = name, typ = ObjectName)
 typeGetterSetter(baseType = InventoryData, varName = item, name = durability, typ = ItemsDurability)
+typeGetterSetter(baseType = InventoryData, varName = item, name = maxDurability, typ = ItemsDurability)
+typeGetterSetter(baseType = InventoryData, varName = item, name = price, typ = Natural)
 
 type
   MobAttributeRecord* = object
