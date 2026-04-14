@@ -120,7 +120,7 @@ proc sortLoot(sortAsc, sortDesc: ItemsSortOrders;
       localItems.add(y = LocalItemData(name: getItemName(item = item), iType: (
           if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
-          item.durability.float / item.maxDurability.float),
+          item.durability.float / getItemMaxDurability(item = item).float),
           owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
           baseCargoIndex].amount else: 0), quality: item.quality, id: index))
     except:
@@ -140,7 +140,7 @@ proc sortLoot(sortAsc, sortDesc: ItemsSortOrders;
       localItems.add(y = LocalItemData(name: itemsList[protoIndex].name,
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
-          item.durability.float / item.maxDurability.float), owned: 0,
+          item.durability.float / getItemMaxDurability(item = item).float), owned: 0,
           available: item.amount, quality: item.quality, id: index))
     except:
       dialog = setError(message = "Can't add item from the base's cargo.")
@@ -408,7 +408,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addProgressBar(tooltip = (if playerShip.cargo[i].durability < 100:
         getItemDamage(item = playerShip.cargo[i])
         else: "Unused"), value = playerShip.cargo[i].durability,
-        maxValue = playerShip.cargo[i].maxDurability, data = index, code = showItemInfo,
+        maxValue = getItemMaxDurability(item = playerShip.cargo[i]), data = index, code = showItemInfo,
         dialog = dialog)
       addButton(label = ($playerShip.cargo[i].quality).capitalizeAscii,
           tooltip = "Show available options of item.", data = index,
@@ -456,10 +456,10 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
         data = i, code = showItemInfo, dialog = dialog)
       var durability: int = (if baseIndex == 0: traderCargo[itemsIndexes[
           i]].durability else: skyBases[baseIndex].cargo[itemsIndexes[i]].durability)
-      addProgressBar(tooltip = (if baseCargo[itemsIndexes[i]].durability < baseCargo[itemsIndexes[i]].maxDurability:
+      addProgressBar(tooltip = (if baseCargo[itemsIndexes[i]].durability < getItemMaxDurability(item = baseCargo[itemsIndexes[i]]):
         getItemDamage(item = baseCargo[itemsIndexes[i]])
         else: "Unused"), value = durability,
-        maxValue = baseCargo[itemsIndexes[i]].maxDurability, data = i, code = showItemInfo,
+        maxValue = getItemMaxDurability(item = baseCargo[itemsIndexes[i]]), data = i, code = showItemInfo,
         dialog = dialog)
       addButton(label = ($baseCargo[itemsIndexes[i]].quality).capitalizeAscii,
           tooltip = "Show available options of item.", data = i,
