@@ -133,6 +133,6 @@ proc inputButton*(id: Buttons; x, y: Natural; down: bool = false) {.raises: [],
   ## * id   - the mouse button which will be emulated
   ## * x    - the X-axis position where the button was clicked
   ## * y    - the Y-axis position where the button was clicked
-  ## * down - if true, the button button is hold
+  ## * down - if true, the button is hold
   nk_input_button(ctx = ctx, id = id, x = x.cint, y = y.cint,
       down = down.nk_bool)
