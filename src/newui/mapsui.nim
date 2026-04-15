@@ -1149,6 +1149,14 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     elif key == mapAccelerators[33]:
       let mousePos: Vec2 = getMousePos()
       inputButton(id = left, x = mousePos.x.int, y = mousePos.y.int)
+    elif key == mapAccelerators[34]:
+      playerShip.speed = fullStop
+    elif key == mapAccelerators[35]:
+      playerShip.speed = quarterSpeed
+    elif key == mapAccelerators[36]:
+      playerShip.speed = halfSpeed
+    elif key == mapAccelerators[37]:
+      playerShip.speed = fullSpeed
     else:
       discard
     key = ""
