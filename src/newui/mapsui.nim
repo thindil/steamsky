@@ -488,8 +488,8 @@ type
     north, northEast, east, southEast, south, southWest, west, northWest,
       moveOne, moveToDestination
 
-proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog) {.raises: [],
-    tags: [TimeEffect, RootEffect], contractual.} =
+proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog) {.raises: [
+    ], tags: [TimeEffect, RootEffect], contractual.} =
   ## Move ship in the selected direction
   ##
   ## * direction - the direction in which the ship should be moved
@@ -1121,6 +1121,9 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       moveMap(direction = south)
     elif key == mapAccelerators[24]:
       moveMap(direction = southeast)
+    elif key == mapAccelerators[25]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int - 5, y = mousePos.y.int - 5)
     else:
       discard
     key = ""
