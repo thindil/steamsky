@@ -477,10 +477,10 @@ type
     name: ObjectName
     durability, maxDurability: ItemsDurability = 100
     price: Natural = 0
-    quality*: ObjectQuality = normal
-    breakChance*: ExtendedNatural = -1
-    craftBonus*: CraftBonuses = CraftBonuses.none
-    craftMalus*: CraftMaluses = CraftMaluses.none
+    quality: ObjectQuality = normal
+    breakChance: ExtendedNatural = -1
+    craftBonus: CraftBonuses = CraftBonuses.none
+    craftMalus: CraftMaluses = CraftMaluses.none
 
 proc initInventoryData*(protoIndex: Natural; amount: Positive; name: ObjectName = "";
     durability: ItemsDurability = 100; price: Natural = 0;
@@ -514,6 +514,10 @@ typeGetterSetter(baseType = InventoryData, varName = item, name = name, typ = Ob
 typeGetterSetter(baseType = InventoryData, varName = item, name = durability, typ = ItemsDurability)
 typeGetterSetter(baseType = InventoryData, varName = item, name = maxDurability, typ = ItemsDurability)
 typeGetterSetter(baseType = InventoryData, varName = item, name = price, typ = Natural)
+typeGetterSetter(baseType = InventoryData, varName = item, name = quality, typ = ObjectQuality)
+typeGetterSetter(baseType = InventoryData, varName = item, name = breakChance, typ = ExtendedNatural)
+typeGetterSetter(baseType = InventoryData, varName = item, name = craftBonus, typ = CraftBonuses)
+typeGetterSetter(baseType = InventoryData, varName = item, name = craftMalus, typ = CraftMaluses)
 
 type
   MobAttributeRecord* = object
