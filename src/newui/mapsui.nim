@@ -1146,6 +1146,9 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     elif key == mapAccelerators[32]:
       let mousePos: Vec2 = getMousePos()
       nuklearWarpMouse(x = mousePos.x.int + 5, y = mousePos.y.int + 5)
+    elif key == mapAccelerators[33]:
+      let mousePos: Vec2 = getMousePos()
+      inputButton(id = left, x = mousePos.x.int, y = mousePos.y.int)
     else:
       discard
     key = ""
