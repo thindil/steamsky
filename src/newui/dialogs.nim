@@ -931,31 +931,35 @@ proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
     protoIndex: Natural = 0
     itemInfo, quality, maxDurability, weight: string = ""
   if memberIndex > -1:
-    let item: InventoryData = playerShip.crew[memberIndex].inventory[itemIndex]
+    let
+      item: InventoryData = playerShip.crew[memberIndex].inventory[itemIndex]
+      itemMaxDurability: ItemsDurability = getItemMaxDurability(item = item)
     protoIndex = item.protoIndex
     quality = $item.quality
-    if item.maxDurability != defaultItemDurability:
+    if itemMaxDurability != defaultItemDurability:
       if gameSettings.showNumbers:
-        maxDurability = $item.maxDurability
+        maxDurability = $itemMaxDurability
       else:
-        maxDurability = (if item.maxDurability < defaultItemDurability: "Less"
+        maxDurability = (if itemMaxDurability < defaultItemDurability: "Less"
           else: "More") & " durable"
     weight = $getItemWeight(item = item)
-    if item.durability < item.maxDurability:
+    if item.durability < itemMaxDurability:
       itemInfo = getItemDamage(item = playerShip.crew[
           memberIndex].inventory[itemIndex], withColors = true) & '\n'
   else:
-    let item: InventoryData = playerShip.cargo[itemIndex]
+    let
+      item: InventoryData = playerShip.cargo[itemIndex]
+      itemMaxDurability: ItemsDurability = getItemMaxDurability(item = item)
     protoIndex = item.protoIndex
     quality = $item.quality
-    if item.maxDurability != defaultItemDurability:
+    if itemMaxDurability != defaultItemDurability:
       if gameSettings.showNumbers:
-        maxDurability = $item.maxDurability
+        maxDurability = $itemMaxDurability
       else:
-        maxDurability = (if item.maxDurability < defaultItemDurability: "Less"
+        maxDurability = (if itemMaxDurability < defaultItemDurability: "Less"
           else: "More") & " durable"
     weight = $getItemWeight(item = item)
-    if item.durability < item.maxDurability:
+    if item.durability < itemMaxDurability:
       itemInfo = getItemDamage(item = playerShip.cargo[
           itemIndex], withColors = true) & '\n'
   itemInfo.add(y = "Weight: {gold}" & weight & " kg{/gold}")
