@@ -1068,6 +1068,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     key = ""
     keyPressed = keyNone
   if (getInputTextLen() > 0 or keyPressed != keyNone) and shortcutsEnabled:
+    redraw = true
     if getInputTextLen() > 0:
       key &= getInputText().toLowerAscii
     elif keyPressed notin {keyEscape, keyTab}:
@@ -1124,6 +1125,27 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     elif key == mapAccelerators[25]:
       let mousePos: Vec2 = getMousePos()
       nuklearWarpMouse(x = mousePos.x.int - 5, y = mousePos.y.int - 5)
+    elif key == mapAccelerators[26]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int, y = mousePos.y.int - 5)
+    elif key == mapAccelerators[27]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int + 5, y = mousePos.y.int - 5)
+    elif key == mapAccelerators[28]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int - 5, y = mousePos.y.int)
+    elif key == mapAccelerators[29]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int + 5, y = mousePos.y.int)
+    elif key == mapAccelerators[30]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int - 5, y = mousePos.y.int + 5)
+    elif key == mapAccelerators[31]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int, y = mousePos.y.int + 5)
+    elif key == mapAccelerators[32]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int + 5, y = mousePos.y.int + 5)
     else:
       discard
     key = ""
