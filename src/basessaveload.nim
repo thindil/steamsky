@@ -134,8 +134,6 @@ proc saveBases*(saveData: var XmlNode) {.raises: [], tags: [],
               "price", $item.price)]
         if item.quality != normal:
           attrs.add(y = ("quality", $item.quality))
-        if item.maxDurability != defaultItemDurability:
-          attrs.add(y = ("maxdurability", $item.maxDurability))
         if item.craftBonus != none:
           attrs.add(y = ("craftbonus", $item.craftBonus))
           attrs.add(y = ("craftmalus", $item.craftMalus))
@@ -300,10 +298,6 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
               name = "quality"))
         else:
           item.quality = normal
-        if baseItem.attr(name = "maxdurability").len > 0:
-          item.maxDurability = baseItem.attr(name = "maxdurability").parseInt
-        else:
-          item.maxDurability = defaultItemDurability
         if baseItem.attr(name = "craftbonus").len > 0:
           item.craftBonus = parseEnum[CraftBonuses](s = baseItem.attr(
               name = "craftbonus"))
