@@ -466,7 +466,6 @@ type
     ## * amount        - The amount of the item in the inventory
     ## * name          - The name of the item, if different than the default one
     ## * durability    - The current durability of the item
-    ## * maxDurability - The maximum durability of the item
     ## * price         - The price for which the item was bought
     ## * quality       - The quality of the item
     ## * breakChance   - The chance to break the item on use
@@ -475,7 +474,7 @@ type
     protoIndex: Natural = 0
     amount: Positive = 1
     name: ObjectName
-    durability, maxDurability: ItemsDurability = 100
+    durability: ItemsDurability = 100
     price: Natural = 0
     quality: ObjectQuality = normal
     breakChance: ExtendedNatural = -1
@@ -498,13 +497,12 @@ proc initInventoryData*(protoIndex: Natural; amount: Positive;
   ## * price         - The price for which the item was bought
   ## * quality       - The quality of the item
   ## * breakChance   - The chance to break the item on use
-  ## * maxDurability - The maximum durability of the item
   ## * craftBonus    - The special crafting bonus for the item
   ## * craftMalus    - The special crafting malus for the item
   ##
   ## Returns the new structure with information about the selected item
   return InventoryData(protoIndex: protoIndex, amount: amount, name: name,
-      durability: durability, maxDurability: maxDurability, price: price,
+      durability: durability, price: price,
       quality: quality, breakChance: breakChance, craftBonus: craftBonus,
       craftMalus: craftMalus)
 
@@ -514,8 +512,6 @@ typeGetterSetter(baseType = InventoryData, varName = item, name = amount,
 typeGetterSetter(baseType = InventoryData, varName = item, name = name,
     typ = ObjectName)
 typeGetterSetter(baseType = InventoryData, varName = item, name = durability,
-    typ = ItemsDurability)
-typeGetterSetter(baseType = InventoryData, varName = item, name = maxDurability,
     typ = ItemsDurability)
 typeGetterSetter(baseType = InventoryData, varName = item, name = price, typ = Natural)
 typeGetterSetter(baseType = InventoryData, varName = item, name = quality,
