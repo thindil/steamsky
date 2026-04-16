@@ -81,7 +81,7 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
         tooltip = "Show the selected item's info",
         command = "ShowInventoryItemInfo " & $(item + 1), column = 2)
     addProgressbar(table = inventoryTable, value = member.inventory[
-        item].durability, maxValue = member.inventory[item].maxDurability,
+        item].durability, maxValue = getItemMaxDurability(item = member.inventory[item]),
         tooltip = "The current durability level of the selected item.",
         command = "ShowInventoryItemInfo " & $(item + 1), column = 3)
     if itemIsUsed(memberIndex = memberIndex, itemIndex = item):
@@ -322,8 +322,8 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
           item = playerShip.crew[memberIndex].inventory[index],
           damageInfo = false, toLower = false), damage: playerShip.crew[
           memberIndex].inventory[index].durability.float /
-          playerShip.crew[
-          memberIndex].inventory[index].maxDurability.float, itemType: (if itemsList[playerShip.crew[
+          getItemMaxDurability(item = playerShip.crew[
+          memberIndex].inventory[index]).float, itemType: (if itemsList[playerShip.crew[
           memberIndex].inventory[index].protoIndex].showType.len > 0: itemsList[
           playerShip.crew[memberIndex].inventory[
           index].protoIndex].showType else: itemsList[playerShip.crew[

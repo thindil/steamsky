@@ -133,8 +133,6 @@ proc savePlayerShip*(saveData: var XmlNode) {.raises: [], tags: [],
       attrs.add(y = ("price", $item.price))
     if item.quality != normal:
       attrs.add(y = ("quality", $item.quality))
-    if item.maxDurability != 100:
-      attrs.add(y = ("maxdurability", $item.maxDurability))
     if item.craftBonus != none:
       attrs.add(y = ("craftbonus", $item.craftBonus))
       attrs.add(y = ("craftmalus", $item.craftMalus))
@@ -497,9 +495,6 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
         quality: ObjectQuality = (if cargo.attr(name = "quality").len ==
             0: normal else: parseEnum[ObjectQuality](s = cargo.attr(
             name = "quality")))
-        maxDurability: ItemsDurability = (if cargo.attr(
-            name = "maxdurability").len == 0: 100 else: cargo.attr(
-            name = "maxdurability").parseInt)
         bonus: CraftBonuses = (if cargo.attr(name = "craftbonus").len ==
             0: CraftBonuses.none else: parseEnum[CraftBonuses](s = cargo.attr(
             name = "craftbonus")))
@@ -508,7 +503,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
             name = "craftmalus")))
       playerShip.cargo.add(y = initInventoryData(protoIndex = protoIndex,
           amount = amount, name = name, durability = itemDurability, price = price,
-          quality = quality, maxDurability = maxDurability,
+          quality = quality,
           craftBonus = bonus, craftMalus = malus))
     for crew in shipNode.findAll(tag = "member"):
       var member: MemberData = MemberData()

@@ -112,7 +112,7 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
         tooltip = "Show item's description and actions",
         command = "ShowCargoItemInfo " & $(index + 1), column = 1)
     addProgressbar(table = cargoTable, value = item.durability,
-        maxValue = item.maxDurability,
+        maxValue = getItemMaxDurability(item = item),
         tooltip = "The current durability of the selected item",
         command = "ShowCargoItemInfo " & $(index + 1), column = 2)
     addButton(table = cargoTable, text = ($item.quality).capitalizeAscii,
@@ -225,7 +225,7 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       localCargo.add(y = LocalCargoData(name: getItemName(item = item,
           damageInfo = false, toLower = false), damage: (item.durability.float /
-          item.maxDurability.float), itemType: (if itemsList[
+          getItemMaxDurability(item = item).float), itemType: (if itemsList[
           item.protoIndex].showType.len > 0: itemsList[
           item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
           amount: item.amount, weight: item.amount * getItemWeight(item = item),
