@@ -482,16 +482,16 @@ type
     craftBonus: CraftBonuses = CraftBonuses.none
     craftMalus: CraftMaluses = CraftMaluses.none
 
-proc initInventoryData*(protoIndex: Natural; amount: Positive; name: ObjectName = "";
-    durability: ItemsDurability = 100; price: Natural = 0;
+proc initInventoryData*(protoIndex: Natural; amount: Positive;
+    name: ObjectName = "";durability: ItemsDurability = 100; price: Natural = 0;
     quality: ObjectQuality = normal; breakChance: ExtendedNatural = -1;
     maxDurability: ItemsDurability = 100;
     craftBonus: CraftBonuses = none;
     craftMalus: CraftMaluses = CraftMaluses.none): InventoryData {.raises: [],
     tags: [], contractual.} =
-  ## Create a new data structure for the player's ship's module data
+  ## Create a new data structure for the item in an inventory
   ##
-  ## * protoIndex       - The index of the prototype item
+  ## * protoIndex    - The index of the prototype item
   ## * amount        - The amount of the item in the inventory
   ## * name          - The name of the item, if different than the default one
   ## * durability    - The current durability of the item
@@ -509,15 +509,23 @@ proc initInventoryData*(protoIndex: Natural; amount: Positive; name: ObjectName 
       craftMalus: craftMalus)
 
 typeGetterSetter(baseType = InventoryData, varName = item, name = protoIndex, typ = Natural)
-typeGetterSetter(baseType = InventoryData, varName = item, name = amount, typ = Positive)
-typeGetterSetter(baseType = InventoryData, varName = item, name = name, typ = ObjectName)
-typeGetterSetter(baseType = InventoryData, varName = item, name = durability, typ = ItemsDurability)
-typeGetterSetter(baseType = InventoryData, varName = item, name = maxDurability, typ = ItemsDurability)
+typeGetterSetter(baseType = InventoryData, varName = item, name = amount,
+    typ = Positive)
+typeGetterSetter(baseType = InventoryData, varName = item, name = name,
+    typ = ObjectName)
+typeGetterSetter(baseType = InventoryData, varName = item, name = durability,
+    typ = ItemsDurability)
+typeGetterSetter(baseType = InventoryData, varName = item, name = maxDurability,
+    typ = ItemsDurability)
 typeGetterSetter(baseType = InventoryData, varName = item, name = price, typ = Natural)
-typeGetterSetter(baseType = InventoryData, varName = item, name = quality, typ = ObjectQuality)
-typeGetterSetter(baseType = InventoryData, varName = item, name = breakChance, typ = ExtendedNatural)
-typeGetterSetter(baseType = InventoryData, varName = item, name = craftBonus, typ = CraftBonuses)
-typeGetterSetter(baseType = InventoryData, varName = item, name = craftMalus, typ = CraftMaluses)
+typeGetterSetter(baseType = InventoryData, varName = item, name = quality,
+    typ = ObjectQuality)
+typeGetterSetter(baseType = InventoryData, varName = item, name = breakChance,
+    typ = ExtendedNatural)
+typeGetterSetter(baseType = InventoryData, varName = item, name = craftBonus,
+    typ = CraftBonuses)
+typeGetterSetter(baseType = InventoryData, varName = item, name = craftMalus,
+    typ = CraftMaluses)
 
 type
   MobAttributeRecord* = object
@@ -528,6 +536,18 @@ type
     level*: range[1..50] = 1
     experience*: Natural = 0
 
+proc initMobAttributeRecord*(level: range[1..50] = 1;
+    experience: Natural = 0): MobAttributeRecord {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for the mob attribute
+  ##
+  ## * level      - the level of the attribute
+  ## * experience - the experience in the selected attribuge
+  ##
+  ## Returns the new structure with information about the selected attribute
+  return MobAttributeRecord(level: level, experience: experience)
+
+type
   SkillInfo* = object
     ## Used to store information about the crew member's skills
     ##
