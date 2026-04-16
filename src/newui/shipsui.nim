@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -24,9 +24,7 @@ import ../[config, game, maps, messages, reputation, ships, shipscrew, types]
 import coreui, dialogs, errordialog, header, mapsui, messagesui, setui,
     shipsuicargo, shipsuicrew, shipsuimodules, themes
 
-var
-  expandedSection: Natural = 0
-  newName: string = ""
+var newName: string = ""
 
 proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =

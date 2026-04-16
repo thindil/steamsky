@@ -403,6 +403,10 @@ proc showOptionsScreen(dialog: var GameDialog; state: var GameState) {.raises: [
 
 var key: string = ""
 
+var
+  expandedSection*: Natural = 0
+    ## Expanded section in some screens, like ship info or knowledge screens
+
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     state: var GameState; options: bool = false): bool {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -607,6 +611,8 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     elif key == fullScreenAccel:
       gameSettings.fullScreen = not gameSettings.fullScreen
       nuklearSetWindowFullScreen(fullScreen = gameSettings.fullScreen)
+    elif state in {shipInfo, knowledgeLists}:
+      discard
     elif playerShip.crew[0].health > 0:
       if key == menuAccelerators[8]:
         showHelpScreen(dialog = dialog, state = state)

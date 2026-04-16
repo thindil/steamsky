@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -21,8 +21,6 @@
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config]
 import coreui, header, knowledgebases, knowledgeevents, knowledgemissions, knowledgestories, messagesui, themes
-
-var expandedSection: Natural = 0
 
 proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
