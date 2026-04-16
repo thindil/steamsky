@@ -285,6 +285,10 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.slider.incButton.textNormal = NkColor(r: 175, g: 175, b: 175, a: 255)
   context.style.slider.incButton.textHover = NkColor(r: 175, g: 175, b: 175, a: 255)
   context.style.slider.incButton.textActive = NkColor(r: 175, g: 175, b: 175, a: 255)
+  context.style.slider.incButton.padding = Vec2(x: 8.0, y: 8.0)
+  context.style.slider.incButton.touchPadding = Vec2(x: 0.0, y: 0.0)
+  context.style.slider.incButton.userData = Handle(handleType: handleInt, intValue: 0)
+  context.style.slider.incButton.alignment = centered
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
