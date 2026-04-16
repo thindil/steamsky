@@ -754,14 +754,13 @@ type
     ## * protoIndex    - The index of the item's prototype
     ## * amount        - The amount of the item in the inventory
     ## * durability    - The current durability of the item
-    ## * maxDurability - The maximum durability of the item
     ## * price         - The price for which the item was bought
     ## * quality       - The quality of the item
     ## * breakChance   - The chance to break the item on use
     ## * craftFeature  - The special feature of the item set during crafting it
     protoIndex*: Natural
     amount*: Natural
-    durability*, maxDurability*: ItemsDurability = 100
+    durability*: ItemsDurability = 100
     price*: Natural
     quality*: ObjectQuality = normal
     breakChance*: ExtendedNatural = -1
