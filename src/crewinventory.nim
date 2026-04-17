@@ -215,6 +215,10 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
   var
     item: InventoryData = inventory[itemIndex]
     damageChance: int = itemsList[item.protoIndex].value[1]
+  if item.craftBonus == lessBreakable:
+    damageChance -= (damageChance.float * 0.2).ceil.int
+  elif item.craftMalus == moreBreakable:
+    damageChance += (damageChance.float * 0.2).ceil.int
   # Modify the item's chance to damage, based on its quality
   case item.quality
   of poor:
