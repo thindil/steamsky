@@ -155,10 +155,10 @@ proc loadMobs*(fileName: Path) {.raises: [DataLoadingError],
             0
         if attrLevel > 0:
           if mobAction == DataAction.add:
-            mob.attributes.add(y = MobAttributeRecord(level: attrLevel,
-                experience: 0))
+            mob.attributes.add(y = initMobAttributeRecord(level = attrLevel,
+                experience = 0))
           else:
-            mob.attributes[i] = MobAttributeRecord(level: attrLevel, experience: 0)
+            mob.attributes[i] = initMobAttributeRecord(level = attrLevel, experience = 0)
         else:
           let minLevel: Natural = try:
             attributes[i].attr(name = "minlevel").parseInt()
@@ -172,11 +172,11 @@ proc loadMobs*(fileName: Path) {.raises: [DataLoadingError],
             raise newException(exceptn = DataLoadingError, message = "Can't " &
                 $mobAction & " mob '" & $mobIndex & "', invalid range for attribute.")
           if mobAction == DataAction.add:
-            mob.attributes.add(y = MobAttributeRecord(level: minLevel,
-                experience: maxLevel))
+            mob.attributes.add(y = initMobAttributeRecord(level = minLevel,
+                experience = maxLevel))
           else:
-            mob.attributes[i] = MobAttributeRecord(level: minLevel,
-                experience: maxLevel)
+            mob.attributes[i] = initMobAttributeRecord(level = minLevel,
+                experience = maxLevel)
       for priority in mobNode.findAll(tag = "priority"):
         for index, order in orderNames:
           if order == priority.attr(name = "name"):
@@ -316,8 +316,8 @@ proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises:
       if attribute.experience == 0:
         result.attributes.add(y = attribute)
       else:
-        result.attributes.add(y = MobAttributeRecord(level: getRandom(
-            min = attribute.level, max = attribute.experience), experience: 0))
+        result.attributes.add(y = initMobAttributeRecord(level = getRandom(
+            min = attribute.level, max = attribute.experience), experience = 0))
     for item in protoMob.inventory:
       let amount: int = if item.maxAmount > 0:
           getRandom(min = item.minAmount, max = item.maxAmount)

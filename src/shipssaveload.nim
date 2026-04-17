@@ -539,8 +539,8 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           level: int = attribute.attr(name = "level").parseInt
           experience: Natural = (if attribute.attr(name = "experience").len >
               0: attribute.attr(name = "experience").parseInt else: 0)
-        member.attributes.add(y = MobAttributeRecord(level: level,
-            experience: experience))
+        member.attributes.add(y = initMobAttributeRecord(level = level,
+            experience = experience))
       for item in crew.findAll(tag = "item"):
         let
           itemIndex: int = item.attr(name = "index").parseInt

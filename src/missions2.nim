@@ -195,8 +195,8 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
       maxAttributeLevel = 50
     var attributes: seq[MobAttributeRecord] = @[]
     for j in 1 .. attributesList.len:
-      attributes.add(y = MobAttributeRecord(level: getRandom(min = 3,
-          max = maxAttributeLevel), experience: 0))
+      attributes.add(y = initMobAttributeRecord(level = getRandom(min = 3,
+          max = maxAttributeLevel), experience = 0))
     playerShip.crew.add(y = MemberData(name: generateMemberName(gender = gender,
         factionIndex = skyBases[passengerBase].owner), gender: gender,
         health: 100, tired: 100, skills: @[], hunger: 0, thirst: 0, order: rest,

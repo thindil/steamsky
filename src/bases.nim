@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -243,8 +243,8 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
       elif skillIndex > -1:
         skills[skillIndex] = SkillInfo(index: skillNumber, level: skillLevel, experience: 0)
     for j in 1..attributesList.len:
-      attributes.add(y = MobAttributeRecord(level: getRandom(min = 3, max = (
-          maxSkillLevel / 3).int), experience: 0))
+      attributes.add(y = initMobAttributeRecord(level = getRandom(min = 3, max = (
+          maxSkillLevel / 3).int), experience = 0))
     for skill in skills:
       price += skill.level
       payment += skill.level

@@ -205,8 +205,8 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
           skill.level = recruitSkill.attr(name = "level").parseInt
           recruit.skills.add(y = skill)
         for recruitAttr in baseRecruit.findAll(tag = "attribute"):
-          recruit.attributes.add(y = MobAttributeRecord(level: recruitAttr.attr(
-              name = "level").parseInt, experience: 0))
+          recruit.attributes.add(y = initMobAttributeRecord(level = recruitAttr.attr(
+              name = "level").parseInt, experience = 0))
         for item in baseRecruit.findAll(tag = "item"):
           let quality: ObjectQuality = (if item.attr(name = "quality").len ==
               0: normal else: parseEnum[ObjectQuality](s = item.attr(
