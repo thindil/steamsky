@@ -596,10 +596,11 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     keyPressed = keyNone
     dialog = none
   if (getInputTextLen() > 0 or keyPressed != keyNone) and shortcutsEnabled:
+    redraw = true
     if getInputTextLen() > 0:
       key &= getInputText().toLowerAscii
-    elif keyPressed notin {keyEscape, keyTab}:
-      key = $keyPressed
+    elif keyPressed notin {keyEscape, keyTab, keyAlt}:
+      key &= $keyPressed
     if key == menuAccelerators[1]:
       showShipInfo(dialog = dialog, state = state)
     elif key == menuAccelerators[4]:
@@ -612,7 +613,26 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       gameSettings.fullScreen = not gameSettings.fullScreen
       nuklearSetWindowFullScreen(fullScreen = gameSettings.fullScreen)
     elif state in {shipInfo, knowledgeLists}:
-      discard
+      if key == generalAccelerators[0]:
+        if expandedSection == 1:
+          expandedSection = 0
+        else:
+          expandedSection = 1
+      elif key == generalAccelerators[1]:
+        if expandedSection == 2:
+          expandedSection = 0
+        else:
+          expandedSection = 2
+      elif key == generalAccelerators[2]:
+        if expandedSection == 3:
+          expandedSection = 0
+        else:
+          expandedSection = 3
+      elif key == generalAccelerators[3]:
+        if expandedSection == 4:
+          expandedSection = 0
+        else:
+          expandedSection = 4
     elif playerShip.crew[0].health > 0:
       if key == menuAccelerators[8]:
         showHelpScreen(dialog = dialog, state = state)
