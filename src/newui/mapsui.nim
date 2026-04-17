@@ -1071,7 +1071,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     redraw = true
     if getInputTextLen() > 0:
       key &= getInputText().toLowerAscii
-    elif keyPressed notin {keyEscape, keyTab}:
+    elif keyPressed notin {keyEscape, keyTab, keyAlt}:
       key &= $keyPressed
     if key == mapAccelerators[2]:
       setDialog(x = windowWidth / 5)
