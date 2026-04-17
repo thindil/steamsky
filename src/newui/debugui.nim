@@ -263,8 +263,8 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
     playerShip.crew[crewSelected].loyalty = memberProperties[5]
     playerShip.crew[crewSelected].attributes = @[]
     for attrib in memberAttribs:
-      playerShip.crew[crewSelected].attributes.add(y = MobAttributeRecord(
-          level: attrib.value, experience: 0))
+      playerShip.crew[crewSelected].attributes.add(y = initMobAttributeRecord(
+          level = attrib.value, experience = 0))
     playerShip.crew[crewSelected].skills = @[]
     for skill in memberSkills:
       for index, pSkill in skillsList:
