@@ -240,13 +240,17 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.selectable.drawBegin = nil
   context.style.selectable.drawEnd = nil
 
+  proc itemHide(): StyleItem {.raises: [], tags: [], contractual.} =
+    ## Set a style item to be hidden
+    ##
+    ## Returns StyleItem object with setting for hidden item
+    return StyleItem(iType: itemColor, data: StyleItemData(itype: itemColor,
+        color: NkColor(r: 0, g: 0, b: 0, a: 0)))
+
   # slider
-  context.style.slider.normal = StyleItem(iType: itemColor,
-      data: StyleItemData(itype: itemColor, color: NkColor(r: 0, g: 0, b: 0, a: 0)))
-  context.style.slider.hover = StyleItem(iType: itemColor,
-      data: StyleItemData(itype: itemColor, color: NkColor(r: 0, g: 0, b: 0, a: 0)))
-  context.style.slider.active = StyleItem(iType: itemColor,
-      data: StyleItemData(itype: itemColor, color: NkColor(r: 0, g: 0, b: 0, a: 0)))
+  context.style.slider.normal = itemHide()
+  context.style.slider.hover = itemHide()
+  context.style.slider.active = itemHide()
   context.style.slider.barNormal = table[sliderColor]
   context.style.slider.barHover = table[sliderColor]
   context.style.slider.barActive = table[sliderColor]
@@ -289,6 +293,16 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.slider.incButton.touchPadding = Vec2(x: 0.0, y: 0.0)
   context.style.slider.incButton.userData = Handle(handleType: handleInt, intValue: 0)
   context.style.slider.incButton.alignment = centered
+  context.style.slider.incButton.border = 1.0
+  context.style.slider.incButton.rounding = 0.0
+  context.style.slider.incButton.colorFactorText = 1.0
+  context.style.slider.incButton.colorFactorBackground = 1.0
+  context.style.slider.incButton.disabledFactor = nkWidgetDisabledFactor
+  context.style.slider.incButton.drawBegin = nil
+  context.style.slider.incButton.drawEnd = nil
+  context.style.slider.decButton = context.style.slider.incButton
+
+  # knob
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
