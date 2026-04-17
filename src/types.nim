@@ -482,9 +482,9 @@ type
     craftMalus: CraftMaluses = CraftMaluses.none
 
 proc initInventoryData*(protoIndex: Natural; amount: Positive;
-    name: ObjectName = "";durability: ItemsDurability = 100; price: Natural = 0;
+    name: ObjectName = ""; durability: ItemsDurability = 100;
+        price: Natural = 0;
     quality: ObjectQuality = normal; breakChance: ExtendedNatural = -1;
-    maxDurability: ItemsDurability = 100;
     craftBonus: CraftBonuses = none;
     craftMalus: CraftMaluses = CraftMaluses.none): InventoryData {.raises: [],
     tags: [], contractual.} =
@@ -529,8 +529,8 @@ type
     ##
     ## * level      - The level of the attribute
     ## * experience - The amount of experience in the attribute
-    level*: range[1..50] = 1
-    experience*: Natural = 0
+    level: range[1..50] = 1
+    experience: Natural = 0
 
 proc initMobAttributeRecord*(level: range[1..50] = 1;
     experience: Natural = 0): MobAttributeRecord {.raises: [], tags: [],
@@ -542,6 +542,11 @@ proc initMobAttributeRecord*(level: range[1..50] = 1;
   ##
   ## Returns the new structure with information about the selected attribute
   return MobAttributeRecord(level: level, experience: experience)
+
+typeGetterSetter(baseType = MobAttributeRecord, varName = mob, name = level,
+    typ = range[1..50])
+typeGetterSetter(baseType = MobAttributeRecord, varName = mob,
+    name = experience, typ = Natural)
 
 type
   SkillInfo* = object
