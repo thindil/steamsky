@@ -559,6 +559,18 @@ type
     level*: SkillRange = 0
     experience*: Natural = 0
 
+proc initSkillInfo*(index: Natural = 0; level: SkillRange = 0;
+    experience: Natural = 0): SkillInfo {.raises: [], tags: [], contractual.} =
+  ## Create a new data structure for the mob skills list
+  ##
+  ## * index      - the index of skill in the skills list
+  ## * level      - the level of the skill
+  ## * experience - The amount of the experience in the skill
+  ##
+  ## Returns the new structure with information about the selected skill
+  return SkillInfo(index: index, level: level, experience: experience)
+
+type
   MemberData* = object
     ## Used to store information about the crew member
     ##
