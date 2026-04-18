@@ -961,7 +961,7 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         if itemInfo.len > 0:
           itemInfo.add(y = "\n")
         itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
-            itemData = itemsList[protoIndex].value[1]) &
+            itemIndex = itemIndex) &
             "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
         break
     except:
@@ -971,7 +971,7 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       if itemInfo.len > 0:
         itemInfo.add(y = "\n")
       itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
-          itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+          itemIndex = itemIndex) & "{/gold}")
   except:
     return showError(message = "Can't get tool info.")
   try:

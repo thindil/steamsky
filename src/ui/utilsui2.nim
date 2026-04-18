@@ -336,12 +336,12 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
   for itemType in itemTypes:
     if itemsList[protoIndex].itemType == itemType:
       itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
-          itemData = itemsList[protoIndex].value[1]) &
+          itemIndex = itemIndex) &
           "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
       break
   if itemsList[protoIndex].itemType in toolsList:
     itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
-        itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+        itemIndex = itemIndex) & "{/gold}")
   if itemsList[protoIndex].itemType.len > 4 and itemsList[protoIndex].itemType[
       0 .. 3] == "Ammo" or itemsList[protoIndex].itemType == "Harpoon":
     itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")

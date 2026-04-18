@@ -333,7 +333,7 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       if itemsList[protoIndex].itemType == itemType:
         itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
-            itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+            itemIndex = itemIndex) & "{/gold}")
         itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[
             2] & "{/gold}")
         break
@@ -342,7 +342,7 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     if itemsList[protoIndex].itemType in toolsList:
       itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
-          itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+          itemIndex = itemIndex) & "{/gold}")
   except:
     return showError(message = "Can't show tool damage chance.")
   try:

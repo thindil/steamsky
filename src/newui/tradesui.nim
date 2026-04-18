@@ -275,7 +275,7 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
         if itemInfo.len > 0:
           itemInfo.add(y = "\n")
         itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
-            itemData = itemsList[protoIndex].value[1]) &
+            itemIndex = itemIndex) &
             "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
         break
     except:
@@ -286,7 +286,7 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
       if itemInfo.len > 0:
         itemInfo.add(y = "\n")
       itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
-          itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+          itemIndex = itemIndex) & "{/gold}")
   except:
     dialog = setError(message = "Can't get tool info.")
     return
