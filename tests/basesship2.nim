@@ -30,18 +30,18 @@ suite "Unit tests for basesship2 module":
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
       1, 0, 0], order: talk, loyalty: 100, skills: @[SkillInfo(index: 4,
       level: 4,
-      experience: 0)], attributes: @[MobAttributeRecord(level: 3,
-          experience: 0),
-      MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
-      experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
+      experience: 0)], attributes: @[initMobAttributeRecord(level = 3,
+          experience = 0),
+      initMobAttributeRecord(level = 3, experience = 0), initMobAttributeRecord(level = 3,
+      experience = 0), initMobAttributeRecord(level = 3, experience = 0)], health: 100))
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
       1, 0, 0], order: gunner, loyalty: 100, skills: @[SkillInfo(index: 4,
       level: 4,
-      experience: 0)], attributes: @[MobAttributeRecord(level: 3,
-          experience: 0),
-      MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
-      experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
+      experience: 0)], attributes: @[initMobAttributeRecord(level = 3,
+          experience = 0),
+      initMobAttributeRecord(level = 3, experience = 0), initMobAttributeRecord(level = 3,
+      experience = 0), initMobAttributeRecord(level = 3, experience = 0)], health: 100))
   playerShip.modules = @[]
   playerShip.modules.add(y = initModuleData(mType = ModuleType2.hull, protoIndex = 1,
       durability = 100, maxDurability = 100, maxModules = 10, name = "Hull", weight = 1))
