@@ -20,7 +20,7 @@
 
 import std/[logging, math, paths, strutils, tables, xmlparser, xmltree]
 import contracts, nimalyzer
-import config, crewinventory, game, log, messages, shipscargo, shipscrew, types, utils
+import config, crewinventory, game, log, maps, messages, shipscargo, shipscrew, types, utils
 
 var
   weaponsList*: seq[Positive] = @[]
@@ -240,18 +240,45 @@ proc getItemName*(item: InventoryData; damageInfo: bool = true;
   if damageInfo and item.durability < 100:
     result = result & " (" & getItemDamage(item = item, toLower = toLower) & ")"
 
-proc getItemChanceToDamage*(itemData: Natural): string {.raises: [],
+proc getItemChanceToDamage*(itemIndex: int): string {.raises: [KeyError],
     tags: [], contractual.} =
   ## Get the string with textual information about the item's chance for take
   ## damage during usage
   ##
-  ## * itemData - the numerical chance for damage for the selected item
+  ## * itemIndex - the index of the item which break chance will be checked
   ##
   ## Returns the string with textual value for the selected numerical chance for damage
   ## or numerical value if the proper setting of the game is enabled
+  var baseCargoIndex, cargoIndex: int = -1
+  if itemIndex < 0:
+    baseCargoIndex = itemIndex.abs
+  else:
+    cargoIndex = itemIndex
+  if cargoIndex > playerShip.cargo.high:
+    return ""
+  let baseIndex: int = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if baseIndex == 0 and baseCargoIndex > traderCargo.high:
+    return ""
+  elif baseIndex > 0 and baseCargoIndex > skyBases[baseIndex].cargo.high:
+    return ""
+  var chance: Natural = 0
+  if itemIndex < 0:
+    var item: BaseCargo = (if baseIndex == 0: traderCargo[baseCargoIndex] else: skyBases[baseIndex].cargo[baseCargoIndex])
+    chance = itemsList[item.protoIndex].breakChance
+    if item.craftBonus == lessBreakable:
+      chance += (chance.float * 0.2).ceil.Natural
+    elif item.craftMalus == moreBreakable:
+      chance -= (chance.float * 0.2).ceil.Natural
+  else:
+    var item: InventoryData = playerShip.cargo[cargoIndex]
+    chance = itemsList[item.protoIndex].breakChance
+    if item.craftBonus == lessBreakable:
+      chance += (chance.float * 0.2).ceil.Natural
+    elif item.craftMalus == moreBreakable:
+      chance -= (chance.float * 0.2).ceil.Natural
   if gameSettings.showNumbers:
-    return " " & $itemData & "%"
-  case itemData
+    return " " & $chance & "%"
+  case chance
   of 1:
     return "Almost never"
   of 2:
