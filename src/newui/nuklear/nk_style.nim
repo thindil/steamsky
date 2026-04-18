@@ -303,6 +303,16 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.slider.decButton = context.style.slider.incButton
 
   # knob
+  context.style.knob.normal = itemHide()
+  context.style.knob.hover = itemHide()
+  context.style.knob.active = itemHide()
+  context.style.knob.knobNormal = table[knobColor]
+  context.style.knob.knobHover = table[knobColor]
+  context.style.knob.knobActive = table[knobColor]
+  context.style.knob.cursorNormal = table[knobCursorColor]
+  context.style.knob.cursorHover = table[knobCursorHoverColor]
+  context.style.knob.cursorActive = table[knobCursorActiveColor]
+  context.style.knob.knobBorderColor = table[StyleColors.borderColor]
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
