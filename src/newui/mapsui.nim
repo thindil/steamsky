@@ -1160,4 +1160,5 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
         playerShip.speed = halfSpeed
       elif key == mapAccelerators[37]:
         playerShip.speed = fullSpeed
-    key = ""
+    if key != "Alt-":
+      key = ""

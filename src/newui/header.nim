@@ -658,7 +658,8 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
           setDialog()
           setWaitMenu()
           dialog = waitDialog
-    key = ""
+    if key != "Alt-":
+      key = ""
   return showDialogs(dialog = dialog, state = state, oldState = oldState)
 
 proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
