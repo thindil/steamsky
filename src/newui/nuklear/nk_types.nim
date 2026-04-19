@@ -1478,6 +1478,8 @@ type
       cursorNormal*, cursorHover*, cursorActive*: NkColor
     border*, knobBorder*, cursorWidth*, colorFactor*, disabledFactor*: float
     padding*, spacing*: Vec2
+    userData*: Handle
+    drawBegin*, drawEnd*: DrawF
   StyleScrollbar* = object
     ## Used to store Nuklear style data for scrollbar widgets
     normal*, hover*, active*, cursorNormal*, cursorHover*,

@@ -313,6 +313,17 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.knob.cursorHover = table[knobCursorHoverColor]
   context.style.knob.cursorActive = table[knobCursorActiveColor]
   context.style.knob.knobBorderColor = table[StyleColors.borderColor]
+  context.style.knob.border = 1.0
+  context.style.knob.padding = Vec2(x: 2.0, y: 2.0)
+  context.style.knob.spacing = Vec2(x: 2.0, y: 2.0)
+  context.style.knob.cursorWidth = 2
+  context.style.knob.colorFactor = 1.0
+  context.style.knob.disabledFactor = nkWidgetDisabledFactor
+  context.style.knob.userData = Handle(handleType: handleInt, intValue: 0)
+  context.style.knob.drawBegin = nil
+  context.style.knob.drawEnd = nil
+
+  # progressbar
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
