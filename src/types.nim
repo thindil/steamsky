@@ -543,9 +543,9 @@ proc initMobAttributeRecord*(level: range[1..50] = 1;
   ## Returns the new structure with information about the selected attribute
   return MobAttributeRecord(level: level, experience: experience)
 
-typeGetterSetter(baseType = MobAttributeRecord, varName = mob, name = level,
-    typ = range[1..50])
-typeGetterSetter(baseType = MobAttributeRecord, varName = mob,
+typeGetterSetter(baseType = MobAttributeRecord, varName = attribute,
+    name = level, typ = range[1..50])
+typeGetterSetter(baseType = MobAttributeRecord, varName = attribute,
     name = experience, typ = Natural)
 
 type
@@ -555,9 +555,9 @@ type
     ## * index      - The index of the skill
     ## * level      - The level of the skill
     ## * experience - The amount of the experience in the skill
-    index*: Natural = 0
-    level*: SkillRange = 0
-    experience*: Natural = 0
+    index: Natural = 0
+    level: SkillRange = 0
+    experience: Natural = 0
 
 proc initSkillInfo*(index: Natural = 0; level: SkillRange = 0;
     experience: Natural = 0): SkillInfo {.raises: [], tags: [], contractual.} =
@@ -569,6 +569,11 @@ proc initSkillInfo*(index: Natural = 0; level: SkillRange = 0;
   ##
   ## Returns the new structure with information about the selected skill
   return SkillInfo(index: index, level: level, experience: experience)
+
+typeGetterSetter(baseType = SkillInfo, varName = skill, name = index, typ = Natural)
+typeGetterSetter(baseType = SkillInfo, varName = skill, name = level,
+    typ = SkillRange)
+typeGetterSetter(baseType = SkillInfo, varName = skill, name = experience, typ = Natural)
 
 type
   MemberData* = object
