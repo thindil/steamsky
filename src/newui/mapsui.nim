@@ -864,12 +864,12 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   rows = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
         height.float).ceil.Natural
   let colWidth: Positive = try:
-      getTextWidth(text = theme.mapIcons[emptyMapIcon]).Positive + 4
+      getTextWidth(text = theme.mapIcons[emptyMapIcon]).Positive + 6
     except:
       dialog = setError(message = "Can't count map column's width.")
       return
-  cols = (windowWidth / colWidth.float).floor.Positive + 6
-  let mapHeight: float = (((height - 2) * rows) + 5).float
+  cols = (windowWidth / colWidth.float).ceil.Positive
+  let mapHeight: float = (height * rows).float - 10.0
   setLayoutRowDynamic(height = mapHeight, cols = 1)
   group(title = "MapGroup", flags = {windowNoScrollbar}):
     var
