@@ -460,8 +460,8 @@ proc debugAddSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   var skillName: string = tclEval2(script = comboBox & " get")
   for index, skill in skillsList:
     if skill.name == skillName:
-      playerShip.crew[memberIndex].skills.add(y = SkillInfo(index: index,
-          level: 1, experience: 0))
+      playerShip.crew[memberIndex].skills.add(y = initSkillInfo(index = index,
+          level = 1, experience = 0))
       return refreshMemberCommand(clientData = clientData, interp = interp,
           argc = argc, argv = argv)
   return tclOk
