@@ -269,8 +269,8 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
     for skill in memberSkills:
       for index, pSkill in skillsList:
         if pSkill.name == skill.name:
-          playerShip.crew[crewSelected].skills.add(y = SkillInfo(index: index,
-              level: skill.value, experience: 0))
+          playerShip.crew[crewSelected].skills.add(y = initSkillInfo(index = index,
+              level = skill.value, experience = 0))
           break
   labelButton(title = "Add skill"):
     memberSkills.add(y = AttributeData(name: availableSkills[skillSelected],

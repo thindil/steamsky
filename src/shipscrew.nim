@@ -836,8 +836,8 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
       skillExp -= (skillLevel * 25)
       skillLevel.inc
     if skillIndex > -1:
-      playerShip.crew[crewIndex].skills[skillIndex] = SkillInfo(
-          index: skillNumber, level: skillLevel, experience: skillExp)
+      playerShip.crew[crewIndex].skills[skillIndex] = initSkillInfo(
+          index = skillNumber, level = skillLevel, experience = skillExp)
     else:
-      playerShip.crew[crewIndex].skills.add(y = SkillInfo(index: skillNumber,
-          level: skillLevel, experience: skillExp))
+      playerShip.crew[crewIndex].skills.add(y = initSkillInfo(index = skillNumber,
+          level = skillLevel, experience = skillExp))

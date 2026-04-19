@@ -528,8 +528,8 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           level: Natural = skill.attr(name = "level").parseInt
           experience: Natural = (if skill.attr(name = "experience").len >
               0: skill.attr(name = "experience").parseInt else: 0)
-        member.skills.add(y = SkillInfo(index: index, level: level,
-            experience: experience))
+        member.skills.add(y = initSkillInfo(index = index, level = level,
+            experience = experience))
       var priorityIndex: int = 1
       for priority in crew.findAll(tag = "priority"):
         member.orders[priorityIndex] = priority.attr(name = "value").parseInt

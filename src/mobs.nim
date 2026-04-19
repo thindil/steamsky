@@ -70,11 +70,11 @@ proc loadSkills(mobNode: XmlNode; mob: var ProtoMobRecord;
       case skillAction
       of DataAction.add:
         if skillLevel > 0:
-          mob.skills.add(y = SkillInfo(index: skillIndex, level: skillLevel,
-              experience: 0))
+          mob.skills.add(y = initSkillInfo(index = skillIndex, level = skillLevel,
+              experience = 0))
         else:
-          mob.skills.add(y = SkillInfo(index: skillIndex, level: minLevel,
-              experience: maxLevel))
+          mob.skills.add(y = initSkillInfo(index = skillIndex, level = minLevel,
+              experience = maxLevel))
       of DataAction.update:
         for mskill in mob.skills.mitems:
           if mskill.index == skillIndex:
@@ -303,11 +303,11 @@ proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises:
       let skillIndex: int = (if skill.index >
           skillsList.len: faction.weaponSkill else: skill.index)
       if skill.experience == 0:
-        result.skills.add(y = SkillInfo(index: skillIndex, level: skill.level,
-            experience: 0))
+        result.skills.add(y = initSkillInfo(index = skillIndex, level = skill.level,
+            experience = 0))
       else:
-        result.skills.add(y = SkillInfo(index: skillIndex, level: getRandom(
-            min = skill.level, max = skill.experience), experience: 0))
+        result.skills.add(y = initSkillInfo(index = skillIndex, level = getRandom(
+            min = skill.level, max = skill.experience), experience = 0))
       if skillIndex == faction.weaponSkill:
         weaponSkillLevel = result.skills[^1].level
       if result.skills[^1].level > highestSkillLevel:

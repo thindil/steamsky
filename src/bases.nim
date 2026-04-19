@@ -238,10 +238,10 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
           skillIndex = (if skills[index].level < skillLevel: index else: -2)
           break
       if skillIndex == -1:
-        skills.add(y = SkillInfo(index: skillNumber, level: skillLevel,
-            experience: 0))
+        skills.add(y = initSkillInfo(index = skillNumber, level = skillLevel,
+            experience = 0))
       elif skillIndex > -1:
-        skills[skillIndex] = SkillInfo(index: skillNumber, level: skillLevel, experience: 0)
+        skills[skillIndex] = initSkillInfo(index = skillNumber, level = skillLevel, experience = 0)
     for j in 1..attributesList.len:
       attributes.add(y = initMobAttributeRecord(level = getRandom(min = 3, max = (
           maxSkillLevel / 3).int), experience = 0))
