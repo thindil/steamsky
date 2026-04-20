@@ -324,6 +324,20 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.knob.drawEnd = nil
 
   # progressbar
+  context.style.progress.normal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[
+      progressbarBorderColor]))
+  context.style.progress.hover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[sliderColor]))
+  context.style.progress.active = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[sliderColor]))
+  context.style.progress.cursorNormal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[progressbarColor]))
+  context.style.progress.cursorHover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[sliderCursorColor]))
+  context.style.progress.cursorActive = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[sliderCursorColor]))
+
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
