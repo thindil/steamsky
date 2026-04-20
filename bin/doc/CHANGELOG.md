@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Items don't break during usage
+
 ## [12.2] - 2026-04-19
 
 ### Fixed
