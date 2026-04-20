@@ -620,6 +620,27 @@ type
     homeBase*: BasesRange = 1
     faction*: FactionIndex = ""
 
+proc initMemberData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
+    SkillInfo] = @[]; name: MobName = ""; gender: char = 'M';
+    health: SkillRange = 100; tired: range[0..150] = 0; hunger: SkillRange = 0;
+    thirst: SkillRange = 0; order: CrewOrders = rest): MemberData {.raises: [],
+    tags: [], contractual.} =
+  ## Create a new data structure for the crew member of the player's ship
+  ##
+  ## * attributes     - The member's attributes
+  ## * skills         - The member's skills
+  ## * name           - The member's name
+  ## * gender         - The member's gender
+  ## * health         - The member's health points
+  ## * tired          - The member's tiredness level
+  ## * hunger         - The member's hunger level
+  ## * thirst         - The member's thirst level
+  ## * order          - The current order of the member
+  return MemberData(attributes: attributes, skills: skills, name: name,
+      gender: gender, health: health, tired: tired, hunger: hunger,
+      thirst: thirst, order: order)
+
+type
   ShipRecord* = object
     ## Used to store information about ships
     ##
