@@ -264,14 +264,14 @@ proc getItemChanceToDamage*(itemIndex: int): string {.raises: [KeyError],
   var chance: Natural = 0
   if itemIndex < 0:
     var item: BaseCargo = (if baseIndex == 0: traderCargo[baseCargoIndex] else: skyBases[baseIndex].cargo[baseCargoIndex])
-    chance = itemsList[item.protoIndex].breakChance
+    chance = itemsList[item.protoIndex].value[1]
     if item.craftBonus == lessBreakable:
       chance += (chance.float * 0.2).ceil.Natural
     elif item.craftMalus == moreBreakable:
       chance -= (chance.float * 0.2).ceil.Natural
   else:
     var item: InventoryData = playerShip.cargo[cargoIndex]
-    chance = itemsList[item.protoIndex].breakChance
+    chance = itemsList[item.protoIndex].value[1]
     if item.craftBonus == lessBreakable:
       chance += (chance.float * 0.2).ceil.Natural
     elif item.craftMalus == moreBreakable:
