@@ -14,9 +14,10 @@ suite "Unit tests for items module":
       durability = 100, maxDurability = 100, name = "Cargo", weight = 1))
   playerShip.cargo = @[]
   playerShip.cargo.add(y = initInventoryData(protoIndex = 53, amount = 1))
+  playerShip.cargo.add(y = initInventoryData(protoIndex = 106, amount = 1))
   playerShip.crew = @[]
   var member = MemberData(homeBase: 1)
-  const attribute = MobAttributeRecord(level: 1, experience: 0)
+  const attribute = initMobAttributeRecord(level = 3, experience = 0)
   member.attributes = @[attribute, attribute, attribute, attribute]
   member.inventory.add(y = initInventoryData(amount = 1, protoIndex = 1))
   member.inventory.add(y = initInventoryData(amount = 1, protoIndex = 2))
@@ -30,7 +31,6 @@ suite "Unit tests for items module":
       durability = defaultItemDurability, price = 0))
   inventory.add(y = initInventoryData(protoIndex = 67, amount = 1, name = "",
       durability = defaultItemDurability, price = 0))
-
 
   test "Find an existing item":
     check:
@@ -67,23 +67,23 @@ suite "Unit tests for items module":
     check:
       getItemName(item, false) == "New name"
 
-  test "Get chance to damage for 3 as string":
+  test "Get chance to damage for 5 as string":
     gameSettings.showNumbers = false
     check:
-      getItemChanceToDamage(3) == "Small"
+      getItemChanceToDamage(1) == "Below average"
 
-  test "Get chance to damage for 30 as string":
+  test "Get chance to damage for 20 as string":
     check:
-      getItemChanceToDamage(30) == "Very high"
+      getItemChanceToDamage(0) == "Very high"
 
-  test "Get chance to damage for 3 as number":
+  test "Get chance to damage for 5 as number":
     gameSettings.showNumbers = true
     check:
-      getItemChanceToDamage(3) == " 3%"
+      getItemChanceToDamage(1) == " 5%"
 
-  test "Get chance to damage for 30 as number":
+  test "Get chance to damage for 20 as number":
     check:
-      getItemChanceToDamage(30) == " 30%"
+      getItemChanceToDamage(0) == " 20%"
 
   test "Find an existing tool":
     check:
