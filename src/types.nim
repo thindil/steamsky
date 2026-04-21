@@ -468,7 +468,6 @@ type
     ## * durability    - The current durability of the item
     ## * price         - The price for which the item was bought
     ## * quality       - The quality of the item
-    ## * breakChance   - The chance to break the item on use
     ## * craftBonus    - The special crafting bonus for the item
     ## * craftMalus    - The special crafting malus for the item
     protoIndex: Natural = 0
@@ -477,14 +476,13 @@ type
     durability: ItemsDurability = 100
     price: Natural = 0
     quality: ObjectQuality = normal
-    breakChance: ExtendedNatural = -1
     craftBonus: CraftBonuses = CraftBonuses.none
     craftMalus: CraftMaluses = CraftMaluses.none
 
 proc initInventoryData*(protoIndex: Natural; amount: Positive;
     name: ObjectName = ""; durability: ItemsDurability = 100;
         price: Natural = 0;
-    quality: ObjectQuality = normal; breakChance: ExtendedNatural = -1;
+    quality: ObjectQuality = normal;
     craftBonus: CraftBonuses = none;
     craftMalus: CraftMaluses = CraftMaluses.none): InventoryData {.raises: [],
     tags: [], contractual.} =
@@ -496,14 +494,13 @@ proc initInventoryData*(protoIndex: Natural; amount: Positive;
   ## * durability    - The current durability of the item
   ## * price         - The price for which the item was bought
   ## * quality       - The quality of the item
-  ## * breakChance   - The chance to break the item on use
   ## * craftBonus    - The special crafting bonus for the item
   ## * craftMalus    - The special crafting malus for the item
   ##
   ## Returns the new structure with information about the selected item
   return InventoryData(protoIndex: protoIndex, amount: amount, name: name,
       durability: durability, price: price,
-      quality: quality, breakChance: breakChance, craftBonus: craftBonus,
+      quality: quality, craftBonus: craftBonus,
       craftMalus: craftMalus)
 
 typeGetterSetter(baseType = InventoryData, varName = item, name = protoIndex, typ = Natural)
@@ -516,8 +513,6 @@ typeGetterSetter(baseType = InventoryData, varName = item, name = durability,
 typeGetterSetter(baseType = InventoryData, varName = item, name = price, typ = Natural)
 typeGetterSetter(baseType = InventoryData, varName = item, name = quality,
     typ = ObjectQuality)
-typeGetterSetter(baseType = InventoryData, varName = item, name = breakChance,
-    typ = ExtendedNatural)
 typeGetterSetter(baseType = InventoryData, varName = item, name = craftBonus,
     typ = CraftBonuses)
 typeGetterSetter(baseType = InventoryData, varName = item, name = craftMalus,
@@ -762,7 +757,6 @@ type
     ## * showType    - The item's type to show to the player instead of the itemType
     ## * description - The description of the item
     ## * reputation  - The minumal reputation which is needed to buy that item
-    ## * breakChance - The chance to break the item on use
     name*: ObjectName
     weight*: Positive
     itemType*: string
@@ -771,7 +765,6 @@ type
     showType*: string
     description*: string
     reputation*: ReputationRange
-    breakChance*: Natural
 
   RecruitItem* = object
     ## Used to store information about a recruit's inventory
@@ -813,14 +806,12 @@ type
     ## * durability    - The current durability of the item
     ## * price         - The price for which the item was bought
     ## * quality       - The quality of the item
-    ## * breakChance   - The chance to break the item on use
     ## * craftFeature  - The special feature of the item set during crafting it
     protoIndex*: Natural
     amount*: Natural
     durability*: ItemsDurability = 100
     price*: Natural
     quality*: ObjectQuality = normal
-    breakChance*: ExtendedNatural = -1
     craftBonus*: CraftBonuses = CraftBonuses.none
     craftMalus*: CraftMaluses = CraftMaluses.none
 
