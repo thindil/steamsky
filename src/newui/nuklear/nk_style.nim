@@ -337,6 +337,20 @@ proc nkStyleFromTable*(table: array[StyleColors,
       data: StyleItemData(itype: itemColor, color: table[sliderCursorColor]))
   context.style.progress.cursorActive = StyleItem(iType: itemColor,
       data: StyleItemData(itype: itemColor, color: table[sliderCursorColor]))
+  context.style.progress.borderColor = NkColor(r: 0, g: 0, b: 0, a: 0)
+  context.style.progress.cursorBorderColor = NkColor(r: 0, g: 0, b: 0, a: 0)
+  context.style.progress.userData = Handle(handleType: handleInt, intValue: 0)
+  context.style.progress.padding = Vec2(x: 4.0, y: 4.0)
+  context.style.progress.rounding = 0.0
+  context.style.progress.border = 0.0
+  context.style.progress.cursorRounding = 0.0
+  context.style.progress.cursorBorder = 0.0
+  context.style.progress.colorFactor = 1.0
+  context.style.progress.disabledFactor = nkWidgetDisabledFactor
+  context.style.progress.drawBegin = nil
+  context.style.progress.drawEnd = nil
+
+  # scrollbars
 
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
