@@ -623,8 +623,13 @@ type
 proc initMemberData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
     SkillInfo] = @[]; name: MobName = ""; gender: char = 'M';
     health: SkillRange = 100; tired: range[0..150] = 0; hunger: SkillRange = 0;
-    thirst: SkillRange = 0; order: CrewOrders = rest): MemberData {.raises: [],
-    tags: [], contractual.} =
+    thirst: SkillRange = 0; order: CrewOrders = rest;
+    previousOrder: CrewOrders = rest; orderTime: int = 15; orders: array[1..12,
+    Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; inventory: seq[
+    InventoryData] = @[]; equipment: EquipmentArray = [-1, -1, -1, -1, -1, -1,
+    -1]; payment: AttributesArray = [0, 0];
+    contractLength: int = -1): MemberData {.raises: [], tags: [],
+    contractual.} =
   ## Create a new data structure for the crew member of the player's ship
   ##
   ## * attributes     - The member's attributes
@@ -636,9 +641,18 @@ proc initMemberData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
   ## * hunger         - The member's hunger level
   ## * thirst         - The member's thirst level
   ## * order          - The current order of the member
+  ## * previousOrder  - The previous order of the member
+  ## * orderTime      - The amount of minutes to next check in the order
+  ## * orders         - The orders priorities for the member
+  ## * inventory      - The inventory of the member
+  ## * equipment      - The equipment of the member
+  ## * payment        - The payment information for the member
+  ## * contractLength - The length of the contract with the member
   return MemberData(attributes: attributes, skills: skills, name: name,
       gender: gender, health: health, tired: tired, hunger: hunger,
-      thirst: thirst, order: order)
+      thirst: thirst, order: order, previousOrder: previousOrder,
+      orderTime: orderTime, orders: orders, inventory: inventory,
+      equipment: equipment, payment: payment, contractLength: contractLength)
 
 type
   ShipRecord* = object
