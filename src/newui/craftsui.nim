@@ -61,7 +61,7 @@ proc setBonuses(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for bonus in {CraftBonuses.none..CraftBonuses.moreDurable}:
     bonuses.add(y = $bonus)
   try:
-    if itemsList[craft.resultIndex].breakChance > 0:
+    if itemsList[craft.resultIndex].value[1] > 0:
       bonuses.add(y = $CraftBonuses.lessBreakable)
   except KeyError:
     dialog = setError(message = "Can't set bonuses list")
@@ -78,7 +78,7 @@ proc setMaluses(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for malus in {CraftMaluses.none..CraftMaluses.lessDurable}:
     maluses.add(y = $malus)
   try:
-    if itemsList[craft.resultIndex].breakChance > 0:
+    if itemsList[craft.resultIndex].value[1] > 0:
       maluses.add(y = $CraftMaluses.moreBreakable)
   except KeyError:
     dialog = setError(message = "Can't set maluses list")
@@ -323,7 +323,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
             continue
           maluses.add(y = $malus)
         try:
-          if itemsList[craft.resultIndex].breakChance > 0 and newBonus !=
+          if itemsList[craft.resultIndex].value[1] > 0 and newBonus !=
               CraftBonuses.lessBreakable.ord:
             maluses.add(y = $CraftMaluses.moreBreakable)
         except KeyError:
@@ -345,7 +345,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
             continue
           bonuses.add(y = $bonus)
         try:
-          if itemsList[craft.resultIndex].breakChance > 0 and newMalus !=
+          if itemsList[craft.resultIndex].value[1] > 0 and newMalus !=
               CraftMaluses.moreBreakable.ord:
             bonuses.add(y = $CraftBonuses.lessBreakable)
         except KeyError:

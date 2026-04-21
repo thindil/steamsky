@@ -240,8 +240,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
   if item.amount > 1:
     inventory.add(y = initInventoryData(protoIndex = item.protoIndex,
         amount = item.amount - 1, name = item.name, durability = item.durability,
-        price = item.price, quality = item.quality,
-        breakChance = item.breakChance))
+        price = item.price, quality = item.quality))
     item.amount = 1
   if item.durability > ItemsDurability.low:
     {.ruleOff: "assignments".}

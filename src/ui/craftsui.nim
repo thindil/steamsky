@@ -658,7 +658,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
           itemsList[recipeIndex.parseInt]
         except ValueError:
           return showError(message = "Can't get proto item")
-    if protoItem.breakChance > 0:
+    if protoItem.value[1] > 0:
       specialValues &= " {" & $CraftBonuses.lessBreakable & "}"
     tclEval(script = specialBox & " configure -values [list" & specialValues & "]")
     tclEval(script = specialBox & " current 0")
@@ -671,7 +671,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     specialBox = specialFrame & ".special2"
     tclEval(script = "ttk::combobox " & specialBox & " -state readonly -width 10")
     specialValues = " {None} {" & $CraftMaluses.heavier & "} {" & $CraftMaluses.lessDurable & "}"
-    if protoItem.breakChance > 0:
+    if protoItem.value[1] > 0:
       specialValues &= " {" & $CraftMaluses.moreBreakable & "}"
     tclEval(script = specialBox & " configure -values [list" & specialValues & "]")
     tclEval(script = specialBox & " current 0")
