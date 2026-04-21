@@ -22,11 +22,11 @@ suite "Unit tests for shipscargo module":
   playerShip.crew = @[]
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1,
-      1, 1, 0, 0], order: talk, loyalty: 100, skills: @[SkillInfo(index: 4,
-      level: 4, experience: 0)], attributes: @[MobAttributeRecord(level: 3,
-      experience: 0), MobAttributeRecord(level: 3, experience: 0),
-      MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
-      experience: 0)], health: 100))
+      1, 1, 0, 0], order: talk, loyalty: 100, skills: @[initSkillInfo(index = 4,
+      level = 4, experience = 0)], attributes: @[initMobAttributeRecord(level = 3,
+      experience = 0), initMobAttributeRecord(level = 3, experience = 0),
+      initMobAttributeRecord(level = 3, experience = 0), initMobAttributeRecord(level = 3,
+      experience = 0)], health: 100))
 
   test "Remove an item from the player's ship cargo":
     updateCargo(playerShip, 1, -1, quality = normal, craftBonus = none,
