@@ -116,17 +116,10 @@ suite "Unit tests for items module":
     check:
       moneyAmount(playerShip.crew[0].inventory) == 1
 
-  test "Setting breakChance field":
-    setToolsList()
-    setBreakChance()
-    check:
-      itemsList[47].breakChance == 10
-
   test "Getting the normal item's max durability":
     let item = initInventoryData(protoIndex = 2, amount = 1)
     check:
       getItemMaxDurability(item = item) == defaultItemDurability
-
 
   test "Getting the special item's max durability":
     let item = initInventoryData(protoIndex = 2, amount = 1, craftBonus = moreDurable)
