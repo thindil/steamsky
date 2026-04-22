@@ -622,8 +622,10 @@ proc initMemberData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
     previousOrder: CrewOrders = rest; orderTime: int = 15; orders: array[1..12,
     Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; inventory: seq[
     InventoryData] = @[]; equipment: EquipmentArray = [-1, -1, -1, -1, -1, -1,
-    -1]; payment: AttributesArray = [0, 0];
-    contractLength: int = -1): MemberData {.raises: [], tags: [],
+    -1]; payment: AttributesArray = [0, 0]; contractLength: int = -1;
+    morale: AttributesArray = [0, 0]; loyalty: SkillRange = 100;
+    homeBase: BasesRange = 1;
+    faction: FactionIndex = ""): MemberData {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for the crew member of the player's ship
   ##
@@ -643,11 +645,16 @@ proc initMemberData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
   ## * equipment      - The equipment of the member
   ## * payment        - The payment information for the member
   ## * contractLength - The length of the contract with the member
+  ## * morale         - The morale information for the member
+  ## * loyalty        - The loyalty level of the member
+  ## * homeBase       - The index of the home base
+  ## * faction        - The faction index to which the member belongs
   return MemberData(attributes: attributes, skills: skills, name: name,
       gender: gender, health: health, tired: tired, hunger: hunger,
       thirst: thirst, order: order, previousOrder: previousOrder,
       orderTime: orderTime, orders: orders, inventory: inventory,
-      equipment: equipment, payment: payment, contractLength: contractLength)
+      equipment: equipment, payment: payment, contractLength: contractLength,
+      morale: morale, loyalty: loyalty, homeBase: homeBase, faction: faction)
 
 type
   ShipRecord* = object
