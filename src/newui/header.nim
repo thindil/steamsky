@@ -285,8 +285,10 @@ proc showShipInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   ## Returns the modified parameters dialog and state.
   if state == shipInfo:
     state = previousState
+    previousState = emptyState
   else:
-    previousState = state
+    if previousState == emptyState:
+      previousState = state
     setShipInfo(dialog = dialog)
     state = shipInfo
     mapPreview = false
@@ -302,8 +304,10 @@ proc showCraftScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
   ## Returns the modified parameters dialog and state.
   if state == crafting:
     state = previousState
+    previousState = emptyState
   else:
-    previousState = state
+    if previousState == emptyState:
+      previousState = state
     setCrafting(dialog = dialog)
     state = crafting
     mapPreview = false
@@ -319,8 +323,10 @@ proc showLastMessagesScreen(dialog: var GameDialog;
   ## Returns the modified parameters dialog and state.
   if state == lastMessages:
     state = previousState
+    previousState = emptyState
   else:
-    previousState = state
+    if previousState == emptyState:
+      previousState = state
     state = lastMessages
     mapPreview = false
   dialog = none
@@ -335,8 +341,10 @@ proc showKnowledgeScreen(dialog: var GameDialog;
   ## Returns the modified parameters dialog and state.
   if state == knowledgeLists:
     state = previousState
+    previousState = emptyState
   else:
-    previousState = state
+    if previousState == emptyState:
+      previousState = state
     setKnowledge(dialog = dialog)
     state = knowledgeLists
     mapPreview = false
@@ -352,8 +360,10 @@ proc showStatsScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
   ## Returns the modified parameters dialog and state.
   if state == gameStatistics:
     state = previousState
+    previousState = emptyState
   else:
-    previousState = state
+    if previousState == emptyState:
+      previousState = state
     setStatistics(dialog = dialog)
     state = gameStatistics
     mapPreview = false
@@ -369,8 +379,10 @@ proc showHelpScreen(dialog: var GameDialog; state: var GameState) {.raises: [],
   ## Returns the modified parameters dialog and state.
   if state == help:
     state = previousState
+    previousState = emptyState
   else:
-    previousState = state
+    if previousState == emptyState:
+      previousState = state
     case state
     of crafting:
       setHelp(dialog = dialog, helpIndex = 6)
@@ -398,8 +410,10 @@ proc showOptionsScreen(dialog: var GameDialog; state: var GameState) {.raises: [
   ## Returns the modified parameters dialog and state.
   if state == options:
     state = previousState
+    previousState = emptyState
   else:
-    previousState = state
+    if previousState == emptyState:
+      previousState = state
     setOptions()
     state = options
     mapPreview = false
