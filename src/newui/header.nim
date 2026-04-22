@@ -198,6 +198,9 @@ type
     ## Destination for the close button in the header
     none, combat, map, previous
 
+var expandedSection*: Natural = 0
+    ## Expanded section in some screens, like ship info or knowledge screens
+
 proc showDialogs(dialog: var GameDialog; state: var GameState;
     oldState: GameState): bool {.raises: [], tags: [RootEffect], contractual.} =
   ## Show various in-game dialogs
@@ -259,6 +262,7 @@ proc closeScreen(close: CloseDestination; state: var GameState;
   ## Returns the modified parameters state and dialog. The later is modified
   ## only when an error happened.
   showOptions = false
+  expandedSection = 0
   case close
   of combat:
     state = combat
@@ -402,10 +406,6 @@ proc showOptionsScreen(dialog: var GameDialog; state: var GameState) {.raises: [
   dialog = none
 
 var key: string = ""
-
-var
-  expandedSection*: Natural = 0
-    ## Expanded section in some screens, like ship info or knowledge screens
 
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     state: var GameState; options: bool = false): bool {.raises: [], tags: [
