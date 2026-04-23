@@ -15,14 +15,14 @@ suite "Unit tests for crew module":
   playerShip.skyY = 1
   const attribute = initMobAttributeRecord(level = 3, experience = 0)
   playerShip.crew = @[]
-  playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
-      homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
-      1, 0, 0], order: talk, loyalty: 100, skills: @[initSkillInfo(index = 4, level = 4,
-      experience = 0)], attributes: @[attribute, attribute, attribute, attribute], name: "Laeran"))
+  playerShip.crew.add(initMemberData(morale = [1: 50.Natural, 2: 0.Natural],
+      homeBase = 1, faction = "POLEIS", orders = [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
+      1, 0, 0], order = talk, loyalty = 100, skills = @[initSkillInfo(index = 4, level = 4,
+      experience = 0)], attributes = @[attribute, attribute, attribute, attribute], name = "Laeran"))
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
       1, 0, 0], order: gunner, loyalty: 100, skills: @[initSkillInfo(index = 4, level = 4,
-      experience = 0)], attributes: @[attribute, attribute, attribute]))
+      experience = 0)], attributes: @[attribute, attribute, attribute, attribute]))
   playerShip.modules = @[]
   playerShip.modules.add(y = initModuleData(mType = ModuleType2.cabin, protoIndex = 4,
       durability = 100, owner = @[0], name = "Cabin", maxDurability = 100, weight = 1))
