@@ -61,7 +61,8 @@ proc checkForOpenSpaceEvents(roll: Positive): bool {.raises: [KeyError, IOError,
         let engineIndex: Natural = engines[getRandom(min = 0,
             max = engines.high)]
         {.ruleOff: "assignments".}
-        playerShip.modules[engineIndex].durability = playerShip.modules[engineIndex].durability - 1
+        playerShip.modules[engineIndex].durability = playerShip.modules[
+            engineIndex].durability - 1
         {.ruleOn: "assignments".}
         updateOrders(ship = playerShip)
       else:
@@ -161,7 +162,10 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
         var injuries: Positive = getRandom(min = 1, max = 10)
         if injuries > playerShip.crew[restingCrew[roll2]].health:
           injuries = playerShip.crew[restingCrew[roll2]].health
-        playerShip.crew[restingCrew[roll2]].health -= injuries
+        {.ruleOff: "assignments".}
+        playerShip.crew[restingCrew[roll2]].health = playerShip.crew[
+            restingCrew[roll2]].health - injuries
+        {.ruleOn: "assignments".}
         addMessage(message = playerShip.crew[restingCrew[roll2]].name &
             " was injured in a brawl inside the base", mType = otherMessage, color = red)
         if playerShip.crew[restingCrew[roll2]].health == 0:

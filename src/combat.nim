@@ -474,10 +474,12 @@ proc characterAttack(attackerIndex2, defenderIndex2: Natural; playerAttack,
     defender.health = if damage > defender.health: 0 else: defender.health - damage
   addMessage(message = attackMessage, mType = combatMessage,
       color = messageColor)
+  {.ruleOff: "assignments".}
   if attacker.tired + 1 <= SkillRange.high:
-    attacker.tired.inc
+    attacker.tired = attacker.tired + 1
   if defender.tired + 1 <= SkillRange.high:
-    defender.tired.inc
+    defender.tired = defender.tired + 1
+  {.ruleOn: "assignments".}
   if playerAttack2:
     playerShip.crew[attackerIndex2] = attacker
     game.enemy.ship.crew[defenderIndex2] = defender

@@ -197,14 +197,15 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
     for j in 1 .. attributesList.len:
       attributes.add(y = initMobAttributeRecord(level = getRandom(min = 3,
           max = maxAttributeLevel), experience = 0))
-    playerShip.crew.add(y = MemberData(name: generateMemberName(gender = gender,
-        factionIndex = skyBases[passengerBase].owner), gender: gender,
-        health: 100, tired: 100, skills: @[], hunger: 0, thirst: 0, order: rest,
-        previousOrder: rest, orderTime: 15, orders: [0.Natural, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0], attributes: attributes, inventory: @[], equipment: [
-        -1, -1, -1, -1, -1, -1, -1], payment: [1: 0.Natural, 2: 0],
-        contractLength: mission.time, morale: [1: morale.Natural, 2: 0],
-        loyalty: morale, homeBase: passengerBase, faction: skyBases[
+    let equipment: EquipmentArray = [-1, -1, -1, -1, -1, -1, -1]
+    playerShip.crew.add(y = initMemberData(name = generateMemberName(gender = gender,
+        factionIndex = skyBases[passengerBase].owner), gender = gender,
+        health = 100, tired = 100, skills = @[], hunger = 0, thirst = 0, order = rest,
+        previousOrder = rest, orderTime = 15, orders = [0.Natural, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0], attributes = attributes, inventory = @[],
+        equipment = equipment, payment = [1: 0.Natural, 2: 0],
+        contractLength = mission.time, morale = [1: morale.Natural, 2: 0],
+        loyalty = morale, homeBase = passengerBase, faction = skyBases[
         passengerBase].owner))
     for module in playerShip.modules.mitems:
       if module.mType == ModuleType2.cabin and module.quality >=

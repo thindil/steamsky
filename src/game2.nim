@@ -296,14 +296,15 @@ proc createPlayerShip(randomBase: Positive;
       tmpInventory.add(y = initInventoryData(protoIndex = item.protoIndex,
           amount = amount, name = "", durability = defaultItemDurability, price = 0))
     {.warning[UnsafeSetLen]: off.}
-    playerShip.crew.insert(item = MemberData(name: newGameSettings.playerName,
-        gender: newGameSettings.playerGender, health: 100, tired: 0,
-        skills: protoPlayer.skills, hunger: 0, thirst: 0,
-        order: protoPlayer.order, previousOrder: rest, orderTime: 15,
-        orders: protoPlayer.priorities, attributes: protoPlayer.attributes,
-        inventory: tmpInventory, equipment: protoPlayer.equipment, payment: [0,
-        0], contractLength: -1, morale: [1: playerMorale, 2: 0], loyalty: 100,
-        homeBase: randomBase, faction: newGameSettings.playerFaction), i = 0)
+    let payment: AttributesArray = [0, 0]
+    playerShip.crew.insert(item = initMemberData(name = newGameSettings.playerName,
+        gender = newGameSettings.playerGender, health = 100, tired = 0,
+        skills = protoPlayer.skills, hunger = 0, thirst = 0,
+        order = protoPlayer.order, previousOrder = rest, orderTime = 15,
+        orders = protoPlayer.priorities, attributes = protoPlayer.attributes,
+        inventory = tmpInventory, equipment = protoPlayer.equipment, payment = payment,
+        contractLength = -1, morale = [1: playerMorale, 2: 0], loyalty = 100,
+        homeBase = randomBase, faction = newGameSettings.playerFaction), i = 0)
     {.warning[UnsafeSetLen]: on.}
     var cabinAssigned: bool = false
     for module in playerShip.modules.mitems:
