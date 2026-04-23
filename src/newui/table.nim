@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -158,7 +158,7 @@ proc addProgressBar*(tooltip: string; value, maxValue, data: int;
   changeStyle(field = progressbar, color = theme.colors[color]):
     progressBar(value = val, maxValue = maxValue, modifyable = false)
   if mouseClicked(id = (if gameSettings.rightButton: Buttons.right else: left),
-      rect = bounds):
+      rect = bounds) and windowHasFocus():
     code(data = data, dialog = dialog)
 
 proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [],
