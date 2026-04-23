@@ -653,13 +653,15 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ttk::frame " & specialFrame)
     var specialBox: string = specialFrame & ".special1"
     tclEval(script = "ttk::combobox " & specialBox & " -state readonly -width 10")
-    var specialValues: string = " {None} {" & $CraftBonuses.lighter & "} {" & $CraftBonuses.moreDurable & "}"
+    var specialValues: string = " {None} {" & $CraftBonuses.lighter & "} {" &
+        $CraftBonuses.moreDurable & "}"
     let protoItem: ObjectData = try:
           itemsList[recipeIndex.parseInt]
         except ValueError:
           return showError(message = "Can't get proto item")
     if protoItem.value[1] > 0:
-      specialValues &= " {" & $CraftBonuses.lessBreakable & "}"
+      specialValues &= " {" & $CraftBonuses.lessBreakable & "} {" &
+          $CraftBonuses.moreEffective & "}"
     tclEval(script = specialBox & " configure -values [list" & specialValues & "]")
     tclEval(script = specialBox & " current 0")
     tclEval(script = "bind " & specialBox & " <<ComboboxSelected>> {SetMaluses}")
@@ -670,9 +672,11 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid " & label & " -padx 5 -row 0 -column 1")
     specialBox = specialFrame & ".special2"
     tclEval(script = "ttk::combobox " & specialBox & " -state readonly -width 10")
-    specialValues = " {None} {" & $CraftMaluses.heavier & "} {" & $CraftMaluses.lessDurable & "}"
+    specialValues = " {None} {" & $CraftMaluses.heavier & "} {" &
+        $CraftMaluses.lessDurable & "}"
     if protoItem.value[1] > 0:
-      specialValues &= " {" & $CraftMaluses.moreBreakable & "}"
+      specialValues &= " {" & $CraftMaluses.moreBreakable & "} {" &
+          $CraftMaluses.lessEffective & "}"
     tclEval(script = specialBox & " configure -values [list" & specialValues & "]")
     tclEval(script = specialBox & " current 0")
     tclEval(script = "bind " & specialBox & " <<ComboboxSelected>> {SetBonuses}")

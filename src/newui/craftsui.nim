@@ -63,6 +63,7 @@ proc setBonuses(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   try:
     if itemsList[craft.resultIndex].value[1] > 0:
       bonuses.add(y = $CraftBonuses.lessBreakable)
+      bonuses.add(y = $CraftBonuses.moreEffective)
   except KeyError:
     dialog = setError(message = "Can't set bonuses list")
 
@@ -80,6 +81,7 @@ proc setMaluses(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   try:
     if itemsList[craft.resultIndex].value[1] > 0:
       maluses.add(y = $CraftMaluses.moreBreakable)
+      maluses.add(y = $CraftMaluses.lessEffective)
   except KeyError:
     dialog = setError(message = "Can't set maluses list")
 
