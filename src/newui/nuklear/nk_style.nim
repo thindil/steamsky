@@ -365,6 +365,13 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.scrollH.cursorActive = StyleItem(iType: itemColor,
       data: StyleItemData(itype: itemColor, color: table[
       scrollbarCursorActiveColor]))
+  context.style.scrollH.decSymbol = circleSolid
+  context.style.scrollH.incSymbol = circleSolid
+  context.style.scrollH.userData = Handle(handleType: handleInt, intValue: 0)
+  context.style.scrollH.borderColor = table[scrollbarColor]
+  context.style.scrollH.cursorBorderColor = table[scrollbarColor]
+  context.style.scrollH.padding = Vec2(x: 0.0, y: 0.0)
+  context.style.scrollH.showButtons = false
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting

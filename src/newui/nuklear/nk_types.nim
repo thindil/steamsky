@@ -1487,7 +1487,7 @@ type
     borderColor*, cursorBorderColor*: NkColor
     border*, rounding*, borderCursor*, colorFactor*, disabledFactor*: float
     padding*: Vec2
-    showButtons: int
+    showButtons*: bool
     incButton*, decButton*: StyleButton
     incSymbol*, decSymbol*: SymbolType
     userData*: Handle
