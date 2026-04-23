@@ -280,7 +280,9 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
               if member.health + healAmount > SkillRange.high:
                 member.health = SkillRange.high
               else:
-                member.health += healAmount
+                {.ruleOff: "assignments".}
+                member.health = member.health + healAmount
+                {.ruleOn: "assignments".}
               addMessage(message = playerShip.crew[memberIndex].name &
                   " healed " & member.name & " a bit.", mType = orderMessage)
               gainExp(amount = times, skillNumber = faction.healingSkill,
