@@ -598,10 +598,10 @@ type
     ## * faction        - The faction index to which the member belongs
     attributes*: seq[MobAttributeRecord] = @[]
     skills*: seq[SkillInfo] = @[]
-    name*: MobName = ""
-    gender*: char = 'M'
-    health*: SkillRange = 100
-    tired*: range[0..150] = 0
+    name: MobName = ""
+    gender: char = 'M'
+    health: SkillRange = 100
+    tired: range[0..150] = 0
     hunger*: SkillRange = 0
     thirst*: SkillRange = 0
     order*: CrewOrders = rest
@@ -657,6 +657,11 @@ proc initMemberData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
       orderTime: orderTime, orders: orders, inventory: inventory,
       equipment: equipment, payment: payment, contractLength: contractLength,
       morale: morale, loyalty: loyalty, homeBase: homeBase, faction: faction)
+
+typeGetterSetter(baseType = MemberData, varName = member, name = name, typ = MobName)
+typeGetterSetter(baseType = MemberData, varName = member, name = gender, typ = char)
+typeGetterSetter(baseType = MemberData, varName = member, name = health, typ = SkillRange)
+typeGetterSetter(baseType = MemberData, varName = member, name = tired, typ = range[0..150])
 
 type
   ShipRecord* = object
