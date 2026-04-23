@@ -21,14 +21,12 @@ suite "Unit tests for shipsrepairs module":
       durability = 100))
   playerShip.cargo.add(y = initInventoryData(protoIndex = 5, amount = 100,
       durability = 100))
+  const attribute = initMobAttributeRecord(level = 3, experience = 0)
   playerShip.crew = @[]
-  playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
-      homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1,
-      1, 1, 0, 0], order: repair, loyalty: 100, skills: @[initSkillInfo(index = 4,
-      level = 4, experience = 0)], attributes: @[initMobAttributeRecord(level = 3,
-      experience = 0), initMobAttributeRecord(level = 3, experience = 0),
-      initMobAttributeRecord(level = 3, experience = 0), initMobAttributeRecord(level = 3,
-      experience = 0)], equipment: [-1, -1, -1, -1, -1, -1, -1]))
+  playerShip.crew.add(y = initMemberData(morale = [1: 50.Natural, 2: 0.Natural],
+      homeBase = 1, faction = "POLEIS", orders = [0.Natural, 0, 0, 1, 1, 1, 2, 1,
+      1, 1, 0, 0], order = repair, loyalty = 100, skills = @[initSkillInfo(index = 4,
+      level = 4, experience = 0)], attributes = @[attribute, attribute, attribute, attribute]))
   playerShip.crew[0].equipment[EquipmentLocations.tool] = -1
 
   test "Repairing the player's ship.":
