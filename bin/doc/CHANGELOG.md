@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typos in messages about lack of crew members on duty
+- Studying an item teach all recipes
 
 ## [12.0] - 2026-02-22
 
