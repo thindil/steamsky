@@ -709,8 +709,8 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
               crafterIndex = crafterIndex, quality = quality):
             break
         else:
-          for key, recipe in recipesList:
-            if recipe.resultIndex == recipe.resultIndex:
+          for key, recipe2 in recipesList:
+            if recipe2.resultIndex == recipe.resultIndex:
               knownRecipes.add(y = key)
         if module.craftingAmount == 0:
           break
