@@ -249,14 +249,14 @@ proc getItemChanceToDamage*(itemIndex: int): string {.raises: [KeyError],
   ##
   ## Returns the string with textual value for the selected numerical chance for damage
   ## or numerical value if the proper setting of the game is enabled
-  var baseCargoIndex, cargoIndex: int = -1
+  var baseCargoIndex, cargoIndex: ExtendedNatural = -1
   if itemIndex < 0:
     baseCargoIndex = itemIndex.abs
   else:
     cargoIndex = itemIndex
   if cargoIndex > playerShip.cargo.high:
     return ""
-  let baseIndex: int = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if baseIndex == 0 and baseCargoIndex > traderCargo.high:
     return ""
   elif baseIndex > 0 and baseCargoIndex > skyBases[baseIndex].cargo.high:
