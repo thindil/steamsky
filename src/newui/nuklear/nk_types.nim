@@ -1485,7 +1485,8 @@ type
     normal*, hover*, active*, cursorNormal*, cursorHover*,
       cursorActive*: StyleItem
     borderColor*, cursorBorderColor*: NkColor
-    border*, rounding*, borderCursor*, colorFactor*, disabledFactor*: float
+    border*, rounding*, borderCursor*, colorFactor*, disabledFactor*,
+      roundingCursor*: float
     padding*: Vec2
     showButtons*: bool
     incButton*, decButton*: StyleButton

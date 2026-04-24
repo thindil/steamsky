@@ -372,6 +372,10 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.scrollH.cursorBorderColor = table[scrollbarColor]
   context.style.scrollH.padding = Vec2(x: 0.0, y: 0.0)
   context.style.scrollH.showButtons = false
+  context.style.scrollH.border = 0.0
+  context.style.scrollH.rounding = 0.0
+  context.style.scrollH.borderCursor = 0.0
+  context.style.scrollH.roundingCursor = 0.0
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
