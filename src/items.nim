@@ -297,6 +297,24 @@ proc getItemChanceToDamage*(itemIndex: int): string {.raises: [KeyError],
   else:
     return "Very high"
 
+proc getItemQuality*(item: InventoryData): ObjectQuality {.raises: [], tags: [],
+    contractual.} =
+  ## Get the quality of the selected item based on its quality and special
+  ## features
+  ##
+  ## * item - the item which quality will be get
+  ##
+  ## Returns the quality of the item
+  if item.craftBonus == moreEffective:
+    if item.quality == excellent:
+      return item.quality
+    return (item.quality.ord + 1).ObjectQuality
+  if item.craftMalus == lessEffective:
+    if item.quality == poor:
+      return item.quality
+    return (item.quality.ord - 1).ObjectQuality
+  return item.quality
+
 proc setToolsList*() {.raises: [], tags: [], contractual.} =
   ## Set the list of all available tools in the game
   ensure:
