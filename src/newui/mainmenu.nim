@@ -94,14 +94,19 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
   layoutSpaceStatic(height = 90, widgetsCount = 1):
     row(x = 50, y = 0, w = 500, h = 90):
       image(image = menuImages[0])
-  setLayoutRowDynamic(height = 40, cols = 1)
+  let height: float = gameSettings.interfaceFontSize.float + 26
+  setLayoutRowDynamic(height = height, cols = 1)
   label(str = gameVersion & " development", alignment = centered)
-  layoutSpaceStatic(height = 240, widgetsCount = 6):
+  var menuHeight: float = 4.0 * height
+  if showLoadButton:
+    menuHeight += height
+  if showHoFButton:
+    menuHeight += height
+  layoutSpaceStatic(height = menuHeight, widgetsCount = 6):
     const
       x: float = 225
       w: float = 150
-      h: float = 40
-    row(x = x, y = 0, w = w, h = h):
+    row(x = x, y = 0, w = w, h = height):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Set and start a new game")
@@ -109,10 +114,10 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = newGame
         dialog = none
         return
-    var y: float = h;
+    var y: float = height;
     if showLoadButton:
-      row(x = x, y = y, w = w, h = h):
-        y += h
+      row(x = x, y = y, w = w, h = height):
+        y += height
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "Load one of the previously saved games")
@@ -120,32 +125,31 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
           state = loadGame
           return
     if showHoFButton:
-      row(x = x, y = y, w = w, h = h):
-        y += h
+      row(x = x, y = y, w = w, h = height):
+        y += height
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "Show your previous the bests scores in the game")
         labelButton(title = "Hall of Fame"):
           state = hallOfFame
           return
-    row(x = x, y = y, w = w, h = h):
-      y += h
+    row(x = x, y = y, w = w, h = height):
+      y += height
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "The list of changes to the game")
       labelButton(title = "News"):
         state = news
         return
-    row(x = x, y = y, w = w, h = h):
-      y += h
+    row(x = x, y = y, w = w, h = height):
+      y += height
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "General information about the game")
       labelButton(title = "About"):
         state = about
         return
-    row(x = x, y = y, w = w, h = h):
-      y += h
+    row(x = x, y = y, w = w, h = height):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Quit from the game")
       labelButton(title = "Quit"):
