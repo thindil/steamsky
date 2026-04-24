@@ -20,7 +20,8 @@
 
 import std/[logging, math, paths, strutils, tables, xmlparser, xmltree]
 import contracts, nimalyzer
-import config, crewinventory, game, log, maps, messages, shipscargo, shipscrew, types, utils
+import config, crewinventory, game, log, maps, messages, shipscargo, shipscrew,
+    types, utils
 
 var
   weaponsList*: seq[Positive] = @[]
@@ -256,14 +257,16 @@ proc getItemChanceToDamage*(itemIndex: int): string {.raises: [KeyError],
     cargoIndex = itemIndex
   if cargoIndex > playerShip.cargo.high:
     return ""
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   if baseIndex == 0 and baseCargoIndex > traderCargo.high:
     return ""
   elif baseIndex > 0 and baseCargoIndex > skyBases[baseIndex].cargo.high:
     return ""
   var chance: Natural = 0
   if itemIndex < 0:
-    var item: BaseCargo = (if baseIndex == 0: traderCargo[baseCargoIndex] else: skyBases[baseIndex].cargo[baseCargoIndex])
+    var item: BaseCargo = (if baseIndex == 0: traderCargo[
+        baseCargoIndex] else: skyBases[baseIndex].cargo[baseCargoIndex])
     chance = itemsList[item.protoIndex].value[1]
     if item.craftBonus == lessBreakable:
       chance += (chance.float * 0.2).ceil.Natural
