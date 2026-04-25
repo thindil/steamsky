@@ -19,6 +19,7 @@
 ## state, the main window width and height, etc
 
 import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
+import ../config
 import themes
 
 type
@@ -88,6 +89,8 @@ var
     ## The keyboard shortcut for switch full screen mode for the game
   shortcutsEnabled*: bool = true
     ## If true, the keyboard shortcuts are enabled
+  buttonHeight*: float = gameSettings.interfaceFontSize.float + 26
+    ## The height of row in pixels for buttons
 
 {.push ruleOff: "varDeclared".}
 var images*: array[menuIcon..IconsNames.high,
