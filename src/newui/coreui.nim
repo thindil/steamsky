@@ -91,6 +91,8 @@ var
     ## If true, the keyboard shortcuts are enabled
   buttonHeight*: float = gameSettings.interfaceFontSize.float + 26
     ## The height of row in pixels for buttons
+  labelHeight*: float = gameSettings.interfaceFontSize.float + 11
+    ## The height of row in pixels for labels
 
 {.push ruleOff: "varDeclared".}
 var images*: array[menuIcon..IconsNames.high,
