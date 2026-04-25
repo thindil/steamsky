@@ -297,8 +297,8 @@ proc getItemChanceToDamage*(itemIndex: int): string {.raises: [KeyError],
   else:
     return "Very high"
 
-proc getItemQuality*(item: InventoryData): ObjectQuality {.raises: [], tags: [],
-    contractual.} =
+proc getItemQuality*(item: InventoryData or
+    BaseCargo): ObjectQuality {.raises: [], tags: [], contractual.} =
   ## Get the quality of the selected item based on its quality and special
   ## features
   ##
