@@ -17,14 +17,12 @@ suite "Unit tests for combat module":
 
   playerShip.skyX = 200
   playerShip.skyY = 200
+  const attribute = initMobAttributeRecord(level = 3, experience = 0)
   playerShip.crew = @[]
-  playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
-      homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1,
-      1, 1, 0, 0], order: talk, loyalty: 100, skills: @[initSkillInfo(index = 4,
-      level = 4, experience = 0)], attributes: @[initMobAttributeRecord(level = 3,
-      experience = 0), initMobAttributeRecord(level = 3, experience = 0),
-      initMobAttributeRecord(level = 3, experience = 0), initMobAttributeRecord(level = 3,
-      experience = 0)], health: 100, name: "Laeran"))
+  playerShip.crew.add(y = initMemberData(morale = [1: 50.Natural, 2: 0.Natural],
+      homeBase = 1, faction = "POLEIS", orders = [0.Natural, 0, 0, 1, 1, 1, 2, 1,
+      1, 1, 0, 0], order = talk, loyalty = 100, skills = @[initSkillInfo(index = 4,
+      level = 4, experience = 0)], attributes = @[attribute, attribute, attribute, attribute], health = 100, name = "Laeran"))
   playerShip.modules = @[]
   playerShip.modules.add(y = initModuleData(mType = ModuleType2.armor, protoIndex = 57,
       durability = 100, maxDurability = 100, name = "Armor", weight = 1))

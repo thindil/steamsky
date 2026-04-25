@@ -15,22 +15,18 @@ suite "Unit tests for missions2 module":
 
   playerShip.skyX = 1
   playerShip.skyY = 1
+  const attribute = initMobAttributeRecord(level = 3, experience = 0)
   playerShip.crew = @[]
-  playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
-      homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1,
-      1, 1, 0, 0], order: pilot, loyalty: 100, health: 100, tired: 0, hunger: 0,
-      thirst: 0, skills: @[initSkillInfo(index = 4, level = 4, experience = 0)],
-      attributes: @[initMobAttributeRecord(level = 3, experience = 0),
-      initMobAttributeRecord(level = 3, experience = 0), initMobAttributeRecord(level = 3,
-      experience = 0), initMobAttributeRecord(level = 3, experience = 0)]))
-  playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
-      homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1,
-      1, 1, 0, 0], order: engineer, loyalty: 100, health: 100, tired: 0,
-      hunger: 0, thirst: 0, skills: @[initSkillInfo(index = 4, level = 4,
-      experience = 0)], attributes: @[initMobAttributeRecord(level = 3,
-      experience = 0), initMobAttributeRecord(level = 3, experience = 0),
-      initMobAttributeRecord(level = 3, experience = 0), initMobAttributeRecord(level = 3,
-      experience = 0)]))
+  playerShip.crew.add(initMemberData(morale = [1: 50.Natural, 2: 0.Natural],
+      homeBase = 1, faction = "POLEIS", orders = [0.Natural, 0, 0, 1, 1, 1, 2, 1,
+      1, 1, 0, 0], order = pilot, loyalty = 100, health = 100, tired = 0, hunger = 0,
+      thirst = 0, skills = @[initSkillInfo(index = 4, level = 4, experience = 0)],
+      attributes = @[attribute, attribute, attribute, attribute]))
+  playerShip.crew.add(initMemberData(morale = [1: 50.Natural, 2: 0.Natural],
+      homeBase = 1, faction = "POLEIS", orders = [0.Natural, 0, 0, 1, 1, 1, 2, 1,
+      1, 1, 0, 0], order = engineer, loyalty = 100, health = 100, tired = 0,
+      hunger = 0, thirst = 0, skills = @[initSkillInfo(index = 4, level = 4,
+      experience = 0)], attributes = @[attribute, attribute, attribute, attribute]))
   playerShip.modules = @[]
   playerShip.modules.add(y = initModuleData(mType = cargoRoom, protoIndex = 7,
       durability = 100, maxDurability = 100, name = "Cargo", weight = 1))
@@ -65,13 +61,10 @@ suite "Unit tests for missions2 module":
       acceptedMissions.len == 0
 
   test "Finish an accepted passenger mission":
-    playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
-        homeBase: 1, faction: "DRONES", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
-        1, 0, 0], loyalty: 100, health: 100, tired: 0, hunger: 0,
-        thirst: 0, skills: @[], attributes: @[initMobAttributeRecord(level = 3,
-      experience = 0), initMobAttributeRecord(level = 3, experience = 0),
-      initMobAttributeRecord(level = 3, experience = 0), initMobAttributeRecord(level = 3,
-      experience = 0)], contractLength: 1000))
+    playerShip.crew.add(initMemberData(morale = [1: 50.Natural, 2: 0.Natural],
+        homeBase = 1, faction = "DRONES", orders = [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
+        1, 0, 0], loyalty = 100, health = 100, tired = 0, hunger = 0,
+        thirst = 0, skills = @[], attributes = @[attribute, attribute, attribute, attribute], contractLength = 1000))
     missions.acceptedMissions.add(y = MissionData(mType: passenger, time: 1000,
         targetX: 1, targetY: 1, reward: 1, startBase: 1, finished: false,
             multiplier: 1.0, data: 2))
