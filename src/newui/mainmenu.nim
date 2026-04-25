@@ -81,6 +81,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   showLoadButton = walkFiles(pattern = saveDirectory.string &
       "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory.string & "halloffame.dat")
+  buttonHeight = gameSettings.interfaceFontSize.float + 26
 
 proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -94,19 +95,18 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
   layoutSpaceStatic(height = 90, widgetsCount = 1):
     row(x = 50, y = 0, w = 500, h = 90):
       image(image = menuImages[0])
-  let height: float = gameSettings.interfaceFontSize.float + 26
-  setLayoutRowDynamic(height = height, cols = 1)
+  setLayoutRowDynamic(height = buttonHeight, cols = 1)
   label(str = gameVersion & " development", alignment = centered)
-  var menuHeight: float = 4.0 * height
+  var menuHeight: float = 4.0 * buttonHeight
   if showLoadButton:
-    menuHeight += height
+    menuHeight += buttonHeight
   if showHoFButton:
-    menuHeight += height
+    menuHeight += buttonHeight
   layoutSpaceStatic(height = menuHeight, widgetsCount = 6):
     const
       x: float = 225
       w: float = 150
-    row(x = x, y = 0, w = w, h = height):
+    row(x = x, y = 0, w = w, h = buttonHeight):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Set and start a new game")
@@ -114,10 +114,10 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = newGame
         dialog = none
         return
-    var y: float = height;
+    var y: float = buttonHeight;
     if showLoadButton:
-      row(x = x, y = y, w = w, h = height):
-        y += height
+      row(x = x, y = y, w = w, h = buttonHeight):
+        y += buttonHeight
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "Load one of the previously saved games")
@@ -125,31 +125,31 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
           state = loadGame
           return
     if showHoFButton:
-      row(x = x, y = y, w = w, h = height):
-        y += height
+      row(x = x, y = y, w = w, h = buttonHeight):
+        y += buttonHeight
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "Show your previous the bests scores in the game")
         labelButton(title = "Hall of Fame"):
           state = hallOfFame
           return
-    row(x = x, y = y, w = w, h = height):
-      y += height
+    row(x = x, y = y, w = w, h = buttonHeight):
+      y += buttonHeight
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "The list of changes to the game")
       labelButton(title = "News"):
         state = news
         return
-    row(x = x, y = y, w = w, h = height):
-      y += height
+    row(x = x, y = y, w = w, h = buttonHeight):
+      y += buttonHeight
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "General information about the game")
       labelButton(title = "About"):
         state = about
         return
-    row(x = x, y = y, w = w, h = height):
+    row(x = x, y = y, w = w, h = buttonHeight):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Quit from the game")
       labelButton(title = "Quit"):
