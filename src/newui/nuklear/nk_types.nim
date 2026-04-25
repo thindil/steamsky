@@ -1544,7 +1544,7 @@ type
     knob*: StyleKnob
     edit*: StyleEdit
     chart*: StyleChart
-    scrollH*, scrollV: StyleScrollbar
+    scrollH*, scrollV*: StyleScrollbar
     tab*: StyleTab
     combo*: StyleCombo
   Str* = object

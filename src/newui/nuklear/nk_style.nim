@@ -376,6 +376,13 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.scrollH.rounding = 0.0
   context.style.scrollH.borderCursor = 0.0
   context.style.scrollH.roundingCursor = 0.0
+  context.style.scrollH.colorFactor = 1.0
+  context.style.scrollH.disabledFactor = nkWidgetDisabledFactor
+  context.style.scrollH.drawBegin = nil
+  context.style.scrollH.drawEnd = nil
+  context.style.scrollV = context.style.scrollH
+
+  # scrollbars buttons
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
