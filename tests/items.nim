@@ -25,7 +25,8 @@ suite "Unit tests for items module":
     member.equipment[index] = -1
   member.equipment[weapon] = 1
   playerShip.crew.add(member)
-  var item = initInventoryData(protoIndex = 2, amount = 1, name = "", durability = 80, price = 0)
+  var item = initInventoryData(protoIndex = 2, amount = 1, name = "",
+      durability = 80, price = 0)
   var inventory: seq[InventoryData]
   inventory.add(y = initInventoryData(protoIndex = 66, amount = 1, name = "",
       durability = defaultItemDurability, price = 0))
@@ -41,12 +42,14 @@ suite "Unit tests for items module":
       findProtoItem("sfdsfsdfsdf") == 0
 
   test "Get damage info":
-    let item = initInventoryData(protoIndex = 2, amount = 1, name = "", durability = 60, price = 0)
+    let item = initInventoryData(protoIndex = 2, amount = 1, name = "",
+        durability = 60, price = 0)
     check:
       getItemDamage(item = item) == "Damaged"
 
   test "Get damage info with lowercasing":
-    let item = initInventoryData(protoIndex = 2, amount = 1, name = "", durability = 60, price = 0)
+    let item = initInventoryData(protoIndex = 2, amount = 1, name = "",
+        durability = 60, price = 0)
     check:
       getItemDamage(item = item, toLower = true) == "damaged"
 
@@ -122,6 +125,18 @@ suite "Unit tests for items module":
       getItemMaxDurability(item = item) == defaultItemDurability
 
   test "Getting the special item's max durability":
-    let item = initInventoryData(protoIndex = 2, amount = 1, craftBonus = moreDurable)
+    let item = initInventoryData(protoIndex = 2, amount = 1,
+        craftBonus = moreDurable)
     check:
       getItemMaxDurability(item = item) == 120
+
+  test "Gettting the normal item's quality":
+    let item = initInventoryData(protoIndex = 2, amount = 1)
+    check:
+      getItemQuality(item = item) == normal
+
+  test "Gettting the good item's quality":
+    let item = initInventoryData(protoIndex = 2, amount = 1,
+        craftBonus = moreEffective)
+    check:
+      getItemQuality(item = item) == good
