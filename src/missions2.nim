@@ -197,7 +197,7 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
     for j in 1 .. attributesList.len:
       attributes.add(y = initMobAttributeRecord(level = getRandom(min = 3,
           max = maxAttributeLevel), experience = 0))
-    let equipment: EquipmentArray = [-1, -1, -1, -1, -1, -1, -1]
+    const equipment: EquipmentArray = [-1, -1, -1, -1, -1, -1, -1]
     playerShip.crew.add(y = initMemberData(name = generateMemberName(gender = gender,
         factionIndex = skyBases[passengerBase].owner), gender = gender,
         health = 100, tired = 100, skills = @[], hunger = 0, thirst = 0, order = rest,
