@@ -321,10 +321,10 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if needLines < 1.0:
             needLines = 1.0
           fileLines += needLines.int
-        fileLines *= 25
+        fileLines *= labelHeight.int
       except:
         dialog = setError(message = "Can't read '" & fileName & "' file.")
-  setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
+  setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
   if fileContent.len > 0:
     group(title = "FileGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = fileLines.float, cols = 1)
@@ -332,7 +332,7 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
   else:
     wrapLabel(str = "Can't find file to load. Did '" & fileName &
         "' file is in '" & docDirectory.string & "' directory?")
-  layoutSpaceStatic(height = 50, widgetsCount = 1):
+  layoutSpaceStatic(height = buttonHeight + 10, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
