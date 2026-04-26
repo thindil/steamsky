@@ -253,12 +253,12 @@ proc getLootData*(itemIndex: int): tuple[protoIndex, maxAmount,
   result.protoIndex = (if cargoIndex > -1: playerShip.cargo[
       cargoIndex].protoIndex else: skyBases[baseIndex].cargo[
       baseCargoIndex].protoIndex)
-  result.quality = (if cargoIndex > -1: playerShip.cargo[
-        cargoIndex].quality else: skyBases[baseIndex].cargo[
-        baseCargoIndex].quality)
-  result.maxDurability = (if cargoIndex > -1: getItemMaxDurability(item = playerShip.cargo[
-        cargoIndex]) else: getItemMaxDurability(item = skyBases[baseIndex].cargo[
-        baseCargoIndex]))
+  result.quality = (if cargoIndex > -1: getItemQuality(item = playerShip.cargo[
+      cargoIndex]) else: getItemQuality(item = skyBases[baseIndex].cargo[
+      baseCargoIndex]))
+  result.maxDurability = (if cargoIndex > -1: getItemMaxDurability(
+      item = playerShip.cargo[cargoIndex]) else: getItemMaxDurability(
+      item = skyBases[baseIndex].cargo[baseCargoIndex]))
   if cargoIndex > -1:
     result.weight = getItemWeight(item = playerShip.cargo[cargoIndex])
   else:
