@@ -82,6 +82,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
       "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory.string & "halloffame.dat")
   buttonHeight = gameSettings.interfaceFontSize.float + 26
+  labelHeight = gameSettings.interfaceFontSize.float + 11
 
 proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -183,10 +184,10 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if needLines < 1.0:
             needLines = 1.0
           fileLines += needLines.int
-        fileLines *= 25
+        fileLines *= labelHeight.int
       except:
         dialog = setError(message = "Can't read ChangeLog file.")
-  setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
+  setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
   if fileContent.len > 0:
     group(title = "NewsGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = fileLines.float, cols = 1)
@@ -194,9 +195,9 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
   else:
     wrapLabel(str = "Can't find file to load. Did 'CHANGELOG.md' file is in '" &
         docDirectory.string & "' directory?")
-  layoutSpaceStatic(height = 50, widgetsCount = 2):
+  layoutSpaceStatic(height = buttonHeight - 10.0, widgetsCount = 2):
     if state == news:
-      row(x = (menuWidth - 310).float, y = 0, w = 155, h = 40):
+      row(x = (menuWidth - 310).float, y = 0, w = 155, h = buttonHeight):
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "Show all changes to the game since previous big stable version")
@@ -205,7 +206,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
           fileContent = ""
           return
     else:
-      row(x = (menuWidth - 405).float, y = 0, w = 250, h = 40):
+      row(x = (menuWidth - 405).float, y = 0, w = 250, h = buttonHeight):
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "Show only changes to the game since previous release")
@@ -213,7 +214,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
           state = news
           fileContent = ""
           return
-    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
       labelButton(title = "Back to menu"):
@@ -233,31 +234,31 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
-  setLayoutRowDynamic(height = 30, cols = 1)
+  setLayoutRowDynamic(height = labelHeight, cols = 1)
   label(str = "Roguelike in the sky with a steampunk theme",
       alignment = centered)
   saveButtonStyle()
   setButtonStyle(field = borderColor, a = 0)
-  layoutSpaceStatic(height = 80, widgetsCount = 4):
-    row(x = 255, y = 0, w = 100, h = 30):
+  layoutSpaceStatic(height = buttonHeight * 2, widgetsCount = 4):
+    row(x = 255, y = 0, w = 100, h = buttonHeight - 10):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Visit the game website: https://thindil.itch.io/steam-sky")
       labelButton(title = "Website"):
         openLink(link = "https://thindil.itch.io/steam-sky")
-    row(x = 270, y = 0, w = 85, h = 30):
+    row(x = 270, y = 0, w = 85, h = buttonHeight - 10):
       label(str = "______")
-    row(x = 145, y = 40, w = 330, h = 30):
+    row(x = 145, y = buttonHeight, w = 330, h = buttonHeight - 10):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Send a mail to the game creator")
       labelButton(title = "(c)2016-2026 Bartek thindil Jasicki"):
         openLink(link = "mailto:thindil@laeran.pl.eu.org")
-    row(x = 160, y = 40, w = 315, h = 30):
+    row(x = 160, y = buttonHeight, w = 315, h = 30):
       label(str = "__________________________")
   restoreButtonStyle()
-  layoutSpaceStatic(height = 40, widgetsCount = 3):
-    row(x = 75, y = 0, w = 150, h = 30):
+  layoutSpaceStatic(height = buttonHeight, widgetsCount = 3):
+    row(x = 75, y = 0, w = 150, h = buttonHeight - 10):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Guide how to help with creating the game, report bugs, etc.")
@@ -266,7 +267,7 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = showFile
         dialog = none
         return
-    row(x = 230, y = 0, w = 150, h = 30):
+    row(x = 230, y = 0, w = 150, h = buttonHeight - 10):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Guide how to modify the game")
@@ -274,7 +275,7 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileName = "MODDING.md"
         state = showFile
         return
-    row(x = 385, y = 0, w = 150, h = 30):
+    row(x = 385, y = 0, w = 150, h = buttonHeight - 10):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Some technical information about the game")
@@ -282,10 +283,10 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileName = "README.md"
         state = showFile
         return
-  setLayoutRowDynamic(height = 175, cols = 1)
+  setLayoutRowDynamic(height = labelHeight * 7, cols = 1)
   wrapLabel(str = "Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\nSteam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.")
-  layoutSpaceStatic(height = 50, widgetsCount = 2):
-    row(x = (menuWidth - 310).float, y = 0, w = 155, h = 40):
+  layoutSpaceStatic(height = buttonHeight, widgetsCount = 2):
+    row(x = (menuWidth - 310).float, y = 0, w = 155, h = buttonHeight):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Show full legal text of GNU GPLv3 license")
@@ -293,7 +294,7 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileName = "COPYING"
         state = showFile
         return
-    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
       labelButton(title = "Back to menu"):
