@@ -52,15 +52,12 @@ suite "Unit tests for statistics module":
 
   test "Updating the list of killed mobs.":
     gameStats.killedMobs = @[]
-    updateKilledMobs(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
-        homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
-        1, 0, 0], order: upgrading, loyalty: 100, skills: @[initSkillInfo(index = 4,
+    const attribute = initMobAttributeRecord(level = 3, experience = 0)
+    updateKilledMobs(initMemberData(morale = [1: 50.Natural, 2: 0.Natural],
+        homeBase = 1, faction = "POLEIS", orders = [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
+        1, 0, 0], order = upgrading, loyalty = 100, skills = @[initSkillInfo(index = 4,
         level = 4,
-        experience = 0)], attributes: @[initMobAttributeRecord(level = 3,
-            experience = 0),
-        initMobAttributeRecord(level = 3, experience = 0), initMobAttributeRecord(
-        level = 3,
-        experience = 0), initMobAttributeRecord(level = 3, experience = 0)]), "POLEIS")
+        experience = 0)], attributes = @[attribute, attribute, attribute, attribute]), "POLEIS")
     check:
       gameStats.killedMobs.len == 1
 
