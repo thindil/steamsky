@@ -383,6 +383,17 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.scrollV = context.style.scrollH
 
   # scrollbars buttons
+  context.style.scrollH.incButton.normal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: NkColor(r: 40, g: 40, b: 40, a: 255)))
+  context.style.scrollH.incButton.hover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: NkColor(r: 42, g: 42, b: 42, a: 255)))
+  context.style.scrollH.incButton.active = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: NkColor(r: 44, g: 44, b: 44, a: 255)))
+  context.style.scrollH.incButton.borderColor = NkColor(r: 65, g: 65, b: 65, a: 255)
+  context.style.scrollH.incButton.textBackground = NkColor(r: 40, g: 40, b: 40, a: 255)
+  context.style.scrollH.incButton.textNormal = NkColor(r: 175, g: 175, b: 175, a: 255)
+  context.style.scrollH.incButton.textHover = NkColor(r: 175, g: 175, b: 175, a: 255)
+  context.style.scrollH.incButton.textActive = NkColor(r: 175, g: 175, b: 175, a: 255)
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
