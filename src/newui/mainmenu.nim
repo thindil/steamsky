@@ -266,7 +266,6 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileName = "CONTRIBUTING.md"
         state = showFile
         dialog = none
-        return
     row(x = 230, y = 0, w = 150, h = buttonHeight - 10):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -274,7 +273,6 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Modify game"):
         fileName = "MODDING.md"
         state = showFile
-        return
     row(x = 385, y = 0, w = 150, h = buttonHeight - 10):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -282,7 +280,6 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "README"):
         fileName = "README.md"
         state = showFile
-        return
   setLayoutRowDynamic(height = labelHeight * 7, cols = 1)
   wrapLabel(str = "Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\nSteam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.")
   layoutSpaceStatic(height = buttonHeight, widgetsCount = 2):
@@ -293,16 +290,13 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Show full license"):
         fileName = "COPYING"
         state = showFile
-        return
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
-        return
   if isKeyPressed(key = keyEscape):
     state = mainMenu
-    return
   showLinkError()
 
 proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
