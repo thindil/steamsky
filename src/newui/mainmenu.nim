@@ -524,7 +524,8 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           labelButton(title = save.saveTime):
             saveClicked = save.path
   restoreButtonStyle()
-  let bounds: Rect = Rect(x: 0, y: 35, w: 580, h: (saves.len.float * (tableHeight + 5.0)))
+  let bounds: Rect = Rect(x: 0, y: tableHeight, w: 580, h: (saves.len.float * (
+      tableHeight + 5.0)))
   if gameSettings.showTooltips:
     addTooltip(bounds = bounds, text = "Press mouse " & (
         if gameSettings.rightButton: "right" else: "left") & " button to show available option")
