@@ -394,6 +394,17 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.scrollH.incButton.textNormal = NkColor(r: 175, g: 175, b: 175, a: 255)
   context.style.scrollH.incButton.textHover = NkColor(r: 175, g: 175, b: 175, a: 255)
   context.style.scrollH.incButton.textActive = NkColor(r: 175, g: 175, b: 175, a: 255)
+  context.style.scrollH.incButton.padding = Vec2(x: 4.0, y: 4.0)
+  context.style.scrollH.incButton.touchPadding = Vec2(x: 0.0, y: 0.0)
+  context.style.scrollH.incButton.userData = Handle(handleType: handleInt, intValue: 0)
+  context.style.scrollH.incButton.alignment = centered
+  context.style.scrollH.incButton.border = 1.0
+  context.style.scrollH.incButton.rounding = 0.0
+  context.style.scrollH.incButton.colorFactorText = 1.0
+  context.style.scrollH.incButton.colorFactorBackground = 1.0
+  context.style.scrollH.incButton.disabledFactor = nkWidgetDisabledFactor
+  context.style.scrollH.incButton.drawBegin = nil
+  context.style.scrollH.incButton.drawEnd = nil
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
