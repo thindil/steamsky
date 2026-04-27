@@ -606,7 +606,7 @@ type
     thirst*: SkillRange = 0
     order*: CrewOrders = rest
     previousOrder*: CrewOrders = rest
-    orderTime*: int = 15
+    orderTime*: range[-1_000..1_000] = 15
     orders*: array[1..12, Natural]
     inventory*: seq[InventoryData] = @[]
     equipment*: EquipmentArray
@@ -621,7 +621,7 @@ proc initMemberData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
     SkillInfo] = @[]; name: MobName = ""; gender: char = 'M';
     health: SkillRange = 100; tired: range[0..150] = 0; hunger: SkillRange = 0;
     thirst: SkillRange = 0; order: CrewOrders = rest;
-    previousOrder: CrewOrders = rest; orderTime: int = 15; orders: array[1..12,
+    previousOrder: CrewOrders = rest; orderTime: range[-1_000..1000] = 15; orders: array[1..12,
     Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; inventory: seq[
     InventoryData] = @[]; equipment: EquipmentArray = [-1, -1, -1, -1, -1, -1,
     -1]; payment: AttributesArray = [0, 0]; contractLength: int = -1;
