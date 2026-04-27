@@ -354,7 +354,7 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
   dialog = none
-  setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
+  setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
   group(title = "HofGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = 25, cols = 4)
     colorLabel(str = "Position", color = colYellow, align = centered)
@@ -368,7 +368,7 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = entry.name, alignment = centered)
       label(str = $entry.points, alignment = centered)
       label(str = entry.deathReason, alignment = centered)
-  layoutSpaceStatic(height = 50, widgetsCount = 1):
+  layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
@@ -401,7 +401,7 @@ proc showLoadMenu(dialog: var GameDialog; bounds: Rect) {.raises: [], tags: [
   contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
       triggerBounds = bounds, button = (
       if gameSettings.rightButton: Buttons.right else: Buttons.left)):
-    setLayoutRowDynamic(height = 25, cols = 1)
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
     contextualItemLabel(label = "Load game", align = centered):
       dialog = loading
     contextualItemLabel(label = "Delete game", align = centered):
@@ -419,9 +419,9 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
-  setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
+  setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
   group(title = "LoadGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = 30, cols = 3)
+    setLayoutRowDynamic(height = tableHeight, cols = 3)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Press mouse button to sort the saved games.")
@@ -509,28 +509,28 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       return
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
-    layoutSpaceStatic(height = (saves.len * 30).float, widgetsCount = (
+    layoutSpaceStatic(height = (saves.len.float * tableHeight), widgetsCount = (
         saves.len * 3)):
       for index, save in saves:
         let
-          y: float = (index * 30).float
-        row(x = 0, y = y, w = 190, h = 30):
+          y: float = (index.float * tableHeight)
+        row(x = 0, y = y, w = 190, h = tableHeight):
           labelButton(title = save.playerName):
             saveClicked = save.path
-        row(x = 190, y = y, w = 190, h = 30):
+        row(x = 190, y = y, w = 190, h = tableHeight):
           labelButton(title = save.shipName):
             saveClicked = save.path
-        row(x = 380, y = y, w = 190, h = 30):
+        row(x = 380, y = y, w = 190, h = tableHeight):
           labelButton(title = save.saveTime):
             saveClicked = save.path
   restoreButtonStyle()
-  let bounds: Rect = Rect(x: 0, y: 35, w: 580, h: (saves.len * 35).float)
+  let bounds: Rect = Rect(x: 0, y: 35, w: 580, h: (saves.len.float * (tableHeight + 5.0)))
   if gameSettings.showTooltips:
     addTooltip(bounds = bounds, text = "Press mouse " & (
         if gameSettings.rightButton: "right" else: "left") & " button to show available option")
   showLoadMenu(dialog = dialog, bounds = bounds)
-  layoutSpaceStatic(height = 50, widgetsCount = 1):
-    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
+  layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
       labelButton(title = "Back to menu"):
