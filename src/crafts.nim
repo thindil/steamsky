@@ -635,8 +635,8 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
             addMessage(message = "You don't have the tool for " & recipeName &
                 ".", mType = craftMessage, color = red)
             break
-          toolQuality = playerShip.crew[crafterIndex].inventory[
-              toolIndex].quality
+          toolQuality = getItemQuality(item = playerShip.crew[crafterIndex].inventory[
+              toolIndex])
         var amount: Natural = 0
         for j in 0..materialIndexes.high:
           amount += (itemsList[materialIndexes[j]].weight *
