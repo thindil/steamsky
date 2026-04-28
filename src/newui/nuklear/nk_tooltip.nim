@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -52,7 +52,8 @@ proc tooltip*(text: string; x, y: float) {.raises: [], tags: [], contractual.} =
   ## * text - the text to show on the tooltip window
   ## * x    - the X coordinate of the tooltip window
   ## * y    - the Y coordinate of the tooltip window
-  proc nk_tooltip2(ctx; text: cstring, startx, starty: cfloat) {.importc, nodecl, raises: [], tags: [], contractual.}
+  proc nk_tooltip2(ctx; text: cstring; startx, starty: cfloat) {.importc,
+      nodecl, raises: [], tags: [], contractual.}
     ## Internal Nuklear C binding
   nk_tooltip2(ctx = ctx, text = text.cstring, startx = x, starty = y)
 
