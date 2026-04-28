@@ -611,7 +611,7 @@ type
     inventory*: seq[InventoryData] = @[]
     equipment*: EquipmentArray
     payment*: AttributesArray
-    contractLength*: int = -1
+    contractLength*: ExtendedNatural = -1
     morale*: AttributesArray
     loyalty*: SkillRange = 100
     homeBase*: BasesRange = 1
@@ -624,7 +624,7 @@ proc initMemberData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
     previousOrder: CrewOrders = rest; orderTime: range[-1_000..1000] = 15; orders: array[1..12,
     Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; inventory: seq[
     InventoryData] = @[]; equipment: EquipmentArray = [-1, -1, -1, -1, -1, -1,
-    -1]; payment: AttributesArray = [0, 0]; contractLength: int = -1;
+    -1]; payment: AttributesArray = [0, 0]; contractLength: ExtendedNatural = -1;
     morale: AttributesArray = [0, 0]; loyalty: SkillRange = 100;
     homeBase: BasesRange = 1;
     faction: FactionIndex = ""): MemberData {.raises: [], tags: [],
