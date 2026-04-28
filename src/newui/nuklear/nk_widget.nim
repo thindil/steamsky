@@ -95,7 +95,23 @@ proc progressBar*(value: var int; maxValue: int; modifyable: bool = true;
 
 proc widgetIsHovered*(): bool {.raises: [], tags: [], contractual.} =
   ## Check if the next widget is hovered by the mouse
-  proc nk_widget_is_hovered(ctx): nk_bool {.importc, nodecl, raises: [], tags: [],
-      contractual.}
+  ##
+  ## Returns true if the mouse is hovering above the next widget, otherwise
+  ## false
+  proc nk_widget_is_hovered(ctx): nk_bool {.importc, nodecl, raises: [],
+      tags: [], contractual.}
     ## Nuklear C binding
   return nk_widget_is_hovered(ctx = ctx) == nkTrue
+
+proc widgetIsMouseClicked*(button: Buttons): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Check if the mouse's button was clicked inside the next widget
+  ##
+  ## * button - the mouse button which will be check
+  ##
+  ## Returns true if the selected mouse button was clicked inside the next
+  ## widget, otherwise false
+  proc nk_widget_is_mouse_clicked(ctx; btn: Buttons): nk_bool {.importc, nodecl,
+      raises: [], tags: [], contractual.}
+    ## Nuklear C binding
+  return nk_widget_is_mouse_clicked(ctx = ctx, btn = button) == nkTrue
