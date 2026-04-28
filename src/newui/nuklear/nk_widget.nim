@@ -93,3 +93,9 @@ proc progressBar*(value: var int; maxValue: int; modifyable: bool = true;
   return nk_progress(ctx = ctx, cur = value, max = maxValue,
       modifyable = modifyable.nk_bool, reversed = reversed.nk_bool) == nkTrue
 
+proc widgetIsHovered*(): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the next widget is hovered by the mouse
+  proc nk_widget_is_hovered(ctx): nk_bool {.importc, nodecl, raises: [], tags: [],
+      contractual.}
+    ## Nuklear C binding
+  return nk_widget_is_hovered(ctx = ctx) == nkTrue
