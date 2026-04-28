@@ -220,14 +220,15 @@ proc getItemDamage*(item: InventoryData or BaseCargo; toLower: bool = false;
     result = toLowerAscii(s = result)
 
 proc getItemName*(item: InventoryData; damageInfo: bool = true;
-    toLower: bool = true): string {.raises: [], tags: [],
-        contractual.} =
+    toLower: bool = true; moreInfo: bool = true): string {.raises: [], tags: [],
+    contractual.} =
   ## Get the name of the selected item with optional info about the item's
   ## damage
   ##
   ## * item       - the item which the name will be get
   ## * damageInfo - if true, add information about item's damage status
   ## * toLower    - if true, the damage info should be in lower characters
+  ## * moreInfo   - if true, show more information (like special item feature)
   ##
   ## Returns the name of the selected item with optional info about the item's damage
   ## status
@@ -239,7 +240,12 @@ proc getItemName*(item: InventoryData; damageInfo: bool = true;
     except KeyError:
       return ""
   if damageInfo and item.durability < 100:
-    result = result & " (" & getItemDamage(item = item, toLower = toLower) & ")"
+    result &= " (" & getItemDamage(item = item, toLower = toLower) & ")"
+  if moreInfo:
+    if item.craftBonus == moreEffective:
+      result &= " (more effective)"
+    elif item.craftMalus == lessEffective:
+      result &= " (less effective)"
 
 proc getItemChanceToDamage*(itemIndex: int): string {.raises: [KeyError],
     tags: [], contractual.} =
