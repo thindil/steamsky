@@ -686,7 +686,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
   {.ruleOn: "varDeclared".}
   group(title = "groupSetting", flags = {windowNoFlags}):
     # Character's name
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
     label(str = "Character name:")
     bounds[0] = getWidgetBounds()
     if mouseClicked(id = left, rect = bounds[0]):
@@ -700,7 +700,8 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     if showGender:
       # Character's gender
-      setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
+      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat,
+          0.1, 0.1])
       label(str = "Character gender:")
       const genders: array[2..3, string] = [2: "Male", 3: "Female"]
       for i in 2..3:
@@ -719,7 +720,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
             playerGender = i.cint
         restoreButtonStyle()
     # Player's ship's name
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
     label(str = "Ship name:")
     bounds[2] = getWidgetBounds()
     if mouseClicked(id = left, rect = bounds[2]):
@@ -732,7 +733,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
       randomName(forPlayer = false)
     restoreButtonStyle()
     # Character's goal
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Character goal:")
     bounds[4] = getWidgetBounds()
     if mouseClicked(id = left, rect = bounds[4]):
@@ -741,11 +742,12 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
       dialog = newGoalDialog
       setSelectedGoal()
     # Character's faction
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Character faction:")
     bounds[5] = getWidgetBounds()
     newFaction = comboList(items = playerFactions,
-        selected = currentFaction, itemHeight = 25, x = 200, y = 150)
+        selected = currentFaction, itemHeight = labelHeight.int, x = 200, y = (
+            labelHeight * 5.0))
     if newFaction != currentFaction or mouseClicked(id = left,
         rect = bounds[5]):
       currentFaction = -1
