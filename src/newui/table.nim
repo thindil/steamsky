@@ -156,10 +156,10 @@ proc addProgressBar*(tooltip: string; value, maxValue, data: int;
   elif percent < 0.26:
     color = redColor
   changeStyle(field = progressbar, color = theme.colors[color]):
+    if widgetIsMouseClicked(button = (if gameSettings.rightButton:
+        Buttons.right else: left)):
+      code(data = data, dialog = dialog)
     progressBar(value = val, maxValue = maxValue, modifyable = false)
-  if mouseClicked(id = (if gameSettings.rightButton: Buttons.right else: left),
-      rect = bounds) and windowHasFocus():
-    code(data = data, dialog = dialog)
 
 proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [],
     contractual.} =
