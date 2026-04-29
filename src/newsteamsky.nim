@@ -178,12 +178,16 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   windowHeight = menuHeight.float
   var
     redrawTime: float = 1_000.0
+  ## The main UI loop
   while true:
     let started: float = cpuTime()
     if redraw:
       # Reset the UI tooltips if enabled
       if gameSettings.showTooltips:
+        enableTooltips()
         resetTooltips()
+      else:
+        disableTooltips()
 
       # The main window
       window(name = "Main", x = 0, y = 0, w = windowWidth,
@@ -246,6 +250,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     if (dt < dtime):
       sleep(milsecs = (dtime - dt).int)
     updateTimer(timeDiff = dtime)
+    updateTooltips()
 
     # Force to redraw every 1 sec
     if not redraw:
