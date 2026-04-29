@@ -602,8 +602,8 @@ type
     gender: char = 'M'
     health: SkillRange = 100
     tired: range[0..150] = 0
-    hunger*: SkillRange = 0
-    thirst*: SkillRange = 0
+    hunger: SkillRange = 0
+    thirst: SkillRange = 0
     order*: CrewOrders = rest
     previousOrder*: CrewOrders = rest
     orderTime*: range[-1_000..1_000] = 15
@@ -662,6 +662,8 @@ typeGetterSetter(baseType = MemberData, varName = member, name = name, typ = Mob
 typeGetterSetter(baseType = MemberData, varName = member, name = gender, typ = char)
 typeGetterSetter(baseType = MemberData, varName = member, name = health, typ = SkillRange)
 typeGetterSetter(baseType = MemberData, varName = member, name = tired, typ = range[0..150])
+typeGetterSetter(baseType = MemberData, varName = member, name = hunger, typ = SkillRange)
+typeGetterSetter(baseType = MemberData, varName = member, name = thirst, typ = SkillRange)
 
 type
   ShipRecord* = object
