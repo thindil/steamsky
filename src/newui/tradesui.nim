@@ -412,7 +412,7 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
     if typeIndex > 0 and itemType != typesList[typeIndex]:
       continue
     let itemName: string = getItemName(item = item,
-        damageInfo = false, toLower = false)
+        damageInfo = false, toLower = false, moreInfo = false)
     if nameSearch.len > 0 and itemName.toLowerAscii.find(
         sub = nameSearch.toLowerAscii) == -1:
       continue

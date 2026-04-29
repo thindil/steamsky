@@ -557,13 +557,13 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
     manipulateData = ManipulateData(itemIndex: iIndex,
         maxAmount: playerShip.crew[mIndex].inventory[iIndex].amount,
         title: "Move " & getItemName(item = playerShip.crew[mIndex].inventory[
-        iIndex], damageInfo = false, toLower = false) & " to ship cargo",
+        iIndex], damageInfo = false, toLower = false, moreInfo = false) & " to ship cargo",
         warning: "", allCost: 0, amount: 1, data: mIndex)
     return moveDialog
   of giveAction:
     manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: 1,
         title: "Give " & getItemName(item = playerShip.cargo[iIndex],
-        damageInfo = false, toLower = false) & " to a crew member", warning: "",
+        damageInfo = false, toLower = false, moreInfo = false) & " to a crew member", warning: "",
         allCost: 0, amount: 1, data: 0)
     result = giveDialog
     updateMaxAmount(dialog = result)
@@ -571,7 +571,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
     manipulateData = ManipulateData(itemIndex: iIndex,
         maxAmount: playerShip.cargo[iIndex].amount, title: "Drop " &
         getItemName(item = playerShip.cargo[iIndex], damageInfo = false,
-        toLower = false) & " from ship cargo", warning: "", allCost: 0, amount: 1)
+        toLower = false, moreInfo = false) & " from ship cargo", warning: "", allCost: 0, amount: 1)
     return dropCargoDialog
 
 proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
@@ -1004,7 +1004,7 @@ proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
     itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
   return setInfo(text = itemInfo, title = (if memberIndex >
       -1: getItemName(item = playerShip.crew[memberIndex].inventory[
-      itemIndex], damageInfo = false, toLower = false) else: getItemName(
+      itemIndex], damageInfo = false, toLower = false, moreInfo = false) else: getItemName(
       item = playerShip.cargo[itemIndex], damageInfo = false,
       toLower = false)), button1 = button1, button2 = button2)
 

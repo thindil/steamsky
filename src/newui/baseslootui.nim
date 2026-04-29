@@ -390,7 +390,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if typeIndex > 0 and itemType != typesList[typeIndex]:
         continue
       let itemName: string = getItemName(item = playerShip.cargo[i],
-          damageInfo = false, toLower = false)
+          damageInfo = false, toLower = false, moreInfo = false)
       if currentRow < startRow:
         currentRow.inc
         continue

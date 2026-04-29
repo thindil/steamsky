@@ -122,7 +122,7 @@ proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
     try:
       let item: InventoryData = playerShip.crew[crewIndex].inventory[data.index]
       localInventory.add(y = LocalItemData(selected: data.checked,
-          name: getItemName(item = item, damageInfo = false, toLower = false),
+          name: getItemName(item = item, damageInfo = false, toLower = false, moreInfo = false),
           damage: item.durability.float / getItemMaxDurability(item = item).float, itemType: (
           if itemsList[item.protoIndex].showType.len > 0: itemsList[
           item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
@@ -362,7 +362,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
         addCheckButton(tooltip = "Select the item to move or equip it.",
             checked = data.checked)
         addButton(label = getItemName(item = member.inventory[data.index],
-            damageInfo = false, toLower = false),
+            damageInfo = false, toLower = false, moreInfo = false),
             tooltip = "Show the selected item's info.", data = data.index,
             code = setItemInfo, dialog = dialog)
         addProgressBar(tooltip = "The current durability level of the selected item.",

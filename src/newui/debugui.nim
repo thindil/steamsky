@@ -110,10 +110,10 @@ proc setCargoData() {.raises: [], tags: [], contractual.} =
   cargoNames = @[]
   for item in playerShip.cargo:
     cargoNames.add(y = getItemName(item = item, damageInfo = false,
-        toLower = false))
+        toLower = false, moreInfo = false))
   cargoSelected = 0
   let item: InventoryData = playerShip.cargo[cargoSelected]
-  cargoName = getItemName(item = item, damageInfo = false, toLower = false)
+  cargoName = getItemName(item = item, damageInfo = false, toLower = false, moreInfo = false)
   cargoAmount = item.amount
   cargoQuality = item.quality.ord
 
