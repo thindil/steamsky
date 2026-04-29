@@ -20,7 +20,7 @@
 
 import std/macros
 import contracts
-import nk_context, nk_types
+import nk_context, nk_types, nk_widget
 
 # ---------------------
 # Procedures parameters
@@ -72,6 +72,10 @@ var
     ## The list of tooltips available in the window
   delay*: float = tooltipDelay
     ## The current delay before show a tooltip, when reached 0, show a tooltip
+  tooltipEnabled: bool = true
+    ## If true, tooltips are enabled (default true)
+  hoveredTooltip: bool = false
+    ## If true, a tooltip is hovered, used to advance the timer
 
 proc setTooltips*(tDelay, fDelay: float) {.raises: [], tags: [], contractual.} =
   ## Set the tooltips configuration
@@ -95,3 +99,29 @@ proc addTooltip*(bounds: Rect; text: string) {.raises: [], tags: [],
   ## * bounds - the area in which the widget with the tooltip is
   ## * text   - the text which will be show as the tooltip
   tooltips.add(y = TooltipData(bounds: bounds, text: text))
+
+proc enableTooltips*() {.raises: [], tags: [], contractual.} =
+  ## Enable showing tooltips
+  tooltipEnabled = true
+
+proc disableTooltips*() {.raises: [], tags: [], contractual.} =
+  ## Disable showing tooltips
+  tooltipEnabled = false
+
+proc showTooltip*(text: string) {.raises: [], tags: [], contractual.} =
+  ## Show the selected tooltip for the next widget
+  ##
+  ## * text - the text to show on the tooltip
+  if not tooltipEnabled or not widgetIsHovered():
+    return
+  hoveredTooltip = true
+  if delay <= 0:
+    tooltip(text = text)
+
+proc updateTooltips*() {.raises: [], tags: [], contractual.} =
+  ## Update tooltips timer
+  if not tooltipEnabled:
+    return
+  if hoveredTooltip:
+    delay -= frameDelay
+  hoveredTooltip = false
