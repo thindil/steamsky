@@ -416,6 +416,10 @@ proc nkStyleFromTable*(table: array[StyleColors,
       itype: itemColor, color: table[editColor]))
   context.style.edit.active = StyleItem(iType: itemColor, data: StyleItemData(
       itype: itemColor, color: table[editColor]))
+  context.style.edit.cursorNormal = table[editCursorColor]
+  context.style.edit.cursorHover = table[editCursorColor]
+  context.style.edit.cursorTextNormal = table[editColor]
+  context.style.edit.cursorTextHover = table[editColor]
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
