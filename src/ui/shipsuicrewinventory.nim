@@ -77,7 +77,7 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
         checked = tclGetVar(varName = "invindex" & $(item + 1)) == "1",
         column = 1, emptyUnchecked = true)
     addButton(table = inventoryTable, text = getItemName(
-        item = member.inventory[item], damageInfo = false, toLower = false),
+        item = member.inventory[item], damageInfo = false, toLower = false, moreInfo = false),
         tooltip = "Show the selected item's info",
         command = "ShowInventoryItemInfo " & $(item + 1), column = 2)
     addProgressbar(table = inventoryTable, value = member.inventory[
@@ -320,7 +320,7 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       localInventory.add(y = LocalItemData(selected: tclGetVar(
           varName = "invindex" & $(index + 1)) == "1", name: getItemName(
           item = playerShip.crew[memberIndex].inventory[index],
-          damageInfo = false, toLower = false), damage: playerShip.crew[
+          damageInfo = false, toLower = false, moreInfo = false), damage: playerShip.crew[
           memberIndex].inventory[index].durability.float /
           getItemMaxDurability(item = playerShip.crew[
           memberIndex].inventory[index]).float, itemType: (if itemsList[playerShip.crew[

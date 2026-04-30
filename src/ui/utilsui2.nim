@@ -354,15 +354,15 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
   if parent == ".":
     showInfo(text = itemInfo, title = (if memberIndex > -1: getItemName(
         item = playerShip.crew[memberIndex].inventory[itemIndex],
-        damageInfo = false, toLower = false) else: getItemName(
+        damageInfo = false, toLower = false, moreInfo = false) else: getItemName(
         item = playerShip.cargo[itemIndex], damageInfo = false,
-        toLower = false)), button1 = button1, button2 = button2)
+        toLower = false, moreInfo = false)), button1 = button1, button2 = button2)
   else:
     showInfo(text = itemInfo, parentName = parent, title = (if memberIndex >
         -1: getItemName(item = playerShip.crew[memberIndex].inventory[
-        itemIndex], damageInfo = false, toLower = false) else: getItemName(
+        itemIndex], damageInfo = false, toLower = false, moreInfo = false) else: getItemName(
         item = playerShip.cargo[itemIndex], damageInfo = false,
-        toLower = false)), button1 = button1, button2 = button2)
+        toLower = false, moreInfo = false)), button1 = button1, button2 = button2)
 
 proc setFonts*(newSize: Positive; fontType: FontTypes) {.raises: [],
     tags: [], contractual.} =

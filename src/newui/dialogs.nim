@@ -1006,7 +1006,7 @@ proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
       -1: getItemName(item = playerShip.crew[memberIndex].inventory[
       itemIndex], damageInfo = false, toLower = false, moreInfo = false) else: getItemName(
       item = playerShip.cargo[itemIndex], damageInfo = false,
-      toLower = false)), button1 = button1, button2 = button2)
+      toLower = false, moreInfo = false)), button1 = button1, button2 = button2)
 
 proc updateTimer*(timeDiff: float) {.raises: [], tags: [], contractual.} =
   ## Update the dialogs' timer

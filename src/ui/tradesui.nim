@@ -177,7 +177,7 @@ proc showPlayersItems(currentItemIndex: var Natural; baseType: string;
     if argc > 1 and argv[1] != "All" and itemType != $argv[1]:
       continue
     let itemName: string = getItemName(item = playerShip.cargo[i],
-        damageInfo = false, toLower = false)
+        damageInfo = false, toLower = false,  moreInfo = false)
     if argc == 3 and itemName.toLowerAscii.find(sub = ($argv[
         2]).toLowerAscii) == -1:
       continue

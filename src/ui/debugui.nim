@@ -274,7 +274,7 @@ proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
   valuesList = ""
   for item in playerShip.cargo:
     valuesList.add(y = " {" & getItemName(item = item, damageInfo = false,
-        toLower = false) & "}")
+        toLower = false, moreInfo = false) & "}")
   tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
   tclEval(script = comboBox & " current 0")
   discard refreshCargoCommand(clientData = clientData, interp = interp,
