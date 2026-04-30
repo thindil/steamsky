@@ -604,8 +604,8 @@ type
     tired: range[0..150] = 0
     hunger: SkillRange = 0
     thirst: SkillRange = 0
-    order*: CrewOrders = rest
-    previousOrder*: CrewOrders = rest
+    order: CrewOrders = rest
+    previousOrder: CrewOrders = rest
     orderTime*: range[-1_000..1_000] = 15
     orders*: array[1..12, Natural]
     inventory*: seq[InventoryData] = @[]
@@ -621,10 +621,12 @@ proc initMemberData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
     SkillInfo] = @[]; name: MobName = ""; gender: char = 'M';
     health: SkillRange = 100; tired: range[0..150] = 0; hunger: SkillRange = 0;
     thirst: SkillRange = 0; order: CrewOrders = rest;
-    previousOrder: CrewOrders = rest; orderTime: range[-1_000..1000] = 15; orders: array[1..12,
+    previousOrder: CrewOrders = rest; orderTime: range[-1_000..1000] = 15;
+        orders: array[1..12,
     Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; inventory: seq[
     InventoryData] = @[]; equipment: EquipmentArray = [-1, -1, -1, -1, -1, -1,
-    -1]; payment: AttributesArray = [0, 0]; contractLength: range[-1_000..100_000] = -1;
+    -1]; payment: AttributesArray = [0, 0]; contractLength: range[
+        -1_000..100_000] = -1;
     morale: AttributesArray = [0, 0]; loyalty: SkillRange = 100;
     homeBase: BasesRange = 1;
     faction: FactionIndex = ""): MemberData {.raises: [], tags: [],
@@ -660,10 +662,18 @@ proc initMemberData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
 
 typeGetterSetter(baseType = MemberData, varName = member, name = name, typ = MobName)
 typeGetterSetter(baseType = MemberData, varName = member, name = gender, typ = char)
-typeGetterSetter(baseType = MemberData, varName = member, name = health, typ = SkillRange)
-typeGetterSetter(baseType = MemberData, varName = member, name = tired, typ = range[0..150])
-typeGetterSetter(baseType = MemberData, varName = member, name = hunger, typ = SkillRange)
-typeGetterSetter(baseType = MemberData, varName = member, name = thirst, typ = SkillRange)
+typeGetterSetter(baseType = MemberData, varName = member, name = health,
+    typ = SkillRange)
+typeGetterSetter(baseType = MemberData, varName = member, name = tired,
+    typ = range[0..150])
+typeGetterSetter(baseType = MemberData, varName = member, name = hunger,
+    typ = SkillRange)
+typeGetterSetter(baseType = MemberData, varName = member, name = thirst,
+    typ = SkillRange)
+typeGetterSetter(baseType = MemberData, varName = member, name = order,
+    typ = CrewOrders)
+typeGetterSetter(baseType = MemberData, varName = member, name = previousOrder,
+    typ = CrewOrders)
 
 type
   ShipRecord* = object
