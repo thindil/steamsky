@@ -57,19 +57,12 @@ proc tooltip*(text: string; x, y: float) {.raises: [], tags: [], contractual.} =
     ## Internal Nuklear C binding
   nk_tooltip2(ctx = ctx, text = text.cstring, startx = x, starty = y)
 
-type
-  TooltipData = object
-    bounds*: Rect
-    text*: string
-
 var
   tooltipDelay*: float = 1000.0
     ## For how long the player hovers the mouse over UI element before a
     ## tooltip will be shown
   frameDelay*: float = 0.0
     ## The length of UI frames. Used to count when to show a tooltip
-  tooltips*: seq[TooltipData] = @[]
-    ## The list of tooltips available in the window
   delay*: float = tooltipDelay
     ## The current delay before show a tooltip, when reached 0, show a tooltip
   tooltipEnabled: bool = true
@@ -85,21 +78,6 @@ proc setTooltips*(tDelay, fDelay: float) {.raises: [], tags: [], contractual.} =
   tooltipDelay = tDelay
   frameDelay = fDelay
 
-proc resetTooltips*() {.raises: [], tags: [], contractual.} =
-  ## Reset the list of tooltips available in the window. Should be called
-  ## at the begining of a Nuklear window declaration.
-  tooltips = @[]
-
-proc addTooltip*(bounds: Rect; text: string) {.raises: [], tags: [],
-    contractual.} =
-  ## Add a tooltip to the list of tooltips. The procedure should be called
-  ## before the widget declaration, because it also needs bounds in which the
-  ## mouse will be check.
-  ##
-  ## * bounds - the area in which the widget with the tooltip is
-  ## * text   - the text which will be show as the tooltip
-  tooltips.add(y = TooltipData(bounds: bounds, text: text))
-
 proc enableTooltips*() {.raises: [], tags: [], contractual.} =
   ## Enable showing tooltips
   tooltipEnabled = true
@@ -109,7 +87,8 @@ proc disableTooltips*() {.raises: [], tags: [], contractual.} =
   tooltipEnabled = false
 
 proc showTooltip*(text: string) {.raises: [], tags: [], contractual.} =
-  ## Show the selected tooltip for the next widget
+  ## Show the selected tooltip for the next widget. The procedure should be
+  ## called before the widget which will have the tooltip.
   ##
   ## * text - the text to show on the tooltip
   if not tooltipEnabled or not widgetIsHovered():
@@ -125,3 +104,12 @@ proc updateTooltips*() {.raises: [], tags: [], contractual.} =
   if hoveredTooltip:
     delay -= frameDelay
   hoveredTooltip = false
+
+proc addTooltip*(bounds: Rect; text: string) {.raises: [], tags: [],
+    contractual.} =
+  ## Deprecated, still here for backward compatybility
+  ##
+  ## * bounds - the area in which the widget with the tooltip is
+  ## * text   - the text which will be show as the tooltip
+  showTooltip(text = text)
+
