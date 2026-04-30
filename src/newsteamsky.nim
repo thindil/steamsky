@@ -185,7 +185,6 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       # Reset the UI tooltips if enabled
       if gameSettings.showTooltips:
         enableTooltips()
-        resetTooltips()
       else:
         disableTooltips()
 
@@ -201,9 +200,6 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         if state in GameState.mainMenu..GameState.options:
           # Show the proper window
           showGame[state](state = state, dialog = dialog)
-        # Add the tooltips, if enabled
-        if gameSettings.showTooltips:
-          showTooltips()
         # Set the UI to redraw if state or dialog changed
         if oldState != state or oldDialog != dialog:
           redraw = true
