@@ -2980,21 +2980,6 @@ proc image*(image: PImage; padding: Vec2 = Vec2(x: 0, y: 0)) {.raises: [], tags:
 # --------
 # Tooltips
 # --------
-proc showTooltips*() {.raises: [], tags: [], contractual.} =
-  ## Check if the mouse is in any of tooltips related widgets bounds. If yes,
-  ## update the timer and if delay reached 0, show the selected tooltip. The best
-  ## place to call it is at the end of the Nuklear window declaration.
-  ## Temporary here due to problems with importing nk_rect.
-  var inBounds: bool = false
-  for tp in tooltips:
-    if isMouseHovering(rect = tp.bounds):
-      inBounds = true
-      delay -= frameDelay
-      if delay <= 0:
-        tooltip(text = tp.text)
-  if not inBounds:
-    delay = tooltipDelay
-
 proc createTooltip(width2, x2, y2: float): bool {.raises: [], tags: [], contractual.} =
   ## Create a new Nuklear tooltip window, internal use only, temporary code
   ## temporary code

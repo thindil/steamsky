@@ -420,6 +420,17 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.edit.cursorHover = table[editCursorColor]
   context.style.edit.cursorTextNormal = table[editColor]
   context.style.edit.cursorTextHover = table[editColor]
+  context.style.edit.borderColor = table[StyleColors.borderColor]
+  context.style.edit.textNormal = table[editTextColor]
+  context.style.edit.textHover = table[editTextColor]
+  context.style.edit.textActive = table[editTextColor]
+  context.style.edit.selectedNormal = table[editTextColor]
+  context.style.edit.selectedHover = table[editTextColor]
+  context.style.edit.selectedTextNormal = table[editColor]
+  context.style.edit.selectedTextHover = table[editColor]
+  context.style.edit.scrollbarSize = Vec2(x: 10, y: 10)
+  context.style.edit.scrollbar = context.style.scrollH
+  context.style.edit.padding = Vec2(x: 4, y: 4)
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
