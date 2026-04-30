@@ -160,7 +160,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
       currentRow.inc
       continue
     let itemName: string = getItemName(item = playerShip.cargo[index],
-        damageInfo = false, toLower = false)
+        damageInfo = false, toLower = false, moreInfo = false)
     addButton(table = lootTable, text = itemName, tooltip = tableTooltip,
         command = "ShowLootItemInfo " & $(index + 1), column = 1)
     addButton(table = lootTable, text = itemType, tooltip = tableTooltip,
