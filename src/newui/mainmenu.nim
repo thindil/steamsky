@@ -108,9 +108,7 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
       x: float = 225
       w: float = 150
     row(x = x, y = 0, w = w, h = buttonHeight):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Set and start a new game")
+      showTooltip(text = "Set and start a new game")
       labelButton(title = "New game"):
         state = newGame
         dialog = none
@@ -119,40 +117,31 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if showLoadButton:
       row(x = x, y = y, w = w, h = buttonHeight):
         y += buttonHeight
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Load one of the previously saved games")
+        showTooltip(text = "Load one of the previously saved games")
         labelButton(title = "Load game"):
           state = loadGame
           return
     if showHoFButton:
       row(x = x, y = y, w = w, h = buttonHeight):
         y += buttonHeight
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Show your previous the bests scores in the game")
+        showTooltip(text = "Show your previous the bests scores in the game")
         labelButton(title = "Hall of Fame"):
           state = hallOfFame
           return
     row(x = x, y = y, w = w, h = buttonHeight):
       y += buttonHeight
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "The list of changes to the game")
+      showTooltip(text = "The list of changes to the game")
       labelButton(title = "News"):
         state = news
         return
     row(x = x, y = y, w = w, h = buttonHeight):
       y += buttonHeight
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "General information about the game")
+      showTooltip(text = "General information about the game")
       labelButton(title = "About"):
         state = about
         return
     row(x = x, y = y, w = w, h = buttonHeight):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Quit from the game")
+      showTooltip(text = "Quit from the game")
       labelButton(title = "Quit"):
         state = quitGame
         return
