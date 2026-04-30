@@ -224,7 +224,7 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   for index, item in playerShip.cargo:
     try:
       localCargo.add(y = LocalCargoData(name: getItemName(item = item,
-          damageInfo = false, toLower = false), damage: (item.durability.float /
+          damageInfo = false, toLower = false, moreInfo = false), damage: (item.durability.float /
           getItemMaxDurability(item = item).float), itemType: (if itemsList[
           item.protoIndex].showType.len > 0: itemsList[
           item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
