@@ -606,7 +606,7 @@ type
     thirst: SkillRange = 0
     order: CrewOrders = rest
     previousOrder: CrewOrders = rest
-    orderTime*: range[-1_000..1_000] = 15
+    orderTime: range[-1_000..1_000] = 15
     orders*: array[1..12, Natural]
     inventory*: seq[InventoryData] = @[]
     equipment*: EquipmentArray
@@ -674,6 +674,10 @@ typeGetterSetter(baseType = MemberData, varName = member, name = order,
     typ = CrewOrders)
 typeGetterSetter(baseType = MemberData, varName = member, name = previousOrder,
     typ = CrewOrders)
+typeGetterSetter(baseType = MemberData, varName = member, name = orderTime,
+    typ = range[-1_000..1_000])
+typeGetterSetter(baseType = MemberData, varName = member, name = contractLength,
+    typ = range[-1_000..100_000])
 
 type
   ShipRecord* = object
