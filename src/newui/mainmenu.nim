@@ -187,25 +187,20 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
   layoutSpaceStatic(height = buttonHeight - 10.0, widgetsCount = 2):
     if state == news:
       row(x = (menuWidth - 310).float, y = 0, w = 155, h = buttonHeight):
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Show all changes to the game since previous big stable version")
+        showTooltip(text = "Show all changes to the game since previous big stable version")
         labelButton(title = "Show all changes"):
           state = allNews
           fileContent = ""
           return
     else:
       row(x = (menuWidth - 405).float, y = 0, w = 250, h = buttonHeight):
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Show only changes to the game since previous release")
+        showTooltip(text = "Show only changes to the game since previous release")
         labelButton(title = "Show only newest changes"):
           state = news
           fileContent = ""
           return
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      showTooltip(text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
         fileContent = ""
@@ -230,17 +225,13 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setButtonStyle(field = borderColor, a = 0)
   layoutSpaceStatic(height = buttonHeight * 2, widgetsCount = 4):
     row(x = 255, y = 0, w = 100, h = buttonHeight - 10):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Visit the game website: https://thindil.itch.io/steam-sky")
+      showTooltip(text = "Visit the game website: https://thindil.itch.io/steam-sky")
       labelButton(title = "Website"):
         openLink(link = "https://thindil.itch.io/steam-sky")
     row(x = 270, y = 0, w = 85, h = buttonHeight - 10):
       label(str = "______")
     row(x = 145, y = buttonHeight, w = 330, h = buttonHeight - 10):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Send a mail to the game creator")
+      showTooltip(text = "Send a mail to the game creator")
       labelButton(title = "(c)2016-2026 Bartek thindil Jasicki"):
         openLink(link = "mailto:thindil@laeran.pl.eu.org")
     row(x = 160, y = buttonHeight, w = 315, h = 30):
@@ -248,24 +239,18 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
   restoreButtonStyle()
   layoutSpaceStatic(height = buttonHeight, widgetsCount = 3):
     row(x = 75, y = 0, w = 150, h = buttonHeight - 10):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Guide how to help with creating the game, report bugs, etc.")
+      showTooltip(text = "Guide how to help with creating the game, report bugs, etc.")
       labelButton(title = "Get involved"):
         fileName = "CONTRIBUTING.md"
         state = showFile
         dialog = none
     row(x = 230, y = 0, w = 150, h = buttonHeight - 10):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Guide how to modify the game")
+      showTooltip(text = "Guide how to modify the game")
       labelButton(title = "Modify game"):
         fileName = "MODDING.md"
         state = showFile
     row(x = 385, y = 0, w = 150, h = buttonHeight - 10):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Some technical information about the game")
+      showTooltip(text = "Some technical information about the game")
       labelButton(title = "README"):
         fileName = "README.md"
         state = showFile
@@ -273,15 +258,12 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
   wrapLabel(str = "Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\nSteam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.")
   layoutSpaceStatic(height = buttonHeight, widgetsCount = 2):
     row(x = (menuWidth - 310).float, y = 0, w = 155, h = buttonHeight):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Show full legal text of GNU GPLv3 license")
+      showTooltip(text = "Show full legal text of GNU GPLv3 license")
       labelButton(title = "Show full license"):
         fileName = "COPYING"
         state = showFile
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      showTooltip(text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
   if isKeyPressed(key = keyEscape):
@@ -323,8 +305,7 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
         "' file is in '" & docDirectory.string & "' directory?")
   layoutSpaceStatic(height = buttonHeight + 10, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      showTooltip(text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
         fileContent = ""
@@ -359,8 +340,7 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = entry.deathReason, alignment = centered)
   layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      showTooltip(text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
   if isKeyPressed(key = keyEscape):
@@ -411,25 +391,19 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
   group(title = "LoadGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = tableHeight, cols = 3)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the saved games.")
+    showTooltip("Press mouse button to sort the saved games.")
     labelButton(title = "Player name"):
       if sortOrder == playerAsc:
         sortOrder = playerDesc
       else:
         sortOrder = playerAsc
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the saved games.")
+    showTooltip(text = "Press mouse button to sort the saved games.")
     labelButton(title = "Ship name"):
       if sortOrder == shipAsc:
         sortOrder = shipDesc
       else:
         sortOrder = shipAsc
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the saved games.")
+    showTooltip(text = "Press mouse button to sort the saved games.")
     labelButton(title = "Last saved"):
       if sortOrder == timeAsc:
         sortOrder = timeDesc
@@ -515,14 +489,12 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   restoreButtonStyle()
   let bounds: Rect = Rect(x: 0, y: tableHeight, w: 580, h: (saves.len.float * (
       tableHeight + 5.0)))
-  if gameSettings.showTooltips:
-    addTooltip(bounds = bounds, text = "Press mouse " & (
-        if gameSettings.rightButton: "right" else: "left") & " button to show available option")
+  showTooltip(text = "Press mouse " & (if gameSettings.rightButton: "right"
+      else: "left") & " button to show available option")
   showLoadMenu(dialog = dialog, bounds = bounds)
   layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      showTooltip(text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
         saveClicked = ""
@@ -698,13 +670,11 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
         setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
         if playerGender == i:
           setButtonStyle2(source = active, destination = normal)
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(), text = genders[i])
+          showTooltip(text = genders[i])
           imageButton(image = menuImages[i]):
             playerGender = i.cint
         else:
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(), text = genders[i])
+          showTooltip(text = genders[i])
           imageButton(image = menuImages[i]):
             playerGender = i.cint
         restoreButtonStyle()
