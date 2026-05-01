@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Use the defender's armor's quality to reduce damage in the melee combat
+
 ### Fixed
 - Items don't break during usage
 - Studying an item teach all recipes
