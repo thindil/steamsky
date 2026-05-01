@@ -335,7 +335,7 @@ proc countMeleeDamage(attacker, defender: MemberData; playerAttack2: bool;
         attacker.equipment[weapon]]
     baseDamage += itemsList[attackerWeapon.protoIndex].value[2]
     baseDamage += countItemBonus(value = itemsList[
-        attackerWeapon.protoIndex].value[2], quality = attackerWeapon.quality)
+        attackerWeapon.protoIndex].value[2], quality = getItemQuality(item = attackerWeapon))
   var wounds: float = 1.0 - (attacker.health.float / 100.0)
   result.damage = (baseDamage - (baseDamage.float * wounds.float).int)
   if attacker.thirst > 40:
@@ -837,7 +837,7 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
         addMessage(message = shootMessage, mType = combatMessage, color = cyan)
     if ammoIndex > -1:
       updateCargo(ship = ship, cargoIndex = ammoIndex, amount = -1,
-          quality = ship.cargo[ammoIndex].quality, craftBonus = ship.cargo[
+          quality = getItemQuality(item = ship.cargo[ammoIndex]), craftBonus = ship.cargo[
           ammoIndex].craftBonus, craftMalus = ship.cargo[ammoIndex].craftMalus)
     if ship.crew == playerShip.crew and gunnerIndex > -1:
       gainExp(amount = 2, skillNumber = gunnerySkill,
