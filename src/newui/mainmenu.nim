@@ -490,7 +490,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   let bounds: Rect = Rect(x: 0, y: tableHeight, w: 580, h: (saves.len.float * (
       tableHeight + 5.0)))
   showTooltip(text = "Press mouse " & (if gameSettings.rightButton: "right"
-      else: "left") & " button to show available option")
+    else: "left") & " button to show available option")
   showLoadMenu(dialog = dialog, bounds = bounds)
   layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
@@ -641,21 +641,17 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  {.ruleOff: "varDeclared".}
-  var
-    bounds: array[8, Rect]
-  {.ruleOn: "varDeclared".}
   group(title = "groupSetting", flags = {windowNoFlags}):
     # Character's name
     setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
     label(str = "Character name:")
-    bounds[0] = getWidgetBounds()
-    if mouseClicked(id = left, rect = bounds[0]):
+    if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = playerTooltips[0]
+    showTooltip(text = playerTooltips[0])
     editString(text = playerName, maxLen = 64)
-    bounds[1] = getWidgetBounds()
     saveButtonStyle()
     setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
+    showTooltip(text = playerTooltips[1])
     imageButton(image = menuImages[1]):
       randomName(forPlayer = true)
     restoreButtonStyle()
@@ -681,34 +677,34 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     # Player's ship's name
     setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
     label(str = "Ship name:")
-    bounds[2] = getWidgetBounds()
-    if mouseClicked(id = left, rect = bounds[2]):
+    if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = playerTooltips[2]
+    showTooltip(text = playerTooltips[2])
     editString(text = shipName, maxLen = 64)
-    bounds[3] = getWidgetBounds()
     saveButtonStyle()
     setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
+    showTooltip(text = playerTooltips[3])
     imageButton(image = menuImages[1]):
       randomName(forPlayer = false)
     restoreButtonStyle()
     # Character's goal
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Character goal:")
-    bounds[4] = getWidgetBounds()
-    if mouseClicked(id = left, rect = bounds[4]):
+    if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = playerTooltips[4]
+    showTooltip(text = playerTooltips[4])
     labelButton(title = selectedGoal):
       dialog = newGoalDialog
       setSelectedGoal()
     # Character's faction
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Character faction:")
-    bounds[5] = getWidgetBounds()
+    showTooltip(text = playerTooltips[5])
     newFaction = comboList(items = playerFactions,
         selected = currentFaction, itemHeight = labelHeight.int, x = 200, y = (
             labelHeight * 5.0))
     if newFaction != currentFaction or mouseClicked(id = left,
-        rect = bounds[5]):
+        rect = getWidgetBounds()):
       currentFaction = -1
       playerCareers = @[]
       currentCareer = 0
@@ -732,25 +728,22 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     # Character's career
     if playerCareers.len > 0:
       label(str = "Character career:")
-      bounds[6] = getWidgetBounds()
+      showTooltip(text = playerTooltips[6])
       newCareer = comboList(items = playerCareers,
           selected = currentCareer, itemHeight = 25, x = 200, y = 125)
       if newCareer != currentCareer or mouseClicked(id = left,
-          rect = bounds[6]):
+          rect = getWidgetBounds()):
         currentCareer = -1
     # Starting base
     if playerBases.len > 0:
       label(str = "Starting base type:")
-      bounds[7] = getWidgetBounds()
+      showTooltip(text = playerTooltips[7])
       newBase = comboList(items = playerBases, selected = currentBase,
           itemHeight = 25, x = 200, y = 60)
-      if newBase != currentBase or mouseClicked(id = left, rect = bounds[
-          7]):
+      if newBase != currentBase or mouseClicked(id = left,
+          rect = getWidgetBounds()):
         currentBase = -1
     setInfoText(dialog = dialog)
-    if gameSettings.showTooltips:
-      for index, bound in bounds:
-        addTooltip(bounds = bound, text = playerTooltips[index])
 
 var
   currentLevel: Natural = 2
