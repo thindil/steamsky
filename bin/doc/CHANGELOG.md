@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Items don't break during usage
 - Studying an item teach all recipes
+- Typos in changelog
 
 ## [12.2] - 2026-04-19
 
