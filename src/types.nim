@@ -572,6 +572,7 @@ typeGetterSetter(baseType = SkillInfo, varName = skill, name = level,
     typ = SkillRange)
 typeGetterSetter(baseType = SkillInfo, varName = skill, name = experience, typ = Natural)
 
+{.push ruleOff: "objects".}
 type
   MemberData* = object
     ## Used to store information about the crew member
@@ -613,9 +614,10 @@ type
     payment*: AttributesArray
     contractLength*: range[-1_000..100_000] = -1
     morale*: AttributesArray
-    loyalty*: SkillRange = 100
-    homeBase*: BasesRange = 1
-    faction*: FactionIndex = ""
+    loyalty: SkillRange = 100
+    homeBase: BasesRange = 1
+    faction: FactionIndex = ""
+{.pop ruleOn: "objects".}
 
 proc initMemberData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
     SkillInfo] = @[]; name: MobName = ""; gender: char = 'M';
@@ -678,6 +680,12 @@ typeGetterSetter(baseType = MemberData, varName = member, name = orderTime,
     typ = range[-1_000..1_000])
 typeGetterSetter(baseType = MemberData, varName = member, name = contractLength,
     typ = range[-1_000..100_000])
+typeGetterSetter(baseType = MemberData, varName = member, name = loyalty,
+    typ = SkillRange)
+typeGetterSetter(baseType = MemberData, varName = member, name = homeBase,
+    typ = BasesRange)
+typeGetterSetter(baseType = MemberData, varName = member, name = faction,
+    typ = FactionIndex)
 
 type
   ShipRecord* = object
