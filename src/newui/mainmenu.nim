@@ -326,7 +326,7 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   dialog = none
   setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
   group(title = "HofGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = 25, cols = 4)
+    setLayoutRowDynamic(height = labelHeight, cols = 4)
     colorLabel(str = "Position", color = colYellow, align = centered)
     colorLabel(str = "Name", color = colYellow, align = centered)
     colorLabel(str = "Points", color = colYellow, align = centered)
@@ -339,7 +339,7 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = $entry.points, alignment = centered)
       label(str = entry.deathReason, alignment = centered)
   layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
-    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
       showTooltip(text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
@@ -698,8 +698,8 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
       setSelectedGoal()
     # Character's faction
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
-    label(str = "Character faction:")
     showTooltip(text = playerTooltips[5])
+    label(str = "Character faction:")
     newFaction = comboList(items = playerFactions,
         selected = currentFaction, itemHeight = labelHeight.int, x = 200, y = (
             labelHeight * 5.0))
@@ -727,19 +727,19 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
             break
     # Character's career
     if playerCareers.len > 0:
-      label(str = "Character career:")
       showTooltip(text = playerTooltips[6])
-      newCareer = comboList(items = playerCareers,
-          selected = currentCareer, itemHeight = 25, x = 200, y = 125)
+      label(str = "Character career:")
+      newCareer = comboList(items = playerCareers, selected = currentCareer,
+          itemHeight = labelHeight.int, x = 200, y = (labelHeight * 3.2))
       if newCareer != currentCareer or mouseClicked(id = left,
           rect = getWidgetBounds()):
         currentCareer = -1
     # Starting base
     if playerBases.len > 0:
-      label(str = "Starting base type:")
       showTooltip(text = playerTooltips[7])
+      label(str = "Starting base type:")
       newBase = comboList(items = playerBases, selected = currentBase,
-          itemHeight = 25, x = 200, y = 60)
+          itemHeight = labelHeight.int, x = 200, y = (labelHeight * 2.1))
       if newBase != currentBase or mouseClicked(id = left,
           rect = getWidgetBounds()):
         currentBase = -1
