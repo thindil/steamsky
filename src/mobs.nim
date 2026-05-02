@@ -287,7 +287,7 @@ proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises:
     protoMobsList.hasKey(key = mobIndex)
     factionsList.hasKey(key = factionIndex)
   body:
-    result = MemberData(homeBase: 1)
+    result = initMemberData(homeBase = 1)
     result.faction = (if getRandom(min = 1, max = 100) <
         99: factionIndex else: getRandomFaction())
     result.gender = 'M'
