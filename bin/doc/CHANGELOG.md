@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Use the defender's armor's quality to reduce damage in the melee combat
+- Special features for crafted items related to items' efficiency
 
 ### Fixed
 - Items don't break during usage
