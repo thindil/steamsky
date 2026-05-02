@@ -19,7 +19,7 @@
 ## menu, and selecting its various sections
 
 import std/[algorithm, colors, math, os, sequtils, strutils, tables, times]
-import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
+import contracts, nuklear/nuklear_sdl_renderer
 import ../[basestypes, config, game, game2, gamesaveload, goals,
     halloffame, log, shipscrew, ships2, utils]
 import coreui, debugui, dialogs, errordialog, goalsui, mapsui, themes
@@ -781,15 +781,11 @@ const diffTooltips: array[12, string] = ["Select game difficulty preset level.",
 
 proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the difficulty settings for starting a new game
-  {.ruleOff: "varDeclared".}
-  var
-    bounds: array[11, Rect]
-  {.ruleOn: "varDeclared".}
   group(title = "groupSetting", flags = {windowNoFlags}):
     # Difficulty level
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+    showTooltip(text = diffTooltips[0])
     label(str = "Difficulty level:")
-    bounds[0] = getWidgetBounds()
     var newLevel: Natural = comboList(items = ["Very Easy", "Easy", "Normal",
         "Hard", "Very Hard", "Custom"], selected = currentLevel,
         itemHeight = 25, x = 200, y = 180)
@@ -820,7 +816,9 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
       else:
         setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
         label(str = diffLabel)
-      bounds[index + 1] = getWidgetBounds()
+      showTooltip(text = diffTooltips[index + 1])
+      if mouseClicked(id = left, rect = getWidgetBounds()):
+        infoText = diffTooltips[index + 1]
       let newValue: int = property2(name = "#", min = 1, val = diffSettings[
           index], max = 500, step = 1, incPerPixel = 1)
       if newValue != diffSettings[index]:
@@ -829,7 +827,9 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
         setPoints()
     # Randomize settings
     setLayoutRowDynamic(height = 35, cols = 1)
-    bounds[9] = getWidgetBounds()
+    showTooltip(text = diffTooltips[9])
+    if mouseClicked(id = left, rect = getWidgetBounds()):
+      infoText = diffTooltips[9]
     labelButton(title = "Random"):
       for diffSetting in diffSettings.mitems:
         diffSetting = getRandom(min = 1, max = 500)
@@ -838,18 +838,14 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     # Randomize the settings on the game's start
     setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.9.cfloat, 0.1])
     label(str = "Randomize difficulty on game start:")
-    bounds[10] = getWidgetBounds()
+    showTooltip(text = diffTooltips[10])
+    if mouseClicked(id = left, rect = getWidgetBounds()):
+      infoText = diffTooltips[10]
     checkbox(label = "", checked = randomSettings)
     # Total gained points
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.7.cfloat, 0.3])
     label(str = "Total gained points:")
     label(str = $points & "%")
-    for index, bound in bounds:
-      if mouseClicked(id = left, rect = bound):
-        infoText = diffTooltips[index]
-    if gameSettings.showTooltips:
-      for index, bound in bounds:
-        addTooltip(bounds = bound, text = diffTooltips[index])
 
 proc startGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
