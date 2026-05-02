@@ -431,6 +431,14 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.edit.scrollbarSize = Vec2(x: 10, y: 10)
   context.style.edit.scrollbar = context.style.scrollH
   context.style.edit.padding = Vec2(x: 4, y: 4)
+  context.style.edit.rowPadding = 2
+  context.style.edit.cursorSize = 4
+  context.style.edit.border = 1
+  context.style.edit.rounding = 0
+  context.style.edit.colorFactor = 1.0
+  context.style.edit.disabledFactor = nkWidgetDisabledFactor
+
+  # property
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
