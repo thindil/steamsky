@@ -97,6 +97,8 @@ var
     ## The height of row in pixels for tables
   editHeight*: float = gameSettings.interfaceFontSize.float + 21
     ## The height of row in pixels for edits
+  tabHeight*: float = gameSettings.interfaceFontSize.float + 16
+    ## The height of row in pixels for tabs buttons
 
 {.push ruleOff: "varDeclared".}
 var images*: array[menuIcon..IconsNames.high,
