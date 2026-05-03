@@ -250,10 +250,10 @@ proc checkRecipe*(recipeIndex: string): Positive {.raises: [
       recipeName: string = ""
       itemIndex: Natural = 0
       mType: ModuleType = alchemyLab
-    if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
+    if recipeIndex.startsWith(prefix = "Study"):
       itemIndex = recipeIndex[6..^1].strip.parseInt
       recipeName = "studying " & itemsList[itemIndex].name
-    elif recipeIndex.len > 12 and recipeIndex[0..10] == "Deconstruct":
+    elif recipeIndex.startsWith(prefix = "Deconstruct"):
       itemIndex = recipeIndex[12..^1].strip.parseInt
       recipeName = "deconstructing " & itemsList[itemIndex].name
     else:
@@ -269,14 +269,14 @@ proc checkRecipe*(recipeIndex: string): Positive {.raises: [
           message = recipeName)
     result = Positive.high
     var materialIndexes: seq[Natural] = @[]
-    if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
+    if recipeIndex.startsWith(prefix = "Study"):
       for i in playerShip.cargo.low..playerShip.cargo.high:
         if itemsList[playerShip.cargo[i].protoIndex].name == itemsList[
             recipe.resultIndex].name:
           materialIndexes.add(y = i)
           break
       result = 1
-    elif recipeIndex.len > 12 and recipeIndex[0..10] == "Deconstruct":
+    elif recipeIndex.startsWith(prefix = "Deconstruct"):
       for i in playerShip.cargo.low..playerShip.cargo.high:
         if playerShip.cargo[i].protoIndex == itemIndex:
           materialIndexes.add(y = i)
@@ -355,12 +355,12 @@ proc getMaterialIndexes(module: ModuleData; recipe: CraftData): seq[
   ##
   ## Returns the list of indexes of materials needed to execute the crafting
   ## order
-  if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
+  if module.craftingIndex.startsWith(prefix = "Study"):
     for j in 1..itemsList.len:
       if itemsList[j].name == itemsList[recipe.resultIndex].name:
         result.add(y = j)
         break
-  elif module.craftingIndex.len > 12 and module.craftingIndex[1..10] == "Deconstruct":
+  elif module.craftingIndex.startsWith(prefix = "Deconstruct"):
     result.add(y = module.craftingIndex[12..^1].strip.parseInt)
   else:
     for materialType in recipe.materialTypes:
@@ -405,7 +405,7 @@ proc finishCrafting(recipe: CraftData; module: ModuleData; crafterIndex: int;
   ## * crafterIndex  - the index of the crew member who crafts currently
   ## * craftedAmount - the amount of crafted items
   if recipe.resultAmount > 0:
-    if module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
+    if module.craftingIndex.startsWith(prefix = "Deconstruct"):
       addMessage(message = playerShip.crew[crafterIndex].name &
           " has recovered " & $craftedAmount & " " & itemsList[
           recipe.resultIndex].name & ".", mType = craftMessage, color = green)
@@ -455,7 +455,7 @@ proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
     resetOrder(module = module, moduleOwner = owner,
         toolIndex = toolIndex, crafterIndex = crafterIndex)
     return true
-  if module.craftingIndex.len > 11 and module.craftingIndex[0..10] == "Deconstruct":
+  if module.craftingIndex.startsWith(prefix = "Deconstruct"):
     updateCargo(ship = playerShip, protoIndex = recipe.resultIndex,
         amount = resultAmount, quality = quality, craftBonus = none,
         craftMalus = none)
@@ -568,9 +568,9 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
         recipeName: string = ""
       let recipe: CraftData = setRecipeData(recipeIndex = module.craftingIndex,
           quality = module.craftingQuality)
-      if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
+      if module.craftingIndex.startsWith(prefix = "Study"):
         recipeName = "studying " & itemsList[recipe.resultIndex].name
-      elif module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
+      elif module.craftingIndex.startsWith(prefix = "Deconstruct"):
         recipeName = "deconstructing " & itemsList[module.craftingIndex[
             12..^1].strip.parseInt].name
       else:
@@ -787,10 +787,10 @@ proc getWorkshopRecipeName*(workshop: Natural): string {.raises: [
   body:
     let module: ModuleData = playerShip.modules[workshop]
     if module.craftingIndex.len > 0:
-      if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
+      if module.craftingIndex.startsWith(prefix = "Study"):
         return "Studying " & itemsList[module.craftingIndex[
             6..^1].strip.parseInt].name
-      elif module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
+      elif module.craftingIndex.startsWith(prefix = "Deconstruct"):
         return "Deconstructing " & itemsList[module.craftingIndex[
             12..^1].strip.parseInt].name
       return "Manufacturing " & $module.craftingAmount & "x " & itemsList[
