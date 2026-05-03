@@ -9,7 +9,7 @@ suite "Unit tests for crewinventory module":
   loadItems("bin/data/items.dat".Path)
 
   playerShip.crew = @[]
-  var member = MemberData(homeBase: 1)
+  var member = initMemberData(homeBase = 1)
   const attribute = initMobAttributeRecord(level = 1, experience = 0)
   member.attributes = @[attribute, attribute, attribute, attribute]
   member.inventory.add(y = initInventoryData(amount = 1, protoIndex = 1, durability = 100))
