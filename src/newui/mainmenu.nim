@@ -931,13 +931,11 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             row(x = x, y = 0, w = widgetWidth, h = 30):
               if currentTab == index:
                 changeStyle(src = active, dest = normal):
-                  if gameSettings.showTooltips:
-                    addTooltip(bounds = getWidgetBounds(), text = tabTooltips[index])
+                  showTooltip(text = tabTooltips[index])
                   labelButton(title = tab):
                     discard
               else:
-                if gameSettings.showTooltips:
-                  addTooltip(bounds = getWidgetBounds(), text = tabTooltips[index])
+                showTooltip(text = tabTooltips[index])
                 labelButton(title = tab):
                   currentTab = index.cint
                   infoText = (if index == 0: playerTooltips[
@@ -971,9 +969,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         wrapLabel(str = infoText)
   layoutSpaceStatic(height = 50, widgetsCount = 2):
     row(x = 140, y = 0, w = 155, h = 40):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Start the game")
+      showTooltip(text = "Start the game")
       labelButton(title = "Start game"):
         startGame(dialog = dialog)
         if dialog == none:
@@ -981,8 +977,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if dialog == none:
             state = map
     row(x = 300.float, y = 0, w = 140, h = 40):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      showTooltip(text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
         return
