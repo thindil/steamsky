@@ -783,12 +783,12 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the difficulty settings for starting a new game
   group(title = "groupSetting", flags = {windowNoFlags}):
     # Difficulty level
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.5.cfloat, 0.5])
     showTooltip(text = diffTooltips[0])
     label(str = "Difficulty level:")
     var newLevel: Natural = comboList(items = ["Very Easy", "Easy", "Normal",
         "Hard", "Very Hard", "Custom"], selected = currentLevel,
-        itemHeight = 25, x = 200, y = 180)
+        itemHeight = labelHeight.int, x = 200, y = (labelHeight * 5.0))
     if newLevel != currentLevel:
       currentLevel = newLevel
       case currentLevel
@@ -811,10 +811,11 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
         "Reputation gained:", "Upgrade cost:", "Prices in bases:"]
     for index, diffLabel in diffLabels:
       if index in {2, 3}:
-        setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.5.cfloat, 0.5])
+        setLayoutRowDynamic(height = (editHeight * 2), cols = 2, ratio = [
+            0.5.cfloat, 0.5])
         wrapLabel(str = diffLabel)
       else:
-        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+        setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.5.cfloat, 0.5])
         label(str = diffLabel)
       showTooltip(text = diffTooltips[index + 1])
       if mouseClicked(id = left, rect = getWidgetBounds()):
@@ -826,7 +827,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
         currentLevel = 5
         setPoints()
     # Randomize settings
-    setLayoutRowDynamic(height = 35, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     showTooltip(text = diffTooltips[9])
     if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = diffTooltips[9]
@@ -836,14 +837,15 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
       currentLevel = 5
       setPoints()
     # Randomize the settings on the game's start
-    setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.9.cfloat, 0.1])
+    setLayoutRowDynamic(height = (buttonHeight * 2.0), cols = 2, ratio = [
+        0.9.cfloat, 0.1])
     label(str = "Randomize difficulty on game start:")
     showTooltip(text = diffTooltips[10])
     if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = diffTooltips[10]
     checkbox(label = "", checked = randomSettings)
     # Total gained points
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.7.cfloat, 0.3])
+    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.7.cfloat, 0.3])
     label(str = "Total gained points:")
     label(str = $points & "%")
 
