@@ -177,6 +177,10 @@ type
     ## Used to store a mob's name
   ModuleName* = string
     ## Used to store a module name
+  ShipName* = string
+    ## Used to store a ship's name
+  Description* = string
+    ## Used to store an object's description
 
 template typeGetterSetter(baseType: typedesc; varName, name: untyped;
     typ: typedesc) =
@@ -704,20 +708,21 @@ type
     ## * repairModule  - The index of module which will be repaired as first
     ## * description   - The description of the ship
     ## * homeBase      - The index of the home base of the ship
-    name*: string = ""
+    name*: ShipName = ""
     skyX*: MapXRange = 1
     skyY*: MapYRange = 1
     speed*: ShipSpeed = fullSpeed
     modules*: seq[ModuleData] = @[]
     cargo*: seq[InventoryData] = @[]
     crew*: seq[MemberData] = @[]
-    upgradeModule*: int = -1
+    upgradeModule*: ExtendedNatural = -1
     destinationX*: range[0..MapXRange.high] = 0
     destinationY*: range[0..MapYRange.high] = 0
-    repairModule*: int = -1
-    description*: string = ""
+    repairModule*: ExtendedNatural = -1
+    description*: Description = ""
     homeBase*: Natural = 0
 
+type
   ReputationRanges* = object
     ## Used to store reputation ranges for relation with other factions
     ##
