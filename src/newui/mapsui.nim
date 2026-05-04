@@ -997,30 +997,20 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   restoreButtonStyle()
   # Draw the map's buttons
   setLayoutRowDynamic(height = 20, cols = 5)
-  let bounds: Rect = getWidgetBounds()
-  if gameSettings.showTooltips:
-    addTooltip(bounds = bounds, text = "Show the map movement menu.")
+  showTooltip(text = "Show the map movement menu.")
   labelButton(title = "\uf85b"):
     setDialog(x = windowWidth / 5)
     dialog = mapMenuDialog
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Make the map smaller by one row.")
+  showTooltip(text = "Make the map smaller by one row.")
   imageButtonCentered(image = images[contract2Icon]):
     gameSettings.messagesPosition += height
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Make the map bigger by one row.")
+  showTooltip(text = "Make the map bigger by one row.")
   imageButtonCentered(image = images[expand2Icon]):
     gameSettings.messagesPosition -= height
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Zoom in the map.")
+  showTooltip(text = "Zoom in the map.")
   labelButton(title = "+"):
     zoomMap(dialog = dialog)
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Zoom out the map.")
+  showTooltip(text = "Zoom out the map.")
   labelButton(title = "-"):
     zoomMap(dialog = dialog, zoomIn = false)
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
