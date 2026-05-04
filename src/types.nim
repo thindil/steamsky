@@ -659,6 +659,8 @@ proc initMemberData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
   ## * loyalty        - The loyalty level of the member
   ## * homeBase       - The index of the home base
   ## * faction        - The faction index to which the member belongs
+  ##
+  ## Returns the new structure with information about the selected crew member
   return MemberData(attributes: attributes, skills: skills, name: name,
       gender: gender, health: health, tired: tired, hunger: hunger,
       thirst: thirst, order: order, previousOrder: previousOrder,
@@ -721,6 +723,19 @@ type
     repairModule*: ExtendedNatural = -1
     description*: Description = ""
     homeBase*: Natural = 0
+
+proc initShipRecord*(name: ShipName = ""; skyX: MapXRange = 1;
+    skyY: MapYRange = 1; speed: ShipSpeed = fullSpeed): ShipRecord {.raises: [],
+    tags: [], contractual.} =
+  ## Create a new data structure for the selected ship
+  ##
+  ## * name          - The name of the ship
+  ## * skyX          - The X position of the ship on the map
+  ## * skyY          - The Y position of the ship on the map
+  ## * speed         - The current setting for the ship's speed
+  ##
+  ## Returns the new structure with information about the selected crew member
+  return ShipRecord(name: name, skyX: skyX, skyY: skyY, speed: speed)
 
 type
   ReputationRanges* = object
