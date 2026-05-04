@@ -42,9 +42,9 @@ suite "Unit tests for shipscrew2 module":
       playerShip.crew.len == (oldLength - 1)
 
   test "Killing a crew member.":
-    playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
-        homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
-        1, 0, 0], order: gunner, loyalty: 100))
+    playerShip.crew.add(y = initMemberData(morale = [1: 50.Natural, 2: 0.Natural],
+        homeBase = 1, faction = "POLEIS", orders = [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
+        1, 0, 0], order = gunner, loyalty = 100))
     playerShip.cargo = @[]
     let oldLength = playerShip.crew.len
     death(1, "Test death", playerShip)
