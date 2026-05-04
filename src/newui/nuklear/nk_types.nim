@@ -1411,6 +1411,17 @@ type
     padding*: Vec2
     userData*: Handle
     drawBegin*, drawEnd*: DrawF
+  StyleProperty* = object
+    ## Used to store Nuklear style data for property widgets
+    normal*, hover*, active*: StyleItem
+    borderColor*, labelNormal*, labelHover*, labelActive*: NkColor
+    symLeft*, symRight*: SymbolType
+    border*, rounding*, colorFactor*, disabledFactor*: float
+    padding*: Vec2
+    edit*: StyleEdit
+    incButton*, decButton: StyleButton
+    userData*: Handle
+    drawBegin*, drawEnd*: DrawF
   TextWidthF* = proc(arg1: Handle; h: float; arg3: string; len: int): cfloat
     ## Used to count width of the selected text
   UserFontGlyph* = object
@@ -1532,7 +1543,8 @@ type
     ## Used to store Nuklear style data slider widgets
     window*: StyleWindow
     button*, contextualButton*, menuButton*: StyleButton
-    progress*, property*: StyleProgress
+    progress*: StyleProgress
+    property*: StyleProperty
     font*: UserFont
     text*: StyleText
     cursorActive*, cursorLast*: Cursor
