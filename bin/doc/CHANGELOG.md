@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Use the defender's armor's quality to reduce damage in the melee combat
 - Special features for crafted items related to items' efficiency
+- Icon for map menu, author: Delapouite (https://game-icons.net),
+  license CC BY 3.0
 
 ### Fixed
 - Items don't break during usage
