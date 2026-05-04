@@ -917,7 +917,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       windowPropertyActive(name = "Main")
   changeStyle(field = spacing, x = 0, y = 0):
     changeStyle(field = buttonRounding, value = 0):
-      layoutSpaceStatic(height = 30, widgetsCount = 2):
+      layoutSpaceStatic(height = tabHeight, widgetsCount = 2):
         var x: float = 200
         const
           tabs: array[2, string] = ["Player", "Difficulty"]
@@ -928,7 +928,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               textWidth: float = getTextWidth(text = tab)
               widgetWidth: float = textWidth + 15 * getButtonStyle(
                   field = padding).x;
-            row(x = x, y = 0, w = widgetWidth, h = 30):
+            row(x = x, y = 0, w = widgetWidth, h = tabHeight):
               if currentTab == index:
                 changeStyle(src = active, dest = normal):
                   showTooltip(text = tabTooltips[index])
@@ -956,19 +956,19 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       fileLines = 3
       for line in infoText.split(sep = "\n\n"):
         var needLines: float = try:
-            ceil(x = getTextWidth(text = line) / (infoWidth - 35.0))
+            ceil(x = getTextWidth(text = line) / (infoWidth - labelHeight - 10.0))
           except:
             dialog = setError(message = "Can't count the line height.")
             return
         if needLines < 1.0:
           needLines = 1.0
         fileLines += needLines.int
-      fileLines *= 25
+      fileLines *= labelHeight.int
       group(title = "Info", flags = {windowBorder, windowTitle}):
         setLayoutRowDynamic(height = fileLines.float, cols = 1)
         wrapLabel(str = infoText)
-  layoutSpaceStatic(height = 50, widgetsCount = 2):
-    row(x = 140, y = 0, w = 155, h = 40):
+  layoutSpaceStatic(height = buttonHeight, widgetsCount = 2):
+    row(x = 140, y = 0, w = 155, h = buttonHeight):
       showTooltip(text = "Start the game")
       labelButton(title = "Start game"):
         startGame(dialog = dialog)
@@ -976,7 +976,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           setGame(dialog = dialog)
           if dialog == none:
             state = map
-    row(x = 300.float, y = 0, w = 140, h = 40):
+    row(x = 300.float, y = 0, w = 140, h = buttonHeight):
       showTooltip(text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
