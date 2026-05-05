@@ -996,9 +996,11 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 mapY = y
   restoreButtonStyle()
   # Draw the map's buttons
+  nuklearSetDefaultFont(defaultFont = fonts[UIFont],
+      fontSize = gameSettings.interfaceFontSize + 10)
   setLayoutRowDynamic(height = 20, cols = 5)
   showTooltip(text = "Show the map movement menu.")
-  labelButton(title = "\uf85b"):
+  imageButtonCentered(image = images[mapMenuIcon]):
     setDialog(x = windowWidth / 5)
     dialog = mapMenuDialog
   showTooltip(text = "Make the map smaller by one row.")
@@ -1013,8 +1015,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showTooltip(text = "Zoom out the map.")
   labelButton(title = "-"):
     zoomMap(dialog = dialog, zoomIn = false)
-  nuklearSetDefaultFont(defaultFont = fonts[UIFont],
-      fontSize = gameSettings.interfaceFontSize + 10)
   layoutDynamic(height = windowHeight - mapHeight - 75, cols = 2):
     # Draw last messages
     row(width = 0.75):
