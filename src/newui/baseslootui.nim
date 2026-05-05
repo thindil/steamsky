@@ -330,15 +330,15 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if updateData:
     refreshLootList(dialog = dialog)
     baseCargo = skyBases[baseIndex].cargo
-  setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.1.cfloat, 0.3])
+  setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.1.cfloat, 0.3])
   label(str = "Type:")
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Show only items of the selected type")
   typeIndex = comboList(items = typesList, selected = typeIndex,
-      itemHeight = 25, x = 200, y = 150)
+      itemHeight = labelHeight.int, x = 200, y = 150)
   # Show information about free cargo space in the player's ship
-  setLayoutRowStatic(height = 30, cols = 2, ratio = [cargoWidth[0], cargoWidth[1]])
+  setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [cargoWidth[0], cargoWidth[1]])
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   # Show the list of items to loot
