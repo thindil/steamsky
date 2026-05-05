@@ -52,14 +52,15 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   centerY = playerShip.skyY
   mapPreview = false
 
-var mapInfoX: float = (windowWidth - 240.0)
+var
+  mapInfoX: float = (windowWidth - 240.0)
+  mapXInfo: MapXRange
+  mapYInfo: MapYRange
 
-proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
+proc showMapInfo(theme: ThemeData) {.raises: [
     ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the map cell info popup
   ##
-  ## * x      - the X coordinate of the map cell which info will be show
-  ## * y      - the Y coordinate of the map cell which info will be show
   ## * theme  - the current game's theme
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
@@ -73,14 +74,14 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
       row(width = 20):
         label(str = "X:")
       row(width = 80):
-        colorLabel(str = $x, color = theme.mapColors[mapGoldenYellow])
+        colorLabel(str = $mapXInfo, color = theme.mapColors[mapGoldenYellow])
       row(width = 20):
         label(str = "Y:")
       row(width = 80):
-        colorLabel(str = $y, color = theme.mapColors[mapGoldenYellow])
-    if playerShip.skyX != x or playerShip.skyY != y:
+        colorLabel(str = $mapYInfo, color = theme.mapColors[mapGoldenYellow])
+    if playerShip.skyX != mapXInfo or playerShip.skyY != mapYInfo:
       let
-        distance: Natural = countDistance(destinationX = x, destinationY = y)
+        distance: Natural = countDistance(destinationX = mapXInfo, destinationY = mapYInfo)
         travelValues: TravelArray = travelInfo(distance = distance)
       layoutStatic(height = 25, cols = 2):
         row(width = 80):
@@ -99,8 +100,8 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
             label(str = "Approx fuel usage:")
           row(width = 70):
             colorLabel(str = $travelValues[2], color = theme.mapColors[mapGoldenYellow])
-    if skyMap[x][y].baseIndex > 0:
-      let baseIndex: Positive = skyMap[x][y].baseIndex
+    if skyMap[mapXInfo][mapYInfo].baseIndex > 0:
+      let baseIndex: Positive = skyMap[mapXInfo][mapYInfo].baseIndex
       if skyBases[baseIndex].known:
         setLayoutRowDynamic(height = 25, cols = 1)
         colorLabel(str = "Base info:", color = theme.mapColors[mapPinkColor])
