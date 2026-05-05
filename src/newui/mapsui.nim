@@ -165,9 +165,9 @@ proc showMapInfo(theme: ThemeData) {.raises: [
             colorLabel(str = "You are well known here", color = theme.mapColors[mapGreenColor])
         if baseIndex == playerShip.homeBase:
           colorLabel(str = "It is your home base", color = theme.mapColors[mapCyanColor])
-    if skyMap[x][y].missionIndex > -1:
+    if skyMap[mapXInfo][mapYInfo].missionIndex > -1:
       setLayoutRowDynamic(height = 25, cols = 1)
-      let missionIndex: int = skyMap[x][y].missionIndex
+      let missionIndex: int = skyMap[mapXInfo][mapYInfo].missionIndex
       case acceptedMissions[missionIndex].mType
       of deliver:
         label(str = "Deliver " & itemsList[acceptedMissions[
@@ -184,7 +184,7 @@ proc showMapInfo(theme: ThemeData) {.raises: [
     if mapPreview:
       for mission in skyBases[skyMap[playerShip.skyX][
           playerShip.skyY].baseIndex].missions:
-        if mission.targetX == x and mission.targetY == y:
+        if mission.targetX == mapXInfo and mission.targetY == mapYInfo:
           setLayoutRowDynamic(height = 50, cols = 1)
           case mission.mType
           of deliver:
@@ -205,7 +205,7 @@ proc showMapInfo(theme: ThemeData) {.raises: [
         storyX = 0
         storyY = 0
       var finishCondition: StepConditionType = any
-      if y == storyX and y == storyY:
+      if mapXInfo == storyX and mapYInfo == storyY:
         finishCondition = (if currentStory.currentStep == 0: storiesList[
             currentStory.index].startingStep.finishCondition elif currentStory.currentStep >
             0: storiesList[currentStory.index].steps[
@@ -214,10 +214,10 @@ proc showMapInfo(theme: ThemeData) {.raises: [
         if finishCondition in {askInBase, destroyShip, explore}:
           setLayoutRowDynamic(height = 25, cols = 1)
           label(str = "Story leads you here")
-    if x == playerShip.skyX and y == playerShip.skyY:
+    if mapXinfo == playerShip.skyX and mapYInfo == playerShip.skyY:
       setLayoutRowDynamic(height = 25, cols = 1)
       colorLabel(str = "You are here", color = theme.mapColors[mapYellowColor])
-    if skyMap[x][y].eventIndex > -1:
+    if skyMap[mapXInfo][mapYInfo].eventIndex > -1:
       setLayoutRowDynamic(height = 25, cols = 1)
       let eventIndex: Natural = skyMap[x][y].eventIndex
       label(str = "")
