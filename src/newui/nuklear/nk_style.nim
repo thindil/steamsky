@@ -446,6 +446,21 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.property.active = StyleItem(iType: itemColor,
       data: StyleItemData(itype: itemColor, color: table[propertyColor]))
   context.style.property.borderColor = table[StyleColors.borderColor]
+  context.style.property.labelNormal = table[StyleColors.textColor]
+  context.style.property.labelHover = table[StyleColors.textColor]
+  context.style.property.labelActive = table[StyleColors.textColor]
+  context.style.property.symLeft = triangleLeft
+  context.style.property.symRight = triangleRight
+  context.style.property.userData = Handle(handleType: handleInt, intValue: 0)
+  context.style.property.padding = Vec2(x: 4, y: 4)
+  context.style.property.border = 1
+  context.style.property.rounding = 10
+  context.style.property.drawBegin = nil
+  context.style.property.drawEnd = nil
+  context.style.property.colorFactor = 1.0
+  context.style.property.disabledFactor = nkWidgetDisabledFactor
+
+  # property buttons
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
