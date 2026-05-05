@@ -390,7 +390,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
   group(title = "LoadGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = tableHeight, cols = 3)
+    setLayoutRowDynamic(height = tableRowHeight, cols = 3)
     showTooltip("Press mouse button to sort the saved games.")
     labelButton(title = "Player name"):
       if sortOrder == playerAsc:
@@ -472,23 +472,23 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       return
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
-    layoutSpaceStatic(height = (saves.len.float * tableHeight), widgetsCount = (
+    layoutSpaceStatic(height = (saves.len.float * tableRowHeight), widgetsCount = (
         saves.len * 3)):
       for index, save in saves:
         let
-          y: float = (index.float * tableHeight)
-        row(x = 0, y = y, w = 190, h = tableHeight):
+          y: float = (index.float * tableRowHeight)
+        row(x = 0, y = y, w = 190, h = tableRowHeight):
           labelButton(title = save.playerName):
             saveClicked = save.path
-        row(x = 190, y = y, w = 190, h = tableHeight):
+        row(x = 190, y = y, w = 190, h = tableRowHeight):
           labelButton(title = save.shipName):
             saveClicked = save.path
-        row(x = 380, y = y, w = 190, h = tableHeight):
+        row(x = 380, y = y, w = 190, h = tableRowHeight):
           labelButton(title = save.saveTime):
             saveClicked = save.path
   restoreButtonStyle()
-  let bounds: Rect = Rect(x: 0, y: tableHeight, w: 580, h: (saves.len.float * (
-      tableHeight + 5.0)))
+  let bounds: Rect = Rect(x: 0, y: tableRowHeight, w: 580, h: (saves.len.float * (
+      tableRowHeight + 5.0)))
   showTooltip(text = "Press mouse " & (if gameSettings.rightButton: "right"
     else: "left") & " button to show available option")
   showLoadMenu(dialog = dialog, bounds = bounds)
