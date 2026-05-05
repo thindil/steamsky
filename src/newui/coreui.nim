@@ -93,7 +93,7 @@ var
     ## The height of row in pixels for buttons
   labelHeight*: float = gameSettings.interfaceFontSize.float + 11
     ## The height of row in pixels for labels
-  tableHeight*: float = gameSettings.interfaceFontSize.float + 21
+  tableRowHeight*: float = gameSettings.interfaceFontSize.float + 21
     ## The height of row in pixels for tables
   editHeight*: float = gameSettings.interfaceFontSize.float + 21
     ## The height of row in pixels for edits
