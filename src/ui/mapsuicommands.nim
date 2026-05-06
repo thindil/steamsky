@@ -1033,11 +1033,22 @@ proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   if tclEval2(script = "winfo class " & focusedWidget) == "TEntry" or tclEval2(
       script = "tk busy status " & gameHeader) == "1":
     return tclOk
-  const menuCommands: array[1..11, string] = ["ShowShipInfo", "ShowOrders",
-      "ShowCrafting", "ShowLastMessages", "ShowKnowledge", "ShowWait",
-      "ShowStats", "ShowHelp", "ShowOptions", "QuitGame", "ResignGame"]
+  let
+    state: string = tclGetVar(varName = "gamestate")
+    menuCommands: array[1..11, string] = case state
+      of "combat":
+        ["ShowShipInfo", "", "ShowCrafting", "ShowLastMessages",
+            "ShowKnowledge", "", "ShowStats", "ShowHelp", "ShowOptions",
+            "QuitGame", "ResignGame"]
+      of "dead":
+        ["ShowShipInfo", "", "", "ShowLastMessages", "ShowKnowledge", "",
+            "ShowStats", "", "", "", ""]
+      else:
+        ["ShowShipInfo", "ShowOrders", "ShowCrafting", "ShowLastMessages",
+            "ShowKnowledge", "ShowWait", "ShowStats", "ShowHelp", "ShowOptions",
+            "QuitGame", "ResignGame"]
   for index, accel in menuAccelerators:
-    if accel == $argv[1]:
+    if accel == $argv[1] and menuCommands[index].len > 0:
       tclEval(script = menuCommands[index])
       return tclOk
   return tclOk
