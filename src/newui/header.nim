@@ -665,7 +665,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
     windowName: string = "Game Menu"
   var height: float = 455
   if inCombat:
-    height = 355
+    height = 380
   elif playerShip.crew[0].health == 0:
     height = 220
   updateDialog(width = width, height = height)
@@ -679,6 +679,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
       labelButton(title = "Ship orders"):
         setDialog()
         dialog = ordersDialog
+    if playerShip.crew[0].health > 0:
       labelButton(title = "Crafting"):
         showCraftScreen(dialog = dialog, state = state)
     labelButton(title = "Last messages"):
