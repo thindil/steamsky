@@ -54,16 +54,14 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 
 var
   mapInfoX: float = (windowWidth - 240.0)
-  mapXInfo: MapXRange
-  mapYInfo: MapYRange
+  mapXInfo: MapXRange = playerShip.skyX
+  mapYInfo: MapYRange = playerShip.skyY
 
 proc showMapInfo(theme: ThemeData) {.raises: [
     ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the map cell info popup
   ##
   ## * theme  - the current game's theme
-  nuklearSetDefaultFont(defaultFont = fonts[UIFont],
-      fontSize = gameSettings.interfaceFontSize + 10)
   tooltip(x = mapInfoX, y = 45, width = 230):
     if windowIsHovered():
       if mapInfoX == 10:
@@ -214,12 +212,12 @@ proc showMapInfo(theme: ThemeData) {.raises: [
         if finishCondition in {askInBase, destroyShip, explore}:
           setLayoutRowDynamic(height = 25, cols = 1)
           label(str = "Story leads you here")
-    if mapXinfo == playerShip.skyX and mapYInfo == playerShip.skyY:
+    if mapXInfo == playerShip.skyX and mapYInfo == playerShip.skyY:
       setLayoutRowDynamic(height = 25, cols = 1)
       colorLabel(str = "You are here", color = theme.mapColors[mapYellowColor])
     if skyMap[mapXInfo][mapYInfo].eventIndex > -1:
       setLayoutRowDynamic(height = 25, cols = 1)
-      let eventIndex: Natural = skyMap[x][y].eventIndex
+      let eventIndex: Natural = skyMap[mapXInfo][mapYInfo].eventIndex
       label(str = "")
       case eventsList[eventIndex].eType
       of trader:
@@ -244,8 +242,6 @@ proc showMapInfo(theme: ThemeData) {.raises: [
             eventIndex].itemIndex].name, color = theme.mapColors[mapLimeColor])
       of EventsTypes.none, baseRecovery:
         discard
-  nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
-      fontSize = gameSettings.mapFontSize + 10)
 
 var
   moveX: MapXRange = 1
@@ -979,11 +975,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               dialog = setError(message = "Can't set map color")
               return
             if isMouseHovering(rect = getWidgetBounds()):
-              try:
-                showMapInfo(x = x, y = y, theme = theme)
-              except:
-                dialog = setError(message = "Can't show the map info")
-                return
+              mapXInfo = x
+              mapYInfo = y
             if dialog != none:
               windowDisable()
             labelButton(title = mapChar):
