@@ -461,6 +461,12 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.property.disabledFactor = nkWidgetDisabledFactor
 
   # property buttons
+  context.style.property.decButton.normal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[propertyColor]))
+  context.style.property.decButton.hover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[propertyColor]))
+  context.style.property.decButton.active = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[propertyColor]))
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting

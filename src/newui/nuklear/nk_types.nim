@@ -1419,7 +1419,7 @@ type
     border*, rounding*, colorFactor*, disabledFactor*: float
     padding*: Vec2
     edit*: StyleEdit
-    incButton*, decButton: StyleButton
+    incButton*, decButton*: StyleButton
     userData*: Handle
     drawBegin*, drawEnd*: DrawF
   TextWidthF* = proc(arg1: Handle; h: float; arg3: string; len: int): cfloat
