@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Items don't break during usage
 - Studying an item teach all recipes
 - Typos in changelog
+- Keyboard shortcuts in combat, ticket b0e2652a18
 
 ## [12.2] - 2026-04-19
 
