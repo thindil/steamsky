@@ -527,7 +527,8 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   let
     mapView: string = mainPaned & ".mapframe.map"
-    mapIndex: string = tclEval2(script = mapView & " index @" & $argv[1] & "," & $argv[2])
+    mapIndex: string = tclEval2(script = mapView & " index @" & $argv[1] & "," &
+        $argv[2])
   try:
     if startY + (mapIndex[0 .. mapIndex.find(sub = ".") - 1]).parseInt - 1 < 1:
       return tclOk
@@ -555,8 +556,10 @@ proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   if playerShip.skyX == mapX and playerShip.skyY == mapY:
     return showOrdersCommand(clientData = clientData, interp = interp,
         argc = argc, argv = argv)
-  let destinationDialog: string = createDialog(name = ".gameframe.destinationmenu",
-      title = "Set destination", parentName = ".gameframe")
+  let destinationDialog: string = createDialog(
+      name = ".gameframe.destinationmenu",
+
+title = "Set destination", parentName = ".gameframe")
   var button: string = destinationDialog & ".set"
   tclEval(script = "ttk::button " & button &
       " -text {Set destination} -command {SetDestination;CloseDialog " &
@@ -675,7 +678,8 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
   drawMap()
   return tclOk
 
-proc updateCoordinates(newX, newY: var int) {.raises: [], tags: [], contractual.} =
+proc updateCoordinates(newX, newY: var int) {.raises: [], tags: [],
+    contractual.} =
   ## Update the new coordinates of the player's ship
   ##
   ## * newX - the new X coordinate of the player's ship
@@ -825,7 +829,8 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
           break
       if gameSettings.autoMoveStop != never and skyMap[playerShip.skyX][
           playerShip.skyY].eventIndex > -1:
-        let eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+        let eventIndex: int = skyMap[playerShip.skyX][
+            playerShip.skyY].eventIndex
         case gameSettings.autoMoveStop
         of any:
           if eventsList[eventIndex].eType in {enemyShip, trader, friendlyShip, enemyPatrol}:
@@ -1033,11 +1038,22 @@ proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   if tclEval2(script = "winfo class " & focusedWidget) == "TEntry" or tclEval2(
       script = "tk busy status " & gameHeader) == "1":
     return tclOk
-  const menuCommands: array[1..11, string] = ["ShowShipInfo", "ShowOrders",
-      "ShowCrafting", "ShowLastMessages", "ShowKnowledge", "ShowWait",
-      "ShowStats", "ShowHelp", "ShowOptions", "QuitGame", "ResignGame"]
+  let
+    state: string = tclGetVar(varName = "gamestate")
+    menuCommands: array[1..11, string] = case state
+      of "combat":
+        ["ShowShipInfo", "", "ShowCrafting", "ShowLastMessages",
+            "ShowKnowledge", "", "ShowStats", "ShowHelp", "ShowOptions",
+            "QuitGame", "ResignGame"]
+      of "dead":
+        ["ShowShipInfo", "", "", "ShowLastMessages", "ShowKnowledge", "",
+            "ShowStats", "", "", "", ""]
+      else:
+        ["ShowShipInfo", "ShowOrders", "ShowCrafting", "ShowLastMessages",
+            "ShowKnowledge", "ShowWait", "ShowStats", "ShowHelp", "ShowOptions",
+            "QuitGame", "ResignGame"]
   for index, accel in menuAccelerators:
-    if accel == $argv[1]:
+    if accel == $argv[1] and menuCommands[index].len > 0:
       tclEval(script = menuCommands[index])
       return tclOk
   return tclOk
