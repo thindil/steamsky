@@ -216,7 +216,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     changeStyle(field = spacing, x = 0, y = 0):
       changeStyle(field = buttonRounding, value = 0):
-        setLayoutRowDynamic(height = 30, cols = 4)
+        setLayoutRowDynamic(height = tabHeight, cols = 4)
         const tabs: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
         for index, tab in tabs:
           try:
@@ -234,7 +234,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       case currentTab
       # General info about the selected recruit
       of 0:
-        setLayoutRowDynamic(height = 35, cols = 2)
+        setLayoutRowDynamic(height = labelHeight, cols = 2)
         label(str = "Gender:")
         colorLabel(str = if recruit.gender == 'M': "Male" else: "Female",
             color = theme.colors[goldenColor])
