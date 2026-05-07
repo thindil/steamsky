@@ -729,9 +729,8 @@ proc initShipRecord*(name: ShipName = ""; skyX: MapXRange = 1;
     ModuleData] = @[]; cargo: seq[InventoryData] = @[]; crew: seq[
     MemberData] = @[]; upgradeModule: ExtendedNatural = -1; destinationX: range[
     0..MapXRange.high] = 0; destinationY: range[0..MapYRange.high] = 0;
-    repairModule: ExtendedNatural = -1;
-    description: Description): ShipRecord {.raises: [], tags: [],
-    contractual.} =
+    repairModule: ExtendedNatural = -1; description: Description;
+    homeBase: Natural = 0): ShipRecord {.raises: [], tags: [], contractual.} =
   ## Create a new data structure for the selected ship
   ##
   ## * name          - The name of the ship
@@ -746,12 +745,13 @@ proc initShipRecord*(name: ShipName = ""; skyX: MapXRange = 1;
   ## * destinationY  - The Y position to which the ship goes
   ## * repairModule  - The index of module which will be repaired as first
   ## * description   - The description of the ship
+  ## * homeBase      - The index of the home base of the ship
   ##
   ## Returns the new structure with information about the selected crew member
   return ShipRecord(name: name, skyX: skyX, skyY: skyY, speed: speed,
       modules: modules, cargo: cargo, crew: crew, upgradeModule: upgradeModule,
       destinationX: destinationX, destinationY: destinationY,
-      repairModule: repairModule, description: description)
+      repairModule: repairModule, description: description, homeBase: homeBase)
 
 type
   ReputationRanges* = object
