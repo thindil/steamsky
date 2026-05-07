@@ -472,8 +472,8 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       return
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
-    layoutSpaceStatic(height = (saves.len.float * tableRowHeight), widgetsCount = (
-        saves.len * 3)):
+    layoutSpaceStatic(height = (saves.len.float * tableRowHeight),
+        widgetsCount = (saves.len * 3)):
       for index, save in saves:
         let
           y: float = (index.float * tableRowHeight)
@@ -487,8 +487,8 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           labelButton(title = save.saveTime):
             saveClicked = save.path
   restoreButtonStyle()
-  let bounds: Rect = Rect(x: 0, y: tableRowHeight, w: 580, h: (saves.len.float * (
-      tableRowHeight + 5.0)))
+  let bounds: Rect = Rect(x: 0, y: tableRowHeight, w: 580, h: (saves.len.float *
+      (tableRowHeight + 5.0)))
   showTooltip(text = "Press mouse " & (if gameSettings.rightButton: "right"
     else: "left") & " button to show available option")
   showLoadMenu(dialog = dialog, bounds = bounds)
@@ -698,11 +698,10 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
       setSelectedGoal()
     # Character's faction
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
-    showTooltip(text = playerTooltips[5])
     label(str = "Character faction:")
-    newFaction = comboList(items = playerFactions,
-        selected = currentFaction, itemHeight = labelHeight.int, x = 200, y = (
-            labelHeight * 5.0))
+    newFaction = comboList(items = playerFactions, selected = currentFaction,
+        itemHeight = labelHeight.int, x = 200, y = (labelHeight * 5.0),
+        tooltip = playerTooltips[5])
     if newFaction != currentFaction or mouseClicked(id = left,
         rect = getWidgetBounds()):
       currentFaction = -1
@@ -727,19 +726,19 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
             break
     # Character's career
     if playerCareers.len > 0:
-      showTooltip(text = playerTooltips[6])
       label(str = "Character career:")
       newCareer = comboList(items = playerCareers, selected = currentCareer,
-          itemHeight = labelHeight.int, x = 200, y = (labelHeight * 3.2))
+          itemHeight = labelHeight.int, x = 200, y = (labelHeight * 3.2),
+          tooltip = playerTooltips[6])
       if newCareer != currentCareer or mouseClicked(id = left,
           rect = getWidgetBounds()):
         currentCareer = -1
     # Starting base
     if playerBases.len > 0:
-      showTooltip(text = playerTooltips[7])
       label(str = "Starting base type:")
       newBase = comboList(items = playerBases, selected = currentBase,
-          itemHeight = labelHeight.int, x = 200, y = (labelHeight * 2.1))
+          itemHeight = labelHeight.int, x = 200, y = (labelHeight * 2.1),
+          tooltip = playerTooltips[7])
       if newBase != currentBase or mouseClicked(id = left,
           rect = getWidgetBounds()):
         currentBase = -1
@@ -784,11 +783,11 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
   group(title = "groupSetting", flags = {windowNoFlags}):
     # Difficulty level
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.5.cfloat, 0.5])
-    showTooltip(text = diffTooltips[0])
     label(str = "Difficulty level:")
     var newLevel: Natural = comboList(items = ["Very Easy", "Easy", "Normal",
         "Hard", "Very Hard", "Custom"], selected = currentLevel,
-        itemHeight = labelHeight.int, x = 200, y = (labelHeight * 5.0))
+        itemHeight = labelHeight.int, x = 200, y = (labelHeight * 5.0),
+        tooltip = diffTooltips[0])
     if newLevel != currentLevel:
       currentLevel = newLevel
       case currentLevel
