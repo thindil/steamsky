@@ -99,6 +99,17 @@ proc showTooltip*(text: string) {.raises: [], tags: [], contractual.} =
   if delay <= 0:
     tooltip(text = text)
 
+proc showTooltip2*(text: string) {.raises: [], tags: [], contractual.} =
+  ## Show the selected tooltip for the next widget. The procedure should be
+  ## called before the widget which will have the tooltip.
+  ##
+  ## * text - the text to show on the tooltip
+  if not tooltipEnabled:
+    return
+  hoveredTooltip = true
+  if delay <= 0:
+    tooltip(text = text)
+
 proc updateTooltips*() {.raises: [], tags: [], contractual.} =
   ## Update tooltips timer
   if not tooltipEnabled:

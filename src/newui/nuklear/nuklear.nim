@@ -2536,7 +2536,7 @@ template changeStyle*(src, dest: ButtonStyleTypes; code: untyped) =
 # Combos
 # ------
 proc comboList*(items: openArray[string]; selected, itemHeight: int; x,
-    y: float; amount: int = items.len - 1): int {.raises: [], tags: [],
+    y: float; amount: int = items.len - 1; tooltip: string = ""): int {.raises: [], tags: [],
         contractual.} =
   ## Create a Nuklear combo widget
   ##
@@ -2547,6 +2547,7 @@ proc comboList*(items: openArray[string]; selected, itemHeight: int; x,
   ## * y           - the height of the combo's values list
   ## * amount      - the amount of items in the items list. Default to the length
   ##                 of the list
+  ## * tooltip     - the tooltip to show when mouse is hovering over the widget
   ##
   ## Returns the index of the currently selected valu on the combo's list
   proc nk_combo(ctx; items: pointer; count,
@@ -2556,9 +2557,12 @@ proc comboList*(items: openArray[string]; selected, itemHeight: int; x,
   var optionsList: seq[cstring] = @[]
   for i in 0..amount:
     optionsList.add(y = items[i].cstring)
-  return nk_combo(ctx = ctx, items = optionsList[0].addr, count = amount.cint +
+  let bounds = getWidgetBounds()
+  result = nk_combo(ctx = ctx, items = optionsList[0].addr, count = amount.cint +
       1, selected = selected.cint, itemHeight = itemHeight.cint,
           size = new_nk_vec2(x = x.cfloat, y = y.cfloat)).int
+  if tooltip.len > 0 and isMouseHovering(rect = bounds):
+    showTooltip2(text = tooltip)
 
 proc createColorCombo(ctx; color1: NkColor; x1, y1: cfloat): bool {.raises: [],
     tags: [], contractual.} =
