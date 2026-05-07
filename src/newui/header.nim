@@ -665,7 +665,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
     windowName: string = "Game Menu"
   var height: float = 455
   if inCombat:
-    height = 380
+    height = 390
   elif playerShip.crew[0].health == 0:
     height = 220
   updateDialog(width = width, height = height)
