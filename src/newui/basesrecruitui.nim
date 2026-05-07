@@ -251,7 +251,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       # Statistics of the selected recruit
       of 1:
         for index, attrib in recruit.attributes:
-          setLayoutRowStatic(height = 35, cols = 3, ratio = [120.cfloat, 120, 35])
+          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.6.cfloat, 0.3, 0.1])
           label(str = attributesList[index].name & ":")
           colorLabel(str = getAttributeLevelName(
               attributeLevel = attrib.level), color = theme.colors[goldenColor])
@@ -269,7 +269,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       of 2:
         for skill in recruit.skills:
           try:
-            setLayoutRowStatic(height = 35, cols = 3, ratio = [120.cfloat, 120, 35])
+            setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.6.cfloat, 0.3, 0.1])
             label(str = skillsList[skill.index].name & ":")
             colorLabel(str = getSkillLevelName(skillLevel = skill.level),
                 color = theme.colors[goldenColor])
