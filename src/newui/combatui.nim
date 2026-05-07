@@ -597,7 +597,7 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
   if showHeader(dialog = dialog, close = (if endCombat: CloseDestination.map else:
-    CloseDestination.none), state = state):
+    CloseDestination.combat), state = state):
     return
   let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
   setLayoutRowDynamic(height = height, cols = (if expandedSection == 0: 2 else: 1))
