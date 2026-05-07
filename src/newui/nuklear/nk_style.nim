@@ -467,6 +467,18 @@ proc nkStyleFromTable*(table: array[StyleColors,
       data: StyleItemData(itype: itemColor, color: table[propertyColor]))
   context.style.property.decButton.active = StyleItem(iType: itemColor,
       data: StyleItemData(itype: itemColor, color: table[propertyColor]))
+  context.style.property.decButton.borderColor = NkColor(r: 0, g: 0, b: 0, a: 0)
+  context.style.property.decButton.textBackground = table[propertyColor]
+  context.style.property.decButton.textNormal = table[textColor]
+  context.style.property.decButton.textHover = table[textColor]
+  context.style.property.decButton.textActive = table[textColor]
+  context.style.property.decButton.padding = Vec2(x: 0.0, y: 0.0)
+  context.style.property.decButton.touchPadding = Vec2(x: 0.0, y: 0.0)
+  context.style.property.decButton.userData = Handle(handleType: handleInt, intValue: 0)
+  context.style.property.decButton.alignment = centered
+  context.style.property.decButton.border = 0.0
+  context.style.property.decButton.rounding = 0.0
+  context.style.property.decButton.colorFactorText = 1.0
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
