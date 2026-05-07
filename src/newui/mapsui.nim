@@ -79,7 +79,8 @@ proc showMapInfo(theme: ThemeData) {.raises: [
         colorLabel(str = $mapYInfo, color = theme.mapColors[mapGoldenYellow])
     if playerShip.skyX != mapXInfo or playerShip.skyY != mapYInfo:
       let
-        distance: Natural = countDistance(destinationX = mapXInfo, destinationY = mapYInfo)
+        distance: Natural = countDistance(destinationX = mapXInfo,
+            destinationY = mapYInfo)
         travelValues: TravelArray = travelInfo(distance = distance)
       layoutStatic(height = 25, cols = 2):
         row(width = 80):
@@ -667,10 +668,9 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       imageButtonCentered(image = images[waitIcon]):
         moveShipOnMap(direction = moveOne, dialog = dialog)
     else:
-      showTooltip(text = "Set speed for your ship. The faster you move, the more fuel used. But faster movement has bigger chance to evade enemies.")
       playerShip.speed = (comboList(items = shipSpeeds,
-          selected = playerShip.speed.ord - 1, itemHeight = 25, x = 200,
-          y = 50) + 1).ShipSpeed
+          selected = playerShip.speed.ord - 1, itemHeight = 25, x = 200, y = 50,
+          tooltip = "Set speed for your ship. The faster you move, the more fuel used. But faster movement has bigger chance to evade enemies.") + 1).ShipSpeed
       setLayoutRowStatic(height = 30, cols = 3, ratio = [40.cfloat, 40, 40])
       showTooltip(text = "Move ship up and left")
       imageButton(image = images[arrowUpLeft]):
