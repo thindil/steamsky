@@ -710,7 +710,7 @@ type
     ## * repairModule  - The index of module which will be repaired as first
     ## * description   - The description of the ship
     ## * homeBase      - The index of the home base of the ship
-    name*: ShipName = ""
+    name: ShipName = ""
     skyX*: MapXRange = 1
     skyY*: MapYRange = 1
     speed*: ShipSpeed = fullSpeed
@@ -752,6 +752,8 @@ proc initShipRecord*(name: ShipName = ""; skyX: MapXRange = 1;
       modules: modules, cargo: cargo, crew: crew, upgradeModule: upgradeModule,
       destinationX: destinationX, destinationY: destinationY,
       repairModule: repairModule, description: description, homeBase: homeBase)
+
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = name, typ = ShipName)
 
 type
   ReputationRanges* = object
