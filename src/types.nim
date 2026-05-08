@@ -729,7 +729,7 @@ proc initShipRecord*(name: ShipName = ""; skyX: MapXRange = 1;
     ModuleData] = @[]; cargo: seq[InventoryData] = @[]; crew: seq[
     MemberData] = @[]; upgradeModule: ExtendedNatural = -1; destinationX: range[
     0..MapXRange.high] = 0; destinationY: range[0..MapYRange.high] = 0;
-    repairModule: ExtendedNatural = -1; description: Description;
+    repairModule: ExtendedNatural = -1; description: Description = "";
     homeBase: Natural = 0): ShipRecord {.raises: [], tags: [], contractual.} =
   ## Create a new data structure for the selected ship
   ##
