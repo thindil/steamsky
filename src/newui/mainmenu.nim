@@ -108,8 +108,7 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
       x: float = 225
       w: float = 150
     row(x = x, y = 0, w = w, h = buttonHeight):
-      showTooltip(text = "Set and start a new game")
-      labelButton(title = "New game"):
+      labelButton(title = "New game", tooltip = "Set and start a new game"):
         state = newGame
         dialog = none
         return
@@ -117,32 +116,29 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if showLoadButton:
       row(x = x, y = y, w = w, h = buttonHeight):
         y += buttonHeight
-        showTooltip(text = "Load one of the previously saved games")
-        labelButton(title = "Load game"):
+        labelButton(title = "Load game",
+            tooltip = "Load one of the previously saved games"):
           state = loadGame
           return
     if showHoFButton:
       row(x = x, y = y, w = w, h = buttonHeight):
         y += buttonHeight
-        showTooltip(text = "Show your previous the bests scores in the game")
-        labelButton(title = "Hall of Fame"):
+        labelButton(title = "Hall of Fame",
+            tooltip = "Show your previous the bests scores in the game"):
           state = hallOfFame
           return
     row(x = x, y = y, w = w, h = buttonHeight):
       y += buttonHeight
-      showTooltip(text = "The list of changes to the game")
-      labelButton(title = "News"):
+      labelButton(title = "News", tooltip = "The list of changes to the game"):
         state = news
         return
     row(x = x, y = y, w = w, h = buttonHeight):
       y += buttonHeight
-      showTooltip(text = "General information about the game")
-      labelButton(title = "About"):
+      labelButton(title = "About", tooltip = "General information about the game"):
         state = about
         return
     row(x = x, y = y, w = w, h = buttonHeight):
-      showTooltip(text = "Quit from the game")
-      labelButton(title = "Quit"):
+      labelButton(title = "Quit", tooltip = "Quit from the game"):
         state = quitGame
         return
 
