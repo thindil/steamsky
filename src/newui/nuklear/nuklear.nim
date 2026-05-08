@@ -2557,7 +2557,7 @@ proc comboList*(items: openArray[string]; selected, itemHeight: int; x,
   var optionsList: seq[cstring] = @[]
   for i in 0..amount:
     optionsList.add(y = items[i].cstring)
-  let bounds = getWidgetBounds()
+  let bounds: Rect = getWidgetBounds()
   result = nk_combo(ctx = ctx, items = optionsList[0].addr, count = amount.cint +
       1, selected = selected.cint, itemHeight = itemHeight.cint,
           size = new_nk_vec2(x = x.cfloat, y = y.cfloat)).int
