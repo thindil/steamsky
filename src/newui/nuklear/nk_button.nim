@@ -71,6 +71,20 @@ template labelButton*(title: string; onPressCode: untyped) =
   if nk_button_label(ctx = ctx, ctitle = title.cstring):
     onPressCode
 
+template labelButton*(title, tooltip: string; onPressCode: untyped) =
+  ## Draw the button with the selected text on it. Execute the selected code
+  ## on pressing it.
+  ##
+  ## * title       - the text to shown on the button
+  ## * tooltip     - the tooltip to show when mouse is hovering about the
+  ##                 button
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  let bounds: Rect = getWidgetBounds()
+  if nk_button_label(ctx = ctx, ctitle = title.cstring):
+    onPressCode
+  if isMouseHovering(rect = bounds):
+    showTooltip2(text = tooltip)
+
 proc setButtonBehavior*(behavior: ButtonBehavior) {.raises: [], tags: [],
     contractual.} =
   ## Set the behavior of the the next button, when it is clicked
@@ -89,6 +103,20 @@ template symbolButton*(symbol: SymbolType; onPressCode: untyped) =
   ## * onPressCode - the Nim code to execute when the button was pressed
   if nk_button_symbol(ctx = ctx, csymbol = symbol):
     onPressCode
+
+template symbolButton*(symbol: SymbolType; tooltip: string; onPressCode: untyped) =
+  ## Draw the button with the selected symbol. Execute the selected code
+  ## on pressing it.
+  ##
+  ## * symbol      - the symbol to shown on the button
+  ## * tooltip     - the tooltip to show when mouse is hovering about the
+  ##                 button
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  let bounds: Rect = getWidgetBounds()
+  if nk_button_symbol(ctx = ctx, csymbol = symbol):
+    onPressCode
+  if isMouseHovering(rect = bounds):
+    showTooltip2(text = tooltip)
 
 template symbolLabelButton*(symbol: SymbolType; label: string;
     align: TextAlignment; onPressCode: untyped) =
