@@ -552,6 +552,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
           progressBar(value = damagePercent, maxValue = 100, modifyable = false)
   if endCombat:
     inCombat = false
+    previousState = emptyState
   else:
     setLayoutRowDynamic(height = 35, cols = 1)
     labelButton(title = "Next turn"):
