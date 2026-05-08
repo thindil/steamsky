@@ -742,8 +742,8 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange; y: MapYRange;
     protoShipsList.contains(key = protoIndex)
   body:
     let protoShip: ProtoShipData = protoShipsList[protoIndex]
-    result = ShipRecord(skyX: x, skyY: y, name: (if name.len ==
-      0: protoShip.name else: name), upgradeModule: -1, repairModule: -1, speed: speed)
+    result = initShipRecord(skyX = x, skyY = y, name = (if name.len ==
+      0: protoShip.name else: name), upgradeModule = -1, repairModule = -1, speed = speed)
     # Add modules to ship
     addModulesToShip(randomUpgrades = randomUpgrades, protoShip = protoShip, ship = result)
     # Set the ship crew
