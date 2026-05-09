@@ -251,7 +251,8 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       # Statistics of the selected recruit
       of 1:
         for index, attrib in recruit.attributes:
-          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.6.cfloat, 0.3, 0.1])
+          setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+              0.6.cfloat, 0.3, 0.1])
           label(str = attributesList[index].name & ":")
           colorLabel(str = getAttributeLevelName(
               attributeLevel = attrib.level), color = theme.colors[goldenColor])
@@ -269,7 +270,8 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       of 2:
         for skill in recruit.skills:
           try:
-            setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.6.cfloat, 0.3, 0.1])
+            setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+                0.6.cfloat, 0.3, 0.1])
             label(str = skillsList[skill.index].name & ":")
             colorLabel(str = getSkillLevelName(skillLevel = skill.level),
                 color = theme.colors[goldenColor])
@@ -289,7 +291,8 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       of 3:
         for index, item in recruit.equipment:
           if item > -1:
-            setLayoutRowDynamic(height = 35, cols = 2)
+            setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+                0.3.cfloat, 0.7])
             label(str = ($index).capitalizeAscii & ":")
             try:
               let rItem: RecruitItem = recruit.inventory[item]
