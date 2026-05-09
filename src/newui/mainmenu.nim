@@ -183,21 +183,20 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
   layoutSpaceStatic(height = buttonHeight - 10.0, widgetsCount = 2):
     if state == news:
       row(x = (menuWidth - 310).float, y = 0, w = 155, h = buttonHeight):
-        showTooltip(text = "Show all changes to the game since previous big stable version")
-        labelButton(title = "Show all changes"):
+        labelButton(title = "Show all changes",
+            tooltip = "Show all changes to the game since previous big stable version"):
           state = allNews
           fileContent = ""
           return
     else:
       row(x = (menuWidth - 405).float, y = 0, w = 250, h = buttonHeight):
-        showTooltip(text = "Show only changes to the game since previous release")
-        labelButton(title = "Show only newest changes"):
+        labelButton(title = "Show only newest changes",
+            tooltip = "Show only changes to the game since previous release"):
           state = news
           fileContent = ""
           return
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
-      showTooltip(text = "Back to the main menu")
-      labelButton(title = "Back to menu"):
+      labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
         fileContent = ""
         return
@@ -221,46 +220,43 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setButtonStyle(field = borderColor, a = 0)
   layoutSpaceStatic(height = buttonHeight * 2, widgetsCount = 4):
     row(x = 255, y = 0, w = 100, h = buttonHeight - 10):
-      showTooltip(text = "Visit the game website: https://thindil.itch.io/steam-sky")
-      labelButton(title = "Website"):
+      labelButton(title = "Website", tooltip = "Visit the game website: https://thindil.itch.io/steam-sky"):
         openLink(link = "https://thindil.itch.io/steam-sky")
     row(x = 270, y = 0, w = 85, h = buttonHeight - 10):
       label(str = "______")
     row(x = 145, y = buttonHeight, w = 330, h = buttonHeight - 10):
-      showTooltip(text = "Send a mail to the game creator")
-      labelButton(title = "(c)2016-2026 Bartek thindil Jasicki"):
+      labelButton(title = "(c)2016-2026 Bartek thindil Jasicki",
+          tooltip = "Send a mail to the game creator"):
         openLink(link = "mailto:thindil@laeran.pl.eu.org")
     row(x = 160, y = buttonHeight, w = 315, h = 30):
       label(str = "__________________________")
   restoreButtonStyle()
   layoutSpaceStatic(height = buttonHeight, widgetsCount = 3):
     row(x = 75, y = 0, w = 150, h = buttonHeight - 10):
-      showTooltip(text = "Guide how to help with creating the game, report bugs, etc.")
-      labelButton(title = "Get involved"):
+      labelButton(title = "Get involved",
+          tooltip = "Guide how to help with creating the game, report bugs, etc."):
         fileName = "CONTRIBUTING.md"
         state = showFile
         dialog = none
     row(x = 230, y = 0, w = 150, h = buttonHeight - 10):
-      showTooltip(text = "Guide how to modify the game")
-      labelButton(title = "Modify game"):
+      labelButton(title = "Modify game",
+          tooltip = "Guide how to modify the game"):
         fileName = "MODDING.md"
         state = showFile
     row(x = 385, y = 0, w = 150, h = buttonHeight - 10):
-      showTooltip(text = "Some technical information about the game")
-      labelButton(title = "README"):
+      labelButton(title = "README", tooltip = "Some technical information about the game"):
         fileName = "README.md"
         state = showFile
   setLayoutRowDynamic(height = labelHeight * 7, cols = 1)
   wrapLabel(str = "Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\nSteam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.")
   layoutSpaceStatic(height = buttonHeight, widgetsCount = 2):
     row(x = (menuWidth - 310).float, y = 0, w = 155, h = buttonHeight):
-      showTooltip(text = "Show full legal text of GNU GPLv3 license")
-      labelButton(title = "Show full license"):
+      labelButton(title = "Show full license",
+          tooltip = "Show full legal text of GNU GPLv3 license"):
         fileName = "COPYING"
         state = showFile
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
-      showTooltip(text = "Back to the main menu")
-      labelButton(title = "Back to menu"):
+      labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
   if isKeyPressed(key = keyEscape):
     state = mainMenu
