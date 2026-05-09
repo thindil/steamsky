@@ -118,7 +118,7 @@ proc updateTooltips*() {.raises: [], tags: [], contractual.} =
     delay -= frameDelay
   hoveredTooltip = false
 
-{.push ruleOff:"params".}
+{.push ruleOff: "params".}
 proc addTooltip*(bounds: Rect; text: string) {.raises: [], tags: [],
     contractual.} =
   ## Deprecated, still here for backward compatybility
@@ -126,14 +126,16 @@ proc addTooltip*(bounds: Rect; text: string) {.raises: [], tags: [],
   ## * bounds - the area in which the widget with the tooltip is
   ## * text   - the text which will be show as the tooltip
   showTooltip(text = text)
-{.pop ruleOn:"params".}
+{.pop ruleOn: "params".}
 
-proc createTooltip(width2, x2, y2: float): bool {.raises: [], tags: [], contractual.} =
+proc createTooltip(width2, x2, y2: float): bool {.raises: [], tags: [],
+    contractual.} =
   ## Create a new Nuklear tooltip window, internal use only, temporary code
   ## temporary code
   ##
   ## Returns true if the popup is active, otherwise false.
-  proc nk_tooltip_begin2(ctx; width, startx, starty: cfloat): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+  proc nk_tooltip_begin2(ctx; width, startx, starty: cfloat): nk_bool {.importc,
+      nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   return nk_tooltip_begin2(ctx = ctx, width = width2.cfloat, startx = x2, starty = y2)
 
