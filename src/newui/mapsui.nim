@@ -52,16 +52,15 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   centerY = playerShip.skyY
   mapPreview = false
 
-var
-  mapInfoX: float = (windowWidth - 240.0)
-  mapXInfo: MapXRange = playerShip.skyX
-  mapYInfo: MapYRange = playerShip.skyY
+var mapInfoX: float = (windowWidth - 240.0)
 
-proc showMapInfo(theme: ThemeData) {.raises: [
+proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange) {.raises: [
     ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the map cell info popup
   ##
-  ## * theme  - the current game's theme
+  ## * theme    - the current game's theme
+  ## * mapXInfo - the X coordinate of the map cell to show the info
+  ## * mapYInfo - the Y coordinate of the map cell to show the info
   tooltip(x = mapInfoX, y = 45, width = 230):
     if windowIsHovered():
       if mapInfoX == 10:
@@ -975,8 +974,10 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               dialog = setError(message = "Can't set map color")
               return
             if isMouseHovering(rect = getWidgetBounds()):
-              mapXInfo = x
-              mapYInfo = y
+              try:
+                showMapInfo(theme = theme, mapXInfo = x, mapYInfo = y)
+              except ValueError:
+                dialog = setError(message = "Can't show map info")
             if dialog != none:
               windowDisable()
             labelButton(title = mapChar):
