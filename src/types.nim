@@ -711,9 +711,9 @@ type
     ## * description   - The description of the ship
     ## * homeBase      - The index of the home base of the ship
     name: ShipName = ""
-    skyX*: MapXRange = 1
-    skyY*: MapYRange = 1
-    speed*: ShipSpeed = fullSpeed
+    skyX: MapXRange = 1
+    skyY: MapYRange = 1
+    speed: ShipSpeed = fullSpeed
     modules*: seq[ModuleData] = @[]
     cargo*: seq[InventoryData] = @[]
     crew*: seq[MemberData] = @[]
@@ -754,6 +754,9 @@ proc initShipRecord*(name: ShipName = ""; skyX: MapXRange = 1;
       repairModule: repairModule, description: description, homeBase: homeBase)
 
 typeGetterSetter(baseType = ShipRecord, varName = ship, name = name, typ = ShipName)
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = skyX, typ = MapXRange)
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = skyY, typ = MapYRange)
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = speed, typ = ShipSpeed)
 
 type
   ReputationRanges* = object
