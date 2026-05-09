@@ -326,9 +326,9 @@ var
     ## The list of in-game messages
   eventsList*: seq[EventData] = @[]
     ## The list of available events in the game
-  playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1)
+  playerShip*: ShipRecord = initShipRecord(skyX = 1, skyY = 1)
     ## The player's ship's data
-  npcShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1)
+  npcShip*: ShipRecord = initShipRecord(skyX = 1, skyY = 1)
     ## The npc ship like enemy, trader, etc
   protoShipsList*: Table[Positive, ProtoShipData] = initTable[Positive,
       ProtoShipData]()
@@ -342,7 +342,7 @@ var
     ## The current trader's ship's cargo
   harpoonDuration*: Natural = 0
     ## How long in combat rounds the player's ship will be stopped by an enemy's harpoon
-  enemy*: EnemyRecord = EnemyRecord(ship: ShipRecord(skyX: 1, skyY: 1))
+  enemy*: EnemyRecord = EnemyRecord(ship: initShipRecord(skyX = 1, skyY = 1))
     ## The enemy information
 {.warning[UnsafeDefault]: on.}
 {.warning[UnsafeSetLen]: on.}

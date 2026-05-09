@@ -1063,37 +1063,39 @@ proc changeEnemySpeed(enemyPilotOrder: var Natural;
   ## * damageRange     - the distance between the ships in which some speed changes happen
   ##
   ## Returns modified parameter enemyPilotOrder
+  {.ruleOff: "assignments".}
   case game.enemy.combatAi
   of berserker:
     if game.enemy.distance > 10 and game.enemy.ship.speed != fullSpeed:
-      game.enemy.ship.speed.inc
+      game.enemy.ship.speed = (game.enemy.ship.speed.ord + 1).ShipSpeed
       addMessage(message = enemyName & " increases speed.",
           mType = combatMessage)
       enemyPilotOrder = 1
     elif game.enemy.distance <= 10 and game.enemy.ship.speed == fullSpeed:
-      game.enemy.ship.speed.dec
+      game.enemy.ship.speed = (game.enemy.ship.speed.ord - 1).ShipSpeed
       addMessage(message = enemyName & " decreases speed.",
           mType = combatMessage)
       enemyPilotOrder = 2
   of attacker, disarmer:
     if game.enemy.distance > damageRange and game.enemy.ship.speed != fullSpeed:
-      game.enemy.ship.speed.inc
+      game.enemy.ship.speed = (game.enemy.ship.speed.ord + 1).ShipSpeed
       addMessage(message = enemyName & " increases speed.",
           mType = combatMessage)
       enemyPilotOrder = 1
     elif game.enemy.distance <= damageRange and game.enemy.ship.speed == fullSpeed:
-      game.enemy.ship.speed.dec
+      game.enemy.ship.speed = (game.enemy.ship.speed.ord - 1).ShipSpeed
       addMessage(message = enemyName & " decreases speed.",
           mType = combatMessage)
       enemyPilotOrder = 2
   of coward:
     if game.enemy.distance < 15_000 and game.enemy.ship.speed != fullSpeed:
-      game.enemy.ship.speed.inc
+      game.enemy.ship.speed = (game.enemy.ship.speed.ord + 1).ShipSpeed
       addMessage(message = enemyName & " increases speed.",
           mType = combatMessage)
     enemyPilotOrder = 4
   else:
     discard
+  {.ruleOn: "assignments".}
 
 proc countDamageRange(damageRange: var Natural;
     ammoIndex2: var int) {.raises: [KeyError], tags: [],
