@@ -346,7 +346,9 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
       elif playerShip.repairModule == shipModuleIndex:
         playerShip.repairModule = -1
       if playerShip.upgradeModule > shipModuleIndex:
-        playerShip.upgradeModule.dec
+        {.ruleOff: "assignments".}
+        playerShip.upgradeModule = playerShip.upgradeModule - 1
+        {.ruleOn: "assignments".}
       for module in playerShip.modules.mitems:
         if module.mType == ModuleType2.turret and module.gunIndex > shipModuleIndex:
           {.ruleOff: "assignments".}
