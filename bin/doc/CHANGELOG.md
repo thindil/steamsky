@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Studying an item teach all recipes
 - Typos in changelog
 - Keyboard shortcuts in combat, ticket b0e2652a18
+- Crash when updating the player's ship's crew members, ticket 11b71c4c15
 
 ## [12.2] - 2026-04-19
 
