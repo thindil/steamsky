@@ -493,6 +493,17 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.property.edit.active = StyleItem(iType: itemColor,
       data: StyleItemData(itype: itemColor, color: table[propertyColor]))
   context.style.property.edit.borderColor = NkColor(r: 0, g: 0, b: 0, a: 0)
+  context.style.property.edit.cursorNormal = table[propertyTextColor]
+  context.style.property.edit.cursorHover = table[propertyTextColor]
+  context.style.property.edit.cursorTextNormal = table[editColor]
+  context.style.property.edit.cursorTextHover = table[editColor]
+  context.style.property.edit.textNormal = table[propertyTextColor]
+  context.style.property.edit.textHover = table[propertyTextColor]
+  context.style.property.edit.textActive = table[propertyTextColor]
+  context.style.property.edit.selectedNormal = table[propertyTextColor]
+  context.style.property.edit.selectedHover = table[propertyTextColor]
+  context.style.property.edit.selectedTextNormal = table[editColor]
+  context.style.property.edit.selectedTextHover = table[editColor]
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
