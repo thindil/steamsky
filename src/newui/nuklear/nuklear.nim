@@ -2863,8 +2863,9 @@ template group*(title: string; flags: set[PanelFlags]; content: untyped) =
 # Edit text
 # ---------
 proc editString*(text: var string; maxLen: int; editType: EditTypes = simple;
-    filter: PluginFilter = nk_filter_default; flags: set[EditFlags] = {
-        }): EditEvent {.discardable, raises: [], tags: [], contractual.} =
+    filter: PluginFilter = nk_filter_default; flags: set[EditFlags] = {};
+    tooltip: string = ""): EditEvent {.discardable, raises: [], tags: [],
+    contractual.} =
   ## Draw the field of hte selected type and with the selected filter to edit a
   ## text
   ##
@@ -2893,9 +2894,12 @@ proc editString*(text: var string; maxLen: int; editType: EditTypes = simple;
   for flag in flags:
     cFlags = cFlags or flag.cint
   {.ruleOn: "assignments".}
+  let bounds: Rect = getWidgetBounds()
   result = nk_edit_string(ctx = ctx, flags = cFlags,
       memory = cText[0].addr, len = length.cint, max = maxLen.cint,
       filter = filter).EditEvent
+  if isMouseHovering(rect = bounds):
+    showTooltip2(text = tooltip)
   text = charArrayToString(charArray = cText, length = length)
 
 proc editIsActive*(): bool {.raises: [], tags: [], contractual.} =
