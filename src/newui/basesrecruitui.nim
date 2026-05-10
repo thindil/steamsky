@@ -305,7 +305,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       else:
         discard
     # Buttons
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     imageLabelButton(image = images[negotiateIcon], text = "Negotiate",
         alignment = right):
       dialog = negotiateDialog
@@ -355,7 +355,7 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   const
     width: float = 400
-    height: float = 400
+    height: float = 420
 
   let
     recruit: RecruitData = skyBases[setui.baseIndex].recruits[recruitIndex]
@@ -363,24 +363,24 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = editHeight, cols = 2)
     label(str = "Daily payment:")
     let newValue: int = property2(name = "#", min = 1, val = currentDaily,
         max = maxDaily, step = 1, incPerPixel = 1)
     if newValue != currentDaily:
       currentDaily = newValue
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = editHeight, cols = 1)
     slider(min = 1, val = currentDaily, max = maxDaily, step = 1)
-    setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.75.cfloat, 0.25])
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
     label(str = "Percent of profit from trades:")
     let newProfit: int = property2(name = "#", min = 0, val = currentProfit,
         max = 10, step = 1, incPerPixel = 1)
     if newProfit != currentProfit:
       currentProfit = newProfit
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = editHeight, cols = 1)
     slider(min = 0, val = currentProfit, max = 10, step = 1)
     label(str = "Contract time:", alignment = centered)
-    setLayoutRowDynamic(height = 35, cols = 1)
+    setLayoutRowDynamic(height = editHeight, cols = 1)
     currentContract = comboList(items = contractLength,
         selected = currentContract, itemHeight = 25, x = 200, y = 150)
     var newCost: int = recruit.price - ((currentDaily - recruit.payment) * 50) -
@@ -411,7 +411,7 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
       dialog = setError(message = "Can't get the width of the hire text.")
       return
     var canHire: bool = false
-    setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len, ratio = moneyWidth)
     if moneyText.len == 1:
       colorLabel(str = moneyText[0], color = theme.colors[redColor])
     else:
@@ -420,11 +420,11 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
       label(str = moneyText[2])
       if moneyAmount >= cost:
         canHire = true
-    setLayoutRowStatic(height = 30, cols = 3, ratio = hireWidth)
+    setLayoutRowStatic(height = labelHeight, cols = 3, ratio = hireWidth)
     label(str = hireText[0])
     colorLabel(str = hireText[1], color = theme.colors[goldenColor])
     label(str = hireText[2])
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     if canHire:
       imageLabelButton(image = images[negotiateColoredIcon], text = "Hire",
