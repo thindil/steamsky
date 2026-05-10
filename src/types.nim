@@ -717,9 +717,9 @@ type
     modules*: seq[ModuleData] = @[]
     cargo*: seq[InventoryData] = @[]
     crew*: seq[MemberData] = @[]
-    upgradeModule*: ExtendedNatural = -1
-    destinationX*: range[0..MapXRange.high] = 0
-    destinationY*: range[0..MapYRange.high] = 0
+    upgradeModule: ExtendedNatural = -1
+    destinationX: range[0..MapXRange.high] = 0
+    destinationY: range[0..MapYRange.high] = 0
     repairModule*: ExtendedNatural = -1
     description*: Description = ""
     homeBase*: Natural = 0
@@ -753,10 +753,20 @@ proc initShipRecord*(name: ShipName = ""; skyX: MapXRange = 1;
       destinationX: destinationX, destinationY: destinationY,
       repairModule: repairModule, description: description, homeBase: homeBase)
 
-typeGetterSetter(baseType = ShipRecord, varName = ship, name = name, typ = ShipName)
-typeGetterSetter(baseType = ShipRecord, varName = ship, name = skyX, typ = MapXRange)
-typeGetterSetter(baseType = ShipRecord, varName = ship, name = skyY, typ = MapYRange)
-typeGetterSetter(baseType = ShipRecord, varName = ship, name = speed, typ = ShipSpeed)
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = name,
+    typ = ShipName)
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = skyX,
+    typ = MapXRange)
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = skyY,
+    typ = MapYRange)
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = speed,
+    typ = ShipSpeed)
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = upgradeModule,
+    typ = ExtendedNatural)
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = destinationX,
+    typ = range[0..MapXRange.high])
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = destinationY,
+    typ = range[0..MapYRange.high])
 
 type
   ReputationRanges* = object
