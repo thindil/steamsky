@@ -502,9 +502,9 @@ proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
       member.previousOrder = member.order
       member.order = rest
       member.orderTime = 15
-      let item: InventoryData = member.inventory[member.equipment[
-          EquipmentLocations.tool]]
       if member.equipment[EquipmentLocations.tool] > -1:
+        let item: InventoryData = member.inventory[member.equipment[
+            EquipmentLocations.tool]]
         updateCargo(ship = playerShip, protoIndex = item.protoIndex, amount = 1,
             durability = item.durability, quality = item.quality,
             craftBonus = item.craftBonus, craftMalus = item.craftMalus)
