@@ -297,8 +297,7 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
         "' file is in '" & docDirectory.string & "' directory?")
   layoutSpaceStatic(height = buttonHeight + 10, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
-      showTooltip(text = "Back to the main menu")
-      labelButton(title = "Back to menu"):
+      labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
         fileContent = ""
         return
@@ -332,8 +331,7 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = entry.deathReason, alignment = centered)
   layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
-      showTooltip(text = "Back to the main menu")
-      labelButton(title = "Back to menu"):
+      labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
   if isKeyPressed(key = keyEscape):
     state = mainMenu
@@ -383,20 +381,17 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
   group(title = "LoadGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = tableRowHeight, cols = 3)
-    showTooltip("Press mouse button to sort the saved games.")
-    labelButton(title = "Player name"):
+    labelButton(title = "Player name", tooltip = "Press mouse button to sort the saved games."):
       if sortOrder == playerAsc:
         sortOrder = playerDesc
       else:
         sortOrder = playerAsc
-    showTooltip(text = "Press mouse button to sort the saved games.")
-    labelButton(title = "Ship name"):
+    labelButton(title = "Ship name", tooltip = "Press mouse button to sort the saved games."):
       if sortOrder == shipAsc:
         sortOrder = shipDesc
       else:
         sortOrder = shipAsc
-    showTooltip(text = "Press mouse button to sort the saved games.")
-    labelButton(title = "Last saved"):
+    labelButton(title = "Last saved", tooltip = "Press mouse button to sort the saved games."):
       if sortOrder == timeAsc:
         sortOrder = timeDesc
       else:
@@ -470,24 +465,27 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         let
           y: float = (index.float * tableRowHeight)
         row(x = 0, y = y, w = 190, h = tableRowHeight):
-          labelButton(title = save.playerName):
+          labelButton(title = save.playerName, tooltip = "Press mouse " & (
+              if gameSettings.rightButton: "right" else: "left") &
+              " button to show available option"):
             saveClicked = save.path
         row(x = 190, y = y, w = 190, h = tableRowHeight):
-          labelButton(title = save.shipName):
+          labelButton(title = save.shipName, tooltip = "Press mouse " & (
+              if gameSettings.rightButton: "right" else: "left") &
+              " button to show available option"):
             saveClicked = save.path
         row(x = 380, y = y, w = 190, h = tableRowHeight):
-          labelButton(title = save.saveTime):
+          labelButton(title = save.saveTime, tooltip = "Press mouse " & (
+              if gameSettings.rightButton: "right" else: "left") &
+              " button to show available option"):
             saveClicked = save.path
   restoreButtonStyle()
   let bounds: Rect = Rect(x: 0, y: tableRowHeight, w: 580, h: (saves.len.float *
       (tableRowHeight + 5.0)))
-  showTooltip(text = "Press mouse " & (if gameSettings.rightButton: "right"
-    else: "left") & " button to show available option")
   showLoadMenu(dialog = dialog, bounds = bounds)
   layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
-      showTooltip(text = "Back to the main menu")
-      labelButton(title = "Back to menu"):
+      labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
         saveClicked = ""
   showQuestion(dialog = dialog, state = state)
