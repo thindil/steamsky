@@ -637,8 +637,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     label(str = "Character name:")
     if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = playerTooltips[0]
-    showTooltip(text = playerTooltips[0])
-    editString(text = playerName, maxLen = 64)
+    editString(text = playerName, maxLen = 64, tooltip = playerTooltips[0])
     saveButtonStyle()
     setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
     showTooltip(text = playerTooltips[1])
