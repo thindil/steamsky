@@ -45,13 +45,13 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if dialog != none:
       windowDisable()
     # Show information about money owned by the player
-    setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len, ratio = moneyWidth)
     for index, text in moneyText:
       if index mod 2 == 0:
         label(str = text)
       else:
         colorLabel(str = text, color = theme.colors[goldenColor])
-    setLayoutRowStatic(height = 30, cols = 4, ratio = [200.cfloat, 200, 50, 250])
+    setLayoutRowStatic(height = buttonHeight, cols = 4, ratio = [200.cfloat, 200, 50, 250])
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Train the selected skill of the selected crew member")
@@ -72,7 +72,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addTooltip(bounds = getWidgetBounds(),
           text = "Select the crew member which skills will be trained")
     let newMember: Natural = comboList(items = crewList,
-        selected = crewIndex, itemHeight = 25, x = 200, y = 150)
+        selected = crewIndex, itemHeight = labelHeight.int, x = 200, y = 150)
     if newMember != crewIndex:
       crewIndex = newMember
       setSchoolSkills()
@@ -82,17 +82,17 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addTooltip(bounds = getWidgetBounds(),
           text = "Select the skill which will be trained")
     let newSkill: Natural = comboList(items = schoolSkillsList,
-        selected = skillIndex, itemHeight = 25, x = 300, y = 150)
+        selected = skillIndex, itemHeight = labelHeight.int, x = 300, y = 150)
     if newSkill != skillIndex:
       skillIndex = newSkill
       setTrainingCost(dialog = dialog)
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Train the selected skill the selected amount of times")
     if option(label = "Selected amount of times", selected = tType == times):
       tType = times
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = editHeight, cols = 2)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Enter amount of training sessions between 1 and 100")
@@ -113,13 +113,13 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addTooltip(bounds = getWidgetBounds(),
           text = "Minimal cost of training. The real cost can be higher that this.")
     colorLabel(str = $timesCost & " " & moneyName, color = theme.colors[goldenColor])
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Train the selected skill as long as you don't spend the selected amount of money")
     if option(label = "Selected maximum cost of training", selected = tType == cost):
       tType = cost
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = editHeight, cols = 2)
     label(str = "Cost:")
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
