@@ -720,9 +720,9 @@ type
     upgradeModule: ExtendedNatural = -1
     destinationX: range[0..MapXRange.high] = 0
     destinationY: range[0..MapYRange.high] = 0
-    repairModule*: ExtendedNatural = -1
-    description*: Description = ""
-    homeBase*: Natural = 0
+    repairModule: ExtendedNatural = -1
+    description: Description = ""
+    homeBase: Natural = 0
 
 proc initShipRecord*(name: ShipName = ""; skyX: MapXRange = 1;
     skyY: MapYRange = 1; speed: ShipSpeed = fullSpeed; modules: seq[
@@ -767,6 +767,11 @@ typeGetterSetter(baseType = ShipRecord, varName = ship, name = destinationX,
     typ = range[0..MapXRange.high])
 typeGetterSetter(baseType = ShipRecord, varName = ship, name = destinationY,
     typ = range[0..MapYRange.high])
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = repairModule,
+    typ = ExtendedNatural)
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = description,
+    typ = Description)
+typeGetterSetter(baseType = ShipRecord, varName = ship, name = homeBase, typ = Natural)
 
 type
   ReputationRanges* = object
