@@ -302,20 +302,16 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Quality:")
       const qualities: array[5, string] = ["Poor", "Low", "Normal", "Good", "Excellent"]
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Desired quality of crafted item. Better quality raises difficulty of crafting, worse lowers.")
       craftQuality = comboList(items = qualities, selected = craftQuality,
-          itemHeight = 25, x = 200, y = 150)
+          itemHeight = 25, x = 200, y = 150,
+          tooltip = "Desired quality of crafted item. Better quality raises difficulty of crafting, worse lowers.")
       # Show special properties setting
       setLayoutRowDynamic(height = 30, cols = 1)
       label(str = "Special:")
       setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.2, 0.4])
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Optional special bonus for the crafted item. If you select any, you will need also to select a malus for it.")
       var newBonus: Natural = comboList(items = bonuses, selected = bonus,
-          itemHeight = 25, x = 200, y = 150)
+          itemHeight = 25, x = 200, y = 150,
+          tooltip = "Optional special bonus for the crafted item. If you select any, you will need also to select a malus for it.")
       if newBonus != bonus:
         bonus = newBonus
         malus = (if bonus > 0: 1 else: 0)
@@ -333,11 +329,9 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
         if bonus == 0:
           setBonuses(dialog = dialog)
       label(str = "<=>", alignment = centered)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Optional special malus for the crafted item. If you select any, you will need also to select a bonus for it.")
       var newMalus: Natural = comboList(items = maluses, selected = malus,
-          itemHeight = 25, x = 200, y = 150)
+          itemHeight = 25, x = 200, y = 150,
+          tooltip = "Optional special malus for the crafted item. If you select any, you will need also to select a bonus for it.")
       if newMalus != malus:
         malus = newMalus
         bonus = (if malus > 0: 1 else: 0)
@@ -371,13 +365,10 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
           text = "Assign the crew member with the highest skill needed for the recipe, even if the crew member is busy.")
     if option(label = "Assign the best worker", selected = assign == best):
       assign = best
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Assign the crew member from the list. The sign + after name means that this crew member has needed skill, the sign ++ after name means that his/her needed skill is the best in the crew.")
     if option(label = "Assign selected member", selected = assign == selected):
       assign = selected
     worker = comboList(items = workers, selected = worker, itemHeight = 25,
-        x = 380, y = 150)
+        x = 380, y = 150, tooltip = "Assign the crew member from the list. The sign + after name means that this crew member has needed skill, the sign ++ after name means that his/her needed skill is the best in the crew.")
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = setImage, text = $recipe.recipeType,
@@ -645,17 +636,13 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     editString(text = nameSearch, maxLen = 64)
     label(str = "Show:")
     const recipesTypes: array[3, string] = ["All", "Craftable only", "Non-craftable only"]
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Show only the selected type of recipes.")
     typeIndex = comboList(items = recipesTypes, selected = typeIndex,
-        itemHeight = 25, x = 200, y = 150)
+        itemHeight = 25, x = 200, y = 150,
+        tooltip = "Show only the selected type of recipes.")
     label(str = "Workshop:")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Show only recipes craftable in the selected workshop.")
     workshopType = comboList(items = workshopsList, selected = workshopType,
-        itemHeight = 25, x = 400, y = 150)
+        itemHeight = 25, x = 400, y = 150,
+        tooltip = "Show only recipes craftable in the selected workshop.")
   let tableHeight: float = windowHeight - 140 - (if showOptions: 135 else: 0) -
       gameSettings.messagesPosition.float
   setLayoutRowDynamic(height = tableHeight, cols = 1)
