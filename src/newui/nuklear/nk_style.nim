@@ -504,6 +504,19 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.property.edit.selectedHover = table[propertyTextColor]
   context.style.property.edit.selectedTextNormal = table[editColor]
   context.style.property.edit.selectedTextHover = table[editColor]
+  context.style.property.edit.padding = Vec2(x: 0.0, y: 0.0)
+  context.style.property.edit.cursorSize = 8
+  context.style.property.edit.border = 0
+  context.style.property.edit.rounding = 0
+  context.style.property.edit.colorFactor = 1.0
+  context.style.property.edit.disabledFactor = nkWidgetDisabledFactor
+
+  # chart
+  context.style.chart.background = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[chartColor]))
+  context.style.chart.borderColor = table[StyleColors.borderColor]
+  context.style.chart.selectedColor = table[colorChartHighlightColor]
+  context.style.chart.color = table[colorChartColor]
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
