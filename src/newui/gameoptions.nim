@@ -106,10 +106,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = tooltip)
       label(str = label)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = tooltip)
       value = comboList(items = items, selected = value, itemHeight = 25,
-          x = 350, y = 200)
+          x = 350, y = 200, tooltip = tooltip)
 
     proc addAccelerator(label, tooltip: string; value: var string;
         index: Natural; dialog: var GameDialog) {.raises: [],
