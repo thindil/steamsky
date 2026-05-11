@@ -342,7 +342,9 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
           moneyName & ".", mType = tradeMessage)
       playerShip.modules.delete(i = shipModuleIndex)
       if playerShip.repairModule > shipModuleIndex:
-        playerShip.repairModule.dec
+        {.ruleOff: "assignments".}
+        playerShip.repairModule = playerShip.repairModule - 1
+        {.ruleOn: "assignments".}
       elif playerShip.repairModule == shipModuleIndex:
         playerShip.repairModule = -1
       if playerShip.upgradeModule > shipModuleIndex:
