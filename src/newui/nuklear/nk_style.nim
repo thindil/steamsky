@@ -517,6 +517,24 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.chart.borderColor = table[StyleColors.borderColor]
   context.style.chart.selectedColor = table[colorChartHighlightColor]
   context.style.chart.color = table[colorChartColor]
+  context.style.chart.padding = Vec2(x: 4.0, y: 4.0)
+  context.style.chart.border = 0
+  context.style.chart.rounding = 0
+  context.style.chart.colorFactor = 1.0
+  context.style.chart.disabledFactor = nkWidgetDisabledFactor
+  context.style.chart.showMarkers = true
+
+  # combo
+  context.style.combo.normal = StyleItem(iType: itemColor, data: StyleItemData(
+      itype: itemColor, color: table[comboColor]))
+  context.style.combo.hover = StyleItem(iType: itemColor, data: StyleItemData(
+      itype: itemColor, color: table[comboColor]))
+  context.style.combo.active = StyleItem(iType: itemColor, data: StyleItemData(
+      itype: itemColor, color: table[comboColor]))
+  context.style.combo.borderColor = table[StyleColors.borderColor]
+  context.style.combo.labelNormal = table[comboTextColor]
+  context.style.combo.labelHover = table[comboTextColor]
+  context.style.combo.labelActive = table[comboTextColor]
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
