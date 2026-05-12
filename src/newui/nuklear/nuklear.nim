@@ -2219,8 +2219,8 @@ proc property*(name: string; min: float; val: var float; max, step: float;
       incPerPixel = incPerPixel.cfloat)
   val = newVal.float
 
-proc property2*(name: string; min, val, max, step,
-    incPerPixel: float): float {.raises: [], tags: [], contractual.} =
+proc property2*(name: string; min, val, max, step, incPerPixel: float;
+    tooltip: string = ""): float {.raises: [], tags: [], contractual.} =
   ## Create a Nuklear property widget with float values
   ##
   ## * name        - the name of the property and its label to show on it.
@@ -2238,12 +2238,15 @@ proc property2*(name: string; min, val, max, step,
   proc nk_propertyf(ctx; name: cstring; min, val, max, step,
       incPerPixel: cfloat): cfloat {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  return nk_propertyf(ctx = ctx, name = name.cstring, min = min.cfloat,
+  let bounds: Rect = getWidgetBounds()
+  result = nk_propertyf(ctx = ctx, name = name.cstring, min = min.cfloat,
       val = val.cfloat, max = max.cfloat, step = step.cfloat,
       incPerPixel = incPerPixel.cfloat).float
+  if isMouseHovering(rect = bounds):
+    showTooltip2(text = tooltip)
 
-proc property2*(name: string; min, val, max, step: int;
-    incPerPixel: float): int {.raises: [], tags: [], contractual.} =
+proc property2*(name: string; min, val, max, step: int; incPerPixel: float;
+    tooltip: string = ""): int {.raises: [], tags: [], contractual.} =
   ## Create a Nuklear property widget with integer values
   ##
   ## * name        - the name of the property and its label to show on it.
@@ -2261,9 +2264,12 @@ proc property2*(name: string; min, val, max, step: int;
   proc nk_propertyi(ctx; name: cstring; min, val, max, step: cint;
       incPerPixel: cfloat): cint {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  return nk_propertyi(ctx = ctx, name = name.cstring, min = min.cint,
+  let bounds: Rect = getWidgetBounds()
+  result = nk_propertyi(ctx = ctx, name = name.cstring, min = min.cint,
       val = val.cint, max = max.cint, step = step.cint,
       incPerPixel = incPerPixel.cfloat).int
+  if isMouseHovering(rect = bounds):
+    showTooltip2(text = tooltip)
 
 # -----
 # Style
