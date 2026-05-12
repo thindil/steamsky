@@ -693,6 +693,7 @@ typeGetterSetter(baseType = MemberData, varName = member, name = homeBase,
 typeGetterSetter(baseType = MemberData, varName = member, name = faction,
     typ = FactionIndex)
 
+{.push ruleOff: "objects".}
 type
   ShipRecord* = object
     ## Used to store information about ships
@@ -723,6 +724,7 @@ type
     repairModule: ExtendedNatural = -1
     description: Description = ""
     homeBase: Natural = 0
+{.pop ruleOn: "objects".}
 
 proc initShipRecord*(name: ShipName = ""; skyX: MapXRange = 1;
     skyY: MapYRange = 1; speed: ShipSpeed = fullSpeed; modules: seq[
