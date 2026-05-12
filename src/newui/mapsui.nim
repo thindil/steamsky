@@ -61,6 +61,8 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange) {.r
   ## * theme    - the current game's theme
   ## * mapXInfo - the X coordinate of the map cell to show the info
   ## * mapYInfo - the Y coordinate of the map cell to show the info
+  nuklearSetDefaultFont(defaultFont = fonts[UIFont],
+      fontSize = gameSettings.interfaceFontSize + 10)
   tooltip(x = mapInfoX, y = 45, width = 230):
     if windowIsHovered():
       if mapInfoX == 10:
@@ -242,6 +244,8 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange) {.r
             eventIndex].itemIndex].name, color = theme.mapColors[mapLimeColor])
       of EventsTypes.none, baseRecovery:
         discard
+  nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
+      fontSize = gameSettings.mapFontSize + 10)
 
 var
   moveX: MapXRange = 1
