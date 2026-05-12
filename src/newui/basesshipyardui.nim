@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -1058,11 +1058,9 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showOptions:
     setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.3, 0.5])
     label(str = "Show modules:")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Show only modules of the selected type")
-    let newType: Natural = comboList(items = typesList,
-        selected = typeIndex, itemHeight = 25, x = 200, y = 150)
+    let newType: Natural = comboList(items = typesList, selected = typeIndex,
+        itemHeight = 25, x = 200, y = 150,
+        tooltip = "Show only modules of the selected type")
     if newType != typeIndex:
       typeIndex = newType
       setModulesList(dialog = dialog)
