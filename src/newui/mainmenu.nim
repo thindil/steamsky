@@ -640,8 +640,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     editString(text = playerName, maxLen = 64, tooltip = playerTooltips[0])
     saveButtonStyle()
     setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
-    showTooltip(text = playerTooltips[1])
-    imageButton(image = menuImages[1]):
+    imageButton(image = menuImages[1], tooltip = playerTooltips[1]):
       randomName(forPlayer = true)
     restoreButtonStyle()
     if showGender:
@@ -655,12 +654,10 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
         setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
         if playerGender == i:
           setButtonStyle2(source = active, destination = normal)
-          showTooltip(text = genders[i])
-          imageButton(image = menuImages[i]):
+          imageButton(image = menuImages[i], tooltip = genders[i]):
             playerGender = i.cint
         else:
-          showTooltip(text = genders[i])
-          imageButton(image = menuImages[i]):
+          imageButton(image = menuImages[i], tooltip = genders[i]):
             playerGender = i.cint
         restoreButtonStyle()
     # Player's ship's name
@@ -668,12 +665,10 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     label(str = "Ship name:")
     if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = playerTooltips[2]
-    showTooltip(text = playerTooltips[2])
-    editString(text = shipName, maxLen = 64)
+    editString(text = shipName, maxLen = 64, tooltip = playerTooltips[2])
     saveButtonStyle()
     setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
-    showTooltip(text = playerTooltips[3])
-    imageButton(image = menuImages[1]):
+    imageButton(image = menuImages[1], tooltip = playerTooltips[3]):
       randomName(forPlayer = false)
     restoreButtonStyle()
     # Character's goal
@@ -681,8 +676,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     label(str = "Character goal:")
     if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = playerTooltips[4]
-    showTooltip(text = playerTooltips[4])
-    labelButton(title = selectedGoal):
+    labelButton(title = selectedGoal, tooltip = playerTooltips[4]):
       dialog = newGoalDialog
       setSelectedGoal()
     # Character's faction
