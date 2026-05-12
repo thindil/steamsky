@@ -3063,3 +3063,28 @@ proc hsvaToColorf*(hsva: array[4, float]): NkColorF {.raises: [], tags: [],
   let newColor: nk_colorf = nk_hsva_colorf(h = hsva[0], s = hsva[1], v = hsva[
       2], a = hsva[3])
   result = NkColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
+
+# --------
+# Tooltips
+# --------
+proc createTooltip(width2, x2, y2: float): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new Nuklear tooltip window, internal use only, temporary code
+  ## temporary code
+  ##
+  ## Returns true if the popup is active, otherwise false.
+  proc nk_tooltip_begin2(ctx; width, startx, starty: cfloat): nk_bool {.importc,
+      nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_tooltip_begin2(ctx = ctx, width = width2.cfloat, startx = x2, starty = y2)
+
+template tooltip*(x, y, width: float; content: untyped) =
+  ## Create a new tooltip window with the selected content
+  ##
+  ## * x       - the X coordinate of the tooltip window
+  ## * y       - the Y coordinate of the tooltip window
+  ## * width   - the width of the tooltip window
+  ## * content - the content of the window
+  if createTooltip(width2 = width, x2 = x, y2 = y):
+    content
+    ctx.nk_tooltip_end
