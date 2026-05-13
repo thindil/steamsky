@@ -535,6 +535,18 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.combo.labelNormal = table[comboTextColor]
   context.style.combo.labelHover = table[comboTextColor]
   context.style.combo.labelActive = table[comboTextColor]
+  context.style.combo.symNormal = triangleDown
+  context.style.combo.symHover = triangleDown
+  context.style.combo.symActive = triangleDown
+  context.style.combo.contentPadding = Vec2(x: 4.0, y: 4.0)
+  context.style.combo.buttonPadding = Vec2(x: 0.0, y: 4.0)
+  context.style.combo.spacing = Vec2(x: 4.0, y: 0.0)
+  context.style.combo.border = 1
+  context.style.combo.rounding = 0
+  context.style.combo.colorFactor = 1.0
+  context.style.combo.disabledFactor = nkWidgetDisabledFactor
+
+  # combo button
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting

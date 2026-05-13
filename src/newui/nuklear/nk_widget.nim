@@ -45,22 +45,6 @@ proc nkWidgetStateReset*(s: var nk_flags) {.raises: [], tags: [],
   else:
     s = widgetStateInactive.ord
 
-proc checkbox*(label: string; checked: var bool): bool {.discardable, raises: [
-    ], tags: [], contractual.} =
-  ## Create a Nuklear checkbox widget
-  ##
-  ## * label   - the text to show with the checkbox
-  ## * checked - the state of the checkbox, if true, the checkbox is checked
-  ##
-  ## Returns true if the state of the checkbox was changed, otherwise false.
-  proc nk_checkbox_label(ctx; text: cstring;
-      active: var cint): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-    ## Nuklear C binding
-  var active: cint = (if checked: 1 else: 0)
-  result = nk_checkbox_label(ctx = ctx, text = label.cstring,
-      active = active) == nkTrue
-  checked = active == 1
-
 proc option*(label: string; selected: bool): bool {.raises: [], tags: [],
     contractual.} =
   ## Create a Nuklear option (radio) widget
