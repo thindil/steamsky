@@ -784,6 +784,18 @@ type
     min*: ReputationRange
     max*: ReputationRange
 
+proc initReputationRanges*(min: ReputationRange = 0;
+    max: ReputationRange = 0): ReputationRanges {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for a reputation
+  ##
+  ## * min - Minimal reputation with the selected faction
+  ## * max - Maximal reputation with the selected faction
+  ##
+  ## Returns the new structure with information about the reputation
+  return ReputationRanges(min: min, max: max)
+
+type
   RelationsData* = object
     ## Used to store data about relation with other faction
     ##
