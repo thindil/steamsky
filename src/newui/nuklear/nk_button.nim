@@ -79,10 +79,10 @@ template labelButton*(title, tooltip: string; onPressCode: untyped) =
   ## * tooltip     - the tooltip to show when mouse is hovering about the
   ##                 button
   ## * onPressCode - the Nim code to execute when the button was pressed
-  let bounds: Rect = getWidgetBounds()
+  let showTips: bool = widgetIsHovered()
   if nk_button_label(ctx = ctx, ctitle = title.cstring):
     onPressCode
-  if isMouseHovering(rect = bounds):
+  if showTips:
     showTooltip2(text = tooltip)
 
 proc setButtonBehavior*(behavior: ButtonBehavior) {.raises: [], tags: [],
@@ -112,10 +112,10 @@ template symbolButton*(symbol: SymbolType; tooltip: string; onPressCode: untyped
   ## * tooltip     - the tooltip to show when mouse is hovering about the
   ##                 button
   ## * onPressCode - the Nim code to execute when the button was pressed
-  let bounds: Rect = getWidgetBounds()
+  let showTips: bool = widgetIsHovered()
   if nk_button_symbol(ctx = ctx, csymbol = symbol):
     onPressCode
-  if isMouseHovering(rect = bounds):
+  if showTips:
     showTooltip2(text = tooltip)
 
 template symbolLabelButton*(symbol: SymbolType; label: string;
