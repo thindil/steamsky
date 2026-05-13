@@ -2238,11 +2238,11 @@ proc property2*(name: string; min, val, max, step, incPerPixel: float;
   proc nk_propertyf(ctx; name: cstring; min, val, max, step,
       incPerPixel: cfloat): cfloat {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  let bounds: Rect = getWidgetBounds()
+  let showTips: bool = widgetIsHovered()
   result = nk_propertyf(ctx = ctx, name = name.cstring, min = min.cfloat,
       val = val.cfloat, max = max.cfloat, step = step.cfloat,
       incPerPixel = incPerPixel.cfloat).float
-  if isMouseHovering(rect = bounds):
+  if showTips:
     showTooltip2(text = tooltip)
 
 proc property2*(name: string; min, val, max, step: int; incPerPixel: float;
@@ -2264,11 +2264,11 @@ proc property2*(name: string; min, val, max, step: int; incPerPixel: float;
   proc nk_propertyi(ctx; name: cstring; min, val, max, step: cint;
       incPerPixel: cfloat): cint {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  let bounds: Rect = getWidgetBounds()
+  let showTips: bool = widgetIsHovered()
   result = nk_propertyi(ctx = ctx, name = name.cstring, min = min.cint,
       val = val.cint, max = max.cint, step = step.cint,
       incPerPixel = incPerPixel.cfloat).int
-  if isMouseHovering(rect = bounds):
+  if showTips:
     showTooltip2(text = tooltip)
 
 # -----
@@ -3032,6 +3032,25 @@ proc ruleHorizontal*(color: Color, rounding: bool) {.raises: [], tags: [], contr
     ## A binding to Nuklear's function. Internal use only
   let (r, g, b) = color.extractRGB
   nk_rule_horizontal(ctx = ctx, color = nk_color(r: r.uint8, g: g.uint8, b: b.uint8), rounding = (if rounding: nkTrue else: nkFalse))
+
+proc checkbox*(label: string; checked: var bool; tooltip: string = ""): bool {.discardable, raises: [
+    ], tags: [], contractual.} =
+  ## Create a Nuklear checkbox widget
+  ##
+  ## * label   - the text to show with the checkbox
+  ## * checked - the state of the checkbox, if true, the checkbox is checked
+  ##
+  ## Returns true if the state of the checkbox was changed, otherwise false.
+  proc nk_checkbox_label(ctx; text: cstring;
+      active: var cint): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## Nuklear C binding
+  var active: cint = (if checked: 1 else: 0)
+  let showTips: bool = widgetIsHovered()
+  result = nk_checkbox_label(ctx = ctx, text = label.cstring,
+      active = active) == nkTrue
+  checked = active == 1
+  if showTips and tooltip.len > 0:
+    showTooltip2(text = tooltip)
 
 # ------
 # Colors
