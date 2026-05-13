@@ -214,11 +214,8 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if showCargoOptions:
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.2.cfloat, 0.6])
     label(str = "Type:")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Show only items with the selected type")
     typeIndex = comboList(items = typesList, selected = typeIndex,
-        itemHeight = 25, x = 200, y = 150)
+        itemHeight = 25, x = 200, y = 150, tooltip = "Show only items with the selected type")
   # Show the list of crew members
   addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
       code = sortCargo, dialog = dialog)
