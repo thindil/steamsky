@@ -799,21 +799,19 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
       else:
         setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.5.cfloat, 0.5])
         label(str = diffLabel)
-      showTooltip(text = diffTooltips[index + 1])
       if mouseClicked(id = left, rect = getWidgetBounds()):
         infoText = diffTooltips[index + 1]
       let newValue: int = property2(name = "#", min = 1, val = diffSettings[
-          index], max = 500, step = 1, incPerPixel = 1)
+          index], max = 500, step = 1, incPerPixel = 1, tooltip = diffTooltips[index + 1])
       if newValue != diffSettings[index]:
         diffSettings[index] = newValue
         currentLevel = 5
         setPoints()
     # Randomize settings
     setLayoutRowDynamic(height = buttonHeight, cols = 1)
-    showTooltip(text = diffTooltips[9])
     if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = diffTooltips[9]
-    labelButton(title = "Random"):
+    labelButton(title = "Random", tooltip = diffTooltips[9]):
       for diffSetting in diffSettings.mitems:
         diffSetting = getRandom(min = 1, max = 500)
       currentLevel = 5
@@ -822,10 +820,9 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     setLayoutRowDynamic(height = (buttonHeight * 2.0), cols = 2, ratio = [
         0.9.cfloat, 0.1])
     label(str = "Randomize difficulty on game start:")
-    showTooltip(text = diffTooltips[10])
     if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = diffTooltips[10]
-    checkbox(label = "", checked = randomSettings)
+    checkbox(label = "", checked = randomSettings, tooltip = diffTooltips[10])
     # Total gained points
     setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.7.cfloat, 0.3])
     label(str = "Total gained points:")
