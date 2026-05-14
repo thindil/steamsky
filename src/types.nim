@@ -781,8 +781,8 @@ type
     ##
     ## * min - Minimal reputation with the selected faction
     ## * max - Maximal reputation with the selected faction
-    min*: ReputationRange
-    max*: ReputationRange
+    min: ReputationRange
+    max: ReputationRange
 
 proc initReputationRanges*(min: ReputationRange = 0;
     max: ReputationRange = 0): ReputationRanges {.raises: [], tags: [],
@@ -794,6 +794,11 @@ proc initReputationRanges*(min: ReputationRange = 0;
   ##
   ## Returns the new structure with information about the reputation
   return ReputationRanges(min: min, max: max)
+
+typeGetterSetter(baseType = ReputationRanges, varName = reputation, name = min,
+    typ = ReputationRange)
+typeGetterSetter(baseType = ReputationRanges, varName = reputation, name = max,
+    typ = ReputationRange)
 
 type
   RelationsData* = object
