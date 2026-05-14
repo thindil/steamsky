@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -46,15 +46,15 @@ proc loadFactionData(factionNode: XmlNode; factionAction: DataAction;
         var attribute: string = childNode.attr(name = "reputation")
         if attribute.len() > 0:
           try:
-            relation.reputation = ReputationRanges(min: attribute.parseInt(), max: 0)
+            relation.reputation = initReputationRanges(min = attribute.parseInt(), max = 0)
           except ValueError:
             raise newException(exceptn = DataLoadingError,
                 message = "Can't " & $factionAction & " faction '" &
                 factionIndex & "', invalid value for reputation.")
         else:
           try:
-            relation.reputation = ReputationRanges(min: childNode.attr(
-                name = "minreputation").parseInt(), max: childNode.attr(
+            relation.reputation = initReputationRanges(min = childNode.attr(
+                name = "minreputation").parseInt(), max = childNode.attr(
                 name = "maxreputation").parseInt())
           except ValueError:
             raise newException(exceptn = DataLoadingError,
