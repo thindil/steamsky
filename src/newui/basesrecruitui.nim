@@ -256,10 +256,8 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
           label(str = attributesList[index].name & ":")
           colorLabel(str = getAttributeLevelName(
               attributeLevel = attrib.level), color = theme.colors[goldenColor])
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "Show detailed information about the selected attribute.")
-          imageButton(image = images[helpIcon]):
+          imageButton(image = images[helpIcon],
+              tooltip = "Show detailed information about the selected attribute."):
             let attribute: AttributeRecord = attributesList[index]
             dialog = setInfo(text = attribute.description,
                 title = attribute.name)
@@ -275,10 +273,8 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
             label(str = skillsList[skill.index].name & ":")
             colorLabel(str = getSkillLevelName(skillLevel = skill.level),
                 color = theme.colors[goldenColor])
-            if gameSettings.showTooltips:
-              addTooltip(bounds = getWidgetBounds(),
-                  text = "Show detailed information about the selected skill.")
-            imageButton(image = images[helpIcon]):
+            imageButton(image = images[helpIcon],
+                tooltip = "Show detailed information about the selected skill."):
               let skill: SkillRecord = skillsList[skill.index]
               dialog = setInfo(text = skill.description, title = skill.name)
             setLayoutRowDynamic(height = 20, cols = 1)
@@ -411,7 +407,8 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
       dialog = setError(message = "Can't get the width of the hire text.")
       return
     var canHire: bool = false
-    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len, ratio = moneyWidth)
+    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len,
+        ratio = moneyWidth)
     if moneyText.len == 1:
       colorLabel(str = moneyText[0], color = theme.colors[redColor])
     else:
