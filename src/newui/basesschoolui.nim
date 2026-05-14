@@ -68,21 +68,15 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't train the skill.")
       setSchool(dialog = dialog)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Select the crew member which skills will be trained")
     let newMember: Natural = comboList(items = crewList,
-        selected = crewIndex, itemHeight = labelHeight.int, x = 200, y = 150)
+        selected = crewIndex, itemHeight = labelHeight.int, x = 200, y = 150, tooltip = "Select the crew member which skills will be trained")
     if newMember != crewIndex:
       crewIndex = newMember
       setSchoolSkills()
       setTrainingCost(dialog = dialog)
     label(str = "in", alignment = centered)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Select the skill which will be trained")
     let newSkill: Natural = comboList(items = schoolSkillsList,
-        selected = skillIndex, itemHeight = labelHeight.int, x = 300, y = 150)
+        selected = skillIndex, itemHeight = labelHeight.int, x = 300, y = 150, tooltip = "Select the skill which will be trained")
     if newSkill != skillIndex:
       skillIndex = newSkill
       setTrainingCost(dialog = dialog)
