@@ -802,7 +802,8 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
       if mouseClicked(id = left, rect = getWidgetBounds()):
         infoText = diffTooltips[index + 1]
       let newValue: int = property2(name = "#", min = 1, val = diffSettings[
-          index], max = 500, step = 1, incPerPixel = 1, tooltip = diffTooltips[index + 1])
+          index], max = 500, step = 1, incPerPixel = 1, tooltip = diffTooltips[
+              index + 1])
       if newValue != diffSettings[index]:
         diffSettings[index] = newValue
         currentLevel = 5
@@ -910,12 +911,10 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             row(x = x, y = 0, w = widgetWidth, h = tabHeight):
               if currentTab == index:
                 changeStyle(src = active, dest = normal):
-                  showTooltip(text = tabTooltips[index])
-                  labelButton(title = tab):
+                  labelButton(title = tab, tooltip = tabTooltips[index]):
                     discard
               else:
-                showTooltip(text = tabTooltips[index])
-                labelButton(title = tab):
+                labelButton(title = tab, tooltip = tabTooltips[index]):
                   currentTab = index.cint
                   infoText = (if index == 0: playerTooltips[
                       8] else: diffTooltips[^1])
@@ -948,16 +947,14 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         wrapLabel(str = infoText)
   layoutSpaceStatic(height = buttonHeight, widgetsCount = 2):
     row(x = 140, y = 0, w = 155, h = buttonHeight):
-      showTooltip(text = "Start the game")
-      labelButton(title = "Start game"):
+      labelButton(title = "Start game", tooltip = "Start the game"):
         startGame(dialog = dialog)
         if dialog == none:
           setGame(dialog = dialog)
           if dialog == none:
             state = map
     row(x = 300.float, y = 0, w = 140, h = buttonHeight):
-      showTooltip(text = "Back to the main menu")
-      labelButton(title = "Back to menu"):
+      labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
         return
   if isKeyPressed(key = keyEscape) and not editActive:
