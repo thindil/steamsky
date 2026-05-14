@@ -799,11 +799,9 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       addTooltip(bounds = getWidgetBounds(),
           text = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
     label(str = "Skill:")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
     skillIndex = comboList(items = crewSkillsList,
-        selected = skillIndex, itemHeight = 25, x = 200, y = 150)
+        selected = skillIndex, itemHeight = 25, x = 200, y = 150,
+        tooltip = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
     setLayoutRowStatic(height = 35, cols = 2, width = 35)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Select all crew member")
