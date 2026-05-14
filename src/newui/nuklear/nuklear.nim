@@ -1890,10 +1890,10 @@ template imageButton*(image: PImage; tooltip: string; onPressCode: untyped) =
   ## * onPressCode - the Nim code to execute when the button was pressed
   ##
   ## Returns true if button was pressed
-  let bounds: Rect = getWidgetBounds()
+  let showTips: bool = widgetIsHovered()
   if createImageButton(img = image):
     onPressCode
-  if isMouseHovering(rect = bounds):
+  if showTips:
     showTooltip2(text = tooltip)
 
 proc createImageButtonCentered(img: PImage): bool {.raises: [], tags: [],
@@ -2242,7 +2242,7 @@ proc property2*(name: string; min, val, max, step, incPerPixel: float;
   result = nk_propertyf(ctx = ctx, name = name.cstring, min = min.cfloat,
       val = val.cfloat, max = max.cfloat, step = step.cfloat,
       incPerPixel = incPerPixel.cfloat).float
-  if showTips:
+  if showTips and tooltip.len > 0:
     showTooltip2(text = tooltip)
 
 proc property2*(name: string; min, val, max, step: int; incPerPixel: float;
@@ -2268,7 +2268,7 @@ proc property2*(name: string; min, val, max, step: int; incPerPixel: float;
   result = nk_propertyi(ctx = ctx, name = name.cstring, min = min.cint,
       val = val.cint, max = max.cint, step = step.cint,
       incPerPixel = incPerPixel.cfloat).int
-  if showTips:
+  if showTips and tooltip.len > 0:
     showTooltip2(text = tooltip)
 
 # -----
