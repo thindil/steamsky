@@ -2579,11 +2579,11 @@ proc comboList*(items: openArray[string]; selected, itemHeight: int; x,
   var optionsList: seq[cstring] = @[]
   for i in 0..amount:
     optionsList.add(y = items[i].cstring)
-  let bounds: Rect = getWidgetBounds()
+  let showTips: bool = widgetIsHovered()
   result = nk_combo(ctx = ctx, items = optionsList[0].addr, count = amount.cint +
       1, selected = selected.cint, itemHeight = itemHeight.cint,
           size = new_nk_vec2(x = x.cfloat, y = y.cfloat)).int
-  if tooltip.len > 0 and isMouseHovering(rect = bounds):
+  if showTips and tooltip.len > 0:
     showTooltip2(text = tooltip)
 
 proc createColorCombo(ctx; color1: NkColor; x1, y1: cfloat): bool {.raises: [],
@@ -2916,11 +2916,11 @@ proc editString*(text: var string; maxLen: int; editType: EditTypes = simple;
   for flag in flags:
     cFlags = cFlags or flag.cint
   {.ruleOn: "assignments".}
-  let bounds: Rect = getWidgetBounds()
+  let showTips: bool = widgetIsHovered()
   result = nk_edit_string(ctx = ctx, flags = cFlags,
       memory = cText[0].addr, len = length.cint, max = maxLen.cint,
       filter = filter).EditEvent
-  if isMouseHovering(rect = bounds):
+  if showTips and tooltip.len > 0:
     showTooltip2(text = tooltip)
   text = charArrayToString(charArray = cText, length = length)
 
