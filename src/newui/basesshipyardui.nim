@@ -1064,10 +1064,8 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if newType != typeIndex:
       typeIndex = newType
       setModulesList(dialog = dialog)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Enter a name of a module which you looking for")
-    editString(text = nameSearch, maxLen = 64)
+    editString(text = nameSearch, maxLen = 64,
+        tooltip = "Enter a name of a module which you looking for")
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
       80 - (if showOptions: 45 else: 0)
   setLayoutRowDynamic(height = tableHeight, cols = 1)
