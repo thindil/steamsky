@@ -144,17 +144,11 @@ proc showPilotSettings(dialog: var GameDialog; faction: FactionData) {.raises: [
   else:
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
   label(str = "Pilot:", alignment = left)
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Select the crew member which will be the pilot during the combat. The sign + after name means that this crew member has piloting skill, the sign ++ after name means that his/her piloting skill is the best in the crew")
   let newPilot: Natural = comboList(items = pilotList,
-      selected = pilotIndex, itemHeight = 25, x = 200, y = 150)
+      selected = pilotIndex, itemHeight = 25, x = 200, y = 150, tooltip = "Select the crew member which will be the pilot during the combat. The sign + after name means that this crew member has piloting skill, the sign ++ after name means that his/her piloting skill is the best in the crew")
   if pilotIndex > 0:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Select the order for the pilot")
     let newOrder: Natural = comboList(items = pilotOrders,
-        selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150)
+        selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150, tooltip = "Select the order for the pilot")
     if newOrder != pilotOrder - 1:
       pilotOrder = newOrder + 1
       if "sentientships" in faction.flags:
@@ -213,17 +207,11 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
     else:
       setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
     label(str = "Engineer:", alignment = left)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Select the crew member which will be the engineer during the combat. The sign + after name means that this crew member has engineering skill, the sign ++ after name means that his/her engineering skill is the best in the crew")
     let newEngineer: Natural = comboList(items = engineerList,
-        selected = engineerIndex, itemHeight = 25, x = 200, y = 150)
+        selected = engineerIndex, itemHeight = 25, x = 200, y = 150, tooltip = "Select the crew member which will be the engineer during the combat. The sign + after name means that this crew member has engineering skill, the sign ++ after name means that his/her engineering skill is the best in the crew")
     if engineerIndex > 0:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Select the order for the engineer")
       let newOrder: Natural = comboList(items = engineerOrders,
-          selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150)
+          selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150, tooltip = "Select the order for the engineer")
       if newOrder != engineerOrder - 1:
         engineerOrder = newOrder + 1
         if "sentientships" in faction.flags:
@@ -289,11 +277,8 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
             return
       wrapLabel(str = playerShip.modules[gun[1]].name & ": (Ammo: " &
           $ammoAmount & ")")
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Select the crew member which will be operating the gun during the combat. The sign + after name means that this crew member has gunnery skill, the sign ++ after name means that his/her gunnery skill is the best in the crew")
       let newGunner: Natural = comboList(items = gunnerList,
-          selected = gunnersIndex[gunIndex], itemHeight = 25, x = 200, y = 150)
+          selected = gunnersIndex[gunIndex], itemHeight = 25, x = 200, y = 150, tooltip = "Select the crew member which will be operating the gun during the combat. The sign + after name means that this crew member has gunnery skill, the sign ++ after name means that his/her gunnery skill is the best in the crew")
       hasGunner = newGunner > 0
       if hasGunner:
         var gunnerOrders: array[1..6, string] = gunnersOrders
@@ -304,11 +289,8 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
           except:
             dialog = setError(message = "Can't show gunner's order.")
             return
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Select the order for the gunner. Shooting in the selected part of enemy ship is less precise but always hit the selected part.")
         let newOrder: Natural = comboList(items = gunnerOrders,
-            selected = (gun[2] - 1), itemHeight = 25, x = 200, y = 150)
+            selected = (gun[2] - 1), itemHeight = 25, x = 200, y = 150, tooltip = "Select the order for the gunner. Shooting in the selected part of enemy ship is less precise but always hit the selected part.")
         if newOrder != gun[2] - 1:
           gun[2] = newOrder + 1
           addMessage(message = "Order for " & playerShip.crew[
@@ -643,12 +625,9 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
             addTooltip(bounds = getWidgetBounds(),
                 text = "The crew member's health.")
           progressBar(value = health, maxValue = 100, modifyable = false)
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "The crew member current order.")
         let newOrder: Natural = comboList(items = ordersList,
           selected = (if boardingOrders[orderIndex] > -1: boardingOrders[orderIndex]
-          else: ordersList.high), itemHeight = 25, x = 200, y = 150)
+          else: ordersList.high), itemHeight = 25, x = 200, y = 150, tooltip = "The crew member current order.")
         if newOrder != boardingOrders[orderIndex]:
           boardingOrders[orderIndex] = (if newOrder == game.enemy.ship.crew.len: -1
             else: newOrder)
