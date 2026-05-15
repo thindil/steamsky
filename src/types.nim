@@ -809,6 +809,18 @@ type
     reputation*: ReputationRanges
     friendly*: bool
 
+proc initRelationsData*(reputation: ReputationRanges = initReputationRanges();
+    friendly: bool = true): RelationsData {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for a factions relations
+  ##
+  ## * reputation - Values of min and max reputation with the faction
+  ## * friendly   - If true, the selected faction is friendly towards the faction
+  ##
+  ## Returns the new structure with information about the relations between factions
+  return RelationsData(reputation: reputation, friendly: friendly)
+
+type
   CareerData* = object
     ## Used to store data about careers available for the faction
     ##
