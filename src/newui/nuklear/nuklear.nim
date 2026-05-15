@@ -1775,16 +1775,20 @@ proc colorLabel*(str: string; background: Color; align: TextAlignment = left) {.
   nk_label_colored3(ctx = ctx, str = str.cstring, align = align.nk_flags,
       color = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
 
-proc label*(str: string; alignment: TextAlignment = left) {.raises: [], tags: [
-    ], contractual.} =
+proc label*(str: string; alignment: TextAlignment = left; tooltip: string = "")
+    {.raises: [], tags: [], contractual.} =
   ## Draw the text with the selected alignment
   ##
   ## * str       - the text to draw
   ## * alignment - the alignment of the text. Default is alignment to the left
+  ## * tooltip   - the tooltip to show on the label. Can be empty
   proc nk_label(ctx; str: cstring; alignment: nk_flags) {.importc, nodecl,
       raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
+  let showTips: bool = widgetIsHovered()
   nk_label(ctx = ctx, str = str.cstring, alignment = alignment.nk_flags)
+  if showTips and tooltip.len > 0:
+    showTooltip2(text = tooltip)
 
 proc text*(str: string; len: int = str.len;
     alignment: TextAlignment = left) {.raises: [], tags: [], contractual.} =
