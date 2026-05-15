@@ -1,4 +1,4 @@
-# Copyright © 2024-2025 Bartek Jasicki
+# Copyright © 2024-2026 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -45,19 +45,15 @@ proc nkWidgetStateReset*(s: var nk_flags) {.raises: [], tags: [],
   else:
     s = widgetStateInactive.ord
 
-proc option*(label: string; selected: bool): bool {.raises: [], tags: [],
-    contractual.} =
-  ## Create a Nuklear option (radio) widget
+proc widgetIsHovered*(): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the next widget is hovered by the mouse
   ##
-  ## * label    - the text show with the option
-  ## * selected - the state of the option, if true the option is selected
-  ##
-  ## Returns true if the option is selected, otherwise false
-  proc nk_option_label(ctx; name: cstring; active: cint): nk_bool {.importc,
-      nodecl, raises: [], tags: [], contractual.}
+  ## Returns true if the mouse is hovering above the next widget, otherwise
+  ## false
+  proc nk_widget_is_hovered(ctx): nk_bool {.importc, nodecl, raises: [],
+      tags: [], contractual.}
     ## Nuklear C binding
-  var active: cint = (if selected: 1 else: 0)
-  return nk_option_label(ctx = ctx, name = label.cstring, active = active) == nkTrue
+  return nk_widget_is_hovered(ctx = ctx) == nkTrue
 
 proc progressBar*(value: var int; maxValue: int; modifyable: bool = true;
     reversed: bool = false): bool {.discardable, raises: [], tags: [],
@@ -76,16 +72,6 @@ proc progressBar*(value: var int; maxValue: int; modifyable: bool = true;
     ## Nuklear C binding
   return nk_progress(ctx = ctx, cur = value, max = maxValue,
       modifyable = modifyable.nk_bool, reversed = reversed.nk_bool) == nkTrue
-
-proc widgetIsHovered*(): bool {.raises: [], tags: [], contractual.} =
-  ## Check if the next widget is hovered by the mouse
-  ##
-  ## Returns true if the mouse is hovering above the next widget, otherwise
-  ## false
-  proc nk_widget_is_hovered(ctx): nk_bool {.importc, nodecl, raises: [],
-      tags: [], contractual.}
-    ## Nuklear C binding
-  return nk_widget_is_hovered(ctx = ctx) == nkTrue
 
 proc widgetIsMouseClicked*(button: Buttons): bool {.raises: [], tags: [],
     contractual.} =

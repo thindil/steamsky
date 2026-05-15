@@ -3052,6 +3052,24 @@ proc checkbox*(label: string; checked: var bool; tooltip: string = ""): bool {.d
   if showTips and tooltip.len > 0:
     showTooltip2(text = tooltip)
 
+proc option*(label: string; selected: bool;
+    tooltip: string = ""): bool {.raises: [], tags: [], contractual.} =
+  ## Create a Nuklear option (radio) widget
+  ##
+  ## * label    - the text show with the option
+  ## * selected - the state of the option, if true the option is selected
+  ## * tooltip  - the tooltip to show when mouse is hovering about the widget
+  ##
+  ## Returns true if the option is selected, otherwise false
+  proc nk_option_label(ctx; name: cstring; active: cint): nk_bool {.importc,
+      nodecl, raises: [], tags: [], contractual.}
+    ## Nuklear C binding
+  var active: cint = (if selected: 1 else: 0)
+  let showTips: bool = widgetIsHovered()
+  result = nk_option_label(ctx = ctx, name = label.cstring, active = active) == nkTrue
+  if showTips and tooltip.len > 0:
+    showTooltip2(text = tooltip)
+
 # ------
 # Colors
 # ------
