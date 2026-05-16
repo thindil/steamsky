@@ -1762,18 +1762,23 @@ proc colorLabel*(str: string; color, background: Color; align: TextAlignment = l
       color = nk_rgb(r = r.cint, g = g.cint, b = b.cint),
       color2 = nk_rgb(r = r2.cint, g = g2.cint, b = b2.cint))
 
-proc colorLabel*(str: string; background: Color; align: TextAlignment = left) {.raises: [], tags: [], contractual.} =
+proc colorLabel*(str: string; background: Color; align: TextAlignment = left;
+    tooltip: string = "") {.raises: [], tags: [], contractual.} =
   ## Draw a text with the selected background color
   ##
   ## * str        - the text to display
   ## * background - the color of the text's background
   ## * align      - the text aligmnent flags
+  ## * tooltip    - the tooltip to show on the label. Can be empty
   proc nk_label_colored3(ctx; str: cstring; align: nk_flags;
       color: nk_color) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   var (r, g, b) = background.extractRGB
+  let showTips: bool = widgetIsHovered()
   nk_label_colored3(ctx = ctx, str = str.cstring, align = align.nk_flags,
       color = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
+  if showTips and tooltip.len > 0:
+    showTooltip2(text = tooltip)
 
 proc label*(str: string; alignment: TextAlignment = left; tooltip: string = "")
     {.raises: [], tags: [], contractual.} =
