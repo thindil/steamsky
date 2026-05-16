@@ -86,22 +86,14 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
         tooltip = "Train the selected skill the selected amount of times"):
       tType = times
     setLayoutRowDynamic(height = editHeight, cols = 2)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Enter amount of training sessions between 1 and 100")
-    label(str = "Amount:")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Enter amount of training sessions between 1 and 100")
+    label(str = "Amount:", tooltip = "Enter amount of training sessions between 1 and 100")
     let newAmount: int = property2(name = "#", min = 1, val = trainAmount,
-        max = 100, step = 1, incPerPixel = 1)
+        max = 100, step = 1, incPerPixel = 1,
+        tooltip = "Enter amount of training sessions between 1 and 100")
     if newAmount != trainAmount:
       trainAmount = newAmount
       timesCost = oneTrainCost * trainAmount
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Minimal cost of training. The real cost can be higher that this.")
-    label(str = "Minimal cost:")
+    label(str = "Minimal cost:", tooltip = "Minimal cost of training. The real cost can be higher that this.")
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Minimal cost of training. The real cost can be higher that this.")
