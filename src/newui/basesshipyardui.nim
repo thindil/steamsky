@@ -186,9 +186,9 @@ proc setHullInfo(dialog: var GameDialog; installing: bool; shipModuleIndex: int;
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   if installing:
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
     colorLabel(str = "Ship hull can be only replaced.", color = theme.colors[goldenColor])
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = labelHeight, cols = 2)
     label(str = "Modules space:")
     if maxValue < playerShip.modules[shipModuleIndex].maxModules:
       colorLabel(str = $maxValue & " (smaller)", color = theme.colors[redColor])
@@ -687,7 +687,7 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     except:
       dialog = setError(message = "Can't show repair skill")
       return
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
     try:
       if modulesList[moduleIndex].unique:
         colorLabel(str = " The module is unique. Only one module of that type can be installed on the ship.",
@@ -698,7 +698,7 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     try:
       if modulesList[moduleIndex].description.len > 0:
         label(str = "")
-        setLayoutRowDynamic(height = 90, cols = 1)
+        setLayoutRowDynamic(height = labelHeight * 3, cols = 1)
         wrapLabel(str = modulesList[moduleIndex].description)
     except:
       dialog = setError(message = "Can't show module's description")
@@ -765,11 +765,11 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
     if compareList.len > 0:
-      setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.4.cfloat, 0.6])
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
       label(str = "Compare with:")
       compareIndex = comboList(items = compareList, selected = compareIndex,
-        itemHeight = 25, x = 300, y = 150)
-    setLayoutRowDynamic(height = 30, cols = 2)
+        itemHeight = labelHeight.int, x = 300, y = 150)
+    setLayoutRowDynamic(height = labelHeight, cols = 2)
     label(str = "Install cost:")
     var cost: Natural = try:
         modulesList[moduleIndex].price
@@ -822,7 +822,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
       except:
         dialog = setError(message = "Can't check unique module.")
     var btnAmount: Positive = 2
-    setLayoutRowDynamic(height = 60, cols = 1)
+    setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
     if moneyAmount == 0:
       colorWrapLabel(str = "You don't have any money to buy the module.",
           color = theme.colors[redColor])
@@ -859,7 +859,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
             btnAmount = 1
       except:
         dialog = setError(message = "Can't set error label.")
-    setLayoutRowDynamic(height = 30, cols = btnAmount)
+    setLayoutRowDynamic(height = buttonHeight, cols = btnAmount)
     if btnAmount == 2:
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       imageLabelButton(image = images[buyIcon], text = "Install", alignment = right):
@@ -953,12 +953,12 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
       var val: Natural = (damagePercent * 100.0).int
       changeStyle(field = progressbar, color = theme.colors[statusColor]):
         progressBar(value = val, maxValue = 100, modifyable = false)
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
     try:
       if modulesList[playerShip.modules[
           moduleIndex].protoIndex].description.len > 0:
         label(str = "")
-        setLayoutRowDynamic(height = 90, cols = 1)
+        setLayoutRowDynamic(height = labelHeight * 3, cols = 1)
         wrapLabel(str = modulesList[playerShip.modules[
             moduleIndex].protoIndex].description)
     except:
