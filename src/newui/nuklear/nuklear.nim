@@ -1732,7 +1732,8 @@ template treeElement*(eType: TreeType; title: string; state: CollapseStates;
 # ------
 # Labels
 # ------
-proc colorLabel*(str: string; color: Color; align: TextAlignment = left) {.raises: [], tags: [], contractual.} =
+proc colorLabel*(str: string; color: Color; align: TextAlignment = left;
+    tooltip: string = "") {.raises: [], tags: [], contractual.} =
   ## Draw a text with the selected color
   ##
   ## * str   - the text to display
@@ -1742,10 +1743,14 @@ proc colorLabel*(str: string; color: Color; align: TextAlignment = left) {.raise
       color: nk_color) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   var (r, g, b) = color.extractRGB
+  let showTips: bool = widgetIsHovered()
   nk_label_colored(ctx = ctx, str = str.cstring, align = align.nk_flags,
       color = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
+  if showTips and tooltip.len > 0:
+    showTooltip2(text = tooltip)
 
-proc colorLabel*(str: string; color, background: Color; align: TextAlignment = left) {.raises: [], tags: [], contractual.} =
+proc colorLabel*(str: string; color, background: Color; align: TextAlignment = left;
+    tooltip: string = "") {.raises: [], tags: [], contractual.} =
   ## Draw a text with the selected color and background
   ##
   ## * str        - the text to display
@@ -1758,9 +1763,12 @@ proc colorLabel*(str: string; color, background: Color; align: TextAlignment = l
   var
     (r, g, b) = color.extractRGB
     (r2, g2, b2) = background.extractRGB
+  let showTips: bool = widgetIsHovered()
   nk_label_colored2(ctx = ctx, str = str.cstring, align = align.nk_flags,
       color = nk_rgb(r = r.cint, g = g.cint, b = b.cint),
       color2 = nk_rgb(r = r2.cint, g = g2.cint, b = b2.cint))
+  if showTips and tooltip.len > 0:
+    showTooltip2(text = tooltip)
 
 proc colorLabel*(str: string; background: Color; align: TextAlignment = left;
     tooltip: string = "") {.raises: [], tags: [], contractual.} =
