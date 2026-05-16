@@ -571,6 +571,21 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.combo.button.drawEnd = nil
 
   # tab
+  context.style.tab.background = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[tabHeaderColor]))
+  context.style.tab.borderColor = table[StyleColors.borderColor]
+  context.style.tab.text = table[textColor]
+  context.style.tab.symMinimize = triangleRight
+  context.style.tab.symMaximize = triangleDown
+  context.style.tab.padding = Vec2(x: 4.0, y: 4.0)
+  context.style.tab.spacing = Vec2(x: 4.0, y: 4.0)
+  context.style.tab.indent = 10.0
+  context.style.tab.border = 1
+  context.style.tab.rounding = 0
+  context.style.tab.colorFactor = 1.0
+  context.style.tab.disabledFactor = nkWidgetDisabledFactor
+
+  # tab button
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
