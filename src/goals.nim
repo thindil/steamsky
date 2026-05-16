@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -148,7 +148,7 @@ proc goalText*(index: int): string {.raises: [KeyError], tags: [],
   let goal: GoalData = (if index > 0 and goalsList.hasKey(
       key = index): goalsList[index] else: currentGoal)
   case goal.goalType
-  of reputation:
+  of GoalTypes.reputation:
     result = "Gain max reputation in "
   of GoalTypes.destroy:
     result = "Destroy "
@@ -166,7 +166,7 @@ proc goalText*(index: int): string {.raises: [KeyError], tags: [],
     discard
   result &= $goal.amount
   case goal.goalType
-  of reputation, visit:
+  of GoalTypes.reputation, visit:
     result &= " base"
   of GoalTypes.destroy:
     result &= " ship"
@@ -222,7 +222,7 @@ proc goalText*(index: int): string {.raises: [KeyError], tags: [],
     if goal.amount > 1:
       insertPosition.dec
     case goal.goalType
-    of reputation, visit:
+    of GoalTypes.reputation, visit:
       result.insert(item = getFactionName(factionIndex = goal.targetIndex,
           factionType = name) & " ", i = insertPosition)
     of GoalTypes.destroy:
