@@ -806,8 +806,8 @@ type
     ##
     ## * reputation - Values of min and max reputation with the faction
     ## * friendly   - If true, the selected faction is friendly towards the faction
-    reputation*: ReputationRanges
-    friendly*: bool
+    reputation: ReputationRanges
+    friendly: bool
 
 proc initRelationsData*(reputation: ReputationRanges = initReputationRanges();
     friendly: bool = true): RelationsData {.raises: [], tags: [],
@@ -819,6 +819,10 @@ proc initRelationsData*(reputation: ReputationRanges = initReputationRanges();
   ##
   ## Returns the new structure with information about the relations between factions
   return RelationsData(reputation: reputation, friendly: friendly)
+
+typeGetterSetter(baseType = RelationsData, varName = relation,
+    name = reputation, typ = ReputationRanges)
+typeGetterSetter(baseType = RelationsData, varName = relation, name = friendly, typ = bool)
 
 type
   CareerData* = object
