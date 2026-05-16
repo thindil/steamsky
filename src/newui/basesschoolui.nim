@@ -94,23 +94,19 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
       trainAmount = newAmount
       timesCost = oneTrainCost * trainAmount
     label(str = "Minimal cost:", tooltip = "Minimal cost of training. The real cost can be higher that this.")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Minimal cost of training. The real cost can be higher that this.")
-    colorLabel(str = $timesCost & " " & moneyName, color = theme.colors[goldenColor])
+    colorLabel(str = $timesCost & " " & moneyName, color = theme.colors[
+        goldenColor],
+        tooltip = "Minimal cost of training. The real cost can be higher that this.")
     setLayoutRowDynamic(height = labelHeight, cols = 1)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Train the selected skill as long as you don't spend the selected amount of money")
-    if option(label = "Selected maximum cost of training", selected = tType == cost):
+    if option(label = "Selected maximum cost of training", selected = tType ==
+        cost,
+        tooltip = "Train the selected skill as long as you don't spend the selected amount of money"):
       tType = cost
     setLayoutRowDynamic(height = editHeight, cols = 2)
     label(str = "Cost:")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Enter amount of money which you want to spend")
     let newCost: int = property2(name = "#", min = oneTrainCost, val = minCost,
-        max = maxCost, step = oneTrainCost, incPerPixel = 1)
+        max = maxCost, step = oneTrainCost, incPerPixel = 1,
+        tooltip = "Enter amount of money which you want to spend")
     if newCost != minCost:
       minCost = newCost
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
