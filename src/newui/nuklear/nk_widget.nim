@@ -55,24 +55,6 @@ proc widgetIsHovered*(): bool {.raises: [], tags: [], contractual.} =
     ## Nuklear C binding
   return nk_widget_is_hovered(ctx = ctx) == nkTrue
 
-proc progressBar*(value: var int; maxValue: int; modifyable: bool = true;
-    reversed: bool = false): bool {.discardable, raises: [], tags: [],
-    contractual.} =
-  ## Create a Nuklear progress bar widget
-  ##
-  ## * value      - the current value of the progress bar
-  ## * maxValue   - the maximum value of the progress bar
-  ## * modifyable - if true, the user can modify the value of the progress bar
-  ## * reversed   - if true, the progress bar should be draw in reverse, from
-  ##                the end
-  ##
-  ## Returns true if the value parameter was changed, otherwise false
-  proc nk_progress(ctx; cur: var nk_size; max: nk_size; modifyable,
-      reversed: nk_bool): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-    ## Nuklear C binding
-  return nk_progress(ctx = ctx, cur = value, max = maxValue,
-      modifyable = modifyable.nk_bool, reversed = reversed.nk_bool) == nkTrue
-
 proc widgetIsMouseClicked*(button: Buttons): bool {.raises: [], tags: [],
     contractual.} =
   ## Check if the mouse's button was clicked inside the next widget

@@ -3087,6 +3087,28 @@ proc option*(label: string; selected: bool;
   if showTips and tooltip.len > 0:
     showTooltip2(text = tooltip)
 
+proc progressBar*(value: var int; maxValue: int; modifyable: bool = true;
+    reversed: bool = false; tooltip: string = ""): bool {.discardable, raises: [], tags: [],
+    contractual.} =
+  ## Create a Nuklear progress bar widget
+  ##
+  ## * value      - the current value of the progress bar
+  ## * maxValue   - the maximum value of the progress bar
+  ## * modifyable - if true, the user can modify the value of the progress bar
+  ## * reversed   - if true, the progress bar should be draw in reverse, from
+  ##                the end
+  ## * tooltip    - the tooltip to show on the progress bar. Can be empty
+  ##
+  ## Returns true if the value parameter was changed, otherwise false
+  proc nk_progress(ctx; cur: var nk_size; max: nk_size; modifyable,
+      reversed: nk_bool): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## Nuklear C binding
+  let showTips: bool = widgetIsHovered()
+  result = nk_progress(ctx = ctx, cur = value, max = maxValue,
+      modifyable = modifyable.nk_bool, reversed = reversed.nk_bool) == nkTrue
+  if showTips and tooltip.len > 0:
+    showTooltip2(text = tooltip)
+
 # ------
 # Colors
 # ------
