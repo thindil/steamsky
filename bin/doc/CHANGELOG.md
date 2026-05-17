@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [12.3] - 2026-05-17
 
 ### Added
 - Use the defender's armor's quality to reduce damage in the melee combat
