@@ -586,6 +586,22 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.tab.disabledFactor = nkWidgetDisabledFactor
 
   # tab button
+  context.style.tab.tabMinimizeButton.normal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[tabHeaderColor]))
+  context.style.tab.tabMinimizeButton.hover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[tabHeaderColor]))
+  context.style.tab.tabMinimizeButton.active = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[tabHeaderColor]))
+  context.style.tab.tabMinimizeButton.borderColor = NkColor(r: 0, g: 0, b: 0,
+      a: 0)
+  context.style.tab.tabMinimizeButton.textBackground = table[tabHeaderColor]
+  context.style.tab.tabMinimizeButton.textNormal = table[textColor]
+  context.style.tab.tabMinimizeButton.textHover = table[textColor]
+  context.style.tab.tabMinimizeButton.textActive = table[textColor]
+  context.style.tab.tabMinimizeButton.padding = Vec2(x: 2.0, y: 2.0)
+  context.style.tab.tabMinimizeButton.touchPadding = Vec2(x: 0.0, y: 0.0)
+  context.style.tab.tabMinimizeButton.userData = Handle(handleType: handleInt,
+      intValue: 0)
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting

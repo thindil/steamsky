@@ -59,7 +59,7 @@ proc nkMemSet*(pData: pointer; c0: int; size: nk_size) {.raises: [], tags: [],
   # align destination
   var t: nk_size = cast[nk_size](dst)
   if (t and nkWmask) != 0:
-    t = nkWsize - t
+    t = nkWsize.nk_size - t
     localSize -= t
     t.dec
     while t != 0:
@@ -76,7 +76,7 @@ proc nkMemSet*(pData: pointer; c0: int; size: nk_size) {.raises: [], tags: [],
     t.dec
 
   # fill trailing bytes
-  t = size and nkWmask
+  t = (size and nkWmask).nk_size
   if t != 0:
     while t != 0:
       dst[] = c0.nk_byte

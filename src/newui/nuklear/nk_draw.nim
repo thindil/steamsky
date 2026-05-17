@@ -1,4 +1,4 @@
-# Copyright © 2025 Bartek Jasicki
+# Copyright © 2025-2026 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@ proc nkCommandBufferPush*(b: var CommandBuffer; t: CommandType;
   ## * t    - the type of command
   ## * size - the size of command to add
   body:
-    const align: nk_size = alignof(x = Command)
+    const align: nk_size = alignof(x = Command).nk_size
     let cmd: ptr Command = cast[ptr Command](nkBufferAlloc(b = b.base,
         bufferAlloc = bufferFront, size = size, align = align))
     if cmd == nil:
@@ -74,7 +74,7 @@ proc nkFillRect*(b: var CommandBuffer; rect: Rect; rounding: float;
       return
 
   var cmd: CommandRectFilled = cast[CommandRectFilled](nkCommandBufferPush(
-      b = b, t = commandRectFilled, size = CommandRectFilled.sizeof))
+      b = b, t = commandRectFilled, size = CommandRectFilled.sizeof.nk_size))
   cmd.rounding = rounding.uint16
   cmd.x = rect.x.int16
   cmd.y = rect.y.int16
