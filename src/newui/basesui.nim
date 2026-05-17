@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -372,10 +372,8 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if showOptions:
       setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.1.cfloat, 0.3])
       label(str = "Name:")
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Search for the selected recipe.")
-      editString(text = nameSearch, maxLen = 64)
+      editString(text = nameSearch, maxLen = 64,
+          tooltip = "Search for the selected recipe.")
     # Show information about money owned by the player
     setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
     for index, text in moneyText:
