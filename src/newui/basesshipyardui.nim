@@ -948,11 +948,10 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
       elif damagePercent == 0.0:
         statusTooltip = "Destroyed"
       label(str = "Status:")
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = statusTooltip)
       var val: Natural = (damagePercent * 100.0).int
       changeStyle(field = progressbar, color = theme.colors[statusColor]):
-        progressBar(value = val, maxValue = 100, modifyable = false)
+        progressBar(value = val, maxValue = 100, modifyable = false,
+        tooltip = statusTooltip)
     setLayoutRowDynamic(height = labelHeight, cols = 1)
     try:
       if modulesList[playerShip.modules[
