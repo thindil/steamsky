@@ -181,6 +181,10 @@ type
     ## Used to store a ship's name
   Description* = string
     ## Used to store an object's description
+  MobIndex* = string
+    ## Used to store prototypes of mobiles indexes
+  ShipIndex* = Positive
+    ## Used to store prototypes of ships indexes
 
 template typeGetterSetter(baseType: typedesc; varName, name: untyped;
     typ: typedesc) =
@@ -832,11 +836,12 @@ type
     ## * playerIndex - The index of the starting mob prototype as the player character
     ## * description - The description of the career
     ## * name        - The name of the career
-    shipIndex*: Positive
-    playerIndex*: string
-    description*: string
-    name*: string
+    shipIndex*: ShipIndex
+    playerIndex*: MobIndex
+    description*: Description
+    name*: CareerName
 
+type
   FactionData* = object
     ## Used to store data about the selected faction
     ##
