@@ -72,20 +72,16 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
     flags = {windowBorder, windowTitle, windowMovable}):
     setLayoutRowStatic(height = 35, cols = 2, width = 35)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Select all crew members")
-    imageButton(image = images[selectAllIcon]):
+    imageButton(image = images[selectAllIcon],
+        tooltip = "Select all crew members"):
       if dialog == boardingDialog:
         for checked in boardingParty.mitems:
           checked = true
       else:
         for checked in defenders.mitems:
           checked = true
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Unselect all crew members")
-    imageButton(image = images[unselectAllIcon]):
+    imageButton(image = images[unselectAllIcon],
+        tooltip = "Unselect all crew members"):
       if dialog == boardingDialog:
         for checked in boardingParty.mitems:
           checked = false
@@ -145,7 +141,8 @@ proc showPilotSettings(dialog: var GameDialog; faction: FactionData) {.raises: [
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
   label(str = "Pilot:", alignment = left)
   let newPilot: Natural = comboList(items = pilotList,
-      selected = pilotIndex, itemHeight = 25, x = 200, y = 150, tooltip = "Select the crew member which will be the pilot during the combat. The sign + after name means that this crew member has piloting skill, the sign ++ after name means that his/her piloting skill is the best in the crew")
+      selected = pilotIndex, itemHeight = 25, x = 200, y = 150,
+      tooltip = "Select the crew member which will be the pilot during the combat. The sign + after name means that this crew member has piloting skill, the sign ++ after name means that his/her piloting skill is the best in the crew")
   if pilotIndex > 0:
     let newOrder: Natural = comboList(items = pilotOrders,
         selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150, tooltip = "Select the order for the pilot")
@@ -187,10 +184,8 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
     if dialog != none:
       windowDisable()
     setLayoutRowStatic(height = 35, cols = 1, width = 35)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Maximize/minimize the ship crew orders")
-    imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+    imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon]),
+        tooltip = "Maximize/minimize the ship crew orders"):
       if expandedSection == 1:
         expandedSection = 0
       else:
@@ -208,7 +203,8 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
       setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
     label(str = "Engineer:", alignment = left)
     let newEngineer: Natural = comboList(items = engineerList,
-        selected = engineerIndex, itemHeight = 25, x = 200, y = 150, tooltip = "Select the crew member which will be the engineer during the combat. The sign + after name means that this crew member has engineering skill, the sign ++ after name means that his/her engineering skill is the best in the crew")
+        selected = engineerIndex, itemHeight = 25, x = 200, y = 150,
+        tooltip = "Select the crew member which will be the engineer during the combat. The sign + after name means that this crew member has engineering skill, the sign ++ after name means that his/her engineering skill is the best in the crew")
     if engineerIndex > 0:
       let newOrder: Natural = comboList(items = engineerOrders,
           selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150, tooltip = "Select the order for the engineer")
@@ -278,7 +274,8 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
       wrapLabel(str = playerShip.modules[gun[1]].name & ": (Ammo: " &
           $ammoAmount & ")")
       let newGunner: Natural = comboList(items = gunnerList,
-          selected = gunnersIndex[gunIndex], itemHeight = 25, x = 200, y = 150, tooltip = "Select the crew member which will be operating the gun during the combat. The sign + after name means that this crew member has gunnery skill, the sign ++ after name means that his/her gunnery skill is the best in the crew")
+          selected = gunnersIndex[gunIndex], itemHeight = 25, x = 200, y = 150,
+          tooltip = "Select the crew member which will be operating the gun during the combat. The sign + after name means that this crew member has gunnery skill, the sign ++ after name means that his/her gunnery skill is the best in the crew")
       hasGunner = newGunner > 0
       if hasGunner:
         var gunnerOrders: array[1..6, string] = gunnersOrders
@@ -290,7 +287,8 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
             dialog = setError(message = "Can't show gunner's order.")
             return
         let newOrder: Natural = comboList(items = gunnerOrders,
-            selected = (gun[2] - 1), itemHeight = 25, x = 200, y = 150, tooltip = "Select the order for the gunner. Shooting in the selected part of enemy ship is less precise but always hit the selected part.")
+            selected = (gun[2] - 1), itemHeight = 25, x = 200, y = 150,
+            tooltip = "Select the order for the gunner. Shooting in the selected part of enemy ship is less precise but always hit the selected part.")
         if newOrder != gun[2] - 1:
           gun[2] = newOrder + 1
           addMessage(message = "Order for " & playerShip.crew[
@@ -320,20 +318,15 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
           defenders.strip(chars = {' ', ','})
         else:
           defenders = "None"
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Set your boarding party. If you join it, you will be able to give orders them, but not your gunners or engineer.")
-        labelButton(title = "Boarding party:"):
+        labelButton(title = "Boarding party:",
+          tooltip = "Set your boarding party. If you join it, you will be able to give orders them, but not your gunners or engineer."):
           dialog = boardingDialog
           setDialog(x = windowWidth / 4)
         var labelHeight: float = ceil(x = getTextWidth(text = boardingParty) / (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
         setLayoutRowDynamic(height = labelHeight, cols = 1)
         wrapLabel(str = boardingParty)
         setLayoutRowDynamic(height = 35, cols = 1)
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Set your ship's defenders against the enemy party.")
-        labelButton(title = "Defenders:"):
+        labelButton(title = "Defenders:", tooltip = "Set your ship's defenders against the enemy party."):
           dialog = defendingDialog
           setDialog(x = windowWidth / 4)
         labelHeight = ceil(x = getTextWidth(text = defenders) / (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
@@ -377,10 +370,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize the enemy's ship info")
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon]),
+          tooltip = "Maximize/minimize the enemy's ship info"):
         if expandedSection == 2:
           expandedSection = 0
         else:
@@ -476,10 +467,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize the ship status info")
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon]),
+          tooltip = "Maximize/minimize the ship status info"):
         if expandedSection == 3:
           expandedSection = 0
         else:
@@ -502,10 +491,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize the ship status info")
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon]),
+          tooltip = "Maximize/minimize the ship status info"):
         if expandedSection == 4:
           expandedSection = 0
         else:
