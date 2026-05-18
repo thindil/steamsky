@@ -841,6 +841,20 @@ type
     description*: Description
     name*: CareerName
 
+proc initCareerData*(shipIndex: ShipIndex = 1; playerIndex: MobIndex = "";
+    description: Description = "";
+    name: CareerName = ""): CareerData {.raises: [], tags: [], contractual.} =
+  ## Create a new data structure for the player's career
+  ##
+  ## * shipIndex   - The index of the starting ship prototype for the career
+  ## * playerIndex - The index of the starting mob prototype as the player character
+  ## * description - The description of the career
+  ## * name        - The name of the career
+  ##
+  ## Returns the new structure with information about the selected career
+  return CareerData(shipIndex: shipIndex, playerIndex: playerIndex,
+      description: description, name: name)
+
 type
   FactionData* = object
     ## Used to store data about the selected faction
