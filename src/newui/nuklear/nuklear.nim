@@ -1982,7 +1982,8 @@ proc createImageLabelButton(img: PImage; txt: string; align: TextAlignment): boo
     ## A binding to Nuklear's function. Internal use only
   return nk_button_image_label(ctx = ctx, image = nk_image_ptr(iPtr = img), text = txt.cstring, text_alignment = align.nk_flags)
 
-template imageLabelButton*(image: PImage; text: string; alignment: TextAlignment; onPressCode: untyped) =
+template imageLabelButton*(image: PImage; text: string;
+    alignment: TextAlignment; onPressCode: untyped) =
   ## Draw the button with the selected image and text. Execute the selected code
   ## on pressing it.
   ##
@@ -1994,6 +1995,24 @@ template imageLabelButton*(image: PImage; text: string; alignment: TextAlignment
   ## Returns true if button was pressed
   if createImageLabelButton(img = image, txt = text, align = alignment):
     onPressCode
+
+template imageLabelButton*(image: PImage; label, tooltip: string;
+    alignment: TextAlignment; onPressCode: untyped) =
+  ## Draw the button with the selected image and text. Execute the selected code
+  ## on pressing it.
+  ##
+  ## * image       - the image to shown on the button
+  ## * label        - the text to show on the button
+  ## * tooltip     - the tooltip to show when mouse is hovering over the widget
+  ## * align       - the alignment of the text to show
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  ##
+  ## Returns true if button was pressed
+  let showTips: bool = widgetIsHovered()
+  if createImageLabelButton(img = image, txt = label, align = alignment):
+    onPressCode
+  if showTips:
+    showTooltip2(text = tooltip)
 
 # -------
 # Sliders
