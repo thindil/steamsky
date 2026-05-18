@@ -900,7 +900,7 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = labelHeight, cols = 2)
     label(str = "Remove gain:")
     let damagePercent: float = (playerShip.modules[moduleIndex].durability.float /
           playerShip.modules[moduleIndex].maxDurability.float)
@@ -963,7 +963,7 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't show module's description")
       return
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[sellIcon], text = "Remove", alignment = right):
       manipulateModule(dialog = dialog)
@@ -1018,7 +1018,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # Show tab buttons
   changeStyle(field = spacing, x = 0, y = 0):
     changeStyle(field = buttonRounding, value = 0):
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = tabHeight, cols = 2)
       const tabs: array[2, string] = ["Install modules", "Remove modules"]
       for index, tab in tabs:
         try:
@@ -1039,14 +1039,14 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
   # Show information about money owned by the player
-  setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+  setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len, ratio = moneyWidth)
   for index, text in moneyText:
     if index mod 2 == 0:
       label(str = text)
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
   # Show information about installed modules
-  setLayoutRowStatic(height = 30, cols = 5, ratio = modulesWidth)
+  setLayoutRowStatic(height = labelHeight, cols = 5, ratio = modulesWidth)
   label(str = modulesText[0])
   colorLabel(str = modulesText[1], color = if modulesAmount.installed <
       modulesAmount.max: theme.colors[greenColor] else: theme.colors[redColor])
@@ -1055,10 +1055,10 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
   label(str = modulesText[4])
   # Show advanced options if needed
   if showOptions:
-    setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.3, 0.5])
+    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.3, 0.5])
     label(str = "Show modules:")
     let newType: Natural = comboList(items = typesList, selected = typeIndex,
-        itemHeight = 25, x = 200, y = 150,
+        itemHeight = labelHeight.int, x = 200, y = 150,
         tooltip = "Show only modules of the selected type")
     if newType != typeIndex:
       typeIndex = newType
