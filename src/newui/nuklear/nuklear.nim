@@ -470,7 +470,7 @@ proc nkPushScissor(b: var CommandBuffer; r: Rect) {.raises: [], tags: [
     b.clip = r
     var cmd: CommandScissor = cast[CommandScissor](
       nkCommandBufferPush(b = b, t = commandScissor,
-      size = CommandScissor.sizeof))
+      size = CommandScissor.sizeof.nk_size))
     cmd.x = r.x.int16
     cmd.y = r.y.int16
     cmd.w = max(x = 0.uint16, y = r.w.uint16)
@@ -493,7 +493,7 @@ proc nkStrokeRect(b: var CommandBuffer, rect: Rect, rounding,
       x1 = b.clip.x, y1 = b.clip.y, w1 = b.clip.w, h1 = b.clip.h):
       return
   var cmd: CommandRect = cast[CommandRect](nkCommandBufferPush(b = b,
-    t = commandRect, size = CommandRect.sizeof))
+    t = commandRect, size = CommandRect.sizeof.nk_size))
   cmd.rounding = rounding.cushort
   cmd.line_thickness = lineThickness.cushort
   cmd.x = rect.x.cshort
@@ -525,7 +525,7 @@ proc nkStrokeTriangle(b: var CommandBuffer; x0, y0, x1, y1, x2, y2,
       return
 
   var cmd: CommandTriangle = cast[CommandTriangle](nkCommandBufferPush(b = b,
-    t = commandTriangle, size = CommandTriangle.sizeof))
+    t = commandTriangle, size = CommandTriangle.sizeof.nk_size))
   cmd.line_thickness = lineThickness.uint16
   cmd.a.x = x0.int16
   cmd.a.y = y0.int16
@@ -550,7 +550,7 @@ proc nkFillCircle(b: var CommandBuffer; rect: Rect; c: NkColor)
       return
 
   var cmd: CommandCircleFilled = cast[CommandCircleFilled](nkCommandBufferPush(b = b,
-    t = commandCircleFilled, size = CommandCircleFilled.sizeof))
+    t = commandCircleFilled, size = CommandCircleFilled.sizeof.nk_size))
   cmd.x = rect.x.int16
   cmd.y = rect.y.int16
   cmd.w = max(x = 0, y = rect.w).uint16
@@ -579,7 +579,7 @@ proc nkFillTriangle(b: var CommandBuffer, x0, y0, x1, y1, x2, y2: float,
       return
 
   var cmd: CommandTriangleFilled = cast[CommandTriangleFilled](nkCommandBufferPush(b = b,
-    t = commandTriangleFilled, size = CommandTriangleFilled.sizeof))
+    t = commandTriangleFilled, size = CommandTriangleFilled.sizeof.nk_size))
   cmd.a.x = x0.int16
   cmd.a.y = y0.int16
   cmd.b.x = x1.int16
@@ -602,7 +602,7 @@ proc nkDrawImage(b: var CommandBuffer; r: Rect; img: Image; col: NkColor)
       return
 
   var cmd: CommandImage = cast[CommandImage](nkCommandBufferPush(b = b, t = commandImage,
-    size = CommandImage.sizeof))
+    size = CommandImage.sizeof.nk_size))
   cmd.x = r.x.cshort
   cmd.y = r.y.cshort
   cmd.w = max(x = 0.cushort, y = r.w.cushort)
@@ -762,7 +762,7 @@ proc nkDrawText(b: var CommandBuffer; r: Rect; str: string; length: var int;
       return
     var cmd: CommandText = cast[CommandText](
         nkCommandBufferPush(b = b, t = commandText,
-            size = CommandText.sizeof + (length + 1).nk_size))
+            size = CommandText.sizeof.nk_size + (length + 1).nk_size))
     cmd.x = r.x.int16
     cmd.y = r.y.int16
     cmd.w = r.w.uint16
@@ -1512,7 +1512,7 @@ proc nkPopupBegin(context; pType: PopupType; title: string; flags: set[PanelFlag
       if win.popup.active:
         return false
       {.ruleOff: "namedParams".}
-      nkZero(pData = popup.addr, size = Window.sizeof)
+      nkZero(pData = popup.addr, size = Window.sizeof.nk_size)
       {.ruleOn: "namedParams".}
       win.popup.name = titleHash.nk_hash
       win.popup.active = nkTrue
@@ -3104,8 +3104,10 @@ proc progressBar*(value: var int; maxValue: int; modifyable: bool = true;
       reversed: nk_bool): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## Nuklear C binding
   let showTips: bool = widgetIsHovered()
-  result = nk_progress(ctx = ctx, cur = value, max = maxValue,
+  var curr: nk_size = value.nk_size
+  result = nk_progress(ctx = ctx, cur = curr, max = maxValue.nk_size,
       modifyable = modifyable.nk_bool, reversed = reversed.nk_bool) == nkTrue
+  value = curr
   if showTips and tooltip.len > 0:
     showTooltip2(text = tooltip)
 
