@@ -78,8 +78,11 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
             currentBase = i
           i.inc
     playerFactions.add(y = "Random")
-  showLoadButton = walkFiles(pattern = saveDirectory.string &
-      "*.sav").toSeq.len > 0
+  try:
+    showLoadButton = walkFiles(pattern = saveDirectory.string &
+        "*.sav").toSeq.len > 0
+  except OSError:
+    dialog = setError(message = "Can't check savegames.")
   showHoFButton = fileExists(filename = saveDirectory.string & "halloffame.dat")
   buttonHeight = gameSettings.interfaceFontSize.float + 26
   labelHeight = gameSettings.interfaceFontSize.float + 11
@@ -400,16 +403,19 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       saves = @[]
       answered = false
     if saves.len == 0:
-      for file in walkFiles(pattern = saveDirectory.string & "*.sav"):
-        let
-          (_, name, _) = splitFile(path = file)
-          parts = name.split(sep = '_')
-        try:
-          saves.add(y = SaveData(playerName: parts[0], shipName: parts[1],
-              saveTime: file.getLastModificationTime.format(
-              f = "yyyy-MM-dd hh:mm:ss"), path: file))
-        except:
-          dialog = setError(message = "Can't add information about the save file.")
+      try:
+        for file in walkFiles(pattern = saveDirectory.string & "*.sav"):
+          let
+            (_, name, _) = splitFile(path = file)
+            parts = name.split(sep = '_')
+          try:
+            saves.add(y = SaveData(playerName: parts[0], shipName: parts[1],
+                saveTime: file.getLastModificationTime.format(
+                f = "yyyy-MM-dd hh:mm:ss"), path: file))
+          except:
+            dialog = setError(message = "Can't add information about the save file.")
+      except OSError:
+        dialog = setError(message = "Can't check savegames.")
     if saves.len == 0:
       showLoadButton = false
       state = mainMenu
