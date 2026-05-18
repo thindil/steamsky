@@ -581,11 +581,8 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize your crew list")
       imageButton(image = (if expandedSection == 0: images[expandIcon] else:
-        images[contractIcon])):
+        images[contractIcon]), tooltip = "Maximize/minimize your crew list"):
         if expandedSection == 1:
           expandedSection = 0
         else:
@@ -598,23 +595,20 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
       for index, member in playerShip.crew:
         if member.order != boarding:
           continue
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Show information about the crew member.")
-        labelButton(title = member.name):
+        labelButton(title = member.name,
+            tooltip = "Show information about the crew member."):
           showBoardingInfo(index = index, dialog = dialog)
         var health: int = member.health
         changeStyle(field = progressbar,
           color = (if health == 100: theme.colors[greenColor]
             elif health > 24: theme.colors[yellowColor]
             else: theme.colors[redColor])):
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "The crew member's health.")
-          progressBar(value = health, maxValue = 100, modifyable = false)
+          progressBar(value = health, maxValue = 100, modifyable = false,
+              tooltip = "The crew member's health.")
         let newOrder: Natural = comboList(items = ordersList,
           selected = (if boardingOrders[orderIndex] > -1: boardingOrders[orderIndex]
-          else: ordersList.high), itemHeight = 25, x = 200, y = 150, tooltip = "The crew member current order.")
+          else: ordersList.high), itemHeight = 25, x = 200, y = 150,
+          tooltip = "The crew member current order.")
         if newOrder != boardingOrders[orderIndex]:
           boardingOrders[orderIndex] = (if newOrder == game.enemy.ship.crew.len: -1
             else: newOrder)
@@ -625,11 +619,8 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize enemy's ship's crew list")
       imageButton(image = (if expandedSection == 0: images[expandIcon] else:
-        images[contractIcon])):
+        images[contractIcon]), tooltip = "Maximize/minimize enemy's ship's crew list"):
         if expandedSection == 1:
           expandedSection = 0
         else:
@@ -639,24 +630,17 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = "Health", alignment = centered)
       label(str = "Order", alignment = centered)
       for index, member in game.enemy.ship.crew:
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Show information about the enemy's ship's crew member.")
-        labelButton(title = member.name):
+        labelButton(title = member.name, tooltip = "Show information about the enemy's ship's crew member."):
           showBoardingInfo(index = index, inCrew = false, dialog = dialog)
         var health: int = member.health
         changeStyle(field = progressbar,
           color = (if health == 100: theme.colors[greenColor]
             elif health > 24: theme.colors[yellowColor]
             else: theme.colors[redColor])):
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "The enemy's ships's crew member's health.")
-          progressBar(value = health, maxValue = 100, modifyable = false)
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "The enemy's ship's crew member current order.")
-        label(str = ($member.order).capitalizeAscii)
+          progressBar(value = health, maxValue = 100, modifyable = false,
+              tooltip = "The enemy's ships's crew member's health.")
+        label(str = ($member.order).capitalizeAscii,
+            tooltip = "The enemy's ship's crew member current order.")
   if endCombat:
     inCombat = false
   else:
