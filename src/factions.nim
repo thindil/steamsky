@@ -110,7 +110,7 @@ proc loadFactionData(factionNode: XmlNode; factionAction: DataAction;
           {.warning[UnsafeDefault]: on.}
           {.warning[ProveInit]: on.}
         else:
-          var career: CareerData = CareerData(shipIndex: 1)
+          var career: CareerData = initCareerData(shipIndex = 1)
           var attribute: string = childNode.attr(name = "shipindex")
           if attribute.len() > 0:
             try:

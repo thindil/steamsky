@@ -21,7 +21,7 @@
 import std/[algorithm, colors, math, os, sequtils, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basestypes, config, game, game2, gamesaveload, goals,
-    halloffame, log, shipscrew, ships2, utils]
+    halloffame, log, shipscrew, ships2, types, utils]
 import coreui, debugui, dialogs, errordialog, goalsui, mapsui, themes
 
 var

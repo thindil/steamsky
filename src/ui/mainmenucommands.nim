@@ -21,7 +21,7 @@
 import std/[algorithm, os, osproc, strutils, tables, times]
 import contracts, nimalyzer
 import ../[basestypes, config, game, game2, gamesaveload, goals,
-    halloffame, ships2, shipscrew, tk, utils]
+    halloffame, ships2, shipscrew, tk, types, utils]
 import coreui, dialogs, errordialog, mapsui, showmainmenu, table, utilsui2
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
