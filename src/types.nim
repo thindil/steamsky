@@ -836,10 +836,10 @@ type
     ## * playerIndex - The index of the starting mob prototype as the player character
     ## * description - The description of the career
     ## * name        - The name of the career
-    shipIndex*: ShipIndex
-    playerIndex*: MobIndex
-    description*: Description
-    name*: CareerName
+    shipIndex: ShipIndex
+    playerIndex: MobIndex
+    description: Description
+    name: CareerName
 
 proc initCareerData*(shipIndex: ShipIndex = 1; playerIndex: MobIndex = "";
     description: Description = "";
@@ -854,6 +854,15 @@ proc initCareerData*(shipIndex: ShipIndex = 1; playerIndex: MobIndex = "";
   ## Returns the new structure with information about the selected career
   return CareerData(shipIndex: shipIndex, playerIndex: playerIndex,
       description: description, name: name)
+
+typeGetterSetter(baseType = CareerData, varName = career, name = shipIndex,
+    typ = ShipIndex)
+typeGetterSetter(baseType = CareerData, varName = career, name = playerIndex,
+    typ = MobIndex)
+typeGetterSetter(baseType = CareerData, varName = career, name = description,
+    typ = Description)
+typeGetterSetter(baseType = CareerData, varName = career, name = name,
+    typ = CareerName)
 
 type
   FactionData* = object
