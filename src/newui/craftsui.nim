@@ -202,11 +202,9 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     colorLabel(str = $craft.time & " minutes", color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = 30, cols = (if recipe.craftable: 2 else: 1))
     if recipe.craftable:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Set crafting order (" & $recipe.recipeType & ")")
-      imageLabelButton(image = craftImage, text = $recipe.recipeType,
-          alignment = right):
+      imageLabelButton(image = craftImage, label = $recipe.recipeType,
+          alignment = right, tooltip = "Set crafting order (" &
+          $recipe.recipeType & ")"):
         dialog = setRecipeDialog
         craftAmount = 1
         maxAmount = try:
