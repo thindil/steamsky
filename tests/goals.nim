@@ -16,7 +16,7 @@ suite "Unit tests for goals module":
 
   test "Not updating the current goal":
     let amount = currentGoal.amount
-    updateGoal(reputation, "PIRATES", 1)
+    updateGoal(GoalTypes.reputation, "PIRATES", 1)
     check:
       currentGoal.amount == amount
 
