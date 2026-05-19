@@ -302,7 +302,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
         discard
     # Buttons
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
-    imageLabelButton(image = images[negotiateIcon], text = "Negotiate",
+    imageLabelButton(image = images[negotiateIcon], label = "Negotiate",
         alignment = right):
       dialog = negotiateDialog
       currentDaily = recruit.payment
@@ -424,7 +424,7 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     if canHire:
-      imageLabelButton(image = images[negotiateColoredIcon], text = "Hire",
+      imageLabelButton(image = images[negotiateColoredIcon], label = "Hire",
           alignment = right):
         dialog = none
         try:
@@ -450,7 +450,7 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
           dialog = setError(message = "Can't hire the recruit.")
     else:
       disabled:
-        imageLabelButton(image = images[negotiateColoredIcon], text = "Hire",
+        imageLabelButton(image = images[negotiateColoredIcon], label = "Hire",
             alignment = right):
           discard
     restoreButtonStyle()

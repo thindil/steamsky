@@ -862,7 +862,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = buttonHeight, cols = btnAmount)
     if btnAmount == 2:
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-      imageLabelButton(image = images[buyIcon], text = "Install", alignment = right):
+      imageLabelButton(image = images[buyIcon], label = "Install", alignment = right):
         manipulateModule(dialog = dialog)
       restoreButtonStyle()
       addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
@@ -965,7 +965,7 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
       return
     setLayoutRowDynamic(height = buttonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    imageLabelButton(image = images[sellIcon], text = "Remove", alignment = right):
+    imageLabelButton(image = images[sellIcon], label = "Remove", alignment = right):
       manipulateModule(dialog = dialog)
     restoreButtonStyle()
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,

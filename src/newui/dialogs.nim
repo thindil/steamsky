@@ -291,7 +291,7 @@ proc addCloseButton*(dialog: var GameDialog; icon: IconsNames = exitIcon;
     addTooltip(bounds = getWidgetBounds(),
         text = "Close the dialog [Escape key]")
   setButtonStyle(field = textNormal, color = theme.colors[color])
-  imageLabelButton(image = images[icon], text = label, alignment = right):
+  imageLabelButton(image = images[icon], label = label, alignment = right):
     if isPopup:
       closePopup()
     dialog = none
@@ -458,7 +458,7 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
               button.code(dialog = dialog)
           else:
             imageLabelButton(image = images[button.icon.IconsNames],
-                text = button.text, alignment = right):
+                label = button.text, alignment = right):
               button.code(dialog = dialog)
         else:
           labelButton(title = button.text):
@@ -479,7 +479,7 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
               button.code(dialog = dialog)
           else:
             imageLabelButton(image = images[button.icon.IconsNames],
-                text = button.text, alignment = right):
+                label = button.text, alignment = right):
               button.code(dialog = dialog)
         else:
           labelButton(title = button.text):
@@ -724,7 +724,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       setLayoutRowDynamic(height = 30, cols = 2)
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       imageLabelButton(image = images[actionButton.icon],
-          text = actionButton.label, alignment = right):
+          label = actionButton.label, alignment = right):
         let
           baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
               playerShip.skyY].baseIndex

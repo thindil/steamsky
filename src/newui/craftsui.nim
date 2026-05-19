@@ -369,7 +369,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
         x = 380, y = 150, tooltip = "Assign the crew member from the list. The sign + after name means that this crew member has needed skill, the sign ++ after name means that his/her needed skill is the best in the crew.")
     setLayoutRowDynamic(height = 30, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    imageLabelButton(image = setImage, text = $recipe.recipeType,
+    imageLabelButton(image = setImage, label = $recipe.recipeType,
         alignment = right):
       dialog = none
       let moduleName: string = workshops[craftWorkshop]
