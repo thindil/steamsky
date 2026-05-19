@@ -54,5 +54,5 @@ task newdebug, "builds the new game UI in debug mode (temporary task)":
 
 task newdebugwindows, "builds the new game UI in debug mode for Windows 64-bit on Linux":
   exec "nim c -d:mingw --app:gui --os:windows --cpu:amd64 --amd64.windows.gcc.exe:x86_64-w64-mingw32-gcc --amd64.windows.gcc.linkerexe=x86_64-w64-mingw32-gcc -d:debug --outdir:" &
-      binDir & " --passL:\"-I/opt/include -I/opt/include/SDL2 -L/opt/lib -lm -lSDL2 -lSDL2_image -mwindows\" --passC:\"-Isrc/newui/nuklear\" " &
+      binDir & " --passL:\"-L/usr/local/x86_64-w64-mingw32/lib -lm -lSDL2 -lSDL2_image -lmingw32 -lSDL2main -mwindows\" --passC:\"-I/usr/local/x86_64-w64-mingw32/include/ -Isrc/newui/nuklear\" " &
       srcDir & DirSep & "newsteamsky.nim"
