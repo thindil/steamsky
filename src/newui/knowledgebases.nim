@@ -148,7 +148,7 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Set the base as the ship destination")
-    imageLabelButton(image = images[destinationIcon], text = "Target",
+    imageLabelButton(image = images[destinationIcon], label = "Target",
         alignment = right):
       if base.skyX == playerShip.skyX and base.skyY == playerShip.skyY:
         dialog = setMessage(message = "You are at this location now.",
@@ -164,7 +164,7 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Show the base on the map")
-    imageLabelButton(image = images[showColoredIcon], text = "Show",
+    imageLabelButton(image = images[showColoredIcon], label = "Show",
         alignment = right):
       centerX = base.skyX
       centerY = base.skyY

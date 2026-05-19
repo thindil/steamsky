@@ -266,7 +266,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       addTooltip(bounds = getWidgetBounds(),
           text = "Show the mission on the map")
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    imageLabelButton(image = images[showColoredIcon], text = "Show",
+    imageLabelButton(image = images[showColoredIcon], label = "Show",
         alignment = right):
       centerX = mission.targetX
       centerY = mission.targetY
@@ -278,7 +278,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Start negotiating accepting the mission")
-      imageLabelButton(image = images[negotiateIcon], text = "Accept",
+      imageLabelButton(image = images[negotiateIcon], label = "Accept",
           alignment = right):
         dialog = acceptMissionDialog
         missionReward = (mission.reward.float * mission.multiplier).Natural
@@ -327,7 +327,7 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
       addTooltip(bounds = getWidgetBounds(),
           text = "Accept the mission")
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    imageLabelButton(image = images[negotiateColoredIcon], text = "Accept",
+    imageLabelButton(image = images[negotiateColoredIcon], label = "Accept",
         alignment = right):
       dialog = none
       skyBases[setui.baseIndex].missions[missionIndex].multiplier = (

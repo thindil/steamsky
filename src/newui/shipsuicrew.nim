@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -351,7 +351,7 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
     currentOrder = comboList(items = availableOrdersText,
         selected = currentOrder, itemHeight = 25, x = 200, y = 150)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    imageLabelButton(image = images[giveOrderColoredIcon], text = "Assign",
+    imageLabelButton(image = images[giveOrderColoredIcon], label = "Assign",
         alignment = right):
       dialog = none
       try:
@@ -718,7 +718,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show the crew member inventory")
-    imageLabelButton(image = images[inventoryIcon], text = "Inventory",
+    imageLabelButton(image = images[inventoryIcon], label = "Inventory",
         alignment = right):
       dialog = inventoryDialog
       setDialog(x = windowWidth / 9, y = windowHeight / 8)
@@ -727,7 +727,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Remove the crew member from the ship's crew.")
-      imageLabelButton(image = images[dismissIcon], text = "Dismiss",
+      imageLabelButton(image = images[dismissIcon], label = "Dismiss",
           alignment = right):
         dialog = setQuestion(question = "Are you sure want to dismiss " &
             member.name & "?", qType = dismissMember, data = $crewIndex)

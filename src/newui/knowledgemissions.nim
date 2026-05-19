@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -66,7 +66,7 @@ proc showMissionMenu*(dialog: var GameDialog) {.raises: [], tags: [
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Set the mission as the ship destination")
-    imageLabelButton(image = images[destinationIcon], text = "Target",
+    imageLabelButton(image = images[destinationIcon], label = "Target",
         alignment = right):
       if mission.targetX == playerShip.skyX and mission.targetY == playerShip.skyY:
         dialog = setMessage(message = "You are at this location now.",
@@ -82,7 +82,7 @@ proc showMissionMenu*(dialog: var GameDialog) {.raises: [], tags: [
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = "Show the mission on the map")
-    imageLabelButton(image = images[showColoredIcon], text = "Show",
+    imageLabelButton(image = images[showColoredIcon], label = "Show",
         alignment = right):
       centerX = mission.targetX
       centerY = mission.targetY
