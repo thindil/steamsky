@@ -283,17 +283,13 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       # Show amount setting
       setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Amount:")
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Set maximum possible amount of how many times the crafting order should be done.")
-      labelButton(title = "max " & $maxAmount):
+      labelButton(title = "max " & $maxAmount,
+          tooltip = "Set maximum possible amount of how many times the crafting order should be done."):
         craftAmount = maxAmount
       setLayoutRowDynamic(height = 30, cols = 1)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Set amount of how many times the crafting order should be done.")
       let newAmount: int = property2(name = "#", min = 1, val = craftAmount,
-          max = maxAmount, step = 1, incPerPixel = 1)
+          max = maxAmount, step = 1, incPerPixel = 1,
+          tooltip = "Set amount of how many times the crafting order should be done.")
       if craftAmount != newAmount:
         craftAmount = newAmount
       # Show quality setting
@@ -353,15 +349,11 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       craftWorkshop = comboList(items = workshops, selected = craftWorkshop,
           itemHeight = 25, x = 380, y = 150)
     # Show assign crew setting
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Don't assign anyone to the order. You can manually do it later, in ship info screen.")
-    if option(label = "Don't assing anyone", selected = assign == noone):
+    if option(label = "Don't assing anyone", selected = assign == noone,
+        tooltip = "Don't assign anyone to the order. You can manually do it later, in ship info screen."):
       assign = noone
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Assign the crew member with the highest skill needed for the recipe, even if the crew member is busy.")
-    if option(label = "Assign the best worker", selected = assign == best):
+    if option(label = "Assign the best worker", selected = assign == best,
+        tooltip = "Assign the crew member with the highest skill needed for the recipe, even if the crew member is busy."):
       assign = best
     if option(label = "Assign selected member", selected = assign == selected):
       assign = selected
@@ -628,10 +620,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showOptions and hasOptions:
     setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.2.cfloat, 0.6])
     label(str = "Name:")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Search for the selected recipe.")
-    editString(text = nameSearch, maxLen = 64)
+    editString(text = nameSearch, maxLen = 64, tooltip = "Search for the selected recipe.")
     label(str = "Show:")
     const recipesTypes: array[3, string] = ["All", "Craftable only", "Non-craftable only"]
     typeIndex = comboList(items = recipesTypes, selected = typeIndex,
