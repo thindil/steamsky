@@ -15,161 +15,129 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-## Provides code related to the list of available goals, like showing them and
-## setting them.
+## Provides code related to the selecting the player's goal dialog, like
+## showing the dialog, and selecting it.
 
-import std/[tables, strutils]
-import contracts, nimalyzer
-import ../[config, game, goals, tk, utils]
-import errordialog
+import std/[strutils, tables]
+import contracts, nuklear/nuklear_sdl_renderer
+import ../[config, game, goals, utils]
+import coreui, errordialog
 
-proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl,
-        ruleOff: "params".} =
-  ## Show goals UI to the player
+var
+  selectedGoal*: string = "Random" ## Currently selected goal
+  oldSelected: string = ""
+  selected: int = -1
+  goalsUiList: Table[string, seq[string]] = initTable[string, seq[string]]()
+
+proc setGoalsUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the goals UI, like types of goals, etc.
   ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
+  ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## ShowGoals buttonpath
-  ## Buttonpath is path to the button which is used to set the goal
-  tclEval(script = """
-      ttk::frame .goalsdialog -style Dialog.TFrame
-      set view [ttk::treeview .goalsdialog.view -show tree \
-         -yscrollcommand [list .goalsdialog.yscroll set] -height 9 -cursor hand1]
-      set selectbutton [ttk::button .goalsdialog.selectbutton -text {Select goal}]
-      grid [ttk::label .goalsdialog.header -text {Select a new goal} -wraplength 275 \
-         -style Header.TLabel -cursor hand1] -sticky we -columnspan 2
-      grid $view -padx 2 -pady {2 0}
-      $view column #0 -width 450 -stretch 1
-      $view insert {} end -id 0 -text Random
-      $view insert {} end -id REPUTATION -text {Gain max reputation in bases}
-      $view insert {} end -id DESTROY -text {Destroy enemy ships}
-      $view insert {} end -id DISCOVER -text {Discover map}
-      $view insert {} end -id VISIT -text {Visit bases}
-      $view insert {} end -id CRAFT -text {Craft items}
-      $view insert {} end -id MISSION -text {Finish missions}
-      $view insert {} end -id KILL -text {Kill enemies in melee combat}
-      $view selection set 0
-      bind $view <<TreeviewSelect>> {
-         set selected [lindex [$view selection] 0]
-         if {[$view parent $selected] == {} && \
-            [$view item $selected -text] != {Random}} {
-            $selectbutton state disabled
-         } else {
-            $selectbutton state !disabled
-         }
-      }
-      bind $view <Double-1> {$selectbutton invoke}
-      bind $view <Return> {$selectbutton invoke}
-      grid [ttk::scrollbar .goalsdialog.yscroll -orient vertical \
-         -command [list $view yview]] -column 1 -row 1 -sticky ns -padx {0 3} \
-         -pady {2 0}
-      grid $selectbutton -row 3 -columnspan 2 -sticky we -padx 5 -pady {2 0}
-      tooltip::tooltip $selectbutton \
-         "Select the goal for your character from the list.\nIf you choose Random option, a random goal will\nbe assigned. You can always change it later during\nthe game, but you will lose all progress then."
-      if {[winfo exists .gameframe] && [winfo ismapped .gameframe]} {
-         set parent .gameframe
-      } else {
-         set parent .
-      }
-      grid [ttk::button .goalsdialog.closebutton -text {Close (Escape)} \
-         -command {CloseDialog .goalsdialog $parent}] -row 4 -columnspan 2 \
-         -sticky we -padx 5 -pady 2
-      tooltip::tooltip .goalsdialog.closebutton \
-         {Close the goals list without any changes}
-      bind .goalsdialog.closebutton <Escape> {.goalsdialog.closebutton invoke;break}
-      bind .goalsdialog.closebutton <Tab> {focus $view;break}
-      bind $selectbutton <Escape> {.goalsdialog.closebutton invoke;break}
-      bind $view <Escape> {.goalsdialog.closebutton invoke;break}
-      ::autoscroll::autoscroll .goalsdialog.yscroll
-      place .goalsdialog -in $parent -relx 0.1 -rely 0.075
-      focus .goalsdialog.closebutton
-      tk busy $parent
-      raise .goalsdialog
-  """)
-  const
-    goalsDialog: string = ".goalsdialog"
-    goalsView: string = goalsDialog & ".view"
+  ## Returns the modified parameter dialog.
   for goal in goalsList.values:
     try:
-      tclEval(script = goalsView & " insert " & ($goal.goalType).toUpperAscii &
-          " end -id {" & goal.index & "} -text {" & goalText(
-          index = goal.index.parseInt) & "}")
+      let key: string = ($goal.goalType).toUpperAscii
+      if not goalsUiList.hasKey(key = key):
+        goalsUiList[key] = @[]
+      goalsUiList[key].add(y = goalText(index = goal.index.parseInt))
     except:
-      return showError(message = "Can't add a goal.")
-  const selectButton: string = goalsDialog & ".selectbutton"
-  tclEval(script = selectButton & " configure -command {SetGoal " & $argv[1] & "}")
-  const dialogHeader: string = goalsDialog & ".header"
-  tclEval(script = "bind " & dialogHeader & " <ButtonPress-" & (
-      if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
-      dialogHeader & " %X %Y}")
-  tclEval(script = "bind " & dialogHeader & " <Motion> {MoveDialog " &
-      goalsDialog & " %X %Y}")
-  tclEval(script = "bind " & dialogHeader & " <ButtonRelease-" & (
-      if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
-      dialogHeader & " 0 0}")
-  return tclOk
+      dialog = setError(message = "Can't set the list of goals")
+      return
 
-proc setGoalCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl.} =
-  ## Set selected goal as a current goal
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## SetGoal buttonpath
-  ## Buttonpath is path to the button which is used to set the goal
-  const goalsView: string = ".goalsdialog.view"
-  let
-    selectedGoal: int = try:
-        tclEval2(script = goalsView & " selection").parseInt
-      except:
-        return showError(message = "Can't get the goal.")
-  clearCurrentGoal()
-  let buttonName: string = $argv[1]
-  if selectedGoal > 0:
-    try:
-      currentGoal = goalsList[selectedGoal]
-    except:
-      return showError(message = "Can't set the current goal.")
-  elif "newgamemenu" notin buttonName:
-    try:
-      currentGoal = goalsList[getRandom(min = 1, max = goalsList.len - 1)]
-    except:
-      return showError(message = "Can't set random current goal.")
-  let goalButton: string = buttonName
-  if selectedGoal > 0:
-    var buttonText: string = try:
-        goalText(index = selectedGoal)
-      except:
-        return showError(message = "Can't get the goal's text.")
-    tclEval(script = "tooltip::tooltip " & goalButton & " \"" & buttonText & "\"")
-    if buttonText.len > 16:
-      buttonText = buttonText[0..16] & "..."
-    tclEval(script = goalButton & " configure -text {" & buttonText & "}")
-  else:
-    tclEval(script = goalButton & " configure -text {Random}")
-  tclEval(script = ".goalsdialog.closebutton invoke")
-  return tclOk
+proc setSelectedGoal*() {.raises: [], tags: [], contractual.} =
+  ## Set the selection in the list of available goals
+  selected = -1
+  oldSelected = selectedGoal
+  setDialog(x = 20, y = 0)
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect], contractual.} =
-  ## Adds Tcl commands related to the goals UI
+proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Show the dialog with the list of available goals for players
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
   try:
-    addCommand(name = "ShowGoals", nimProc = showGoalsCommand)
-    addCommand(name = "SetGoal", nimProc = setGoalCommand)
+    const
+      width: float = 540
+      height: float = 360
+      windowName: string = "Select a new goal"
+    updateDialog(width = width, height = height)
+    window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+        flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+      setLayoutRowDynamic(height = 230, cols = 1)
+      group(title = "GoalsGroup", flags = {windowNoFlags}):
+        setLayoutRowDynamic(height = 25, cols = 1)
+
+        proc addSelectable(label: string; num: Natural) {.raises: [], tags: [],
+            contractual.} =
+          ## Add a selectable goal to the list
+          ##
+          ## * label - the goal text to add
+          var sel: bool = selected == num
+          if selectableLabel(str = label, value = sel):
+            if sel:
+              selected = num
+              selectedGoal = label
+            else:
+              selected = -1
+              selectedGoal = "Random"
+
+        var index: Natural = 0
+        addSelectable(label = "Random", num = index)
+        try:
+          const categories: OrderedTable[string, string] = {
+            "REPUTATION": "Gain max reputation in bases",
+              "DESTROY": "Destroy enemy ships", "DISCOVER": "Discover map",
+              "VISIT": "Visit bases", "CRAFT": "Craft items",
+              "MISSION": "Finish missions",
+              "KILL": "Kill enemies in melee combat"}.toOrderedTable
+          var catIndex: Positive = 1
+          for catName, category in categories:
+            treeNode(title = category, state = minimized, index = catIndex):
+              for goal in goalsUiList[catName]:
+                index.inc
+                addSelectable(label = goal, num = index)
+            catIndex.inc
+        except:
+          dialog = setError(message = "Can't show a goal.")
+          return
+      setLayoutRowDynamic(height = 35, cols = 1)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Select the goal for your character from the list. If you choose Random option, a random goal will be assigned. You can always change it later during the game, but you will lose all progress then.")
+      if selected == -1:
+        disabled:
+          labelButton(title = "Select goal"):
+            discard
+      else:
+        labelButton(title = "Select goal"):
+          dialog = none
+          clearCurrentGoal()
+          if selected > 0:
+            try:
+              for goal in goalsList.values:
+                if selectedGoal == goalText(index = goal.index.parseInt):
+                  currentGoal = goal
+            except:
+              dialog = setError(message = "Can't set the current goal.")
+          elif dialog != newGoalDialog:
+            try:
+              currentGoal = goalsList[getRandom(min = 1, max = goalsList.len - 1)]
+            except:
+              dialog = setError(message = "Can't set random current goal.")
+          if selectedGoal.len > 16:
+            selectedGoal = selectedGoal[0..16] & "..."
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Close the goals list without any changes")
+      labelButton(title = "Close"):
+        dialog = none
+        selectedGoal = oldSelected
+
+    windowSetFocus(name = windowName)
   except:
-    showError(message = "Can't add a Tcl command.")
+    dialog = setError(message = "Can't show the goals' dialog")
+

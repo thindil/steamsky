@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -19,155 +19,386 @@
 ## minimizing/maximizin its sections, setting the ship's name, etc.
 
 import std/[strutils, tables]
-import contracts, nimalyzer
-import ../[game, tk, types]
-import coreui, dialogs, errordialog, shipsuicargo, shipsuicrew, shipsuimodules, showshipinfo
+import contracts, nuklear/nuklear_sdl_renderer
+import ../[config, game, maps, messages, reputation, ships, shipscrew, types]
+import coreui, dialogs, errordialog, header, mapsui, messagesui, setui,
+    shipsuicargo, shipsuicrew, shipsuimodules, themes
 
-proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
-        contractual, ruleOff: "params".} =
-  ## Change name of the player's ship
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## SetShipName shipname
-  ## Shipname is the new name for the player's ship
-  if argc == 1:
-    return tclOk
-  let nameEntry: string = mainPaned & ".shipinfoframe.general.canvas.frame.name"
-  playerShip.name = $argv[1]
-  tclEval(script = nameEntry & " configure -text {Name: " & $argv[1] & "}")
-  return tclOk
+var newName: string = ""
 
-proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
-        contractual.} =
-  ## Maximize or minimize the selected section of the player's ship info
+proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the dialog to rename things
   ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
+  ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## ShipMaxMin framename
-  ## Framename is name of the frame to maximize or minimize
-  type FrameInfo = object
-    name: string
-    column: range[0 .. 1]
-    row: range[0 .. 1]
-  const frames: array[1..4, FrameInfo] = [FrameInfo(name: "general", column: 0,
-        row: 0), FrameInfo(name: "modules", column: 0, row: 1), FrameInfo(
-        name: "crew", column: 1, row: 0), FrameInfo(name: "cargo", column: 1, row: 1)]
-  let
-    shipFrame: string = mainPaned & ".shipinfoframe"
-    button: string = shipFrame & "." & $argv[1] & ".canvas.frame.maxmin.maxmin"
-  if argv[2] == "show":
-    for frameInfo in frames:
-      let frame: string = shipFrame & "." & frameInfo.name
-      if frameInfo.name == $argv[1]:
-        tclEval(script = "grid configure " & frame & " -columnspan 2 -rowspan 2 -row 0 -column 0")
-      else:
-        tclEval(script = "grid remove " & frame)
-    tclEval(script = button & " configure -image contracticon -command {ShipMaxMin " &
-        $argv[1] & " hide}")
-  else:
-    for frameInfo in frames:
-      let frame: string = shipFrame & "." & frameInfo.name
-      if frameInfo.name == $argv[1]:
-        tclEval(script = "grid configure " & frame &
-            " -columnspan 1 -rowspan 1 -row " & $frameInfo.row & " -column " &
-            $frameInfo.column)
-      else:
-        tclEval(script = "grid " & frame)
-    tclEval(script = button & " configure -image expandicon -command {ShipMaxMin " &
-        $argv[1] & " show}")
-  return tclOk
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  const
+    width: float = 400
+    height: float = 200
 
-proc shipMoreCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
-        contractual.} =
-  ## Maximize or minimize the selected part in the player's ship info
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## ShipMore framename show/hide
-  ## Framename is name of the frame in which the part will be shown or hidden.
-  ## If the second argument is set to show, show the part, otherwise hide it.
-  let
-    shipFrame: string = mainPaned & ".shipinfoframe"
-    button: string = shipFrame & "." & $argv[1] & ".canvas.frame.maxmin.more"
-  if argv[1] == "crew":
-    if argv[2] == "show":
-      tclEval(script = "grid " & shipFrame & ".crew.canvas.frame.ordersbuttons -sticky w -row 1")
-      tclEval(script = "grid " & shipFrame & ".crew.canvas.frame.selectskill -sticky w -row 2")
-      tclSetVar(varName = "shipoptions", newValue = "crew")
+  let windowName: string = "Rename the " & (case dialog
+    of renameDialog:
+      "ship"
+    of renameMemberDialog:
+      "crew member"
+    of renameModuleDialog:
+      "module"
     else:
-      tclEval(script = "grid remove " & shipFrame & ".crew.canvas.frame.ordersbuttons")
-      tclEval(script = "grid remove " & shipFrame & ".crew.canvas.frame.selectskill")
-      tclUnsetVar(varName = "shipoptions")
-  elif argv[1] == "cargo":
-    if argv[2] == "show":
-      tclEval(script = "grid " & shipFrame & ".cargo.canvas.frame.selecttype -sticky w -row 2")
+      "")
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 1)
+    label(str = "Enter a new name" & (case dialog
+      of renameDialog:
+        ""
+      of renameMemberDialog:
+        " for " & playerShip.crew[crewIndex].name
+      of renameModuleDialog:
+        " for " & playerShip.modules[moduleIndex].name
+      else:
+        "") & ":")
+    editString(text = newName, maxLen = 64)
+    setLayoutRowDynamic(height = 30, cols = 2)
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+    if newName.len == 0:
+      disabled:
+        imageLabelButton(image = images[editColoredIcon], label = "Rename",
+            alignment = right):
+          discard
     else:
-      tclEval(script = "grid remove " & shipFrame & ".cargo.canvas.frame.selecttype")
-  if argv[2] == "show":
-    tclEval(script = button & " configure -command {ShipMore " &
-        $argv[1] & " hide}")
-  else:
-    tclEval(script = button & " configure -command {ShipMore " &
-        $argv[1] & " show}")
-  return tclOk
+      imageLabelButton(image = images[editColoredIcon], label = "Rename",
+          alignment = right):
+        case dialog
+        of renameDialog:
+          playerShip.name = newName
+        of renameMemberDialog:
+          playerShip.crew[crewIndex].name = newName
+        of renameModuleDialog:
+          playerShip.modules[moduleIndex].name = newName
+        else:
+          discard
+        newName = ""
+        dialog = none
+    restoreButtonStyle()
+    addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
+        isPopup = false, label = "Cancel")
 
-proc showFactionInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect], cdecl, contractual.} =
-  ## Show information about the selected faction
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## ShowFactionInfo factionIndex
-  ## FactionIndex is the index of the faction to show
-  try:
-    let faction: FactionData = factionsList[$argv[1]]
-    showInfo(text = faction.description[0..faction.description.rfind(
-        sub = '\n') - 1], parentName = $argv[2], title = faction.name,
-        wrap = true, relativeX = 0.1, relativeY = 0.1, width = 55)
-  except:
-    return showError(message = "Can't show information about the faction.")
-  return tclOk
+  windowSetFocus(name = windowName)
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect,
+proc cancelUpgrade(dialog: var GameDialog) {.raises: [], tags: [WriteIOEffect,
     TimeEffect, RootEffect], contractual.} =
-  ## Adds Tcl commands related to the wait menu
+  ## Cancel the current player's ship's upgrade
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  playerShip.upgradeModule = -1
+  for index, member in playerShip.crew:
+    if member.order == upgrading:
+      try:
+        giveOrders(ship = playerShip, memberIndex = index,
+            givenOrder = rest)
+      except CrewOrderError:
+        dialog = setMessage(message = getCurrentExceptionMsg(),
+            title = "Can't give orders")
+        return
+      except:
+        dialog = setError(message = "Can't give orders to a crew member.")
+        return
+      break
+  addMessage(message = "You stopped current upgrade.", mType = orderMessage)
+
+proc setRepair(moduleIndex: int = -1) {.raises: [], tags: [], contractual.} =
+  ## Remove or set the current player's ship's repair's priority
+  ##
+  ## * moduleIndex - the index of the module which will be repaired first. If
+  ##                 -1, remove the priority
+  playerShip.repairModule = moduleIndex
+  if moduleIndex == -1:
+    addMessage(message = "You removed the repair's priority.",
+        mType = orderMessage)
+  else:
+    addMessage(message = "You assigned " & playerShip.modules[
+        playerShip.repairModule].name & " as the repair's priority.",
+        mType = orderMessage)
+
+proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show the general info about the player's ship
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state - the current game's state
+  ##
+  ## Returns the modified parameters dialog and state.
+  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = "The name of your ship")
+  label(str = "Name:")
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = "The name of your ship")
+  colorLabel(str = playerShip.name, color = theme.colors[goldenColor])
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = "Set a new name for the ship")
+  imageButton(image = images[editIcon]):
+    dialog = renameDialog
+  if playerShip.upgradeModule > -1:
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+    label(str = "Upgrade:")
+    var
+      upgradeInfo: string = playerShip.modules[
+          playerShip.upgradeModule].name & " "
+      maxUpgrade: int = 0
+    case playerShip.modules[playerShip.upgradeModule].upgradeAction
+    of durability:
+      upgradeInfo.add(y = "(durability)")
+      maxUpgrade = try:
+          modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].durability
+        except:
+          dialog = setError(message = "Can't set max upgrade info.")
+          return
+    of maxValue:
+      try:
+        case modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].mType
+        of engine:
+          upgradeInfo.add(y = "(power)")
+          maxUpgrade = (modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue / 20).int
+        of cabin:
+          upgradeInfo.add(y = "(quality)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue
+        of gun, batteringRam:
+          upgradeInfo.add(y = "(damage)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue * 2
+        of hull:
+          upgradeInfo.add(y = "(enlarge)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue * 40
+        of harpoonGun:
+          upgradeInfo.add(y = "(strength)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue * 10
+        else:
+          discard
+      except:
+        dialog = setError(message = "Can't set upgrade info.")
+        return
+    of value:
+      try:
+        if modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].mType == engine:
+          upgradeInfo.add(y = "(fuel usage)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].value * 20
+      except:
+        dialog = setError(message = "Can't set upgrade fuel usage info.")
+        return
+    else:
+      discard
+    maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
+    if maxUpgrade == 0:
+      maxUpgrade = 1
+    var upgradePercent: int = 100 - ((playerShip.modules[
+        playerShip.upgradeModule].upgradeProgress.float / maxUpgrade.float) * 100.0).int
+    colorLabel(str = upgradeInfo, color = theme.colors[goldenColor])
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.9.cfloat, 0.1])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "The current ship's upgrade progress")
+    progressBar(value = upgradePercent, maxValue = 100, modifyable = false)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Stop the current upgrade")
+    imageButton(image = images[cancelIcon]):
+      cancelUpgrade(dialog = dialog)
+  if playerShip.repairModule > -1:
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "If damaged, the module will be repaired as the first")
+    label(str = "Repair first:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "If damaged, the module will be repaired as the first")
+    colorLabel(str = playerShip.modules[playerShip.repairModule].name,
+        color = theme.colors[goldenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Remove the repair priority")
+    imageButton(image = images[cancelIcon]):
+      setRepair()
+  if playerShip.destinationX > 0 and playerShip.destinationY > 0:
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "The current travel destination of your ship")
+    label(str = "Destination:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "The current travel destination of your ship")
+    if skyMap[playerShip.destinationX][playerShip.destinationY].baseIndex > 0:
+      colorLabel(str = skyBases[skyMap[playerShip.destinationX][
+          playerShip.destinationY].baseIndex].name, color = theme.colors[goldenColor])
+    else:
+      colorLabel(str = "X: " & $playerShip.destinationX & " Y: " &
+          $playerShip.destinationY, color = theme.colors[goldenColor])
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Reset the ship destination")
+    imageButton(image = images[cancelIcon]):
+      playerShip.destinationX = 0
+      playerShip.destinationY = 0
+  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Your ship the current home base")
+  label(str = "Home:")
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Your ship the current home base")
+  colorLabel(str = skyBases[playerShip.homeBase].name, color = theme.colors[goldenColor])
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = "Show the home base on map")
+  imageButton(image = images[showIcon]):
+    centerX = skyBases[playerShip.homeBase].skyX
+    centerY = skyBases[playerShip.homeBase].skyY
+    state = map
+  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines")
+  label(str = "Weight:")
   try:
-    shipsuimodules.addCommands()
-    shipsuicrew.addCommands()
-    shipsuicargo.addCommands()
-    addCommand(name = "ShowShipInfo", nimProc = showShipInfoCommand)
-    addCommand(name = "SetShipName", nimProc = setShipNameCommand)
-    addCommand(name = "ShipMaxMin", nimProc = shipMaxMinCommand)
-    addCommand(name = "ShipMore", nimProc = shipMoreCommand)
-    addCommand(name = "ShowFactionInfo", nimProc = showFactionInfoCommand)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines")
+    colorLabel(str = $countShipWeight(ship = playerShip) & "kg",
+        color = theme.colors[goldenColor])
   except:
-    showError(message = "Can't add a Tcl command.")
+    dialog = setError(message = "Can't show the ship's weight")
+    return
+  setLayoutRowDynamic(height = 35, cols = 1)
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Your reputation among factions")
+  label(str = "Reputation:")
+  setLayoutRowDynamic(height = 35, cols = 2)
+  for index, faction in factionsList:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show information about the faction")
+    labelButton(title = faction.name):
+      try:
+        dialog = setInfo(text = faction.description[
+            0..faction.description.rfind(sub = '\n') - 1], title = faction.name)
+      except:
+        dialog = setError(message = "Can't show information about the faction.")
+        return
+    let repLevel: int = getReputation(factionIndex = index)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Your reputation with the faction")
+    colorLabel(str = getReputationText(reputationLevel = repLevel), color = (
+        if repLevel > 0: theme.colors[greenColor] elif repLevel <
+        0: theme.colors[redColor] else: theme.colors[goldenColor]))
+
+proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the screen with information about the player's ship
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters state and dialog. The latter is modified if
+  ## any error happened.
+  if showHeader(dialog = dialog, close = previous, state = state):
+    return
+  if updateData:
+    refreshCargoList(dialog = dialog)
+  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+  if expandedSection == 0:
+    setLayoutRowDynamic(height = height / 2, cols = 2)
+  else:
+    setLayoutRowDynamic(height = height, cols = 1)
+  # General info about the player's ship
+  if expandedSection in {0, 1}:
+    group(title = "General info:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
+      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize the ship general info")
+      imageButton(image = (if expandedSection == 0: images[
+          expandIcon] else: images[contractIcon])):
+        if expandedSection == 1:
+          expandedSection = 0
+        else:
+          expandedSection = 1
+      showGeneralInfo(dialog = dialog, state = state)
+  # The player's ship's crew info
+  if expandedSection in {0, 2}:
+    group(title = "Crew info:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
+      setLayoutRowStatic(height = 35, cols = 2, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize the ship crew info")
+      imageButton(image = (if expandedSection == 0: images[
+          expandIcon] else: images[contractIcon])):
+        if expandedSection == 2:
+          expandedSection = 0
+        else:
+          expandedSection = 2
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show/Hide additional options related to managing the crew")
+      imageButton(image = images[moreOptionsIcon]):
+        showCrewOptions = not showCrewOptions
+      showCrewInfo(dialog = dialog)
+  # The player's ship's modules info
+  if expandedSection in {0, 3}:
+    group(title = "Modules info:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
+      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize the ship modules info")
+      imageButton(image = (if expandedSection == 0: images[
+          expandIcon] else: images[contractIcon])):
+        if expandedSection == 3:
+          expandedSection = 0
+        else:
+          expandedSection = 3
+      showModulesInfo(dialog = dialog)
+  # The player's ship's cargo info
+  if expandedSection in {0, 4}:
+    group(title = "Cargo info:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
+      setLayoutRowStatic(height = 35, cols = 2, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize the ship cargo info")
+      imageButton(image = (if expandedSection == 0: images[
+          expandIcon] else: images[contractIcon])):
+        if expandedSection == 4:
+          expandedSection = 0
+        else:
+          expandedSection = 4
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show/Hide additional options related to managing the cargo")
+      imageButton(image = images[moreOptionsIcon]):
+        showCargoOptions = not showCargoOptions
+      showCargoInfo(dialog = dialog)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+      height - 75)

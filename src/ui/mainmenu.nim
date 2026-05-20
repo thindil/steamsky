@@ -13,749 +13,971 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+# along with Steam Sky.  if, see <http://www.gnu.org/licenses/>.
 
-## Provides code related to showing the main game's menu, like creating it.
+## Provides code related to the game's main menu, like showing the
+## menu, and selecting its various sections
 
-import std/[os, tables]
-import contracts
-import ../[basestypes, careers, config, game, game2, tk]
-import dialogs2, errordialog, goalsui, mainmenucommands, showmainmenu,
-    table, themes, utilsui, utilsui2
+import std/[algorithm, colors, math, os, sequtils, strutils, tables, times]
+import contracts, nuklear/nuklear_sdl_renderer
+import ../[basestypes, config, game, game2, gamesaveload, goals,
+    halloffame, log, shipscrew, ships2, types, utils]
+import coreui, debugui, dialogs, errordialog, goalsui, mapsui, themes
 
-proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
-    WriteIOEffect, TimeEffect, RootEffect], contractual.} =
-  ## Create the main menu UI
-  let
-    uiDirectory: string = dataDirectory.string & "ui" & DirSep
-    iconPath: string = uiDirectory & "images" & DirSep & "icon.png"
-  const mainWindow: string = "."
-  if not fileExists(filename = iconPath):
-    tclEval(script = "wm withdraw " & mainWindow)
-    tclEval(script = "tk_messageBox -message {Couldn't not find the game data files and the game have to stop. Are you sure that directory \"" &
-        dataDirectory.string & "\" is the proper place where the game data files exists?} -icon error -type ok")
-    tclEval(script = "exit 1")
-    return
-  mainmenucommands.addCommands()
-  dialogs2.addCommands()
-  utilsui.addCommands()
-  goalsui.addCommands()
-  table.addCommands()
-  let icon: string = tclEval2(script = "image create photo logo -file {" &
-      iconPath & "}")
-  tclEval(script = "wm iconphoto . -default " & icon)
+var
+  menuImages: array[4, PImage] = [nil, nil, nil, nil]
+  showLoadButton, showHoFButton: bool = false
+  fileContent: string = ""
+  fileName: string = ""
+  fileLines: Positive = 1
+  playerFactions, playerCareers, playerBases: seq[string] = @[]
+  currentFaction, currentCareer, currentBase: int = 0
+  newFaction, newCareer, newBase: Natural = 0
+  showGender: bool = true
+
+proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
+    ReadDirEffect, WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Set the main menu, load logo if needed and set the menu's buttons
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns parameter dialog, modified if any error happened.
+  if menuImages[0] == nil:
+    # Load images
+    try:
+      theme = themesList[gameSettings.interfaceTheme]
+      menuImages[0] = nuklearLoadSVGImage(filePath = theme.icons[logoImage],
+          width = 0, height = 110)
+      for index, fileName in theme.icons[1..3]:
+        menuImages[index + 1] = nuklearLoadSVGImage(filePath = fileName,
+            width = 0, height = 10 + gameSettings.interfaceFontSize)
+    except:
+      dialog = setError(message = "Can't set the game's images.")
+    # Set the list of available factions
+    for index, faction in factionsList:
+      playerFactions.add(y = faction.name)
+      if index == newGameSettings.playerFaction:
+        showGender = "nogender" notin faction.flags
+        currentFaction = playerFactions.high
+        var i: Natural = 0
+        for index, career in faction.careers:
+          playerCareers.add(y = career.name)
+          if index == newGameSettings.playerCareer:
+            currentCareer = i
+          i.inc
+        playerCareers.add(y = "Random")
+        playerBases.add(y = "Any")
+        i = 1
+        for baseType in faction.basesTypes.keys:
+          try:
+            playerBases.add(y = basesTypesList[baseType].name)
+          except:
+            dialog = setError(message = "Can't add a base type.")
+            break
+          if baseType == newGameSettings.startingBase:
+            currentBase = i
+          i.inc
+    playerFactions.add(y = "Random")
   try:
-    tclEvalFile(fileName = themesList[gameSettings.interfaceTheme].fileName)
+    showLoadButton = walkFiles(pattern = saveDirectory.string &
+        "*.sav").toSeq.len > 0
+  except OSError:
+    dialog = setError(message = "Can't check savegames.")
+  showHoFButton = fileExists(filename = saveDirectory.string & "halloffame.dat")
+  buttonHeight = gameSettings.interfaceFontSize.float + 26
+  labelHeight = gameSettings.interfaceFontSize.float + 11
+
+proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the game's main menu and set the game's state
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  layoutSpaceStatic(height = 90, widgetsCount = 1):
+    row(x = 50, y = 0, w = 500, h = 90):
+      image(image = menuImages[0])
+  setLayoutRowDynamic(height = buttonHeight, cols = 1)
+  label(str = gameVersion & " development", alignment = centered)
+  var menuHeight: float = 4.0 * buttonHeight
+  if showLoadButton:
+    menuHeight += buttonHeight
+  if showHoFButton:
+    menuHeight += buttonHeight
+  layoutSpaceStatic(height = menuHeight, widgetsCount = 6):
+    const
+      x: float = 225
+      w: float = 150
+    row(x = x, y = 0, w = w, h = buttonHeight):
+      labelButton(title = "New game", tooltip = "Set and start a new game"):
+        state = newGame
+        dialog = none
+        return
+    var y: float = buttonHeight;
+    if showLoadButton:
+      row(x = x, y = y, w = w, h = buttonHeight):
+        y += buttonHeight
+        labelButton(title = "Load game",
+            tooltip = "Load one of the previously saved games"):
+          state = loadGame
+          return
+    if showHoFButton:
+      row(x = x, y = y, w = w, h = buttonHeight):
+        y += buttonHeight
+        labelButton(title = "Hall of Fame",
+            tooltip = "Show your previous the bests scores in the game"):
+          state = hallOfFame
+          return
+    row(x = x, y = y, w = w, h = buttonHeight):
+      y += buttonHeight
+      labelButton(title = "News", tooltip = "The list of changes to the game"):
+        state = news
+        return
+    row(x = x, y = y, w = w, h = buttonHeight):
+      y += buttonHeight
+      labelButton(title = "About", tooltip = "General information about the game"):
+        state = about
+        return
+    row(x = x, y = y, w = w, h = buttonHeight):
+      labelButton(title = "Quit", tooltip = "Quit from the game"):
+        state = quitGame
+        return
+
+proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [ReadDirEffect, ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect],
+        contractual.} =
+  ## Show the game's latest changes
+  ##
+  ## * state  - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  if fileContent.len == 0 and dialog == none:
+    if fileExists(filename = docDirectory.string & "CHANGELOG.md"):
+      try:
+        var index: Natural = 0
+        fileLines = 1
+        for line in lines(filename = docDirectory.string & "CHANGELOG.md"):
+          index.inc
+          if index < 6:
+            continue
+          if state == news and line.len > 1 and line[0..2] == "## ":
+            break
+          fileContent.add(y = line & "\n")
+          var needLines: float = ceil(x = getTextWidth(text = line) /
+              menuWidth.float)
+          if needLines < 1.0:
+            needLines = 1.0
+          fileLines += needLines.int
+        fileLines *= labelHeight.int
+      except:
+        dialog = setError(message = "Can't read ChangeLog file.")
+  setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
+  if fileContent.len > 0:
+    group(title = "NewsGroup", flags = {windowNoFlags}):
+      setLayoutRowDynamic(height = fileLines.float, cols = 1)
+      wrapLabel(str = fileContent)
+  else:
+    wrapLabel(str = "Can't find file to load. Did 'CHANGELOG.md' file is in '" &
+        docDirectory.string & "' directory?")
+  layoutSpaceStatic(height = buttonHeight - 10.0, widgetsCount = 2):
+    if state == news:
+      row(x = (menuWidth - 310).float, y = 0, w = 155, h = buttonHeight):
+        labelButton(title = "Show all changes",
+            tooltip = "Show all changes to the game since previous big stable version"):
+          state = allNews
+          fileContent = ""
+          return
+    else:
+      row(x = (menuWidth - 405).float, y = 0, w = 250, h = buttonHeight):
+        labelButton(title = "Show only newest changes",
+            tooltip = "Show only changes to the game since previous release"):
+          state = news
+          fileContent = ""
+          return
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
+      labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
+        state = mainMenu
+        fileContent = ""
+        return
+  if isKeyPressed(key = keyEscape):
+    state = mainMenu
+    fileContent = ""
+
+proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [ReadIOEffect, RootEffect], contractual.} =
+  ## Show the general information about the game
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  setLayoutRowDynamic(height = labelHeight, cols = 1)
+  label(str = "Roguelike in the sky with a steampunk theme",
+      alignment = centered)
+  saveButtonStyle()
+  setButtonStyle(field = borderColor, a = 0)
+  layoutSpaceStatic(height = buttonHeight * 2, widgetsCount = 4):
+    row(x = 255, y = 0, w = 100, h = buttonHeight - 10):
+      labelButton(title = "Website", tooltip = "Visit the game website: https://thindil.itch.io/steam-sky"):
+        openLink(link = "https://thindil.itch.io/steam-sky")
+    row(x = 270, y = 0, w = 85, h = buttonHeight - 10):
+      label(str = "______")
+    row(x = 145, y = buttonHeight, w = 330, h = buttonHeight - 10):
+      labelButton(title = "(c)2016-2026 Bartek thindil Jasicki",
+          tooltip = "Send a mail to the game creator"):
+        openLink(link = "mailto:thindil@laeran.pl.eu.org")
+    row(x = 160, y = buttonHeight, w = 315, h = 30):
+      label(str = "__________________________")
+  restoreButtonStyle()
+  layoutSpaceStatic(height = buttonHeight, widgetsCount = 3):
+    row(x = 75, y = 0, w = 150, h = buttonHeight - 10):
+      labelButton(title = "Get involved",
+          tooltip = "Guide how to help with creating the game, report bugs, etc."):
+        fileName = "CONTRIBUTING.md"
+        state = showFile
+        dialog = none
+    row(x = 230, y = 0, w = 150, h = buttonHeight - 10):
+      labelButton(title = "Modify game",
+          tooltip = "Guide how to modify the game"):
+        fileName = "MODDING.md"
+        state = showFile
+    row(x = 385, y = 0, w = 150, h = buttonHeight - 10):
+      labelButton(title = "README", tooltip = "Some technical information about the game"):
+        fileName = "README.md"
+        state = showFile
+  setLayoutRowDynamic(height = labelHeight * 7, cols = 1)
+  wrapLabel(str = "Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\nSteam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.")
+  layoutSpaceStatic(height = buttonHeight, widgetsCount = 2):
+    row(x = (menuWidth - 310).float, y = 0, w = 155, h = buttonHeight):
+      labelButton(title = "Show full license",
+          tooltip = "Show full legal text of GNU GPLv3 license"):
+        fileName = "COPYING"
+        state = showFile
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
+      labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
+        state = mainMenu
+  if isKeyPressed(key = keyEscape):
+    state = mainMenu
+  showLinkError()
+
+proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [ReadIOEffect, RootEffect], contractual.} =
+  ## Show the selected file content
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  if fileContent.len == 0 and dialog == none:
+    if fileExists(filename = docDirectory.string & fileName):
+      try:
+        fileLines = 1
+        if fileName == "CONTRIBUTING.md":
+          fileLines = 6
+        for line in lines(filename = docDirectory.string & fileName):
+          fileContent.add(y = line & "\n")
+          var needLines: float = ceil(x = getTextWidth(text = line) /
+              menuWidth.float)
+          if needLines < 1.0:
+            needLines = 1.0
+          fileLines += needLines.int
+        fileLines *= labelHeight.int
+      except:
+        dialog = setError(message = "Can't read '" & fileName & "' file.")
+  setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
+  if fileContent.len > 0:
+    group(title = "FileGroup", flags = {windowNoFlags}):
+      setLayoutRowDynamic(height = fileLines.float, cols = 1)
+      wrapLabel(str = fileContent)
+  else:
+    wrapLabel(str = "Can't find file to load. Did '" & fileName &
+        "' file is in '" & docDirectory.string & "' directory?")
+  layoutSpaceStatic(height = buttonHeight + 10, widgetsCount = 1):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
+      labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
+        state = mainMenu
+        fileContent = ""
+        return
+  if isKeyPressed(key = keyEscape):
+    state = mainMenu
+    fileContent = ""
+
+proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [ReadIOEffect, RootEffect], contractual.} =
+  ## Show the game's hall of fame
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  dialog = none
+  setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
+  group(title = "HofGroup", flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = labelHeight, cols = 4)
+    colorLabel(str = "Position", color = colYellow, align = centered)
+    colorLabel(str = "Name", color = colYellow, align = centered)
+    colorLabel(str = "Points", color = colYellow, align = centered)
+    colorLabel(str = "Died from", color = colYellow, align = centered)
+    for index, entry in hallOfFameArray:
+      if entry.points == 0:
+        break
+      label(str = $index, alignment = centered)
+      label(str = entry.name, alignment = centered)
+      label(str = $entry.points, alignment = centered)
+      label(str = entry.deathReason, alignment = centered)
+  layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
+      labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
+        state = mainMenu
+  if isKeyPressed(key = keyEscape):
+    state = mainMenu
+
+type
+  SortingOrder = enum
+    playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
+  SaveData = object
+    playerName, shipName, saveTime, path: string
+
+var
+  sortOrder: SortingOrder = timeDesc
+  saveClicked: string = ""
+  saves: seq[SaveData] = @[]
+
+proc showLoadMenu(dialog: var GameDialog; bounds: Rect) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the menu for the selected saved game
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * bounds - the rectangle in which the player should click the mouse's
+  ##            button to show the menu
+  ##
+  ## Returns the parameter dialog. It is modified only when the player start
+  ## loading the game.
+  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
+      triggerBounds = bounds, button = (
+      if gameSettings.rightButton: Buttons.right else: Buttons.left)):
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
+    contextualItemLabel(label = "Load game", align = centered):
+      dialog = loading
+    contextualItemLabel(label = "Delete game", align = centered):
+      dialog = setQuestion(question = "Are you sure you want delete this savegame?",
+          data = saveClicked, qType = deleteSave)
+    contextualItemLabel(label = "Close", align = centered):
+      discard
+
+proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [ReadIOEffect, RootEffect], contractual.} =
+  ## Show the list of saved games
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
+  group(title = "LoadGroup", flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = tableRowHeight, cols = 3)
+    labelButton(title = "Player name", tooltip = "Press mouse button to sort the saved games."):
+      if sortOrder == playerAsc:
+        sortOrder = playerDesc
+      else:
+        sortOrder = playerAsc
+    labelButton(title = "Ship name", tooltip = "Press mouse button to sort the saved games."):
+      if sortOrder == shipAsc:
+        sortOrder = shipDesc
+      else:
+        sortOrder = shipAsc
+    labelButton(title = "Last saved", tooltip = "Press mouse button to sort the saved games."):
+      if sortOrder == timeAsc:
+        sortOrder = timeDesc
+      else:
+        sortOrder = timeAsc
+    if answered:
+      saves = @[]
+      answered = false
+    if saves.len == 0:
+      try:
+        for file in walkFiles(pattern = saveDirectory.string & "*.sav"):
+          let
+            (_, name, _) = splitFile(path = file)
+            parts = name.split(sep = '_')
+          try:
+            saves.add(y = SaveData(playerName: parts[0], shipName: parts[1],
+                saveTime: file.getLastModificationTime.format(
+                f = "yyyy-MM-dd hh:mm:ss"), path: file))
+          except:
+            dialog = setError(message = "Can't add information about the save file.")
+      except OSError:
+        dialog = setError(message = "Can't check savegames.")
+    if saves.len == 0:
+      showLoadButton = false
+      state = mainMenu
+      return
+
+    proc sortSaves(x, y: SaveData): int {.raises: [], tags: [], contractual.} =
+      ## Check how to sort the selected saves on the list
+      ##
+      ## * x - the first save to sort
+      ## * y - the second save to sort
+      ##
+      ## Returns 1 if the x save should go first, otherwise -1
+      case sortOrder
+      of playerAsc:
+        if x.playerName < y.playerName:
+          return 1
+        return -1
+      of playerDesc:
+        if x.playerName > y.playerName:
+          return 1
+        return -1
+      of shipAsc:
+        if x.shipName < y.shipName:
+          return 1
+        return -1
+      of shipDesc:
+        if x.shipName > y.shipName:
+          return 1
+        return -1
+      of timeAsc:
+        if x.saveTime < y.saveTime:
+          return 1
+        return -1
+      of timeDesc:
+        if x.saveTime > y.saveTime:
+          return 1
+        return -1
+
+    saves.sort(cmp = sortSaves)
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    layoutSpaceStatic(height = (saves.len.float * tableRowHeight),
+        widgetsCount = (saves.len * 3)):
+      for index, save in saves:
+        let
+          y: float = (index.float * tableRowHeight)
+        row(x = 0, y = y, w = 190, h = tableRowHeight):
+          labelButton(title = save.playerName, tooltip = "Press mouse " & (
+              if gameSettings.rightButton: "right" else: "left") &
+              " button to show available option"):
+            saveClicked = save.path
+        row(x = 190, y = y, w = 190, h = tableRowHeight):
+          labelButton(title = save.shipName, tooltip = "Press mouse " & (
+              if gameSettings.rightButton: "right" else: "left") &
+              " button to show available option"):
+            saveClicked = save.path
+        row(x = 380, y = y, w = 190, h = tableRowHeight):
+          labelButton(title = save.saveTime, tooltip = "Press mouse " & (
+              if gameSettings.rightButton: "right" else: "left") &
+              " button to show available option"):
+            saveClicked = save.path
+  restoreButtonStyle()
+  let bounds: Rect = Rect(x: 0, y: tableRowHeight, w: 580, h: (saves.len.float *
+      (tableRowHeight + 5.0)))
+  showLoadMenu(dialog = dialog, bounds = bounds)
+  layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
+      labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
+        state = mainMenu
+        saveClicked = ""
+  showQuestion(dialog = dialog, state = state)
+  if isKeyPressed(key = keyEscape):
+    if dialog == none:
+      state = mainMenu
+      saveClicked = ""
+    else:
+      dialog = none
+
+proc setGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the size of the main window and show the map
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  nuklearResizeWin(width = gameSettings.windowWidth,
+      height = gameSettings.windowHeight)
+  nuklearSetWindowPos(x = windowCentered, y = windowCentered)
+  windowWidth = gameSettings.windowWidth.float
+  windowHeight = gameSettings.windowHeight.float
+  nuklearSetWindowResizable()
+  createGameUi(dialog = dialog)
+
+proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [WriteIOEffect, ReadIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Start loading the selected saved game
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  try:
+    saveName = saveClicked
+    loadGame()
+    if debugMode == menu:
+      setDebugData()
   except:
-    showError(message = "Can't eval interface theme file.")
+    state = loadGame
+    dialog = setError(message = "Can't load this game.")
     return
-  tclEval(script = "ttk::style theme use " & gameSettings.interfaceTheme)
-  loadThemeImages()
-  tclEval(script = """
-      proc InvokeButton {name} {
-         set focused [focus]
-         if {$focused != {} && [winfo class $focused] == "TEntry"} {
+  dialog = none
+  selectedGoal = try:
+      goalText(index = 0)
+    except KeyError:
+      state = loadGame
+      dialog = setError(message = "Can't set the current goal.")
+      return
+  if selectedGoal.len > 16:
+    selectedGoal = selectedGoal[0..16] & "..."
+  setGame(dialog = dialog)
+  if dialog == none:
+    state = map
+
+const playerTooltips: array[12, string] = ["Enter character name.",
+    "Select a random name for the character, based on the character gender",
+    "Enter ship name.",
+    "Select a random name for the character, based on the character gender",
+    "Select starting goal for your character. You can change it later in game.",
+    "Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later.",
+    "Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later.",
+    "Select type of base in which you will start the game. This may have some impact on game difficulty.",
+    "General player character settings. Select field which you want to set to see more information about.",
+    "Faction, career and base type will be randomly selected for you during creating new game. Not recommended for new player.",
+    "Career will be randomly selected for you during creating new game. Not recommended for new player.", "Start the game in randomly selected base type."]
+
+var
+  playerName: string = newGameSettings.playerName
+  shipName: string = newGameSettings.shipName
+  currentTab: cint = 0
+  playerGender: cint = 2
+  infoText: string = playerTooltips[8]
+
+proc setInfoText(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the info text based on the selected player's faction, career or base
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if currentFaction == -1:
+    currentFaction = newFaction
+    if currentFaction == playerFactions.high:
+      infoText = playerTooltips[5] & "\n\n" & playerTooltips[9]
+      return
+    for faction in factionsList.values:
+      if faction.name == playerFactions[newFaction]:
+        infoText = playerTooltips[5] & "\n\n" & faction.description
+        return
+  if currentCareer == -1:
+    currentCareer = newCareer
+    if currentCareer == playerCareers.high:
+      infoText = playerTooltips[5] & "\n\n" & playerTooltips[10]
+      return
+    for faction in factionsList.values:
+      if faction.name == playerFactions[newFaction]:
+        for career in faction.careers.values:
+          if career.name == playerCareers[newCareer]:
+            infoText = playerTooltips[6] & "\n\n" & career.description
             return
-         } elseif {[winfo ismapped $name] == "1"} {
-            focus $name
-            $name invoke
-         }
-      }
+  if currentBase == -1:
+    currentBase = newBase
+    if currentBase == 0:
+      infoText = playerTooltips[5] & "\n\n" & playerTooltips[11]
+      return
+    for faction in factionsList.values:
+      if faction.name == playerFactions[newFaction]:
+        for baseType in faction.basesTypes.keys:
+          try:
+            if basesTypesList[baseType].name == playerBases[newBase]:
+              infoText = playerTooltips[7] & "\n\n" & basesTypesList[
+                  baseType].description
+              return
+          except:
+            dialog = setError(message = "Can't get base type.")
+            return
 
-      # Main Menu
-      ttk::frame .mainmenu -style Main.TFrame
-      pack [ttk::label .mainmenu.logo -image logo] -pady {15 0}
-      pack [ttk::label .mainmenu.version]
-      pack [ttk::button .mainmenu.newgame -text {New game} -underline 0 -command {
-         set newtab difficulty
-         bind . <Alt-s> {InvokeButton .newgamemenu.buttonsbox2.start}
-         bind . <Alt-b> {InvokeButton .newgamemenu.buttonsbox2.back}
-         bind . <Alt-p> {InvokeButton .newgamemenu.buttonsbox.player}
-         bind . <Alt-d> {InvokeButton .newgamemenu.buttonsbox.difficulty}
-         bind . <Escape> {InvokeButton .newgamemenu.buttonsbox2.back}
-         pack forget .mainmenu
-         pack .newgamemenu -fill both -expand true
-         .newgamemenu.buttonsbox.player invoke
-      }]
-      tooltip::tooltip .mainmenu.newgame {Set and start a new game}
-      ttk::button .mainmenu.loadgame -text {Load game} -underline 0 -command {
-         bind . <Alt-b> {InvokeButton .loadmenu.back}
-         bind . <Escape> {InvokeButton .loadmenu.back}
-         pack forget .mainmenu
-         pack .loadmenu -fill both -expand true
-         ShowLoadGame
-      }
-      tooltip::tooltip .mainmenu.loadgame {Load one of the previously saved games}
-      ttk::button .mainmenu.halloffame -text {Hall of Fame} -underline 0 -command {
-         bind . <Alt-b> {InvokeButton .hofmenu.back}
-         bind . <Escape> {InvokeButton .hofmenu.back}
-         pack forget .mainmenu
-         pack .hofmenu -fill both -expand true
-         ShowHallOfFame
-      }
-      tooltip::tooltip .mainmenu.halloffame \
-         {Show your previous the bests scores in the game}
-      pack [ttk::button .mainmenu.news -text {News} -underline 1 -command {
-         bind . <Alt-s> {InvokeButton .newsmenu.showall}
-         bind . <Alt-b> {InvokeButton .newsmenu.back}
-         bind . <Escape> {InvokeButton .newsmenu.back}
-         pack forget .mainmenu
-         pack .newsmenu -fill both -expand true
-         ShowNews false
-      }]
-      tooltip::tooltip .mainmenu.news {The list of changes to the game}
-      pack [ttk::button .mainmenu.about -text {About} -underline 0 -command {
-         bind . <Alt-s> {InvokeButton .aboutmenu.showlicense}
-         bind . <Alt-b> {InvokeButton .aboutmenu.back}
-         bind . <Escape> {InvokeButton .aboutmenu.back}
-         pack forget .mainmenu
-         pack .aboutmenu -fill both -expand true
-      }]
-      tooltip::tooltip .mainmenu.about {General information about the game}
-      pack [ttk::button .mainmenu.quit -text {Quit} -command exit -underline 0]
-      tooltip::tooltip .mainmenu.quit {Quit from the game}
-      bind . <Alt-n> {InvokeButton .mainmenu.newgame}
-      bind . <Alt-l> {InvokeButton .mainmenu.loadgame}
-      bind . <Alt-h> {InvokeButton .mainmenu.halloffame}
-      bind . <Alt-e> {InvokeButton .mainmenu.news}
-      bind . <Alt-a> {InvokeButton .mainmenu.about}
-      bind . <Alt-q> {InvokeButton .mainmenu.quit}
-
-      # About menu
-      ttk::frame .aboutmenu -style Main.TFrame
-      grid [ttk::label .aboutmenu.about \
-         -text {Roguelike in the sky with a steampunk theme}] -columnspan 3 -pady 2
-      grid [ttk::button .aboutmenu.website -text {Website} -style Link.Toolbutton \
-         -command {OpenLink https://thindil.itch.io/steam-sky}] -row 1 -columnspan 3
-      tooltip::tooltip .aboutmenu.website \
-         {Visit the game website: https://thindil.itch.io/steam-sky}
-      grid [ttk::button .aboutmenu.mail -text {(c)2016-2026 Bartek thindil Jasicki} \
-         -style Link.Toolbutton -command {OpenLink mailto:thindil@laeran.pl.eu.org}] \
-         -row 2 -columnspan 3
-      tooltip::tooltip .aboutmenu.mail {Send a mail to the game creator}
-      grid [ttk::button .aboutmenu.getinvolved -text {Get involved} -command {
-         pack forget .aboutmenu
-         pack .showfilemenu -fill both -expand true
-         ShowFile CONTRIBUTING.md
-      }] -row 3 -sticky e
-      tooltip::tooltip .aboutmenu.getinvolved \
-         {Guide how to help with creating the game, report bugs, etc}
-      grid [ttk::button .aboutmenu.modify -text {Modify game} -command {
-         pack forget .aboutmenu
-         pack .showfilemenu -fill both -expand true
-         ShowFile MODDING.md
-      }] -row 3 -column 1
-      tooltip::tooltip .aboutmenu.modify {Guide how to modify the game}
-      grid [ttk::button .aboutmenu.readme -text {README} -command {
-         pack forget .aboutmenu
-         pack .showfilemenu -fill both -expand true
-         ShowFile README.md
-      }] -row 3 -column 2 -sticky w
-      tooltip::tooltip .aboutmenu.readme {Some technical information about the game}
-      grid [ttk::label .aboutmenu.license \
-         -text {Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.} \
-         -wraplength 590] -row 4 -columnspan 3 -padx 2
-      grid [ttk::label .aboutmenu.license2 \
-         -text {Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.} \
-         -wraplength 590] -row 5 -columnspan 3
-      grid [ttk::button .aboutmenu.showlicense -text {Show full license} \
-         -underline 0 -command {
-            pack forget .aboutmenu
-            pack .showfilemenu -fill both -expand true
-            ShowFile COPYING
-         }] -row 6 -column 1 -sticky e
-      tooltip::tooltip .aboutmenu.showlicense \
-         {Show full legal text of GNU GPLv3 license}
-      grid [ttk::button .aboutmenu.back -text {Back to main menu} -underline 0 \
-         -command {
-            bind . <Alt-s> {}
-            bind . <Alt-b> {}
-            bind . <Escape> {}
-            pack forget .aboutmenu
-            pack .mainmenu -fill both -expand true
-         }] -row 6 -column 2 -sticky e
-      tooltip::tooltip .aboutmenu.back {Back to the main menu}
-
-      # Show file content
-      ttk::frame .showfilemenu -style Main.TFrame
-      pack [ttk::button .showfilemenu.back -text {Back} -underline 0 -command {
-         bind . <Alt-b> {}
-         bind . <Escape> {}
-         pack forget .showfilemenu
-         pack .mainmenu -fill both -expand true
-      }] -side bottom -anchor e -pady 2 -padx 2
-      tooltip::tooltip .showfilemenu.back {Back to the main menu}
-      pack [ttk::scrollbar .showfilemenu.scroll -orient vertical \
-         -command [list .showfilemenu.text yview]] -side right -fill y -pady 2 \
-         -padx 2
-      pack [text .showfilemenu.text -wrap char \
-         -yscrollcommand {.showfilemenu.scroll set} -font HelpFont] -side top \
-         -fill both -expand true -pady 2 -padx 2
-      ::autoscroll::autoscroll .showfilemenu.scroll""")
-  tclEval(script = """
-      # News menu
-      ttk::frame .newsmenu -style Main.TFrame
-      grid [text .newsmenu.text -wrap word -yscrollcommand {.newsmenu.scroll set} \
-         -font HelpFont] -sticky nesw -columnspan 2 -pady 2 -padx 2
-      grid [ttk::scrollbar .newsmenu.scroll -orient vertical \
-         -command [list .newsmenu.text yview]] -column 2 -row 0 -sticky ns -pady 2 \
-         -padx 2
-      ::autoscroll::autoscroll .newsmenu.scroll
-      grid [ttk::button .newsmenu.showall -text {Show all changes} -underline 0] \
-         -row 1 -column 0 -sticky e -pady 2
-      tooltip::tooltip .newsmenu.showall \
-         {Show all changes to the game since previous big stable version}
-      grid [ttk::button .newsmenu.back -text {Back to menu} -underline 0 -command {
-         bind . <Alt-s> {}
-         bind . <Alt-b> {}
-         bind . <Escape> {}
-         pack forget .newsmenu
-         pack .mainmenu -fill both -expand true
-      }] -row 1 -column 1 -sticky e -pady 2 -padx 2
-      tooltip::tooltip .newsmenu.back {Back to the main menu}
-      grid columnconfigure .newsmenu 0 -weight 1
-      grid rowconfigure .newsmenu 0 -weight 1
-
-      # Hall of Fame menu
-      ttk::frame .hofmenu -style Main.TFrame
-      grid [ttk::treeview .hofmenu.view -yscrollcommand {.hofmenu.yscroll set} \
-         -xscrollcommand {.hofmenu.xscroll set} -show headings \
-         -columns [list position name points diedfrom] -selectmode none] \
-         -sticky nesw -padx 2 -pady 2
-      .hofmenu.view heading position -text {Position}
-      .hofmenu.view column position -width 100
-      .hofmenu.view heading name -text {Name}
-      .hofmenu.view column name -width 150
-      .hofmenu.view heading points -text {Points}
-      .hofmenu.view column points -width 100
-      .hofmenu.view heading diedfrom -text {Died from}
-      grid [ttk::scrollbar .hofmenu.yscroll -orient vertical \
-         -command [list .hofmenu.view yview]] -column 1 -row 0 -sticky ns -padx 2 \
-         -pady 2
-      ::autoscroll::autoscroll .hofmenu.yscroll
-      grid [ttk::scrollbar .hofmenu.xscroll -orient horizontal \
-         -command [list .hofmenu.view xview]] -column 0 -row 1 -columnspan 2 \
-         -sticky we
-      ::autoscroll::autoscroll .hofmenu.xscroll
-      grid [ttk::button .hofmenu.back -text {Back to menu} -command {
-         bind . <Alt-b> {}
-         bind . <Escape> {}
-         pack forget .hofmenu
-         pack .mainmenu -fill both -expand true
-      }] -row 2 -column 0 -columnspan 2 -sticky e -pady 2 -padx 2
-      tooltip::tooltip .hofmenu.back {Back to the main menu}
-      grid columnconfigure .hofmenu 0 -weight 1
-      grid rowconfigure .hofmenu 0 -weight 1
-
-      # Load game menu
-      ttk::frame .loadmenu -style Main.TFrame
-      grid [ttk::frame .loadmenu.list] -sticky we -padx {2cm 2}
-      grid [ttk::button .loadmenu.back -text {Back to main menu} -underline 0 \
-         -command {
-            bind . <Alt-b> {}
-            pack forget .loadmenu
-            pack .mainmenu -fill both -expand true
-         }] -sticky e -padx 2 -pady 2
-      tooltip::tooltip .loadmenu.back {Back to the main menu}
-      grid columnconfigure .loadmenu 0 -weight 1
-      grid rowconfigure .loadmenu 0 -weight 1
-
-      # New game setting menu
-      set windowid {}
-      set playertooltips \
-         [list \
-         "General player character settings. Select field which you want to set to see more information about." \
-         "Enter character name." "Select the gender of your character." \
-         "Enter ship name." \
-         "Select starting goal for your character.\nYou can change it later in game." \
-         "Select your faction from a list. Factions have the biggest impact on game.\nThey determine the amount of bases and some playing styles.\nMore information about each faction can be found after selecting it.\nYou can't change this later." \
-         "Select your career from a list. Careers have some impact on gameplay\n(each have bonuses to gaining experience in some fields plus\nthey determine your starting ship and crew). More info about each\ncareer can be found after selecting it. You can't change career later." \
-         "Select type of base in which you will start the game.\nThis may have some impact on game difficulty."]
-      set difficultytooltips [list \
-         "Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it." \
-         "Select game difficulty preset level." "Percentage of damage done by enemy ships in combat.\nLowering it makes the  game easier but lowers the\namount of score gained as well." \
-         "Percentage of damage done by the player's ship in combat.\nRaising it makes the game easier but lowers the amount\nof score gained as well." \
-         "Percentage of damage done by enemies in melee combat.\nLowering it makes the game easier but lowers the\namount of score gained as well." \
-         "Percentage of damage done by player's crew (and player character)\nin melee combat. Raising it makes the game easier but lowers the\namount of score gained as well." \
-         "Percentage of experience gained by player and their crew from actions.\nRaising it makes the game easier but lowers the amount of score gained as well." \
-         "Percentage of reputation in bases gained or lost by player in sky bases\ndue to player actions. Raising it makes the game easier but lowers the\namount of score gained as well." \
-         "Percentage of the standard material cost and time needed\nfor upgrading ship modules. Lowering it makes the game\neasier but lowers the amount of score gained as well." \
-         "Percentage of the standard prices for services in bases (docking, repairing ship,\nrecruiting new crew members, etc). Lowering it makes the game easier but lowers\nthe amount of score gained as well." \
-         "Select random values for all settings." \
-         "If you select this option, all difficulty settings will be\nrandomized during start new game. Not recommended for new players."]
-      proc SetInfo {name index} {
-         global playertooltips
-         global difficultytooltips
-         .newgamemenu.info.text configure -state normal
-         .newgamemenu.info.text delete 1.0 end
-         if {$name == "player"} {
-            .newgamemenu.info.text insert end [lindex $playertooltips $index]
-         } else {
-            .newgamemenu.info.text insert end [lindex $difficultytooltips $index]
-         }
-         .newgamemenu.info.text configure -state disabled
-      }
-      proc SetPoints {{difficulty Custom}} {
-         set values [list [.newgamemenu.canvas.difficulty.enemydamage get] \
-            [.newgamemenu.canvas.difficulty.playerdamage get] \
-            [.newgamemenu.canvas.difficulty.enemymeleedamage get] \
-            [.newgamemenu.canvas.difficulty.playermeleedamage get] \
-            [.newgamemenu.canvas.difficulty.experience get] \
-            [.newgamemenu.canvas.difficulty.reputation get] \
-            [.newgamemenu.canvas.difficulty.upgrade get] \
-            [.newgamemenu.canvas.difficulty.prices get]]
-         set totalpoints 0
-         for {set i 0} {$i < 8} {incr i} {
-            set value [regsub -all {[^0-9]} [lindex $values $i] {}]
-            if {$value == ""} {
-               set value 1
-            } elseif {$value < 1} {
-               set value 1
-            } elseif {$value > 500} {
-               set value 500
-            }
-            if {$i == 1 || $i == 3 || $i == 4 || $i == 5} {
-               if {$value < 100} {
-                  set value [expr 100 + ((100 - $value) * 4)]
-               } elseif {$value > 100} {
-                  set value [expr 100 - $value]
-               }
-            }
-            set totalpoints [expr $totalpoints + $value]
-         }
-         set totalpoints [expr $totalpoints  / 8]
-         if {$totalpoints < 1} {
-            set totalpoints 1
-         }
-         .newgamemenu.canvas.difficulty.totalpoints configure \
-            -text "Total gained points: $totalpoints%"
-         .newgamemenu.canvas.difficulty.difficultylevel set $difficulty
-         return true
-      }""")
-  tclEval(script = """
-      ttk::frame .newgamemenu -style Main.TFrame
-      grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 3 -pady {5 2}
-      grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player \
-         -state selected -style Radio.Toolbutton -value player -variable newtab \
-         -underline 0 -command {
-         .newgamemenu.info.text configure -state normal
-         .newgamemenu.info.text delete 1.0 end
-         .newgamemenu.info.text insert end [lindex $playertooltips 0]
-         .newgamemenu.info.text configure -state disabled
-         ::autoscroll::unautoscroll .newgamemenu.scrollbar
-         .newgamemenu.canvas delete $windowid
-         set windowid [.newgamemenu.canvas create window 0 0 -anchor nw \
-            -window .newgamemenu.canvas.player]
-         .newgamemenu.canvas configure \
-            -width [winfo reqwidth .newgamemenu.canvas.player] \
-            -height [winfo reqheight .newgamemenu.canvas.player] \
-            -scrollregion [.newgamemenu.canvas bbox all]
-         ::autoscroll::autoscroll .newgamemenu.scrollbar
-      }] -sticky e
-      tooltip::tooltip .newgamemenu.buttonsbox.player \
-         {Show settings for your character.}
-      grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty \
-         -style Radio.Toolbutton -value difficulty -variable newtab -underline 0 \
-         -command {
-            .newgamemenu.info.text configure -state normal
-            .newgamemenu.info.text delete 1.0 end
-            .newgamemenu.info.text insert end [lindex $difficultytooltips 0]
-            .newgamemenu.info.text configure -state disabled
-            .newgamemenu.canvas delete $windowid
-            set windowid [.newgamemenu.canvas create window 0 0 -anchor nw \
-               -window .newgamemenu.canvas.difficulty]
-            .newgamemenu.canvas configure \
-               -width [winfo reqwidth .newgamemenu.canvas.difficulty] \
-               -height [winfo reqheight .newgamemenu.canvas.difficulty] \
-               -scrollregion [.newgamemenu.canvas bbox all]
-         }] -column 1 -row 0 -sticky w
-      tooltip::tooltip .newgamemenu.buttonsbox.difficulty \
-         {Show settings for the game difficulty.}
-      grid [canvas .newgamemenu.canvas \
-         -yscrollcommand [list .newgamemenu.scrollbar set]] -sticky nwes -row 1 \
-         -padx 2
-      grid [ttk::scrollbar .newgamemenu.scrollbar -orient vertical \
-         -command [list .newgamemenu.canvas yview]] -sticky ns -row 1 -column 1
-      ttk::frame .newgamemenu.canvas.player
-      grid [ttk::label .newgamemenu.canvas.player.labelplayername \
-         -text {Character name:}] -sticky e -padx {0 5}
-      grid [ttk::entry .newgamemenu.canvas.player.playername -width 15] -row 0 \
-         -column 1 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.player.playername \
-         [lindex $playertooltips 1]
-      grid [ttk::button .newgamemenu.canvas.player.randomplayer \
-         -style Toolbutton -command {RandomName player}] -row 0 -column 2 \
-         -padx {5 0}
-      tooltip::tooltip .newgamemenu.canvas.player.randomplayer \
-         "Select a random name for the character,\nbased on the character gender"
-      bind .newgamemenu.canvas.player.playername <FocusIn> {SetInfo player 1}
-      grid [ttk::label .newgamemenu.canvas.player.labelgender \
-         -text {Character gender:}] -row 1 -sticky e -padx {0 5}
-      grid [ttk::frame .newgamemenu.canvas.player.gender] -row 1 -column 1 -pady 3
-      grid [ttk::radiobutton .newgamemenu.canvas.player.gender.male \
-         -style Toolbutton -value M -variable playergender \
-         -command {SetInfo player 2}] -padx {0 5}
-      tooltip::tooltip .newgamemenu.canvas.player.gender.male Male
-      grid [ttk::radiobutton .newgamemenu.canvas.player.gender.female \
-         -style Toolbutton -value F -variable playergender \
-         -command {SetInfo player 2}] -row 0 -column 1
-      tooltip::tooltip .newgamemenu.canvas.player.gender.female Female
-      grid [ttk::label .newgamemenu.canvas.player.labelshipname -text {Ship name:}] \
-         -row 2 -sticky e -padx {0 5}
-      grid [ttk::entry .newgamemenu.canvas.player.shipname -width 15] -row 2 \
-         -column 1 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.player.shipname [lindex $playertooltips 3]
-      bind .newgamemenu.canvas.player.shipname <FocusIn> {SetInfo player 3}
-      grid [ttk::button .newgamemenu.canvas.player.randomship \
-         -style Toolbutton -command {RandomName ship}] -row 2 -column 2 \
-         -padx {5 0}
-      tooltip::tooltip .newgamemenu.canvas.player.randomship \
-         "Select a random name for the ship"
-      grid [ttk::label .newgamemenu.canvas.player.labelgoal -text {Character goal:}] \
-         -row 3 -sticky e -padx {0 5}
-      grid [ttk::button .newgamemenu.canvas.player.goal -text {Random} \
-         -command {ShowGoals .newgamemenu.canvas.player.goal}] -row 3 -column 1 \
-         -columnspan 2 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.player.goal [lindex $playertooltips 4]
-      bind .newgamemenu.canvas.player.goal <FocusIn> {SetInfo player 4}
-      grid [ttk::label .newgamemenu.canvas.player.labelfaction \
-         -text {Character faction:}] -row 4 -sticky e -padx {0 5}
-      grid [ttk::combobox .newgamemenu.canvas.player.faction -state readonly \
-         -width 16] -row 4 -column 1 -columnspan 2 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.player.faction [lindex $playertooltips 5]
-      bind .newgamemenu.canvas.player.faction <FocusIn> SetFaction
-      bind .newgamemenu.canvas.player.faction <<ComboboxSelected>> SetFaction
-      grid [ttk::label .newgamemenu.canvas.player.labelcareer \
-         -text {Character career:}] -row 5 -sticky e -padx {0 5}
-      grid [ttk::combobox .newgamemenu.canvas.player.career -state readonly \
-         -width 16] -row 5 -column 1 -columnspan 2 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.player.career [lindex $playertooltips 6]
-      bind .newgamemenu.canvas.player.career <FocusIn> {SetCareer}
-      bind .newgamemenu.canvas.player.career <<ComboboxSelected>> SetCareer
-      grid [ttk::label .newgamemenu.canvas.player.labelbase \
-         -text {Starting base type:}] -row 6 -sticky e -padx {0 5}
-      grid [ttk::combobox .newgamemenu.canvas.player.base -state readonly -width 16] \
-         -row 6 -column 1 -columnspan 2 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.player.base [lindex $playertooltips 7]
-      bind .newgamemenu.canvas.player.base <FocusIn> {SetBase}
-      bind .newgamemenu.canvas.player.base <<ComboboxSelected>> SetBase
-      ttk::frame .newgamemenu.canvas.difficulty
-      SetScrollbarBindings .newgamemenu.canvas.difficulty .newgamemenu.scrollbar
-      grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel \
-         -text {Difficulty level:}] -sticky e -padx {0 5}
-      SetScrollbarBindings .newgamemenu.canvas.difficulty.difficultylabel \
-         .newgamemenu.scrollbar
-      grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel \
-         -state readonly \
-         -values [list {Very Easy} Easy Normal Hard {Very Hard} Custom] -width 7] \
-         -column 1 -row 0 -pady 3
-      bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
-         set level [.newgamemenu.canvas.difficulty.difficultylevel get]
-         switch $level {
-            "Very Easy" {
-               .newgamemenu.canvas.difficulty.enemydamage set 10
-               .newgamemenu.canvas.difficulty.playerdamage set 450
-               .newgamemenu.canvas.difficulty.enemymeleedamage set 10
-               .newgamemenu.canvas.difficulty.playermeleedamage set 450
-               .newgamemenu.canvas.difficulty.experience set 450
-               .newgamemenu.canvas.difficulty.reputation set 450
-               .newgamemenu.canvas.difficulty.upgrade set 10
-               .newgamemenu.canvas.difficulty.prices set 10
-            }
-            "Easy" {
-               .newgamemenu.canvas.difficulty.enemydamage set 50
-               .newgamemenu.canvas.difficulty.playerdamage set 250
-               .newgamemenu.canvas.difficulty.enemymeleedamage set 50
-               .newgamemenu.canvas.difficulty.playermeleedamage set 250
-               .newgamemenu.canvas.difficulty.experience set 250
-               .newgamemenu.canvas.difficulty.reputation set 250
-               .newgamemenu.canvas.difficulty.upgrade set 50
-               .newgamemenu.canvas.difficulty.prices set 50
-            }
-            "Normal" {
-               .newgamemenu.canvas.difficulty.enemydamage set 100
-               .newgamemenu.canvas.difficulty.playerdamage set 100
-               .newgamemenu.canvas.difficulty.enemymeleedamage set 100
-               .newgamemenu.canvas.difficulty.playermeleedamage set 100
-               .newgamemenu.canvas.difficulty.experience set 100
-               .newgamemenu.canvas.difficulty.reputation set 100
-               .newgamemenu.canvas.difficulty.upgrade set 100
-               .newgamemenu.canvas.difficulty.prices set 100
-            }
-            "Hard" {
-               .newgamemenu.canvas.difficulty.enemydamage set 250
-               .newgamemenu.canvas.difficulty.playerdamage set 50
-               .newgamemenu.canvas.difficulty.enemymeleedamage set 250
-               .newgamemenu.canvas.difficulty.playermeleedamage set 50
-               .newgamemenu.canvas.difficulty.experience set 50
-               .newgamemenu.canvas.difficulty.reputation set 50
-               .newgamemenu.canvas.difficulty.upgrade set 250
-               .newgamemenu.canvas.difficulty.prices set 250
-            }
-            "Very Hard" {
-               .newgamemenu.canvas.difficulty.enemydamage set 450
-               .newgamemenu.canvas.difficulty.playerdamage set 10
-               .newgamemenu.canvas.difficulty.enemymeleedamage set 450
-               .newgamemenu.canvas.difficulty.playermeleedamage set 10
-               .newgamemenu.canvas.difficulty.experience set 10
-               .newgamemenu.canvas.difficulty.reputation set 10
-               .newgamemenu.canvas.difficulty.upgrade set 450
-               .newgamemenu.canvas.difficulty.prices set 450
-            }
-         }
-         SetPoints $level
-      }""")
-  tclEval(script = """
-      tooltip::tooltip .newgamemenu.canvas.difficulty.difficultylevel \
-         [lindex $difficultytooltips 1]
-      bind .newgamemenu.canvas.difficulty.difficultylevel <FocusIn> \
-         {SetInfo difficulty 1}
-      grid [ttk::label .newgamemenu.canvas.difficulty.enemydamagelabel \
-         -text {Enemy ship damage:}] -row 1 -sticky e -padx {0 5}
-      SetScrollbarBindings .newgamemenu.canvas.difficulty.enemydamagelabel \
-         .newgamemenu.scrollbar
-      grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemydamage -from 1 -to 500 \
-         -increment 1.0 -width 5 -validate focusout \
-         -validatecommand SetPoints -command SetPoints] -column 1 -row 1 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.difficulty.enemydamage \
-         [lindex $difficultytooltips 2]
-      bind .newgamemenu.canvas.difficulty.enemydamage <FocusIn> \
-         {SetInfo difficulty 2}
-      grid [ttk::label .newgamemenu.canvas.difficulty.playerdamagelabel \
-         -text {Player ship damage:}] -row 2 -sticky e -padx {0 5}
-      SetScrollbarBindings .newgamemenu.canvas.difficulty.playerdamagelabel \
-         .newgamemenu.scrollbar
-      grid [ttk::spinbox .newgamemenu.canvas.difficulty.playerdamage -from 1 -to 500 \
-         -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints \
-         -command SetPoints] -column 1 -row 2 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.difficulty.playerdamage \
-         [lindex $difficultytooltips 3]
-      bind .newgamemenu.canvas.difficulty.playerdamage <FocusIn> \
-         {SetInfo difficulty 3}
-      grid [ttk::label .newgamemenu.canvas.difficulty.enemymeleedamagelabel \
-         -text {Enemy damage in melee combat:} -wraplength 150] -row 3 -sticky e \
-         -padx {0 5}
-      SetScrollbarBindings .newgamemenu.canvas.difficulty.enemymeleedamagelabel \
-         .newgamemenu.scrollbar
-      grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemymeleedamage -from 1 \
-         -to 500 -increment 1.0 -width 5 -validate focusout \
-         -validatecommand SetPoints -command SetPoints] -column 1 -row 3 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.difficulty.enemymeleedamage \
-         [lindex $difficultytooltips 4]
-      bind .newgamemenu.canvas.difficulty.enemymeleedamage <FocusIn> \
-         {SetInfo difficulty 4}
-      grid [ttk::label .newgamemenu.canvas.difficulty.playermeleedamagelabel \
-         -text {Player crew damage in melee combat:} -wraplength 150] -row 4 \
-         -sticky e -padx {0 5}
-      SetScrollbarBindings .newgamemenu.canvas.difficulty.playermeleedamagelabel \
-         .newgamemenu.scrollbar
-      grid [ttk::spinbox .newgamemenu.canvas.difficulty.playermeleedamage -from 1 \
-         -to 500 -increment 1.0 -width 5 -validate focusout \
-         -validatecommand SetPoints -command SetPoints] -column 1 -row 4 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.difficulty.playermeleedamage \
-         [lindex $difficultytooltips 5]
-      bind .newgamemenu.canvas.difficulty.playermeleedamage <FocusIn> \
-         {SetInfo difficulty 5}
-      grid [ttk::label .newgamemenu.canvas.difficulty.experiencelabel \
-         -text {Experience gained:}] -row 5 -sticky e -padx {0 5}
-      SetScrollbarBindings .newgamemenu.canvas.difficulty.experiencelabel \
-         .newgamemenu.scrollbar
-      grid [ttk::spinbox .newgamemenu.canvas.difficulty.experience -from 1 -to 500 \
-         -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints \
-         -command SetPoints] -column 1 -row 5 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.difficulty.experience \
-         [lindex $difficultytooltips 6]
-      bind .newgamemenu.canvas.difficulty.experience <FocusIn> {SetInfo difficulty 6}
-      grid [ttk::label .newgamemenu.canvas.difficulty.reputationlabel \
-         -text {Reputation gained:}] -row 6 -sticky e -padx {0 5}
-      SetScrollbarBindings .newgamemenu.canvas.difficulty.reputationlabel \
-         .newgamemenu.scrollbar
-      grid [ttk::spinbox .newgamemenu.canvas.difficulty.reputation -from 1 -to 500 \
-         -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints \
-         -command SetPoints] -column 1 -row 6 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.difficulty.reputation \
-         [lindex $difficultytooltips 7]
-      bind .newgamemenu.canvas.difficulty.reputation <FocusIn> {SetInfo difficulty 7}
-      grid [ttk::label .newgamemenu.canvas.difficulty.upgradelabel \
-         -text {Upgrade cost:}] -row 7 -sticky e -padx {0 5}
-      SetScrollbarBindings .newgamemenu.canvas.difficulty.upgradelabel \
-         .newgamemenu.scrollbar
-      grid [ttk::spinbox .newgamemenu.canvas.difficulty.upgrade -from 1 -to 500 \
-         -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints \
-         -command SetPoints] -column 1 -row 7 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.difficulty.upgrade \
-         [lindex $difficultytooltips 8]
-      bind .newgamemenu.canvas.difficulty.upgrade <FocusIn> {SetInfo difficulty 8}
-      grid [ttk::label .newgamemenu.canvas.difficulty.priceslabel \
-         -text {Prices in bases:}] -row 8 -sticky e -padx {0 5}
-      SetScrollbarBindings .newgamemenu.canvas.difficulty.priceslabel \
-         .newgamemenu.scrollbar
-      grid [ttk::spinbox .newgamemenu.canvas.difficulty.prices -from 1 -to 500 \
-         -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints \
-         -command SetPoints] -column 1 -row 8 -pady 3
-      tooltip::tooltip .newgamemenu.canvas.difficulty.prices \
-         [lindex $difficultytooltips 9]
-      bind .newgamemenu.canvas.difficulty.prices <FocusIn> {SetInfo difficulty 9}
-      grid [ttk::button .newgamemenu.canvas.difficulty.random -text Random -command {
-         .newgamemenu.canvas.difficulty.enemydamage set [expr { int(499 * rand()) \
-            + 1 }]
-         .newgamemenu.canvas.difficulty.playerdamage set [expr { int(499 * rand()) \
-            + 1 }]
-         .newgamemenu.canvas.difficulty.enemymeleedamage set [expr { int(499 * \
-            rand()) + 1 }]
-         .newgamemenu.canvas.difficulty.playermeleedamage set [expr { int(499 * \
-            rand()) + 1 }]
-         .newgamemenu.canvas.difficulty.experience set [expr { int(499 * rand()) + \
-            1 }]
-         .newgamemenu.canvas.difficulty.reputation set [expr { int(499 * rand()) + \
-            1 }]
-         .newgamemenu.canvas.difficulty.upgrade set [expr { int(499 * rand()) + 1 }]
-         .newgamemenu.canvas.difficulty.prices set [expr { int(499 * rand()) + 1 }]
-         SetPoints
-      }] -row 9 -columnspan 2 -sticky we -pady 3 -padx 5
-      tooltip::tooltip .newgamemenu.canvas.difficulty.random \
-         [lindex $difficultytooltips 10]
-      bind .newgamemenu.canvas.difficulty.random <FocusIn> {SetInfo difficulty 10}
-      grid [ttk::label .newgamemenu.canvas.difficulty.randomizelabel \
-         -text {Randomize difficulty on game start} -wraplength 150] -row 10
-      SetScrollbarBindings .newgamemenu.canvas.difficulty.randomizelabel \
-         .newgamemenu.scrollbar
-      tooltip::tooltip .newgamemenu.canvas.difficulty.randomizelabel \
-         [lindex $difficultytooltips 11]
-      grid [ttk::checkbutton .newgamemenu.canvas.difficulty.randomize] -row 10 \
-         -column 1
-      tooltip::tooltip .newgamemenu.canvas.difficulty.randomize \
-         [lindex $difficultytooltips 11]
-      bind .newgamemenu.canvas.difficulty.randomize <FocusIn> {SetInfo difficulty 11}
-      grid [ttk::label .newgamemenu.canvas.difficulty.totalpoints \
-         -text {Total gained points: 100%}] -row 11 -columnspan 2
-      SetScrollbarBindings .newgamemenu.canvas.difficulty.totalpoints \
-         .newgamemenu.scrollbar
-      grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 2 \
-         -sticky nwes -padx 2
-      pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical \
-         -command [list .newgamemenu.info.text yview]] -side right -fill y
-      pack [text .newgamemenu.info.text -wrap word \
-         -yscrollcommand [list .newgamemenu.info.scroll set]] -expand true \
-         -fill both -side top
-      ::autoscroll::autoscroll .newgamemenu.info.scroll
-      grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -columnspan 3 -pady 2
-      grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} \
-         -underline 0 -command {
-            bind . <Alt-s> {}
-            bind . <Alt-b> {}
-            bind . <Alt-p> {}
-            bind . <Alt-d> {}
-            bind . <Escape> {}
-            pack forget .newgamemenu
-            NewGame
-            focus .
-         }] -sticky e -padx 3 -pady 3
-      tooltip::tooltip .newgamemenu.buttonsbox2.start {Start the game.}
-      grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} \
-         -underline 0 -command {
-            bind . <Alt-s> {}
-            bind . <Alt-b> {}
-            bind . <Alt-p> {}
-            bind . <Alt-d> {}
-            bind . <Escape> {}
-            pack forget .newgamemenu
-            pack .mainmenu -fill both -expand true
-         }] -column 1 -row 0 -sticky w -padx 3 -pady 3
-      tooltip::tooltip .newgamemenu.buttonsbox2.back {Back to the main menu.}
-      grid columnconfigure .newgamemenu .newgamemenu.info -weight 3
-      grid rowconfigure .newgamemenu .newgamemenu.info -weight 3
-  """)
-  if not gameSettings.showTooltips:
-    tclEval(script = "tooltip::tooltip disable")
-  setFonts(newSize = gameSettings.mapFontSize, fontType = mapFont)
-  setFonts(newSize = gameSettings.helpFontSize, fontType = helpFont)
-  setFonts(newSize = gameSettings.interfaceFontSize, fontType = interfaceFont)
-  const versionLabel: string = ".mainmenu.version"
-  tclEval(script = versionLabel & " configure -text {" & gameVersion & " development}")
-  try:
-    dataError = loadGameData()
-  except:
-    dataError = getCurrentExceptionMsg()
-    showMainMenu()
-  if dataError.len > 0:
-    return
-  const playerFrameName: string = ".newgamemenu.canvas.player"
-  var textEntry: string = playerFrameName & ".playername"
-  tclEval(script = textEntry & " delete 0 end")
-  tclEval(script = textEntry & " insert 0 {" & newGameSettings.playerName & "}")
-  tclSetVar(varName = "playergender", newValue = $newGameSettings.playerGender)
-  textEntry = playerFrameName & ".shipname"
-  tclEval(script = textEntry & " delete 0 end")
-  tclEval(script = textEntry & " insert 0 {" & newGameSettings.shipName & "}")
-  var values: string = ""
-  for faction in factionsList.values:
-    if faction.careers.len > 0:
-      values = values & " {" & faction.name & "}"
-  values.add(y = " Random")
-  var comboBox: string = playerFrameName & ".faction"
-  tclEval(script = comboBox & " configure -values [list" & values & "]")
-  if newGameSettings.playerFaction == "random":
-    tclEval(script = comboBox & " set Random")
+proc randomName(forPlayer: bool) {.raises: [], tags: [], contractual.} =
+  ## Generate a random name for the player's character or their ship
+  ##
+  ## * forPlayer - if true, generate a random name for the player's character
+  var factionIndex: string = ""
+  for index, faction in factionsList:
+    if faction.name == playerFactions[newFaction]:
+      factionIndex = index
+      break
+  if forPlayer:
+    let gender: char = (if playerGender == 2: 'M' else: 'F')
+    playerName = generateMemberName(gender = gender,
+        factionIndex = factionIndex)
   else:
-    try:
-      discard tclEval(script = comboBox & " set {" & factionsList[
-          newGameSettings.playerFaction].name & "}")
-    except:
-      showError(message = "Can't set player's faction.")
-  tclEval(script = "SetFaction")
-  comboBox = playerFrameName & ".career"
-  if newGameSettings.playerCareer == "random":
-    tclEval(script = comboBox & " set Random")
+    shipName = generateShipName(factionIndex = factionIndex)
+
+proc newGamePlayer(dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the player's settings for starting a new game
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  group(title = "groupSetting", flags = {windowNoFlags}):
+    # Character's name
+    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    label(str = "Character name:")
+    if mouseClicked(id = left, rect = getWidgetBounds()):
+      infoText = playerTooltips[0]
+    editString(text = playerName, maxLen = 64, tooltip = playerTooltips[0])
+    saveButtonStyle()
+    setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
+    imageButton(image = menuImages[1], tooltip = playerTooltips[1]):
+      randomName(forPlayer = true)
+    restoreButtonStyle()
+    if showGender:
+      # Character's gender
+      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat,
+          0.1, 0.1])
+      label(str = "Character gender:")
+      const genders: array[2..3, string] = [2: "Male", 3: "Female"]
+      for i in 2..3:
+        saveButtonStyle()
+        setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
+        if playerGender == i:
+          setButtonStyle2(source = active, destination = normal)
+          imageButton(image = menuImages[i], tooltip = genders[i]):
+            playerGender = i.cint
+        else:
+          imageButton(image = menuImages[i], tooltip = genders[i]):
+            playerGender = i.cint
+        restoreButtonStyle()
+    # Player's ship's name
+    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    label(str = "Ship name:")
+    if mouseClicked(id = left, rect = getWidgetBounds()):
+      infoText = playerTooltips[2]
+    editString(text = shipName, maxLen = 64, tooltip = playerTooltips[2])
+    saveButtonStyle()
+    setButtonStyle(field = padding, value = Vec2(x: 0.0, y: 0.0))
+    imageButton(image = menuImages[1], tooltip = playerTooltips[3]):
+      randomName(forPlayer = false)
+    restoreButtonStyle()
+    # Character's goal
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
+    label(str = "Character goal:")
+    if mouseClicked(id = left, rect = getWidgetBounds()):
+      infoText = playerTooltips[4]
+    labelButton(title = selectedGoal, tooltip = playerTooltips[4]):
+      dialog = newGoalDialog
+      setSelectedGoal()
+    # Character's faction
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
+    label(str = "Character faction:")
+    newFaction = comboList(items = playerFactions, selected = currentFaction,
+        itemHeight = labelHeight.int, x = 200, y = (labelHeight * 5.0),
+        tooltip = playerTooltips[5])
+    if newFaction != currentFaction or mouseClicked(id = left,
+        rect = getWidgetBounds()):
+      currentFaction = -1
+      playerCareers = @[]
+      currentCareer = 0
+      playerBases = @[]
+      currentBase = 0
+      if newFaction < playerFactions.high:
+        for faction in factionsList.values:
+          if faction.name == playerFactions[newFaction]:
+            showGender = "nogender" notin faction.flags
+            for career in faction.careers.values:
+              playerCareers.add(y = career.name)
+            playerCareers.add(y = "Random")
+            playerBases.add(y = "Any")
+            for baseType in faction.basesTypes.keys:
+              try:
+                playerBases.add(y = basesTypesList[baseType].name)
+              except:
+                dialog = setError(message = "Can't add a base type.")
+                break
+            break
+    # Character's career
+    if playerCareers.len > 0:
+      label(str = "Character career:")
+      newCareer = comboList(items = playerCareers, selected = currentCareer,
+          itemHeight = labelHeight.int, x = 200, y = (labelHeight * 3.2),
+          tooltip = playerTooltips[6])
+      if newCareer != currentCareer or mouseClicked(id = left,
+          rect = getWidgetBounds()):
+        currentCareer = -1
+    # Starting base
+    if playerBases.len > 0:
+      label(str = "Starting base type:")
+      newBase = comboList(items = playerBases, selected = currentBase,
+          itemHeight = labelHeight.int, x = 200, y = (labelHeight * 2.1),
+          tooltip = playerTooltips[7])
+      if newBase != currentBase or mouseClicked(id = left,
+          rect = getWidgetBounds()):
+        currentBase = -1
+    setInfoText(dialog = dialog)
+
+var
+  currentLevel: Natural = 2
+  diffSettings: array[8, Positive] = [100, 100, 100, 100, 100, 100, 100, 100]
+  randomSettings: bool = false
+  points: Natural = 100
+
+proc setPoints() {.raises: [], tags: [], contractual.} =
+  ## Count the bonus for gained points with the selected game's difficulty
+  var newPoints: int = 0
+  for index, difficulty in diffSettings:
+    var value: int = difficulty
+    if index in {1, 3, 4, 5}:
+      if value < 100:
+        value = 100 + ((100 - value) * 4)
+      elif value > 100:
+        value = 100 - value
+    newPoints += value
+  newPoints = ((newPoints.float) / 8.0).int
+  if newPoints < 1:
+    newPoints = 1
+  points = newPoints
+
+const diffTooltips: array[12, string] = ["Select game difficulty preset level.",
+    "Percentage of damage done by enemy ships in combat. Lowering it makes the  game easier but lowers the amount of score gained as well.",
+    "Percentage of damage done by the player's ship in combat. Raising it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of damage done by enemies in melee combat. Lowering it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of damage done by player's crew (and player character) in melee combat. Raising it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of experience gained by player and their crew from actions. Raising it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of reputation in bases gained or lost by player in sky bases due to player actions. Raising it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of the standard material cost and time needed for upgrading ship modules. Lowering it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of the standard prices for services in bases (docking, repairing ship,\nrecruiting new crew members, etc). Lowering it makes the game easier but lowers the amount of score gained as well.",
+    "Select random values for all settings.",
+    "If you select this option, all difficulty settings will be randomized during start new game. Not recommended for new players.", "Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it."]
+
+proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the difficulty settings for starting a new game
+  group(title = "groupSetting", flags = {windowNoFlags}):
+    # Difficulty level
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.5.cfloat, 0.5])
+    label(str = "Difficulty level:")
+    var newLevel: Natural = comboList(items = ["Very Easy", "Easy", "Normal",
+        "Hard", "Very Hard", "Custom"], selected = currentLevel,
+        itemHeight = labelHeight.int, x = 200, y = (labelHeight * 5.0),
+        tooltip = diffTooltips[0])
+    if newLevel != currentLevel:
+      currentLevel = newLevel
+      case currentLevel
+      of 0:
+        diffSettings = [10, 450, 10, 450, 450, 450, 10, 10]
+      of 1:
+        diffSettings = [50, 250, 50, 250, 250, 250, 50, 50]
+      of 2:
+        diffSettings = [100, 100, 100, 100, 100, 100, 100, 100]
+      of 3:
+        diffSettings = [250, 50, 250, 50, 50, 50, 250, 250]
+      of 4:
+        diffSettings = [450, 10, 450, 10, 10, 10, 450, 450]
+      else:
+        discard
+      setPoints()
+    const diffLabels: array[8, string] = ["Enemy ship damage:",
+        "Player ship damage:", "Enemy damage in melee combat:",
+        "Player crew damage in melee combat:", "Experience gained:",
+        "Reputation gained:", "Upgrade cost:", "Prices in bases:"]
+    for index, diffLabel in diffLabels:
+      if index in {2, 3}:
+        setLayoutRowDynamic(height = (editHeight * 2), cols = 2, ratio = [
+            0.5.cfloat, 0.5])
+        wrapLabel(str = diffLabel)
+      else:
+        setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.5.cfloat, 0.5])
+        label(str = diffLabel)
+      if mouseClicked(id = left, rect = getWidgetBounds()):
+        infoText = diffTooltips[index + 1]
+      let newValue: int = property2(name = "#", min = 1, val = diffSettings[
+          index], max = 500, step = 1, incPerPixel = 1, tooltip = diffTooltips[
+              index + 1])
+      if newValue != diffSettings[index]:
+        diffSettings[index] = newValue
+        currentLevel = 5
+        setPoints()
+    # Randomize settings
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
+    if mouseClicked(id = left, rect = getWidgetBounds()):
+      infoText = diffTooltips[9]
+    labelButton(title = "Random", tooltip = diffTooltips[9]):
+      for diffSetting in diffSettings.mitems:
+        diffSetting = getRandom(min = 1, max = 500)
+      currentLevel = 5
+      setPoints()
+    # Randomize the settings on the game's start
+    setLayoutRowDynamic(height = (buttonHeight * 2.0), cols = 2, ratio = [
+        0.9.cfloat, 0.1])
+    label(str = "Randomize difficulty on game start:")
+    if mouseClicked(id = left, rect = getWidgetBounds()):
+      infoText = diffTooltips[10]
+    checkbox(label = "", checked = randomSettings, tooltip = diffTooltips[10])
+    # Total gained points
+    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.7.cfloat, 0.3])
+    label(str = "Total gained points:")
+    label(str = $points & "%")
+
+proc startGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Start the new game
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  newGameSettings.playerGender = (if playerGender == 3: 'F' else: 'M')
+  if selectedGoal == "Random":
+    clearCurrentGoal()
+    currentGoal = try:
+        goalsList[getRandom(min = 1, max = goalsList.len)]
+      except:
+        try:
+          goalsList[getRandom(min = 1, max = goalsList.len)]
+        except:
+          dialog = setError(message = "Can't set the current goal.")
+          return
+  newGameSettings.playerName = playerName
+  newGameSettings.shipName = shipName
+  if currentFaction == playerFactions.high:
+    newGameSettings.playerFaction = "random"
   else:
-    try:
-      discard tclEval(script = comboBox & " set {" & careersList[
-          newGameSettings.playerCareer].name & "}")
-    except:
-      showError(message = "Can't set player's career")
-  comboBox = playerFrameName & ".base"
+    block setFaction:
+      for index, faction in factionsList:
+        if faction.name == playerFactions[currentFaction]:
+          newGameSettings.playerFaction = index
+          for key, career in faction.careers:
+            if career.name == playerCareers[currentCareer]:
+              newGameSettings.playerCareer = key
+              break setFaction
+  if currentCareer == playerCareers.high:
+    newGameSettings.playerCareer = "random"
+  newGameSettings.startingBase = "Any"
+  for index, baseType in basesTypesList:
+    if baseType.name == playerBases[currentBase]:
+      newGameSettings.startingBase = index
+      break
+  newGameSettings.difficultyLevel = currentLevel.DifficultyType
+  newGameSettings.enemyDamageBonus = diffSettings[0].float / 100.0
+  newGameSettings.playerDamageBonus = diffSettings[1].float / 100.0
+  newGameSettings.enemyMeleeDamageBonus = diffSettings[2].float / 100.0
+  newGameSettings.playerMeleeDamageBonus = diffSettings[3].float / 100.0
+  newGameSettings.experienceBonus = diffSettings[4].float / 100.0
+  newGameSettings.reputationBonus = diffSettings[5].float / 100.0
+  newGameSettings.upgradeCostBonus = diffSettings[6].float / 100.0
+  newGameSettings.pricesBonus = diffSettings[7].float / 100.0
   try:
-    discard tclEval(script = comboBox & " set " & (
-        if newGameSettings.startingBase == "Any": "Any" else: "{" &
-        basesTypesList[newGameSettings.startingBase].name & "}"))
+    newGame()
+    if debugMode == menu:
+      setDebugData()
   except:
-    showError(message = "Can't set starting base.")
-  const difficultyFrameName: string = ".newgamemenu.canvas.difficulty"
-  comboBox = difficultyFrameName & ".difficultylevel"
-  var spinBox: string = difficultyFrameName & ".enemydamage"
-  tclEval(script = spinBox & " set " & $((newGameSettings.enemyDamageBonus *
-      100.0).Natural))
-  spinBox = difficultyFrameName & ".playerdamage"
-  tclEval(script = spinBox & " set " & $((newGameSettings.playerDamageBonus *
-      100.0).Natural))
-  spinBox = difficultyFrameName & ".enemymeleedamage"
-  tclEval(script = spinBox & " set " & $((
-      newGameSettings.enemyMeleeDamageBonus * 100.0).Natural))
-  spinBox = difficultyFrameName & ".playermeleedamage"
-  tclEval(script = spinBox & " set " & $((
-      newGameSettings.playerMeleeDamageBonus * 100.0).Natural))
-  spinBox = difficultyFrameName & ".experience"
-  tclEval(script = spinBox & " set " & $((newGameSettings.experienceBonus *
-      100.0).Natural))
-  spinBox = difficultyFrameName & ".reputation"
-  tclEval(script = spinBox & " set " & $((newGameSettings.reputationBonus *
-      100.0).Natural))
-  spinBox = difficultyFrameName & ".upgrade"
-  tclEval(script = spinBox & " set " & $((newGameSettings.upgradeCostBonus *
-      100.0).Natural))
-  spinBox = difficultyFrameName & ".prices"
-  tclEval(script = spinBox & " set " & $((newGameSettings.pricesBonus *
-      100.0).Natural))
-  tclEval(script = "SetPoints")
-  tclEval(script = comboBox & " current " & $(
-      newGameSettings.difficultyLevel.ord))
-  tclEval(script = "event generate " & comboBox & " <<ComboboxSelected>>")
-  var button: string = ".newgamemenu.canvas.player.randomplayer"
-  tclEval(script = button & " configure -image randomicon")
-  button = ".newgamemenu.canvas.player.randomship"
-  tclEval(script = button & " configure -image randomicon")
-  button = ".newgamemenu.canvas.player.gender.male"
-  tclEval(script = button & " configure -image maleicon")
-  button = ".newgamemenu.canvas.player.gender.female"
-  tclEval(script = button & " configure -image femaleicon")
-  showMainMenu()
+    dialog = setError(message = "Can't start the new game.")
+
+proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Start the new game settings
+  ##
+  ## * state  - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  var editActive: bool = windowEditActive(name = "Main") or
+      windowPropertyActive(name = "Main")
+  changeStyle(field = spacing, x = 0, y = 0):
+    changeStyle(field = buttonRounding, value = 0):
+      layoutSpaceStatic(height = tabHeight, widgetsCount = 2):
+        var x: float = 200
+        const
+          tabs: array[2, string] = ["Player", "Difficulty"]
+          tabTooltips: array[2, string] = ["Show settings for your character.", "Show settings for the game difficulty."]
+        for index, tab in tabs:
+          try:
+            let
+              textWidth: float = getTextWidth(text = tab)
+              widgetWidth: float = textWidth + 15 * getButtonStyle(
+                  field = padding).x;
+            row(x = x, y = 0, w = widgetWidth, h = tabHeight):
+              if currentTab == index:
+                changeStyle(src = active, dest = normal):
+                  labelButton(title = tab, tooltip = tabTooltips[index]):
+                    discard
+              else:
+                labelButton(title = tab, tooltip = tabTooltips[index]):
+                  currentTab = index.cint
+                  infoText = (if index == 0: playerTooltips[
+                      8] else: diffTooltips[^1])
+            x += widgetWidth
+          except:
+            dialog = setError(message = "Can't set the tabs buttons.")
+  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 2):
+    row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
+      # Player settings
+      if currentTab == 0:
+        newGamePlayer(dialog = dialog)
+      # Difficulty settings
+      else:
+        newGameDifficulty()
+    let infoWidth: float = (menuWidth.float * 0.35)
+    row(x = (menuWidth.float * 0.65), y = 0, w = infoWidth, h = (menuHeight - 90).float):
+      fileLines = 3
+      for line in infoText.split(sep = "\n\n"):
+        var needLines: float = try:
+            ceil(x = getTextWidth(text = line) / (infoWidth - labelHeight - 10.0))
+          except:
+            dialog = setError(message = "Can't count the line height.")
+            return
+        if needLines < 1.0:
+          needLines = 1.0
+        fileLines += needLines.int
+      fileLines *= labelHeight.int
+      group(title = "Info", flags = {windowBorder, windowTitle}):
+        setLayoutRowDynamic(height = fileLines.float, cols = 1)
+        wrapLabel(str = infoText)
+  layoutSpaceStatic(height = buttonHeight, widgetsCount = 2):
+    row(x = 140, y = 0, w = 155, h = buttonHeight):
+      labelButton(title = "Start game", tooltip = "Start the game"):
+        startGame(dialog = dialog)
+        if dialog == none:
+          setGame(dialog = dialog)
+          if dialog == none:
+            state = map
+    row(x = 300.float, y = 0, w = 140, h = buttonHeight):
+      labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
+        state = mainMenu
+        return
+  if isKeyPressed(key = keyEscape) and not editActive:
+    if dialog == none:
+      state = mainMenu
+    else:
+      dialog = none
+
+proc backToMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Return to the game's main menu and set the game's state
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  setMainMenu(dialog = dialog)
+  showMainMenu(state = state, dialog = dialog)
+  state = mainMenu

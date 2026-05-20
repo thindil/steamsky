@@ -1,4 +1,4 @@
-# Copyright 2023-2026 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -13,1089 +13,1120 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+# along with Steam Sky.  if, see <http://www.gnu.org/licenses/>.
 
-## Provides code related to showing the main game's map, like drawing the map,
-## updating movement buttons, etc.
+## Provides code related to the game's main map, like, creating the game's UI,
+## etc.
 
-import std/[colors, os, parsecfg, streams, strutils, tables, unicode]
-import contracts
-import ../[bases, basestypes, config, game, log, maps, missions, statistics,
-    stories, tk, types]
-import coreui, dialogs, errordialog, themes, updateheader, utilsui2
+import std/[colors, math, strutils, tables, unicode]
+import contracts, nuklear/nuklear_sdl_renderer
+import ../[bases, basestypes, config, crew2, events2, game, game2, maps,
+    messages, missions, missions2, shipscrew, shipscargo, shipsmovement,
+    stories, types]
+import coreui, dialogs, errordialog, header, messagesui, themes, utilsui2
 
 var
-  mapView: string = ".gameframe.paned.mapframe.map"
-  menuAccelerators*: array[1..11, string] = ["s", "o", "r", "m", "k", "w",
-      "g", "F1", "p", "q", "x"]
-    ## The game menu keyboard shortcuts
-  mapAccelerators*: array[1..37, string] = ["e", "v", "plus", "minus",
-      "KP_Home", "KP_Up", "KP_Prior", "KP_Left", "KP_Begin", "KP_Right",
-      "KP_End", "KP_Down", "KP_Next", "KP_Divide", "Shift-Return", "Shift-h",
-      "Shift-KP_Home", "Shift-KP_Up", "Shift-KP_Prior", "Shift-KP_Left",
-      "Shift-KP_Right", "Shift-KP_End", "Shift-KP_Down", "Shift-KP_Next",
-      "Control-KP_Home", "Control-KP_Up", "Control-KP_Prior", "Control-KP_Left",
-      "Control-KP_Right", "Control-KP_End", "Control-KP_Down",
-      "Control-KP_Next", "Control-Return", "Control-a", "Control-b",
-      "Control-c", "Control-d"] ## The keyboard shortcuts used on the map
-  fullScreenAccel*: string = "Control-f" ## Keyboard shortcut for toggle full screen
-  defaultFontSizes*: array[3, Positive] = [10, 10, 10] ## The default sizes of fonts
+  centerX*: MapXRange = 1
+    ## The X coordinate of the center point of the map
+  centerY*: MapYRange = 1
+    ## The Y coordinate of the center point of the map
 
-proc updateMoveButtons*() {.raises: [], tags: [], contractual.} =
-  ## Update the player's ship movement buttons, depending on the state of the
-  ## ship
-  const
-    moveButtonsNames: array[8, string] = ["nw", "n", "ne", "w", "e", "sw", "s", "se"]
-    frameName: string = mainPaned & ".controls.buttons"
-    speedBox: string = frameName & ".box.speed"
-  var button: string = frameName & ".box.moveto"
-  if playerShip.speed == docked:
-    tclEval(script = "grid remove " & speedBox)
-    tclEval(script = "grid remove " & button)
-    button = frameName & ".wait"
-    tclEval(script = button & " configure -image waiticon")
-    tclEval(script = "tooltip::tooltip " & button & " \"Wait " &
-        $gameSettings.waitMinutes & " minute" & (if gameSettings.waitMinutes >
-        1: "s" else: "") & ".\"")
-    tclEval(script = "grid configure " & button & " -columnspan 3 -column 0 -row 1")
-    for buttonName in moveButtonsNames:
-      button = frameName & "." & buttonName
-      tclEval(script = "grid remove " & button)
-  else:
-    tclEval(script = speedBox & " current " & $(playerShip.speed.ord - 1))
-    tclEval(script = "grid " & speedBox)
-    if playerShip.destinationX > 0 and playerShip.destinationY > 0:
-      button = frameName & ".box.moveto"
-      tclEval(script = "grid " & button)
-      tclEval(script = "grid configure " & speedBox)
-      button = frameName & ".wait"
-      tclEval(script = button & " configure -image movestepicon")
-      tclEval(script = "tooltip::tooltip " & button & " \"Move ship one map field toward destination.\"")
-    else:
-      button = frameName & ".box.moveto"
-      tclEval(script = "grid remove " & button)
-      tclEval(script = "grid configure " & speedBox)
-      button = frameName & ".wait"
-      tclEval(script = button & " configure -image waiticon")
-      tclEval(script = "tooltip::tooltip " & button & " \"" & (
-          if gameSettings.waitMinutes == 1: "Wait 1 minute." else: "Wait " &
-          $gameSettings.waitMinutes & " minutes.") & "\"")
-    tclEval(script = "grid configure " & button & " -columnspan 1 -column 1 -row 2")
-    for index, name in moveButtonsNames:
-      button = frameName & "." & name
-      tclEval(script = "grid " & button)
-  button = frameName & ".box.orders"
-  if skyMap[playerShip.skyX][playerShip.skyY].eventIndex == -1 and skyMap[
-      playerShip.skyX][playerShip.skyY].baseIndex == 0:
-    tclEval(script = "grid remove " & button)
-  else:
-    tclEval(script = "grid " & button)
-
-proc finishStory*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
-  ## Finish the current player's story. Give experience and ask about
-  ## finishing the game
-  gameStats.points = gameStats.points + (10_000 * currentStory.maxSteps)
-  clearCurrentStory()
-  try:
-    showQuestion(question = storiesList[currentStory.index].endText &
-        " Do you want to finish the game?", res = "retire")
-  except KeyError:
-    showError(message = "Can't get the end text of the current story. Result: " &
-        tclGetResult2())
-
-proc showSkyMap*(clear: bool = false) {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect], contractual.} =
-  ## Show the sky map, draw the map, update the header, etc
+  ## Create the game's UI and show the map to the player
   ##
-  ## * clear - if true, remove the old subwindow and replace it with the one
-  ##           with the sky map
-  tclSetVar(varName = "refreshmap", newValue = "1")
-  if clear:
-    showScreen(newScreenName = "mapframe")
-  tclSetVar(varName = "gamestate", newValue = "general")
-  updateHeader()
-  if tclGetVar(varName = "refreshmap") == "1":
-    tclEval(script = "DrawMap")
-  updateMoveButtons()
-  tclEval(script = "update")
-  updateMessages()
-  if playerShip.speed != docked:
-    const speedBox: string = "$bframe.box.speed"
-    tclEval(script = "bind " & speedBox & " <<ComboboxSelected>> {}")
-    tclEval(script = speedBox & " current " & $(playerShip.speed.ord - 1))
-    tclEval(script = "bind " & speedBox &
-        " <<ComboboxSelected>> {SetShipSpeed [" & speedBox & " current]}")
-  if currentStory.index.len > 0 and currentStory.showText:
-    if currentStory.currentStep > -2:
-      try:
-        showInfo(text = getCurrentStoryText(), title = "Story")
-      except KeyError:
-        showError(message = "Can't show the story text.")
-    else:
-      finishStory()
-      if playerShip.crew[0].health == 0:
-        showQuestion(question = "You are dead. Would you like to see your game statistics?",
-            res = "showstats")
-    currentStory.showText = true
-
-proc showMission(currentTheme: ThemeRecord; mType: MissionsTypes): tuple[icon,
-    tag: string] {.raises: [], tags: [], contractual.} =
-  ## Show the mission info on the map, based on the missions' type
+  ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## * mType - the type of the mission
-  ##
-  ## Returns the tuple with icon and text tag for the selected mission
-  case mType
-  of deliver:
-    result.icon = currentTheme.deliverIcon
-    result.tag = "yellow"
-  of destroy:
-    result.icon = currentTheme.destroyIcon
-    result.tag = "red"
-  of patrol:
-    result.icon = currentTheme.patrolIcon
-    result.tag = "lime"
-  of explore:
-    result.icon = currentTheme.exploreIcon
-    result.tag = "green"
-  of passenger:
-    result.icon = currentTheme.passengerIcon
-    result.tag = "cyan"
-
-var preview: bool = false
-
-proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
-    contractual.} =
-  ## Draw the map on the screen
-  preview = (if tclGetVar(varName = "mappreview").len > 0: true else: false)
-  if preview and playerShip.speed != docked:
-    tclUnsetVar(varName = "mappreview")
-    preview = false
-  tclEval(script = mapView & " configure -state normal")
-  tclEval(script = mapView & " delete 1.0 end")
-  let
-    mapHeight: Positive = try:
-        tclEval2(script = mapView & " cget -height").parseInt()
-      except:
-        showError(message = "Can't get map height.")
-        return
-    mapWidth: Positive = try:
-        tclEval2(script = mapView & " cget -width").parseInt()
-      except:
-        showError(message = "Can't get map width.")
-        return
-  startX = centerX - (mapWidth / 2).int
-  startY = centerY - (mapHeight / 2).int
-  var
-    endY: int = centerY + (mapHeight / 2).int
-    endX: int = centerX + (mapWidth / 2).int
-    storyX: int = 1
-    storyY: int = 1
-  if startY < 1:
-    startY = 1
-    endY = mapHeight + 1
-  if startX < 1:
-    startX = 1
-    endX = mapWidth + 1
-  if endY > 1_024:
-    endY = 1_024
-    startY = 1_024 - mapHeight
-  if endX > 1_024:
-    endX = 1_024
-    startX = 1_025 - mapWidth
-  if currentStory.index.len > 0:
-    (storyX, storyY) = try:
-        getStoryLocation()
-      except:
-        showError(message = "Can't get the current story location.")
-        return
-    if storyX == playerShip.skyX and storyY == playerShip.skyY:
-      storyX = 0
-      storyY = 0
-  if playerShip.speed == docked and skyMap[playerShip.skyX][
-      playerShip.skyY].baseIndex == 0:
-    playerShip.speed = fullStop
-  let currentTheme: ThemeRecord = try:
-        themesList[gameSettings.interfaceTheme]
-      except:
-        showError(message = "Can't get the curernt game's theme.")
-        return
-  for y in startY..endY:
-    for x in startX..endX:
-      var mapTag, mapChar: string = ""
-      if x == playerShip.skyX and y == playerShip.skyY:
-        mapChar = currentTheme.playerShipIcon
-      else:
-        mapChar = currentTheme.emptyMapIcon
-        mapTag = (if skyMap[x][y].visited: "black" else: "unvisited gray")
-        if x == playerShip.destinationX and y == playerShip.destinationY:
-          mapChar = currentTheme.targetIcon
-          mapTag = (if skyMap[x][y].visited: "" else: "unvisited")
-        elif currentStory.index.len > 0 and (x == storyX and y == storyY):
-          mapChar = currentTheme.storyIcon
-          mapTag = "green"
-        elif skyMap[x][y].missionIndex > -1:
-          (mapChar, mapTag) = showMission(currentTheme = currentTheme,
-              mType = acceptedMissions[skyMap[x][y].missionIndex].mType)
-          if not skyMap[x][y].visited:
-            mapTag &= " unvisited"
-        elif skyMap[x][y].eventIndex > -1:
-          if skyMap[x][y].eventIndex > eventsList.high:
-            skyMap[x][y].eventIndex = -1
-          else:
-            case eventsList[skyMap[x][y].eventIndex].eType
-            of enemyShip:
-              mapChar = currentTheme.enemyShipIcon
-              mapTag = "red"
-            of attackOnBase:
-              mapChar = currentTheme.attackOnBaseIcon
-              mapTag = "red2"
-            of enemyPatrol:
-              mapChar = currentTheme.enemyPatrolIcon
-              mapTag = "red3"
-            of disease:
-              mapChar = currentTheme.diseaseIcon
-              mapTag = "yellow"
-            of fullDocks:
-              mapChar = currentTheme.fullDocksIcon
-              mapTag = "cyan"
-            of doublePrice:
-              mapChar = currentTheme.doublePriceIcon
-              mapTag = "lime"
-            of trader:
-              mapChar = currentTheme.traderIcon
-              mapTag = "green"
-            of friendlyShip:
-              mapChar = currentTheme.friendlyShipIcon
-              mapTag = "green2"
-            of EventsTypes.none, baseRecovery:
-              discard
-            if not skyMap[x][y].visited:
-              mapTag &= " unvisited"
-        elif skyMap[x][y].baseIndex > 0:
-          mapChar = currentTheme.notVisitedBaseIcon
-          if skyBases[skyMap[x][y].baseIndex].known:
-            if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
-              mapChar = try:
-                  factionsList[skyBases[skyMap[x][
-                      y].baseIndex].owner].baseIcon.Rune.toUTF8
-                except:
-                  showError(message = "Can't get the base icon.")
-                  return
-              mapTag = skyBases[skyMap[x][y].baseIndex].baseType
-            else:
-              mapTag = "unvisited"
-          else:
-            mapTag = "unvisited gray"
-      if preview:
-        for mission in skyBases[skyMap[playerShip.skyX][
-            playerShip.skyY].baseIndex].missions:
-          if mission.targetX == x and mission.targetY == y:
-            (mapChar, mapTag) = showMission(currentTheme = currentTheme,
-                mType = mission.mType)
-            if not skyMap[x][y].visited:
-              mapTag &= " unvisited"
-            break
-      tclEval(script = mapView & " insert end {" & mapChar & "} [list " &
-          mapTag & "]")
-    if y < endY:
-      tclEval(script = mapView & " insert end {\n}")
-  tclEval(script = mapView & " configure -state disable")
-
-proc updateMapInfo*(x: Positive = playerShip.skyX;
-    y: Positive = playerShip.skyY) {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], contractual.} =
-  ## Update frame with information about the map cell on which the player
-  ## currently points.
-  ##
-  ## * x - the X coordinate of the map's cell
-  ## * y - the Y coordinate of the map's cell
-  const mapInfo: string = mainPaned & ".mapframe.info"
-  tclEval(script = mapInfo & " configure -state normal")
-  tclEval(script = mapInfo & " delete 1.0 end")
-  var width: int = 1
-
-  proc insertText(newText: string; tagName: string = "") {.raises: [], tags: [],
-      contractual.} =
-    ## Insert a text into the map info
-    ##
-    ## newText - the text to insert
-    ## tagName - the text's tag to add to the text in the info widget
-    if newText.len > width:
-      width = newText.len
-    if width > 21:
-      width = 21
-    tclEval(script = mapInfo & " insert end {" & newText & "}" & (
-        if tagName.len == 0: "" else: " [list " & tagName & "]"))
-
-  insertText(newText = "X:")
-  insertText(newText = " " & $x, tagName = "yellow2")
-  insertText(newText = " Y:")
-  insertText(newText = " " & $y, tagName = "yellow2")
-  if playerShip.skyX != x or playerShip.skyY != y:
-    let
-      distance: Natural = countDistance(destinationX = x, destinationY = y)
-      travelValues: TravelArray = travelInfo(distance = distance)
-    insertText(newText = "\nDistance: ")
-    insertText(newText = $distance, tagName = "yellow2")
-    if travelValues[1] > 0:
-      insertText(newText = "\nETA:")
-      var distanceText: string = ""
-      minutesToDate(minutes = travelValues[1], infoText = distanceText)
-      insertText(newText = distanceText, tagName = "yellow2")
-      insertText(newText = "\nApprox fuel usage: ")
-      insertText(newText = $travelValues[2], tagName = "yellow2")
-  if skyMap[x][y].baseIndex > 0:
-    let baseIndex: Positive = skyMap[x][y].baseIndex
-    if skyBases[baseIndex].known:
-      insertText(newText = "\nBase info:", tagName = "pink underline")
-      insertText(newText = "\nName: ")
-      insertText(newText = skyBases[baseIndex].name, tagName = "yellow2")
-    if skyBases[baseIndex].visited.year > 0:
-      try:
-        discard tclEval(script = mapInfo &
-            " tag configure basetype -foreground " & $basesTypesList[skyBases[
-                baseIndex].baseType].color)
-      except:
-        showError(message = "Can't get the color of the base's type.")
-        return
-      insertText(newText = "\nType: ")
-      try:
-        insertText(newText = basesTypesList[skyBases[baseIndex].baseType].name,
-            tagName = "basetype")
-      except:
-        showError(message = "Can't get the name of the base's type.")
-        return
-      let population: BasePopulation = getBasePopulation(baseIndex = baseIndex)
-      if population > empty:
-        insertText(newText = "\nPopulation: ")
-        insertText(newText = $population, tagName = "yellow2")
-      insertText(newText = "\nSize: ")
-      insertText(newText = $skyBases[baseIndex].size & "\n",
-          tagName = "yellow2")
-      if population > empty:
-        insertText(newText = "Owner: ")
-        try:
-          insertText(newText = factionsList[skyBases[baseIndex].owner].name,
-              tagName = "yellow2")
-        except:
-          showError(message = "Can't get the name of the owner's faction.")
-          return
-      else:
-        insertText(newText = "Base is abandoned")
-      if population > empty:
-        var
-          baseInfoText: string = "\n"
-          color: string = ""
-        case skyBases[baseIndex].reputation.level
-        of -100.. -75:
-          baseInfoText &= "You are hated here"
-          color = "red"
-        of -74.. -50:
-          baseInfoText &= "You are outlawed here"
-          color = "red"
-        of -49.. -25:
-          baseInfoText &= "You are disliked here"
-          color = "red"
-        of -24.. -1:
-          baseInfoText &= "They are unfriendly to you"
-          color = "red"
-        of 0:
-          baseInfoText &= "You are unknown here"
-        of 1..25:
-          baseInfoText &= "You are know here as visitor"
-          color = "green"
-        of 26..50:
-          baseInfoText &= "You are know here as trader"
-          color = "green"
-        of 51..75:
-          baseInfoText &= "You are know here as friend"
-          color = "green"
-        of 76..100:
-          baseInfoText &= "You are well known here"
-          color = "green"
-        insertText(newText = baseInfoText, tagName = color)
-      if baseIndex == playerShip.homeBase:
-        insertText(newText = "\nIt is your home base", tagName = "cyan")
-  if skyMap[x][y].missionIndex > -1:
-    var missionInfoText: string = "\n"
-    if skyMap[x][y].baseIndex > 0 or skyMap[x][y].eventIndex > -1:
-      missionInfoText &= "\n"
-    let missionIndex: int = skyMap[x][y].missionIndex
-    case acceptedMissions[missionIndex].mType
-    of deliver:
-      try:
-        missionInfoText &= "Deliver " & itemsList[
-            acceptedMissions[missionIndex].itemIndex].name
-      except:
-        showError(message = "Can't get the name of the item to deliver.")
-        return
-    of destroy:
-      try:
-        missionInfoText &= "Destroy " & protoShipsList[
-            acceptedMissions[missionIndex].shipIndex].name
-      except:
-        showError(message = "Can't get the name of the ship to destroy.")
-        return
-    of patrol:
-      missionInfoText &= "Patrol area"
-    of explore:
-      missionInfoText &= "Explore area"
-    of passenger:
-      missionInfoText &= "Transport passenger"
-    insertText(newText = missionInfoText)
-  if preview:
-    for mission in skyBases[skyMap[playerShip.skyX][
-        playerShip.skyY].baseIndex].missions:
-      if mission.targetX == x and mission.targetY == y:
-        var missionInfoText: string = "\n"
-        if skyMap[x][y].baseIndex > 0 or skyMap[x][y].eventIndex > -1:
-          missionInfoText &= "\n"
-        case mission.mType
-        of deliver:
-          try:
-            missionInfoText &= "Deliver " & itemsList[mission.itemIndex].name
-          except:
-            showError(message = "Can't get the name of the item to deliver.")
-            return
-        of destroy:
-          try:
-            missionInfoText &= "Destroy " & protoShipsList[
-                mission.shipIndex].name
-          except:
-            showError(message = "Can't get the name of the ship to destroy.")
-            return
-        of patrol:
-          missionInfoText &= "Patrol area"
-        of explore:
-          missionInfoText &= "Explore area"
-        of passenger:
-          missionInfoText &= "Transport passenger"
-        insertText(newText = missionInfoText)
-  if currentStory.index.len > 0:
-    var storyX, storyY: Natural = 1
+  ## Returns parameter dialog, modified if any error happened.
+  if images[menuIcon] == nil:
+    # Load images
     try:
-      (storyX, storyY) = getStoryLocation()
+      for index, fileName in themesList[gameSettings.interfaceTheme].icons[
+          menuIcon..IconsNames.high]:
+        images[(index + 4).IconsNames] = nuklearLoadSVGImage(
+            filePath = fileName, width = 0, height = 20 +
+            gameSettings.interfaceFontSize)
     except:
-      showError(message = "Can't get the location of the current story.")
-      return
-    if storyX == playerShip.skyX and storyY == playerShip.skyY:
-      storyX = 0
-      storyY = 0
-    var finishCondition: StepConditionType = any
-    if y == storyX and y == storyY:
-      try:
+      dialog = setError(message = "Can't set the game's images.")
+  centerX = playerShip.skyX
+  centerY = playerShip.skyY
+  mapPreview = false
+
+var mapInfoX: float = (windowWidth - 240.0)
+
+proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange) {.raises: [
+    ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show the map cell info popup
+  ##
+  ## * theme    - the current game's theme
+  ## * mapXInfo - the X coordinate of the map cell to show the info
+  ## * mapYInfo - the Y coordinate of the map cell to show the info
+  nuklearSetDefaultFont(defaultFont = fonts[UIFont],
+      fontSize = gameSettings.interfaceFontSize + 10)
+  tooltip(x = mapInfoX, y = 45, width = 230):
+    if windowIsHovered():
+      if mapInfoX == 10:
+        mapInfoX = (windowWidth - 240.0)
+      else:
+        mapInfoX = 10
+    layoutStatic(height = 25, cols = 4):
+      row(width = 20):
+        label(str = "X:")
+      row(width = 80):
+        colorLabel(str = $mapXInfo, color = theme.mapColors[mapGoldenYellow])
+      row(width = 20):
+        label(str = "Y:")
+      row(width = 80):
+        colorLabel(str = $mapYInfo, color = theme.mapColors[mapGoldenYellow])
+    if playerShip.skyX != mapXInfo or playerShip.skyY != mapYInfo:
+      let
+        distance: Natural = countDistance(destinationX = mapXInfo,
+            destinationY = mapYInfo)
+        travelValues: TravelArray = travelInfo(distance = distance)
+      layoutStatic(height = 25, cols = 2):
+        row(width = 80):
+          label(str = "Distance:")
+        row(width = 100):
+          colorLabel(str = $distance, color = theme.mapColors[mapGoldenYellow])
+      if travelValues[1] > 0:
+        layoutStatic(height = 25, cols = 2):
+          row(width = 50):
+            label(str = "ETA:")
+          row(width = 180):
+            var distanceText: string = ""
+            minutesToDate(minutes = travelValues[1], infoText = distanceText)
+            colorLabel(str = distanceText, color = theme.mapColors[mapGoldenYellow])
+          row(width = 160):
+            label(str = "Approx fuel usage:")
+          row(width = 70):
+            colorLabel(str = $travelValues[2], color = theme.mapColors[mapGoldenYellow])
+    if skyMap[mapXInfo][mapYInfo].baseIndex > 0:
+      let baseIndex: Positive = skyMap[mapXInfo][mapYInfo].baseIndex
+      if skyBases[baseIndex].known:
+        setLayoutRowDynamic(height = 25, cols = 1)
+        colorLabel(str = "Base info:", color = theme.mapColors[mapPinkColor])
+        layoutStatic(height = 25, cols = 2):
+          row(width = 60):
+            label(str = "Name:")
+          row(width = 170):
+            colorLabel(str = skyBases[baseIndex].name, color = theme.mapColors[mapGoldenYellow])
+          if skyBases[baseIndex].visited.year > 0:
+            row(width = 60):
+              label(str = "Type:")
+            row(width = 170):
+              colorLabel(str = basesTypesList[skyBases[
+                  baseIndex].baseType].name, color = basesTypesList[skyBases[
+                  baseIndex].baseType].color)
+            if getBasePopulation(baseIndex = baseIndex) == empty:
+              row(width = 230):
+                label(str = "Base is abandoned")
+            else:
+              row(width = 100):
+                label(str = "Population:")
+              row(width = 130):
+                colorLabel(str = $getBasePopulation(baseIndex = baseIndex),
+                    color = theme.mapColors[mapGoldenYellow])
+            row(width = 60):
+              label(str = "Size:")
+            row(width = 170):
+              colorLabel(str = $skyBases[baseIndex].size,
+                  color = theme.mapColors[mapGoldenYellow])
+            if getBasePopulation(baseIndex = baseIndex) > empty:
+              row(width = 70):
+                label(str = "Owner:")
+              row(width = 160):
+                colorLabel(str = factionsList[skyBases[baseIndex].owner].name,
+                    color = theme.mapColors[mapGoldenYellow])
+        setLayoutRowDynamic(height = 25, cols = 1)
+        if getBasePopulation(baseIndex = baseIndex) > empty and skyBases[
+            baseIndex].visited.year > 0:
+          case skyBases[baseIndex].reputation.level
+          of -100 .. -75:
+            colorLabel(str = "You are hated here", color = theme.mapColors[mapRedColor])
+          of -74 .. -50:
+            colorLabel(str = "You are outlawed here", color = theme.mapColors[mapRedColor])
+          of -49 .. -25:
+            colorLabel(str = "You are disliked here", color = theme.mapColors[mapRedColor])
+          of -24 .. -1:
+            colorLabel(str = "They are unfriendly to you",
+                color = theme.mapColors[mapRedColor])
+          of 0:
+            label(str = "You are unknown here")
+          of 1..25:
+            colorLabel(str = "You are know here as visitor",
+                color = theme.mapColors[mapGreenColor])
+          of 26..50:
+            colorLabel(str = "You are know here as trader",
+                color = theme.mapColors[mapGreenColor])
+          of 51..75:
+            colorLabel(str = "You are know here as friend",
+                color = theme.mapColors[mapGreenColor])
+          of 76..100:
+            colorLabel(str = "You are well known here", color = theme.mapColors[mapGreenColor])
+        if baseIndex == playerShip.homeBase:
+          colorLabel(str = "It is your home base", color = theme.mapColors[mapCyanColor])
+    if skyMap[mapXInfo][mapYInfo].missionIndex > -1:
+      setLayoutRowDynamic(height = 25, cols = 1)
+      let missionIndex: int = skyMap[mapXInfo][mapYInfo].missionIndex
+      case acceptedMissions[missionIndex].mType
+      of deliver:
+        label(str = "Deliver " & itemsList[acceptedMissions[
+            missionIndex].itemIndex].name)
+      of destroy:
+        label(str = "Destroy " & protoShipsList[acceptedMissions[
+            missionIndex].shipIndex].name)
+      of patrol:
+        label(str = "Patrol area")
+      of explore:
+        label(str = "Explore area")
+      of passenger:
+        label(str = "Transport passenger")
+    if mapPreview:
+      for mission in skyBases[skyMap[playerShip.skyX][
+          playerShip.skyY].baseIndex].missions:
+        if mission.targetX == mapXInfo and mission.targetY == mapYInfo:
+          setLayoutRowDynamic(height = 50, cols = 1)
+          case mission.mType
+          of deliver:
+            wrapLabel(str = "Deliver " & itemsList[mission.itemIndex].name)
+          of destroy:
+            wrapLabel(str = "Destroy " & protoShipsList[mission.shipIndex].name)
+          of patrol:
+            label(str = "Patrol area")
+          of explore:
+            label(str = "Explore area")
+          of passenger:
+            label(str = "Transport passenger")
+          break
+    if currentStory.index.len > 0:
+      var storyX, storyY: Natural = 1
+      (storyX, storyY) = getStoryLocation()
+      if storyX == playerShip.skyX and storyY == playerShip.skyY:
+        storyX = 0
+        storyY = 0
+      var finishCondition: StepConditionType = any
+      if mapXInfo == storyX and mapYInfo == storyY:
         finishCondition = (if currentStory.currentStep == 0: storiesList[
             currentStory.index].startingStep.finishCondition elif currentStory.currentStep >
             0: storiesList[currentStory.index].steps[
             currentStory.currentStep].finishCondition else: storiesList[
             currentStory.index].finalStep.finishCondition)
         if finishCondition in {askInBase, destroyShip, explore}:
-          insertText(newText = "\nStory leads you here")
-      except:
-        showError(message = "Can't get the finish condition of the current story.")
-        return
-  if x == playerShip.skyX and y == playerShip.skyY:
-    insertText(newText = "\nYou are here", tagName = "yellow")
-  if skyMap[x][y].eventIndex > -1:
-    let eventIndex: Natural = skyMap[x][y].eventIndex
-    var eventInfoText: string = ""
-    if eventsList[eventIndex].eType notin {baseRecovery, EventsTypes.none}:
-      eventInfoText = "\n\n"
-    var color: string = ""
-    case eventsList[eventIndex].eType
-    of trader:
-      try:
-        eventInfoText &= protoShipsList[eventsList[
-            eventIndex].shipIndex].name
-      except:
-        showError(message = "Can't get the name of the trader's ship for the event.")
-        return
-      color = "green"
-    of friendlyShip:
-      try:
-        eventInfoText &= protoShipsList[eventsList[
-            eventIndex].shipIndex].name
-      except:
-        showError(message = "Can't get the name of the friendly ship for the event.")
-        return
-      color = "green2"
-    of enemyShip:
-      try:
-        eventInfoText &= protoShipsList[eventsList[
-            eventIndex].shipIndex].name
-      except:
-        showError(message = "Can't get the name of the enemy's ship for the event.")
-        return
-      color = "red"
-    of fullDocks:
-      eventInfoText &= "Full docks in base"
-      color = "cyan"
-    of attackOnBase:
-      eventInfoText &= "Base is under attack"
-      color = "red"
-    of disease:
-      eventInfoText &= "Disease in base"
-      color = "yellow"
-    of enemyPatrol:
-      eventInfoText &= "Enemy patrol"
-      color = "red3"
-    of doublePrice:
-      try:
-        eventInfoText &= "Double price for " & itemsList[
-            eventsList[eventIndex].itemIndex].name
-      except:
-        showError(message = "Can't get the name of the item for the event.")
-        return
-      color = "lime"
-    of EventsTypes.none, baseRecovery:
-      discard
-    insertText(newText = eventInfoText, tagName = color)
-  tclEval(script = mapInfo & " configure -state disabled -width " & $width &
-      " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
+          setLayoutRowDynamic(height = 25, cols = 1)
+          label(str = "Story leads you here")
+    if mapXInfo == playerShip.skyX and mapYInfo == playerShip.skyY:
+      setLayoutRowDynamic(height = 25, cols = 1)
+      colorLabel(str = "You are here", color = theme.mapColors[mapYellowColor])
+    if skyMap[mapXInfo][mapYInfo].eventIndex > -1:
+      setLayoutRowDynamic(height = 25, cols = 1)
+      let eventIndex: Natural = skyMap[mapXInfo][mapYInfo].eventIndex
+      label(str = "")
+      case eventsList[eventIndex].eType
+      of trader:
+        colorLabel(str = protoShipsList[eventsList[eventIndex].shipIndex].name,
+            color = theme.mapColors[mapGreenColor])
+      of friendlyShip:
+        colorLabel(str = protoShipsList[eventsList[eventIndex].shipIndex].name,
+            color = theme.mapColors[mapGreen2Color])
+      of enemyShip:
+        colorLabel(str = protoShipsList[eventsList[eventIndex].shipIndex].name,
+            color = theme.mapColors[mapRedColor])
+      of fullDocks:
+        colorLabel(str = "Full docks in base", color = theme.mapColors[mapCyanColor])
+      of attackOnBase:
+        colorLabel(str = "Base is under attack", color = theme.mapColors[mapRedColor])
+      of disease:
+        colorLabel(str = "Disease in base", color = theme.mapColors[mapYellowColor])
+      of enemyPatrol:
+        colorLabel(str = "Enemy patrol", color = theme.mapColors[mapRed3Color])
+      of doublePrice:
+        colorLabel(str = "Double price for " & itemsList[eventsList[
+            eventIndex].itemIndex].name, color = theme.mapColors[mapLimeColor])
+      of EventsTypes.none, baseRecovery:
+        discard
+  nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
+      fontSize = gameSettings.mapFontSize + 10)
 
-proc setKeys*() {.raises: [], tags: [], contractual.} =
-  ## Set the keyboard shortcuts for the map
-  const tclCommandsArray: array[37, string] = [
-    "{if {[winfo class [focus]] != {TEntry} && [tk busy status " & gameHeader &
-      "] == 0} {ShowGameMenu}}", "{" & mainPaned &
-      ".mapframe.buttons.wait invoke}", "{ZoomMap raise}", "{ZoomMap lower}",
-      "{InvokeButton $bframe.nw}", "{InvokeButton $bframe.n}",
-      "{InvokeButton $bframe.ne}", "{InvokeButton $bframe.w}",
-      "{InvokeButton $bframe.wait}", "{InvokeButton $bframe.e}",
-      "{InvokeButton $bframe.sw}", "{InvokeButton $bframe.s}",
-      "{InvokeButton $bframe.se}", "{InvokeButton $bframe.box.moveto}",
-      "{MoveMap centeronship}", "{MoveMap centeronhome}", "{MoveMap nw}",
-      "{MoveMap n}", "{MoveMap ne}", "{MoveMap w}", "{MoveMap e}",
-      "{MoveMap sw}", "{MoveMap s}", "{MoveMap se}", "{MoveCursor nw %x %y}",
-      "{MoveCursor n %x %y}", "{MoveCursor ne %x %y}", "{MoveCursor w %x %y}",
-      "{MoveCursor e %x %y}", "{MoveCursor sw %x %y}", "{MoveCursor s %x %y}",
-      "{MoveCursor se %x %y}", "{MoveCursor click %x %y}", "{" & mainPaned &
-      ".controls.buttons.box.speed current 0}", "{" & mainPaned &
-      ".controls.buttons.box.speed current 1}", "{" & mainPaned &
-      ".controls.buttons.box.speed current 2}", "{" & mainPaned & ".controls.buttons.box.speed current 3}"]
-  for index, command in tclCommandsArray:
-    var
-      pos: int = mapAccelerators[index + 1].rfind(sub = '-')
-      keyName: string = ""
-    if pos > -1:
-      keyName = mapAccelerators[index + 1][0..pos] & "KeyPress-" &
-          mapAccelerators[index + 1][pos + 1 .. ^1]
-    else:
-      keyName = "KeyPress-" & mapAccelerators[index + 1]
-    tclEval(script = "bind . <" & keyName & "> " & command)
-  var
-    pos: int = fullScreenAccel.rfind(sub = '-')
-    keyName: string = ""
-  if pos > -1:
-    keyName = fullScreenAccel[0..pos] & "KeyPress-" & fullScreenAccel[pos +
-        1 .. ^1]
-  else:
-    keyName = "KeyPress-" & fullScreenAccel
-  tclEval(script = "bind . <" & keyName & "> {ToggleFullScreen}")
+var
+  moveX: MapXRange = 1
+  moveY: MapYRange = 1
+  rows, cols: Positive = 1
 
-import basesui, baseslootui, basesrecruitui, basesschoolui, basesshipyardui,
-    craftsui, debugui, gameoptions, helpui, knowledge, mapsuicommands,
-    messagesui, missionsui, ordersmenu, shipsui, statisticsui, tradesui, waitmenu
+type
+  MapDirections = enum
+    north, northeast, east, southeast, south, southwest, west, northwest
 
-proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
-    ReadIOEffect, RootEffect], contractual.} =
-  ## Create the game UI and show sky map to the player
+proc moveMap(direction: MapDirections) {.raises: [], tags: [], contractual.} =
+  ## Move the map in the selected direction
+  ##
+  ## * direction - the direction in which the map will be moved
+  case direction
+  of north:
+    centerY = (if centerY - (rows / 3).int < 1: (rows /
+        3).int else: centerY - (rows / 3).int)
+  of northeast:
+    centerY = (if centerY - (rows / 3).int < 1: (rows /
+        3).int else: centerY - (rows / 3).int)
+    centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+        3).int else: centerX + (cols / 3).int)
+  of east:
+    centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+        3).int else: centerX + (cols / 3).int)
+  of southeast:
+    centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+        3).int else: centerY + (rows / 3).int)
+    centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+        3).int else: centerX + (cols / 3).int)
+  of south:
+    centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+        3).int else: centerY + (rows / 3).int)
+  of southwest:
+    centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+        3).int else: centerY + (rows / 3).int)
+    centerX = (if centerX - (cols / 3).int < 1: (cols /
+        3).int else: centerX - (cols / 3).int)
+  of west:
+    centerX = (if centerX - (cols / 3).int < 1: (cols /
+        3).int else: centerX - (cols / 3).int)
+  of northwest:
+    centerY = (if centerY - (rows / 3).int < 1: (rows /
+        3).int else: centerY - (rows / 3).int)
+    centerX = (if centerX - (cols / 3).int < 1: (cols /
+        3).int else: centerX - (cols / 3).int)
+
+proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Show the map's menu
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
+
+  proc closeMapMenu(dialog: var GameDialog) {.raises: [], tags: [],
+      contractual.} =
+    ## Close the menu, reset the position form
+    ## * dialog - the current in-game dialog displayed on the screen
+    ##
+    ## Returns the modified parameters dialog.
+    moveX = 1
+    moveY = 1
+    dialog = none
+
   const
-    gameFrame: string = ".gameframe"
-    paned: string = gameFrame & ".paned"
-  mapView = paned & ".mapframe.map"
-  var newStart: bool = false
-  if tclEval2(script = "winfo exists " & mapView) == "0":
-    newStart = true
-    let fileName: string = saveDirectory.string & "keys.cfg"
-    var configFile: FileStream = newFileStream(filename = fileName)
-    if configFile == nil:
-      if DirSep == '\\':
-        mapAccelerators[5] = "Home"
-        mapAccelerators[6] = "Up"
-        mapAccelerators[7] = "Prior"
-        mapAccelerators[8] = "Left"
-        mapAccelerators[9] = "Clear"
-        mapAccelerators[10] = "Right"
-        mapAccelerators[11] = "End"
-        mapAccelerators[12] = "Down"
-        mapAccelerators[13] = "Next"
-        mapAccelerators[14] = "slash"
-        mapAccelerators[17] = "Shift-Home"
-        mapAccelerators[18] = "Shift-Up"
-        mapAccelerators[19] = "Shift-Prior"
-        mapAccelerators[20] = "Shift-Left"
-        mapAccelerators[21] = "Shift-Right"
-        mapAccelerators[22] = "Shift-End"
-        mapAccelerators[23] = "Shift-Down"
-        mapAccelerators[24] = "Shift-Next"
-        mapAccelerators[25] = "Control-Home"
-        mapAccelerators[26] = "Control-Up"
-        mapAccelerators[27] = "Control-Prior"
-        mapAccelerators[28] = "Control-Left"
-        mapAccelerators[29] = "Control-Right"
-        mapAccelerators[30] = "Control-End"
-        mapAccelerators[31] = "Control-Down"
-        mapAccelerators[32] = "Control-Next"
-    else:
-      var parser: CfgParser = CfgParser()
-      try:
-        parser.open(input = configFile, filename = fileName)
+    width: float = 540
+    height: float = 200
+    windowName: string = "Map Menu"
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY,
+      w = width, h = height, flags = {windowBorder, windowTitle,
+          windowNoScrollbar, windowMovable}):
+    setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35,
+        135, 230])
+    imageButton(image = images[arrowUpLeft]):
+      moveMap(direction = northwest)
+    imageButton(image = images[arrowUp]):
+      moveMap(direction = north)
+    imageButton(image = images[arrowUpRight]):
+      moveMap(direction = northeast)
+    label(str = "X:")
+    property(name = "#", min = MapXRange.low, val = moveX,
+        max = MapXRange.high, step = 1, incPerPixel = 1)
+    labelButton(title = "Center map on ship"):
+      centerX = playerShip.skyX
+      centerY = playerShip.skyY
+      closeMapMenu(dialog = dialog)
+    imageButton(image = images[arrowLeft]):
+      moveMap(direction = west)
+    label(str = "")
+    imageButton(image = images[arrowRight]):
+      moveMap(direction = east)
+    label(str = "Y:")
+    property(name = "#", min = MapYRange.low, val = moveY,
+        max = MapYRange.high, step = 1, incPerPixel = 1)
+    labelButton(title = "Center map on home base"):
+      centerX = skyBases[playerShip.homeBase].skyX
+      centerY = skyBases[playerShip.homeBase].skyY
+      closeMapMenu(dialog = dialog)
+    setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 230])
+    imageButton(image = images[arrowDownLeft]):
+      moveMap(direction = southwest)
+    imageButton(image = images[arrowDown]):
+      moveMap(direction = south)
+    imageButton(image = images[arrowDownRight]):
+      moveMap(direction = southeast)
+    labelButton(title = "Move map"):
+      centerX = moveX
+      centerY = moveY
+      closeMapMenu(dialog = dialog)
+    labelButton(title = "Close"):
+      closeMapMenu(dialog = dialog)
+
+  windowSetFocus(name = windowName)
+
+proc updateCoordinates(newX, newY: var int) {.raises: [], tags: [],
+    contractual.} =
+  ## Update the new coordinates after move the player's ship
+  ##
+  ## * newX - the difference on X axis for the player's ship position
+  ## * newY - the difference on Y axis for the player's ship position
+  ##
+  ## Returns modified parameters newX and newY
+  if playerShip.destinationX > playerShip.skyX:
+    newX = 1
+  elif playerShip.destinationX < playerShip.skyX:
+    newX = -1
+  if playerShip.destinationY > playerShip.skyY:
+    newY = 1
+  elif playerShip.destinationY < playerShip.skyY:
+    newY = -1
+
+proc moveShipToDestination(dialog: var GameDialog): Natural {.raises: [],
+  tags: [RootEffect], contractual.} =
+  ## Move the player's ship on the map
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog and the result's code of the
+  ## movement.
+  result = 0
+  while true:
+    var
+      newX, newY: int = 0
+      message: string = ""
+    updateCoordinates(newX = newX, newY = newY)
+    result = try:
+        moveShip(x = newX, y = newY, message = message)
       except:
-        showError(message = "Can't open the shortcut's configuration file.")
+        dialog = setError(message = "Can't move the ship.")
         return
-      while true:
-        var entry: CfgEvent = try:
-            parser.next
+    if result == 0:
+      break
+    var startsCombat: bool = try:
+        checkForEvent()
+      except:
+        dialog = setError(message = "Can't check for events.")
+        return
+    if startsCombat:
+      result = 4
+      break
+    if result == 8:
+      try:
+        waitForRest()
+      except:
+        dialog = setError(message = "Can't wait for rest of the crew.")
+        return
+      try:
+        if "sentientships" notin factionsList[playerShip.crew[
+            0].faction].flags and (findMember(order = pilot) == -1 or
+            findMember(order = engineer) == 0):
+          try:
+            waitForRest()
           except:
-            showError(message = "Can't get next shortcut setting.")
+            dialog = setError(message = "Can't wait for rest of the crew.")
             return
-        case entry.kind
-          of cfgEof:
-            break
-          of cfgSectionStart, cfgOption:
-            discard
-          of cfgKeyValuePair:
-            case entry.key
-            of "ShipInfo":
-              menuAccelerators[1] = entry.value
-            of "Orders":
-              menuAccelerators[2] = entry.value
-            of "Crafting":
-              menuAccelerators[3] = entry.value
-            of "LastMessages":
-              menuAccelerators[4] = entry.value
-            of "Knowledge":
-              menuAccelerators[5] = entry.value
-            of "WaitOrders":
-              menuAccelerators[6] = entry.value
-            of "GameStats":
-              menuAccelerators[7] = entry.value
-            of "Help":
-              menuAccelerators[8] = entry.value
-            of "GameOptions":
-              menuAccelerators[9] = entry.value
-            of "Quit":
-              menuAccelerators[10] = entry.value
-            of "Resign":
-              menuAccelerators[11] = entry.value
-            of "GameMenu":
-              mapAccelerators[1] = entry.value
-            of "MapOptions":
-              mapAccelerators[2] = entry.value
-            of "ZoomInMap":
-              mapAccelerators[3] = entry.value
-            of "ZoomOutMap":
-              mapAccelerators[4] = entry.value
-            of "MoveUpLeft":
-              mapAccelerators[5] = entry.value
-            of "MoveUp":
-              mapAccelerators[6] = entry.value
-            of "MoveUpRight":
-              mapAccelerators[7] = entry.value
-            of "MoveLeft":
-              mapAccelerators[8] = entry.value
-            of "WaitInPlace":
-              mapAccelerators[10] = entry.value
-            of "MoveRight":
-              mapAccelerators[9] = entry.value
-            of "MoveDownLeft":
-              mapAccelerators[11] = entry.value
-            of "MoveDown":
-              mapAccelerators[12] = entry.value
-            of "MoveDownRight":
-              mapAccelerators[13] = entry.value
-            of "MoveTo":
-              mapAccelerators[14] = entry.value
-            of "CenterMap":
-              mapAccelerators[15] = entry.value
-            of "CenterMapOnHomeBase":
-              mapAccelerators[16] = entry.value
-            of "MoveMapUpLeft":
-              mapAccelerators[17] = entry.value
-            of "MoveMapUp":
-              mapAccelerators[18] = entry.value
-            of "MoveMapUpRight":
-              mapAccelerators[19] = entry.value
-            of "MoveMapLeft":
-              mapAccelerators[20] = entry.value
-            of "MoveMapRight":
-              mapAccelerators[21] = entry.value
-            of "MoveMapDownLeft":
-              mapAccelerators[22] = entry.value
-            of "MoveMapDown":
-              mapAccelerators[23] = entry.value
-            of "MoveMapDownRight":
-              mapAccelerators[24] = entry.value
-            of "MoveCursorUpLeft":
-              mapAccelerators[25] = entry.value
-            of "MoveCursorUp":
-              mapAccelerators[26] = entry.value
-            of "MoveCursorUpRight":
-              mapAccelerators[27] = entry.value
-            of "MoveCursorLeft":
-              mapAccelerators[28] = entry.value
-            of "MoveCursorRight":
-              mapAccelerators[29] = entry.value
-            of "MoveCursorDownLeft":
-              mapAccelerators[30] = entry.value
-            of "MoveCursorDown":
-              mapAccelerators[31] = entry.value
-            of "MoveCursorDownRight":
-              mapAccelerators[32] = entry.value
-            of "LeftClickMouse":
-              mapAccelerators[33] = entry.value
-            of "FullStop":
-              mapAccelerators[34] = entry.value
-            of "QuarterSpeed":
-              mapAccelerators[35] = entry.value
-            of "HalfSpeed":
-              mapAccelerators[36] = entry.value
-            of "FullSpeed":
-              mapAccelerators[37] = entry.value
-            of "FullScreen":
-              fullScreenAccel = entry.value
-          of cfgError:
-            showError(message = "Can't set keyboard shortcuts. Message: " & entry.msg)
-      try:
-        parser.close()
       except:
-        showError(message = "Can't close the shortcuts' configuration file.")
+        dialog = setError(message = "Can't check do faction has sentientships flag.")
         return
-    mapsuicommands.addCommands()
-    tclEval(script = """
-      pack [ttk::frame .gameframe -style Main.TFrame] -fill both -expand true
-      # Game header
-      ttk::frame .gameframe.header
-      grid [ttk::button .gameframe.header.menubutton -style Small.TButton \
-         -command ShowGameMenu] -sticky w
-      tooltip::tooltip .gameframe.header.menubutton \
-         "The main game menu. Show info about the ships,\nits crew and allow to quit the game"
-      ttk::button .gameframe.header.closebutton -style Small.TButton \
-         -command {ShowSkyMap}
-      tooltip::tooltip .gameframe.header.closebutton {Back to the game map [Escape key]}
-      ttk::button .gameframe.header.morebutton -style Small.TButton \
-         -command {ShowMore}
-      tooltip::tooltip .gameframe.header.morebutton {Show more options}
-      grid [ttk::label .gameframe.header.time -text {1600-03-01}] -row 0 -column 3
-      tooltip::tooltip .gameframe.header.time {The game time}
-      grid columnconfigure .gameframe.header .gameframe.header.time -weight 1
-      grid [ttk::label .gameframe.header.fuel] -row 0 -column 4 -padx 3
-      grid [ttk::label .gameframe.header.food] -row 0 -column 5 -padx 3
-      grid [ttk::label .gameframe.header.drinks] -row 0 -column 6 -padx 3
-      grid [ttk::label .gameframe.header.overloaded] -row 0 -column 7 -padx 3
-      grid [ttk::label .gameframe.header.pilot] -row 0 -column 8 -padx 3
-      grid [ttk::label .gameframe.header.engineer] -row 0 -column 9 -padx 3
-      grid [ttk::label .gameframe.header.gunner] -row 0 -column 10 -padx 3
-      grid [ttk::label .gameframe.header.talk] -row 0 -column 11 -padx 3
-      grid [ttk::label .gameframe.header.repairs] -row 0 -column 12 -padx 3
-      grid [ttk::label .gameframe.header.upgrade] -row 0 -column 13 -padx 3
-      grid [ttk::label .gameframe.header.clean] -row 0 -column 14 -padx 3
-      grid [ttk::label .gameframe.header.crafting] -row 0 -column 15 -padx 3
-      grid .gameframe.header -sticky we -padx 5 -pady {5 0}
-      ttk::panedwindow .gameframe.paned
-      # Game map
-      .gameframe.paned add [ttk::frame .gameframe.paned.mapframe]
-      set mapview [text .gameframe.paned.mapframe.map \
-         -bg [set ttk::theme::[ttk::style theme use]::colors(-black)] -wrap none \
-         -fg white -font MapFont -cursor crosshair -bd 0]
-      grid $mapview -sticky nwes
-      $mapview tag configure unvisited -background [ttk::style lookup Map -unvisited]
-      $mapview tag configure yellow -foreground [ttk::style lookup Map -yellow]
-      $mapview tag configure green -foreground [ttk::style lookup Map -green]
-      $mapview tag configure red -foreground [ttk::style lookup Map -red]
-      $mapview tag configure cyan -foreground [ttk::style lookup Map -cyan]
-      $mapview tag configure lime -foreground [ttk::style lookup Map -lime]
-      $mapview tag configure red2 -foreground [ttk::style lookup Map -red2]
-      $mapview tag configure red3 -foreground [ttk::style lookup Map -red3]
-      $mapview tag configure green2 -foreground [ttk::style lookup Map -green2]
-      $mapview tag configure gray -foreground [ttk::style lookup Map -gray]
-      $mapview tag configure black -foreground [ttk::style lookup Map -black]
-      proc ValidateSpinbox {widget value button} {
-         if {$value == ""} {
-            if {$button != ""} {
-               $button configure -state disabled
-            }
-            return true
-         }
-         if {$button != ""} {
-            $button configure -state normal
-         }
-         set newvalue [regsub -all {[^0-9]} $value {}]
-         set minvalue [$widget cget -from]
-         if {$newvalue == ""} {
-            $widget set $minvalue
-            return false
-         }
-         if {$newvalue < $minvalue} {
-            $widget set $minvalue
-            return true
-         }
-         set maxvalue [$widget cget -to]
-         if {$newvalue > $maxvalue} {
-            $widget set $maxvalue
-            return true
-         }
-         $widget set $newvalue
-         $widget icursor end
-         return true
-      }
-      # Move map buttons
-      set mframe [ttk::frame .gameframe.paned.mapframe.buttons]
-      grid [ttk::button $mframe.show -style Toolbutton -command ShowMapButtons] \
-         -columnspan 5 -sticky we
-      tooltip::tooltip $mframe.show {Show the map manipulation buttons}
-      grid [ttk::button $mframe.left -style Map.Toolbutton \
-         -command {MoveMapButtons left}] -rowspan 3 -row 1 -column 0 -sticky ns
-      tooltip::tooltip $mframe.left {Move map buttons to the left corner}
-      grid [ttk::button $mframe.nw -style Map.Toolbutton -command {MoveMap nw}] \
-         -row 1 -column 1
-      tooltip::tooltip $mframe.nw {Move map up and left}
-      grid [ttk::button $mframe.n -style Map.Toolbutton -command {MoveMap n}] \
-         -column 2 -row 1
-      tooltip::tooltip $mframe.n {Move map up}
-      grid [ttk::button $mframe.ne -style Map.Toolbutton -command {MoveMap ne}] \
-         -column 3 -row 1
-      tooltip::tooltip $mframe.ne {Move map up and right}
-      grid [ttk::button $mframe.right -style Map.Toolbutton \
-         -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
-      tooltip::tooltip $mframe.right {Move map buttons to the right corner}
-      grid [ttk::button $mframe.w -style Map.Toolbutton -command {MoveMap w}] \
-         -row 2 -column 1
-      tooltip::tooltip $mframe.w {Move map left}
-      grid [ttk::button $mframe.wait -style Map.Toolbutton -command {
-         if {[winfo ismapped .gameframe.paned.mapframe] == "0"} {
+      result = 1
+      startsCombat = try:
+          checkForEvent()
+        except:
+          dialog = setError(message = "Can't check for events.")
+          return
+      if startsCombat:
+        result = 4
+        break
+    if gameSettings.autoMoveStop != never and skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex > -1:
+      let eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+      case gameSettings.autoMoveStop
+      of any:
+        if eventsList[eventIndex].eType in {enemyShip, trader, friendlyShip, enemyPatrol}:
+          result = 0
+          break
+      of friendly:
+        if eventsList[eventIndex].eType in {trader, friendlyShip}:
+          result = 0
+          break
+      of enemy:
+        if eventsList[eventIndex].eType in {enemyShip, enemyPatrol}:
+          result = 0
+          break
+      of never:
+        discard
+    if dialog == none:
+      try:
+        if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
+          dialog = setMessage(message = "Your fuel level is dangerously low.",
+              title = "Low fuel level")
+          result = 4
+          break
+        elif getItemsAmount(iType = "Food") <= gameSettings.lowFood:
+          dialog = setMessage(message = "Your food level is dangerously low.",
+              title = "Low food level")
+          result = 4
+          break
+        elif getItemsAmount(iType = "Drinks") <= gameSettings.lowDrinks:
+          dialog = setMessage(message = "Your drinks level is dangerously low.",
+              title = "Low drinks level")
+          result = 4
+          break
+      except:
+        dialog = setError(message = "Can't check low level of items.")
+        return
+    if playerShip.destinationX == playerShip.skyX and
+        playerShip.destinationY == playerShip.skyY:
+      addMessage(message = "You reached your travel destination.",
+          mType = orderMessage)
+      playerShip.destinationX = 0
+      playerShip.destinationY = 0
+      if gameSettings.autoFinish:
+        message = try:
+            autoFinishMissions()
+          except:
+            dialog = setError(message = "Can't finish missions.")
             return
-         }
-         if {[winfo exists .gameframe.movemapdialog]} {
-            CloseDialog .gameframe.movemapdialog
-            return
-         }
-         tk busy .gameframe.header
-         tk busy .gameframe.paned
-         ttk::frame .gameframe.movemapdialog -style Dialog.TFrame
-         grid [ttk::label .gameframe.movemapdialog.header -text {Move map} \
-            -style Header.TLabel] -sticky we -columnspan 2
-         grid [ttk::label .gameframe.movemapdialog.xlabel -text X: -takefocus 0] \
-            -pady {5 0}
-         grid [ttk::spinbox .gameframe.movemapdialog.x -from 1 -to 1024 \
-            -validate key \
-            -validatecommand {ValidateSpinbox %W %P .gameframe.movemapdialog.moveto} \
-            -width 5] -row 1 -column 1 -pady {5 0}
-         .gameframe.movemapdialog.x set 1
-         grid [ttk::label .gameframe.movemapdialog.ylabel -text Y: -takefocus 0] \
-            -row 2
-         grid [ttk::spinbox .gameframe.movemapdialog.y -from 1 -to 1024 \
-            -validate key \
-            -validatecommand {ValidateSpinbox %W %P .gameframe.movemapdialog.moveto} \
-            -width 5] -row 2 -column 1
-         .gameframe.movemapdialog.y set 1
-         grid [ttk::button .gameframe.movemapdialog.moveto \
-            -text {Move map to selected location} -command {MoveMap movemapto} \
-            -underline 0] -row 3 -columnspan 2 -sticky we -padx 5
-         grid [ttk::button .gameframe.movemapdialog.centeronship \
-            -text {Center map on ship} -command {MoveMap centeronship} -underline 0] \
-            -row 4 -columnspan 2 -sticky we -padx 5
-         grid [ttk::button .gameframe.movemapdialog.centeronhome \
-            -text {Center map on home base} -command {MoveMap centeronhome} \
-            -underline 1] -row 5 -columnspan 2 -sticky we -padx 5
-         grid [ttk::button .gameframe.movemapdialog.close -text {Close} \
-            -command {CloseDialog .gameframe.movemapdialog}] -row 6 -columnspan 2 \
-            -sticky we -padx 5 -pady {0 5}
-         place .gameframe.movemapdialog -in .gameframe -relx 0.3 -rely 0.25
-         focus .gameframe.movemapdialog.close
-         foreach widget [winfo children .gameframe.movemapdialog] {
-            bind $widget <Alt-m> {.gameframe.movemapdialog.moveto invoke;break}
-            bind $widget <Alt-c> {.gameframe.movemapdialog.centeronship invoke;break}
-            bind $widget <Alt-e> {.gameframe.movemapdialog.centeronhome invoke;break}
-            bind $widget <Escape> {.gameframe.movemapdialog.close invoke;break}
-         }
-         bind .gameframe.movemapdialog.close <Tab> \
-            {focus .gameframe.movemapdialog.x;break}
-      }] -column 2 -row 2
-      tooltip::tooltip $mframe.wait {Show more the map's options}
-      grid [ttk::button $mframe.e -style Map.Toolbutton -command {MoveMap e}] \
-         -column 3 -row 2
-      tooltip::tooltip $mframe.e {Move map right}
-      grid [ttk::button $mframe.sw -style Map.Toolbutton -command {MoveMap sw}] \
-         -row 3 -column 1
-      tooltip::tooltip $mframe.sw {Move map down and left}
-      grid [ttk::button $mframe.s -style Map.Toolbutton -command {MoveMap s}] \
-         -column 2 -row 3
-      tooltip::tooltip $mframe.s {Move map down}
-      grid [ttk::button $mframe.se -style Map.Toolbutton -command {MoveMap se}] \
-         -column 3 -row 3
-      tooltip::tooltip $mframe.se {Move map down and right}
-      grid [ttk::button $mframe.hide -style Map.Toolbutton -command HideMapButtons] \
-         -columnspan 5 -row 4 -sticky we
-      tooltip::tooltip $mframe.hide {Hide the map manipulation buttons}
-      grid $mframe -row 0 -column 0 -sticky se
-      # Map info frame
-      set mapinfo [text .gameframe.paned.mapframe.info -wrap word -height 10 \
-         -width 20 -background [ttk::style lookup MapInfo -background] \
-         -relief ridge -borderwidth 3 -padx 5]
-      $mapinfo tag configure yellow -foreground [ttk::style lookup Map -yellow]
-      $mapinfo tag configure green -foreground [ttk::style lookup Map -green]
-      $mapinfo tag configure red -foreground [ttk::style lookup Map -red]
-      $mapinfo tag configure cyan -foreground [ttk::style lookup Map -cyan]
-      $mapinfo tag configure lime -foreground [ttk::style lookup Map -lime]
-      $mapinfo tag configure red2 -foreground [ttk::style lookup Map -red2]
-      $mapinfo tag configure red3 -foreground [ttk::style lookup Map -red3]
-      $mapinfo tag configure green2 -foreground [ttk::style lookup Map -green2]
-      $mapinfo tag configure pink -foreground [ttk::style lookup Map -pink]
-      $mapinfo tag configure yellow2 -foreground [ttk::style lookup Map -goldenyellow]
-      $mapinfo tag configure underline -font UnderlineFont
-      grid $mapinfo -column 0 -row 0 -sticky ne
-      bind .gameframe.paned.mapframe.info <Enter> MoveMapInfo
-      grid rowconfigure .gameframe.paned.mapframe 0 -weight 1
-      grid columnconfigure .gameframe.paned.mapframe 0 -weight 1
-      # Last messages
-      .gameframe.paned add [ttk::frame .gameframe.paned.controls]
-      grid [ttk::frame .gameframe.paned.controls.messages -style LastMessages.TFrame] \
-         -sticky we
-      pack [ttk::scrollbar .gameframe.paned.controls.messages.scroll -orient vertical \
-         -command [list .gameframe.paned.controls.messages.view yview]] -side right \
-         -fill y -padx {0 5} -pady 5
-      set messagesview [text .gameframe.paned.controls.messages.view -wrap word \
-         -yscrollcommand [list .gameframe.paned.controls.messages.scroll set]]
-      $messagesview tag configure yellow -foreground \
-         [ttk::style lookup Messages -yellow]
-      $messagesview tag configure green -foreground \
-         [ttk::style lookup Messages -green]
-      $messagesview tag configure red -foreground \
-         [ttk::style lookup Messages -red]
-      $messagesview tag configure cyan -foreground \
-         [ttk::style lookup Messages -cyan]
-      $messagesview tag configure blue -foreground \
-         [ttk::style lookup Messages -blue]
-      $messagesview tag configure gray -foreground \
-         [ttk::style lookup Messages -gray]
-      pack $messagesview -side top -fill both -padx 5 -pady 5
-      tooltip::tooltip $messagesview \
-         "The last game messages. You can see more of them\nIn Menu->Last messages screen"
-      ::autoscroll::autoscroll .gameframe.paned.controls.messages.scroll
-      bind .gameframe.paned.controls <Configure> {
-         $messagesview configure -height [expr \
-            [winfo height .gameframe.paned.controls] / [font metrics InterfaceFont \
-            -linespace]]
-      }
-      # Movement buttons
-      set bframe [ttk::frame .gameframe.paned.controls.buttons]
-      grid $bframe -row 0 -column 1 -sticky nw
-      grid [ttk::frame $bframe.box] -columnspan 3 -sticky we
-      grid [ttk::button $bframe.box.orders -command {ShowOrders} -text {Ship Orders}]
-      tooltip::tooltip $bframe.box.orders "Show available orders for your ship."
-      grid [ttk::combobox $bframe.box.speed -state readonly -values [list {Full stop} \
-         {Quarted speed} {Half speed} {Full speed}] -width 10] -sticky we
-      tooltip::tooltip $bframe.box.speed \
-         "Set speed for your ship. The faster you move,\nthe more fuel used. But faster movement has\nbigger chance to evade enemies."
-      grid [ttk::button $bframe.box.moveto -command {MoveShip moveto} \
-         -style Move.TButton] -row 0 -column 1
-      tooltip::tooltip $bframe.box.moveto "Auto move your ship to its destination"
-      grid [ttk::button $bframe.nw -command {MoveShip nw} -style Move.TButton] \
-         -row 1 -sticky we
-      tooltip::tooltip $bframe.nw "Move ship up and left"
-      grid [ttk::button $bframe.n -command {MoveShip n} -style Move.TButton] \
-         -column 1 -row 1 -sticky we
-      tooltip::tooltip $bframe.n "Move ship up"
-      grid [ttk::button $bframe.ne -command {MoveShip ne} -style Move.TButton] \
-         -column 2 -row 1 -sticky we
-      tooltip::tooltip $bframe.ne "Move ship up and right"
-      grid [ttk::button $bframe.w -command {MoveShip w} -style Move.TButton] -row 2 \
-         -sticky we
-      tooltip::tooltip $bframe.w "Move ship left"
-      grid [ttk::button $bframe.wait -command {MoveShip waitormove} \
-         -style Move.TButton] -column 1 -row 2 -sticky we
-      grid [ttk::button $bframe.e -command {MoveShip e} -style Move.TButton] \
-         -column 2 -row 2 -sticky we
-      tooltip::tooltip $bframe.e "Move ship right"
-      grid [ttk::button $bframe.sw -command {MoveShip sw} -style Move.TButton] \
-         -row 3 -sticky we
-      tooltip::tooltip $bframe.sw "Move ship down and left"
-      grid [ttk::button $bframe.s -command {MoveShip s} -style Move.TButton] \
-         -column 1 -row 3 -sticky we
-      tooltip::tooltip $bframe.s "Move ship down"
-      grid [ttk::button $bframe.se -command {MoveShip se} -style Move.TButton] \
-         -column 2 -row 3 -sticky we
-      tooltip::tooltip $bframe.se "Move ship down and right"
-      grid columnconfigure .gameframe.paned.controls \
-         .gameframe.paned.controls.messages -weight 1
-      grid .gameframe.paned -sticky nwes -padx 5 -pady {0 5}
-      grid columnconfigure .gameframe .gameframe.paned -weight 1
-      grid rowconfigure .gameframe .gameframe.paned -weight 1
-      update
-    """)
-    setTheme()
-    ordersmenu.addCommands()
-    waitmenu.addCommands()
-    helpui.addCommands()
-    shipsui.addCommands()
-    craftsui.addCommands()
-    messagesui.addCommands()
-    gameoptions.addCommands()
-    tradesui.addCommands()
-    basesschoolui.addCommands()
-    basesrecruitui.addCommands()
-    basesui.addCommands()
-    basesshipyardui.addCommands()
-    baseslootui.addCommands()
-    knowledge.addCommands()
-    missionsui.addCommands()
-    statisticsui.addCommands()
-    const messagesFrame: string = paned & ".controls.messages"
-    tclEval(script = "bind " & messagesFrame & " <Configure> {ResizeLastMessages}")
-    tclEval(script = "bind " & mapView & " <Configure> {DrawMap}")
-    tclEval(script = "bind " & mapView & " <Motion> {UpdateMapInfo %x %y}")
-    tclEval(script = "bind " & mapView & " <Button-" & (
-        if gameSettings.rightButton: "3" else: "1") & "> {ShowDestinationMenu %X %Y;break}")
-    tclEval(script = "bind " & mapView & " <MouseWheel> {if {%D > 0} {ZoomMap raise} else {ZoomMap lower}}")
-    tclEval(script = "bind " & mapView & " <Button-4> {ZoomMap raise}")
-    tclEval(script = "bind " & mapView & " <Button-5> {ZoomMap lower}")
-    setKeys()
-    if debugMode == menu:
-      showDebugUi()
+      result = 4
+      break
+    if result in 6..7:
+      break
+
+type
+  MoveDirection = enum
+    north, northEast, east, southEast, south, southWest, west, northWest,
+      moveOne, moveToDestination
+
+proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog) {.raises: [
+    ], tags: [TimeEffect, RootEffect], contractual.} =
+  ## Move ship in the selected direction
+  ##
+  ## * direction - the direction in which the ship should be moved
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
+  var
+    res: Natural = 0
+    message: string = ""
+    newX, newY: int = 0
+    startsCombat: bool = false
+  case direction
+  of northWest:
+    try:
+      res = moveShip(x = -1, y = -1, message = message)
+    except:
+      dialog = setError(message = "Can't move the ship.")
+  of north:
+    try:
+      res = moveShip(x = 0, y = -1, message = message)
+    except:
+      dialog = setError(message = "Can't move the ship.")
+  of northEast:
+    try:
+      res = moveShip(x = 1, y = -1, message = message)
+    except:
+      dialog = setError(message = "Can't move the ship.")
+  of west:
+    try:
+      res = moveShip(x = -1, y = 0, message = message)
+    except:
+      dialog = setError(message = "Can't move the ship.")
+  of moveOne:
+    if playerShip.destinationX == 0:
+      res = 1
+      try:
+        updateGame(minutes = gameSettings.waitMinutes)
+        waitInPlace(minutes = gameSettings.waitMinutes)
+      except:
+        dialog = setError(message = "Can't update the game.")
+    else:
+      updateCoordinates(newX = newX, newY = newY)
+      res = try:
+          moveShip(x = newX, y = newY, message = message)
+        except:
+          dialog = setError(message = "Can't move the ship.")
+          return
+      if playerShip.destinationX == playerShip.skyX and
+          playerShip.destinationY == playerShip.skyY:
+        addMessage(message = "You reached your travel destination.",
+            mType = orderMessage)
+        playerShip.destinationX = 0
+        playerShip.destinationY = 0
+        if gameSettings.autoFinish:
+          message = try:
+              autoFinishMissions()
+            except:
+              dialog = setError(message = "Can't finish missions.")
+              return
+        res = 4
+  of east:
+    try:
+      res = moveShip(x = 1, y = 0, message = message)
+    except:
+      dialog = setError(message = "Can't move the ship.")
+  of southWest:
+    try:
+      res = moveShip(x = -1, y = 1, message = message)
+    except:
+      dialog = setError(message = "Can't move the ship.")
+  of south:
+    try:
+      res = moveShip(x = 0, y = 1, message = message)
+    except:
+      dialog = setError(message = "Can't move the ship.")
+  of southEast:
+    try:
+      res = moveShip(x = 1, y = 1, message = message)
+    except:
+      dialog = setError(message = "Can't move the ship.")
+  of moveToDestination:
+    res = moveShipToDestination(dialog = dialog)
+  case res
+  # Ship moved, check for events
+  of 1:
+    startsCombat = try:
+        checkForEvent()
+      except:
+        dialog = setError(message = "Can't check for events.")
+        return
+    if not startsCombat and gameSettings.autoFinish:
+      message = try:
+          autoFinishMissions()
+        except:
+          dialog = setError(message = "Can't finish missions.")
+          return
+  # Ship moved, but pilot needs rest, confirm
+  of 6:
+    dialog = setQuestion(question = "You don't have pilot on duty. Do you want to wait until your pilot rest?",
+        qType = noPilot)
+    return
+  # Ship moved, but engineer needs rest, confirm
+  of 7:
+    dialog = setQuestion(question = "You don't have engineer on duty. Do you want to wait until your engineer rest?",
+        qType = noPilot)
+    return
+  # Ship moved, but crew needs rest, autorest
+  of 8:
+    startsCombat = try:
+        checkForEvent()
+      except:
+        dialog = setError(message = "Can't check for events.")
+        return
+    if not startsCombat:
+      try:
+        waitForRest()
+      except:
+        dialog = setError(message = "Can't wait for rest of th crew.")
+        return
+      try:
+        if "sentientships" notin factionsList[playerShip.crew[
+            0].faction].flags and (findMember(order = pilot) == -1 or
+                findMember(
+            order = engineer) == -1):
+          waitForRest()
+      except:
+        dialog = setError(message = "Can't check do faction has sentientships flag.")
+        return
+      startsCombat = try:
+          checkForEvent()
+        except:
+          dialog = setError(message = "Can't check for events.")
+          return
+    if not startsCombat and gameSettings.autoFinish:
+      message = try:
+          autoFinishMissions()
+        except:
+          dialog = setError(message = "Can't finish missions.")
+          return
   else:
-    tclEval(script = "pack " & gameFrame & " -fill both -expand true")
-  tclSetVar(varName = "refreshmap", newValue = "1")
-  tclEval(script = "wm title . {Steam Sky}")
-  if gameSettings.fullScreen:
-    tclEval(script = "wm attributes . -fullscreen 1")
-  for accel in menuAccelerators:
-    let pos: int = accel.rfind(sub = '-')
-    tclEval(script = "bind . <" & accel[0..pos] & "KeyPress-" &
-      accel[pos + 1..^1] & "> {InvokeMenu " & accel & "}")
-  if not tclEval2(script = "grid slaves .").contains(sub = ".gameframe.header"):
-    let header: string = gameFrame & ".header"
-    tclEval(script = "grid " & header)
-  updateHeader()
+    discard
   centerX = playerShip.skyX
   centerY = playerShip.skyY
-  for index, baseType in basesTypesList:
-    tclEval(script = mapView & " tag configure " & index & " -foreground " &
-        $baseType.color)
-  let panedPosition: int = (if gameSettings.windowHeight -
-      gameSettings.messagesPosition <
-      0: gameSettings.windowHeight else: gameSettings.windowHeight -
-      gameSettings.messagesPosition)
-  tclEval(script = paned & " sashpos 0 " & $panedPosition)
-  if not tclEval2(script = "grid slaves .").contains(sub = ".gameframe.paned"):
-    tclEval(script = "grid " & paned)
-  tclEval(script = "update")
-  const button: string = paned & ".mapframe.buttons.hide"
-  tclEval(script = button & " invoke")
-  tclEval(script = "bind . <Escape> {InvokeButton " & closeButton & "}")
-  updateMessages()
-  if not newStart:
-    tclEval(script = "DrawMap")
-  updateMoveButtons()
-  updateMapInfo()
-  if not gameSettings.showLastMessages:
-    const messagesFrame: string = paned & ".controls.messages"
-    tclEval(script = "grid remove " & messagesFrame)
-  tclSetVar(varName = "shipname", newValue = playerShip.name)
-  tclSetVar(varName = "gamestate", newValue = "general")
-  if tclEval2(script = "winfo ismapped " & closeButton) == "1":
-    showSkyMap(clear = true)
-    tclEval(script = "grid remove " & closeButton)
+
+proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Show the buttons for manage the ship, like orders, movement or wait
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
+  group(title = "ButtonsGroup", flags = {windowNoScrollbar}):
+    if dialog != none:
+      windowDisable()
+    if playerShip.speed == docked or playerShip.destinationX == 0:
+      setLayoutRowDynamic(height = 30, cols = 1)
+    else:
+      setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.75.cfloat, 0.25])
+    showTooltip(text = "Show available orders for your ship.")
+    labelButton(title = "Ship orders"):
+      setDialog()
+      dialog = ordersDialog
+    if playerShip.speed != docked and playerShip.destinationX > 0:
+      showTooltip(text = "Auto move your ship to its destination.")
+      imageButton(image = images[moveToIcon]):
+        moveShipOnMap(direction = moveToDestination, dialog = dialog)
+    setLayoutRowDynamic(height = 30, cols = 1)
+    if playerShip.speed == docked:
+      showTooltip(text = if gameSettings.waitMinutes ==
+          1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes.")
+      imageButtonCentered(image = images[waitIcon]):
+        moveShipOnMap(direction = moveOne, dialog = dialog)
+    else:
+      playerShip.speed = (comboList(items = shipSpeeds,
+          selected = playerShip.speed.ord - 1, itemHeight = 25, x = 200, y = 50,
+          tooltip = "Set speed for your ship. The faster you move, the more fuel used. But faster movement has bigger chance to evade enemies.") + 1).ShipSpeed
+      setLayoutRowStatic(height = 30, cols = 3, ratio = [40.cfloat, 40, 40])
+      showTooltip(text = "Move ship up and left")
+      imageButton(image = images[arrowUpLeft]):
+        moveShipOnMap(direction = northWest, dialog = dialog)
+      showTooltip(text = "Move ship up")
+      imageButton(image = images[arrowUp]):
+        moveShipOnMap(direction = north, dialog = dialog)
+      showTooltip(text = "Move ship up and right")
+      imageButton(image = images[arrowUpRight]):
+        moveShipOnMap(direction = northEast, dialog = dialog)
+      showTooltip(text = "Move ship left")
+      imageButton(image = images[arrowLeft]):
+        moveShipOnMap(direction = west, dialog = dialog)
+      if playerShip.destinationX == 0:
+        showTooltip(text = if gameSettings.waitMinutes ==
+              1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes.")
+        imageButton(image = images[waitIcon]):
+          moveShipOnMap(direction = moveOne, dialog = dialog)
+      else:
+        showTooltip(text = "Move ship one map field toward destination")
+        imageButton(image = images[moveStepIcon]):
+          moveShipOnMap(direction = moveOne, dialog = dialog)
+      showTooltip(text = "Move ship right")
+      imageButton(image = images[arrowRight]):
+        moveShipOnMap(direction = east, dialog = dialog)
+      showTooltip(text = "Move ship down and left")
+      imageButton(image = images[arrowDownLeft]):
+        moveShipOnMap(direction = southWest, dialog = dialog)
+      showTooltip(text = "Move ship down")
+      imageButton(image = images[arrowDown]):
+        moveShipOnMap(direction = south, dialog = dialog)
+      showTooltip(text = "Move ship down and right")
+      imageButton(image = images[arrowDownRight]):
+        moveShipOnMap(direction = southEast, dialog = dialog)
+
+var mapX, mapY: Natural = 0
+
+proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the menu for setting a destination for the player's ship
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  if dialog != destinationDialog:
+    return
+  try:
+    const width: float = 250
+    var height: float = 0
+    if playerShip.speed == docked:
+      height = 115
+    else:
+      if playerShip.destinationX > 0 and playerShip.destinationY > 0:
+        height = 185
+      else:
+        height = 150
+
+    proc closeDialog(dialog: var GameDialog) {.raises: [], tags: [],
+        contractual.} =
+      ## Close the destination menu dialog
+      ## * dialog - the current in-game dialog displayed on the screen
+      ##
+      ## Returns the reseted parameter dialog.
+      closePopup()
+      dialog = none
+      mapX = 0
+      mapY = 0
+
+    proc setDestination(dialog: var GameDialog) {.raises: [], tags: [],
+        contractual.} =
+      ## Set the new destination point for the player's ship
+      ##
+      ## * dialog - the current in-game dialog displayed on the screen
+      ##
+      ## Returns the reseted parameter dialog.
+      playerShip.destinationX = mapX
+      playerShip.destinationY = mapY
+      closeDialog(dialog = dialog)
+
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = "Set destination", x = dialogX,
+        y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
+        windowNoScrollbar}):
+      setLayoutRowDynamic(height = 30, cols = 1)
+      labelButton(title = "Set destination"):
+        setDestination(dialog = dialog)
+      if playerShip.speed != docked:
+        labelButton(title = "Set destination and move"):
+          setDestination(dialog = dialog)
+          discard moveShipToDestination(dialog = dialog)
+        if playerShip.destinationX > 0 and playerShip.destinationY > 0:
+          labelButton(title = "Move to"):
+            closeDialog(dialog = dialog)
+            discard moveShipToDestination(dialog = dialog)
+      labelButton(title = "Close"):
+        closeDialog(dialog = dialog)
+  except:
+    dialog = setError(message = "Can't show the destination's menu")
+
+proc showMission(mType: MissionsTypes): tuple[icon: string;
+    color: Color] {.raises: [], tags: [], contractual.} =
+  ## Show the mission info on the map, based on the missions' type
+  ##
+  ## * mType - the type of the mission
+  ##
+  ## Returns the tuple with icon and color tag for the selected mission
+  case mType
+  of deliver:
+    result.icon = theme.mapIcons[deliverIcon]
+    result.color = theme.mapColors[mapYellowColor]
+  of destroy:
+    result.icon = theme.mapIcons[destroyIcon]
+    result.color = theme.mapColors[mapRedColor]
+  of patrol:
+    result.icon = theme.mapIcons[patrolIcon]
+    result.color = theme.mapColors[mapLimeColor]
+  of explore:
+    result.icon = theme.mapIcons[exploreIcon]
+    result.color = theme.mapColors[mapGreenColor]
+  of passenger:
+    result.icon = theme.mapIcons[passengerIcon]
+    result.color = theme.mapColors[mapCyanColor]
+
+proc zoomMap(dialog: var GameDialog; zoomIn: bool = true) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Zoom in or zoom out the map
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns parameter dialog, modified if any error happened.
+  if zoomIn:
+    gameSettings.mapFontSize.inc
+    if gameSettings.mapFontSize > 50:
+      gameSettings.mapFontSize = 50
+  else:
+    gameSettings.mapFontSize.dec
+    if gameSettings.mapFontSize < 3:
+      gameSettings.mapFontSize = 3
+  try:
+    fonts[FontsNames.mapFont] = nuklearLoadFont(font = FontData(
+        path: themesList[gameSettings.interfaceTheme].fonts[FontsNames.mapFont],
+        size: gameSettings.mapFontSize + 10), glyphsRanges = [0x0020.nk_rune,
+        0x00ff, 0x2000, 0xffff, 0])
+  except:
+    dialog = setError(message = "Can't reload the map font.")
+
+var key: string = ""
+
+proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the game's map
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters state and dialog. The latter is modified if
+  ## any error happened.
+  discard showHeader(dialog = dialog, state = state)
+  if playerShip.speed != docked and mapPreview:
+    mapPreview = false
+  # draw dialogs
+  showDestinationMenu(dialog = dialog)
+  # draw map
+  nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
+      fontSize = gameSettings.mapFontSize + 10)
+  let height: Positive = gameSettings.mapFontSize + 10
+  rows = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
+        height.float).ceil.Natural
+  let colWidth: Positive = try:
+      getTextWidth(text = theme.mapIcons[emptyMapIcon]).Positive + 6
+    except:
+      dialog = setError(message = "Can't count map column's width.")
+      return
+  cols = (windowWidth / colWidth.float).ceil.Positive + 3
+  let mapHeight: float = (height * rows).float - 15.0
+  setLayoutRowDynamic(height = mapHeight, cols = 1)
+  group(title = "MapGroup", flags = {windowNoScrollbar}):
+    var
+      startX: int = centerX - (cols / 2).int
+      startY: int = centerY - (rows / 2).int
+      endY: int = centerY + (rows / 2).floor.int
+      endX: int = centerX + (cols / 2).floor.int
+      storyX: int = 1
+      storyY: int = 1
+    if startY < 1:
+      startY = 1
+      endY = rows + 1
+    if startX < 1:
+      startX = 1
+      endX = cols + 1
+    if endY > 1_024:
+      endY = 1_024
+      startY = 1_024 - rows
+    if endX > 1_024:
+      endX = 1_024
+      startX = 1_025 - cols
+    saveButtonStyle()
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    if currentStory.index.len > 0:
+      (storyX, storyY) = try:
+          getStoryLocation()
+        except:
+          dialog = setError(message = "Can't get the current story location.")
+          return
+      if storyX == playerShip.skyX and storyY == playerShip.skyY:
+        storyX = 0
+        storyY = 0
+    layoutSpaceStatic(height = ((height - 2) * rows).float,
+        widgetsCount = (rows * cols) + 15):
+      var curRow, col: int = -1
+      for y in startY..endY:
+        curRow.inc
+        col = -1
+        for x in startX..endX:
+          col.inc
+          row(x = (col * (colWidth - 2)).float, y = (curRow * (height -
+              2)).float, w = colWidth.float, h = height.float):
+            var
+              mapChar: string = theme.mapIcons[emptyMapIcon]
+              mapColor: Color = theme.mapColors[mapUnvisitedColor]
+            if x == playerShip.skyX and y == playerShip.skyY:
+              skyMap[x][y].visited = true
+              mapChar = theme.mapIcons[playerShipIcon]
+              mapColor = theme.mapColors[mapDefaultColor]
+            else:
+              if x == playerShip.destinationX and y == playerShip.destinationY:
+                mapChar = theme.mapIcons[targetIcon]
+                mapColor = theme.mapColors[mapDefaultColor]
+              elif currentStory.index.len > 0 and (x == storyX and y == storyY):
+                mapChar = theme.mapIcons[storyIcon]
+                mapColor = theme.mapColors[mapGreenColor]
+              elif skyMap[x][y].missionIndex > -1:
+                (mapChar, mapColor) = showMission(mType = acceptedMissions[
+                    skyMap[x][y].missionIndex].mType)
+              elif skyMap[x][y].eventIndex > -1:
+                if skyMap[x][y].eventIndex > eventsList.high:
+                  skyMap[x][y].eventIndex = -1
+                else:
+                  case eventsList[skyMap[x][y].eventIndex].eType
+                  of enemyShip:
+                    mapChar = theme.mapIcons[enemyShipIcon]
+                    mapColor = theme.mapColors[mapRedColor]
+                  of attackOnBase:
+                    mapChar = theme.mapIcons[attackOnBaseIcon]
+                    mapColor = theme.mapColors[mapRed2Color]
+                  of enemyPatrol:
+                    mapChar = theme.mapIcons[enemyPatrolIcon]
+                    mapColor = theme.mapColors[mapRed3Color]
+                  of disease:
+                    mapChar = theme.mapIcons[diseaseIcon]
+                    mapColor = theme.mapColors[mapYellowColor]
+                  of fullDocks:
+                    mapChar = theme.mapIcons[fullDocksIcon]
+                    mapColor = theme.mapColors[mapCyanColor]
+                  of doublePrice:
+                    mapChar = theme.mapIcons[doublePriceIcon]
+                    mapColor = theme.mapColors[mapLimeColor]
+                  of trader:
+                    mapChar = theme.mapIcons[mapTraderIcon]
+                    mapColor = theme.mapColors[mapGreenColor]
+                  of friendlyShip:
+                    mapChar = theme.mapIcons[friendlyShipIcon]
+                    mapColor = theme.mapColors[mapGreen2Color]
+                  of EventsTypes.none, baseRecovery:
+                    discard
+              elif skyMap[x][y].baseIndex > 0:
+                mapChar = theme.mapIcons[notVisitedBaseIcon]
+                if skyBases[skyMap[x][y].baseIndex].known:
+                  mapColor = theme.mapColors[mapDefaultColor]
+                  if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
+                    mapChar = try:
+                        factionsList[skyBases[skyMap[x][
+                            y].baseIndex].owner].baseIcon.Rune.toUTF8
+                      except:
+                        dialog = setError(message = "Can't get the base icon.")
+                        return
+                    mapColor = try:
+                        basesTypesList[skyBases[skyMap[x][
+                            y].baseIndex].baseType].color
+                      except:
+                        dialog = setError(
+                            message = "Can't get the color of the base.")
+                        return
+            if mapPreview:
+              for mission in skyBases[skyMap[playerShip.skyX][
+                  playerShip.skyY].baseIndex].missions:
+                if mission.targetX == x and mission.targetY == y:
+                  (mapChar, mapColor) = showMission(mType = mission.mType)
+                  break
+            try:
+              let background: Color = (if skyMap[x][y].visited: theme.mapColors[
+                  mapVisitedColor] else: theme.mapColors[mapUnvisitedColor])
+              setButtonStyle(field = borderColor, color = background)
+              setButtonStyle(field = normal, color = background)
+              setButtonStyle(field = textBackground, color = background)
+              setButtonStyle(field = hover, color = background + 0x303030.Color)
+              setButtonStyle(field = textHover, color = mapColor +
+                  0x303030.Color)
+              setButtonStyle(field = textNormal, color = mapColor)
+            except:
+              dialog = setError(message = "Can't set map color")
+              return
+            if isMouseHovering(rect = getWidgetBounds()):
+              try:
+                showMapInfo(theme = theme, mapXInfo = x, mapYInfo = y)
+              except ValueError:
+                dialog = setError(message = "Can't show map info")
+            if dialog != none:
+              windowDisable()
+            labelButton(title = mapChar):
+              if x == playerShip.skyX and y == playerShip.skyY:
+                setDialog(y = windowHeight / 7)
+                dialog = ordersDialog
+              else:
+                setDialog()
+                dialog = destinationDialog
+                mapX = x
+                mapY = y
+  restoreButtonStyle()
+  # Draw the map's buttons
+  nuklearSetDefaultFont(defaultFont = fonts[UIFont],
+      fontSize = gameSettings.interfaceFontSize + 10)
+  setLayoutRowDynamic(height = 20, cols = 5)
+  showTooltip(text = "Show the map movement menu.")
+  imageButtonCentered(image = images[mapMenuIcon]):
+    setDialog(x = windowWidth / 5)
+    dialog = mapMenuDialog
+  showTooltip(text = "Make the map smaller by one row.")
+  imageButtonCentered(image = images[contract2Icon]):
+    gameSettings.messagesPosition += height
+  showTooltip(text = "Make the map bigger by one row.")
+  imageButtonCentered(image = images[expand2Icon]):
+    gameSettings.messagesPosition -= height
+  showTooltip(text = "Zoom in the map.")
+  labelButton(title = "+"):
+    zoomMap(dialog = dialog)
+  showTooltip(text = "Zoom out the map.")
+  labelButton(title = "-"):
+    zoomMap(dialog = dialog, zoomIn = false)
+  layoutDynamic(height = windowHeight - mapHeight - 75, cols = 2):
+    # Draw last messages
+    row(width = 0.75):
+      showLastMessages(theme = theme, dialog = dialog, withButtons = false, height = 0)
+    # Draw movement buttons
+    row(width = 0.25):
+      showButtons(dialog = dialog)
+  # Keyboard shortcuts
+  const specialKeys: set[Keys] = {keyShift, keyCtrl, keyAlt}
+  for sKey in specialKeys:
+    if isKeyPressed(key = sKey):
+      key = $sKey & "-"
+      break
+  var keyPressed: Keys = keyNone
+  for nkey in keyScrollDown..keyF12:
+    if isKeyPressed(key = nkey):
+      keyPressed = nkey
+      break
+  if isKeyPressed(key = keyEscape):
+    key = ""
+    keyPressed = keyNone
+  if (getInputTextLen() > 0 or keyPressed != keyNone) and shortcutsEnabled:
+    redraw = true
+    if getInputTextLen() > 0:
+      key &= getInputText().toLowerAscii
+    elif keyPressed notin {keyEscape, keyTab, keyAlt}:
+      key &= $keyPressed
+    if key == mapAccelerators[2]:
+      setDialog(x = windowWidth / 5)
+      dialog = mapMenuDialog
+    elif key == mapAccelerators[3]:
+      zoomMap(dialog = dialog)
+    elif key == mapAccelerators[4]:
+      zoomMap(dialog = dialog, zoomIn = false)
+    elif key == mapAccelerators[5]:
+      moveShipOnMap(direction = northWest, dialog = dialog)
+    elif key == mapAccelerators[6]:
+      moveShipOnMap(direction = north, dialog = dialog)
+    elif key == mapAccelerators[7]:
+      moveShipOnMap(direction = northEast, dialog = dialog)
+    elif key == mapAccelerators[8]:
+      moveShipOnMap(direction = west, dialog = dialog)
+    elif key == mapAccelerators[9]:
+      moveShipOnMap(direction = moveOne, dialog = dialog)
+    elif key == mapAccelerators[10]:
+      moveShipOnMap(direction = east, dialog = dialog)
+    elif key == mapAccelerators[11]:
+      moveShipOnMap(direction = southWest, dialog = dialog)
+    elif key == mapAccelerators[12]:
+      moveShipOnMap(direction = south, dialog = dialog)
+    elif key == mapAccelerators[13]:
+      moveShipOnMap(direction = southEast, dialog = dialog)
+    elif key == mapAccelerators[14]:
+      moveShipOnMap(direction = moveToDestination, dialog = dialog)
+    elif key == mapAccelerators[15]:
+      centerX = playerShip.skyX
+      centerY = playerShip.skyY
+    elif key == mapAccelerators[16]:
+      centerX = skyBases[playerShip.homeBase].skyX
+      centerY = skyBases[playerShip.homeBase].skyY
+    elif key == mapAccelerators[17]:
+      moveMap(direction = northwest)
+    elif key == mapAccelerators[18]:
+      moveMap(direction = north)
+    elif key == mapAccelerators[19]:
+      moveMap(direction = northeast)
+    elif key == mapAccelerators[20]:
+      moveMap(direction = west)
+    elif key == mapAccelerators[21]:
+      moveMap(direction = east)
+    elif key == mapAccelerators[22]:
+      moveMap(direction = southwest)
+    elif key == mapAccelerators[23]:
+      moveMap(direction = south)
+    elif key == mapAccelerators[24]:
+      moveMap(direction = southeast)
+    elif key == mapAccelerators[25]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int - 5, y = mousePos.y.int - 5)
+    elif key == mapAccelerators[26]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int, y = mousePos.y.int - 5)
+    elif key == mapAccelerators[27]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int + 5, y = mousePos.y.int - 5)
+    elif key == mapAccelerators[28]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int - 5, y = mousePos.y.int)
+    elif key == mapAccelerators[29]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int + 5, y = mousePos.y.int)
+    elif key == mapAccelerators[30]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int - 5, y = mousePos.y.int + 5)
+    elif key == mapAccelerators[31]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int, y = mousePos.y.int + 5)
+    elif key == mapAccelerators[32]:
+      let mousePos: Vec2 = getMousePos()
+      nuklearWarpMouse(x = mousePos.x.int + 5, y = mousePos.y.int + 5)
+    elif key == mapAccelerators[33]:
+      let mousePos: Vec2 = getMousePos()
+      inputButton(id = left, x = mousePos.x.int, y = mousePos.y.int)
+    else:
+      discard
+    if playerShip.speed != docked:
+      if key == mapAccelerators[34]:
+        playerShip.speed = fullStop
+      elif key == mapAccelerators[35]:
+        playerShip.speed = quarterSpeed
+      elif key == mapAccelerators[36]:
+        playerShip.speed = halfSpeed
+      elif key == mapAccelerators[37]:
+        playerShip.speed = fullSpeed
+    if key != "Alt-":
+      key = ""

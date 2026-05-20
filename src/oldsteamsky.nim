@@ -21,7 +21,7 @@
 import std/[os, paths, parseopt, segfaults, strutils]
 import contracts
 import config, halloffame, game, log, tk
-import ui/[mainmenu, themes]
+import oldui/[mainmenu, themes]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.

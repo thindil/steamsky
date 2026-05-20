@@ -1,4 +1,4 @@
-# Copyright 2023-2026 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -13,411 +13,1005 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+# along with Steam Sky.  if, see <http://www.gnu.org/licenses/>.
 
-## Provides code related to creating, showing and destroying various in game
-## dialogs, like messages, items information, etc
+## Provides code related to the game's dialogs, like showing questions, etc.
 
-import std/[strutils, wordwrap]
-import contracts
-import ../[config, game, tk, types]
-import coreui, errordialog
+import std/[colors, os, math, strutils, tables, times]
+import contracts, nuklear/nuklear_sdl_renderer
+import ../[bases, basescargo, config, crew2, crewinventory, events2, game,
+    game2, items, maps, messages, missions, missions2, shipscargo, shipscrew,
+    shipscrew2, stories, types, trades, utils]
+import coreui, errordialog, setui, themes
 
-type ButtonSettings* = object
-  ## Used to store information about a button in a dialog
-  text*: string    ## Text to show on the button
-  command*: string ## Tcl command to execute when button was pressed
-  icon*: string    ## Tcl icon to show on the button
-  tooltip*: string ## The tooltip text associated with the button
-  color*: string   ## The color of the button's text
+type
+  QuestionType* = enum
+    ## Types of questions, used to set actions to the player's response
+    deleteSave, showDeadStats, quitGame, resignGame, homeBase, finishGame,
+      dismissMember, deleteMessages, noPilot
+  QuestionData = object
+    question, data: string
+    qType: QuestionType
+    lines: float
+  MessageData = object
+    text, title: string
+    lines, started: float
+  ButtonSettings* = object
+    ## Used to store information about a button in a dialog
+    text*: string       ## Text to show on the button
+    code*: proc(dialog: var GameDialog) ## The code to execute when the button was pressed
+    icon*: int          ## The index of the icon to show on the button
+    tooltip*: string    ## The tooltip text associated with the button
+    color*: ColorsNames ## The color of the button's text
+  TextData = object
+    text: string
+    lines: float
+    color: Color
+  InfoData = object
+    data: seq[TextData]
+    title: string
+    button1, button2: ButtonSettings
+    widgetsAmount: seq[Positive]
+  ManipulateType* = enum
+    ## Types of action, used to manipulate items, like selling or buying items
+    sellAction, buyAction, takeAction, dropAction, moveAction, giveAction, dropCargoAction
+  ManipulateData = object
+    itemIndex: int
+    amount, maxAmount, cost, allCost, data: Natural
+    title, warning: string
 
-const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "",
-    command: "", icon: "", tooltip: "",
-    color: "") ## Empty Button setting, used to disable the selected button
+const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "", code: nil,
+    icon: -1, tooltip: "",
+    color: buttonTextColor) ## Empty Button setting, used to disable the selected button
 
-var timerId*: string = "" ## Id of the timer for auto close command
+var
+  questionData: QuestionData = QuestionData(question: "", data: "")
+  messageData: MessageData = MessageData(text: "", title: "Info")
+  answered*: bool = false ## If true, the question was answered
+  infoData: InfoData = InfoData(data: @[], title: "",
+      button1: emptyButtonSettings, button2: emptyButtonSettings)
+  manipulateData: ManipulateData = ManipulateData(itemIndex: 0, maxAmount: 0,
+      cost: 0, title: "")
+  timer: float = gameSettings.autoCloseMessagesTime.float * 1000.0
 
-proc createDialog*(name, title: string; titleWidth: Positive = 275;
-    columns: Positive = 1;
-    parentName: string = ".gameframe"): string {.raises: [], tags: [],
-        contractual.} =
-  ## Create a new dialog with the selected title
+proc setQuestion*(question: string; qType: QuestionType;
+    data: string = ""): GameDialog {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data related to the current in-game question
   ##
-  ## * name       - the Tk path of the new dialog
-  ## * title      - the title of the new dialog
-  ## * titleWidth - the width in pixels of the new dialog
-  ## * columns    - the amount of columns for elements in the new dialog
-  ## * parentName - the Tk path of the parent widget
+  ## * question - the question which will be asked to the player
+  ## * qType    - the type of the question, used to set action to the player's
+  ##              answer
+  ## * dialog   - the current in-game dialog displayed on the screen
   ##
-  ## Returns the full Tk path of the new dialog
-  require:
-    name.len > 0
-  body:
-    if parentName == ".gameframe":
-      tclEval(script = "tk busy " & gameHeader)
-      tclEval(script = "tk busy " & mainPaned)
-    else:
-      tclEval(script = "tk busy " & parentName)
-    if timerId.len > 0:
-      tclEval(script = "after cancel " & timerId)
-      timerId = ""
-    tclEval(script = "update")
-    result = name
-    tclEval(script = "ttk::frame " & result & " -style Dialog.TFrame")
-    let dialogHeader: string = result & ".header"
-    tclEval(script = "ttk::label " & dialogHeader & " -text {" & title &
-        "} -wraplength " & $titleWidth & " -style Header.TLabel -cursor hand1")
-    tclEval(script = "grid " & dialogHeader &
-        " -sticky we -padx 2 -pady {2 0}" & (if columns > 1: " -columnspan " &
-            $columns else: ""))
-    tclEval(script = "bind " & dialogHeader & " <ButtonPress-" & (
-        if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
-        dialogHeader & " %X %Y}")
-    tclEval(script = "bind " & dialogHeader & " <Motion> {MoveDialog " &
-        result & " %X %Y}")
-    tclEval(script = "bind " & dialogHeader & " <ButtonRelease-" & (
-        if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
-        dialogHeader & " 0 0}")
-
-proc addCloseButton*(name, text, command: string; columnSpan: Positive = 1;
-    row: Natural = 0; column: Natural = 0; icon: string = "exiticon";
-    color: string = "") {.raises: [], tags: [], contractual.} =
-  ## Add a close button to the selected dialog and set keyboard bindings for it
-  ##
-  ## * name       - the Tk path (name) for the button
-  ## * text       - the text to display on the button
-  ## * command    - the Tcl command to run when the button was clicked
-  ## * columnSpan - the amount of columns to merge when placing the button
-  ## * row        - the row in which the button will be placed
-  ## * column     - the column in which the button will be placed
-  ## * icon       - the Tcl name of the image which will be displayed on the
-  ##                button intead of the text or close to the text
-  ## * color      - the color of the text on the button. Depends on the
-  ##                current game's theme
-  require:
-    name.len > 0
-  body:
-    let button: string = name
-    tclEval(script = "ttk::button " & button & " -command {" & command &
-        "} -image {" & icon & "} -style Dialog" & color & ".TButton -text {" &
-        text & "}")
-    tclEval(script = "tooltip::tooltip " & button & " \"Close the dialog \\[Escape key\\]\"")
-    tclEval(script = "grid " & button & " -pady 5" & (if columnSpan >
-        1: " -columnspan " & $columnSpan else: "") & " -row " & $row & (
-        if column > 0: " -column " & $column else: ""))
-    tclEval(script = "focus " & button)
-    tclEval(script = "bind " & button & " <Tab> {break}")
-    tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
-
-proc showDialog*(dialog: string; parentFrame: string = ".gameframe";
-    withTimer: bool = false; relativeX: float = 0.3;
-    relativeY: float = 0.3) {.raises: [], tags: [], contractual.} =
-  ## Show the selected dialog to the player
-  ##
-  ## * dialog      - the Tk path (name) of the dialog to show
-  ## * parentFrame - the Tk path (name) of the parent frame for the dialog
-  ## * withTimer   - if true, add the close timer for the dialog
-  ## * relativeX   - the relative X coordinate of the dialog inside its parent
-  ##                 frame. 0.0 is the left border
-  ## * relativeY   - the relative Y coordinate of the dialog inside its parent
-  ##                 frame. 0.0 is the top border
-  require:
-    dialog.len > 0
-  body:
-    tclEval(script = "place " & dialog & " -in " & parentFrame & " -relx " &
-        $relativeX & " -rely " & $relativeY)
-    tclEval(script = "raise " & dialog)
-    if withTimer:
-      timerId = tclEval2(script = "after 1000 UpdateDialog " & dialog & (
-          if parentFrame == ".gameframe": "" else: " " & parentFrame))
-
-proc showMessage*(text: string; parentFrame: string = ".gameframe";
-    title: string) {.raises: [], tags: [], contractual.} =
-  ## Show the dialog with the selected message to the player
-  ##
-  ## * text        - the text to of the message to show
-  ## * parentFrame - the Tk path (name) of the parent frame of the message
-  ## * title       - the title of the dialog with the message
-  let
-    messageDialog: string = createDialog(name = (if parentFrame ==
-        ".": "" else: parentFrame) & ".message", title = title,
-        parentName = parentFrame)
-    messageLabel: string = messageDialog & ".text"
-  tclEval(script = "ttk::label " & messageLabel & " -text {" & text & "} -wraplength 300")
-  tclEval(script = "grid " & messageLabel & " -sticky we -padx 5 -pady 5")
-  addCloseButton(name = messageDialog & ".button", text = "Close " &
-      $gameSettings.autoCloseMessagesTime, command = "CloseDialog " &
-      messageDialog & (if parentFrame == ".gameframe": "" else: " " &
-      parentFrame), row = 2)
-  showDialog(dialog = messageDialog, parentFrame = parentFrame,
-      withTimer = true)
-
-proc showQuestion*(question, res: string; inGame: bool = true) {.raises: [],
-    tags: [], contractual.} =
-  ## Show the dialog with the selected question to the player
-  ##
-  ## * question - the question to show to the player
-  ## * res      - the Tcl value set for the Ok button
-  ## * inGame   - if true, the dialog will be show in the game, otherwise in
-  ##              the main screen (like delete save game, etc.)
-  require:
-    question.len > 0
-  body:
-    let
-      questionDialog: string = createDialog(name = ".questiondialog", title = (
-          if res == "showstats": "Question" else: "Confirmation"),
-              titleWidth = 275,
-          columns = 2, parentName = (if inGame: ".gameframe" else: "."))
-      label: string = questionDialog & ".question"
-    tclEval(script = "ttk::label " & label & " -text {" & question & "} -wraplength 370 -takefocus 0")
-    tclEval(script = "grid " & label & " -columnspan 2 -padx 5 -pady {5 0}")
-    var button: string = questionDialog & ".yesbutton"
-    tclEval(script = "ttk::button " & button &
-        " -text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
-        res & "}")
-    tclEval(script = "grid " & button & " -column 0 -row 2 -pady {0 5} -padx 5")
-    tclEval(script = "bind " & button & " <Escape> {" & questionDialog & ".nobutton invoke;break}")
-    button = questionDialog & ".nobutton"
-    tclEval(script = "ttk::button " & button &
-        " -text No -command {CloseDialog " & questionDialog & (
-        if inGame: "" else: " .") & "}")
-    tclEval(script = "grid " & button & " -column 1 -row 2 -pady {0 5} -padx 5")
-    tclEval(script = "focus " & button)
-    if inGame:
-      showDialog(dialog = questionDialog)
-    else:
-      showDialog(dialog = questionDialog, parentFrame = ".", relativeX = 0.2)
-    tclEval(script = "bind " & button & " <Tab> {focus .questiondialog.yesbutton;break}")
-    tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
-    if res == "showstats":
-      tclEval(script = button & " configure -command {CloseDialog " &
-          questionDialog & "; ProcessQuestion mainmenu}")
-      button = questionDialog & ".yesbutton"
-      tclEval(script = button & " configure -command {CloseDialog " &
-          questionDialog & "; ProcessQuestion showstats}")
-
-proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
-    button1: ButtonSettings = emptyButtonSettings;
-    button2: ButtonSettings = emptyButtonSettings; wrap: bool = false;
-    relativeX: float = 0.3; relativeY: float = 0.3; width = 30) {.raises: [],
-    tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
-  ## Show the dialog with the selected text to the player
-  ##
-  ## * text       - the text to show in the dialog. Can use special tags for colors,
-  ##                like `{gold}{/gold}`
-  ## * parentName - the name of the Tk parent frame
-  ## * title      - the title of the dialog
-  ## * button1    - the settings for the first optional button. If empty,
-  ##                the button will not shown
-  ## * button2    - the settings for the second optional button. If empty,
-  ##                the button will not shown
-  ## * wrap       - if true, use Nim word wrapping instead of Tcl. Needed for
-  ##                very long texts. Default disabled
-  ## * relativeX  - the relative X coordinate of the dialog inside its parent
-  ##                frame. 0.0 is the left border
-  ## * relativeY  - the relative Y coordinate of the dialog inside its parent
-  ##                frame. 0.0 is the top border
-  ## * width      - the width of text in characters
-  let
-    infoDialog: string = createDialog(name = ".info", title = title,
-        titleWidth = 275, columns = 3, parentName = parentName)
-    infoLabel: string = infoDialog & ".text"
-  tclEval(script = "text " & infoLabel & " -width " & $width & " -height 25 -wrap word")
-  tclEval(script = infoLabel & " tag configure gold -foreground " & tclGetVar(
-      varName = "ttk::theme::" & gameSettings.interfaceTheme &
-      "::colors(-goldenyellow)"))
-  tclEval(script = infoLabel & " tag configure green -foreground " & tclGetVar(
-      varName = "ttk::theme::" & gameSettings.interfaceTheme &
-      "::colors(-green)"))
-  tclEval(script = infoLabel & " tag configure red -foreground " & tclGetVar(
-      varName = "ttk::theme::" & gameSettings.interfaceTheme &
-      "::colors(-red)"))
-  var
-    startIndex: int = 0
-    tagIndex: int = text.find(sub = '{')
-  while true:
-    if tagIndex == -1:
-      tagIndex = text.len
-    if wrap:
-      tclEval(script = infoLabel & " insert end {" & text[startIndex..tagIndex -
-          1].wrapWords(maxLineWidth = width + (width / 5).int + 1) & "}")
-    else:
-      tclEval(script = infoLabel & " insert end {" & text[startIndex..tagIndex -
-          1] & "}")
-    if tagIndex == text.len:
-      break
-    startIndex = tagIndex
-    tagIndex = text.find(sub = '}', start = startIndex)
-    let tagName: string = text[startIndex + 1..tagIndex - 1]
-    startIndex = tagIndex + 1
-    tagIndex = text.find(sub = "{/" & tagName & "}", start = startIndex)
-    tclEval(script = infoLabel & " insert end {" & text[startIndex..tagIndex -
-        1] & "} [list " & tagName & "]")
-    startIndex = tagIndex + tagName.len + 3
-    tagIndex = text.find(sub = '{', start = startIndex)
+  ## Returns the questionDialog if the message was set, otherwise
+  ## errorDialog
+  setDialog()
   try:
-    discard tclEval(script = infoLabel & " configure -state disabled -height " &
-        $(tclEval2(script = infoLabel & " index end").parseFloat + 1.0))
-  except ValueError:
-    showError(message = "Can't show the info. Tcl result: " & tclGetResult2())
-    return
-  tclEval(script = "grid " & infoLabel & " -sticky we -padx 5 -pady {5 0}")
-  let
-    buttonsFrame: string = infoDialog & ".buttons"
-    closeCommand: string = "CloseDialog " & infoDialog & (if parentName ==
-        ".gameframe": "" else: " " & parentName)
-  tclEval(script = "ttk::frame " & buttonsFrame)
-  var button: string = ""
-  if button1.text.len > 0 and button1.command.len > 0:
-    button = buttonsFrame & ".button1"
-    tclEval(script = "ttk::button " & button & " -text {" & button1.text & "}" &
-        (if button1.icon.len > 0: " -image {" & button1.icon & "}" else: "") &
-        " -command {" & closeCommand & ";" & button1.command &
-        "} -style Dialog" & button1.color & ".TButton")
-    tclEval(script = "tooltip::tooltip " & button & " \"" & button1.tooltip & "\"")
-    tclEval(script = "grid " & button & " -padx 5")
-    tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button;break}")
-    tclEval(script = "bind " & button & " <Escape> {" & buttonsFrame & ".button invoke;break}")
-  addCloseButton(name = buttonsFrame & ".button", text = "Close",
-      command = closeCommand, column = (if button1.text.len > 0: 1 else: 0),
-      icon = "exiticon")
-  tclEval(script = "bind " & infoLabel & " <Escape> {" & buttonsFrame & ".button invoke;break}")
-  button = buttonsFrame & ".button"
-  if button2.text.len > 0 and button2.command.len > 1:
-    tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button2;break}")
-    button = buttonsFrame & ".button2"
-    tclEval(script = "ttk::button " & button & " -text {" & button2.text & "}" &
-        (if button2.icon.len > 0: " -image {" & button2.icon & "}" else: "") &
-        " -command {" & closeCommand & ";" & button2.command &
-        "} -style Dialog" & button2.color & ".TButton")
-    tclEval(script = "tooltip::tooltip " & button & " \"" & button2.tooltip & "\"")
-    tclEval(script = "grid " & button & " -row 0 -column 2 -padx 5")
-    if button1.text.len > 0:
-      tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button1;break}")
-    else:
-      tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button;break}")
-    tclEval(script = "bind " & button & " <Escape> {" & buttonsFrame & ".button invoke;break}")
-  elif button1.text.len > 0 and button1.command.len > 0:
-    tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button1;break}")
-  tclEval(script = "grid " & buttonsFrame & " -padx 5 -pady 5")
-  showDialog(dialog = infoDialog, relativeX = relativeX, relativeY = relativeY)
+    var needLines: float = ceil(x = getTextWidth(text = question) / 350)
+    if needLines < 1.0:
+      needLines = 1.0
+    questionData = QuestionData(question: question, data: data,
+        lines: needLines, qType: qType)
+    answered = false
+    result = questionDialog
+  except:
+    result = setError(message = "Can't set the question.")
 
-proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
-    maxAmount: Natural = 0; cost: Natural = 0) {.raises: [], tags: [],
-        contractual.} =
-  ## Show the dialog for manipulate items amount in cargo (like selling,
-  ## dropping, etc).
+proc setMessage*(message, title: string): GameDialog {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Set the data related to the current in-game message
   ##
-  ## * title      - The title of the dialog
-  ## * command    - The Tcl command which will be executed when the player hit
-  ##                the button Ok
-  ## * action     - The name of action which the player is doing (like drop,
-  ##                sell, ect)
-  ## * itemIndex  - The index of the item which will be manipulated
-  ## * maxAmount  - Max amount of the items to manipualate. If zero, use max
-  ##                amount of items from player ship cargo. Default value is
-  ##                zero.
-  ## * cost       - The cost (in buying) or gain (in selling) for one item in
-  ##                the game money. Can be zero. Default value is zero.
-  let itemDialog: string = createDialog(name = ".itemdialog", title = title,
-      titleWidth = 275, columns = 2)
-  var button: string = itemDialog & ".dropbutton"
-  tclEval(script = "ttk::button " & button & " -command {" & command &
-      "} -style Dialoggreen.TButton" & (case action
-    of "drop":
-      " -image drop2icon"
-    of "take":
-      " -image give2icon"
-    of "buy":
-      " -image buyicon"
-    of "sell":
-      " -image sellicon"
-    else:
-      "") & " -text {" & action.capitalizeAscii & "}")
-  case action
-  of "drop":
-    tclEval(script = "tooltip::tooltip " & button & " \"Drop the item from the ship's cargo\"")
-  of "take":
-    tclEval(script = "tooltip::tooltip " & button & " \"Take the item from the base\"")
-  of "buy":
-    tclEval(script = "tooltip::tooltip " & button & " \"Buy the selected amount of the item\"")
-  of "sell":
-    tclEval(script = "tooltip::tooltip " & button & " \"Sell the selected amount of the item\"")
-  else:
-    discard
-  let amountBox: string = itemDialog & ".amount"
-  if maxAmount == 0:
-    tclEval(script = "ttk::spinbox " & amountBox & " -width 10 -from 1 -to " &
-        $playerShip.cargo[itemIndex].amount &
-        " -validate key -validatecommand {CheckAmount " & amountBox & " " & $(
-        itemIndex + 1) & " %P " & action & (if cost > 0: " " & $cost else: "") &
-        " " & button & "} -command {ValidateAmount " & amountBox & " " & $(
-        itemIndex + 1) & " " & action & (if cost > 0: " " & $cost else: "") &
-        " " & button & "}")
-  else:
-    tclEval(script = "ttk::spinbox " & amountBox & " -width 10 -from 1 -to " &
-        $maxAmount & " -validate key -validatecommand {CheckAmount " &
-        amountBox & " " & $(itemIndex + 1) & " %P " & action & (if cost >
-        0: " " & $cost else: "") & " " & button &
-        "} -command {ValidateAmount " & amountBox & " " & $(itemIndex + 1) &
-        " " & action & (if cost > 0: " " & $cost else: "") & " " & button & "}")
+  ## * message - the message which will be show to the player
+  ## * title   - the title of the message's dialog
+  ##
+  ## Returns the messageDialog if the message was set, otherwise
+  ## errorDialog
+  setDialog()
+  try:
+    var needLines: float = ceil(x = getTextWidth(text = message) / 250)
+    if needLines < 1.0:
+      needLines = 1.0
+    messageData = MessageData(text: message, title: title, lines: needLines,
+        started: cpuTime())
+    timer = gameSettings.autoCloseMessagesTime.float * 1000.0
+    result = messageDialog
+  except:
+    result = setError(message = "Can't set the message.")
+
+proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the current question to the player
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current game's state
+  ##
+  ## Returns the parameter dialog and state. The first is modified only when
+  ## the player closed the dialog and the second when the player quit the game.
+  if dialog != questionDialog:
+    return
+  try:
+    const
+      width: float = 350
+      height: float = 150
+
+    proc setMainMenu(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [], contractual.} =
+      ## Set the main window for the main game menu
+      ##
+      ## * dialog - the current in-game dialog displayed on the screen
+      ## * state  - the current game's state
+      ##
+      ## Returns the parameter dialog and state.
+      state = endGame
+      nuklearResizeWin(width = menuWidth, height = menuHeight)
+      nuklearSetWindowPos(x = windowCentered, y = windowCentered)
+      nuklearSetWindowResizable(resizable = false)
+      closePopup()
+      dialog = none
+
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = "Question", x = dialogX, y = dialogY,
+        w = width, h = height, flags = {windowBorder, windowTitle,
+        windowNoScrollbar, windowMovable}):
+      setLayoutRowDynamic(height = 30 * questionData.lines, cols = 1)
+      wrapLabel(str = questionData.question)
+      setLayoutRowDynamic(height = 30, cols = 2)
+      labelButton(title = "Yes"):
+        closePopup()
+        dialog = none
+        case questionData.qType
+        of deleteSave:
+          try:
+            removeFile(file = questionData.data)
+          except:
+            dialog = setError(message = "Can't remove the save file.")
+        of quitGame:
+          try:
+            endGame(save = true)
+            setMainMenu(dialog = dialog, state = state)
+          except:
+            dialog = setError(message = "Can't end the game.")
+        of resignGame:
+          try:
+            death(memberIndex = 0, reason = "resignation", ship = playerShip)
+          except:
+            dialog = setError(message = "Can't kill the player.")
+        of homeBase:
+          let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
+          if moneyAmount == 0:
+            dialog = setMessage(message = "You don't have any " & moneyName &
+                " for change ship home base.", title = "No money")
+            return
+          let price: Natural = questionData.data.parseInt
+          if moneyAmount < price:
+            dialog = setMessage(message = "You don't have enough " & moneyName &
+                " for change ship home base.", title = "No money")
+            return
+          playerShip.homeBase = skyMap[playerShip.skyX][
+              playerShip.skyY].baseIndex
+          updateMoney(memberIndex = -1, amount = -price, quality = any)
+          addMessage(message = "You changed your ship home base to: " &
+              skyBases[playerShip.homeBase].name, mType = otherMessage)
+          let traderIndex: int = findMember(order = talk)
+          gainExp(amount = 1, skillNumber = talkingSkill,
+              crewIndex = traderIndex)
+          try:
+            updateGame(minutes = 10)
+          except:
+            dialog = setError(message = "Can't update the game.")
+            return
+        of finishGame:
+          try:
+            death(memberIndex = 0, reason = "retired after finished the game",
+                ship = playerShip)
+            dialog = setQuestion(question = "You are dead. Would you like to see your game statistics?",
+                qType = showDeadStats)
+          except:
+            dialog = setError(message = "Can't kill the player.")
+            return
+        of dismissMember:
+          let
+            baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+                playerShip.skyY].baseIndex
+            memberIndex: int = try:
+                questionData.data.parseInt
+              except:
+                dialog = setError(message = "Can't get the member index.")
+                return
+          addMessage(message = "You dismissed " & playerShip.crew[
+              memberIndex].name & ".", mType = orderMessage)
+          try:
+            deleteMember(memberIndex = memberIndex, ship = playerShip)
+          except:
+            dialog = setError(message = "Can't delete the member.")
+            return
+          skyBases[baseIndex].population.inc
+          for index, _ in playerShip.crew:
+            try:
+              updateMorale(ship = playerShip, memberIndex = index,
+                  value = getRandom(min = -5, max = -1))
+            except:
+              dialog = setError(message = "Can't update the crew's morale.")
+              return
+          refreshCrewList()
+        of deleteMessages:
+          clearMessages()
+        of showDeadStats:
+          setStatistics(dialog = dialog)
+          state = gameStatistics
+        of noPilot:
+          try:
+            waitForRest()
+          except:
+            dialog = setError(message = "Can't wait for rest.")
+            return
+          let startsCombat: bool = try:
+              checkForEvent()
+            except:
+              dialog = setError(message = "Can't start a combat.")
+              return
+          var message: string = ""
+          if not startsCombat and gameSettings.autoFinish:
+            message = try:
+                autoFinishMissions()
+              except:
+                dialog = setError(message = "Can't autofinish mission.")
+                return
+          if message.len > 0:
+            dialog = setMessage(message = message, title = "Error")
+      labelButton(title = "No"):
+        if questionData.qType == showDeadStats:
+          endGame(save = false)
+          setMainMenu(dialog = dialog, state = state)
+        else:
+          closePopup()
+          dialog = none
+      if dialog == none:
+        questionData = QuestionData(question: "", data: "")
+        answered = true
+  except:
+    answered = true
+    dialog = setError(message = "Can't show the question")
+
+proc addCloseButton*(dialog: var GameDialog; icon: IconsNames = exitIcon;
+    color: ColorsNames = buttonTextColor; isPopup: bool = true;
+    label: string = "Close") {.raises: [], tags: [], contractual.} =
+  ## Add the close button to the dialog
+  ##
+  ## * dialog  - the current in-game dialog displayed on the screen
+  ## * icon    - the icon used on the button. Default is exitIcon
+  ## * color   - the color of the text on the button
+  ## * isPopup - if true, the dialog is a popup, otherwise it is a window
+  ## * label   - the label to show on the button
+  ##
+  ## Returns the parameter dialog. It is modified only when the player closed
+  ## the dialog.
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Close the dialog [Escape key]")
+  setButtonStyle(field = textNormal, color = theme.colors[color])
+  imageLabelButton(image = images[icon], label = label, alignment = right):
+    if isPopup:
+      closePopup()
+    dialog = none
+  restoreButtonStyle()
+
+proc showMessage*(dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the current question to the player
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the parameter dialog. It is modified only when the player closed
+  ## the dialog.
+  if dialog != messageDialog:
+    return
+  if timer == 0.0 and dialog == messageDialog:
+    dialog = none
+    return
+  try:
+    const
+      width: float = 350
+      height: float = 200
+
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = messageData.title, x = dialogX,
+        y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
+        windowNoScrollbar, windowMovable}):
+      setLayoutRowDynamic(height = 30 * messageData.lines, cols = 1)
+      wrapLabel(str = messageData.text)
+      setLayoutRowDynamic(height = 30, cols = 1)
+      addCloseButton(dialog = dialog, label = "Close " & $((timer /
+          1000.0).ceil.int))
+  except:
+    dialog = setError(message = "Can't show the message")
+
+var infoWidth: float = 0.0
+
+proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings;
+    button2: ButtonSettings = emptyButtonSettings): GameDialog {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Set the data related to the current in-game info dialog
+  ##
+  ## * text    - the text to show in the dialog. Can use special tags for
+  ##             colors, like `{gold}{/gold}`
+  ## * title   - the title of the dialog
+  ## * button1 - the settings for the first optional button. If empty, the
+  ##             button will not show
+  ## * button2 - the settings for the second optional button. If empty, the
+  ##             button will not show
+  ##
+  ## Returns the infoDialog if the info was set, otherwise errorDialog
+  setDialog(x = windowWidth / 5.0)
+  try:
+    infoWidth = windowWidth / 1.5
+    var
+      startIndex: int = 0
+      tagIndex: int = text.find(sub = '{')
+      parts: seq[TextData] = @[]
+      widgetsAmount: seq[Positive] = @[]
+      lineWidth, wAmount: Natural = 0
+    while true:
+      if tagIndex == -1:
+        tagIndex = text.len
+      var
+        partText: string = text[startIndex..tagIndex - 1]
+        needLines: float = ceil(x = getTextWidth(text = partText) / infoWidth)
+        newLines: float = partText.count(sub = '\n').float + 1.0
+      if needLines < 1.0:
+        needLines = 1.0
+      if needLines < newLines:
+        needLines = newLines
+      parts.add(y = TextData(text: partText, color: theme.colors[
+          foregroundColor], lines: needLines))
+      lineWidth += getTextWidth(text = partText).Natural
+      wAmount.inc
+      if lineWidth > infoWidth.Natural or tagIndex == text.len:
+        widgetsAmount.add(y = wAmount)
+        break
+      startIndex = tagIndex
+      tagIndex = text.find(sub = '}', start = startIndex)
+      let tagName: string = text[startIndex + 1..tagIndex - 1]
+      startIndex = tagIndex + 1
+      tagIndex = text.find(sub = "{/" & tagName & "}", start = startIndex)
+      partText = text[startIndex..tagIndex - 1]
+      needLines = ceil(x = getTextWidth(text = partText) / infoWidth)
+      if needLines < 1.0:
+        needLines = 1.0
+      parts.add(y = TextData(text: partText, color: case tagName
+        of "gold":
+          theme.colors[goldenColor]
+        of "green":
+          theme.colors[greenColor]
+        of "red:":
+          theme.colors[redColor]
+        else:
+          theme.colors[foregroundColor], lines: needLines))
+      if needLines > 1:
+        widgetsAmount.add(y = 1)
+        lineWidth = 0
+        wAmount = 0
+      lineWidth += getTextWidth(text = partText).Natural
+      if lineWidth <= infoWidth.Natural:
+        wAmount.inc
+      widgetsAmount.add(y = wAmount)
+      wAmount = 0
+      lineWidth = 0
+      startIndex = tagIndex + tagName.len + 3
+      if startIndex == text.len:
+        break
+      if text[startIndex] == '\n':
+        startIndex.inc
+      tagIndex = text.find(sub = '{', start = startIndex)
+    infoData = InfoData(data: parts, button1: button1, button2: button2,
+        widgetsAmount: widgetsAmount, title: title)
+    return infoDialog
+  except:
+    return setError(message = "Can't set the message.")
+
+proc showInfo*(dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the info to the player
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the parameter dialog. It is modified only when the player closed
+  ## the dialog.
+  if dialog != infoDialog:
+    return
+  try:
+    var height: float = 90
+    for data in infoData.data:
+      height += (30 * data.lines).float
+    updateDialog(width = infoWidth, height = height)
+    popup(pType = staticPopup, title = infoData.title, x = dialogX,
+        y = dialogY, w = infoWidth, h = height, flags = {windowBorder,
+        windowTitle, windowNoScrollbar, windowMovable}):
+      var index: Natural = 0
+      for wAmount in infoData.widgetsAmount:
+        if wAmount == 1:
+          setLayoutRowDynamic(height = 30 * infoData.data[index].lines, cols = 1)
+          colorWrapLabel(str = infoData.data[index].text, color = infoData.data[index].color)
+        else:
+          setLayoutRowDynamic(height = 30, cols = wAmount)
+          for index2 in index..index + wAmount - 1:
+            colorWrapLabel(str = infoData.data[index2].text,
+                color = infoData.data[index2].color)
+        index += wAmount
+      var cols: Positive = 3
+      if infoData.button1 == emptyButtonSettings:
+        cols.dec
+      if infoData.button2 == emptyButtonSettings:
+        cols.dec
+      setLayoutRowDynamic(height = 30, cols = cols)
+      # Draw the first optional button
+      if infoData.button1 != emptyButtonSettings:
+        let button: ButtonSettings = infoData.button1
+        setButtonStyle(field = textNormal, color = theme.colors[button.color])
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = button.tooltip)
+        if button.icon > -1:
+          if button.text.len == 0:
+            imageButton(image = images[button.icon.IconsNames]):
+              button.code(dialog = dialog)
+          else:
+            imageLabelButton(image = images[button.icon.IconsNames],
+                label = button.text, alignment = right):
+              button.code(dialog = dialog)
+        else:
+          labelButton(title = button.text):
+            button.code(dialog = dialog)
+        restoreButtonStyle()
+      # Draw close button
+      addCloseButton(dialog = dialog)
+      # Draw the second optional button
+      if infoData.button2 != emptyButtonSettings:
+        let button: ButtonSettings = infoData.button2
+        setButtonStyle(field = textNormal, color = theme.colors[button.color])
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = button.tooltip)
+        if button.icon > -1:
+          if button.text.len == 0:
+            imageButton(image = images[button.icon.IconsNames]):
+              button.code(dialog = dialog)
+          else:
+            imageLabelButton(image = images[button.icon.IconsNames],
+                label = button.text, alignment = right):
+              button.code(dialog = dialog)
+        else:
+          labelButton(title = button.text):
+            button.code(dialog = dialog)
+        restoreButtonStyle()
+  except:
+    dialog = setError(message = "Can't show the info")
+
+proc updateMaxAmount(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Update max allowed amount of items to give
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   let
-    amountLabel: string = itemDialog & ".amountlbl"
-    newMaxAmount: int = (if maxAmount == 0: playerShip.cargo[
-        itemIndex].amount else: maxAmount)
-  tclEval(script = "ttk::label " & amountLabel & " -text {Amount (max: " &
-      $newMaxAmount & "):}")
-  tclEval(script = "grid " & amountLabel & " -padx {5 0}")
-  # Add amount combobox
-  tclEval(script = amountBox & " set 1")
-  tclEval(script = "grid " & amountBox & " -column 1 -row 1 -padx {0 5}")
-  tclEval(script = "bind " & amountBox & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
-  # Add amount buttons
-  let amountFrame: string = itemDialog & ".amountframe"
-  tclEval(script = "ttk::frame " & amountFrame)
-  const amounts: array[3, Positive] = [100, 500, 1000]
-  var column: Natural = 0
-  for amount in amounts:
-    if newMaxAmount <= amount:
+    item: InventoryData = playerShip.cargo[manipulateData.itemIndex]
+    memberIndex: Natural = manipulateData.data
+  manipulateData.maxAmount = try:
+        (freeInventory(memberIndex = memberIndex, amount = 0).float /
+            getItemWeight(item = item).float).Natural
+      except:
+        dialog = setError(message = "Can't count the max amount.")
+        return
+  if item.amount < manipulateData.maxAmount:
+    manipulateData.maxAmount = item.amount
+
+proc setManipulate*(action: ManipulateType; iIndex: int;
+    mIndex: Natural = 0): GameDialog {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data related to the current in-game manipulate item dialog
+  ##
+  ## * action - the action used to manipulate items, like selling or buying
+  ## * iIndex - the index of the item to manipulate, in the player's ship's
+  ##            cargo (if positive) or in a trader's cargo (if negative)
+  ## * mIndex - the index of the player's ship's crew member in which inventory
+  ##            the item is stored. Used for moving items from or to the ship's
+  ##            cargo
+  ##
+  ## Returns the type of dialog if the dialog was set, otherwise errorDialog
+  setDialog(x = windowWidth / 5.0)
+  case action
+  of buyAction, sellAction:
+    let (protoIndex, maxSellAmount, maxBuyAmount, price, _, _, _) = try:
+        getTradeData(iIndex = iIndex)
+      except:
+        return setError(message = "Can't get the trade's data.")
+    try:
+      manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (
+          if action == buyAction: maxBuyAmount else: maxSellAmount),
+          cost: price, title: (if action == buyAction: "Buy " else: "Sell ") &
+          itemsList[protoIndex].name, amount: 1, warning: "", allCost: price)
+    except:
+      return setError(message = "Can't set the manipulate data.")
+    if action == buyAction:
+      return buyDialog
+    return sellDialog
+  of takeAction, dropAction:
+    let (protoIndex, maxAmount, cargoMaxAmount, _, _, _) = try:
+        getLootData(itemIndex = iIndex)
+      except:
+        return setError(message = "Can't get the trade's data.")
+    try:
+      manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (
+          if action == takeAction: maxAmount else: cargoMaxAmount),
+          cost: 0, title: (if action == takeAction: "Take " else: "Drop ") &
+          itemsList[protoIndex].name, amount: 1, warning: "", allCost: 0)
+    except:
+      return setError(message = "Can't set the manipulate data.")
+    if action == takeAction:
+      return takeDialog
+    return dropDialog
+  of moveAction:
+    manipulateData = ManipulateData(itemIndex: iIndex,
+        maxAmount: playerShip.crew[mIndex].inventory[iIndex].amount,
+        title: "Move " & getItemName(item = playerShip.crew[mIndex].inventory[
+        iIndex], damageInfo = false, toLower = false, moreInfo = false) & " to ship cargo",
+        warning: "", allCost: 0, amount: 1, data: mIndex)
+    return moveDialog
+  of giveAction:
+    manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: 1,
+        title: "Give " & getItemName(item = playerShip.cargo[iIndex],
+        damageInfo = false, toLower = false, moreInfo = false) & " to a crew member", warning: "",
+        allCost: 0, amount: 1, data: 0)
+    result = giveDialog
+    updateMaxAmount(dialog = result)
+  of dropCargoAction:
+    manipulateData = ManipulateData(itemIndex: iIndex,
+        maxAmount: playerShip.cargo[iIndex].amount, title: "Drop " &
+        getItemName(item = playerShip.cargo[iIndex], damageInfo = false,
+        toLower = false, moreInfo = false) & " from ship cargo", warning: "", allCost: 0, amount: 1)
+    return dropCargoDialog
+
+proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
+    KeyError], tags: [], contractual.} =
+  ## Update cost of the item and the warning message
+  ##
+  ## * amount     - the amount of the item
+  ## * cargoIndex - the index of the item in the player's ship's cargo
+  ## * dialog     - the type of dialog to show
+  if manipulateData.cost > 0:
+    manipulateData.allCost = manipulateData.amount * manipulateData.cost
+    countPrice(price = manipulateData.allCost, traderIndex = findMember(
+        order = talk), reduce = dialog == buyDialog)
+  else:
+    manipulateData.allCost = manipulateData.amount
+  manipulateData.warning = ""
+  if dialog == buyDialog:
+    if getItemAmount(itemType = fuelType) - manipulateData.allCost <=
+        gameSettings.lowFuel:
+      manipulateData.warning = "You will spend " & moneyName & " below low level of fuel."
+  elif dialog in {sellDialog, dropDialog, giveDialog, dropCargoDialog}:
+    let action: string = case dialog
+      of sellDialog:
+        "sell"
+      of giveDialog:
+        "give"
+      else:
+        "drop"
+    if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
+      let amount: int = getItemAmount(itemType = fuelType) - amount
+      if amount <= gameSettings.lowFuel:
+        manipulateData.warning = "You will " & action & " amount below low lewel of fuel."
+    for member in playerShip.crew:
+      let faction: FactionData = factionsList[member.faction]
+      if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in
+          faction.drinksTypes:
+        let amount: int = getItemsAmount(iType = "Drinks") - amount
+        if amount <= gameSettings.lowDrinks:
+          manipulateData.warning = "You will " & action & " amount below low lewel of drinks."
+          break
+      elif itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in
+          faction.foodTypes:
+        let amount: int = getItemsAmount(iType = "Food") - amount
+        if amount <= gameSettings.lowFood:
+          manipulateData.warning = "You will " & action & " amount below low lewel of food."
+          break
+
+proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the dialog to manipulate the selected item(s) to the player
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the parameter dialog. It is modified only when the player closed
+  ## the dialog. Returns true if an item was sold or bought, otherwise false
+  result = false
+  try:
+    const height: float = 220
+    let width: float = windowWidth / 1.5
+    updateDialog(width = width, height = height)
+    window(name = manipulateData.title, x = dialogX, y = dialogY, w = width,
+        h = height, flags = {windowBorder, windowTitle, windowNoScrollbar,
+        windowMovable}):
+      var baseCargoIndex, cargoIndex, protoIndex: int = -1
+      if manipulateData.itemIndex < 0:
+        baseCargoIndex = manipulateData.itemIndex.abs
+        if dialog == takeDialog:
+          baseCargoIndex.dec
+        let
+          baseIndex: int = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+          item: BaseCargo = skyBases[baseIndex].cargo[baseCargoIndex]
+        protoIndex = item.protoIndex
+        cargoIndex = findItem(inventory = playerShip.cargo,
+            protoIndex = protoIndex, itemQuality = item.quality,
+            craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+      else:
+        cargoIndex = manipulateData.itemIndex
+        if dialog == dropDialog:
+          cargoIndex.dec
+      if cargoIndex > -1:
+        protoIndex = playerShip.cargo[cargoIndex].protoIndex
+        if baseCargoIndex == -1 and dialog != moveDialog:
+          baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+              quality = playerShip.cargo[cargoIndex].quality,
+              craftBonus = playerShip.cargo[cargoIndex].craftBonus,
+              craftMalus = playerShip.cargo[cargoIndex].craftMalus)
+      setLayoutRowDynamic(height = 30, cols = 2)
+      # Set target (give dialog only)
+      if dialog == giveDialog:
+        label(str = "To:")
+        let newMember: Natural = comboList(items = crewList,
+            selected = manipulateData.data, itemHeight = 25, x = 200, y = 150)
+        if newMember != manipulateData.data:
+          manipulateData.data = newMember
+          updateMaxAmount(dialog = dialog)
+      # Set amount
+      label(str = "Amount (max: " & $manipulateData.maxAmount & "):")
+      let newValue: int = property2(name = "#", min = 1,
+          val = manipulateData.amount, max = manipulateData.maxAmount, step = 1,
+          incPerPixel = 1)
+      if newValue != manipulateData.amount:
+        manipulateData.amount = newValue
+        updateCost(amount = newValue, cargoIndex = (if cargoIndex >
+            -1: cargoIndex else: 0), dialog = dialog)
+      # Amount buttons
+      const amounts: array[1..3, Positive] = [100, 500, 1000]
+      var cols: Positive = 1
+      for amount in amounts:
+        if amount < manipulateData.maxAmount:
+          cols.inc
+      setLayoutRowDynamic(height = 30, cols = cols)
+      for i in 1..cols - 1:
+        labelButton(title = $amounts[i]):
+          manipulateData.amount = amounts[i]
+          updateCost(amount = amounts[i], cargoIndex = (if cargoIndex >
+              -1: cargoIndex else: 0), dialog = dialog)
+      labelButton(title = "Max"):
+        manipulateData.amount = manipulateData.maxAmount
+        updateCost(amount = manipulateData.amount, cargoIndex = (if cargoIndex >
+            -1: cargoIndex else: 0), dialog = dialog)
+      # Labels
+      if manipulateData.cost > 0:
+        setLayoutRowDynamic(height = 30, cols = 2)
+        label(str = "Total " & (if dialog == buyDialog: "cost:" else: "gain:"))
+        colorLabel(str = $manipulateData.allCost & " " & moneyName,
+            color = theme.colors[goldenColor])
+      setLayoutRowDynamic(height = 30, cols = 1)
+      colorLabel(str = manipulateData.warning, color = theme.colors[redColor])
+      # Action (buy, sell, etc) button
+      type ActionData = object
+        icon: IconsNames
+        label: string
+      let actionButton: ActionData = case dialog
+        of buyDialog:
+          ActionData(icon: buyIcon, label: "Buy")
+        of sellDialog:
+          ActionData(icon: sellIcon, label: "Sell")
+        of takeDialog:
+          ActionData(icon: giveIcon, label: "Take")
+        of dropDialog:
+          ActionData(icon: dropIcon, label: "Drop")
+        of moveDialog:
+          ActionData(icon: moveIcon, label: "Move")
+        of giveDialog:
+          ActionData(icon: giveColoredIcon, label: "Give")
+        of dropCargoDialog:
+          ActionData(icon: dropColoredIcon, label: "Drop")
+        else:
+          ActionData(icon: buyIcon, label: "Invalid")
+      setLayoutRowDynamic(height = 30, cols = 2)
+      setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+      imageLabelButton(image = images[actionButton.icon],
+          label = actionButton.label, alignment = right):
+        let
+          baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+              playerShip.skyY].baseIndex
+          trader: string = (if baseIndex > 0: "base" else: "ship")
+        try:
+          case dialog
+          of buyDialog:
+            buyItems(baseItemIndex = manipulateData.itemIndex.abs,
+                amount = $manipulateData.amount)
+          of sellDialog:
+            sellItems(itemIndex = manipulateData.itemIndex,
+                amount = $manipulateData.amount)
+          of takeDialog:
+            let item: BaseCargo = skyBases[baseIndex].cargo[baseCargoIndex]
+            if cargoIndex > -1:
+              updateCargo(ship = playerShip, cargoIndex = cargoIndex,
+                  amount = manipulateData.amount, durability = item.durability,
+                  quality = item.quality, craftBonus = item.craftBonus,
+                  craftMalus = item.craftMalus)
+            else:
+              updateCargo(ship = playerShip, protoIndex = protoIndex,
+                  amount = manipulateData.amount, durability = item.durability,
+                  quality = item.quality, craftBonus = item.craftBonus,
+                  craftMalus = item.craftMalus)
+            try:
+              updateBaseCargo(cargoIndex = baseCargoIndex,
+                  amount = -manipulateData.amount, durability = item.durability,
+                  quality = item.quality, craftBonus = item.craftBonus,
+                  craftMalus = item.craftMalus)
+            except:
+              dialog = setError(message = "Can't update the base's cargo3.")
+              return
+            try:
+              addMessage(message = "You took " & $manipulateData.amount & " " &
+                  itemsList[protoIndex].name & ".", mType = orderMessage)
+            except:
+              dialog = setError(message = "Can't add message.")
+              return
+          of dropDialog:
+            let item: InventoryData = playerShip.cargo[cargoIndex]
+            if baseCargoIndex > -1:
+              try:
+                updateBaseCargo(cargoIndex = baseCargoIndex,
+                    amount = manipulateData.amount,
+                    durability = item.durability, quality = item.quality,
+                    craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+              except:
+                dialog = setError(message = "Can't update the base's cargo.")
+                return
+            else:
+              try:
+                updateBaseCargo(protoIndex = protoIndex,
+                    amount = manipulateData.amount,
+                    durability = item.durability, quality = item.quality,
+                    craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+              except:
+                dialog = setError(message = "Can't update the base's cargo2.")
+                return
+            updateCargo(ship = playerShip, cargoIndex = cargoIndex,
+                amount = -manipulateData.amount, durability = item.durability,
+                quality = item.quality, craftBonus = item.craftBonus,
+                craftMalus = item.craftMalus)
+            try:
+              addMessage(message = "You drop " & $manipulateData.amount & " " &
+                  itemsList[protoIndex].name & ".", mType = orderMessage)
+            except:
+              dialog = setError(message = "Can't add message.")
+              return
+          of moveDialog:
+            try:
+              moveItem(itemIndex = manipulateData.itemIndex,
+                  amount = manipulateData.amount,
+                  memberIndex = manipulateData.data)
+            except NoFreeCargoError:
+              dialog = setMessage(message = getCurrentExceptionMsg(),
+                  title = "No free space in cargo")
+              return
+            except CrewNoSpaceError:
+              dialog = setError(message = "Can't update the member's inventory.")
+              return
+            except CrewOrderError:
+              dialog = setMessage(message = getCurrentExceptionMsg(),
+                  title = "Can't give an order.")
+              return
+            except:
+              dialog = setError(message = "Can't move item to the ship cargo.")
+              return
+          of giveDialog:
+            let item: InventoryData = playerShip.cargo[manipulateData.itemIndex]
+            try:
+              if freeInventory(memberIndex = manipulateData.data, amount = -(
+                  getItemWeight(item = item) * manipulateData.amount)) < 0:
+                dialog = setMessage(message = "No free space in " &
+                    playerShip.crew[manipulateData.data].name &
+                    "'s inventory for that amount of " & getItemName(
+                    item = item), title = "Can't give item")
+                return false
+            except:
+              dialog = setError(message = "Can't get the item.")
+              return false
+            addMessage(message = "You gave " & $manipulateData.amount & " " & getItemName(
+                item = item) & " to " & playerShip.crew[
+                manipulateData.data].name & ".", mType = otherMessage)
+            try:
+              updateInventory(memberIndex = manipulateData.data,
+                  amount = manipulateData.amount, protoIndex = item.protoIndex,
+                  durability = item.durability, price = item.price,
+                  ship = playerShip, quality = item.quality,
+                  craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+            except:
+              dialog = setError(message = "Can't update the member's inventory.")
+              return
+            updateCargo(ship = playerShip, amount = -manipulateData.amount,
+                cargoIndex = manipulateData.itemIndex, price = item.price,
+                quality = item.quality, craftBonus = item.craftBonus,
+                craftMalus = item.craftMalus)
+          of dropCargoDialog:
+            var dropAmount, dropAmount2: Natural = manipulateData.amount
+            let itemIndex: Natural = manipulateData.itemIndex
+            try:
+              if itemsList[playerShip.cargo[itemIndex].protoIndex].itemType == missionItemsType:
+                for j in 1..dropAmount2:
+                  for index, mission in acceptedMissions:
+                    if mission.mType == deliver and mission.itemIndex ==
+                        playerShip.cargo[itemIndex].protoIndex:
+                      deleteMission(missionIndex = index)
+                      dropAmount.dec
+                      break
+              elif currentStory.index.len > 0 and storiesList[
+                  currentStory.index].startData[0].parseInt == playerShip.cargo[
+                      itemIndex].protoIndex:
+                clearCurrentStory()
+            except:
+              dialog = setError(message = "Can't check the drop amount.")
+              return false
+            if dropAmount > 0:
+              addMessage(message = "You dropped " & $dropAmount & " " &
+                  getItemName(item = playerShip.cargo[itemIndex]) & ".",
+                      mtype = otherMessage)
+              let item: InventoryData = playerShip.cargo[itemIndex]
+              updateCargo(ship = playerShip, protoIndex = item.protoIndex,
+                amount = -dropAmount, durability = item.durability,
+                price = item.price, quality = item.quality,
+                craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+          else:
+            return false
+          dialog = none
+          result = true
+        except CantBuyError:
+          dialog = setMessage(message = "You can't buy " &
+              getCurrentExceptionMsg() & " in this " & trader & ".",
+                  title = "Can't buy items")
+        except NoFreeCargoError:
+          dialog = setMessage(message = "You don't have enough free space in your ship's cargo.",
+              title = "Can't buy items")
+        except NoMoneyError:
+          dialog = setMessage(message = "You don't have any " & moneyName &
+              " to buy " & getCurrentExceptionMsg() & ".",
+                  title = "No money to buy items")
+        except NotEnoughMoneyError:
+          dialog = setMessage(message = "You don't have enough " & moneyName &
+              " to buy so many " & getCurrentExceptionMsg() & ".",
+              title = "Not enough money to buy items")
+        except NoMoneyInBaseError:
+          dialog = setMessage(message = "You can't sell so many " &
+              getCurrentExceptionMsg() & " because " & trader &
+                  " don't have that many " & moneyName &
+              " to buy it.", title = "Too much items for sale")
+        except NoTraderError:
+          dialog = setMessage(message = "You don't have assigned anyone in the crew to the trader's duty.",
+              title = "No trader assigned")
+        except NoFreeSpaceError:
+          dialog = setMessage(message = "The " & trader &
+              " doesn't have free space in cargo to buy it.",
+              title = "No space in the " &
+              trader & "'s cargo")
+        except:
+          dialog = setError(message = "Can't trade item.")
+      restoreButtonStyle()
+      # Close button
+      addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
+          label = "Cancel", isPopup = false)
+  except:
+    dialog = setError(message = "Can't show the info")
+
+  windowSetFocus(name = manipulateData.title)
+
+proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
+    button1: ButtonSettings = emptyButtonSettings;
+    button2: ButtonSettings = emptyButtonSettings): GameDialog {.raises: [
+    KeyError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Show info about selected item in ship cargo or crew member inventory
+  ##
+  ## * itemIndex   - Index of item (can be inventory or ship cargo)
+  ## * memberIndex - If item is in crew member inventory, crew index of member,
+  ##                 otherwise 0
+  ## * button1     - The settings for the first optional button. If empty, the
+  ##                 button will not show. Default value is empty.
+  ## * button2     - The setting for the second optional button. If empty,
+  ##                 the button will not show. Default value is empty.
+  ##
+  ## Returns the infoDialog if the info was set, otherwise errorDialog
+  var
+    protoIndex: Natural = 0
+    itemInfo, quality, maxDurability, weight: string = ""
+  if memberIndex > -1:
+    let
+      item: InventoryData = playerShip.crew[memberIndex].inventory[itemIndex]
+      itemMaxDurability: ItemsDurability = getItemMaxDurability(item = item)
+    protoIndex = item.protoIndex
+    quality = $item.quality
+    if itemMaxDurability != defaultItemDurability:
+      if gameSettings.showNumbers:
+        maxDurability = $itemMaxDurability
+      else:
+        maxDurability = (if itemMaxDurability < defaultItemDurability: "Less"
+          else: "More") & " durable"
+    weight = $getItemWeight(item = item)
+    if item.durability < itemMaxDurability:
+      itemInfo = getItemDamage(item = playerShip.crew[
+          memberIndex].inventory[itemIndex], withColors = true) & '\n'
+  else:
+    let
+      item: InventoryData = playerShip.cargo[itemIndex]
+      itemMaxDurability: ItemsDurability = getItemMaxDurability(item = item)
+    protoIndex = item.protoIndex
+    quality = $item.quality
+    if itemMaxDurability != defaultItemDurability:
+      if gameSettings.showNumbers:
+        maxDurability = $itemMaxDurability
+      else:
+        maxDurability = (if itemMaxDurability < defaultItemDurability: "Less"
+          else: "More") & " durable"
+    weight = $getItemWeight(item = item)
+    if item.durability < itemMaxDurability:
+      itemInfo = getItemDamage(item = playerShip.cargo[
+          itemIndex], withColors = true) & '\n'
+  itemInfo.add(y = "Weight: {gold}" & weight & " kg{/gold}")
+  if itemsList[protoIndex].itemType == weaponType:
+    itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[protoIndex].value[
+        3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[
+        3]].attribute].name & "{/gold}")
+    if itemsList[protoIndex].value[4] == 1:
+      itemInfo.add(y = "\n{gold}Can be used with shield.{/gold}")
+    else:
+      itemInfo.add(y = "\n{gold}Can't be used with shield (two-handed weapon).{/gold}")
+    itemInfo.add(y = "\nDamage type: {gold}")
+    itemInfo.add(y = case itemsList[protoIndex].value[5]
+      of 1:
+        "cutting"
+      of 2:
+        "impaling"
+      of 3:
+        "blunt"
+      else:
+        "")
+    itemInfo.add(y = "{/gold}")
+  let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor,
+      armsArmor, legsArmor, shieldType]
+  for itemType in itemTypes:
+    if itemsList[protoIndex].itemType == itemType:
+      itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
+          itemIndex = itemIndex) &
+          "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
       break
-    let amountButton: string = amountFrame & ".button" & $amount
-    tclEval(script = "ttk::button " & amountButton & " -text {" & $amount &
-        "} -command {" & amountBox & " set " & $amount & ";" & amountBox & " validate} -style Dialog.TButton")
-    tclEval(script = "grid " & amountButton & " -padx {5 0} -row 0 -column " &
-        $column & " -sticky w")
-    tclEval(script = "bind " & amountButton & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
-    column.inc
-  let allButton: string = amountFrame & ".button" & $newMaxAmount
-  tclEval(script = "ttk::button " & allButton & " -text {Max} -command {" &
-      amountBox & " set " & $newMaxAmount & ";" & amountBox & " validate} -style Dialog.TButton")
-  tclEval(script = "bind " & allButton & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
-  tclEval(script = "grid " & allButton & " -padx {5 0} -row 0 -column " &
-      $column & " -sticky w")
-  tclEval(script = "grid " & amountFrame & " -padx 5 -pady 5 -columnspan 2")
-  # Add other labels
-  var label: string = ""
-  if cost > 0:
-    label = itemDialog & ".costlbl"
-    tclEval(script = "ttk::label " & label & " -text {Total " & (if action ==
-        "buy": "cost:" else: "gain:") & "}")
-    tclEval(script = "grid " & label & " -padx {5 0}")
-    label = itemDialog & ".cost2lbl"
-    tclEval(script = "ttk::label " & label & " -text { " & $cost & " " &
-        moneyName & "} -style " & (if action ==
-        "buy": "Golden.TLabel" else: "Headergreen.TLabel"))
-    tclEval(script = "grid " & label & " -column 1 -row 3 -padx {0 5}")
-  label = itemDialog & ".errorlbl"
-  tclEval(script = "ttk::label " & label & " -style Headerred.TLabel -wraplength 370")
-  tclEval(script = "grid " & label & " -columnspan 2 -padx 5")
-  tclEval(script = "grid remove " & label)
-  tclEval(script = "grid " & button & " -column 0 -row 5 -pady {0 5}")
-  tclEval(script = "bind " & button & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
-  button = itemDialog & ".cancelbutton"
-  tclEval(script = "ttk::button " & button & " -command {CloseDialog " &
-      itemDialog & "} -image cancelicon -style Dialogred.TButton -text {Cancel}")
-  tclEval(script = "grid " & button & " -column 1 -row 5 -pady {0 5}")
-  tclEval(script = "tooltip::tooltip " & button & " \"Close the dialog \\[Escape key\\]\"")
-  tclEval(script = "focus " & button)
-  tclEval(script = "bind " & button & " <Tab> {focus .itemdialog.dropbutton;break}")
-  tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
-  showDialog(dialog = itemDialog)
+  if itemsList[protoIndex].itemType in toolsList:
+    itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
+        itemIndex = itemIndex) & "{/gold}")
+  if itemsList[protoIndex].itemType.len > 4 and itemsList[protoIndex].itemType[
+      0 .. 3] == "Ammo" or itemsList[protoIndex].itemType == "Harpoon":
+    itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
+  if protoIndex != moneyIndex:
+    itemInfo.add(y = "\nQuality: {gold}" & quality.capitalizeAscii & "{/gold}")
+  if maxDurability.len > 0:
+    itemInfo.add(y = "\nMax durability: {gold}" & maxDurability & "{/gold}")
+  if itemsList[protoIndex].description.len > 0:
+    itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
+  return setInfo(text = itemInfo, title = (if memberIndex >
+      -1: getItemName(item = playerShip.crew[memberIndex].inventory[
+      itemIndex], damageInfo = false, toLower = false, moreInfo = false) else: getItemName(
+      item = playerShip.cargo[itemIndex], damageInfo = false,
+      toLower = false, moreInfo = false)), button1 = button1, button2 = button2)
+
+proc updateTimer*(timeDiff: float) {.raises: [], tags: [], contractual.} =
+  ## Update the dialogs' timer
+  ##
+  ## * timeDiff - the amount of time passed
+  timer -= timeDiff
+  if timer < 0.0:
+    timer = 0.0

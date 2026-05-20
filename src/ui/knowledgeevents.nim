@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -15,246 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-## Provides code related to the list of known events, like showing information,
-## sorting or showing them on the map.
+## Provides code related to the information about the list of known events, like
+## sorting them, showing information about them, etc.
 
-import std/[algorithm, strutils, tables]
-import contracts, nimalyzer
-import ../[config, game, maps, tk, types]
-import coreui, dialogs, errordialog, table
-
-proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
-  ## Show information about the selected event
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## ShowEventInfo eventindex
-  ## EventIndex is the index of the event to show
-  let
-    eventIndex: int = try:
-        ($argv[1]).parseInt - 1
-      except:
-        return showError(message = "Can't get the event index.")
-    baseIndex: ExtendedBasesRange = skyMap[eventsList[eventIndex].skyX][eventsList[
-        eventIndex].skyY].baseIndex
-  var eventInfo: string = "X: {gold}" & $eventsList[eventIndex].skyX &
-      "{/gold} Y: {gold}" & $eventsList[eventIndex].skyY & "{/gold}"
-  case eventsList[eventIndex].eType
-  of enemyShip, enemyPatrol, trader, friendlyShip:
-    try:
-      eventInfo.add(y = "\nShip type: {gold}" & protoShipsList[eventsList[
-          eventIndex].shipIndex].name & "{/gold}")
-    except:
-      return showError(message = "Can't get the ship info")
-  of fullDocks, attackOnBase, disease:
-    eventInfo.add(y = "\nBase name: {gold}" & skyBases[baseIndex].name & "{/gold}")
-  of doublePrice:
-    eventInfo.add(y = "\nBase name: {gold}" & skyBases[baseIndex].name & "{/gold}")
-    try:
-      eventInfo.add(y = "\nItem: {gold}" & itemsList[eventsList[
-          eventIndex].itemIndex].name & "{/gold}")
-    except:
-      return showError(message = "Can't get the item info")
-  of EventsTypes.none, baseRecovery:
-    discard
-  showInfo(text = eventInfo, title = "Event information",
-      button1 = ButtonSettings(tooltip: "Set the event as the ship destination",
-      command: "SetDestination2 " & $eventsList[eventIndex].skyX & " " &
-      $eventsList[eventIndex].skyY, icon: "destinationicon", text: "Target",
-      color: "green"), button2 = ButtonSettings(
-      tooltip: "Show the event on the map", command: "ShowOnMap " & $eventsList[
-      eventIndex].skyX & " " & $eventsList[eventIndex].skyY, icon: "show2icon",
-      text: "Show", color: "green"))
-  return tclOk
-
-{.push ruleOff: "varDeclared".}
-var
-  eventsTable: TableWidget
-  eventsIndexes: seq[Natural] = @[]
-{.pop ruleOn: "varDeclared".}
-
-proc updateEventsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
-    contractual.} =
-  ## Update and show list of known events
-  ##
-  ## * page     - the current page of the events' list to show
-  if eventsTable.row > 1:
-    clearTable(table = eventsTable)
-  let
-    eventsCanvas: string = mainPaned & ".knowledgeframe.events.canvas"
-    eventsFrame: string = eventsCanvas & ".frame"
-  var rows: int = try:
-      tclEval2(script = "grid size " & eventsFrame).split(sep = " ")[1].parseInt
-    except:
-      showError(message = "Can't get the amount of rows.")
-      return
-  deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = eventsFrame)
-  var
-    label: string = ""
-    row: Positive = 1
-  if eventsList.len == 0:
-    label = eventsFrame & ".noevents"
-    tclEval(script = "ttk::label " & label & " -text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 350")
-    tclEval(script = "grid " & label & " -padx 10")
-    tclEval(script = "bind " & eventsCanvas & " <Configure> {" & label &
-        " configure -wraplength [expr [winfo width " & eventsCanvas & "] - 10]}")
-  else:
-    tclEval(script = "bind " & eventsCanvas & " <Configure> {}")
-    row = 2
-    eventsTable = createTable(parent = eventsFrame, headers = @["Name",
-        "Distance", "Coordinates", "Details"], scrollbar = mainPaned &
-        ".knowledgeframe.events.scrolly", command = "SortKnownEvents",
-        tooltipText = "Press mouse button to sort the events.")
-    if eventsIndexes.len != eventsList.len:
-      eventsIndexes = @[]
-      for index, _ in eventsList:
-        eventsIndexes.add(y = index)
-    let startRow: Positive = ((page - 1) * gameSettings.listsLimit) + 1
-    var
-      currentRow: Positive = 1
-      color: string = ""
-    for event in eventsIndexes:
-      if currentRow < startRow:
-        currentRow.inc
-        continue
-      case eventsList[event].eType
-      of enemyShip:
-        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
-            event].skyY == playerShip.skyY: "yellow" else: "red")
-        addButton(table = eventsTable, text = "Enemy ship spotted",
-            tooltip = "Show the event's details", command = "ShowEventInfo " &
-            $(event + 1), column = 1, color = color)
-      of fullDocks:
-        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
-            event].skyY == playerShip.skyY: "yellow" else: "cyan")
-        addButton(table = eventsTable, text = "Full docks in base",
-            tooltip = "Show the event's details", command = "ShowEventInfo " &
-            $(event + 1), column = 1, color = color)
-      of attackOnBase:
-        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
-            event].skyY == playerShip.skyY: "yellow" else: "red")
-        addButton(table = eventsTable, text = "Base is under attack",
-            tooltip = "Show the event's details", command = "ShowEventInfo " &
-            $(event + 1), column = 1, color = color)
-      of disease:
-        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
-            event].skyY == playerShip.skyY: "yellow" else: "yellow3")
-        addButton(table = eventsTable, text = "Disease in base",
-            tooltip = "Show the event's details", command = "ShowEventInfo " &
-            $(event + 1), column = 1, color = color)
-      of enemyPatrol:
-        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
-            event].skyY == playerShip.skyY: "yellow" else: "red3")
-        addButton(table = eventsTable, text = "Enemy patrol",
-            tooltip = "Show the event's details", command = "ShowEventInfo " &
-            $(event + 1), column = 1, color = color)
-      of doublePrice:
-        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
-            event].skyY == playerShip.skyY: "yellow" else: "lime")
-        addButton(table = eventsTable, text = "Double price in base",
-            tooltip = "Show the event's details", command = "ShowEventInfo " &
-            $(event + 1), column = 1, color = color)
-      of trader:
-        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
-            event].skyY == playerShip.skyY: "yellow" else: "green")
-        addButton(table = eventsTable, text = "Friendly trader spotted",
-            tooltip = "Show the event's details", command = "ShowEventInfo " &
-            $(event + 1), column = 1, color = color)
-      of friendlyShip:
-        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
-            event].skyY == playerShip.skyY: "yellow" else: "green")
-        addButton(table = eventsTable, text = "Friendly ship spotted",
-            tooltip = "Show the event's details", command = "ShowEventInfo " &
-            $(event + 1), column = 1, color = color)
-      of EventsTypes.none, baseRecovery:
-        discard
-      addButton(table = eventsTable, text = $countDistance(
-          destinationX = eventsList[event].skyX, destinationY = eventsList[
-          event].skyY), tooltip = "The distance to the event",
-          command = "ShowEventInfo " & $(event + 1), column = 2, color = color)
-      addButton(table = eventsTable, text = "X: " & $eventsList[event].skyX &
-          " Y: " & $eventsList[event].skyY,
-          tooltip = "The coordinates of the event on the map",
-          command = "ShowEventInfo " & $(event + 1), column = 3, color = color)
-      case eventsList[event].eType
-      of doublePrice:
-        try:
-          addButton(table = eventsTable, text = itemsList[eventsList[
-              event].itemIndex].name & " in " & skyBases[skyMap[eventsList[
-              event].skyX][eventsList[event].skyY].baseIndex].name,
-              tooltip = "Show the event's details", command = "ShowEventInfo " &
-              $(event + 1), column = 4, newRow = true, color = color)
-        except:
-          showError(message = "Can't add item info button.")
-          return
-      of attackOnBase, disease, fullDocks, enemyPatrol:
-        addButton(table = eventsTable, text = skyBases[skyMap[eventsList[
-            event].skyX][eventsList[event].skyY].baseIndex].name,
-            tooltip = "Show the event's details", command = "ShowEventInfo " &
-            $(event + 1), column = 4, newRow = true, color = color)
-      of enemyShip, trader, friendlyShip:
-        try:
-          addButton(table = eventsTable, text = protoShipsList[eventsList[
-              event].shipIndex].name, tooltip = "Show the event's details",
-              command = "ShowEventInfo " & $(event + 1), column = 4,
-                  newRow = true, color = color)
-        except:
-          showError(message = "Can't add ship info button.")
-          return
-      of EventsTypes.none, baseRecovery:
-        discard
-      row.inc
-      if eventsTable.row == gameSettings.listsLimit + 1:
-        break
-    if page > 1:
-      if eventsTable.row < gameSettings.listsLimit + 1:
-        addPagination(table = eventsTable, previousCommand = "ShowEvents " & $(
-            page - 1), nextCommand = "")
-      else:
-        addPagination(table = eventsTable, previousCommand = "ShowEvents " & $(
-            page - 1), nextCommand = "ShowEvents " & $(page + 1))
-    elif eventsTable.row > gameSettings.listsLimit:
-      addPagination(table = eventsTable, previousCommand = "",
-          nextCommand = "ShowEvents " & $(page + 1))
-    updateTable(table = eventsTable)
-  tclEval(script = "update")
-  tclEval(script = eventsCanvas & " configure -scrollregion [list " & tclEval2(
-      script = eventsCanvas & " bbox all") & "]")
-  tclEval(script = eventsCanvas & " xview moveto 0.0")
-  tclEval(script = eventsCanvas & " yview moveto 0.0")
-
-proc showEventsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl, contractual.} =
-  ## Show the list of known events to the player
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## ShowEvents ?startindex?
-  ## Page parameter is a page number which will be show
-  if argc == 2:
-    try:
-      updateEventsList(page = ($argv[1]).parseInt)
-    except:
-      return showError(message = "Can't show the list of known events.")
-  else:
-    updateEventsList()
-  tclSetResult(value = "1")
-  return tclOk
+import std/[algorithm, tables]
+import contracts, nuklear/nuklear_sdl_renderer
+import ../[config, game, maps, messages, types]
+import coreui, dialogs, errordialog, mapsui, setui, table, themes
 
 type EventsSortOrders = enum
   none, typeAsc, typeDesc, distanceAsc, distanceDesc, detailsAsc, detailsDesc,
@@ -264,73 +31,97 @@ const defaultEventsSortOrder: EventsSortOrders = none
 
 var eventsSortOrder: EventsSortOrders = defaultEventsSortOrder
 
-proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl, contractual.} =
-  ## Show the list of known events to the player
+proc setTargetEvent(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the event as the target for the player's ship
   ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
+  ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## The procedure always return tclOk
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  closePopup()
+  dialog = none
+  let event = eventsList[setui.eventIndex]
+  if event.skyX == playerShip.skyX and event.skyY == playerShip.skyY:
+    dialog = setMessage(message = "You are at this location now.",
+        title = "Can't set destination")
+    return
+  playerShip.destinationX = event.skyX
+  playerShip.destinationY = event.skyY
+  addMessage(message = "You set the travel destination for your ship.",
+      mType = orderMessage)
+
+proc showEvent(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Show the event on the map
   ##
-  ## Tcl:
-  ## SortKnownEvents x
-  ## X is X axis coordinate where the player clicked the mouse button
-  let column: int = try:
-        getColumnNumber(table = eventsTable, xPosition = ($argv[1]).parseInt)
-      except:
-        return showError(message = "Can't get the column number.")
-  case column
-  of 1:
-    if eventsSortOrder == typeAsc:
-      eventsSortOrder = typeDesc
-    else:
-      eventsSortOrder = typeAsc
-  of 2:
-    if eventsSortOrder == distanceAsc:
-      eventsSortOrder = distanceDesc
-    else:
-      eventsSortOrder = distanceAsc
-  of 3:
-    if eventsSortOrder == detailsAsc:
-      eventsSortOrder = detailsDesc
-    else:
-      eventsSortOrder = detailsAsc
-  of 4:
-    if eventsSortOrder == coordAsc:
-      eventsSortOrder = coordDesc
-    else:
-      eventsSortOrder = coordAsc
-  else:
-    discard
-  type LocalEventData = object
-    eType: EventsTypes
-    distance: Natural
-    coords: string
-    details: string
-    id: Natural
-  var localEvents: seq[LocalEventData] = @[]
-  for index, event in eventsList:
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  closePopup()
+  let event = eventsList[setui.eventIndex]
+  centerX = event.skyX
+  centerY = event.skyY
+  dialog = none
+  mapPreview = true
+
+proc showEventInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected event information
+  ##
+  ## * data   - the index of the selected item
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  setui.eventIndex = data
+  let baseIndex: ExtendedBasesRange = skyMap[eventsList[setui.eventIndex].skyX][eventsList[
+        setui.eventIndex].skyY].baseIndex
+  var eventInfo: string = "X: {gold}" & $eventsList[setui.eventIndex].skyX &
+      "{/gold} Y: {gold}" & $eventsList[setui.eventIndex].skyY & "{/gold}"
+  case eventsList[setui.eventIndex].eType
+  of enemyShip, enemyPatrol, trader, friendlyShip:
     try:
-      localEvents.add(y = LocalEventData(eType: event.eType,
-          distance: countDistance(destinationX = event.skyX,
-          destinationY = event.skyY), coords: "X: " & $event.skyX & " Y: " &
-          $event.skyY, details: (case event.eType
-      of doublePrice:
-        itemsList[event.itemIndex].name & " in " & skyBases[skyMap[event.skyX][
-            event.skyY].baseIndex].name
-      of attackOnBase, disease, fullDocks, enemyPatrol:
-        skyBases[skyMap[event.skyX][event.skyY].baseIndex].name
-      of enemyShip, trader, friendlyShip:
-        protoShipsList[event.shipIndex].name
-      of EventsTypes.none, baseRecovery:
-        ""), id: index))
+      eventInfo.add(y = "\nShip type: {gold}" & protoShipsList[eventsList[
+          setui.eventIndex].shipIndex].name & "{/gold}")
     except:
-      return showError(message = "Can't add local event.")
-  proc sortEvents(x, y: LocalEventData): int {.raises: [], tags: [],
+      dialog = setError(message = "Can't get the ship info")
+      return
+  of fullDocks, attackOnBase, disease:
+    eventInfo.add(y = "\nBase name: {gold}" & skyBases[baseIndex].name & "{/gold}")
+  of doublePrice:
+    eventInfo.add(y = "\nBase name: {gold}" & skyBases[baseIndex].name & "{/gold}")
+    try:
+      eventInfo.add(y = "\nItem: {gold}" & itemsList[eventsList[
+          setui.eventIndex].itemIndex].name & "{/gold}")
+    except:
+      dialog = setError(message = "Can't get the item info")
+  of EventsTypes.none, baseRecovery:
+    discard
+  dialog = setInfo(text = eventInfo, title = "Event information",
+      button1 = ButtonSettings(tooltip: "Set the event as the ship destination",
+      code: setTargetEvent, icon: destinationIcon.ord, text: "Target",
+      color: greenColor), button2 = ButtonSettings(
+      tooltip: "Show the event on the map", code: showEvent,
+      icon: showColoredIcon.ord, text: "Show", color: greenColor))
+
+proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Sort events on the list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if eventsSortOrder == sortAsc:
+    eventsSortOrder = sortDesc
+  else:
+    eventsSortOrder = sortAsc
+
+  proc sortEvents(x, y: KnowledgeData): int {.raises: [], tags: [],
       contractual.} =
     ## Compare two events and return which should go first, based on the sort
     ## order of the events
@@ -342,11 +133,11 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     ## should go first.
     case eventsSortOrder
     of typeAsc:
-      if x.eType < y.eType:
+      if x.name < y.name:
         return 1
       return -1
     of typeDesc:
-      if x.eType > y.eType:
+      if x.name > y.name:
         return 1
       return -1
     of distanceAsc:
@@ -357,14 +148,6 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
       if x.distance > y.distance:
         return 1
       return -1
-    of detailsAsc:
-      if x.details < y.details:
-        return 1
-      return -1
-    of detailsDesc:
-      if x.details > y.details:
-        return 1
-      return -1
     of coordAsc:
       if x.coords < y.coords:
         return 1
@@ -373,21 +156,76 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
       if x.coords > y.coords:
         return 1
       return -1
+    of detailsAsc:
+      if x.details < y.details:
+        return 1
+      return -1
+    of detailsDesc:
+      if x.details > y.details:
+        return 1
+      return -1
     of none:
       return -1
-  localEvents.sort(cmp = sortEvents)
-  eventsIndexes = @[]
-  for event in localEvents:
-    eventsIndexes.add(y = event.id)
-  updateEventsList()
-  return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+  knownEventsList.sort(cmp = sortEvents)
+
+proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
-  ## Adds Tcl commands related to the known events UI
-  try:
-    addCommand(name = "ShowEventInfo", nimProc = showEventInfoCommand)
-    addCommand(name = "ShowEvents", nimProc = showEventsCommand)
-    addCommand(name = "SortKnownEvents", nimProc = sortEventsCommand)
-  except:
-    showError(message = "Can't add a Tcl command.")
+  ## Show the list of the known events
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  # No events
+  if knownEventsList.len == 0:
+    setLayoutRowDynamic(height = 100, cols = 1)
+    wrapLabel(str = "You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.")
+  else:
+    const
+      headers: array[4, HeaderData[EventsSortOrders]] = [
+        HeaderData[EventsSortOrders](label: "Name", sortAsc: typeAsc,
+            sortDesc: typeDesc),
+        HeaderData[EventsSortOrders](label: "Distance",
+            sortAsc: distanceAsc, sortDesc: distanceDesc),
+        HeaderData[EventsSortOrders](label: "Coordinates", sortAsc: coordAsc,
+            sortDesc: coordDesc),
+        HeaderData[EventsSortOrders](label: "Details",
+            sortAsc: detailsAsc, sortDesc: detailsDesc)]
+      ratio: array[4, cfloat] = [200.cfloat, 100, 150, 250]
+
+    addHeader(headers = headers, ratio = ratio, tooltip = "events",
+        code = sortEvents, dialog = dialog)
+    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    var
+      row, currentRow: Positive = 1
+    # Show the list of known events
+    for event in knownEventsList:
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      setButtonStyle(field = textNormal, color = theme.colors[event.color])
+      addButton(label = event.name, tooltip = "Show the event's details",
+          data = event.index, code = showEventInfo, dialog = dialog)
+      addButton(label = $event.distance, tooltip = "The distance to the event",
+          data = event.index, code = showEventInfo, dialog = dialog)
+      addButton(label = event.coords, tooltip = "The coordinates of the event",
+          data = event.index, code = showEventInfo, dialog = dialog)
+      addButton(label = event.details, tooltip = "Show the event's details",
+          data = event.index, code = showEventInfo, dialog = dialog)
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+      row.inc
+      if row == gameSettings.listsLimit + 1:
+        break
+    restoreButtonStyle()
+    addPagination(page = currentPage, row = row)

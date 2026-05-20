@@ -1,4 +1,4 @@
-# Copyright 2023-2026 Bartek thindil Jasicki
+# Copyright 2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -15,149 +15,30 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-## Provides various procedures related to the game's UI, like showing a screen,
-## updating the messages list, convert amount of minutes to date etc.  Split
-## from the utilsui module to avoid circular dependencies.
+## Provides various utility procedures for the game's UI, like counting the
+## travel information, converting minutes to in-game date, etc.
 
-import std/[strutils, tables]
 import contracts
-import ../[config, crew, game, items, messages, shipscargo, shipscrew, shipsmovement, tk, types]
-import coreui, dialogs, errordialog
+import ../[crew, game, shipscrew, shipsmovement, types]
 
 type
   TravelArray* = array[1..2, Natural]
-    ## Used to store data about travel: first is amount of minutes needed to
-    ## reach, the second is amount of fuel needed.
+    ## Used to store data about travel to some point on the map
 
-proc showScreen*(newScreenName: string) {.raises: [], tags: [], contractual.} =
-  ## Clear the old screen and show the selected to the player
-  ##
-  ## * newScreenName - the Tcl name of the screen which will be show
-  if tclGetVar(varName = "mappreview") == "1" and newScreenName != "mapframe":
-    tclUnsetVar(varName = "mappreview")
-  const
-    paned: string = mainPaned & ".controls.buttons"
-    messagesFrame: string = mainPaned & ".controls.messages"
-  let interp: PInterp = getInterp()
-  if tclEval(script = mainPaned & " panes") == tclError:
-    return
-  let
-    tclResult: string = interp.tclGetResult2()
-    oldSubWindow: string = tclResult.split()[0]
-    subWindow: string = mainPaned & "." & $newScreenName
-  if tclEval(script = mainPaned & " forget " & oldSubWindow) == tclError:
-    return
-  if tclEval(script = mainPaned & " insert 0 " & subWindow &
-      " -weight 1") == tclError:
-    return
-  if newScreenName in ["optionsframe", "messagesframe"] or
-      not gameSettings.showLastMessages:
-    if tclEval(script = "grid remove " & messagesFrame) == tclError:
-      return
-    if newScreenName != "mapframe":
-      if tclEval(script = "winfo height " & mainPaned) == tclError:
-        return
-      let newPos: string = interp.tclGetResult2()
-      if tclEval(script = mainPaned & " sashpos 0 " & newPos) == tclError:
-        return
-  else:
-    if oldSubWindow in [mainPaned & ".messagesframe", mainPaned &
-        ".optionsframe"]:
-      if tclEval(script = mainPaned & " sashpos 0 " & $(
-          gameSettings.windowHeight - gameSettings.messagesPosition)) == tclError:
-        return
-    if tclEval(script = "grid " & messagesFrame) == tclError:
-      return
-  if newScreenName == "mapframe":
-    if tclEval(script = "grid " & paned) == tclError:
-      return
-  else:
-    if tclEval(script = "grid remove " & paned) == tclError:
-      return
-
-proc updateMessages*() {.raises: [], tags: [], contractual.} =
-  ## Update the list of in-game messages, delete old ones and show the
-  ## newest to the player
-  let messagesView: string = mainPaned & ".controls.messages.view"
-  tclEval(script = messagesView & " configure -state normal")
-  tclEval(script = messagesView & " delete 1.0 end")
-  var loopStart: int = 0 - messagesAmount()
-  if loopStart == 0:
-    return
-  if loopStart < -10:
-    loopStart = -10
-
-  proc showMessage(message: MessageData) {.raises: [], tags: [], contractual.} =
-    ## Show the selected message
-    ##
-    ## * message - the message to show
-    const tagNames: array[1..5, string] = ["yellow", "green", "red", "blue", "cyan"]
-    if message.color == white:
-      tclEval(script = messagesView & " insert end {" & message.message & "}")
-    else:
-      tclEval(script = messagesView & " insert end {" & message.message &
-          "} [list " & tagNames[message.color.ord] & "]")
-
-  if gameSettings.messagesOrder == olderFirst:
-    for i in loopStart .. -1:
-      showMessage(message = getMessage(messageIndex = i + 1))
-      if i < -1:
-        tclEval(script = messagesView & " insert end {\n}")
-    tclEval(script = "update")
-    tclEval(script = messagesView & " see end")
-  else:
-    for i in countdown(a = -1, b = loopStart):
-      showMessage(message = getMessage(messageIndex = i + 1))
-      if i > loopStart:
-        tclEval(script = messagesView & " insert end {\n}")
-  tclEval(script = messagesView & " configure -state disable")
-
-proc getSkillMarks*(skillIndex: Positive;
-    memberIndex: Natural): string {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], contractual.} =
-  ## Get the marks with information about the skill level for the selected
-  ## skill for the selected crew member
-  ##
-  ## * skillIndex  - the index of the skill to check
-  ## * memberIndex - the index of the player's ship's crew member to check
-  ##
-  ## The string with one "+" sign if the crew member known the skill, the
-  ## string with twi "+" sings if the crew member has the highest level in
-  ## the skill of the all crew members. Otherwise return an empty string.
-  var
-    skillValue: int = 0
-    crewIndex: int = -1
-  try:
-    for index, member in playerShip.crew:
-      if getSkillLevel(member = member, skillIndex = skillIndex) > skillValue:
-        skillValue = getSkillLevel(member = member, skillIndex = skillIndex)
-        crewIndex = index
-    if getSkillLevel(member = playerShip.crew[memberIndex],
-        skillIndex = skillIndex) > 0:
-      result = " +"
-  except:
-    showError(message = "Can't get the crew member skill level.")
-    return ""
-  if memberIndex == crewIndex:
-    result &= "+"
-
-proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc travelInfo*(distance: Natural): TravelArray {.raises: [ValueError],
+    tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Count the ETA and the fuel usage for the selected distance
   ##
-  ## * Distance - Distance in map fields to destination point
+  ## * distance - Distance in map fields to destination point
   ##
   ## The result is the array with two values, the first is estimated time to
   ## travel the distance, the second is the amount of fuel needed to travel
-  ## the distance.
+  ## the distance. Additionally, it returns the modified parameter dialog it
+  ## is modified if any error happened.
   result = [0, 0]
   if distance == 0:
     return
-  let speed: float = try:
-      realSpeed(ship = playerShip, infoOnly = true) / 1_000
-    except:
-      showError(message = "Can't count the player's ship speed.")
-      return
+  let speed: float = realSpeed(ship = playerShip, infoOnly = true) / 1_000
   if speed == 0.0:
     return
   var minutesDiff: int = (100.0 / speed).int
@@ -217,7 +98,7 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
     travelTime: DateRecord = DateRecord()
     minutesDiff: int = minutes
   while minutesDiff > 0:
-    case minutesDiff:
+    case minutesDiff
     of 518_401..int.high:
       minutesDiff -= 518_400
       travelTime.year.inc()
@@ -263,129 +144,29 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
   if travelTime.minutes > 0:
     infoText = infoText & " " & $travelTime.minutes & "mins"
 
-proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
-    memberIndex: int; button1: ButtonSettings = emptyButtonSettings;
-    button2: ButtonSettings = emptyButtonSettings) {.raises: [
-    KeyError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
-  ## Show info about selected item in ship cargo or crew member inventory
+proc getSkillMarks*(skillIndex: Positive; memberIndex: Natural): string
+  {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Get the marks with information about the skill level for the selected
+  ## skill for the selected crew member
   ##
-  ## * parent      - The name of the parent widget
-  ## * itemIndex   - Index of item (can be inventory or ship cargo)
-  ## * memberIndex - If item is in crew member inventory, crew index of member,
-  ##                 otherwise 0
-  ## * button1     - The settings for the first optional button. If empty, the
-  ##                 button will not show. Default value is empty.
-  ## * button2     - The setting for the second optional button. If empty,
-  ##                 the button will not show. Default value is empty.
+  ## * skillIndex  - the index of the skill to check
+  ## * memberIndex - the index of the player's ship's crew member to check
+  ##
+  ## The string with one "+" sign if the crew member known the skill, the
+  ## string with twi "+" sings if the crew member has the highest level in
+  ## the skill of the all crew members. Otherwise return an empty string.
   var
-    protoIndex: Natural = 0
-    itemInfo, quality, maxDurability, weight: string = ""
-  if memberIndex > -1:
-    let
-      item: InventoryData = playerShip.crew[memberIndex].inventory[itemIndex]
-      itemMaxDur: ItemsDurability = getItemMaxDurability(item = item)
-    protoIndex = item.protoIndex
-    quality = $item.quality
-    if itemMaxDur != defaultItemDurability:
-      if gameSettings.showNumbers:
-        maxDurability = $itemMaxDur
-      else:
-        maxDurability = (if itemMaxDur < defaultItemDurability: "Less"
-          else: "More") & " durable"
-    weight = $getItemWeight(item = item)
-    if item.durability < itemMaxDur:
-      itemInfo = getItemDamage(item = item,
-        withColors = true) & '\n'
-  else:
-    let
-      item: InventoryData = playerShip.cargo[itemIndex]
-      itemMaxDur: ItemsDurability = getItemMaxDurability(item = item)
-    protoIndex = item.protoIndex
-    quality = $item.quality
-    if itemMaxDur != defaultItemDurability:
-      if gameSettings.showNumbers:
-        maxDurability = $itemMaxDur
-      else:
-        maxDurability = (if itemMaxDur < defaultItemDurability: "Less"
-          else: "More") & " durable"
-    weight = $getItemWeight(item = item)
-    if item.durability < itemMaxDur:
-      itemInfo = getItemDamage(item = item,
-        withColors = true) & '\n'
-  itemInfo.add(y = "Weight: {gold}" & weight & " kg{/gold}")
-  if itemsList[protoIndex].itemType == weaponType:
-    itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[protoIndex].value[
-        3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[
-        3]].attribute].name & "{/gold}")
-    if itemsList[protoIndex].value[4] == 1:
-      itemInfo.add(y = "\n{gold}Can be used with shield.{/gold}")
-    else:
-      itemInfo.add(y = "\n{gold}Can't be used with shield (two-handed weapon).{/gold}")
-    itemInfo.add(y = "\nDamage type: {gold}")
-    itemInfo.add(y = case itemsList[protoIndex].value[5]
-      of 1:
-        "cutting"
-      of 2:
-        "impaling"
-      of 3:
-        "blunt"
-      else:
-        "")
-    itemInfo.add(y = "{/gold}")
-  let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor, armsArmor, legsArmor, shieldType]
-  for itemType in itemTypes:
-    if itemsList[protoIndex].itemType == itemType:
-      itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
-          itemIndex = itemIndex) &
-          "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
-      break
-  if itemsList[protoIndex].itemType in toolsList:
-    itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
-        itemIndex = itemIndex) & "{/gold}")
-  if itemsList[protoIndex].itemType.len > 4 and itemsList[protoIndex].itemType[
-      0 .. 3] == "Ammo" or itemsList[protoIndex].itemType == "Harpoon":
-    itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
-  if protoIndex != moneyIndex:
-    itemInfo.add(y = "\nQuality: {gold}" & quality.capitalizeAscii & "{/gold}")
-  if maxDurability.len > 0:
-    itemInfo.add(y = "\nMax durability: {gold}" & maxDurability & "{/gold}")
-  if itemsList[protoIndex].description.len > 0:
-    itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
-  if parent == ".":
-    showInfo(text = itemInfo, title = (if memberIndex > -1: getItemName(
-        item = playerShip.crew[memberIndex].inventory[itemIndex],
-        damageInfo = false, toLower = false, moreInfo = false) else: getItemName(
-        item = playerShip.cargo[itemIndex], damageInfo = false,
-        toLower = false, moreInfo = false)), button1 = button1, button2 = button2)
-  else:
-    showInfo(text = itemInfo, parentName = parent, title = (if memberIndex >
-        -1: getItemName(item = playerShip.crew[memberIndex].inventory[
-        itemIndex], damageInfo = false, toLower = false, moreInfo = false) else: getItemName(
-        item = playerShip.cargo[itemIndex], damageInfo = false,
-        toLower = false, moreInfo = false)), button1 = button1, button2 = button2)
-
-proc setFonts*(newSize: Positive; fontType: FontTypes) {.raises: [],
-    tags: [], contractual.} =
-  ##  Set all the game fonts to the selected size
-  ##
-  ##  newSize  - The new size of the selected font's type
-  ##  fontType - The type of the font
-  const
-    helpFonts: array[4, string] = ["HelpFont", "BoldHelpFont",
-        "UnderlineHelpFont", "ItalicHelpFont"]
-    interfaceFonts: array[3, string] = ["InterfaceFont", "OverstrikedFont", "UnderlineFont"]
-  case fontType
-  of mapFont:
-    gameSettings.mapFontSize = newSize
-    tclEval(script = "font configure MapFont -size " &
-        $gameSettings.mapFontSize)
-  of helpFont:
-    gameSettings.helpFontSize = newSize
-    for fontName in helpFonts:
-      tclEval(script = "font configure " & fontName & " -size " &
-          $gameSettings.helpFontSize)
-  of interfaceFont:
-    gameSettings.interfaceFontSize = newSize
-    for fontName in interfaceFonts:
-      tclEval(script = "font configure " & fontName & " -size " &
-          $gameSettings.interfaceFontSize)
+    skillValue: int = 0
+    crewIndex: int = -1
+  try:
+    for index, member in playerShip.crew:
+      if getSkillLevel(member = member, skillIndex = skillIndex) > skillValue:
+        skillValue = getSkillLevel(member = member, skillIndex = skillIndex)
+        crewIndex = index
+    if getSkillLevel(member = playerShip.crew[memberIndex],
+        skillIndex = skillIndex) > 0:
+      result = " +"
+  except:
+    return ""
+  if memberIndex == crewIndex:
+    result &= "+"

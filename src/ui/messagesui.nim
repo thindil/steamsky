@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -13,240 +13,170 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+# along with Steam Sky.  if, see <http://www.gnu.org/licenses/>.
 
-## Provides code related to showing last in-game messages like showing their
-## list, selecting and deleting messages, etc.
+## Provides code related to showing in-game messages
 
-import std/strutils
-import contracts, nimalyzer
-import ../[config, messages, tk, types]
-import coreui, dialogs, errordialog, utilsui2
+import std/[colors, math, strutils]
+import contracts, nuklear/nuklear_sdl_renderer
+import ../[config, messages, types]
+import coreui, dialogs, errordialog, header, themes
 
-proc showMessage(message: MessageData; messageView: string;
-    messagesType: MessageType) {.raises: [], tags: [], cdecl, contractual,
-    ruleOff: "params".} =
-  ## Show the selected message to a player
+proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
+    inCombat: bool = false; withButtons: bool = true;
+    height: float) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the last in-game messages to the player
   ##
-  ## * message      - the message to show
-  ## * messageView  - the Tcl treeview name in which the message will be show
-  ## * messagesType - the selected type of messages to show
-  if message.kind != messagesType and messagesType != default:
+  ## * theme       - the current game's theme
+  ## * dialog      - the current in-game dialog displayed on the screen
+  ## * inCombat    - if true, show messages in combat
+  ## * withButtons - if true, show the buttons to resize the last messages
+  ##                 window
+  ## * height      - the height of the last messages window. If set to 0,
+  ##                 it wil be handled outside the procedure.
+  ##
+  ## Returns parameter dialog, modified if any error happened.
+  # Show buttons to resize the last messages window
+  if withButtons:
+    setLayoutRowDynamic(height = 20, cols = 2)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Make the list of messages bigger.")
+    imageButtonCentered(image = images[contract2Icon]):
+      gameSettings.messagesPosition += gameSettings.interfaceFontSize + 10
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Make the list of messages smaller.")
+    imageButtonCentered(image = images[expand2Icon]):
+      gameSettings.messagesPosition -= gameSettings.interfaceFontSize + 10
+  var loopStart: int = 0 - messagesAmount()
+  if loopStart == 0:
     return
-  let messageTag: string = (if message.color == white: "" else: " [list " & (
-      $message.color).toLowerAscii & "]")
-  tclEval(script = messageView & " insert end {" & message.message & "\n}" & messageTag)
+  if loopStart < -10:
+    loopStart = -10
 
-proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl, contractual.} =
-  ## Show the list of last messages to a player
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## ShowLastMessages messagestype
-  ## MessagesType is the type of messages to show, default all
-  var messagesFrame: string = mainPaned & ".messagesframe"
-  let messagesCanvas: string = messagesFrame & ".canvas"
-  if tclEval2(script = "winfo exists " & messagesCanvas) == "0":
-    tclEval(script = """
-      ttk::frame .gameframe.paned.messagesframe
-      set messagescanvas [canvas .gameframe.paned.messagesframe.canvas \
-         -xscrollcommand [list .gameframe.paned.messagesframe.scrollx set]]
-      pack $messagescanvas -side top -fill both
-      pack [ttk::scrollbar .gameframe.paned.messagesframe.scrollx \
-         -orient horizontal -command [list $messagescanvas xview]] -fill x
-      ::autoscroll::autoscroll .gameframe.paned.messagesframe.scrollx
-      set messagesframe [ttk::frame $messagescanvas.messages]
-      # Messages options
-      grid [ttk::frame $messagesframe.options] -sticky w
-      grid [ttk::combobox $messagesframe.options.types \
-         -values [list All Combat Trade Orders Craft Others Missions] \
-         -state readonly -width 10]
-      tooltip::tooltip $messagesframe.options.types \
-         {Select the type of messages to show}
-      bind $messagesframe.options.types <<ComboboxSelected>> SelectMessages
-      $messagesframe.options.types current 0
-      grid [ttk::entry $messagesframe.options.search -validate key \
-         -validatecommand {SearchMessages %P} -width 30] -row 0 -column 1
-      tooltip::tooltip $messagesframe.options.search \
-         {Search for the selected text in the messages}
-      grid [ttk::button $messagesframe.options.delete -text {Delete all messages} \
-         -command DeleteMessages] -row 0 -column 2
-      tooltip::tooltip $messagesframe.options.delete {Clear all messages}
-      # Messages list
-      grid [ttk::frame $messagesframe.list] -sticky nwes
-      set messagesview2 [text $messagesframe.list.view -width 10 -height 10 \
-         -yscrollcommand [list $messagesframe.list.scrolly set]]
-      $messagesview2 tag configure yellow -foreground \
-         [ttk::style lookup Messages -yellow]
-      $messagesview2 tag configure green -foreground \
-         [ttk::style lookup Messages -green]
-      $messagesview2 tag configure red -foreground \
-         [ttk::style lookup Messages -red]
-      $messagesview2 tag configure cyan -foreground \
-         [ttk::style lookup Messages -cyan]
-      $messagesview2 tag configure blue -foreground \
-         [ttk::style lookup Messages -blue]
-      $messagesview2 tag configure gray -foreground \
-         [ttk::style lookup Messages -gray]
-      pack [ttk::scrollbar $messagesframe.list.scrolly -orient vertical \
-         -command [list $messagesview2 yview]] -side right -fill y
-      pack $messagesview2 -side top -fill both -expand true
-      ::autoscroll::autoscroll $messagesframe.list.scrolly
-      SetScrollbarBindings $messagescanvas $messagesframe.list.scrolly
-      bind $messagescanvas <Configure> {
-         $messagesview2 configure -height [expr [winfo height $messagescanvas] \
-            / [font metrics InterfaceFont -linespace] - 1] -width [expr %w \
-            / [font measure InterfaceFont {  }] + 4]
-      }
-    """)
-    tclEval(script = "bind " & messagesFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
-  elif tclEval2(script = "winfo ismapped " & messagesCanvas) == "1" and argc == 1:
-    tclEval(script = "InvokeButton " & closeButton)
-    tclEval(script = "grid remove " & closeButton)
-    return tclOk
-  let typeBox: string = messagesCanvas & ".messages.options.types"
-  if argc == 1:
-    tclEval(script = typeBox & " current 0")
-  let searchEntry: string = messagesCanvas & ".messages.options.search"
-  tclEval(script = searchEntry & " delete 0 end")
-  let messagesView: string = messagesCanvas & ".messages.list.view"
-  tclEval(script = messagesView & " configure -state normal")
-  tclEval(script = messagesView & " delete 1.0 end")
-  let messagesType: MessageType = try:
-      (if argc == 1: default else: ($argv[1]).parseInt.MessageType)
-    except:
-      return showError(message = "Can't get messages type.")
-  if messagesAmount(kind = messagesType) == 0:
-    tclEval(script = messagesView & " insert end {There are no messages of that type.}")
-  else:
-    if gameSettings.messagesOrder == olderFirst:
-      for i in 1..messagesAmount():
-        showMessage(message = getMessage(messageIndex = i),
-            messageView = messagesView, messagesType = messagesType)
+  proc showMessage(message: MessageData; dialog: var GameDialog) {.raises: [],
+      tags: [RootEffect], contractual.} =
+    ## Show the selected message
+    ##
+    ## * message - the message to show
+    let
+      colors: array[1..5, Color] = [theme.colors[yellowColor], theme.colors[
+          greenColor], theme.colors[redColor], theme.colors[blueColor],
+          theme.colors[cyanColor]]
+      currentTurnTime: string = "[" & formattedTime() & "]"
+      width: float = (if inCombat: windowWidth else: windowWidth * 0.75)
+    var needLines: float = try:
+          ceil(x = getTextWidth(text = message.message) / width.float)
+        except:
+          dialog = setError(message = "Can't count the message lenght.")
+          return
+    if needLines < 1.0:
+      needLines = 1.0
+    setLayoutRowDynamic(height = 25 * needLines, cols = 1)
+    if inCombat:
+      if message.message.startsWith(prefix = currentTurnTime):
+        if message.color == white:
+          wrapLabel(str = message.message)
+        else:
+          colorWrapLabel(str = message.message, color = colors[
+              message.color.ord])
+      else:
+        colorWrapLabel(str = message.message, color = theme.colors[grayColor])
     else:
-      for i in countdown(a = messagesAmount(), b = 1):
-        showMessage(message = getMessage(messageIndex = i),
-            messageView = messagesView, messagesType = messagesType)
-  tclEval(script = messagesView & " configure -state disabled")
-  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
-  messagesFrame = messagesCanvas & ".messages"
-  tclEval(script = messagesCanvas & " configure -height [expr " & tclEval2(
-      script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
-      script = mainPaned & " cget -width"))
-  tclEval(script = "update")
-  tclEval(script = messagesCanvas & " create window 0 0 -anchor nw -window " & messagesFrame)
-  tclEval(script = "update")
-  tclEval(script = messagesCanvas & " configure -scrollregion [list " &
-      tclEval2(script = messagesCanvas & " bbox all") & "]")
-  showScreen(newScreenName = "messagesframe")
-  return tclOk
+      if message.color == white:
+        wrapLabel(str = message.message)
+      else:
+        colorWrapLabel(str = message.message, color = colors[message.color.ord])
 
-proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl, contractual.} =
-  ## Show only messages of the selected type
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## SelectMessages
-  let typeBox: string = mainPaned & ".messagesframe.canvas.messages.options.types"
-  return showLastMessagesCommand(clientData = clientData, interp = interp,
-      argc = 2, argv = @["SelectMessages", tclEval2(script = typeBox &
-      " current")].allocCStringArray)
-
-proc deleteMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
-        contractual.} =
-  ## Delete all messages
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## DeleteMessages
-  showQuestion(question = "Are you sure you want to clear all messages?",
-      res = "messages")
-  return tclOk
-
-proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl, contractual.} =
-  ## Show only this messages which contains the selected sequence
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## SearchMessages text
-  ## Text is the string to search in the messages
-  let
-    frameName: string = mainPaned & ".messagesframe.canvas.messages"
-    messagesView: string = frameName & ".list.view"
-  tclEval(script = messagesView & " configure -state normal")
-  tclEval(script = messagesView & " delete 1.0 end")
-  let
-    searchText: string = $argv[1]
-    typeBox: string = frameName & ".options.types"
-    messagesType: MessageType = try:
-        tclEval2(script = typeBox & " current").parseInt.MessageType
-      except:
-        return showError(message = "Can't get messages' type.")
-  if searchText.len == 0:
+  # Show the last messages
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "The last game messages. You can see more of them in Menu->Last messages screen")
+  if height > 0:
+    setLayoutRowDynamic(height = height, cols = 1)
+  group(title = "LastMessagesGroup", flags = {windowBorder}):
     if gameSettings.messagesOrder == olderFirst:
-      for i in 1..messagesAmount():
-        showMessage(message = getMessage(messageIndex = i),
-            messageView = messagesView, messagesType = messagesType)
+      for i in loopStart .. -1:
+        showMessage(message = getMessage(messageIndex = i + 1), dialog = dialog)
     else:
-      for i in countdown(a = 1, b = messagesAmount()):
-        showMessage(message = getMessage(messageIndex = i),
-            messageView = messagesView, messagesType = messagesType)
-    tclSetResult(value = "1")
-    return tclOk
-  if gameSettings.messagesOrder == olderFirst:
-    for i in 1..messagesAmount():
-      let message: MessageData = getMessage(messageIndex = i)
-      if message.message.find(sub = searchText) > -1:
-        showMessage(message = message, messageView = messagesView,
-            messagesType = messagesType)
-  else:
-    for i in countdown(a = 1, b = messagesAmount()):
-      let message: MessageData = getMessage(messageIndex = i)
-      if message.message.find(sub = searchText) > -1:
-        showMessage(message = message, messageView = messagesView,
-            messagesType = messagesType)
-  tclEval(script = messagesView & " configure -state disable")
-  tclSetResult(value = "1")
-  return tclOk
+      for i in countdown(a = -1, b = loopStart):
+        showMessage(message = getMessage(messageIndex = i + 1), dialog = dialog)
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
-    contractual.} =
-  ## Adds Tcl commands related to the crew UI
-  try:
-    addCommand(name = "ShowLastMessages", nimProc = showLastMessagesCommand)
-    addCommand(name = "SelectMessages", nimProc = selectMessagesCommand)
-    addCommand(name = "DeleteMessages", nimProc = deleteMessagesCommand)
-    addCommand(name = "SearchMessages", nimProc = searchMessagesCommand)
-  except:
-    showError(message = "Can't add a Tcl command.")
+var
+  messagesType: Natural = 0
+  messageSearch: string = ""
+
+proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the last messages screen
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters state and dialog. The latter is modified if
+  ## any error happened.
+  if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
+    return
+  const typesList: array[7, string] = ["All", "Combat", "Trade", "Orders",
+      "Craft", "Others", "Missions"]
+  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.2.cfloat, 0.55, 0.25])
+  messagesType = comboList(items = typesList, selected = messagesType,
+      itemHeight = 25, x = 150, y = 150)
+  editString(text = messageSearch, maxLen = 64)
+  labelButton(title = "Delete all messages"):
+    dialog = setQuestion(question = "Are you sure you want to clear all messages?",
+        qType = deleteMessages)
+  setLayoutRowDynamic(height = windowHeight - 55, cols = 1)
+  group(title = "MessagesGroup", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
+    let msgType: MessageType = if messagesType ==
+        0: default else: messagesType.MessageType
+    if messagesAmount(kind = msgType) == 0:
+      setLayoutRowDynamic(height = 25, cols = 1)
+      label(str = "There are no messages of that type.")
+    else:
+
+      proc showOneMessage(message: MessageData; messagesType: MessageType;
+          dialog: var GameDialog) {.raises: [], tags: [RootEffect], cdecl,
+          contractual.} =
+        ## Show the selected message to a player
+        ##
+        ## * message      - the message to show
+        ## * messagesType - the selected type of messages to show
+        if message.kind != messagesType and messagesType != default:
+          return
+        var needLines: float = try:
+              ceil(x = getTextWidth(text = message.message) / windowWidth.float)
+            except:
+              dialog = setError(message = "Can't count the message lenght.")
+              return
+        if needLines < 1.0:
+          needLines = 1.0
+        setLayoutRowDynamic(height = 25 * needLines, cols = 1)
+        if message.color == white:
+          wrapLabel(str = message.message)
+        else:
+          case message.color
+          of yellow:
+            colorWrapLabel(str = message.message, color = theme.colors[yellowColor])
+          of green:
+            colorWrapLabel(str = message.message, color = theme.colors[greenColor])
+          of red:
+            colorWrapLabel(str = message.message, color = theme.colors[redColor])
+          of blue:
+            colorWrapLabel(str = message.message, color = theme.colors[blueColor])
+          of cyan:
+            colorWrapLabel(str = message.message, color = theme.colors[cyanColor])
+          of white:
+            discard
+
+      if gameSettings.messagesOrder == olderFirst:
+        for i in 1..messagesAmount():
+          showOneMessage(message = getMessage(messageIndex = i),
+              messagesType = msgType, dialog = dialog)
+      else:
+        for i in countdown(a = messagesAmount(), b = 1):
+          showOneMessage(message = getMessage(messageIndex = i),
+              messagesType = msgType, dialog = dialog)

@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -13,79 +13,28 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+# along with Steam Sky.  if, see <http://www.gnu.org/licenses/>.
 
-## Provides code related to the wait menu, like showing it and executing
-## a wait command.
+## Provides code related to the wait some time menu, like showing the menu,
+## executing a wait command, etc.
 
-import std/strutils
-import contracts, nimalyzer
-import ../[crew2, game, game2, shipsmovement, tk, types]
-import coreui, dialogs, errordialog, updateheader, utilsui2
+import contracts, nuklear/nuklear_sdl_renderer
+import ../[config, crew2, game, game2, shipsmovement, types]
+import coreui, errordialog
 
-proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual,
-    ruleOff: "params".} =
-  ## Show the available wait orders to the player
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## ShowWait
-  var waitDialog: string = ".gameframe.wait"
-  if tclEval2(script = "winfo exists " & waitDialog) == "1":
-    let button: string = waitDialog & ".close"
-    tclEval(script = button & " invoke")
-    return tclOk
-  waitDialog = createDialog(name = ".gameframe.wait", title = "Wait in place", columns = 3)
+type
+  WaitReason = enum
+    rest, heal
 
-  proc addButton(time: Positive) {.raises: [], tags: [], contractual.} =
-    ## Add a button to the menu
-    ##
-    ## * time - the amount of minutes to wait after pressing the button
-    let button: string = waitDialog & ".wait" & $time
-    tclEval(script = "ttk::button " & button & " -text {Wait " & $time &
-        " minute" & (if time > 1: "s" else: "") & "} -command {Wait " & $time & "}")
-    tclEval(script = "grid " & button & " -sticky we -columnspan 3 -padx 5" & (
-        if time == 1: " -pady {5 0}" else: ""))
-    tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
-    tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for " &
-        $time & " minute" & (if time > 1: "s" else: "") & "\"")
+var
+  waitAmount: Positive = 1
+  waitInterval: Natural = 0
+  needRest, needHealing: bool = false
 
-  addButton(time = 1)
-  addButton(time = 5)
-  addButton(time = 10)
-  addButton(time = 15)
-  addButton(time = 30)
-  var button: string = waitDialog & ".wait1h"
-  tclEval(script = "ttk::button " & button & " -text {Wait 1 hour} -command {Wait 60}")
-  tclEval(script = "grid " & button & " -sticky we -columnspan 3 -padx 5")
-  tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for 1 hour\"")
-  tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
-  button = waitDialog & ".wait"
-  tclEval(script = "ttk::button " & button & " -text Wait -command {Wait amount}")
-  tclEval(script = "grid " & button & " -padx {5 0}")
-  tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
-  tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for the selected amount of minutes:\nfrom 1 to 1440 (the whole day)\"")
-  let amountBox: string = waitDialog & ".amount"
-  tclEval(script = "ttk::spinbox " & amountBox &
-      " -from 1 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P " &
-      button & "} -textvariable customwaittime")
-  tclEval(script = "grid " & amountBox & " -row 7 -column 1")
-  tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
-  if tclGetVar(varName = "customwaittime").len == 0:
-    tclEval(script = amountBox & " set 1")
-  tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for the selected amount of time:\nfrom 1 to 1440\"")
-  let amountCombo: string = waitDialog & ".mins"
-  tclEval(script = "ttk::combobox " & amountCombo & " -state readonly -values [list minutes hours days] -width 8")
-  tclEval(script = amountCombo & " current 0")
-  tclEval(script = "grid " & amountCombo & " -row 7 -column 2 -padx {0 5}")
-  var needRest, needHealing: bool = false
+proc setWaitMenu*() {.raises: [], tags: [], contractual.} =
+  ## Set the buttons to wait until crew is rested or healed
+  needRest = false
+  needHealing = false
   for index, member in playerShip.crew:
     if member.tired > 0 and member.order == rest:
       needRest = true
@@ -96,126 +45,136 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
             if owner == index:
               needHealing = true
               break
-  if needRest:
-    button = waitDialog & ".rest"
-    tclEval(script = "ttk::button " & button & " -text {Wait until crew is rested} -command {Wait rest}")
-    tclEval(script = "grid " & button & " -sticky we -columnspan 3 -padx 5")
-    tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
-    tclEval(script = "tooltip::tooltip " & button & " \"Wait in place until the whole ship's crew is rested.\"")
-  if needHealing:
-    button = waitDialog & ".heal"
-    tclEval(script = "ttk::button " & button & " -text {Wait until crew is healed} -command {Wait heal}")
-    tclEval(script = "grid " & button & " -sticky we -columnspan 3 -padx 5")
-    tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
-    tclEval(script = "tooltip::tooltip " & button & " \"Wait in place until the whole ship's crew is rested\nCan take a large amount of time.\"")
-  button = waitDialog & ".close"
-  tclEval(script = "ttk::button " & button &
-      " -text {Close} -command {CloseDialog " & waitDialog & ";break}")
-  tclEval(script = "grid " & button & " -sticky we -columnspan 3 -padx {0 5}")
-  tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
-  tclEval(script = "tooltip::tooltip " & button & " \"Close dialog \\[Escape\\]\"")
-  tclEval(script = "focus " & button)
-  tclEval(script = "bind " & button & " <Tab> {focus " & waitDialog & ".wait1;break}")
-  showDialog(dialog = waitDialog, relativeY = 0.15)
-  return tclOk
 
-proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl, contractual.}
-  ## Wait the selected amount of time
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## Wait
-
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+proc wait(minutes: Positive): GameDialog {.raises: [], tags: [RootEffect],
     contractual.} =
-  ## Adds Tcl commands related to the wait menu
+  ## Wait in place by selected in-game minutes
+  ##
+  ## * minutes - the amount of minutes to wait
   try:
-    addCommand(name = "ShowWait", nimProc = showWaitCommand)
-    addCommand(name = "Wait", nimProc = waitCommand)
+    updateGame(minutes = minutes)
+    waitInPlace(minutes = minutes)
+    setWaitMenu()
   except:
-    showError(message = "Can't add a Tcl command.")
+    return setError(message = "Can't wait in place.")
+  return none
 
-import mapsui
-
-proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.ruleOff: "hasPragma",
-    ruleOff: "hasdoc".} =
-  try:
-    case argv[1]
-    of "1":
-      updateGame(minutes = 1)
-      waitInPlace(minutes = 1)
-    of "5":
-      updateGame(minutes = 5)
-      waitInPlace(minutes = 5)
-    of "10":
-      updateGame(minutes = 10)
-      waitInPlace(minutes = 10)
-    of "15":
-      updateGame(minutes = 15)
-      waitInPlace(minutes = 15)
-    of "30":
-      updateGame(minutes = 30)
-      waitInPlace(minutes = 30)
-    of "60":
-      updateGame(minutes = 60)
-      waitInPlace(minutes = 60)
-    of "rest":
+proc waitReason(reason: WaitReason): GameDialog {.raises: [], tags: [
+    WriteIOEffect, RootEffect], contractual.} =
+  ## Wait in place for some time, depends on the reason
+  ##
+  ## * reason - the reason to wait, resting or wounded crew members
+  if reason == rest:
+    try:
       waitForRest()
-    of "heal":
-      var timeNeeded: Natural = 0
-      for index, member in playerShip.crew:
-        if member.health in 1..99 and member.order == rest:
-          block checkModules:
-            for module in playerShip.modules:
-              if module.mType == ModuleType2.cabin:
-                for owner in module.owner:
-                  if owner == index:
-                    if timeNeeded < (100 - member.health) * 15:
-                      timeNeeded = (100 - member.health) * 15
-                      break checkModules
-      if timeNeeded == 0:
-        return tclOk
-      updateGame(minutes = timeNeeded)
-      waitInPlace(minutes = timeNeeded)
-    of "amount":
-      const amountBox: string = ".gameframe.wait.amount"
-      var timeNeeded: Natural = try:
-          tclEval2(script = amountBox & " get").parseInt
-        except:
-          return showError(message = "Can't get type of time to wait.")
-      const amountCombo: string = ".gameframe.wait.mins"
-      if tclEval2(script = amountCombo & " current") == "1":
-        timeNeeded *= 60
-      elif tclEval2(script = amountCombo & " current") == "2":
-        timeNeeded *= 1_440
-      updateGame(minutes = timeNeeded)
-      waitInPlace(minutes = timeNeeded)
-    else:
-      discard
-  except:
-    return showError(message = "Can't wait selected amount of time.")
-  updateHeader()
-  updateMessages()
-  var currentFrame: string = mainPaned & ".shipinfoframe"
-  if tclEval2(script = "winfo exists " & currentFrame) == "1" and tclEval2(
-      script = "winfo ismapped " & currentFrame) == "1":
-    tclEval(script = "ShowShipInfo 1")
+      setWaitMenu()
+      return none
+    except:
+      return setError(message = "Can't wait until crew is rested.")
   else:
-    currentFrame = mainPaned & ".knowledgeframe"
-    if tclEval2(script = "winfo exists " & currentFrame) == "1" and tclEval2(
-        script = "winfo ismapped " & currentFrame) == "1":
-      tclEval(script = "ShowKnowledge 1")
-    else:
-      drawMap()
-  const dialogCloseButton: string = ".gameframe.wait.close"
-  tclEval(script = dialogCloseButton & " invoke")
-  return tclOk
+    var timeNeeded: Natural = 0
+    for index, member in playerShip.crew:
+      if member.health in 1..99 and member.order == rest:
+        block checkModules:
+          for module in playerShip.modules:
+            if module.mType == ModuleType2.cabin:
+              for owner in module.owner:
+                if owner == index:
+                  if timeNeeded < (100 - member.health) * 15:
+                    timeNeeded = (100 - member.health) * 15
+                    break checkModules
+    if timeNeeded == 0:
+      return none
+    return wait(minutes = timeNeeded)
+
+proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Show the menu with options to wait some in-game time
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog if error happened or menu has closed.
+
+  const windowName: string = "Wait in place"
+  var height: float = 320
+  if needRest:
+    height += 34
+  if needHealing:
+    height += 34
+  window(name = windowName, x = windowWidth / 4, y = windowHeight / 4,
+      w = 320, h = height, flags = {windowBorder, windowTitle,
+      windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = 30, cols = 1)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for 1 minute")
+    labelButton(title = "Wait 1 minute"):
+      dialog = wait(minutes = 1)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for 5 minutes")
+    labelButton(title = "Wait 5 minutes"):
+      dialog = wait(minutes = 5)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for 10 minutes")
+    labelButton(title = "Wait 10 minutes"):
+      dialog = wait(minutes = 10)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for 15 minutes")
+    labelButton(title = "Wait 15 minutes"):
+      dialog = wait(minutes = 15)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for 30 minutes")
+    labelButton(title = "Wait 30 minutes"):
+      dialog = wait(minutes = 30)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for 1 hour")
+    labelButton(title = "Wait 1 hour"):
+      dialog = wait(minutes = 60)
+    setLayoutRowDynamic(height = 30, cols = 3)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for the selected amount of minutes: from 1 to 1440 (the whole day)")
+    labelButton(title = "Wait"):
+      case waitInterval
+      of 0:
+        dialog = wait(minutes = waitAmount)
+      of 1:
+        dialog = wait(minutes = waitAmount * 60)
+      of 2:
+        dialog = wait(minutes = waitAmount * 1440)
+      else:
+        discard
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Wait in place for the selected amount of time: from 1 to 1440")
+    let newValue: int = property2(name = "#", min = 1, val = waitAmount,
+        max = 1440, step = 1, incPerPixel = 1)
+    if newValue != waitAmount:
+      waitAmount = newValue
+    waitInterval = comboList(items = ["minutes", "hours", "days"],
+        selected = waitInterval, itemHeight = 25, x = 100, y = 180)
+    setLayoutRowDynamic(height = 30, cols = 1)
+    if needRest:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Wait in place until the whole ship's crew is rested")
+      labelButton(title = "Wait until crew is rested"):
+        dialog = waitReason(reason = rest)
+    if needHealing:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Wait in place until the whole ship's crew is healed. Can take a large amount of time")
+      labelButton(title = "Wait until crew is healed"):
+        dialog = waitReason(reason = heal)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Close dialog")
+    labelButton(title = "Close"):
+      dialog = none
+
+  windowSetFocus(name = windowName)

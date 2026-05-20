@@ -19,9 +19,9 @@
 ## initialize graphic and start the game.
 
 import std/[os, parseopt, paths, strutils, tables, times]
-import contracts, newui/nuklear/nuklear_sdl_renderer
+import contracts, ui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
-import newui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
+import ui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
     basesui, combatui, coreui, craftsui, debugui, dialogs, errordialog,
     gameoptions, goalsui, header, helpui, knowledge, knowledgebases,
     knowledgemissions, mainmenu, mapsui, messagesui, missionsui, shipsui,
