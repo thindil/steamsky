@@ -123,7 +123,7 @@ template showActionMenu(button: string; action: untyped) =
     popup(pType = staticPopup, title = windowName, x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar, windowMovable}):
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
       labelButton(title = button):
         dialog = none
         closePopup()
@@ -201,7 +201,7 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if dialog != none:
       windowDisable()
     # Show information about money owned by the player
-    setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len, ratio = moneyWidth)
     for index, text in moneyText:
       if index mod 2 == 0:
         label(str = text)
@@ -280,7 +280,7 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if dialog != none:
       windowDisable()
     # Show information about money owned by the player
-    setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len, ratio = moneyWidth)
     for index, text in moneyText:
       if index mod 2 == 0:
         label(str = text)
@@ -370,12 +370,12 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
       windowDisable()
     # Show advanced options if needed
     if showOptions:
-      setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.1.cfloat, 0.3])
+      setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.1.cfloat, 0.3])
       label(str = "Name:")
       editString(text = nameSearch, maxLen = 64,
           tooltip = "Search for the selected recipe.")
     # Show information about money owned by the player
-    setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len, ratio = moneyWidth)
     for index, text in moneyText:
       if index mod 2 == 0:
         label(str = text)
