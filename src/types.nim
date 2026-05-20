@@ -185,6 +185,10 @@ type
     ## Used to store prototypes of mobiles indexes
   ShipIndex* = Positive
     ## Used to store prototypes of ships indexes
+  FactionName* = string
+    ## Used to store a faction's name
+  FactionMemberName* = string
+    ## Used to store a faction's members' names
 
 template typeGetterSetter(baseType: typedesc; varName, name: untyped;
     typ: typedesc) =
@@ -885,14 +889,14 @@ type
     ## * baseIcon         - The icon used as icon for the faction's bases on the map
     ## * basesTypes       - The list of available bases types for the faction
     ## * weaponSkill      - The skill used as prefered weapon skill for the faction
-    name*: string
-    memberName*: string
-    pluralMemberName*: string
+    name*: FactionName
+    memberName*: FactionMemberName
+    pluralMemberName*: FactionMemberName
     spawnChance*: Natural
     population*: AttributesArray
     namesType*: NamesTypes
     relations*: Table[string, RelationsData]
-    description*: string
+    description*: Description
     foodTypes*: seq[string]
     drinksTypes*: seq[string]
     healingTools*: SettingString
@@ -903,6 +907,7 @@ type
     basesTypes*: Table[string, Positive]
     weaponSkill*: Natural
 
+type
   ObjectData* = object
     ## Used to store information about items
     ##
