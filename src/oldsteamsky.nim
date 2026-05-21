@@ -28,7 +28,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   try:
     setCurrentDir(newDir = getAppDir())
-  except:
+  except OSError:
     echo "Can't set the current directory for the game."
     return
   # Get the command line params if any
@@ -59,7 +59,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     of "debug":
       try:
         debugMode = parseEnum[DebugLevels](s = val)
-      except:
+      except ValueError:
         echo "Invalid debug value: " & val
         return
   # Create the game directories
@@ -67,7 +67,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     createDir(dir = $saveDirectory)
     createDir(dir = $modsDirectory)
     createDir(dir = $themesDirectory)
-  except:
+  except IOError, OSError:
     echo "Can't create directories"
     return
 
@@ -80,7 +80,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   # Load the hall of fame
   try:
     loadHallOfFame()
-  except:
+  except DataLoadingError:
     echo "Can't load hall of fame"
     return
 
