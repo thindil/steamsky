@@ -287,11 +287,9 @@ proc addCloseButton*(dialog: var GameDialog; icon: IconsNames = exitIcon;
   ##
   ## Returns the parameter dialog. It is modified only when the player closed
   ## the dialog.
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Close the dialog [Escape key]")
   setButtonStyle(field = textNormal, color = theme.colors[color])
-  imageLabelButton(image = images[icon], label = label, alignment = right):
+  imageLabelButton(image = images[icon], label = label, alignment = right,
+      tooltip = "Close the dialog [Escape key]"):
     if isPopup:
       closePopup()
     dialog = none
@@ -449,12 +447,10 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
       if infoData.button1 != emptyButtonSettings:
         let button: ButtonSettings = infoData.button1
         setButtonStyle(field = textNormal, color = theme.colors[button.color])
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = button.tooltip)
         if button.icon > -1:
           if button.text.len == 0:
-            imageButton(image = images[button.icon.IconsNames]):
+            imageButton(image = images[button.icon.IconsNames],
+                tooltip = button.tooltip):
               button.code(dialog = dialog)
           else:
             imageLabelButton(image = images[button.icon.IconsNames],
@@ -470,12 +466,10 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
       if infoData.button2 != emptyButtonSettings:
         let button: ButtonSettings = infoData.button2
         setButtonStyle(field = textNormal, color = theme.colors[button.color])
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = button.tooltip)
         if button.icon > -1:
           if button.text.len == 0:
-            imageButton(image = images[button.icon.IconsNames]):
+            imageButton(image = images[button.icon.IconsNames],
+                tooltip = button.tooltip):
               button.code(dialog = dialog)
           else:
             imageLabelButton(image = images[button.icon.IconsNames],
@@ -557,13 +551,15 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
     manipulateData = ManipulateData(itemIndex: iIndex,
         maxAmount: playerShip.crew[mIndex].inventory[iIndex].amount,
         title: "Move " & getItemName(item = playerShip.crew[mIndex].inventory[
-        iIndex], damageInfo = false, toLower = false, moreInfo = false) & " to ship cargo",
+        iIndex], damageInfo = false, toLower = false, moreInfo = false) &
+        " to ship cargo",
         warning: "", allCost: 0, amount: 1, data: mIndex)
     return moveDialog
   of giveAction:
     manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: 1,
         title: "Give " & getItemName(item = playerShip.cargo[iIndex],
-        damageInfo = false, toLower = false, moreInfo = false) & " to a crew member", warning: "",
+        damageInfo = false, toLower = false, moreInfo = false) &
+            " to a crew member", warning: "",
         allCost: 0, amount: 1, data: 0)
     result = giveDialog
     updateMaxAmount(dialog = result)
@@ -571,7 +567,8 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
     manipulateData = ManipulateData(itemIndex: iIndex,
         maxAmount: playerShip.cargo[iIndex].amount, title: "Drop " &
         getItemName(item = playerShip.cargo[iIndex], damageInfo = false,
-        toLower = false, moreInfo = false) & " from ship cargo", warning: "", allCost: 0, amount: 1)
+        toLower = false, moreInfo = false) & " from ship cargo", warning: "",
+            allCost: 0, amount: 1)
     return dropCargoDialog
 
 proc updateCost(amount, cargoIndex: Natural; dialog: GameDialog) {.raises: [
@@ -825,8 +822,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             except:
               dialog = setError(message = "Can't get the item.")
               return false
-            addMessage(message = "You gave " & $manipulateData.amount & " " & getItemName(
-                item = item) & " to " & playerShip.crew[
+            addMessage(message = "You gave " & $manipulateData.amount & " " &
+                getItemName(item = item) & " to " & playerShip.crew[
                 manipulateData.data].name & ".", mType = otherMessage)
             try:
               updateInventory(memberIndex = manipulateData.data,
@@ -1004,7 +1001,8 @@ proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
     itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
   return setInfo(text = itemInfo, title = (if memberIndex >
       -1: getItemName(item = playerShip.crew[memberIndex].inventory[
-      itemIndex], damageInfo = false, toLower = false, moreInfo = false) else: getItemName(
+      itemIndex], damageInfo = false, toLower = false,
+      moreInfo = false) else: getItemName(
       item = playerShip.cargo[itemIndex], damageInfo = false,
       toLower = false, moreInfo = false)), button1 = button1, button2 = button2)
 
