@@ -29,11 +29,10 @@ language. It is recommended to use instructions from the download page.
 Linux packages are usually outdated and may not work.
 Perhaps the easiest way to build the game is to use [nimble](https://github.com/nim-lang/nimble)
 tool. It will install all needed Nim packages. Additionally, you will need
-to install *Tcl* and *Tk* development version of packages. On Windows, you can
-use [MagicSplat](https://www.magicsplat.com/tcl-installer/index.html)
-installer, on Debian-based distributions, it will be `apt-get install tcl-dev tk-dev`.
-Additional libraries, needed for running the game are listed in the section
-**Libraries needed to run the game** of the README.md.
+to install *SDL2* and *SDL2_Image* development version of libraries. On Windows,
+you can download them from [SDL2 releases](https://github.com/libsdl-org/SDL/releases)
+and [SDL2_Image releases](https://github.com/libsdl-org/SDL_image/releases)
+pages. On Debian-based distributions, it will be `apt-get install libsdl2-dev libsdl2-image-dev`
 
 When you have all dependencies installed, in the main directory, where this
 file is, type: `nimble release -y` for build the release version of the
@@ -90,19 +89,11 @@ directory.
 
 ### Libraries needed to run the game
 
-Additionally, the game requires a few more libraries to run. They are included
-in the releases:
-
-* TkLib. Included in MagicSplat version for Windows, on Linux should
-  be available in all mayor distributions.
-
-* Tk extension *tksvg*. You can get it from:
-
-   <https://github.com/auriocus/tksvg>
-
-* Tk extension *extrafont*. You can get it from:
-
-   <https://wiki.tcl-lang.org/page/extrafont>
+Besides *SDL2* and *SDL2_Image* the game doesn't need any additional libraries to
+run. On Windows you will need to download the libraries from [SDL2 releases](https://github.com/libsdl-org/SDL/releases)
+and [SDL2_Image releases](https://github.com/libsdl-org/SDL_image/releases)
+pages if you were build the game by yourself. The libraries are included in
+the releases.
 
 ### Starting parameters
 You can specify the game directories through command-line parameters.
@@ -163,10 +154,9 @@ see [CONTRIBUTING.md](bin/doc/CONTRIBUTING.md)
 ## Licenses
 The game is available under the GPLv3 license.
 
-Tcl/Tk, Tklib, Tksvg and Extrafont libraries distributed with the game are
-under BSD-like license.
-
-Nuklear GUI library, used in the new UI is under MIT license.
+Nuklear GUI library, used in the UI is under MIT license.
+SDL2 and SDL2 libraries, distributed with the game are available under
+zlib/libpng license.
 
 The Licensing for the fonts distributed with the game is as follows:
 
