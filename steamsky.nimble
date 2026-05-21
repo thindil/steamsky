@@ -51,7 +51,7 @@ task docs, "builds the project's documentation":
 
 task debug, "builds the new game UI in debug mode (temporary task)":
   exec "nim c -d:debug --app:gui --styleCheck:hint --spellSuggest:auto --errorMax:0 --outdir:" &
-      binDir & " --passl:\"-lm -lSDL2 -lSDL2_image\" --passc:\"-Isrc/ui/nuklear\" " &
+      binDir & " --passl:\"-lm -lSDL2 -lSDL2_image\" --passc:\"-Isrc/ui/nuklear -Wno-int-conversion -Wno-incompatible-function-pointer-types\" " &
       srcDir & DirSep & "steamsky.nim"
 
 task debugwindows, "builds the new game UI in debug mode for Windows 64-bit on Linux":
