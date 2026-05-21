@@ -71,7 +71,7 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
     flags = {windowBorder, windowTitle, windowMovable}):
-    setLayoutRowStatic(height = 35, cols = 2, width = 35)
+    setLayoutRowStatic(height = buttonHeight, cols = 2, width = buttonHeight.int)
     imageButton(image = images[selectAllIcon],
         tooltip = "Select all crew members"):
       if dialog == boardingDialog:
@@ -88,13 +88,13 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
       else:
         for checked in defenders.mitems:
           checked = false
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     for index, member in playerShip.crew:
       if dialog == boardingDialog:
         checkbox(label = member.name, checked = boardingParty[index])
       else:
         checkbox(label = member.name, checked = defenders[index])
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     imageLabelButton(image = images[assignCrewIcon], label = "Assign",
       alignment = right):
       for index, member in playerShip.crew:
@@ -136,16 +136,16 @@ proc showPilotSettings(dialog: var GameDialog; faction: FactionData) {.raises: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   if pilotIndex == 0:
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.33.cfloat, 0.33])
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.33.cfloat, 0.33])
   else:
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
+    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
   label(str = "Pilot:", alignment = left)
   let newPilot: Natural = comboList(items = pilotList,
-      selected = pilotIndex, itemHeight = 25, x = 200, y = 150,
+      selected = pilotIndex, itemHeight = labelHeight.int, x = 200, y = 150,
       tooltip = "Select the crew member which will be the pilot during the combat. The sign + after name means that this crew member has piloting skill, the sign ++ after name means that his/her piloting skill is the best in the crew")
   if pilotIndex > 0:
     let newOrder: Natural = comboList(items = pilotOrders,
-        selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150, tooltip = "Select the order for the pilot")
+        selected = (pilotOrder - 1), itemHeight = labelHeight.int, x = 200, y = 150, tooltip = "Select the order for the pilot")
     if newOrder != pilotOrder - 1:
       pilotOrder = newOrder + 1
       if "sentientships" in faction.flags:
@@ -183,14 +183,14 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
   group(title = "Your ship crew orders:", flags = {windowBorder, windowTitle}):
     if dialog != none:
       windowDisable()
-    setLayoutRowStatic(height = 35, cols = 1, width = 35)
+    setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
     imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon]),
         tooltip = "Maximize/minimize the ship crew orders"):
       if expandedSection == 1:
         expandedSection = 0
       else:
         expandedSection = 1
-    setLayoutRowDynamic(height = 35, cols = 3)
+    setLayoutRowDynamic(height = labelHeight, cols = 3)
     label(str = "Position", alignment = centered)
     label(str = "Member", alignment = centered)
     label(str = "Order", alignment = centered)
@@ -198,16 +198,17 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
     showPilotSettings(dialog = dialog, faction = faction)
     # Show engineer settings
     if engineerIndex == 0:
-      setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.33.cfloat, 0.33])
+      setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.33.cfloat, 0.33])
     else:
-      setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
+      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
     label(str = "Engineer:", alignment = left)
     let newEngineer: Natural = comboList(items = engineerList,
-        selected = engineerIndex, itemHeight = 25, x = 200, y = 150,
+        selected = engineerIndex, itemHeight = labelHeight.int, x = 200, y = 150,
         tooltip = "Select the crew member which will be the engineer during the combat. The sign + after name means that this crew member has engineering skill, the sign ++ after name means that his/her engineering skill is the best in the crew")
     if engineerIndex > 0:
       let newOrder: Natural = comboList(items = engineerOrders,
-          selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150, tooltip = "Select the order for the engineer")
+          selected = (engineerOrder - 1), itemHeight = labelHeight.int,
+              x = 200, y = 150, tooltip = "Select the order for the engineer")
       if newOrder != engineerOrder - 1:
         engineerOrder = newOrder + 1
         if "sentientships" in faction.flags:
@@ -236,9 +237,9 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
     for gunIndex, gun in guns.mpairs:
       var hasGunner: bool = playerShip.modules[gun[1]].owner[0] > 0
       if hasGunner:
-        setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
+        setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
       else:
-        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.33.cfloat, 0.33])
+        setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.33.cfloat, 0.33])
       var
         haveAmmo: bool = false
         ammoAmount: Natural = 0
@@ -274,7 +275,7 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
       wrapLabel(str = playerShip.modules[gun[1]].name & ": (Ammo: " &
           $ammoAmount & ")")
       let newGunner: Natural = comboList(items = gunnerList,
-          selected = gunnersIndex[gunIndex], itemHeight = 25, x = 200, y = 150,
+          selected = gunnersIndex[gunIndex], itemHeight = labelHeight.int, x = 200, y = 150,
           tooltip = "Select the crew member which will be operating the gun during the combat. The sign + after name means that this crew member has gunnery skill, the sign ++ after name means that his/her gunnery skill is the best in the crew")
       hasGunner = newGunner > 0
       if hasGunner:
@@ -287,7 +288,7 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
             dialog = setError(message = "Can't show gunner's order.")
             return
         let newOrder: Natural = comboList(items = gunnerOrders,
-            selected = (gun[2] - 1), itemHeight = 25, x = 200, y = 150,
+            selected = (gun[2] - 1), itemHeight = labelHeight.int, x = 200, y = 150,
             tooltip = "Select the order for the gunner. Shooting in the selected part of enemy ship is less precise but always hit the selected part.")
         if newOrder != gun[2] - 1:
           gun[2] = newOrder + 1
@@ -300,7 +301,7 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
     try:
       if (harpoonDuration > 0 or game.enemy.harpoonDuration > 0) and
           protoShipsList[enemyShipIndex].crew.len > 0:
-        setLayoutRowDynamic(height = 35, cols = 1)
+        setLayoutRowDynamic(height = buttonHeight, cols = 1)
         var boardingParty, defenders: string = ""
         for member in playerShip.crew:
           case member.order
@@ -322,15 +323,17 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
           tooltip = "Set your boarding party. If you join it, you will be able to give orders them, but not your gunners or engineer."):
           dialog = boardingDialog
           setDialog(x = windowWidth / 4)
-        var labelHeight: float = ceil(x = getTextWidth(text = boardingParty) / (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
-        setLayoutRowDynamic(height = labelHeight, cols = 1)
+        var labelHeight2: float = ceil(x = getTextWidth(text = boardingParty) /
+            (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
+        setLayoutRowDynamic(height = labelHeight2, cols = 1)
         wrapLabel(str = boardingParty)
-        setLayoutRowDynamic(height = 35, cols = 1)
+        setLayoutRowDynamic(height = labelHeight, cols = 1)
         labelButton(title = "Defenders:", tooltip = "Set your ship's defenders against the enemy party."):
           dialog = defendingDialog
           setDialog(x = windowWidth / 4)
-        labelHeight = ceil(x = getTextWidth(text = defenders) / (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
-        setLayoutRowDynamic(height = labelHeight, cols = 1)
+        labelHeight2 = ceil(x = getTextWidth(text = defenders) /
+            (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
+        setLayoutRowDynamic(height = labelHeight2, cols = 1)
         wrapLabel(str = defenders)
     except:
       dialog = setError(message = "Can't show information about boarding party and defenders.")
