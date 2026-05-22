@@ -155,13 +155,14 @@ see [CONTRIBUTING.md](bin/doc/CONTRIBUTING.md)
 The game is available under the GPLv3 license.
 
 Nuklear GUI library, used in the UI is under MIT license.
-SDL2 and SDL2 libraries, distributed with the game are available under
+
+SDL2 and SDL2\_Image libraries, distributed with the game are available under
 zlib/libpng license.
 
 The Licensing for the fonts distributed with the game is as follows:
 
 * Font Amarante is under SIL Open Font License: https://fonts.google.com/specimen/Amarante
-* Font Hack Nerd Font is under MiT license: https://nerdfonts.com/
+* Font Hack Nerd Font is under MIT license: https://nerdfonts.com/
 * Font Roboto is under Apache v2.0 license: https://fonts.google.com/specimen/Roboto
 
 All images used by the game are from https://game-icons.net, distributed under
