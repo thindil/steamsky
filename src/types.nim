@@ -907,6 +907,22 @@ type
     basesTypes*: Table[string, Positive]
     weaponSkill*: Natural
 
+proc initFactionData*(name: FactionName = "";
+    memberName: FactionMemberName = "";
+    pluralMemberName: FactionMemberName = "";
+    spawnChance: Natural = 0): FactionData {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for the in-game faction
+  ##
+  ## * name             - The name of the faction
+  ## * memberName       - The name of members of the faction
+  ## * pluralMemberName - The name for plural amount of members of the faction
+  ## * spawnChance      - The chance of the spawn for a base of the selected faction
+  ##
+  ## Returns the new structure with information about the selected faction
+  return FactionData(name: name, memberName: memberName,
+      pluralMemberName: pluralMemberName, spawnChance: spawnChance)
+
 type
   ObjectData* = object
     ## Used to store information about items
