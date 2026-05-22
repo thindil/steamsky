@@ -66,11 +66,9 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       ## * tooltip - the text to show as tooltip for the checkbox
       ##
       ## Returns the modified parameter option
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = tooltip)
-      label(str = label)
+      label(str = label, tooltip = tooltip)
       var checked: bool = option.bool
-      checkbox(label = "", checked = checked)
+      checkbox(label = "", checked = checked, tooltip = tooltip)
       option = checked.ord
 
     proc addProperty(label, tooltip: string; min, max: Natural;
@@ -84,13 +82,9 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       ## * value   - the current value set on the property
       ##
       ## Returns the modified parameter value
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = tooltip)
-      label(str = label)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = tooltip)
+      label(str = label, tooltip = tooltip)
       value = property2(name = "#", min = min, val = value, max = max, step = 1,
-          incPerPixel = 1)
+          incPerPixel = 1, tooltip = tooltip)
 
 
     proc addComboList(label, tooltip: string; items: openArray[string];
@@ -103,9 +97,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       ## * value   - the currently selected value on the list
       ##
       ## Returns the modified parameter value
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = tooltip)
-      label(str = label)
+      label(str = label, tooltip = tooltip)
       value = comboList(items = items, selected = value, itemHeight = 25,
           x = 350, y = 200, tooltip = tooltip)
 
@@ -120,16 +112,10 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       ## * index   - the index of the key to set
       ##
       ## Returns the modified parameter value
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = tooltip)
-      label(str = label)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = tooltip)
-      label(str = value)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Set the new keyboard shortcut for the action")
-      imageButton(image = images[moreOptionsIcon]):
+      label(str = label, tooltip = tooltip)
+      label(str = value, tooltip = tooltip)
+      imageButton(image = images[moreOptionsIcon],
+          tooltip = "Set the new keyboard shortcut for the action"):
         keyLabel = label
         keyIndex = index
         dialog = setKeyDialog
@@ -424,12 +410,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip: "Place where you should put all modifications files.")]
       setLayoutRowDynamic(height = 30, cols = 2)
       for index, path in pathsOptions:
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = pathsTexts[index].tooltip)
-        label(str = pathsTexts[index].label)
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = pathsTexts[index].tooltip)
-        label(str = path)
+        label(str = pathsTexts[index].label, tooltip = pathsTexts[index].tooltip)
+        label(str = path, tooltip = pathsTexts[index].tooltip)
     else:
       discard
     # Start setting the selected key
