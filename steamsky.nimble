@@ -26,7 +26,7 @@ task olddebug, "builds the old game UI in debug mode":
 
 task release, "builds the project in release mode":
   exec "nim c -d:release --app:gui --passC:-flto --passL:-Wl,-s --passL:-Wl,--disable-new-dtags,-rpath,$ORIGIN/lib --outdir:" &
-      binDir & " --passl:\"-lm -lSDL2 -lSDL2_image\" --passc:\"-Isrc/ui/nuklear\" " &
+      binDir & " --passl:\"-lm -lSDL2 -lSDL2_image\" --passc:\"-Isrc/ui/nuklear -Wno-int-conversion -Wno-incompatible-function-pointer-types\" " &
       srcDir & DirSep & "steamsky.nim"
 
 task releasewindows, "builds the project in release mode for Windows 64-bit on Linux":
