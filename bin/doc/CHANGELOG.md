@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- The new user interface for the game
+
 ### Changed
 - Updated README.md
 
