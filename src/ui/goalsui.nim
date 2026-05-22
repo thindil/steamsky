@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -105,15 +105,13 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           dialog = setError(message = "Can't show a goal.")
           return
       setLayoutRowDynamic(height = 35, cols = 1)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Select the goal for your character from the list. If you choose Random option, a random goal will be assigned. You can always change it later during the game, but you will lose all progress then.")
       if selected == -1:
         disabled:
           labelButton(title = "Select goal"):
             discard
       else:
-        labelButton(title = "Select goal"):
+        labelButton(title = "Select goal",
+            tooltip = "Select the goal for your character from the list. If you choose Random option, a random goal will be assigned. You can always change it later during the game, but you will lose all progress then."):
           dialog = none
           clearCurrentGoal()
           if selected > 0:
@@ -130,10 +128,7 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
               dialog = setError(message = "Can't set random current goal.")
           if selectedGoal.len > 16:
             selectedGoal = selectedGoal[0..16] & "..."
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Close the goals list without any changes")
-      labelButton(title = "Close"):
+      labelButton(title = "Close", tooltip = "Close the goals list without any changes"):
         dialog = none
         selectedGoal = oldSelected
 
