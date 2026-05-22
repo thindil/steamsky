@@ -372,14 +372,14 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Enemy info:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon]),
           tooltip = "Maximize/minimize the enemy's ship info"):
         if expandedSection == 2:
           expandedSection = 0
         else:
           expandedSection = 2
-      setLayoutRowDynamic(height = 25, cols = 2)
+      setLayoutRowDynamic(height = labelHeight, cols = 2)
       label(str = "Name:")
       colorLabel(str = enemyName, color = theme.colors[goldenColor])
       label(str = "Type:")
@@ -469,14 +469,14 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Your ship status:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon]),
           tooltip = "Maximize/minimize the ship status info"):
         if expandedSection == 3:
           expandedSection = 0
         else:
           expandedSection = 3
-      setLayoutRowDynamic(height = 25, cols = 2)
+      setLayoutRowDynamic(height = labelHeight, cols = 2)
       for module in playerShip.modules:
         if module.durability > 0:
           label(str = module.name)
@@ -493,14 +493,14 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Enemy ship status:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon]),
           tooltip = "Maximize/minimize the ship status info"):
         if expandedSection == 4:
           expandedSection = 0
         else:
           expandedSection = 4
-      setLayoutRowDynamic(height = 25, cols = 2)
+      setLayoutRowDynamic(height = labelHeight, cols = 2)
       if endCombat:
         game.enemy.distance = 100
       for module in game.enemy.ship.modules.mitems:
@@ -526,7 +526,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     inCombat = false
     previousState = emptyState
   else:
-    setLayoutRowDynamic(height = 35, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     labelButton(title = "Next turn"):
       try:
         combatTurn()
@@ -583,14 +583,14 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Your crew:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[expandIcon] else:
         images[contractIcon]), tooltip = "Maximize/minimize your crew list"):
         if expandedSection == 1:
           expandedSection = 0
         else:
           expandedSection = 1
-      setLayoutRowDynamic(height = 25, cols = 3)
+      setLayoutRowDynamic(height = labelHeight, cols = 3)
       label(str = "Member", alignment = centered)
       label(str = "Health", alignment = centered)
       label(str = "Order", alignment = centered)
@@ -610,7 +610,7 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
               tooltip = "The crew member's health.")
         let newOrder: Natural = comboList(items = ordersList,
           selected = (if boardingOrders[orderIndex] > -1: boardingOrders[orderIndex]
-          else: ordersList.high), itemHeight = 25, x = 200, y = 150,
+          else: ordersList.high), itemHeight = labelHeight.int, x = 200, y = 150,
           tooltip = "The crew member current order.")
         if newOrder != boardingOrders[orderIndex]:
           boardingOrders[orderIndex] = (if newOrder == game.enemy.ship.crew.len: -1
@@ -621,14 +621,14 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Your crew:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[expandIcon] else:
         images[contractIcon]), tooltip = "Maximize/minimize enemy's ship's crew list"):
         if expandedSection == 1:
           expandedSection = 0
         else:
           expandedSection = 1
-      setLayoutRowDynamic(height = 25, cols = 3)
+      setLayoutRowDynamic(height = labelHeight, cols = 3)
       label(str = "Member", alignment = centered)
       label(str = "Health", alignment = centered)
       label(str = "Order", alignment = centered)
@@ -647,7 +647,7 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if endCombat:
     inCombat = false
   else:
-    setLayoutRowDynamic(height = 35, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     labelButton(title = "Next turn"):
       try:
         combatTurn()
