@@ -627,6 +627,19 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.tab.nodeMinimizeButton.textActive = table[textColor]
   context.style.tab.nodeMinimizeButton.padding = Vec2(x: 2.0, y: 2.0)
   context.style.tab.nodeMinimizeButton.touchPadding = Vec2(x: 0.0, y: 0.0)
+  context.style.tab.nodeMinimizeButton.userData = Handle(handleType: handleInt,
+      intValue: 0)
+  context.style.tab.nodeMinimizeButton.alignment = centered
+  context.style.tab.nodeMinimizeButton.border = 0.0
+  context.style.tab.nodeMinimizeButton.rounding = 0.0
+  context.style.tab.nodeMinimizeButton.colorFactorText = 1.0
+  context.style.tab.nodeMinimizeButton.colorFactorBackground = 1.0
+  context.style.tab.nodeMinimizeButton.disabledFactor = nkWidgetDisabledFactor
+  context.style.tab.nodeMinimizeButton.drawBegin = nil
+  context.style.tab.nodeMinimizeButton.drawEnd = nil
+  context.style.tab.nodeMaximizeButton = context.style.tab.nodeMinimizeButton
+
+  # window header
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
