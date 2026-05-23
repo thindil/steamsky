@@ -909,8 +909,10 @@ type
 
 proc initFactionData*(name: FactionName = "";
     memberName: FactionMemberName = "";
-    pluralMemberName: FactionMemberName = "";
-    spawnChance: Natural = 0): FactionData {.raises: [], tags: [],
+    pluralMemberName: FactionMemberName = ""; spawnChance: Natural = 0;
+    population: AttributesArray = [0, 0]; namesType: NamesTypes = normal;
+    relations: Table[string, RelationsData] = initTable[string, RelationsData]();
+    description: Description = ""): FactionData {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for the in-game faction
   ##
@@ -918,10 +920,16 @@ proc initFactionData*(name: FactionName = "";
   ## * memberName       - The name of members of the faction
   ## * pluralMemberName - The name for plural amount of members of the faction
   ## * spawnChance      - The chance of the spawn for a base of the selected faction
+  ## * population       - The min and max population for new bases of the faction
+  ## * namesType        - The type of names for the mobs, bases and ships of the faction
+  ## * relations        - The faction's relations with other factions
+  ## * description      - The description of the faction
   ##
   ## Returns the new structure with information about the selected faction
   return FactionData(name: name, memberName: memberName,
-      pluralMemberName: pluralMemberName, spawnChance: spawnChance)
+      pluralMemberName: pluralMemberName, spawnChance: spawnChance,
+      population: population, namesType: namesType, relations: relations,
+      description: description)
 
 type
   ObjectData* = object
