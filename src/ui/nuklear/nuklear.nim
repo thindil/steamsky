@@ -1772,9 +1772,10 @@ proc colorLabel*(str: string; color: Color; align: TextAlignment = left;
     tooltip: string = "") {.raises: [], tags: [], contractual.} =
   ## Draw a text with the selected color
   ##
-  ## * str   - the text to display
-  ## * color - the color of the text
-  ## * align - the text aligmnent flags
+  ## * str     - the text to display
+  ## * color   - the color of the text
+  ## * align   - the text aligmnent flags
+  ## * tooltip - the tooltip to show on the label. Can be empty
   proc nk_label_colored(ctx; str: cstring; align: nk_flags;
       color: nk_color) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
@@ -1791,9 +1792,10 @@ proc colorLabel*(str: string; color, background: Color;
   ## Draw a text with the selected color and background
   ##
   ## * str        - the text to display
-  ## * color       - the color of the text
+  ## * color      - the color of the text
   ## * background - the color of the text's background
   ## * align      - the text aligmnent flags
+  ## * tooltip    - the tooltip to show on the label. Can be empty
   proc nk_label_colored2(ctx; str: cstring; align: nk_flags;
       color, color2: nk_color) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
@@ -2312,6 +2314,7 @@ proc property2*(name: string; min, val, max, step, incPerPixel: float;
   ##                 when the user press arrows buttons
   ## * incPerPixel - the amount which increase or decrease the property value
   ##                 when the user drag in it
+  ## * tooltip     - the tooltip to show on the property. Can be empty
   ##
   ## Returns the new value of the property
   proc nk_propertyf(ctx; name: cstring; min, val, max, step,
@@ -2338,6 +2341,7 @@ proc property2*(name: string; min, val, max, step: int; incPerPixel: float;
   ##                 when the user press arrows buttons
   ## * incPerPixel - the amount which increase or decrease the property value
   ##                 when the user drag in it
+  ## * tooltip     - the tooltip to show on the property. Can be empty
   ##
   ## Returns the new value of the property
   proc nk_propertyi(ctx; name: cstring; min, val, max, step: cint;
@@ -2986,6 +2990,7 @@ proc editString*(text: var string; maxLen: int; editType: EditTypes = simple;
   ##               field. By default there is no filtering.
   ##  * flags    - the additional flags for the edit field. By default no
   ##               additional flags
+  ## * tooltip   - the tooltip to show on the edit field. Can be empty
   ##
   ## Returns the current state of the edit field and the modified text
   ## parameter.
