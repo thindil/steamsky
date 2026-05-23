@@ -1511,7 +1511,7 @@ proc nkStartPopup(win: ref Window) {.raises: [], tags: [],
     win.popup.buf = buf
 
 proc nkPopupBegin(context; pType: PopupType; title: string; flags: set[
-    PanelFlags];x, y, w, h: float): bool {.raises: [NuklearException], tags: [
+    PanelFlags]; x, y, w, h: float): bool {.raises: [NuklearException], tags: [
         RootEffect], contractual.} =
   ## Try to create a new popup window. Internal use only.
   ##
@@ -1787,7 +1787,7 @@ proc colorLabel*(str: string; color: Color; align: TextAlignment = left;
     showTooltip2(text = tooltip)
 
 proc colorLabel*(str: string; color, background: Color;
-    align: TextAlignment = left;tooltip: string = "") {.raises: [], tags: [],
+    align: TextAlignment = left; tooltip: string = "") {.raises: [], tags: [],
         contractual.} =
   ## Draw a text with the selected color and background
   ##
@@ -2670,7 +2670,8 @@ proc comboList*(items: openArray[string]; selected, itemHeight: int; x,
     optionsList.add(y = items[i].cstring)
   let showTips: bool = widgetIsHovered()
   result = nk_combo(ctx = ctx, items = optionsList[0].addr,
-      count = amount.cint + 1, selected = selected.cint, itemHeight = itemHeight.cint,
+      count = amount.cint + 1, selected = selected.cint,
+          itemHeight = itemHeight.cint,
       size = new_nk_vec2(x = x.cfloat, y = y.cfloat)).int
   if showTips and tooltip.len > 0:
     showTooltip2(text = tooltip)
@@ -3077,12 +3078,13 @@ proc selectableSymbolLabel*(sym: SymbolType; title: string; value: var bool;
 # ------
 # Images
 # ------
-proc image*(image: PImage; padding: Vec2 = Vec2(x: 0, y: 0))
-    {.raises: [], tags: [], contractual.} =
+proc image*(image: PImage; padding: Vec2 = Vec2(x: 0, y: 0);
+    tooltip: string = "") {.raises: [], tags: [], contractual.} =
   ## Draw an image
   ##
   ## * image   - pointer to the image which will be drawn
   ## * padding - the padding of the image, can be empty
+  ## * tooltip - the tooltip to show on the image. Can be empty
   proc nk_draw_image(b: var nk_command_buffer; r: nk_rect; img: var nk_image;
       col: nk_color) {.importc: "nk_draw_image", nodecl, raises: [], tags: [],
       contractual.}
@@ -3100,6 +3102,9 @@ proc image*(image: PImage; padding: Vec2 = Vec2(x: 0, y: 0))
   var newImage: nk_image = nk_image_ptr(iPtr = image)
   nk_draw_image(b = ctx.current.buffer, r = bounds, img = newImage,
       col = nk_color(r: 255, g: 255, b: 255, a: 255))
+  if isMouseHovering(rect = Rect(x: bounds.x, y: bounds.y, w: bounds.w,
+      h: bounds.h)) and tooltip.len > 0:
+    showTooltip2(text = tooltip)
 
 # -------
 # Widgets
@@ -3140,6 +3145,7 @@ proc checkbox*(label: string; checked: var bool;
   ##
   ## * label   - the text to show with the checkbox
   ## * checked - the state of the checkbox, if true, the checkbox is checked
+  ## * tooltip - the tooltip to show on the checkbox. Can be empty
   ##
   ## Returns true if the state of the checkbox was changed, otherwise false.
   proc nk_checkbox_label(ctx; text: cstring;
