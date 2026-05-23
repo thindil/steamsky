@@ -46,10 +46,8 @@ proc showResourcesInfo(fuelAmount, foodAmount,
     color = theme.colors[redColor]
     image = images[noFuelIcon]
     tooltipText = "You can't travel anymore, because you don't have any fuel for ship."
-  showTooltip(text = tooltipText)
-  image(image = image, padding = Vec2(x: 5, y: 5))
-  showTooltip(text = tooltipText)
-  colorLabel(str = $fuelAmount, color = color)
+  image(image = image, padding = Vec2(x: 5, y: 5), tooltip = tooltipText)
+  colorLabel(str = $fuelAmount, color = color, tooltip = tooltipText)
   if foodAmount > gameSettings.lowFood:
     color = theme.colors[greenColor]
     image = images[foodIcon]
@@ -62,10 +60,8 @@ proc showResourcesInfo(fuelAmount, foodAmount,
     color = theme.colors[redColor]
     image = images[noFoodIcon]
     tooltipText = "You don't have any food in ship but your crew needs them to live."
-  showTooltip(text = tooltipText)
-  image(image = image, padding = Vec2(x: 5, y: 5))
-  showTooltip(text = tooltipText)
-  colorLabel(str = $foodAmount, color = color)
+  image(image = image, padding = Vec2(x: 5, y: 5), tooltip = tooltipText)
+  colorLabel(str = $foodAmount, color = color, tooltip = tooltipText)
   if drinksAmount > gameSettings.lowFood:
     color = theme.colors[greenColor]
     image = images[drinksIcon]
@@ -78,10 +74,8 @@ proc showResourcesInfo(fuelAmount, foodAmount,
     color = theme.colors[redColor]
     image = images[noDrinksIcon]
     tooltipText = "You don't have any drinks in ship but your crew needs them to live."
-  showTooltip(text = tooltipText)
-  image(image = image, padding = Vec2(x: 5, y: 5))
-  showTooltip(text = tooltipText)
-  colorLabel(str = $drinksAmount, color = color)
+  image(image = image, padding = Vec2(x: 5, y: 5), tooltip = tooltipText)
+  colorLabel(str = $drinksAmount, color = color, tooltip = tooltipText)
 
 proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
     haveUpgrader, haveCleaner, haveRepairman, haveGunner, needRepairs,
@@ -175,7 +169,7 @@ type
     none, combat, map, previous
 
 var expandedSection*: Natural = 0
-    ## Expanded section in some screens, like ship info or knowledge screens
+  ## Expanded section in some screens, like ship info or knowledge screens
 
 proc showDialogs(dialog: var GameDialog; state: var GameState;
     oldState: GameState): bool {.raises: [], tags: [RootEffect], contractual.} =
