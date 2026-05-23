@@ -101,14 +101,14 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
     if recipe.recipeType == craftType:
-      setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.3.cfloat, 0.7])
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.3.cfloat, 0.7])
       label(str = "Amount:")
       colorLabel(str = $craft.resultAmount, color = theme.colors[goldenColor])
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
     label(str = "Materials needed:")
-    setLayoutRowDynamic(height = 85, cols = 1)
+    setLayoutRowDynamic(height = labelHeight * 3, cols = 1)
     group(title = "materialInfo", flags = {windowNoFlags}):
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = labelHeight, cols = 1)
       for mIndex, material in craft.materialTypes:
         colorLabel(str = $(mIndex + 1) & ":", color = theme.colors[goldenColor])
         for iIndex, item in itemsList:
@@ -146,11 +146,11 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
     if craft.tool == "None":
       haveTool = true
     else:
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = labelHeight, cols = 1)
       label(str = "Tool needed:")
-      setLayoutRowDynamic(height = 85, cols = 1)
+      setLayoutRowDynamic(height = labelHeight * 3, cols = 1)
       group(title = "toolInfo", flags = {windowNoFlags}):
-        setLayoutRowDynamic(height = 30, cols = 1)
+        setLayoutRowDynamic(height = labelHeight, cols = 1)
         for iIndex, item in itemsList:
           haveTool = false
           if item.itemType == craft.tool and item.value[1] <= craft.toolQuality:
@@ -161,7 +161,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
               haveTool = true
             colorLabel(str = $item.name, color = theme.colors[
                 if haveTool: goldenColor else: redColor])
-    setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.3.cfloat, 0.7])
+    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.3.cfloat, 0.7])
     label(str = "Workplace:")
     var
       haveWorkplace: bool = false
@@ -200,7 +200,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
           color = theme.colors[goldenColor])
     label(str = "Time needed:")
     colorLabel(str = $craft.time & " minutes", color = theme.colors[goldenColor])
-    setLayoutRowDynamic(height = 30, cols = (if recipe.craftable: 2 else: 1))
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = (if recipe.craftable: 2 else: 1))
     if recipe.craftable:
       imageLabelButton(image = craftImage, label = $recipe.recipeType,
           alignment = right, tooltip = "Set crafting order (" &
@@ -281,12 +281,12 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       flags = {windowBorder, windowTitle, windowMovable}):
     if recipe.recipeType == craftType:
       # Show amount setting
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
       label(str = "Amount:")
       labelButton(title = "max " & $maxAmount,
           tooltip = "Set maximum possible amount of how many times the crafting order should be done."):
         craftAmount = maxAmount
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = editHeight, cols = 1)
       let newAmount: int = property2(name = "#", min = 1, val = craftAmount,
           max = maxAmount, step = 1, incPerPixel = 1,
           tooltip = "Set amount of how many times the crafting order should be done.")
