@@ -640,6 +640,24 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.tab.nodeMaximizeButton = context.style.tab.nodeMinimizeButton
 
   # window header
+  context.style.window.header.align = headerRight
+  context.style.window.header.closeSymbol = x
+  context.style.window.header.minimizeSymbol = minus
+  context.style.window.header.maximizeSymbol = plus
+  context.style.window.header.normal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[headerColor]))
+  context.style.window.header.hover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[headerColor]))
+  context.style.window.header.active = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[headerColor]))
+  context.style.window.header.labelNormal = table[headerTextColor]
+  context.style.window.header.labelHover = table[headerTextColor]
+  context.style.window.header.labelActive = table[headerTextColor]
+  context.style.window.header.labelPadding = Vec2(x: 4.0, y: 4.0)
+  context.style.window.header.padding = Vec2(x: 4.0, y: 4.0)
+  context.style.window.header.spacing = Vec2(x: 0.0, y: 0.0)
+
+  # window header close button
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
