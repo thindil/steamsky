@@ -178,7 +178,7 @@ proc nk_contextual_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.
 proc nk_contextual_item_label(ctx; clabel: cstring;
     calign: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_contextual_item_image(ctx; img: PImage;): nk_bool {.importc, cdecl,
+proc nk_contextual_item_image(ctx; img: PImage; ): nk_bool {.importc, cdecl,
   raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
@@ -386,7 +386,8 @@ proc windowIsHovered*(): bool {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   return nk_window_is_hovered(ctx = ctx)
 
-proc windowFind*(name: string): ptr nk_window {.raises: [], tags: [], contractual.} =
+proc windowFind*(name: string): ptr nk_window {.raises: [], tags: [],
+    contractual.} =
   ## Find the window with the selected name
   ##
   ## * name - the name of the window to find
@@ -412,7 +413,8 @@ proc windowPropertyActive*(name: string): bool {.raises: [], tags: [],
   ## Returns true if the window has active property widget, otherwise false
   return windowFind(name = name).property.active == 1
 
-proc windowInput*(name: string; disable: bool = true) {.raises: [], tags: [], contractual.} =
+proc windowInput*(name: string; disable: bool = true) {.raises: [], tags: [],
+    contractual.} =
   ## Enable or disable input in the selected window
   ##
   ## * name - the name of the window in which input will be enabled or disabled
@@ -476,8 +478,8 @@ proc nkPushScissor(b: var CommandBuffer; r: Rect) {.raises: [], tags: [
     cmd.w = max(x = 0.uint16, y = r.w.uint16)
     cmd.h = max(x = 0.uint16, y = r.h.uint16)
 
-proc nkStrokeRect(b: var CommandBuffer, rect: Rect, rounding,
-  lineThickness: float, c: NkColor) {.raises: [], tags: [RootEffect],
+proc nkStrokeRect(b: var CommandBuffer; rect: Rect; rounding,
+  lineThickness: float; c: NkColor) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw a rectangle. Internal use only
   ##
@@ -503,7 +505,8 @@ proc nkStrokeRect(b: var CommandBuffer, rect: Rect, rounding,
   cmd.color = c
 
 proc nkStrokeTriangle(b: var CommandBuffer; x0, y0, x1, y1, x2, y2,
-  lineThickness: float; c: NkColor) {.raises: [], tags: [RootEffect], contractual.} =
+  lineThickness: float; c: NkColor) {.raises: [], tags: [RootEffect],
+      contractual.} =
   ## Draw a triangle. Internal use only
   ##
   ## * b             - the command buffer in which the triangle will be drawn
@@ -519,8 +522,10 @@ proc nkStrokeTriangle(b: var CommandBuffer; x0, y0, x1, y1, x2, y2,
     return
   if b.use_clipping != 0:
     if not nkInbox(px = x0, py = y0, x = b.clip.x, y = b.clip.y, w = b.clip.w,
-      h = b.clip.h) and not nkInbox(px = x1, py = y1, x = b.clip.x, y = b.clip.y,
-      w = b.clip.w, h = b.clip.h) and not nkInbox(px = x2, py = y2, x = b.clip.x,
+      h = b.clip.h) and not nkInbox(px = x1, py = y1, x = b.clip.x,
+      y = b.clip.y,
+      w = b.clip.w, h = b.clip.h) and not nkInbox(px = x2, py = y2,
+      x = b.clip.x,
       y = b.clip.y, w = b.clip.w, h = b.clip.h):
       return
 
@@ -557,7 +562,7 @@ proc nkFillCircle(b: var CommandBuffer; rect: Rect; c: NkColor)
   cmd.h = max(x = 0, y = rect.h).uint16
   cmd.color = c
 
-proc nkFillTriangle(b: var CommandBuffer, x0, y0, x1, y1, x2, y2: float,
+proc nkFillTriangle(b: var CommandBuffer; x0, y0, x1, y1, x2, y2: float;
   c: NkColor) {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the circle with the selected color
   ##
@@ -573,12 +578,15 @@ proc nkFillTriangle(b: var CommandBuffer, x0, y0, x1, y1, x2, y2: float,
     return
   if b.use_clipping != 0:
     if not nkInbox(px = x0, py = y0, x = b.clip.x, y = b.clip.y, w = b.clip.w,
-      h = b.clip.h) and not nkInbox(px = x1, py = y1, x = b.clip.x, y = b.clip.y,
-      w = b.clip.w, h = b.clip.h) and not nkInbox(px = x2, py = y2, x = b.clip.x,
+      h = b.clip.h) and not nkInbox(px = x1, py = y1, x = b.clip.x,
+      y = b.clip.y,
+      w = b.clip.w, h = b.clip.h) and not nkInbox(px = x2, py = y2,
+      x = b.clip.x,
       y = b.clip.y, w = b.clip.w, h = b.clip.h):
       return
 
-  var cmd: CommandTriangleFilled = cast[CommandTriangleFilled](nkCommandBufferPush(b = b,
+  var cmd: CommandTriangleFilled = cast[CommandTriangleFilled](
+    nkCommandBufferPush(b = b,
     t = commandTriangleFilled, size = CommandTriangleFilled.sizeof.nk_size))
   cmd.a.x = x0.int16
   cmd.a.y = y0.int16
@@ -597,11 +605,13 @@ proc nkDrawImage(b: var CommandBuffer; r: Rect; img: Image; col: NkColor)
   ## * img - the image to draw
   ## * col - the color used as a background for the image
   if b.use_clipping != 0:
-    if b.clip.w == 0 or b.clip.h == 0 or not nkIntersect(x0 = r.x, y0 = r.y, w0 = r.w,
+    if b.clip.w == 0 or b.clip.h == 0 or not nkIntersect(x0 = r.x, y0 = r.y,
+      w0 = r.w,
       h0 = r.h, x1 = b.clip.x, y1 = b.clip.y, w1 = b.clip.w, h1 = b.clip.h):
       return
 
-  var cmd: CommandImage = cast[CommandImage](nkCommandBufferPush(b = b, t = commandImage,
+  var cmd: CommandImage = cast[CommandImage](nkCommandBufferPush(b = b,
+    t = commandImage,
     size = CommandImage.sizeof.nk_size))
   cmd.x = r.x.cshort
   cmd.y = r.y.cshort
@@ -633,39 +643,49 @@ proc nkDrawNineSlice(b: var CommandBuffer; r: Rect; slc: NineSlice; col: NkColor
   img.h = slcImg.h
   img.region = [rgnX, rgnY, slc.l, slc.t]
 
-  nkDrawImage(b = b, r = Rect(x: r.x, y: r.y, w: slc.l.float, h: slc.t.float), img = img, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x, y: r.y, w: slc.l.float, h: slc.t.float),
+      img = img, col = col)
 
   # top-center
   img.region = [rgnX + slc.l, rgnY, rgnW - slc.l - slc.r, slc.t]
-  nkDrawImage(b = b, r = Rect(x: r.x + slc.l.float, y: r.y, w: r.w - slc.l.float - slc.r.float, h: slc.t.float), img = img, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x + slc.l.float, y: r.y, w: r.w -
+      slc.l.float - slc.r.float, h: slc.t.float), img = img, col = col)
 
   # top-right
   img.region = [rgnX + rgnW - slc.r, rgnY, slc.r, slc.t]
-  nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y, w: slc.r.float, h: slc.t.float), img = img, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y,
+      w: slc.r.float, h: slc.t.float), img = img, col = col)
 
   # center-left
   img.region = [rgnX, rgnY + slc.t, slc.l, rgnH - slc.t - slc.b]
-  nkDrawImage(b = b, r = Rect(x: r.x, y: r.y + slc.t.float, w: slc.l.float, h: r.h - slc.t.float - slc.b.float), img = img, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x, y: r.y + slc.t.float, w: slc.l.float,
+      h: r.h - slc.t.float - slc.b.float), img = img, col = col)
 
   # center
   img.region = [rgnX + slc.l, rgnY + slc.t, rgnW - slc.l - slc.r, rgnH - slc.t - slc.b]
-  nkDrawImage(b = b, r = Rect(x: r.x + slc.l.float, y: r.y + slc.t.float, w: r.w - slc.l.float - slc.r.float, h: r.h - slc.t.float - slc.b.float), img = img, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x + slc.l.float, y: r.y + slc.t.float,
+      w: r.w - slc.l.float - slc.r.float, h: r.h - slc.t.float - slc.b.float),
+      img = img, col = col)
 
   # center-right
   img.region = [rgnX + rgnW - slc.r, rgnY + slc.t, slc.r, rgnH - slc.t - slc.b]
-  nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y - slc.t.float, w: slc.r.float, h: r.h - slc.t.float - slc.b.float), img = img, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y - slc.t.float,
+      w: slc.r.float, h: r.h - slc.t.float - slc.b.float), img = img, col = col)
 
   # bottom-left
   img.region = [rgnX, rgnY + rgnH - slc.b, slc.l, slc.b]
-  nkDrawImage(b = b, r = Rect(x: r.x, y: r.y + r.h - slc.b.float, w: slc.l.float, h: slc.b.float), img = img, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x, y: r.y + r.h - slc.b.float,
+      w: slc.l.float, h: slc.b.float), img = img, col = col)
 
   # bottom-center
   img.region = [rgnX + slc.l, rgnY + rgnH - slc.b, rgnW - slc.l - slc.r, slc.b]
-  nkDrawImage(b = b, r = Rect(x: r.x + slc.l.float, y: r.y + r.h - slc.b.float, w: r.w - slc.l.float - slc.r.float, h: slc.b.float), img = img, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x + slc.l.float, y: r.y + r.h - slc.b.float,
+      w: r.w - slc.l.float - slc.r.float, h: slc.b.float), img = img, col = col)
 
   # bottom-right
   img.region = [rgnX + rgnW - slc.r, rgnY + rgnH - slc.b, slc.r, slc.b]
-  nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y + r.h - slc.b.float, w: slc.r.float, h: slc.b.float), img = img, col = col)
+  nkDrawImage(b = b, r = Rect(x: r.x + r.w - slc.r.float, y: r.y + r.h -
+      slc.b.float, w: slc.r.float, h: slc.b.float), img = img, col = col)
 
 proc nkTextClamp(font: UserFont; text: string; textLen: int;
   space: float; glyphs: var int; textWidth: var float; sepList: seq[nk_rune];
@@ -936,7 +956,8 @@ proc nkWidgetText(o: var CommandBuffer; b: var Rect; str: string; len: var int;
       if label.w >= label.x:
         label.w -= label.x
     elif (a and textRight.ord).bool:
-      label.x = max(x = b.x + t.padding.x, y = (b.x + b.w) - (2 * t.padding.x + textWidth.float))
+      label.x = max(x = b.x + t.padding.x, y = (b.x + b.w) - (2 * t.padding.x +
+          textWidth.float))
       label.w = textWidth.float + 2 * t.padding.x
     else:
       return
@@ -1011,7 +1032,8 @@ proc nkDoButton(state: var nk_flags; r: Rect;
     bounds.y = r.y - style.touch_padding.y
     bounds.w = r.w + 2 * style.touch_padding.x
     bounds.h = r.h + 2 * style.touch_padding.y
-    return nkButtonBehavior(state = state, r = bounds, i = `in`, behavior = behavior)
+    return nkButtonBehavior(state = state, r = bounds, i = `in`,
+        behavior = behavior)
 
 proc nkDrawButton(`out`: var CommandBuffer; bounds: Rect;
   state: nk_flags; style: StyleButton): StyleItem {.raises: [],
@@ -1145,7 +1167,8 @@ proc nkDrawButtonSymbol(`out`: var CommandBuffer; bounds, content: var Rect;
   # select correct colors/images
   let background: StyleItem = nkDrawButton(`out` = `out`, bounds = bounds,
     state = state, style = style)
-  let bg: NkColor = (if background.iType == itemColor: background.data.color else: style.textBackground)
+  let bg: NkColor = (if background.iType ==
+      itemColor: background.data.color else: style.textBackground)
 
   var sym: NkColor = (if (state and widgetStateHover.ord).bool:
     style.textHover elif (state and widgetStateActive.ord).bool:
@@ -1155,9 +1178,11 @@ proc nkDrawButtonSymbol(`out`: var CommandBuffer; bounds, content: var Rect;
   nkDrawSymbol(`out` = `out`, `type` = `type`, content = content,
     background = bg, foreground = sym, borderWidth = 1, font = font)
 
-proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer; bounds: var Rect,
+proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer;
+    bounds: var Rect;
   symbol: SymbolType; behavior: ButtonBehavior; style: StyleButton;
-  `in`: Input; font: UserFont): bool {.raises: [], tags: [RootEffect], contractual.} =
+  `in`: Input; font: UserFont): bool {.raises: [], tags: [RootEffect],
+      contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only
   ##
   ## * state    - the state of the button
@@ -1193,7 +1218,7 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: var CommandBuffer; bounds: var
 # Panel
 # -----
 proc panelHeader(win: ref Window; title: string; style: Style; font: UserFont;
-  layout: ref Panel; `out`: var CommandBuffer, `in`: Input): bool {.raises: [],
+  layout: ref Panel; `out`: var CommandBuffer; `in`: Input): bool {.raises: [],
   tags: [RootEffect], contractual.} =
   ## Start drawing a Nuklear panel's header if needed. Internal use only
   ##
@@ -1269,11 +1294,14 @@ proc panelHeader(win: ref Window; title: string; style: Style; font: UserFont;
     if (win.flags and windowClosable.cint).nk_bool:
       var ws: nk_flags = 0
       if style.window.header.align == headerRight:
-        button.x = (header.w + header.x) - (button.w + style.window.header.padding.x)
-        header.w -= button.w + style.window.header.spacing.x + style.window.header.padding.x
+        button.x = (header.w + header.x) - (button.w +
+            style.window.header.padding.x)
+        header.w -= button.w + style.window.header.spacing.x +
+            style.window.header.padding.x
       else:
         button.x = header.x + style.window.header.padding.x
-        header.x += button.w + style.window.header.spacing.x + style.window.header.padding.x
+        header.x += button.w + style.window.header.spacing.x +
+            style.window.header.padding.x
       if nkDoButtonSymbol(state = ws, `out` = win.buffer, bounds = button,
         symbol = style.window.header.close_symbol, behavior = default,
         style = style.window.header.close_button, `in` = `in`,
@@ -1300,7 +1328,7 @@ proc panelHeader(win: ref Window; title: string; style: Style; font: UserFont;
         style.window.header.minimizeSymbol, behavior = default,
         style = style.window.header.minimize_button, `in` = `in`,
         font = style.font) and not(win.flags and windowRom.cint).nk_bool:
-          layout.flags = if (layout.flags and windowMinimized.cint).nk_bool:
+        layout.flags = if (layout.flags and windowMinimized.cint).nk_bool:
             layout.flags and not windowMinimized.cint else:
             layout.flags or windowMinimized.cint
 
@@ -1324,8 +1352,10 @@ proc panelHeader(win: ref Window; title: string; style: Style; font: UserFont;
       t = text, a = TextAlignment.left, f = font)
   return true
 
-proc nkPanelBegin(context; title: string; panelType: PanelType): bool {.raises: [
-    ], tags: [RootEffect], contractual.} =
+proc nkPanelBegin(context; title: string;
+    panelType: PanelType): bool {.raises: [
+
+], tags: [RootEffect], contractual.} =
   ## Start drawing a Nuklear panel. Internal use only
   ##
   ## * ctx       - the Nuklear context
@@ -1347,9 +1377,9 @@ proc nkPanelBegin(context; title: string; panelType: PanelType): bool {.raises: 
     var
       win: ref Window = context.current
       layout: ref Panel = win.layout
-    {.ruleOff: "varUplevel"}
-    var  `out`: CommandBuffer = win.buffer
-    {.ruleOn: "varUplevel"}
+    {.ruleOff: "varUplevel".}
+    var `out`: CommandBuffer = win.buffer
+    {.ruleOn: "varUplevel".}
     var `in`: Input = (if (win.flags and windowNoInput.cint) ==
           1: Input() else: context.input)
     when defined(nkIncludeCommandUserdata):
@@ -1376,7 +1406,8 @@ proc nkPanelBegin(context; title: string; panelType: PanelType): bool {.raises: 
       let
         leftMouseDown: bool = buttons[Buttons.left].down
         leftMouseClicked: bool = buttons[Buttons.left].clicked == 1
-        leftMouseClickInCursor: bool = hasMouseClickDownInRect2(id = left, rect = header, down = nkTrue)
+        leftMouseClickInCursor: bool = hasMouseClickDownInRect2(id = left,
+            rect = header, down = nkTrue)
         cursors: CursorsArray = cast[CursorsArray](ctx.style.cursors)
       if leftMouseDown and leftMouseClickInCursor and not leftMouseClicked:
         win.bounds.x += `in`.mouse.delta.x
@@ -1393,7 +1424,8 @@ proc nkPanelBegin(context; title: string; panelType: PanelType): bool {.raises: 
     layout.bounds.x += panelPadding.x
     layout.bounds.w -= (2 * panelPadding.x)
     if (win.flags and windowBorder.cint).nk_bool:
-      layout.border = nkPanelGetBorder(style = style, flags = win.flags, pType = panelType)
+      layout.border = nkPanelGetBorder(style = style, flags = win.flags,
+          pType = panelType)
       var shrinked: Rect = Rect(x: layout.bounds.x, y: layout.bounds.y,
         w: layout.bounds.w, h: layout.bounds.h)
       shrinked = nkShrinkRect(r = shrinked, amount = layout.border)
@@ -1478,8 +1510,8 @@ proc nkStartPopup(win: ref Window) {.raises: [], tags: [],
     buf.active = nkTrue
     win.popup.buf = buf
 
-proc nkPopupBegin(context; pType: PopupType; title: string; flags: set[PanelFlags];
-    x, y, w, h: float): bool {.raises: [NuklearException], tags: [
+proc nkPopupBegin(context; pType: PopupType; title: string; flags: set[
+    PanelFlags];x, y, w, h: float): bool {.raises: [NuklearException], tags: [
         RootEffect], contractual.} =
   ## Try to create a new popup window. Internal use only.
   ##
@@ -1587,15 +1619,18 @@ proc createPopup(pType2: PopupType; title2: string; flags2: set[PanelFlags];
   return nkPopupBegin(context = con, pType = pType2, title = title2,
     flags = flags2, x = x2, y = y2, w = w2, h = h2)
 
-proc createNonBlocking(flags2: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises: [], tags: [], contractual, discardable.} =
+proc createNonBlocking(flags2: nk_flags; x2, y2, w2,
+    h2: cfloat): bool {.raises: [], tags: [], contractual, discardable.} =
   ## Create a new Nuklear non-blocking popup window, internal use only,
   ## temporary code
   ##
   ## Returns true if the popup is active, otherwise false.
-  proc nk_nonblock_begin(ctx; flags: nk_flags; body, header: nk_rect, panelType: PanelType): nk_bool
+  proc nk_nonblock_begin(ctx; flags: nk_flags; body, header: nk_rect;
+      panelType: PanelType): nk_bool
     {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  return nk_nonblock_begin(ctx = ctx, flags = flags2, body = new_nk_rect(x = x2, y = y2, w = w2, h = h2),
+  return nk_nonblock_begin(ctx = ctx, flags = flags2, body = new_nk_rect(x = x2,
+      y = y2, w = w2, h = h2),
     header = new_nk_rect(x = 0, y = 0, w = 0, h = 0), panel_type = panelPopup)
 
 template popup*(pType: PopupType; title: string; flags: set[PanelFlags]; x,
@@ -1617,7 +1652,8 @@ template popup*(pType: PopupType; title: string; flags: set[PanelFlags]; x,
   content
   ctx.nk_popup_end
 
-template nonBlocking*(flags: set[PanelFlags]; x, y, w, h: float; content: untyped) =
+template nonBlocking*(flags: set[PanelFlags]; x, y, w, h: float;
+    content: untyped) =
   ## Create a new Nuklear non-blocking popup window with the selected content
   ##
   ## * flags   - the flags for the popup
@@ -1749,8 +1785,9 @@ proc colorLabel*(str: string; color: Color; align: TextAlignment = left;
   if showTips and tooltip.len > 0:
     showTooltip2(text = tooltip)
 
-proc colorLabel*(str: string; color, background: Color; align: TextAlignment = left;
-    tooltip: string = "") {.raises: [], tags: [], contractual.} =
+proc colorLabel*(str: string; color, background: Color;
+    align: TextAlignment = left;tooltip: string = "") {.raises: [], tags: [],
+        contractual.} =
   ## Draw a text with the selected color and background
   ##
   ## * str        - the text to display
@@ -1826,15 +1863,18 @@ proc wrapLabel*(str: string) {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_label_wrap(ctx = ctx, str = str.cstring)
 
-proc colorWrapLabel*(str: string; color: Color) {.raises: [], tags: [], contractual.} =
+proc colorWrapLabel*(str: string; color: Color) {.raises: [], tags: [],
+    contractual.} =
   ## Draw a text and wrap it if its lentgh is bigger than the width of its
   ## container
   ##
   ## * str - the text to draw
-  proc nk_label_colored_wrap(ctx; str: cstring; color: nk_color) {.importc, nodecl, raises: [], tags: [], contractual.}
+  proc nk_label_colored_wrap(ctx; str: cstring; color: nk_color) {.importc,
+      nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   var (r, g, b) = color.extractRGB
-  nk_label_colored_wrap(ctx = ctx, str = str.cstring, color = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
+  nk_label_colored_wrap(ctx = ctx, str = str.cstring, color = nk_rgb(r = r.cint,
+      g = g.cint, b = b.cint))
 
 {.push ruleOff: "namedParams".}
 macro fmtLabel*(alignment: TextAlignment; args: varargs[untyped]): untyped =
@@ -1920,8 +1960,8 @@ proc createImageButtonCentered(img: PImage): bool {.raises: [], tags: [],
   ## * image - the image to shown on the button
   ##
   ## Returns true if button was created, otherwise false
-  proc nk_button_image_centered(ctx; image: nk_image): nk_bool {.importc, nodecl,
-      raises: [], tags: [], contractual.}
+  proc nk_button_image_centered(ctx; image: nk_image): nk_bool {.importc,
+      nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   return nk_button_image_centered(ctx = ctx, image = nk_image_ptr(iPtr = img))
 
@@ -1968,8 +2008,8 @@ template imageButtonStyled*(image: PImage; style: ButtonStyle;
   if createStyledImageButton(img = image, bStyle = style):
     onPressCode
 
-proc createImageLabelButton(img: PImage; txt: string; align: TextAlignment): bool {.raises: [], tags: [],
-    contractual.} =
+proc createImageLabelButton(img: PImage; txt: string;
+    align: TextAlignment): bool {.raises: [], tags: [], contractual.} =
   ## Draw the button with the selected image and text, internal use only, temporary code
   ##
   ## * image - the image to show on the button
@@ -1977,10 +2017,13 @@ proc createImageLabelButton(img: PImage; txt: string; align: TextAlignment): boo
   ## * align - the alignment of the text to show
   ##
   ## Returns true if button was created, otherwise false
-  proc nk_button_image_label(ctx; image: nk_image; text: cstring; textAlignment: nk_flags): nk_bool {.importc, nodecl,
-      raises: [], tags: [], contractual.}
+  proc nk_button_image_label(ctx; image: nk_image; text: cstring;
+      textAlignment: nk_flags): nk_bool {.importc, nodecl,
+
+raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  return nk_button_image_label(ctx = ctx, image = nk_image_ptr(iPtr = img), text = txt.cstring, text_alignment = align.nk_flags)
+  return nk_button_image_label(ctx = ctx, image = nk_image_ptr(iPtr = img),
+      text = txt.cstring, text_alignment = align.nk_flags)
 
 template imageLabelButton*(image: PImage; label: string;
     alignment: TextAlignment; onPressCode: untyped) =
@@ -2328,7 +2371,8 @@ proc restoreButtonStyle*() {.raises: [], tags: [], contractual.} =
   ##
   ctx.style.button = buttonStyle
 
-proc setButtonStyle*(field: ButtonStyleTypes; color: Color = colWhite; a: Natural = 255) {.raises: [], tags: [], contractual.} =
+proc setButtonStyle*(field: ButtonStyleTypes; color: Color = colWhite;
+    a: Natural = 255) {.raises: [], tags: [], contractual.} =
   ## Set the color for the selected field of the Nuklear buttons style
   ##
   ## * field - the style's field which value will be changed
@@ -2454,7 +2498,8 @@ proc stylePushFloat(fld: FloatStyleTypes;
     return nk_style_push_float(ctx = ctx, dest = ctx.style.window.popup_border,
         source = val)
 
-proc stylePushColor(fld: ColorStyleTypes; col: Color): bool {.raises: [], tags: [], contractual.} =
+proc stylePushColor(fld: ColorStyleTypes; col: Color): bool {.raises: [],
+    tags: [], contractual.} =
   ## Push the color value for the selected Nuklear window style on a
   ## temporary stack
   ##
@@ -2470,7 +2515,8 @@ proc stylePushColor(fld: ColorStyleTypes; col: Color): bool {.raises: [], tags: 
     return nk_style_push_color(ctx = ctx, dest = ctx.style.window.background,
       source = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
 
-proc stylePushStyleItem(fld: StyleStyleTypes; col: Color): bool {.raises: [], tags: [], contractual.} =
+proc stylePushStyleItem(fld: StyleStyleTypes; col: Color): bool {.raises: [],
+    tags: [], contractual.} =
   ## Push the color value for the selected Nuklear window style on a
   ## temporary stack
   ##
@@ -2478,12 +2524,14 @@ proc stylePushStyleItem(fld: StyleStyleTypes; col: Color): bool {.raises: [], ta
   ## * col - the new color for the selected field
   ##
   ## Returns true if value was succesfully pushed, otherwise false
-  proc nk_style_push_style_item(ctx; dest: var nk_style_item; source: nk_style_item):
+  proc nk_style_push_style_item(ctx; dest: var nk_style_item;
+      source: nk_style_item):
     nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   let (r, g, b) = col.extractRGB()
   if fld == progressbar:
-    return nk_style_push_style_item(ctx = ctx, dest = ctx.style.progress.cursor_normal,
+    return nk_style_push_style_item(ctx = ctx,
+      dest = ctx.style.progress.cursor_normal,
       source = nk_style_item_color(col = nk_rgb(r = r.cint, g = g.cint, b = b.cint)))
 
 proc styleFromTable*(table: openArray[NkColor]) {.raises: [], tags: [],
@@ -2572,7 +2620,8 @@ proc storeButton() {.raises: [], tags: [], contractual.} =
   ## Store the current setting for buttons
   storedButton = ctx.style.button
 
-proc restoreButtonStyle(destination: ButtonStyleTypes) {.raises: [], tags: [], contractual.} =
+proc restoreButtonStyle(destination: ButtonStyleTypes) {.raises: [], tags: [],
+    contractual.} =
   ## Restore default setting for the selected field in the button's style
   ##
   ## * destination - the field in the style which will be restored
@@ -2594,8 +2643,8 @@ template changeStyle*(src, dest: ButtonStyleTypes; code: untyped) =
 # Combos
 # ------
 proc comboList*(items: openArray[string]; selected, itemHeight: int; x,
-    y: float; amount: int = items.len - 1; tooltip: string = ""): int {.raises: [], tags: [],
-        contractual.} =
+    y: float; amount: int = items.len - 1;
+    tooltip: string = ""): int {.raises: [], tags: [], contractual.} =
   ## Create a Nuklear combo widget
   ##
   ## * items       - the list of values for the combo
@@ -2616,9 +2665,9 @@ proc comboList*(items: openArray[string]; selected, itemHeight: int; x,
   for i in 0..amount:
     optionsList.add(y = items[i].cstring)
   let showTips: bool = widgetIsHovered()
-  result = nk_combo(ctx = ctx, items = optionsList[0].addr, count = amount.cint +
-      1, selected = selected.cint, itemHeight = itemHeight.cint,
-          size = new_nk_vec2(x = x.cfloat, y = y.cfloat)).int
+  result = nk_combo(ctx = ctx, items = optionsList[0].addr,
+      count = amount.cint + 1, selected = selected.cint, itemHeight = itemHeight.cint,
+      size = new_nk_vec2(x = x.cfloat, y = y.cfloat)).int
   if showTips and tooltip.len > 0:
     showTooltip2(text = tooltip)
 
@@ -2846,7 +2895,8 @@ proc chartPushSlot*(value: float; slot: int): ChartEvent {.discardable,
 # Contextual
 # ----------
 proc createContextual(ctx; flags1: nk_flags; x1, y1: cfloat;
-    triggerBounds1: Rect; btn: Buttons): bool {.raises: [], tags: [], contractual.} =
+    triggerBounds1: Rect; btn: Buttons): bool {.raises: [], tags: [],
+        contractual.} =
   ## Create a contextual menu, internal use only, temporary code
   ##
   ## * ctx            - the Nuklear context
@@ -2860,7 +2910,8 @@ proc createContextual(ctx; flags1: nk_flags; x1, y1: cfloat;
   ## Return true if the contextual menu was created successfully, otherwise
   ## false
   proc nk_contextual_begin(ctx; flags: nk_flags; size: nk_vec2;
-      triggerBounds: nk_rect; cButton: Buttons): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+      triggerBounds: nk_rect; cButton: Buttons): nk_bool {.importc, nodecl,
+          raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   return nk_contextual_begin(ctx = ctx, flags = flags1, size = new_nk_vec2(
       x = x1, y = y1), triggerBounds = new_nk_rect(x = triggerBounds1.x,
@@ -3021,15 +3072,18 @@ proc selectableSymbolLabel*(sym: SymbolType; title: string; value: var bool;
 # ------
 # Images
 # ------
-proc image*(image: PImage; padding: Vec2 = Vec2(x: 0, y: 0)) {.raises: [], tags: [], contractual.} =
+proc image*(image: PImage; padding: Vec2 = Vec2(x: 0, y: 0))
+    {.raises: [], tags: [], contractual.} =
   ## Draw an image
   ##
   ## * image   - pointer to the image which will be drawn
   ## * padding - the padding of the image, can be empty
-  proc nk_draw_image(b: var nk_command_buffer; r: nk_rect; img: var nk_image; col: nk_color) {.importc: "nk_draw_image", nodecl, raises: [
-      ], tags: [], contractual.}
+  proc nk_draw_image(b: var nk_command_buffer; r: nk_rect; img: var nk_image;
+      col: nk_color) {.importc: "nk_draw_image", nodecl, raises: [], tags: [],
+      contractual.}
     ## A binding to Nuklear's function. Internal use only
-  proc nk_state_widget(bounds: var nk_rect; ctx): int {.importc: "nk_widget", nodecl, raises: [], tags: [], contractual.}
+  proc nk_state_widget(bounds: var nk_rect; ctx): int {.importc: "nk_widget",
+      nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   var bounds: nk_rect = nk_rect(x: padding.x, y: 0, w: 0, h: 0)
   discard nk_state_widget(bounds = bounds, ctx = ctx)
@@ -3039,7 +3093,8 @@ proc image*(image: PImage; padding: Vec2 = Vec2(x: 0, y: 0)) {.raises: [], tags:
     bounds.w -= 2 * padding.x
     bounds.h -= 2 * padding.y
   var newImage: nk_image = nk_image_ptr(iPtr = image)
-  nk_draw_image(b = ctx.current.buffer, r = bounds, img = newImage, col = nk_color(r: 255, g: 255, b: 255, a: 255))
+  nk_draw_image(b = ctx.current.buffer, r = bounds, img = newImage,
+      col = nk_color(r: 255, g: 255, b: 255, a: 255))
 
 # -------
 # Widgets
@@ -3059,18 +3114,23 @@ proc colorPicker*(color: NkColorF;
       r: color.r, g: color.g, b: color.b, a: color.a), fmt = format)
   result = NkColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
 
-proc ruleHorizontal*(color: Color, rounding: bool) {.raises: [], tags: [], contractual.} =
+proc ruleHorizontal*(color: Color; rounding: bool) {.raises: [], tags: [],
+    contractual.} =
   ## Draw a horizontal rule with selected color
   ##
   ## * color    - the color of the rule
   ## * rounding - if true, corners of the rule will be rounded
-  proc nk_rule_horizontal(ctx; color: nk_color; rounding: nk_bool) {.importc, nodecl, raises: [], tags: [], contractual.}
+  proc nk_rule_horizontal(ctx; color: nk_color; rounding: nk_bool) {.importc,
+      nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   let (r, g, b) = color.extractRGB
-  nk_rule_horizontal(ctx = ctx, color = nk_color(r: r.uint8, g: g.uint8, b: b.uint8), rounding = (if rounding: nkTrue else: nkFalse))
+  nk_rule_horizontal(ctx = ctx, color = nk_color(r: r.uint8, g: g.uint8,
+      b: b.uint8), rounding = (if rounding: nkTrue else: nkFalse))
 
-proc checkbox*(label: string; checked: var bool; tooltip: string = ""): bool {.discardable, raises: [
-    ], tags: [], contractual.} =
+proc checkbox*(label: string; checked: var bool;
+    tooltip: string = ""): bool {.discardable, raises: [
+
+], tags: [], contractual.} =
   ## Create a Nuklear checkbox widget
   ##
   ## * label   - the text to show with the checkbox
@@ -3107,7 +3167,8 @@ proc option*(label: string; selected: bool;
     showTooltip2(text = tooltip)
 
 proc progressBar*(value: var int; maxValue: int; modifyable: bool = true;
-    reversed: bool = false; tooltip: string = ""): bool {.discardable, raises: [], tags: [],
+    reversed: bool = false; tooltip: string = ""): bool {.discardable, raises: [
+        ], tags: [],
     contractual.} =
   ## Create a Nuklear progress bar widget
   ##
