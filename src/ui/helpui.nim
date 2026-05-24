@@ -47,15 +47,11 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
           setHelpContent(content = entry.text, dialog = dialog)
       index.inc
   setLayoutRowDynamic(height = 20, cols = 2)
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Make the list of topics smaller.")
-  imageButtonCentered(image = images[contract2Icon]):
+  imageButtonCentered(image = images[contract2Icon],
+      tooltip = "Make the list of topics smaller."):
     gameSettings.topicsPosition -= gameSettings.interfaceFontSize + 10
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Make the list of topics bigger.")
-  imageButtonCentered(image = images[expand2Icon]):
+  imageButtonCentered(image = images[expand2Icon],
+      tooltip = "Make the list of topics bigger."):
     gameSettings.topicsPosition += gameSettings.interfaceFontSize + 10
   setLayoutRowDynamic(height = windowHeight -
       gameSettings.topicsPosition.float - 75, cols = 1)
