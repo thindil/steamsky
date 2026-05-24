@@ -20,7 +20,8 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config]
-import coreui, header, knowledgebases, knowledgeevents, knowledgemissions, knowledgestories, messagesui, themes
+import coreui, header, knowledgebases, knowledgeevents, knowledgemissions,
+    knowledgestories, messagesui, themes
 
 proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -48,19 +49,15 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 2, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize the list of known bases")
       imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon])):
+          expandIcon] else: images[contractIcon]),
+              tooltip = "Maximize/minimize the list of known bases"):
         if expandedSection == 1:
           expandedSection = 0
         else:
           expandedSection = 1
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Show/Hide additional options related to managing the list of known bases")
-      imageButton(image = images[moreOptionsIcon]):
+      imageButton(image = images[moreOptionsIcon],
+          tooltip = "Show/Hide additional options related to managing the list of known bases"):
         showBasesOptions = not showBasesOptions
       showBasesInfo(dialog = dialog)
   # The list of known events
@@ -69,11 +66,9 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 2, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize the list of known events")
       imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon])):
+          expandIcon] else: images[contractIcon]),
+              tooltip = "Maximize/minimize the list of known events"):
         if expandedSection == 2:
           expandedSection = 0
         else:
@@ -85,11 +80,9 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize the list of accepted missions")
       imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon])):
+          expandIcon] else: images[contractIcon]),
+              tooltip = "Maximize/minimize the list of accepted missions"):
         if expandedSection == 3:
           expandedSection = 0
         else:
@@ -101,11 +94,9 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 2, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize the list of known stories")
       imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon])):
+          expandIcon] else: images[contractIcon]),
+              tooltip = "Maximize/minimize the list of known stories"):
         if expandedSection == 4:
           expandedSection = 0
         else:
