@@ -1978,6 +1978,23 @@ template imageButtonCentered*(image: PImage; onPressCode: untyped) =
   if createImageButtonCentered(img = image):
     onPressCode
 
+template imageButtonCentered*(image: PImage; tooltip: string;
+    onPressCode: untyped) =
+  ## Draw the button with the selected image. Execute the selected code
+  ## on pressing it.
+  ##
+  ## * image       - the image to shown on the button
+  ## * tooltip     - the tooltip to show when mouse is hovering about the
+  ##                 button
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  ##
+  ## Returns true if button was pressed
+  let showTips: bool = widgetIsHovered()
+  if createImageButtonCentered(img = image):
+    onPressCode
+  if showTips:
+    showTooltip2(text = tooltip)
+
 proc createStyledImageButton(img: PImage; bStyle: ButtonStyle): bool {.raises: [
     ], tags: [], contractual.} =
   ## Draw the button with the selected image, internal use only, temporary code
