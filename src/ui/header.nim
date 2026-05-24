@@ -198,19 +198,15 @@ proc showInfo(dialog: var GameDialog): bool {.raises: [], tags: [RootEffect],
   ## happened or the game's menu is to show. Additionally, it returns true if
   ## the game's state changed, otherwise false.
   if gameSettings.showNumbers:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Game time and current ship speed.")
     try:
       label(str = formattedTime() & " Speed: " & $((realSpeed(
-          ship = playerShip) * 60) / 1_000) & " km/h", alignment = centered)
+          ship = playerShip) * 60) / 1_000) & " km/h", alignment = centered,
+          tooltip = "Game time and current ship speed.")
     except:
       dialog = setError(message = "Can't get the ship's speed")
       return true
   else:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Game time.")
-    label(str = formattedTime(), alignment = centered)
+    label(str = formattedTime(), alignment = centered, tooltip = "Game time.")
 
 proc closeScreen(close: CloseDestination; state: var GameState;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -525,26 +521,17 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       rowTemplateStatic(width = 35)
     if needCleaning:
       rowTemplateStatic(width = 35)
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "The main game menu. Show info about the ship, its crew and allow to quit the game")
-  imageButton(image = images[menuIcon]):
+  imageButton(image = images[menuIcon], tooltip = "The main game menu. Show info about the ship, its crew and allow to quit the game"):
     if dialog == none:
       setDialog(y = 20)
       dialog = gameMenuDialog
   if close != none:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Back to the " & $close & " screen")
-    imageButton(image = images[exitIcon]):
+    imageButton(image = images[exitIcon], tooltip = "Back to the " & $close & " screen"):
       closeScreen(close = close, state = state, dialog = dialog)
     if isKeyPressed(key = keyEscape) and dialog == none:
       closeScreen(close = close, state = state, dialog = dialog)
   if options:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Show more options")
-    imageButton(image = images[moreOptionsIcon]):
+    imageButton(image = images[moreOptionsIcon], tooltip = "Show more options"):
       showOptions = not showOptions
   if showInfo(dialog = dialog):
     return true
