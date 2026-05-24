@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [12.0.1] - 2026-05-24
 
 ### Fixed
 - Typos in messages about lack of crew members on duty
