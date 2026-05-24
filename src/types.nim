@@ -912,7 +912,9 @@ proc initFactionData*(name: FactionName = "";
     pluralMemberName: FactionMemberName = ""; spawnChance: Natural = 0;
     population: AttributesArray = [0, 0]; namesType: NamesTypes = normal;
     relations: Table[string, RelationsData] = initTable[string, RelationsData]();
-    description: Description = ""): FactionData {.raises: [], tags: [],
+    description: Description = ""; foodTypes: seq[string] = @[];
+    drinksTypes: seq[string] = @[]; healingTools: SettingString = "";
+    healingSkill: Natural = 0): FactionData {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for the in-game faction
   ##
@@ -924,12 +926,17 @@ proc initFactionData*(name: FactionName = "";
   ## * namesType        - The type of names for the mobs, bases and ships of the faction
   ## * relations        - The faction's relations with other factions
   ## * description      - The description of the faction
+  ## * foodTypes        - The types of items used as food for the faction's members
+  ## * drinksTypes      - The types of items used as drinks for the faction's members
+  ## * healingTools     - The type of items used as healing tools for the faction's members
+  ## * healingSkill     - The skill used as healing skill for the faction's members
   ##
   ## Returns the new structure with information about the selected faction
   return FactionData(name: name, memberName: memberName,
       pluralMemberName: pluralMemberName, spawnChance: spawnChance,
       population: population, namesType: namesType, relations: relations,
-      description: description)
+      description: description, foodTypes: foodTypes, drinksTypes: drinksTypes,
+      healingTools: healingTools, healingSkill: healingSkill)
 
 type
   ObjectData* = object
