@@ -658,6 +658,22 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.window.header.spacing = Vec2(x: 0.0, y: 0.0)
 
   # window header close button
+  context.style.window.header.closeButton.normal = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[headerColor]))
+  context.style.window.header.closeButton.hover = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[headerColor]))
+  context.style.window.header.closeButton.active = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[headerColor]))
+  context.style.window.header.closeButton.borderColor = NkColor(r: 0, g: 0,
+      b: 0, a: 0)
+  context.style.window.header.closeButton.textBackground = table[headerColor]
+  context.style.window.header.closeButton.textNormal = table[textColor]
+  context.style.window.header.closeButton.textHover = table[textColor]
+  context.style.window.header.closeButton.textActive = table[textColor]
+  context.style.window.header.closeButton.padding = Vec2(x: 0.0, y: 0.0)
+  context.style.window.header.closeButton.touchPadding = Vec2(x: 0.0, y: 0.0)
+  context.style.window.header.closeButton.userData = Handle(
+      handleType: handleInt, intValue: 0)
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
