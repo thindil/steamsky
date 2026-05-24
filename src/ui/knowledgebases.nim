@@ -125,31 +125,27 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
         label(str = "Reputation:")
         let reputationText: string = getReputationText(
             reputationLevel = base.reputation.level)
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = reputationText)
         if base.reputation.level < 0:
           var repLevel: Positive = base.reputation.level.abs
           changeStyle(field = progressbar, color = theme.colors[redColor]):
             progressBar(value = repLevel, maxValue = 100, modifyable = false,
-                reversed = true)
+                reversed = true, tooltip = reputationText)
         else:
           var repLevel: Natural = 0
-          progressBar(value = repLevel, maxValue = 100, modifyable = false)
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = reputationText)
+          progressBar(value = repLevel, maxValue = 100, modifyable = false,
+              tooltip = reputationText)
         if base.reputation.level > 0:
           var repLevel: Positive = base.reputation.level
-          progressBar(value = repLevel, maxValue = 100, modifyable = false)
+          progressBar(value = repLevel, maxValue = 100, modifyable = false,
+              tooltip = reputationText)
         else:
           var repLevel: Natural = 0
-          progressBar(value = repLevel, maxValue = 100, modifyable = false)
+          progressBar(value = repLevel, maxValue = 100, modifyable = false,
+              tooltip = reputationText)
     setLayoutRowDynamic(height = 30, cols = 3)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Set the base as the ship destination")
     imageLabelButton(image = images[destinationIcon], label = "Target",
-        alignment = right):
+        alignment = right, tooltip = "Set the base as the ship destination"):
       if base.skyX == playerShip.skyX and base.skyY == playerShip.skyY:
         dialog = setMessage(message = "You are at this location now.",
             title = "Can't set destination")
@@ -162,10 +158,8 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
     restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Show the base on the map")
     imageLabelButton(image = images[showColoredIcon], label = "Show",
-        alignment = right):
+        alignment = right, tooltip = "Show the base on the map"):
       centerX = base.skyX
       centerY = base.skyY
       dialog = none
@@ -339,10 +333,8 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         tooltip = "Show only the selected owner bases")
     setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.2.cfloat, 0.8])
     label(str = "Name:")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Search for a base with the selected name")
-    editString(text = nameSearch, maxLen = 64)
+    editString(text = nameSearch, maxLen = 64,
+        tooltip = "Search for a base with the selected name")
   const
     headers: array[8, HeaderData[BasesSortOrders]] = [
       HeaderData[BasesSortOrders](label: "Name", sortAsc: nameAsc,
