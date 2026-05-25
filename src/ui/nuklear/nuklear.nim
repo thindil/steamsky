@@ -2990,6 +2990,21 @@ template group*(title: string; flags: set[PanelFlags]; content: untyped) =
     content
     nk_group_end(ctx = ctx)
 
+template group*(title, tooltip: string; flags: set[PanelFlags]; content: untyped) =
+  ## Set a group of widgets inside the parent
+  ##
+  ## * title   - the title of the group
+  ## * tooltip - the tooltip to show on the group.
+  ## * flags   - the set of PanelFlags for the group
+  ## * content - the content of the group
+  let showTips: bool = widgetIsHovered()
+  if nk_group_begin(ctx = ctx, ctitle = title.cstring, cflags = winSetToInt(
+      nimFlags = flags)):
+    content
+    nk_group_end(ctx = ctx)
+  if showTips:
+    showTooltip2(text = tooltip)
+
 # ---------
 # Edit text
 # ---------
