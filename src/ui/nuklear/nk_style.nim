@@ -674,6 +674,16 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.window.header.closeButton.touchPadding = Vec2(x: 0.0, y: 0.0)
   context.style.window.header.closeButton.userData = Handle(
       handleType: handleInt, intValue: 0)
+  context.style.window.header.closeButton.alignment = centered
+  context.style.window.header.closeButton.border = 0.0
+  context.style.window.header.closeButton.rounding = 0.0
+  context.style.window.header.closeButton.colorFactorText = 1.0
+  context.style.window.header.closeButton.colorFactorBackground = 1.0
+  context.style.window.header.closeButton.disabledFactor = nkWidgetDisabledFactor
+  context.style.window.header.closeButton.drawBegin = nil
+  context.style.window.header.closeButton.drawEnd = nil
+
+  # window header minimize button
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
