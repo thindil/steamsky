@@ -54,8 +54,10 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 
 var mapInfoX: float = (windowWidth - 240.0)
 
-proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange) {.raises: [
-    ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange;
+    mapYInfo: MapYRange) {.raises: [
+
+ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the map cell info popup
   ##
   ## * theme    - the current game's theme
@@ -998,21 +1000,19 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
   setLayoutRowDynamic(height = 20, cols = 5)
-  showTooltip(text = "Show the map movement menu.")
-  imageButtonCentered(image = images[mapMenuIcon]):
+  imageButtonCentered(image = images[mapMenuIcon],
+      tooltip = "Show the map movement menu."):
     setDialog(x = windowWidth / 5)
     dialog = mapMenuDialog
-  showTooltip(text = "Make the map smaller by one row.")
-  imageButtonCentered(image = images[contract2Icon]):
+  imageButtonCentered(image = images[contract2Icon],
+      tooltip = "Make the map smaller by one row."):
     gameSettings.messagesPosition += height
-  showTooltip(text = "Make the map bigger by one row.")
-  imageButtonCentered(image = images[expand2Icon]):
+  imageButtonCentered(image = images[expand2Icon],
+      tooltip = "Make the map bigger by one row."):
     gameSettings.messagesPosition -= height
-  showTooltip(text = "Zoom in the map.")
-  labelButton(title = "+"):
+  labelButton(title = "+", tooltip = "Zoom in the map."):
     zoomMap(dialog = dialog)
-  showTooltip(text = "Zoom out the map.")
-  labelButton(title = "-"):
+  labelButton(title = "-", tooltip = "Zoom out the map."):
     zoomMap(dialog = dialog, zoomIn = false)
   layoutDynamic(height = windowHeight - mapHeight - 75, cols = 2):
     # Draw last messages
