@@ -658,57 +658,49 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       setLayoutRowDynamic(height = 30, cols = 1)
     else:
       setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.75.cfloat, 0.25])
-    showTooltip(text = "Show available orders for your ship.")
-    labelButton(title = "Ship orders"):
+    labelButton(title = "Ship orders", tooltip = "Show available orders for your ship."):
       setDialog()
       dialog = ordersDialog
     if playerShip.speed != docked and playerShip.destinationX > 0:
-      showTooltip(text = "Auto move your ship to its destination.")
-      imageButton(image = images[moveToIcon]):
+      imageButton(image = images[moveToIcon], tooltip = "Auto move your ship to its destination."):
         moveShipOnMap(direction = moveToDestination, dialog = dialog)
     setLayoutRowDynamic(height = 30, cols = 1)
     if playerShip.speed == docked:
-      showTooltip(text = if gameSettings.waitMinutes ==
-          1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes.")
-      imageButtonCentered(image = images[waitIcon]):
+      imageButtonCentered(image = images[waitIcon], tooltip = if gameSettings.waitMinutes ==
+          1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes."):
         moveShipOnMap(direction = moveOne, dialog = dialog)
     else:
       playerShip.speed = (comboList(items = shipSpeeds,
           selected = playerShip.speed.ord - 1, itemHeight = 25, x = 200, y = 50,
           tooltip = "Set speed for your ship. The faster you move, the more fuel used. But faster movement has bigger chance to evade enemies.") + 1).ShipSpeed
       setLayoutRowStatic(height = 30, cols = 3, ratio = [40.cfloat, 40, 40])
-      showTooltip(text = "Move ship up and left")
-      imageButton(image = images[arrowUpLeft]):
+      imageButton(image = images[arrowUpLeft],
+          tooltip = "Move ship up and left"):
         moveShipOnMap(direction = northWest, dialog = dialog)
-      showTooltip(text = "Move ship up")
-      imageButton(image = images[arrowUp]):
+      imageButton(image = images[arrowUp], tooltip = "Move ship up"):
         moveShipOnMap(direction = north, dialog = dialog)
-      showTooltip(text = "Move ship up and right")
-      imageButton(image = images[arrowUpRight]):
+      imageButton(image = images[arrowUpRight],
+          tooltip = "Move ship up and right"):
         moveShipOnMap(direction = northEast, dialog = dialog)
-      showTooltip(text = "Move ship left")
-      imageButton(image = images[arrowLeft]):
+      imageButton(image = images[arrowLeft], tooltip = "Move ship left"):
         moveShipOnMap(direction = west, dialog = dialog)
       if playerShip.destinationX == 0:
-        showTooltip(text = if gameSettings.waitMinutes ==
-              1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes.")
-        imageButton(image = images[waitIcon]):
+        imageButton(image = images[waitIcon], tooltip = if gameSettings.waitMinutes ==
+              1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes."):
           moveShipOnMap(direction = moveOne, dialog = dialog)
       else:
-        showTooltip(text = "Move ship one map field toward destination")
-        imageButton(image = images[moveStepIcon]):
+        imageButton(image = images[moveStepIcon],
+            tooltip = "Move ship one map field toward destination"):
           moveShipOnMap(direction = moveOne, dialog = dialog)
-      showTooltip(text = "Move ship right")
-      imageButton(image = images[arrowRight]):
+      imageButton(image = images[arrowRight], tooltip = "Move ship right"):
         moveShipOnMap(direction = east, dialog = dialog)
-      showTooltip(text = "Move ship down and left")
-      imageButton(image = images[arrowDownLeft]):
+      imageButton(image = images[arrowDownLeft],
+          tooltip = "Move ship down and left"):
         moveShipOnMap(direction = southWest, dialog = dialog)
-      showTooltip(text = "Move ship down")
-      imageButton(image = images[arrowDown]):
+      imageButton(image = images[arrowDown], tooltip = "Move ship down"):
         moveShipOnMap(direction = south, dialog = dialog)
-      showTooltip(text = "Move ship down and right")
-      imageButton(image = images[arrowDownRight]):
+      imageButton(image = images[arrowDownRight],
+          tooltip = "Move ship down and right"):
         moveShipOnMap(direction = southEast, dialog = dialog)
 
 var mapX, mapY: Natural = 0
