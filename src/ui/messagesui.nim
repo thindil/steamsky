@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -39,15 +39,11 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
   # Show buttons to resize the last messages window
   if withButtons:
     setLayoutRowDynamic(height = 20, cols = 2)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Make the list of messages bigger.")
-    imageButtonCentered(image = images[contract2Icon]):
+    imageButtonCentered(image = images[contract2Icon],
+        tooltip = "Make the list of messages bigger."):
       gameSettings.messagesPosition += gameSettings.interfaceFontSize + 10
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Make the list of messages smaller.")
-    imageButtonCentered(image = images[expand2Icon]):
+    imageButtonCentered(image = images[expand2Icon],
+        tooltip = "Make the list of messages smaller."):
       gameSettings.messagesPosition -= gameSettings.interfaceFontSize + 10
   var loopStart: int = 0 - messagesAmount()
   if loopStart == 0:
