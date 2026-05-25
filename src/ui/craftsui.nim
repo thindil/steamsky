@@ -599,7 +599,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # Show tab buttons
   changeStyle(field = spacing, x = 0, y = 0):
     changeStyle(field = buttonRounding, value = 0):
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = tabHeight, cols = 2)
       const tabs: array[2, string] = ["Recipes", "Workshops"]
       for index, tab in tabs:
         try:
@@ -618,17 +618,17 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
           dialog = setError(message = "Can't set the tabs buttons.")
   # Show advanced options if needed
   if showOptions and hasOptions:
-    setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.2.cfloat, 0.6])
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
     label(str = "Name:")
     editString(text = nameSearch, maxLen = 64, tooltip = "Search for the selected recipe.")
     label(str = "Show:")
     const recipesTypes: array[3, string] = ["All", "Craftable only", "Non-craftable only"]
     typeIndex = comboList(items = recipesTypes, selected = typeIndex,
-        itemHeight = 25, x = 200, y = 150,
+        itemHeight = labelHeight.int, x = 200, y = 150,
         tooltip = "Show only the selected type of recipes.")
     label(str = "Workshop:")
     workshopType = comboList(items = workshopsList, selected = workshopType,
-        itemHeight = 25, x = 400, y = 150,
+        itemHeight = labelHeight.int, x = 400, y = 150,
         tooltip = "Show only recipes craftable in the selected workshop.")
   let tableHeight: float = windowHeight - 140 - (if showOptions: 135 else: 0) -
       gameSettings.messagesPosition.float
