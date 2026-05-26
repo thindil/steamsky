@@ -2220,15 +2220,16 @@ proc slide*(min, val, max, step: int): int {.raises: [], tags: [],
   return nk_slide_int(ctx = ctx, min = min.cint, val = val.cint, max = max.cint,
       step = step.cint).int
 
-proc slider*(min: int; val: var int; max, step: int): bool {.discardable,
+proc slider*(min: int; val: var int; max, step: int; tooltip: string = ""): bool {.discardable,
     raises: [], tags: [], contractual.} =
   ## Create a Nuklear slider with integer values
   ##
-  ## * min  - the minimal value on the slider
-  ## * val  - the current value on the slider
-  ## * max  - the maximum value on the slider
-  ## * step - the amount which increase or decrease the slider's value when
-  ##          the user drag its button
+  ## * min     - the minimal value on the slider
+  ## * val     - the current value on the slider
+  ## * max     - the maximum value on the slider
+  ## * step    - the amount which increase or decrease the slider's value when
+  ##             the user drag its button
+  ## * tooltip - the tooltip to show on the slider. Can be empty
   ##
   ## Returns true if the current value was modified, otherwise false. Also
   ## the modified parameter val
@@ -2236,9 +2237,12 @@ proc slider*(min: int; val: var int; max, step: int): bool {.discardable,
       step: cint): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   var newVal: cint = val.cint
+  let showTips: bool = widgetIsHovered()
   result = nk_slider_int(ctx = ctx, min = min.cint, val = newVal,
       max = max.cint, step = step.cint) == nkTrue
   val = newVal
+  if showTips and tooltip.len > 0:
+    showTooltip2(text = tooltip)
 
 proc slider*(min: float; val: var float; max,
     step: float): bool {.discardable, raises: [], tags: [], contractual.} =
