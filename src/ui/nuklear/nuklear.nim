@@ -2077,26 +2077,6 @@ template imageLabelButton*(image: PImage; label, tooltip: string;
     showTooltip2(text = tooltip)
 
 # -------
-# Sliders
-# -------
-proc slide*(min, val, max, step: int): int {.raises: [], tags: [],
-    contractual.} =
-  ## Draw a slide widget with integer values
-  ##
-  ## * min  - the minimal value on the slider
-  ## * val  - the current value on the slider
-  ## * max  - the maximum value on the slider
-  ## * step - the amount of incrementing or decrementing the value on the
-  ##          slider with mouse click
-  ##
-  ## Returns the new value on the slider
-  proc nk_slide_int(ctx; min, val, max, step: cint): cint {.importc, nodecl,
-      raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  return nk_slide_int(ctx = ctx, min = min.cint, val = val.cint, max = max.cint,
-      step = step.cint).int
-
-# -------
 # Layouts
 # -------
 proc layoutSpacePush(ctx; x1, y1, w1, h1: cfloat) {.raises: [], tags: [],
@@ -2222,6 +2202,23 @@ template menuItem*(label: string; align: TextAlignment; onPressCode: untyped) =
 # -------
 # Sliders
 # -------
+
+proc slide*(min, val, max, step: int): int {.raises: [], tags: [],
+    contractual.} =
+  ## Draw a slide widget with integer values
+  ##
+  ## * min  - the minimal value on the slider
+  ## * val  - the current value on the slider
+  ## * max  - the maximum value on the slider
+  ## * step - the amount of incrementing or decrementing the value on the
+  ##          slider with mouse click
+  ##
+  ## Returns the new value on the slider
+  proc nk_slide_int(ctx; min, val, max, step: cint): cint {.importc, nodecl,
+      raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_slide_int(ctx = ctx, min = min.cint, val = val.cint, max = max.cint,
+      step = step.cint).int
 
 proc slider*(min: int; val: var int; max, step: int): bool {.discardable,
     raises: [], tags: [], contractual.} =
