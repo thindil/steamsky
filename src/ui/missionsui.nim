@@ -304,25 +304,18 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = 30, cols = 1)
     label(str = "Percent of " & moneyName & " as reward:")
     setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.75.cfloat, 0.25])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Move left - more reputation from mission but less money, move right - more money from mission but less reputation.")
-    slider(min = 0, val = missionPercent, max = 200, step = 1)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Move left - more reputation from mission but less money, move right - more money from mission but less reputation.")
+    slider(min = 0, val = missionPercent, max = 200, step = 1,
+        tooltip = "Move left - more reputation from mission but less money, move right - more money from mission but less reputation.")
     let newPercent: int = property2(name = "#", min = 0, val = missionPercent,
-        max = 200, step = 1, incPerPixel = 1)
+        max = 200, step = 1, incPerPixel = 1,
+        tooltip = "Move left - more reputation from mission but less money, move right - more money from mission but less reputation.")
     if newPercent != missionPercent:
       missionPercent = newPercent
     missionReward = ((mission.reward.float * missionPercent.float) / 100.0).Natural
     setLayoutRowDynamic(height = 30, cols = 2)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Accept the mission")
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[negotiateColoredIcon], label = "Accept",
-        alignment = right):
+        alignment = right, tooltip = "Accept the mission"):
       dialog = none
       skyBases[setui.baseIndex].missions[missionIndex].multiplier = (
         missionPercent.float / 100.0)
