@@ -173,7 +173,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
-  setLayoutRowDynamic(height = 30, cols = 5)
+  setLayoutRowDynamic(height = buttonHeight, cols = 5)
   labelButton(title = "Move ship"):
     playerShip.skyX = shipX
     playerShip.skyY = shipY
@@ -183,16 +183,16 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Y:")
   shipY = property2(name = "#", min = 1, val = shipY, max = 1_024, step = 1,
       incPerPixel = 1)
-  setLayoutRowDynamic(height = 30, cols = 2)
+  setLayoutRowDynamic(height = editHeight, cols = 2)
   label(str = "Module:")
   let newModule = comboList(items = playerModules, selected = moduleSelected,
-      itemHeight = 25, x = 235, y = 125)
+      itemHeight = labelHeight.int, x = 235, y = 125)
   if newModule != moduleSelected:
     moduleSelected = newModule
     setSelectedModule()
   label(str = "Prototype:")
   protoSelected = comboList(items = protoModules, selected = protoSelected,
-      itemHeight = 25, x = 235, y = 125)
+      itemHeight = labelHeight.int, x = 235, y = 125)
   label(str = "Weight:")
   weight = property2(name = "#", min = 1, val = weight, max = 1_00_000,
       step = 1, incPerPixel = 1)
@@ -205,7 +205,7 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Upgrade progress:")
   upgradeProgress = property2(name = "#", min = 1, val = upgradeProgress,
       max = 100, step = 1, incPerPixel = 1)
-  setLayoutRowDynamic(height = 30, cols = 1)
+  setLayoutRowDynamic(height = buttonHeight, cols = 1)
   labelButton(title = "Change"):
     for index, module in modulesList:
       if protoModules[protoSelected] == module.name:
@@ -218,16 +218,16 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
 
 proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes to the player's ship's crew members
-  setLayoutRowDynamic(height = 30, cols = 2)
+  setLayoutRowDynamic(height = editHeight, cols = 2)
   label(str = "Member:")
   let newMember = comboList(items = crewList, selected = crewSelected,
-      itemHeight = 25, x = 235, y = 125)
+      itemHeight = labelHeight.int, x = 235, y = 125)
   if newMember != crewSelected:
     crewSelected = newMember
     setSelectedMember()
   setLayoutRowDynamic(height = 370, cols = 3)
   group(title = "memberProperties", flags = {windowNoScrollbar}):
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = editHeight, cols = 2)
     label(str = "Health")
     memberProperties[0] = property2(name = "#", min = 1, val = memberProperties[
         0], max = 100, step = 1, incPerPixel = 1)
@@ -238,7 +238,7 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
       memberProperties[i] = property2(name = "#", min = 0,
           val = memberProperties[i], max = 100, step = 1, incPerPixel = 1)
   group(title = "memberAttribs", flags = {windowNoScrollbar}):
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = editHeight, cols = 2)
     for index, attrib in memberAttribs:
       label(str = attrib.name)
       let newVal: SkillRange = property2(name = "#", min = 1,
@@ -246,14 +246,14 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
       if newVal != attrib.value:
         memberAttribs[index].value = newVal
   group(title = "memberSkills", flags = {windowNoScrollbar}):
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = editHeight, cols = 2)
     for index, skill in memberSkills:
       label(str = skill.name)
       let newVal: SkillRange = property2(name = "#", min = 1,
           val = skill.value, max = 100, step = 1, incPerPixel = 1)
       if newVal != skill.value:
         memberSkills[index].value = newVal
-  setLayoutRowDynamic(height = 30, cols = 3)
+  setLayoutRowDynamic(height = buttonHeight, cols = 3)
   labelButton(title = "Change"):
     playerShip.crew[crewSelected].health = memberProperties[0]
     playerShip.crew[crewSelected].thirst = memberProperties[1]
@@ -277,7 +277,7 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
         value: 1))
     setAvailableSkills()
   skillSelected = comboList(items = availableSkills, selected = skillSelected,
-      itemHeight = 25, x = 235, y = 125)
+      itemHeight = labelHeight.int, x = 235, y = 125)
 
 proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes to the player's ship's cargo
