@@ -262,12 +262,9 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't get fuel name.")
         return
     setLayoutRowDynamic(height = 30, cols = (if canAccept: 3 else: 2))
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Show the mission on the map")
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[showColoredIcon], label = "Show",
-        alignment = right):
+        alignment = right, tooltip = "Show the mission on the map"):
       centerX = mission.targetX
       centerY = mission.targetY
       dialog = none
@@ -275,11 +272,8 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
     restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
     if canAccept:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Start negotiating accepting the mission")
       imageLabelButton(image = images[negotiateIcon], label = "Accept",
-          alignment = right):
+          alignment = right, tooltip = "Start negotiating accepting the mission"):
         dialog = acceptMissionDialog
         missionReward = (mission.reward.float * mission.multiplier).Natural
         missionPercent = 100
@@ -459,7 +453,8 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
             return
           mission.shipIndex = enemies[getRandom(min = enemies.low,
               max = enemies.high)]
-          skyBases[setui.baseIndex].missions[index].shipIndex = mission.shipIndex
+          skyBases[setui.baseIndex].missions[
+              index].shipIndex = mission.shipIndex
         try:
           addButton(label = protoShipsList[mission.shipIndex].name,
               tooltip = "Show more info about the mission", data = index,
