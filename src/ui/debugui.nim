@@ -281,7 +281,7 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
 
 proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes to the player's ship's cargo
-  setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.7, 0.1])
+  setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.7, 0.1])
   labelButton(title = "Add:"):
     try:
       var protoIndex: Positive = 1
@@ -298,36 +298,36 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
   editString(text = itemName, maxLen = 64)
   imageButton(image = images[assignCrewIcon]):
     debugDialog = addItem
-  setLayoutRowDynamic(height = 30, cols = 2)
+  setLayoutRowDynamic(height = editHeight, cols = 2)
   label(str = "Amount:")
   itemAmount = property2(name = "#", min = 1, val = itemAmount, max = 1_000_000,
       step = 1, incPerPixel = 1)
   label(str = "Quality:")
   itemQuality = comboList(items = itemQualities, selected = itemQuality,
-      itemHeight = 25, x = 235, y = 125)
-  setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.7, 0.1])
+      itemHeight = labelHeight.int, x = 235, y = 125)
+  setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.7, 0.1])
   labelButton(title = "Update:"):
     playerShip.cargo[cargoSelected].amount = cargoAmount
     playerShip.cargo[cargoSelected].quality = cargoQuality.ObjectQuality
   editString(text = cargoName, maxLen = 64)
   imageButton(image = images[assignCrewIcon]):
     debugDialog = updateItem
-  setLayoutRowDynamic(height = 30, cols = 2)
+  setLayoutRowDynamic(height = editHeight, cols = 2)
   label(str = "Amount:")
   cargoAmount = property2(name = "#", min = 1, val = cargoAmount,
       max = 1_000_000, step = 1, incPerPixel = 1)
   label(str = "Quality:")
   cargoQuality = comboList(items = itemQualities, selected = cargoQuality,
-      itemHeight = 25, x = 235, y = 125)
+      itemHeight = labelHeight.int, x = 235, y = 125)
 
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be added to the player's
   ## ship's cargo
   window(name = "Item to add", x = 300, y = 100, w = 300, h = 120, flags = {
       windowBorder, windowTitle}):
-    setLayoutRowDynamic(height = 25, cols = 1)
+    setLayoutRowDynamic(height = editHeight, cols = 1)
     itemSelected = comboList(items = itemsNames, selected = itemSelected,
-        itemHeight = 25, x = 290, y = 200)
+        itemHeight = labelHeight.int, x = 290, y = 200)
     labelButton(title = "Add"):
       itemName = itemsNames[itemSelected]
       debugDialog = none
@@ -339,9 +339,9 @@ proc showUpdateItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## ship's cargo
   window(name = "Item to update", x = 300, y = 100, w = 300, h = 120, flags = {
       windowBorder, windowTitle}):
-    setLayoutRowDynamic(height = 25, cols = 1)
+    setLayoutRowDynamic(height = editHeight, cols = 1)
     cargoSelected = comboList(items = cargoNames, selected = cargoSelected,
-        itemHeight = 25, x = 290, y = 200)
+        itemHeight = labelHeight.int, x = 290, y = 200)
     labelButton(title = "Update"):
       cargoName = cargoNames[cargoSelected]
       let item = playerShip.cargo[cargoSelected]
@@ -353,22 +353,22 @@ proc showUpdateItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
 
 proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes to the sky bases
-  setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.7, 0.1])
+  setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.7, 0.1])
   label(str = "Base:")
   editString(text = baseName, maxLen = 64)
   imageButton(image = images[assignCrewIcon]):
     debugDialog = setBase
-  setLayoutRowDynamic(height = 30, cols = 2)
+  setLayoutRowDynamic(height = editHeight, cols = 2)
   label(str = "Type:")
   baseTypeSelected = comboList(items = basesTypesNames,
-      selected = baseTypeSelected, itemHeight = 25, x = 290, y = 200)
+      selected = baseTypeSelected, itemHeight = labelHeight.int, x = 290, y = 200)
   label(str = "Owner:")
   ownerSelected = comboList(items = ownersNames, selected = ownerSelected,
-      itemHeight = 25, x = 290, y = 200)
+      itemHeight = labelHeight.int, x = 290, y = 200)
   const sizesNames: array[3, string] = ["Small", "Medium", "Big"]
   label(str = "Size:")
   sizeSelected = comboList(items = sizesNames, selected = sizeSelected,
-      itemHeight = 25, x = 290, y = 200)
+      itemHeight = labelHeight.int, x = 290, y = 200)
   label(str = "Population:")
   population = property2(name = "#", min = 0, val = population, max = 10_000,
       step = 1, incPerPixel = 1)
@@ -378,7 +378,7 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Money:")
   money = property2(name = "#", min = 0, val = money, max = 1_000_000, step = 1,
       incPerPixel = 1)
-  setLayoutRowDynamic(height = 30, cols = 1)
+  setLayoutRowDynamic(height = buttonHeight, cols = 1)
   labelButton(title = "Update"):
     let baseIndex: BasesRange = baseSelected + 1
     skyBases[baseIndex].baseType = $baseTypeSelected
@@ -401,9 +401,9 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases which can be set
   window(name = "Bases", x = 300, y = 100, w = 300, h = 120, flags = {
       windowBorder, windowTitle}):
-    setLayoutRowDynamic(height = 25, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     baseSelected = comboList(items = basesNames, selected = baseSelected,
-        itemHeight = 25, x = 290, y = 200)
+        itemHeight = labelHeight.int, x = 290, y = 200)
     labelButton(title = "Select"):
       baseName = basesNames[baseSelected]
       let base: BaseRecord = skyBases[baseSelected + 1]
