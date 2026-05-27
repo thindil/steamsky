@@ -20,7 +20,7 @@
 
 import std/[strutils, tables]
 import contracts, nimalyzer
-import ../[basestypes, config, game, help, items, tk]
+import ../[basestypes, config, game, help, items, tk, types]
 import dialogs, errordialog, themes
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;

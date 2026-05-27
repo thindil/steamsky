@@ -19,7 +19,7 @@
 
 import std/[os, tables]
 import contracts
-import ../[basestypes, careers, config, game, game2, tk]
+import ../[basestypes, careers, config, game, game2, tk, types]
 import dialogs2, errordialog, goalsui, mainmenucommands, showmainmenu,
     table, themes, utilsui, utilsui2
 

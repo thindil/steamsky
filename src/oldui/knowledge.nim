@@ -20,7 +20,7 @@
 
 import std/tables
 import contracts, nimalyzer
-import ../[basestypes, game, tk]
+import ../[basestypes, game, tk, types]
 import coreui, errordialog, knowledgebases, knowledgeevents, knowledgemissions,
     knowledgestories, utilsui2
 
