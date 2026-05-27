@@ -58,5 +58,11 @@ cpDir("bin" & DirSep & "doc", dirName & "doc")
 cpFile("README.md", dirName & "doc" & DirSep & "README.md")
 if target != "windows":
   mkDir(dirName & DirSep & "lib")
-  cpFile()
+case target
+of "linux":
+  cpFile("/usr/lib/libSDL2_image-2.0.so.0.800.12", dirName & DirSep & "lib/libSDL2_image.so")
+  cpFile("/usr/lib/libSDL2-2.0.so.0.3200.10", dirName & DirSep & "lib/libSDL2.so")
+of "windows":
+  cpFile("/opt/SDL/SDL2_image.dll", dirName & DirSep & "SDL2_image.dll")
+  cpFile("/opt/SDL/SDL2.dll", dirName & DirSep & "SDL2.dll")
 echo "Files and directories copied."
