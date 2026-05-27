@@ -889,10 +889,10 @@ type
     ## * baseIcon         - The icon used as icon for the faction's bases on the map
     ## * basesTypes       - The list of available bases types for the faction
     ## * weaponSkill      - The skill used as prefered weapon skill for the faction
-    name*: FactionName
-    memberName*: FactionMemberName
-    pluralMemberName*: FactionMemberName
-    spawnChance*: Natural
+    name: FactionName
+    memberName: FactionMemberName
+    pluralMemberName: FactionMemberName
+    spawnChance: Natural
     population*: AttributesArray
     namesType*: NamesTypes
     relations*: Table[string, RelationsData]
@@ -946,6 +946,14 @@ proc initFactionData*(name: FactionName = "";
       healingTools: healingTools, healingSkill: healingSkill, flags: flags,
       careers: careers, baseIcon: baseIcon, basesTypes: basesTypes,
       weaponSkill: weaponSkill)
+
+typeGetterSetter(baseType = FactionData, varName = faction, name = name,
+    typ = FactionName)
+typeGetterSetter(baseType = FactionData, varName = faction, name = memberName,
+    typ = FactionMemberName)
+typeGetterSetter(baseType = FactionData, varName = faction,
+    name = pluralMemberName, typ = FactionMemberName)
+typeGetterSetter(baseType = FactionData, varName = faction, name = spawnChance, typ = Natural)
 
 type
   ObjectData* = object
