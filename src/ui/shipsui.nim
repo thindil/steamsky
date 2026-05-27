@@ -135,15 +135,10 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   ##
   ## Returns the modified parameters dialog and state.
   setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(), text = "The name of your ship")
-  label(str = "Name:")
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(), text = "The name of your ship")
-  colorLabel(str = playerShip.name, color = theme.colors[goldenColor])
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(), text = "Set a new name for the ship")
-  imageButton(image = images[editIcon]):
+  label(str = "Name:", tooltip = "The name of your ship")
+  colorLabel(str = playerShip.name, color = theme.colors[goldenColor],
+      tooltip = "The name of your ship")
+  imageButton(image = images[editIcon], tooltip = "Set a new name for the ship"):
     dialog = renameDialog
   if playerShip.upgradeModule > -1:
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
@@ -209,29 +204,19 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
         playerShip.upgradeModule].upgradeProgress.float / maxUpgrade.float) * 100.0).int
     colorLabel(str = upgradeInfo, color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.9.cfloat, 0.1])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "The current ship's upgrade progress")
-    progressBar(value = upgradePercent, maxValue = 100, modifyable = false)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Stop the current upgrade")
-    imageButton(image = images[cancelIcon]):
+    progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
+        tooltip = "The current ship's upgrade progress")
+    imageButton(image = images[cancelIcon],
+        tooltip = "Stop the current upgrade"):
       cancelUpgrade(dialog = dialog)
   if playerShip.repairModule > -1:
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "If damaged, the module will be repaired as the first")
-    label(str = "Repair first:")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "If damaged, the module will be repaired as the first")
+    label(str = "Repair first:", tooltip = "If damaged, the module will be repaired as the first")
     colorLabel(str = playerShip.modules[playerShip.repairModule].name,
-        color = theme.colors[goldenColor])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Remove the repair priority")
-    imageButton(image = images[cancelIcon]):
+        color = theme.colors[goldenColor],
+            tooltip = "If damaged, the module will be repaired as the first")
+    imageButton(image = images[cancelIcon],
+        tooltip = "Remove the repair priority"):
       setRepair()
   if playerShip.destinationX > 0 and playerShip.destinationY > 0:
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
