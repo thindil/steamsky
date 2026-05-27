@@ -11,30 +11,35 @@ if not fileExists("steamsky.nimble"):
 let target =
   if paramCount() == 2:
     if detectOs(Linux):
-      "x86_64-linux-gnu"
+      "linux"
+    elif detectOs(FreeBSD):
+      "freebsd"
     else:
-      "x86_64-windows"
+      "windows"
   else:
     paramStr(3)
 
 # Check if correct target was set
-if target notin ["x86_64-linux-gnu", "x86_64-windows"]:
-  echo "Invalid compilation target. Allowed options are x86_64-linux-gnu and x86_64-windows"
+if target notin ["linux", "windows"]:
+  echo "Invalid compilation target. Allowed options are linux, freebsd and windows"
   quit QuitFailure
 
 # Clean and compile the game
 rmDir(nimCacheDir().parentDir() & DirSep & "build_r")
-if target == "x86_64-linux-gnu":
+if target in ["linux", "freebsd"]:
   exec "nimble release -y"
 else:
   exec "nimble releasewindows -y"
 let dirName =
-  if target == "x86_64-linux-gnu":
+  case target
+  of "linux":
     "release" & DirSep & "steamsky-linux" & DirSep
-  else:
+  of "windows":
     "release" & DirSep & "steamsky-windows" & DirSep
+  of "freebsd":
+    "release" & DirSep & "steamsky-freebsd" & DirSep
 let extension =
-  if target == "x86_64-linux-gnu":
+  if target in ["linux", "freebsd"]:
     ""
   else:
     ".exe"
@@ -51,4 +56,7 @@ rmDir(dirName & "data" & DirSep & "saves")
 rmDir(dirname & "data" & DirSep & "themes")
 cpDir("bin" & DirSep & "doc", dirName & "doc")
 cpFile("README.md", dirName & "doc" & DirSep & "README.md")
+if target != "windows":
+  mkDir(dirName & DirSep & "lib")
+  cpFile()
 echo "Files and directories copied."
