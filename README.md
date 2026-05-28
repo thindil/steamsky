@@ -58,8 +58,8 @@ To build the game for Windows 64-bit, download `buildwin64` image and type in co
 
 `docker run --rm -v [path to source code]:/app ghcr.io/thindil/buildwin64 /bin/bash -c "cd /app && others/build.nims x86_64-windows"`
 
-It will build the game and put all needed files (except libraries) to directory
-*release* in the project root directory (where this file is).
+It will build the game and put all needed files to directory *release* in the
+project root directory (where this file is).
 
 ### Build unit tests
 
@@ -89,9 +89,9 @@ directory.
 
 ### Libraries needed to run the game
 
-Besides *SDL2* and *SDL2_Image* the game doesn't need any additional libraries to
+Besides *SDL2* and *SDL2_image* the game doesn't need any additional libraries to
 run. On Windows you will need to download the libraries from [SDL2 releases](https://github.com/libsdl-org/SDL/releases)
-and [SDL2_Image releases](https://github.com/libsdl-org/SDL_image/releases)
+and [SDL2_image releases](https://github.com/libsdl-org/SDL_image/releases)
 pages if you were build the game by yourself. The libraries are included in
 the releases.
 
@@ -132,8 +132,8 @@ of the game, you can also use all of this starting parameters.
 Here are available testing versions of the game. You can find them
 in [GitHub Actions](https://github.com/thindil/steamsky/actions/workflows/ada-devel.yml).
 Just select option from the list of results to see Artifacts list.
-To use them, first you must download normal development release. Then unpack
-files (replace existing) to the proper location where the game is installed.
+They should contain all files and libraries needed to run the game. Available
+versions:
 
 * steamsky-development-windows.tar contains Windows 64-bit version of the game.
 
@@ -156,7 +156,7 @@ The game is available under the GPLv3 license.
 
 Nuklear GUI library, used in the UI is under MIT license.
 
-SDL2 and SDL2\_Image libraries, distributed with the game are available under
+SDL2 and SDL2\_image libraries, distributed with the game are available under
 zlib/libpng license.
 
 The Licensing for the fonts distributed with the game is as follows:
