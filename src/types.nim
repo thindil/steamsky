@@ -894,9 +894,9 @@ type
     pluralMemberName: FactionMemberName
     spawnChance: Natural
     population*: AttributesArray
-    namesType*: NamesTypes
+    namesType: NamesTypes
     relations*: Table[string, RelationsData]
-    description*: Description
+    description: Description
     foodTypes*: seq[string]
     drinksTypes*: seq[string]
     healingTools*: SettingString
@@ -954,6 +954,10 @@ typeGetterSetter(baseType = FactionData, varName = faction, name = memberName,
 typeGetterSetter(baseType = FactionData, varName = faction,
     name = pluralMemberName, typ = FactionMemberName)
 typeGetterSetter(baseType = FactionData, varName = faction, name = spawnChance, typ = Natural)
+typeGetterSetter(baseType = FactionData, varName = faction, name = namesType,
+    typ = NamesTypes)
+typeGetterSetter(baseType = FactionData, varName = faction, name = description,
+    typ = Description)
 
 type
   ObjectData* = object
