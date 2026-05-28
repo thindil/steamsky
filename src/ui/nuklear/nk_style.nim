@@ -710,6 +710,11 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.window.header.minimizeButton.drawEnd = nil
 
   # window
+  context.style.window.background = table[windowColor]
+  context.style.window.fixedBackground = StyleItem(iType: itemColor,
+      data: StyleItemData(itype: itemColor, color: table[windowColor]))
+  context.style.window.borderColor = table[StyleColors.borderColor]
+  context.style.window.popupBorderColor = table[popupBorderColor]
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
