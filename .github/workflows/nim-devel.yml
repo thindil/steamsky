@@ -49,7 +49,7 @@ jobs:
     - name: Build the program
       run: |
         git config --global --add safe.directory /__w/steamsky/steamsky
-        others/build.nims x86_64-linux-gnu
+        others/build.nims linux
 
     - name: Compress the artifact
       run: tar -cf steamsky-development-linux.tar -C release steamsky-linux
@@ -78,7 +78,7 @@ jobs:
         git config --global --add safe.directory /__w/steamsky/steamsky
         apt-get update
         apt-get install -y gcc
-        others/build.nims x86_64-windows
+        others/build.nims windows
 
     - name: Compress the artifact
       run: tar -cf steamsky-development-windows.tar -C release steamsky-windows
