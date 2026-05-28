@@ -254,10 +254,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   label(str = "Reputation:", tooltip = "Your reputation among factions")
   setLayoutRowDynamic(height = 35, cols = 2)
   for index, faction in factionsList:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Show information about the faction")
-    labelButton(title = faction.name):
+    labelButton(title = faction.name, tooltip = "Show information about the faction"):
       try:
         dialog = setInfo(text = faction.description[
             0..faction.description.rfind(sub = '\n') - 1], title = faction.name)
@@ -265,12 +262,10 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
         dialog = setError(message = "Can't show information about the faction.")
         return
     let repLevel: int = getReputation(factionIndex = index)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Your reputation with the faction")
     colorLabel(str = getReputationText(reputationLevel = repLevel), color = (
         if repLevel > 0: theme.colors[greenColor] elif repLevel <
-        0: theme.colors[redColor] else: theme.colors[goldenColor]))
+        0: theme.colors[redColor] else: theme.colors[goldenColor]),
+            tooltip = "Your reputation with the faction")
 
 proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -296,11 +291,9 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize the ship general info")
       imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon])):
+          expandIcon] else: images[contractIcon]),
+              tooltip = "Maximize/minimize the ship general info"):
         if expandedSection == 1:
           expandedSection = 0
         else:
@@ -312,19 +305,15 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 2, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize the ship crew info")
       imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon])):
+          expandIcon] else: images[contractIcon]),
+              tooltip = "Maximize/minimize the ship crew info"):
         if expandedSection == 2:
           expandedSection = 0
         else:
           expandedSection = 2
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Show/Hide additional options related to managing the crew")
-      imageButton(image = images[moreOptionsIcon]):
+      imageButton(image = images[moreOptionsIcon],
+          tooltip = "Show/Hide additional options related to managing the crew"):
         showCrewOptions = not showCrewOptions
       showCrewInfo(dialog = dialog)
   # The player's ship's modules info
@@ -333,11 +322,9 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize the ship modules info")
       imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon])):
+          expandIcon] else: images[contractIcon]),
+              tooltip = "Maximize/minimize the ship modules info"):
         if expandedSection == 3:
           expandedSection = 0
         else:
@@ -349,19 +336,15 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = 35, cols = 2, width = 35)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize the ship cargo info")
       imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon])):
+          expandIcon] else: images[contractIcon]),
+              tooltip = "Maximize/minimize the ship cargo info"):
         if expandedSection == 4:
           expandedSection = 0
         else:
           expandedSection = 4
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Show/Hide additional options related to managing the cargo")
-      imageButton(image = images[moreOptionsIcon]):
+      imageButton(image = images[moreOptionsIcon],
+          tooltip = "Show/Hide additional options related to managing the cargo"):
         showCargoOptions = not showCargoOptions
       showCargoInfo(dialog = dialog)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
