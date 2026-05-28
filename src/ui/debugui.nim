@@ -430,12 +430,12 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes to the world's events
   setLayoutRowDynamic(height = 370, cols = 2)
   group(title = "shipProperties", flags = {windowNoScrollbar}):
-    setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.6, 0.2])
+    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.6, 0.2])
     label(str = "Ship:")
     editString(text = shipName, maxLen = 64)
     imageButton(image = images[assignCrewIcon]):
       debugDialog = setShip
-    setLayoutRowDynamic(height = 25, cols = 2)
+    setLayoutRowDynamic(height = editHeight, cols = 2)
     label(str = "X:")
     ship2X = property2(name = "#", min = 1, val = ship2X, max = 1_024, step = 1,
         incPerPixel = 1)
@@ -445,7 +445,7 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
     label(str = "Duration:")
     shipDuration = property2(name = "#", min = 60, val = shipDuration,
         max = 1_000, step = 1, incPerPixel = 1)
-    setLayoutRowDynamic(height = 25, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     labelButton(title = "Add ship"):
       var friendlyShips: seq[Positive] = @[]
       try:
@@ -467,24 +467,24 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
                 time: shipDuration, eType: enemyShip, shipIndex: index))
           skyMap[ship2X][ship2Y].eventIndex = eventsList.high
   group(title = "baseProperties", flags = {windowNoScrollbar}):
-    setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.2.cfloat, 0.6, 0.2])
+    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.6, 0.2])
     label(str = "Base:")
     editString(text = base2Name, maxLen = 64)
     imageButton(image = images[assignCrewIcon]):
       debugDialog = setBaseEvent
-    setLayoutRowDynamic(height = 25, cols = 2)
+    setLayoutRowDynamic(height = editHeight, cols = 2)
     label(str = "Event:")
     const eventsNames: array[3, string] = ["Disease", "Double price", "Full docks"]
     eventSelected = comboList(items = eventsNames, selected = eventSelected,
-        itemHeight = 25, x = 290, y = 200)
+        itemHeight = labelHeight.int, x = 290, y = 200)
     if eventSelected == 1:
       label(str = "Item:")
       item3Selected = comboList(items = itemsNames, selected = item3Selected,
-          itemHeight = 25, x = 290, y = 200)
+          itemHeight = labelHeight.int, x = 290, y = 200)
     label(str = "Duration:")
     eventDuration = property2(name = "#", min = 15, val = eventDuration,
         max = 12_000, step = 1, incPerPixel = 1)
-    setLayoutRowDynamic(height = 25, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     labelButton(title = "Add event"):
       case eventSelected
       of 0:
@@ -506,9 +506,9 @@ proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of proto ships which can be set
   window(name = "Ships", x = 300, y = 100, w = 300, h = 120, flags = {
       windowBorder, windowTitle}):
-    setLayoutRowDynamic(height = 25, cols = 1)
+    setLayoutRowDynamic(height = editHeight, cols = 1)
     shipSelected = comboList(items = shipsNames, selected = shipSelected,
-        itemHeight = 25, x = 290, y = 200)
+        itemHeight = labelHeight.int, x = 290, y = 200)
     labelButton(title = "Select"):
       shipName = shipsNames[shipSelected]
       debugDialog = none
@@ -517,9 +517,9 @@ proc showSetBaseEventDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases for an event
   window(name = "Bases", x = 300, y = 100, w = 300, h = 120, flags = {
       windowBorder, windowTitle}):
-    setLayoutRowDynamic(height = 25, cols = 1)
+    setLayoutRowDynamic(height = editHeight, cols = 1)
     base2Selected = comboList(items = basesNames, selected = base2Selected,
-        itemHeight = 25, x = 290, y = 200)
+        itemHeight = labelHeight.int, x = 290, y = 200)
     labelButton(title = "Select"):
       base2Name = basesNames[base2Selected]
       base2Selected.inc
@@ -545,7 +545,7 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     layoutSpaceStatic(height = groupHeight, widgetsCount = 2):
       row(x = 0, y = 0, w = groupOneWidth, h = groupHeight):
         group(title = "debugButtons", flags = {windowNoScrollbar}):
-          setLayoutRowDynamic(height = 30, cols = 1)
+          setLayoutRowDynamic(height = buttonHeight, cols = 1)
           labelButton(title = "Ship"):
             debugTab = ship
           labelButton(title = "Crew"):
