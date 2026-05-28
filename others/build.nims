@@ -30,8 +30,7 @@ if target in ["linux", "freebsd"]:
   exec "nimble release -y"
 else:
   exec "nimble releasewindows -y"
-let dirName =
-  case target
+let dirName = case target
   of "linux":
     "release" & DirSep & "steamsky-linux" & DirSep
   of "windows":
@@ -39,7 +38,7 @@ let dirName =
   of "freebsd":
     "release" & DirSep & "steamsky-freebsd" & DirSep
   else:
-    discard
+    ""
 let extension =
   if target in ["linux", "freebsd"]:
     ""
