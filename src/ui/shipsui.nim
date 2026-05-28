@@ -220,59 +220,38 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
       setRepair()
   if playerShip.destinationX > 0 and playerShip.destinationY > 0:
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "The current travel destination of your ship")
-    label(str = "Destination:")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "The current travel destination of your ship")
+    label(str = "Destination:", tooltip = "The current travel destination of your ship")
     if skyMap[playerShip.destinationX][playerShip.destinationY].baseIndex > 0:
       colorLabel(str = skyBases[skyMap[playerShip.destinationX][
-          playerShip.destinationY].baseIndex].name, color = theme.colors[goldenColor])
+          playerShip.destinationY].baseIndex].name, color = theme.colors[
+              goldenColor],
+              tooltip = "The current travel destination of your ship")
     else:
       colorLabel(str = "X: " & $playerShip.destinationX & " Y: " &
-          $playerShip.destinationY, color = theme.colors[goldenColor])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Reset the ship destination")
+          $playerShip.destinationY, color = theme.colors[goldenColor],
+              tooltip = "The current travel destination of your ship")
     imageButton(image = images[cancelIcon]):
       playerShip.destinationX = 0
       playerShip.destinationY = 0
   setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Your ship the current home base")
-  label(str = "Home:")
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Your ship the current home base")
-  colorLabel(str = skyBases[playerShip.homeBase].name, color = theme.colors[goldenColor])
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(), text = "Show the home base on map")
-  imageButton(image = images[showIcon]):
+  label(str = "Home:", tooltip = "Your ship the current home base")
+  colorLabel(str = skyBases[playerShip.homeBase].name, color = theme.colors[
+      goldenColor], tooltip = "Your ship the current home base")
+  imageButton(image = images[showIcon], tooltip = "Show the home base on map"):
     centerX = skyBases[playerShip.homeBase].skyX
     centerY = skyBases[playerShip.homeBase].skyY
     state = map
   setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines")
-  label(str = "Weight:")
+  label(str = "Weight:", tooltip = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines")
   try:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines")
     colorLabel(str = $countShipWeight(ship = playerShip) & "kg",
-        color = theme.colors[goldenColor])
+        color = theme.colors[goldenColor],
+            tooltip = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines")
   except:
     dialog = setError(message = "Can't show the ship's weight")
     return
   setLayoutRowDynamic(height = 35, cols = 1)
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Your reputation among factions")
-  label(str = "Reputation:")
+  label(str = "Reputation:", tooltip = "Your reputation among factions")
   setLayoutRowDynamic(height = 35, cols = 2)
   for index, faction in factionsList:
     if gameSettings.showTooltips:
