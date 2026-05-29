@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -203,10 +203,8 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   if module.upgradeAction == upgradeType and playerShip.upgradeModule == moduleIndex:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Stop upgrading the " & buttonTooltip)
-    imageButton(image = images[cancelIcon]):
+    imageButton(image = images[cancelIcon], tooltip = "Stop upgrading the " &
+        buttonTooltip):
       try:
         stopUpgrade()
       except CrewOrderError:
@@ -216,10 +214,8 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
         dialog = setError(message = "Can't give orders to a crew member.")
       dialog = none
   else:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Start upgrading the " & buttonTooltip)
-    imageButton(image = images[upgradeButtonIcon]):
+    imageButton(image = images[upgradeButtonIcon],
+        tooltip = "Start upgrading the " & buttonTooltip):
       dialog = none
       let upgradeNumber: Positive = case upgradeType
         of maxValue:
@@ -273,8 +269,6 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
         "Not damaged"
   if module.maxDurability == moduleMaxValue:
     statusTooltip.add(y = " (max upgrade)")
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(), text = statusTooltip)
   var value: int = module.durability
   if damagePercent < 0.8 and damagePercent > 0.19:
     changeStyle(field = progressbar, color = theme.colors[yellowColor]):
@@ -286,21 +280,17 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
           modifyable = false)
   else:
     progressBar(value = value, maxValue = module.maxDurability,
-        modifyable = false)
+        modifyable = false, tooltip = statusTooltip)
   if playerShip.repairModule == moduleIndex:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Remove the repair priority")
-    imageButton(image = images[cancelIcon]):
+    imageButton(image = images[cancelIcon],
+        tooltip = "Remove the repair priority"):
       playerShip.repairModule = -1
       addMessage(message = "You removed the repair's priority.",
           mType = orderMessage)
       dialog = none
   else:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Repair the selected module as first when damaged")
-    imageButton(image = images[repairPriorityIcon]):
+    imageButton(image = images[repairPriorityIcon],
+        tooltip = "Repair the selected module as first when damaged"):
       playerShip.repairModule = moduleIndex
       addMessage(message = "You assigned " & module.name &
           " as the repair's priority.", mType = orderMessage)
@@ -372,22 +362,20 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
   label(str = "Upgrade progress:")
   var upgradePercent: int = 100 - ((module.upgradeProgress.float /
       maxUpgrade.float) * 100.0).int
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = moduleInfo)
   if upgradePercent > 74:
-    progressBar(value = upgradePercent, maxValue = 100, modifyable = false)
+    progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
+        tooltip = moduleInfo)
   elif upgradePercent > 24:
     changeStyle(field = progressbar, color = theme.colors[yellowColor]):
-      progressBar(value = upgradePercent, maxValue = 100, modifyable = false)
+      progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
+          tooltip = moduleInfo)
   else:
     changeStyle(field = progressbar, color = theme.colors[redColor]):
-      progressBar(value = upgradePercent, maxValue = 100, modifyable = false)
+      progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
+          tooltip = moduleInfo)
   if playerShip.upgradeModule == moduleIndex:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Stop upgrading the module")
-    imageButton(image = images[cancelIcon]):
+    imageButton(image = images[cancelIcon],
+        tooltip = "Stop upgrading the module"):
       try:
         stopUpgrade()
       except CrewOrderError:
@@ -442,10 +430,8 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   label(str = "State:")
   colorLabel(str = (if module.disabled: "Disabled" else: "Enabled"),
       color = theme.colors[goldenColor])
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(), text = "Turn " & (
-        if module.disabled: "on " else: "off ") & " the engine")
-  imageButton(image = images[powerIcon]):
+  imageButton(image = images[powerIcon], tooltip = "Turn " & (
+        if module.disabled: "on " else: "off ") & " the engine"):
     if playerShip.modules[moduleIndex].disabled:
       playerShip.modules[moduleIndex].disabled = false
       addMessage(message = "You enabled " & playerShip.modules[
@@ -495,10 +481,8 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
     ownersText.add(y = "none")
   colorLabel(str = ownersText, color = theme.colors[goldenColor])
   if addButton:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Assign crew members to the module.")
-    imageButton(image = images[assignCrewIcon]):
+    imageButton(image = images[assignCrewIcon],
+        tooltip = "Assign crew members to the module."):
       setDialog(y = windowHeight / 10)
       dialog = assignCrewDialog
 
