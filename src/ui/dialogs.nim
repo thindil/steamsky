@@ -154,9 +154,9 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     popup(pType = staticPopup, title = "Question", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar, windowMovable}):
-      setLayoutRowDynamic(height = 30 * questionData.lines, cols = 1)
+      setLayoutRowDynamic(height = labelHeight * questionData.lines, cols = 1)
       wrapLabel(str = questionData.question)
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
       labelButton(title = "Yes"):
         closePopup()
         dialog = none
@@ -317,9 +317,9 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
     popup(pType = staticPopup, title = messageData.title, x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar, windowMovable}):
-      setLayoutRowDynamic(height = 30 * messageData.lines, cols = 1)
+      setLayoutRowDynamic(height = labelHeight * messageData.lines, cols = 1)
       wrapLabel(str = messageData.text)
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
       addCloseButton(dialog = dialog, label = "Close " & $((timer /
           1000.0).ceil.int))
   except:
@@ -429,10 +429,10 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
       var index: Natural = 0
       for wAmount in infoData.widgetsAmount:
         if wAmount == 1:
-          setLayoutRowDynamic(height = 30 * infoData.data[index].lines, cols = 1)
+          setLayoutRowDynamic(height = labelHeight * infoData.data[index].lines, cols = 1)
           colorWrapLabel(str = infoData.data[index].text, color = infoData.data[index].color)
         else:
-          setLayoutRowDynamic(height = 30, cols = wAmount)
+          setLayoutRowDynamic(height = labelHeight, cols = wAmount)
           for index2 in index..index + wAmount - 1:
             colorWrapLabel(str = infoData.data[index2].text,
                 color = infoData.data[index2].color)
@@ -442,7 +442,7 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
         cols.dec
       if infoData.button2 == emptyButtonSettings:
         cols.dec
-      setLayoutRowDynamic(height = 30, cols = cols)
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = cols)
       # Draw the first optional button
       if infoData.button1 != emptyButtonSettings:
         let button: ButtonSettings = infoData.button1
@@ -626,7 +626,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
   ## the dialog. Returns true if an item was sold or bought, otherwise false
   result = false
   try:
-    const height: float = 220
+    const height: float = 240
     let width: float = windowWidth / 1.5
     updateDialog(width = width, height = height)
     window(name = manipulateData.title, x = dialogX, y = dialogY, w = width,
@@ -655,12 +655,12 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
               quality = playerShip.cargo[cargoIndex].quality,
               craftBonus = playerShip.cargo[cargoIndex].craftBonus,
               craftMalus = playerShip.cargo[cargoIndex].craftMalus)
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = editHeight, cols = 2)
       # Set target (give dialog only)
       if dialog == giveDialog:
         label(str = "To:")
         let newMember: Natural = comboList(items = crewList,
-            selected = manipulateData.data, itemHeight = 25, x = 200, y = 150)
+            selected = manipulateData.data, itemHeight = labelHeight.int, x = 200, y = 150)
         if newMember != manipulateData.data:
           manipulateData.data = newMember
           updateMaxAmount(dialog = dialog)
@@ -679,7 +679,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       for amount in amounts:
         if amount < manipulateData.maxAmount:
           cols.inc
-      setLayoutRowDynamic(height = 30, cols = cols)
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = cols)
       for i in 1..cols - 1:
         labelButton(title = $amounts[i]):
           manipulateData.amount = amounts[i]
@@ -691,11 +691,11 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
             -1: cargoIndex else: 0), dialog = dialog)
       # Labels
       if manipulateData.cost > 0:
-        setLayoutRowDynamic(height = 30, cols = 2)
+        setLayoutRowDynamic(height = labelHeight, cols = 2)
         label(str = "Total " & (if dialog == buyDialog: "cost:" else: "gain:"))
         colorLabel(str = $manipulateData.allCost & " " & moneyName,
             color = theme.colors[goldenColor])
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = labelHeight, cols = 1)
       colorLabel(str = manipulateData.warning, color = theme.colors[redColor])
       # Action (buy, sell, etc) button
       type ActionData = object
@@ -718,7 +718,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           ActionData(icon: dropColoredIcon, label: "Drop")
         else:
           ActionData(icon: buyIcon, label: "Invalid")
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = buttonHeight, cols = 2)
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       imageLabelButton(image = images[actionButton.icon],
           label = actionButton.label, alignment = right):
