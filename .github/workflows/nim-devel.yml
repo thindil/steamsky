@@ -60,6 +60,17 @@ jobs:
          name: steamsky-development-linux.tar
          path: steamsky-development-linux.tar
 
+    - name: Update Nightly Release
+      uses: andelf/nightly-release@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: nightly
+        name: 'Steam Sky Nightly Release'
+        prerelease: true
+        body: 'Daily builds of the project. Can be very buggy or unstable.'
+        files: steamsky-development-linux.tar
+
   build_windows:
 
     if: ${{ always() }}
@@ -88,3 +99,14 @@ jobs:
       with:
          name: steamsky-development-windows.tar
          path: steamsky-development-windows.tar
+
+    - name: Update Nightly Release
+      uses: andelf/nightly-release@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: nightly
+        name: 'Steam Sky Nightly Release'
+        prerelease: true
+        body: 'Daily builds of the project. Can be very buggy or unstable.'
+        files: steamsky-development-windows.tar
