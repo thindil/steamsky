@@ -122,8 +122,10 @@ proc sortInventory(sortAsc, sortDesc: InventorySortOrders;
     try:
       let item: InventoryData = playerShip.crew[crewIndex].inventory[data.index]
       localInventory.add(y = LocalItemData(selected: data.checked,
-          name: getItemName(item = item, damageInfo = false, toLower = false, moreInfo = false),
-          damage: item.durability.float / getItemMaxDurability(item = item).float, itemType: (
+          name: getItemName(item = item, damageInfo = false, toLower = false,
+              moreInfo = false),
+          damage: item.durability.float / getItemMaxDurability(
+              item = item).float, itemType: (
           if itemsList[item.protoIndex].showType.len > 0: itemsList[
           item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
           amount: item.amount, weight: item.amount * getItemWeight(item = item),
@@ -327,14 +329,11 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     colorLabel(str = spaceText[1], color = theme.colors[goldenColor])
     ## Show select/unselect all items buttons
     setLayoutRowStatic(height = 35, cols = 2, width = 35)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Select all items")
-    imageButton(image = images[selectAllIcon]):
+    imageButton(image = images[selectAllIcon], tooltip = "Select all items"):
       for data in inventoryDataList.mitems:
         data.checked = true
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Unselect all items")
-    imageButton(image = images[unselectAllIcon]):
+    imageButton(image = images[unselectAllIcon],
+        tooltip = "Unselect all items"):
       for data in inventoryDataList.mitems:
         data.checked = false
     # Show the list of items in inventory
@@ -367,8 +366,8 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
             code = setItemInfo, dialog = dialog)
         addProgressBar(tooltip = "The current durability level of the selected item.",
             value = member.inventory[data.index].durability,
-            maxValue = getItemMaxDurability(item = member.inventory[data.index]),
-                data = data.index,
+            maxValue = getItemMaxDurability(item = member.inventory[
+                data.index]), data = data.index,
             code = setItemInfo, dialog = dialog)
         var
           checked: bool = false
