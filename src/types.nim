@@ -868,6 +868,7 @@ typeGetterSetter(baseType = CareerData, varName = career, name = description,
 typeGetterSetter(baseType = CareerData, varName = career, name = name,
     typ = CareerName)
 
+{.push ruleOff: "objects".}
 type
   FactionData* = object
     ## Used to store data about the selected faction
@@ -899,13 +900,14 @@ type
     description: Description
     foodTypes*: seq[string]
     drinksTypes*: seq[string]
-    healingTools*: SettingString
-    healingSkill*: Natural
+    healingTools: SettingString
+    healingSkill: Natural
     flags*: seq[string]
     careers*: Table[string, CareerData]
-    baseIcon*: Natural
+    baseIcon: Natural
     basesTypes*: Table[string, Positive]
-    weaponSkill*: Natural
+    weaponSkill: Natural
+{.pop ruleOn: "objects".}
 
 proc initFactionData*(name: FactionName = "";
     memberName: FactionMemberName = "";
@@ -958,6 +960,11 @@ typeGetterSetter(baseType = FactionData, varName = faction, name = namesType,
     typ = NamesTypes)
 typeGetterSetter(baseType = FactionData, varName = faction, name = description,
     typ = Description)
+typeGetterSetter(baseType = FactionData, varName = faction, name = healingTools,
+    typ = SettingString)
+typeGetterSetter(baseType = FactionData, varName = faction, name = healingSkill, typ = Natural)
+typeGetterSetter(baseType = FactionData, varName = faction, name = baseIcon, typ = Natural)
+typeGetterSetter(baseType = FactionData, varName = faction, name = weaponSkill, typ = Natural)
 
 type
   ObjectData* = object
