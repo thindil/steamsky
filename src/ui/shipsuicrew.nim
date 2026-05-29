@@ -432,27 +432,20 @@ proc showAttributes(member: MemberData; dialog: var GameDialog) {.raises: [],
     label(str = attributesList[index].name & ":")
     colorLabel(str = getAttributeLevelName(attributeLevel = attrib.level),
         color = theme.colors[goldenColor])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Show detailed information about the selected attribute.")
-    imageButton(image = images[helpIcon]):
+    imageButton(image = images[helpIcon],
+        tooltip = "Show detailed information about the selected attribute."):
       let attribute: AttributeRecord = attributesList[index]
       dialog = setInfo(text = attribute.description,
           title = attribute.name)
     setLayoutRowDynamic(height = 20, cols = 1)
     var level: int = (if attrib.level > 2: attrib.level * 2 else: 6)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "The current level of the attribute.")
     progressBar(value = level, maxValue = SkillRange.high,
-        modifyable = false)
+        modifyable = false, tooltip = "The current level of the attribute.")
     setLayoutRowDynamic(height = 5, cols = 1)
     var exp: int = ((attrib.experience.float / (attrib.level.float *
         250.0)) * 100.0).int
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Experience need to reach the next level")
-    progressBar(value = exp, maxValue = 100, modifyable = false)
+    progressBar(value = exp, maxValue = 100, modifyable = false,
+        tooltip = "Experience need to reach the next level")
 
 proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -499,10 +492,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
         label(str = "Name:")
         colorLabel(str = member.name, color = theme.colors[goldenColor])
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Set a new name for the crew member")
-        imageButton(image = images[editIcon]):
+        imageButton(image = images[editIcon],
+            tooltip = "Set a new name for the crew member"):
           dialog = renameMemberDialog
         if member.health < 100:
           setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
@@ -596,10 +587,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
           except:
             dialog = setError(message = "Can't show the order info.")
             return
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "Set a new order for the crew member")
-          imageButton(image = images[giveOrderIcon]):
+          imageButton(image = images[giveOrderIcon],
+              tooltip = "Set a new order for the crew member"):
             dialog = giveOrderDialog
             setGiveOrder(data = crewIndex, dialog = dialog)
         let faction: FactionData = try:
@@ -654,10 +643,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             return
           colorLabel(str = getSkillLevelName(skillLevel = skill.level),
               color = theme.colors[goldenColor])
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "Show detailed information about the selected skill.")
-          imageButton(image = images[helpIcon]):
+          imageButton(image = images[helpIcon],
+              tooltip = "Show detailed information about the selected skill."):
             try:
               let skill: SkillRecord = skillsList[skill.index]
               dialog = setInfo(text = skill.description, title = skill.name)
@@ -666,18 +653,13 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               return
           setLayoutRowDynamic(height = 20, cols = 1)
           var level: int = skill.level
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "The current level of the skill.")
           progressBar(value = level, maxValue = SkillRange.high,
-              modifyable = false)
+              modifyable = false, tooltip = "The current level of the skill.")
           setLayoutRowDynamic(height = 5, cols = 1)
           var exp: int = ((skill.experience.float / (skill.level.float *
               25.0)) * 100.0).int
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "Experience need to reach the next level")
-          progressBar(value = exp, maxValue = 100, modifyable = false)
+          progressBar(value = exp, maxValue = 100, modifyable = false,
+              tooltip = "Experience need to reach the next level")
       # Order priorites of the selected crew member
       of 3:
         setLayoutRowDynamic(height = 35, cols = 2)
@@ -715,20 +697,14 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         discard
     setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
         crewIndex > 0: 3 else: 2))
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Show the crew member inventory")
     imageLabelButton(image = images[inventoryIcon], label = "Inventory",
-        alignment = right):
+        alignment = right, tooltip = "Show the crew member inventory"):
       dialog = inventoryDialog
       setDialog(x = windowWidth / 9, y = windowHeight / 8)
     addCloseButton(dialog = dialog, isPopup = false)
     if playerShip.speed == docked and crewIndex > 0:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Remove the crew member from the ship's crew.")
       imageLabelButton(image = images[dismissIcon], label = "Dismiss",
-          alignment = right):
+          alignment = right, tooltip = "Remove the crew member from the ship's crew."):
         dialog = setQuestion(question = "Are you sure want to dismiss " &
             member.name & "?", qType = dismissMember, data = $crewIndex)
 
