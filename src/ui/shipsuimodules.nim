@@ -774,33 +774,27 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       module.quality.float) * 100.0).Natural
   case damagePercent2
   of 0:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Ruined")
     changeStyle(field = progressbar, color = theme.colors[redColor]):
-      progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
+      progressBar(value = damagePercent2, maxValue = 100, modifyable = false,
+          tooltip = "Ruined")
   of 1..19:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Very dirty")
     changeStyle(field = progressbar, color = theme.colors[redColor]):
-      progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
+      progressBar(value = damagePercent2, maxValue = 100, modifyable = false,
+          tooltip = "Very dirty")
   of 20..49:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Dirty")
     changeStyle(field = progressbar, color = theme.colors[yellowColor]):
-      progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
+      progressBar(value = damagePercent2, maxValue = 100, modifyable = false,
+          tooltip = "Dirty")
   of 50..79:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Dusty")
     changeStyle(field = progressbar, color = theme.colors[yellowColor]):
-      progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
+      progressBar(value = damagePercent2, maxValue = 100, modifyable = false,
+          tooltip = "Dusty")
   of 80..99:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Bit dusty")
-    progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
+    progressBar(value = damagePercent2, maxValue = 100, modifyable = false,
+        tooltip = "Bit dusty")
   else:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = "Clean")
-    progressBar(value = damagePercent2, maxValue = 100, modifyable = false)
+    progressBar(value = damagePercent2, maxValue = 100, modifyable = false,
+        tooltip = "Clean")
   # Show information about cabin's quality
   let moduleMaxValue2: Positive = try:
         (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
@@ -813,12 +807,11 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5])
   label(str = "Quality:")
   var quality: Natural = ((module.quality.float / 100.0) * 100.0).Natural
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(), text = getCabinQuality(
-        quality = module.quality) & (if module.quality ==
-        moduleMaxValue2: " (max upgrade)" else: ""))
   changeStyle(field = progressbar, color = theme.colors[blueColor]):
-    progressBar(value = quality, maxValue = 100, modifyable = false)
+    progressBar(value = quality, maxValue = 100, modifyable = false,
+        tooltip = getCabinQuality(quality = module.quality) & (
+        if module.quality ==
+        moduleMaxValue2: " (max upgrade)" else: ""))
   if module.quality < moduleMaxValue2:
     addUpgradeButton(upgradeType = maxValue, buttonTooltip = "cabin's quality",
         module = module, dialog = dialog)
@@ -844,10 +837,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     # Show the module's name
     label(str = "Name:")
     colorLabel(str = module.name, color = theme.colors[goldenColor])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Set a new name for the module")
-    imageButton(image = images[editIcon]):
+    imageButton(image = images[editIcon],
+        tooltip = "Set a new name for the module"):
       dialog = renameModuleDialog
     # Show the module's status
     showModuleDamage(module = module, dialog = dialog)
@@ -1041,10 +1032,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
         label(str = "Order:")
         colorLabel(str = recipeName, color = theme.colors[goldenColor])
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Cancel the current crafting order")
-        imageButton(image = images[cancelIcon]):
+        imageButton(image = images[cancelIcon],
+            tooltip = "Cancel the current crafting order"):
           try:
             cancelCraftOrder(moduleIndex = moduleIndex)
           except CrewOrderError, CrewNoSpaceError:
@@ -1091,10 +1080,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
       label(str = "Trained skill:")
       colorLabel(str = trainText, color = theme.colors[goldenColor])
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Assign a skill which will be trained in the training room.")
-      imageButton(image = images[assignCrewIcon]):
+      imageButton(image = images[assignCrewIcon],
+          tooltip = "Assign a skill which will be trained in the training room."):
         setDialog(y = windowHeight / 10, x = windowWidth / 10)
         dialog = assignSkillDialog
     # Show information about battering rams
