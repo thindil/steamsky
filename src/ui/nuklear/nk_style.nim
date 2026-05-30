@@ -724,6 +724,14 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.window.tooltipBackground = table[tooltipColor]
   context.style.window.scaler = StyleItem(iType: itemColor, data: StyleItemData(
       itype: itemColor, color: table[textColor]))
+  context.style.window.rounding = 0.0
+  context.style.window.spacing = Vec2(x: 4.0, y: 4.0)
+  context.style.window.scrollbarSize = Vec2(x: 10.0, y: 10.0)
+  context.style.window.minSize = Vec2(x: 64.0, y: 64.0)
+  context.style.window.comboBorder = 1.0
+  context.style.window.contextualBorder = 1.0
+  context.style.window.menuBorder = 1.0
+  context.style.window.groupBorder = 1.0
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
