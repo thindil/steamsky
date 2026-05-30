@@ -189,6 +189,8 @@ type
     ## Used to store a faction's name
   FactionMemberName* = string
     ## Used to store a faction's members' names
+  ItemType* = string
+    ## Used to store names of objects (items) types
 
 template typeGetterSetter(baseType: typedesc; varName, name: untyped;
     typ: typedesc) =
@@ -980,13 +982,14 @@ type
     ## * reputation  - The minumal reputation which is needed to buy that item
     name*: ObjectName
     weight*: Positive
-    itemType*: string
+    itemType*: ItemType
     price*: Natural
     value*: array[1..5, int]
-    showType*: string
-    description*: string
+    showType*: ItemType
+    description*: Description
     reputation*: ReputationRange
 
+type
   RecruitItem* = object
     ## Used to store information about a recruit's inventory
     ##
