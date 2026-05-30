@@ -42,23 +42,15 @@ proc addPagination*(page: var Positive; row: Positive) {.raises: [], tags: [
     setLayoutRowDynamic(height = 30, cols = cols)
     if page > 1:
       if row < gameSettings.listsLimit + 1:
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = "Previous page")
-        labelButton(title = "Previous"):
+        labelButton(title = "Previous", tooltip = "Previous page"):
           page.dec
       else:
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = "Previous page")
-        labelButton(title = "Previous"):
+        labelButton(title = "Previous", tooltip = "Previous page"):
           page.dec
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = "Next page")
-        labelButton(title = "Next"):
+        labelButton(title = "Next", tooltip = "Next page"):
           page.inc
     elif row == gameSettings.listsLimit + 1:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Next page")
-      labelButton(title = "Next"):
+      labelButton(title = "Next", tooltip = "Next page"):
         page.inc
 
 type
@@ -93,10 +85,7 @@ proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
   ## happened.
   setLayoutRowStatic(height = 30, cols = headers.len, ratio = ratio)
   for header in headers:
-    if gameSettings.showTooltips and tooltip.len > 0:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the " & tooltip & ".")
-    labelButton(title = header.label):
+    labelButton(title = header.label, tooltip = "Press mouse button to sort the " & tooltip & "."):
       code(sortAsc = header.sortAsc, sortDesc = header.sortDesc,
           dialog = dialog)
 
@@ -120,11 +109,9 @@ proc addButton*(label, tooltip: string; data: int; code: ButtonCode;
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(), text = tooltip)
   if color != tableTextColor:
     setButtonStyle(field = textNormal, color = theme.colors[color])
-  labelButton(title = label):
+  labelButton(title = label, tooltip = tooltip):
     code(data = data, dialog = dialog)
   if color != tableTextColor:
     setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
@@ -144,9 +131,6 @@ proc addProgressBar*(tooltip: string; value, maxValue, data: int;
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  let bounds: Rect = getWidgetBounds()
-  if gameSettings.showTooltips:
-    addTooltip(bounds = bounds, text = tooltip)
   var
     val: int = value
     color: ColorsNames = greenColor
@@ -159,7 +143,7 @@ proc addProgressBar*(tooltip: string; value, maxValue, data: int;
     if widgetIsMouseClicked(button = (if gameSettings.rightButton:
         Buttons.right else: left)):
       code(data = data, dialog = dialog)
-    progressBar(value = val, maxValue = maxValue, modifyable = false)
+    progressBar(value = val, maxValue = maxValue, modifyable = false, tooltip = tooltip)
 
 proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [],
     contractual.} =
@@ -170,6 +154,4 @@ proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [],
   ##
   ## Returns modified parameter checked. It is modified when the player check
   ## or uncheck the button.
-  if gameSettings.showTooltips and tooltip.len > 0:
-    addTooltip(bounds = getWidgetBounds(), text = tooltip)
-  checkbox(label = "", checked = checked)
+  checkbox(label = "", checked = checked, tooltip = tooltip)
