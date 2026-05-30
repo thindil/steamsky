@@ -159,7 +159,8 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType),
               damage: (
-          item.durability.float / getItemMaxDurability(item = item).float), price: price,
+          item.durability.float / getItemMaxDurability(item = item).float),
+              price: price,
           profit: price - item.price, weight: getItemWeight(item = item),
           owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
           baseCargoIndex].amount else: 0), id: index, quality: item.quality))
@@ -186,7 +187,8 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType),
               damage: (
-          item.durability.float / getItemMaxDurability(item = item).float), price: price,
+          item.durability.float / getItemMaxDurability(item = item).float),
+              price: price,
           profit: -price, weight: getItemWeight(item = item), owned: 0,
           available: item.amount, id: index, quality: item.quality))
     except:
@@ -456,7 +458,8 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
     addProgressBar(tooltip = (if playerShip.cargo[i].durability < 100:
       getItemDamage(item = item)
       else: "Unused"), value = item.durability,
-      maxValue = getItemMaxDurability(item = item), data = index, code = showItemInfo,
+      maxValue = getItemMaxDurability(item = item), data = index,
+          code = showItemInfo,
       dialog = dialog)
     addButton(label = ($item.quality).capitalizeAscii,
         tooltip = "Show available options of item.", data = index,
@@ -504,11 +507,10 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
     label(str = "Type:")
     typeIndex = comboList(items = typesList, selected = typeIndex,
-        itemHeight = 25, x = 200, y = 150, tooltip = "Show only items of the selected type")
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Enter a name of an item which you looking for")
-    editString(text = nameSearch, maxLen = 64)
+        itemHeight = 25, x = 200, y = 150,
+        tooltip = "Show only items of the selected type")
+    editString(text = nameSearch, maxLen = 64,
+        tooltip = "Enter a name of an item which you looking for")
   # Show information about money owned by the player and the base
   setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
   for index, text in moneyText:
@@ -603,9 +605,9 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         data = i, code = showItemInfo, dialog = dialog)
       var durability: int = (if baseIndex == 0: traderCargo[itemsIndexes[
           i]].durability else: skyBases[baseIndex].cargo[itemsIndexes[i]].durability)
-      var maxDurability: int = (if baseIndex == 0: getItemMaxDurability(item = traderCargo[itemsIndexes[
-          i]]) else: getItemMaxDurability(item = skyBases[baseIndex].cargo[itemsIndexes[
-              i]]))
+      var maxDurability: int = (if baseIndex == 0: getItemMaxDurability(
+          item = traderCargo[itemsIndexes[i]]) else: getItemMaxDurability(
+              item = skyBases[baseIndex].cargo[itemsIndexes[i]]))
       addProgressBar(tooltip = (if baseCargo[itemsIndexes[i]].durability < 100:
         getItemDamage(item = baseCargo[itemsIndexes[i]])
         else: "Unused"), value = durability,
@@ -622,7 +624,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         data = i, code = showItemInfo, dialog = dialog)
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       try:
-        addButton(label = $getItemWeight(item = baseCargo[itemsIndexes[i]]) & " kg",
+        addButton(label = $getItemWeight(item = baseCargo[itemsIndexes[i]]) &
+            " kg",
           tooltip = "Show available options of item.", data = i,
           code = showItemInfo, dialog = dialog)
       except:
