@@ -42,12 +42,9 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
     ## * title   - the title of the statistic to show
     ## * value   - the value of the statistic to show
     ## * tooltip - the tooltip for the statistic
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = tooltip)
-    label(str = title)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = tooltip)
-    colorLabel(str = value, color = theme.colors[goldenColor])
+    label(str = title, tooltip = tooltip)
+    colorLabel(str = value, color = theme.colors[goldenColor],
+        tooltip = tooltip)
 
   group(title = "Group1", flags = {}):
 
