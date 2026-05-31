@@ -19,8 +19,8 @@
 ## them, etc.
 
 import std/macros
-import contracts, nimalyzer
-import nk_context, nk_types, nk_widget
+import contracts
+import nk_context, nk_types
 
 # ---------------------
 # Procedures parameters
@@ -88,17 +88,6 @@ proc disableTooltips*() {.raises: [], tags: [], contractual.} =
   ## Disable showing tooltips
   tooltipEnabled = false
 
-proc showTooltip*(text: string) {.raises: [], tags: [], contractual.} =
-  ## Show the selected tooltip for the next widget. The procedure should be
-  ## called before the widget which will have the tooltip.
-  ##
-  ## * text - the text to show on the tooltip
-  if not tooltipEnabled or not widgetIsHovered():
-    return
-  hoveredTooltip = true
-  if delay <= 0:
-    tooltip(text = text)
-
 proc showTooltip2*(text: string) {.raises: [], tags: [], contractual.} =
   ## Show the selected tooltip for the next widget. The procedure should be
   ## called before the widget which will have the tooltip.
@@ -117,14 +106,3 @@ proc updateTooltips*() {.raises: [], tags: [], contractual.} =
   if hoveredTooltip:
     delay -= frameDelay
   hoveredTooltip = false
-
-{.push ruleOff: "params".}
-proc addTooltip*(bounds: Rect; text: string) {.raises: [], tags: [],
-    contractual.} =
-  ## Deprecated, still here for backward compatybility
-  ##
-  ## * bounds - the area in which the widget with the tooltip is
-  ## * text   - the text which will be show as the tooltip
-  showTooltip(text = text)
-{.pop ruleOn: "params".}
-
