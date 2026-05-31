@@ -989,6 +989,19 @@ type
     description*: Description
     reputation*: ReputationRange
 
+proc initObjectData*(name: ObjectName = ""; weight: Positive = 1;
+    itemType: ItemType = ""; price: Natural = 0): ObjectData {.raises: [],
+    tags: [], contractual.} =
+  ## Create a new data structure for an item
+  ##
+  ## * name        - The name of the item
+  ## * weight      - The weight of the item
+  ## * itemType    - The type of the item
+  ## * price       - The base price of the item in bases
+  ##
+  ## Returns the new structure with information about the selected item
+  return ObjectData(name: name, weight: weight, itemType: itemType, price: price)
+
 type
   RecruitItem* = object
     ## Used to store information about a recruit's inventory
