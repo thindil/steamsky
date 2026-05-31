@@ -42,7 +42,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     changeStyle(field = buttonRounding, value = 0):
       const tabs: array[7, string] = ["General", "Movement keys", "Menu keys",
           "Map keys", "General keys", "Interface", "Info"]
-      setLayoutRowDynamic(height = 30, cols = tabs.len)
+      setLayoutRowDynamic(height = tabHeight, cols = tabs.len)
       for index, tab in tabs:
         try:
           if currentTab == index:
@@ -98,7 +98,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       ##
       ## Returns the modified parameter value
       label(str = label, tooltip = tooltip)
-      value = comboList(items = items, selected = value, itemHeight = 25,
+      value = comboList(items = items, selected = value, itemHeight = labelHeight.int,
           x = 350, y = 200, tooltip = tooltip)
 
     proc addAccelerator(label, tooltip: string; value: var string;
@@ -128,7 +128,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     case currentTab
     # General options
     of 0:
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = editHeight, cols = 2)
       const
         autoMoveList: array[4, string] = ["Never", "Any ship",
           "Friendly ship", "Enemy ship"]
@@ -209,12 +209,12 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip: "set half speed for the ship."), KeyTexts(
           label: "Set full speed for ship",
           tooltip: "set full speed for the ship.")]
-      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
+      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
       for index, key in movementKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
             tooltip = "Key used to " & keysTexts[index].tooltip,
             value = key, index = index, dialog = dialog)
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
       labelButton(title = "Reset movement keys to default"):
         mapAccelerators[5] = "KP_Home"
         mapAccelerators[6] = "KP_Up"
@@ -247,12 +247,12 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           label: "Quit from game", tooltip: "quit from the game"), KeyTexts(
           label: "Resign from game", tooltip: "resign from the game."),
           KeyTexts(label: "Show menu", tooltip: "show main menu.")]
-      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
+      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
       for index, key in menuKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
             tooltip = "Key used to " & keysTexts[index].tooltip,
             value = key, index = index, dialog = dialog)
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
       labelButton(title = "Reset menu keys to default"):
         menuAccelerators[1] = "s"
         menuAccelerators[2] = "o"
@@ -298,12 +298,12 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           KeyTexts(label: "Zoom in map", tooltip: "zoom in map."), KeyTexts(
           label: "Zoom out map", tooltip: "zoom out map."), KeyTexts(
           label: "Show move map options", tooltip: "show move map options.")]
-      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
+      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
       for index, key in mapKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
             tooltip = "Key used to " & keysTexts[index].tooltip,
             value = key, index = index, dialog = dialog)
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
       labelButton(title = "Reset map keys to default"):
         mapAccelerators[15] = "Shift-Return"
         mapAccelerators[16] = "Shift-h"
@@ -339,12 +339,12 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip: "resize (maximize or minimize) the third section of information (like ship info, knowledge or in combat)."),
           KeyTexts(label: "Resize fourth section",
           tooltip: "resize (maximize or minimize) the fourth section of information (like ship info, knowledge or in combat).")]
-      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
+      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
       for index, key in generalKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
             tooltip = "Key used to " & keysTexts[index].tooltip,
             value = key, index = index, dialog = dialog)
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
       labelButton(title = "Reset general keys to default"):
         mapAccelerators[34] = "Control-a"
         mapAccelerators[35] = "Control-b"
@@ -353,7 +353,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         setGeneralKeys()
     # Interface options
     of 5:
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = editHeight, cols = 2)
       addComboList(label = "Interace theme:", tooltip = "Select UI theme.",
           items = interfaceThemes, value = interfaceOptions[0])
       addCheckbox(label = "Use right mouse button:",
@@ -368,11 +368,11 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addCheckbox(label = "Full screen mode:",
           option = interfaceOptions[4],
           tooltip = "Run the game in full screen mode.")
-      setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
+      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
       addAccelerator(label = "Full screen shortcut:",
           tooltip = "Key used to switch full screen mode.",
           value = fullScreenAccel, index = 0, dialog = dialog)
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = editHeight, cols = 2)
       addProperty(label = "Close messages after:",
           tooltip = "Auto close game messages after that amount of seconds.",
           min = 1, max = 60, value = interfaceOptions[5])
@@ -391,7 +391,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addProperty(label = "Size of interface font:",
           tooltip = "Size (in pixels) of font used in interface (for example, here).",
           min = 3, max = 50, value = interfaceOptions[10])
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
       labelButton(title = "Set default size for fonts"):
         gameSettings.mapFontSize = 16
         gameSettings.helpFontSize = 14
@@ -408,7 +408,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip: "Place where are game documentation files."),
           KeyTexts(label: "Modifications directory path:",
           tooltip: "Place where you should put all modifications files.")]
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = labelHeight, cols = 2)
       for index, path in pathsOptions:
         label(str = pathsTexts[index].label, tooltip = pathsTexts[index].tooltip)
         label(str = path, tooltip = pathsTexts[index].tooltip)
@@ -419,7 +419,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       try:
         popup(pType = staticPopup, title = "Set Key", flags = {windowNoFlags},
             x = windowWidth / 4, y = windowHeight / 4, w = windowWidth / 2, h = 120):
-          setLayoutRowDynamic(height = 100, cols = 1)
+          setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
           wrapLabel(str = "Press a key or keys combination to set it as a new value for " &
               keyLabel & ". Press Escape to cancel.")
       except NuklearException:
