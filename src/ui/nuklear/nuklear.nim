@@ -2220,8 +2220,10 @@ proc slide*(min, val, max, step: int): int {.raises: [], tags: [],
   return nk_slide_int(ctx = ctx, min = min.cint, val = val.cint, max = max.cint,
       step = step.cint).int
 
-proc slider*(min: int; val: var int; max, step: int; tooltip: string = ""): bool {.discardable,
-    raises: [], tags: [], contractual.} =
+proc slider*(min: int; val: var int; max, step: int;
+    tooltip: string = ""): bool {.discardable,
+
+raises: [], tags: [], contractual.} =
   ## Create a Nuklear slider with integer values
   ##
   ## * min     - the minimal value on the slider
@@ -2991,7 +2993,8 @@ template group*(title: string; flags: set[PanelFlags]; content: untyped) =
     content
     nk_group_end(ctx = ctx)
 
-template group*(title, tooltip: string; flags: set[PanelFlags]; content: untyped) =
+template group*(title, tooltip: string; flags: set[PanelFlags];
+    content: untyped) =
   ## Set a group of widgets inside the parent
   ##
   ## * title   - the title of the group
@@ -3171,9 +3174,8 @@ proc ruleHorizontal*(color: Color; rounding: bool) {.raises: [], tags: [],
       b: b.uint8), rounding = (if rounding: nkTrue else: nkFalse))
 
 proc checkbox*(label: string; checked: var bool;
-    tooltip: string = ""): bool {.discardable, raises: [
-
-], tags: [], contractual.} =
+    tooltip: string = ""): bool {.discardable, raises: [], tags: [],
+    contractual.} =
   ## Create a Nuklear checkbox widget
   ##
   ## * label   - the text to show with the checkbox
@@ -3211,9 +3213,8 @@ proc option*(label: string; selected: bool;
     showTooltip2(text = tooltip)
 
 proc progressBar*(value: var int; maxValue: int; modifyable: bool = true;
-    reversed: bool = false; tooltip: string = ""): bool {.discardable, raises: [
-        ], tags: [],
-    contractual.} =
+    reversed: bool = false; tooltip: string = ""): bool {.discardable, raises: [],
+    tags: [], contractual.} =
   ## Create a Nuklear progress bar widget
   ##
   ## * value      - the current value of the progress bar
