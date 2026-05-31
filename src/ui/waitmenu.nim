@@ -134,32 +134,23 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         dialog = wait(minutes = waitAmount * 1440)
       else:
         discard
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Wait in place for the selected amount of time: from 1 to 1440")
     let newValue: int = property2(name = "#", min = 1, val = waitAmount,
-        max = 1440, step = 1, incPerPixel = 1)
+        max = 1440, step = 1, incPerPixel = 1,
+        tooltip = "Wait in place for the selected amount of time: from 1 to 1440")
     if newValue != waitAmount:
       waitAmount = newValue
     waitInterval = comboList(items = ["minutes", "hours", "days"],
         selected = waitInterval, itemHeight = 25, x = 100, y = 180)
     setLayoutRowDynamic(height = 30, cols = 1)
     if needRest:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Wait in place until the whole ship's crew is rested")
-      labelButton(title = "Wait until crew is rested"):
+      labelButton(title = "Wait until crew is rested",
+          tooltip = "Wait in place until the whole ship's crew is rested"):
         dialog = waitReason(reason = rest)
     if needHealing:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Wait in place until the whole ship's crew is healed. Can take a large amount of time")
-      labelButton(title = "Wait until crew is healed"):
+      labelButton(title = "Wait until crew is healed",
+          tooltip = "Wait in place until the whole ship's crew is healed. Can take a large amount of time"):
         dialog = waitReason(reason = heal)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Close dialog")
-    labelButton(title = "Close"):
+    labelButton(title = "Close", tooltip = "Close dialog"):
       dialog = none
 
   windowSetFocus(name = windowName)
