@@ -1,4 +1,4 @@
-# Copyright 2025 Bartek thindil Jasicki
+# Copyright 2025-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -105,41 +105,26 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       w = 320, h = height, flags = {windowBorder, windowTitle,
       windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = 30, cols = 1)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Wait in place for 1 minute")
-    labelButton(title = "Wait 1 minute"):
+    labelButton(title = "Wait 1 minute",
+        tooltip = "Wait in place for 1 minute"):
       dialog = wait(minutes = 1)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Wait in place for 5 minutes")
-    labelButton(title = "Wait 5 minutes"):
+    labelButton(title = "Wait 5 minutes",
+        tooltip = "Wait in place for 5 minutes"):
       dialog = wait(minutes = 5)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Wait in place for 10 minutes")
-    labelButton(title = "Wait 10 minutes"):
+    labelButton(title = "Wait 10 minutes",
+        tooltip = "Wait in place for 10 minutes"):
       dialog = wait(minutes = 10)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Wait in place for 15 minutes")
-    labelButton(title = "Wait 15 minutes"):
+    labelButton(title = "Wait 15 minutes",
+        tooltip = "Wait in place for 15 minutes"):
       dialog = wait(minutes = 15)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Wait in place for 30 minutes")
-    labelButton(title = "Wait 30 minutes"):
+    labelButton(title = "Wait 30 minutes",
+        tooltip = "Wait in place for 30 minutes"):
       dialog = wait(minutes = 30)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Wait in place for 1 hour")
-    labelButton(title = "Wait 1 hour"):
+    labelButton(title = "Wait 1 hour", tooltip = "Wait in place for 1 hour"):
       dialog = wait(minutes = 60)
     setLayoutRowDynamic(height = 30, cols = 3)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Wait in place for the selected amount of minutes: from 1 to 1440 (the whole day)")
-    labelButton(title = "Wait"):
+    labelButton(title = "Wait",
+        tooltip = "Wait in place for the selected amount of minutes: from 1 to 1440 (the whole day)"):
       case waitInterval
       of 0:
         dialog = wait(minutes = waitAmount)
