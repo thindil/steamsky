@@ -732,6 +732,10 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.window.contextualBorder = 1.0
   context.style.window.menuBorder = 1.0
   context.style.window.groupBorder = 1.0
+  context.style.window.tooltipBorder = 1.0
+  context.style.window.popupBorder = 1.0
+  context.style.window.border = 2.0
+  context.style.window.minRowHeightPadding = 8.0
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting

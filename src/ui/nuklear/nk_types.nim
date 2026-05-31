@@ -1400,7 +1400,7 @@ type
       menuBorderColor*, groupBorderColor*, tooltipBorderColor*,
       tooltipBackground*: NkColor
     border*, comboBorder*, contextualBorder*, menuBorder*, groupBorder*,
-      tooltipBorder*, popupBorder*, rounding*: float
+      tooltipBorder*, popupBorder*, rounding*, minRowHeightPadding*: float
   StyleProgress* = object
     ## Used to store Nuklear style data for progress bar widgets
     cursorNormal*, cursorHover*, cursorActive*, normal*, hover*,
