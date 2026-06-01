@@ -26,7 +26,7 @@
 ## Provides some widgets from nuklear library
 
 import contracts
-import nk_context, nk_types
+import nk_context, nk_tooltip, nk_types
 
 # ---------------------
 # Procedures parameters
@@ -67,3 +67,66 @@ proc widgetIsMouseClicked*(button: Buttons): bool {.raises: [], tags: [],
       raises: [], tags: [], contractual.}
     ## Nuklear C binding
   return nk_widget_is_mouse_clicked(ctx = ctx, btn = button) == nkTrue
+
+proc checkbox*(label: string; checked: var bool;
+    tooltip: string = ""): bool {.discardable, raises: [], tags: [],
+    contractual.} =
+  ## Create a Nuklear checkbox widget
+  ##
+  ## * label   - the text to show with the checkbox
+  ## * checked - the state of the checkbox, if true, the checkbox is checked
+  ## * tooltip - the tooltip to show on the checkbox. Can be empty
+  ##
+  ## Returns true if the state of the checkbox was changed, otherwise false.
+  proc nk_checkbox_label(ctx; text: cstring;
+      active: var cint): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## Nuklear C binding
+  var active: cint = (if checked: 1 else: 0)
+  let showTips: bool = widgetIsHovered()
+  result = nk_checkbox_label(ctx = ctx, text = label.cstring,
+      active = active) == nkTrue
+  checked = active == 1
+  if showTips and tooltip.len > 0:
+    showTooltip2(text = tooltip)
+
+proc option*(label: string; selected: bool;
+    tooltip: string = ""): bool {.raises: [], tags: [], contractual.} =
+  ## Create a Nuklear option (radio) widget
+  ##
+  ## * label    - the text show with the option
+  ## * selected - the state of the option, if true the option is selected
+  ## * tooltip  - the tooltip to show when mouse is hovering about the widget
+  ##
+  ## Returns true if the option is selected, otherwise false
+  proc nk_option_label(ctx; name: cstring; active: cint): nk_bool {.importc,
+      nodecl, raises: [], tags: [], contractual.}
+    ## Nuklear C binding
+  var active: cint = (if selected: 1 else: 0)
+  let showTips: bool = widgetIsHovered()
+  result = nk_option_label(ctx = ctx, name = label.cstring, active = active) == nkTrue
+  if showTips and tooltip.len > 0:
+    showTooltip2(text = tooltip)
+
+proc progressBar*(value: var int; maxValue: int; modifyable: bool = true;
+    reversed: bool = false; tooltip: string = ""): bool {.discardable, raises: [],
+    tags: [], contractual.} =
+  ## Create a Nuklear progress bar widget
+  ##
+  ## * value      - the current value of the progress bar
+  ## * maxValue   - the maximum value of the progress bar
+  ## * modifyable - if true, the user can modify the value of the progress bar
+  ## * reversed   - if true, the progress bar should be draw in reverse, from
+  ##                the end
+  ## * tooltip    - the tooltip to show on the progress bar. Can be empty
+  ##
+  ## Returns true if the value parameter was changed, otherwise false
+  proc nk_progress(ctx; cur: var nk_size; max: nk_size; modifyable,
+      reversed: nk_bool): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## Nuklear C binding
+  let showTips: bool = widgetIsHovered()
+  var curr: nk_size = value.nk_size
+  result = nk_progress(ctx = ctx, cur = curr, max = maxValue.nk_size,
+      modifyable = modifyable.nk_bool, reversed = reversed.nk_bool) == nkTrue
+  value = curr
+  if showTips and tooltip.len > 0:
+    showTooltip2(text = tooltip)
