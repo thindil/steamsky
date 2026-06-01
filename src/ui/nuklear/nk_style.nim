@@ -736,10 +736,14 @@ proc nkStyleFromTable*(table: array[StyleColors,
   context.style.window.popupBorder = 1.0
   context.style.window.border = 2.0
   context.style.window.minRowHeightPadding = 8.0
+  context.style.window.padding = Vec2(x: 4.0, y: 4.0)
+  context.style.window.groupPadding = Vec2(x: 4.0, y: 4.0)
+  context.style.window.popupPadding = Vec2(x: 4.0, y: 4.0)
+  context.style.window.comboPadding = Vec2(x: 4.0, y: 4.0)
+  context.style.window.contextualPadding = Vec2(x: 4.0, y: 4.0)
+  context.style.window.menuPadding = Vec2(x: 4.0, y: 4.0)
+  context.style.window.tooltipPadding = Vec2(x: 4.0, y: 4.0)
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## Reset the UI colors to the default Nuklear setting
-  proc nk_style_default(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  nk_style_default(ctx = ctx)
-
+  nkStyleFromTable()
