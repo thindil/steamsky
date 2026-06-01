@@ -357,9 +357,9 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
       try:
         giveOrders(ship = playerShip, memberIndex = crewIndex,
             givenOrder = availableOrders[currentOrder])
-      except CrewOrderError:
+      except CrewOrderError, CrewNoSpaceError:
         addMessage(message = getCurrentExceptionMsg(), mType = orderMessage)
-      except:
+      except IndexDefect, KeyError, Exception:
         dialog = setError(message = "Can't give orders.")
     restoreButtonStyle()
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
