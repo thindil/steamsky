@@ -67,9 +67,9 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     updateDialog(width = width, height = height)
     window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
         flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-      setLayoutRowDynamic(height = 230, cols = 1)
+      setLayoutRowDynamic(height = labelHeight * 9, cols = 1)
       group(title = "GoalsGroup", flags = {windowNoFlags}):
-        setLayoutRowDynamic(height = 25, cols = 1)
+        setLayoutRowDynamic(height = labelHeight, cols = 1)
 
         proc addSelectable(label: string; num: Natural) {.raises: [], tags: [],
             contractual.} =
@@ -104,7 +104,7 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         except:
           dialog = setError(message = "Can't show a goal.")
           return
-      setLayoutRowDynamic(height = 35, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
       if selected == -1:
         disabled:
           labelButton(title = "Select goal"):
