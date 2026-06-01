@@ -636,16 +636,16 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
   const
     width: float = 200
     windowName: string = "Game Menu"
-  var height: float = 455
+  var height: float = (dialogButtonHeight * 15) + 5
   if inCombat:
-    height = 390
+    height = (dialogButtonHeight * 13) + 5
   elif playerShip.crew[0].health == 0:
-    height = 220
+    height = (dialogButtonHeight * 7) + 5
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY,
       w = width, h = height, flags = {windowBorder, windowTitle,
       windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     labelButton(title = "Ship information"):
       showShipInfo(dialog = dialog, state = state)
     if playerShip.crew[0].health > 0 and not inCombat:
