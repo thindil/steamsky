@@ -990,17 +990,25 @@ type
     reputation*: ReputationRange
 
 proc initObjectData*(name: ObjectName = ""; weight: Positive = 1;
-    itemType: ItemType = ""; price: Natural = 0): ObjectData {.raises: [],
-    tags: [], contractual.} =
+    itemType: ItemType = ""; price: Natural = 0; value: array[1..5, int] = [0,
+    0, 0, 0, 0]; showType: ItemType = ""; description: Description = "";
+    reputation: ReputationRange = 0): ObjectData {.raises: [], tags: [],
+    contractual.} =
   ## Create a new data structure for an item
   ##
   ## * name        - The name of the item
   ## * weight      - The weight of the item
   ## * itemType    - The type of the item
   ## * price       - The base price of the item in bases
+  ## * value       - Various data related to the item (damage for ammo, etc.)
+  ## * showType    - The item's type to show to the player instead of the itemType
+  ## * description - The description of the item
+  ## * reputation  - The minumal reputation which is needed to buy that item
   ##
   ## Returns the new structure with information about the selected item
-  return ObjectData(name: name, weight: weight, itemType: itemType, price: price)
+  return ObjectData(name: name, weight: weight, itemType: itemType,
+      price: price, value: value, showType: showType, description: description,
+      reputation: reputation)
 
 type
   RecruitItem* = object
