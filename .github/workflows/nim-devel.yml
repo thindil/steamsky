@@ -84,7 +84,9 @@ jobs:
         others/build.nims windows
 
     - name: Compress the artifact
-      run: zip -r steamsky-development-windows.zip release/steamsky-windows/
+      uses: montudor/action-zip@v1
+      with:
+        args: zip -qq -r steamsky-development-windows.zip release/steamsky-windows/
 
     - name: Upload to the nightly release
       uses: softprops/action-gh-release@v3
