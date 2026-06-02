@@ -980,10 +980,10 @@ type
     ## * showType    - The item's type to show to the player instead of the itemType
     ## * description - The description of the item
     ## * reputation  - The minumal reputation which is needed to buy that item
-    name*: ObjectName
-    weight*: Positive
-    itemType*: ItemType
-    price*: Natural
+    name: ObjectName
+    weight: Positive
+    itemType: ItemType
+    price: Natural
     value*: array[1..5, int]
     showType*: ItemType
     description*: Description
@@ -1009,6 +1009,15 @@ proc initObjectData*(name: ObjectName = ""; weight: Positive = 1;
   return ObjectData(name: name, weight: weight, itemType: itemType,
       price: price, value: value, showType: showType, description: description,
       reputation: reputation)
+
+typeGetterSetter(baseType = ObjectData, varName = obj, name = name,
+    typ = ObjectName)
+typeGetterSetter(baseType = ObjectData, varName = obj, name = weight,
+    typ = Positive)
+typeGetterSetter(baseType = ObjectData, varName = obj, name = itemType,
+    typ = ItemType)
+typeGetterSetter(baseType = ObjectData, varName = obj, name = price,
+    typ = Natural)
 
 type
   RecruitItem* = object
