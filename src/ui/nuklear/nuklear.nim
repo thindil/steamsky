@@ -3228,3 +3228,17 @@ template tooltip*(x, y, width: float; content: untyped) =
   if createTooltip(width2 = width, x2 = x, y2 = y):
     content
     ctx.nk_tooltip_end
+
+# -------
+# Context
+# -------
+#
+proc nkSetup*(ctx: Context; font: UserFont = UserFont()) {.raises: [], tags: [],
+    contractual.} =
+  ## Set the Nuklear context
+  ##
+  ## * ctx  - the Nuklear context to set
+  ## * font - the font used in the UI. If empty, use the default Nuklear font
+  ##
+  ## Returns the modified parameter ctx
+  defaultStyle()
