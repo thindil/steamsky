@@ -101,6 +101,8 @@ var
     ## The height of row in pixels for tabs buttons
   dialogButtonHeight*: float = gameSettings.interfaceFontSize.float + 21
     ## The height of row in pixels for buttons in dialogs
+  mapButtonHeight*: float = gameSettings.interfaceFontSize.float + 6
+    ## The height of row in pixels for map/help resize buttons
 
 {.push ruleOff: "varDeclared".}
 var images*: array[menuIcon..IconsNames.high,
