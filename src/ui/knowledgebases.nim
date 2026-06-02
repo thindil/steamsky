@@ -54,16 +54,16 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = 30, cols = 4, ratio = [0.4.cfloat, 0.1, 0.1, 0.1])
+    setLayoutRowDynamic(height = labelHeight, cols = 4, ratio = [0.4.cfloat, 0.1, 0.1, 0.1])
     label(str = "Coordinates X:")
     colorLabel(str = $base.skyX, color = theme.colors[goldenColor])
     label(str = "Y:")
     colorLabel(str = $base.skyY, color = theme.colors[goldenColor])
     if base.visited.year == 0:
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = labelHeight, cols = 1)
       colorLabel(str = "Not visited yet.", color = theme.colors[redColor])
     else:
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = labelHeight, cols = 2)
       label(str = "Last visited:")
       colorLabel(str = formattedTime(time = base.visited),
           color = theme.colors[goldenColor])
@@ -72,13 +72,13 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
       if population > empty and base.reputation.level > -25:
         timeDiff = 30 - daysDifference(dateToCompare = base.recruitDate)
         if timeDiff > 0:
-          setLayoutRowDynamic(height = 30, cols = 3,
+          setLayoutRowDynamic(height = labelHeight, cols = 3,
               ratio = [0.7.cfloat, 0.1, 0.2])
           label(str = "New recruits available in")
           colorLabel(str = $timeDiff, color = theme.colors[goldenColor])
           label(str = "days.")
         else:
-          setLayoutRowDynamic(height = 30, cols = 1)
+          setLayoutRowDynamic(height = labelHeight, cols = 1)
           colorLabel(str = "New recruits available now.",
               color = theme.colors[greenColor])
       else:
@@ -87,13 +87,13 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
       if population > empty and base.reputation.level > -25:
         timeDiff = daysDifference(dateToCompare = base.askedForEvents)
         if timeDiff < 7:
-          setLayoutRowDynamic(height = 30, cols = 3,
+          setLayoutRowDynamic(height = labelHeight, cols = 3,
               ratio = [0.7.cfloat, 0.1, 0.2])
           label(str = "You asked for events")
           colorLabel(str = $timeDiff, color = theme.colors[goldenColor])
           label(str = "days ago.")
         else:
-          setLayoutRowDynamic(height = 30, cols = 1)
+          setLayoutRowDynamic(height = labelHeight, cols = 1)
           colorLabel(str = "You can ask for events again",
               color = theme.colors[greenColor])
       else:
@@ -102,13 +102,13 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
       if population > empty and base.reputation.level > -1:
         timeDiff = 7 - daysDifference(dateToCompare = base.missionsDate)
         if timeDiff > 0:
-          setLayoutRowDynamic(height = 30, cols = 3,
+          setLayoutRowDynamic(height = labelHeight, cols = 3,
               ratio = [0.7.cfloat, 0.1, 0.2])
           label(str = "New missions available in")
           colorLabel(str = $timeDiff, color = theme.colors[goldenColor])
           label(str = "days.")
         else:
-          setLayoutRowDynamic(height = 30, cols = 1)
+          setLayoutRowDynamic(height = labelHeight, cols = 1)
           colorLabel(str = "New missions available now.",
               color = theme.colors[greenColor])
       else:
@@ -117,11 +117,11 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
       if baseIndex == playerShip.homeBase:
         colorLabel(str = "It is your home base.", color = theme.colors[cyanColor])
       if skyBases[baseIndex].reputation.level == 0:
-        setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.3.cfloat, 0.3])
+        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.3.cfloat, 0.3])
         label(str = "Reputation:")
         colorLabel(str = "Unknown", color = theme.colors[goldenColor])
       else:
-        setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.3.cfloat, 0.35, 0.35])
+        setLayoutRowDynamic(height = labelHeight, cols = 3, ratio = [0.3.cfloat, 0.35, 0.35])
         label(str = "Reputation:")
         let reputationText: string = getReputationText(
             reputationLevel = base.reputation.level)
@@ -142,7 +142,7 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
           var repLevel: Natural = 0
           progressBar(value = repLevel, maxValue = 100, modifyable = false,
               tooltip = reputationText)
-    setLayoutRowDynamic(height = 30, cols = 3)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 3)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[destinationIcon], label = "Target",
         alignment = right, tooltip = "Set the base as the ship destination"):
