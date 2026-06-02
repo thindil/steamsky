@@ -54,7 +54,8 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = labelHeight, cols = 4, ratio = [0.4.cfloat, 0.1, 0.1, 0.1])
+    setLayoutRowDynamic(height = labelHeight, cols = 4, ratio = [0.4.cfloat,
+        0.1, 0.1, 0.1])
     label(str = "Coordinates X:")
     colorLabel(str = $base.skyX, color = theme.colors[goldenColor])
     label(str = "Y:")
@@ -121,7 +122,8 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
         label(str = "Reputation:")
         colorLabel(str = "Unknown", color = theme.colors[goldenColor])
       else:
-        setLayoutRowDynamic(height = labelHeight, cols = 3, ratio = [0.3.cfloat, 0.35, 0.35])
+        setLayoutRowDynamic(height = labelHeight, cols = 3, ratio = [0.3.cfloat,
+            0.35, 0.35])
         label(str = "Reputation:")
         let reputationText: string = getReputationText(
             reputationLevel = base.reputation.level)
@@ -317,21 +319,21 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   # Show options related to managing the list
   if showBasesOptions:
-    setLayoutRowStatic(height = 25, cols = 6, ratio = [50.cfloat, 150, 75,
-        150, 75, 150])
+    setLayoutRowStatic(height = editHeight, cols = 6, ratio = [50.cfloat, 150,
+        75, 150, 75, 150])
     label(str = "Type:")
     basesType = comboList(items = basesTList, selected = basesType,
-        itemHeight = 25, x = 150, y = 150,
+        itemHeight = labelHeight.int, x = 150, y = 150,
         tooltip = "Show only the selected type bases")
     label(str = "Status:")
     basesStatus = comboList(items = basesStatuses, selected = basesStatus,
-        itemHeight = 25, x = 150, y = 150,
+        itemHeight = labelHeight.int, x = 150, y = 150,
         tooltip = "Show only the selected status bases")
     label(str = "Owner:")
     basesOwner = comboList(items = basesOwners, selected = basesOwner,
-        itemHeight = 25, x = 150, y = 150,
+        itemHeight = labelHeight.int, x = 150, y = 150,
         tooltip = "Show only the selected owner bases")
-    setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.2.cfloat, 0.8])
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.8])
     label(str = "Name:")
     editString(text = nameSearch, maxLen = 64,
         tooltip = "Search for a base with the selected name")
