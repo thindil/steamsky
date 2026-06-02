@@ -48,7 +48,8 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Known bases:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 2, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 2,
+          width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[
           expandIcon] else: images[contractIcon]),
               tooltip = "Maximize/minimize the list of known bases"):
@@ -65,7 +66,8 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Known events:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 2, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 2,
+          width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[
           expandIcon] else: images[contractIcon]),
               tooltip = "Maximize/minimize the list of known events"):
@@ -79,7 +81,8 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Accepted missions:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 1,
+          width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[
           expandIcon] else: images[contractIcon]),
               tooltip = "Maximize/minimize the list of accepted missions"):
@@ -93,7 +96,8 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Known stories:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 2, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 2,
+          width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[
           expandIcon] else: images[contractIcon]),
               tooltip = "Maximize/minimize the list of known stories"):
