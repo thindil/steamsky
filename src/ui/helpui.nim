@@ -37,7 +37,7 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.helpFont],
       fontSize = gameSettings.helpFontSize + 10)
   group(title = "TopicsGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = 25, cols = 1)
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
     var index: Natural = 0
     for title, entry in helpList:
       var sel: bool = selectedHelp == index
@@ -46,7 +46,7 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
           selectedHelp = index
           setHelpContent(content = entry.text, dialog = dialog)
       index.inc
-  setLayoutRowDynamic(height = 20, cols = 2)
+  setLayoutRowDynamic(height = mapButtonHeight, cols = 2)
   imageButtonCentered(image = images[contract2Icon],
       tooltip = "Make the list of topics smaller."):
     gameSettings.topicsPosition -= gameSettings.interfaceFontSize + 10
@@ -60,7 +60,7 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
       var ratio: seq[cfloat] = @[]
       for lbl in row:
         ratio.add(y = lbl.width)
-      setLayoutRowStatic(height = 25, cols = row.len, ratio = ratio)
+      setLayoutRowStatic(height = labelHeight, cols = row.len, ratio = ratio)
       for lbl in row:
         case lbl.tag
         of none:
