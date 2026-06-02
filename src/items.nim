@@ -95,9 +95,9 @@ proc loadItems*(fileName: Path) {.raises: [DataLoadingError],
           try:
             itemsList[itemIndex]
           except ValueError:
-            ObjectData(weight: 1, reputation: -100)
+            initObjectData(weight = 1, reputation = -100)
         else:
-          ObjectData(weight: 1, reputation: -100)
+          initObjectData(weight = 1, reputation = -100)
       var attribute: XmlAttribute = itemNode.attr(name = "name")
       if attribute.len() > 0:
         item.name = attribute
