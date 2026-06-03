@@ -61,7 +61,7 @@ proc showMissionMenu*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = 30, cols = 3)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 3)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[destinationIcon], label = "Target",
         alignment = right, tooltip = "Set the mission as the ship destination"):
@@ -180,7 +180,7 @@ proc showMissionsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   # No missions
   if missionsUIList.len == 0:
-    setLayoutRowDynamic(height = 100, cols = 1)
+    setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
     wrapLabel(str = "You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.")
   else:
     const
