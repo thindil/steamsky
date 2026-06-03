@@ -37,12 +37,12 @@ proc showStoriesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   # No stories discovered
   if knownStoriesList.len == 0:
-    setLayoutRowDynamic(height = 100, cols = 1)
+    setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
     wrapLabel(str = "You didn't discover any story yet.")
   else:
-    setLayoutRowStatic(height = 30, cols = 3, ratio = [200.cfloat, 150, 250])
+    setLayoutRowStatic(height = editHeight, cols = 3, ratio = [200.cfloat, 150, 250])
     let newStoryIndex = comboList(items = knownStoriesList,
-        selected = storyIndex, itemHeight = 25, x = 150, y = 200)
+        selected = storyIndex, itemHeight = labelHeight.int, x = 150, y = 200)
     if newStoryIndex != storyIndex or storyText.len == 0:
       storyIndex = newStoryIndex
       storyText = ""
@@ -140,5 +140,5 @@ proc showStoriesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         addMessage(message = "You set the travel destination for your ship.",
             mType = orderMessage)
     if storyText.len > 0:
-      setLayoutRowDynamic(height = 200, cols = 1)
+      setLayoutRowDynamic(height = labelHeight * 8, cols = 1)
       wrapLabel(str = storyText)
