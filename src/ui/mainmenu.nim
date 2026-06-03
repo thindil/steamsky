@@ -86,6 +86,11 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   showHoFButton = fileExists(filename = saveDirectory.string & "halloffame.dat")
   buttonHeight = gameSettings.interfaceFontSize.float + 26
   labelHeight = gameSettings.interfaceFontSize.float + 11
+  tableRowHeight = gameSettings.interfaceFontSize.float + 21
+  editHeight = gameSettings.interfaceFontSize.float + 21
+  tabHeight = gameSettings.interfaceFontSize.float + 16
+  dialogButtonHeight = gameSettings.interfaceFontSize.float + 21
+  mapButtonHeight = gameSettings.interfaceFontSize.float + 6
 
 proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
