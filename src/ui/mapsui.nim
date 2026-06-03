@@ -54,10 +54,9 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 
 var mapInfoX: float = (windowWidth - 240.0)
 
-proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange;
-    mapYInfo: MapYRange) {.raises: [
-
-ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
+    {.raises: [ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Show the map cell info popup
   ##
   ## * theme    - the current game's theme
