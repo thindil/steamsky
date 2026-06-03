@@ -985,9 +985,9 @@ type
     itemType: ItemType
     price: Natural
     value*: array[1..5, int]
-    showType*: ItemType
-    description*: Description
-    reputation*: ReputationRange
+    showType: ItemType
+    description: Description
+    reputation: ReputationRange
 
 proc initObjectData*(name: ObjectName = ""; weight: Positive = 1;
     itemType: ItemType = ""; price: Natural = 0; value: array[1..5, int] = [0,
@@ -1018,6 +1018,12 @@ typeGetterSetter(baseType = ObjectData, varName = obj, name = itemType,
     typ = ItemType)
 typeGetterSetter(baseType = ObjectData, varName = obj, name = price,
     typ = Natural)
+typeGetterSetter(baseType = ObjectData, varName = obj, name = showType,
+    typ = ItemType)
+typeGetterSetter(baseType = ObjectData, varName = obj, name = description,
+    typ = Description)
+typeGetterSetter(baseType = ObjectData, varName = obj, name = reputation,
+    typ = ReputationRange)
 
 type
   RecruitItem* = object
