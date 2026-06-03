@@ -129,18 +129,14 @@ of the game, you can also use all of this starting parameters.
 
 ### Testing versions
 
-Here are available testing versions of the game. You can find them
-in [GitHub Actions](https://github.com/thindil/steamsky/actions/workflows/ada-devel.yml).
-Just select option from the list of results to see Artifacts list.
+Here are available daily testing versions of the game. You can find them
+in [GitHub Releases](https://github.com/thindil/steamsky/releases/tag/nightly).
 They should contain all files and libraries needed to run the game. Available
 versions:
 
-* steamsky-development-windows.tar contains Windows 64-bit version of the game.
+* steamsky-development-windows.zip contains Windows 64-bit version of the game.
 
-* steamsky-development-linux.tar contains Linux 64-bit version of the game.
-
-Size is a file's size after unpacking. You will download it compressed with
-Zip.
+* steamsky-development-linux.tar.gz contains Linux 64-bit version of the game.
 
 ## Modding Support
 For detailed information about modifying various game elements or debugging
