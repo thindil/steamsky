@@ -3233,7 +3233,7 @@ template tooltip*(x, y, width: float; content: untyped) =
 # Context
 # -------
 #
-proc nkSetup*(ctx: Context; font: UserFont = UserFont()) {.raises: [], tags: [],
+proc nkSetup*(ctx: var Context; font: UserFont = UserFont()) {.raises: [], tags: [],
     contractual.} =
   ## Set the Nuklear context
   ##
@@ -3242,3 +3242,8 @@ proc nkSetup*(ctx: Context; font: UserFont = UserFont()) {.raises: [], tags: [],
   ##
   ## Returns the modified parameter ctx
   defaultStyle()
+  ctx.seq = 1
+  if font.height > 0.0:
+    ctx.style.font = font
+  when defined(nkIncludeVertexBufferOutput):
+    discard

@@ -1435,7 +1435,7 @@ type
   UserFont* = object
     ## Used to store Nuklear data for user's font
     userData*: Handle
-    height*: float
+    height*: float = 0.0
     width*: TextWidthF
     when defined(nkIncludeVertexBufferOutput):
       query*: QueryFontGlyphF
