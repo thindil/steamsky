@@ -719,12 +719,12 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
     const width: float = 250
     var height: float = 0
     if playerShip.speed == docked:
-      height = 115
+      height = (dialogButtonHeight * 3) + 10
     else:
       if playerShip.destinationX > 0 and playerShip.destinationY > 0:
-        height = 185
+        height = (dialogButtonHeight * 5) + 10
       else:
-        height = 150
+        height = (dialogButtonHeight * 4) + 10
 
     proc closeDialog(dialog: var GameDialog) {.raises: [], tags: [],
         contractual.} =
@@ -752,7 +752,7 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
     popup(pType = staticPopup, title = "Set destination", x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
       labelButton(title = "Set destination"):
         setDestination(dialog = dialog)
       if playerShip.speed != docked:
@@ -992,7 +992,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # Draw the map's buttons
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
-  setLayoutRowDynamic(height = 20, cols = 5)
+  setLayoutRowDynamic(height = mapButtonHeight, cols = 5)
   imageButtonCentered(image = images[mapMenuIcon],
       tooltip = "Show the map movement menu."):
     setDialog(x = windowWidth / 5)
