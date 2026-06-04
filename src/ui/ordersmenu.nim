@@ -65,38 +65,38 @@ proc countHeight(baseIndex: ExtendedBasesRange;
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog if error happened.
-  result = 75
+  result = (dialogButtonHeight * 2).Positive + 5
   if playerShip.speed == docked:
-    result += 35
+    result += dialogButtonHeight.Positive
     if getBasePopulation(baseIndex = baseIndex) == empty:
-      result += 35
+      result += dialogButtonHeight.Positive
     else:
-      result += 35
+      result += dialogButtonHeight.Positive
       if haveTrader:
-        result += 70
+        result += (dialogButtonHeight.Positive * 2)
         if skyBases[baseIndex].recruits.len > 0:
-          result += 35
+          result += dialogButtonHeight.Positive
       if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
-        result += 35
+        result += dialogButtonHeight.Positive
       if not skyBases[baseIndex].askedForBases:
-        result += 35
+        result += dialogButtonHeight.Positive
       try:
         if "temple" in basesTypesList[skyBases[baseIndex].baseType].flags:
-          result += 35
+          result += dialogButtonHeight.Positive
       except:
         dialog = setError(message = "Can't check if base has temple flag.")
         return
       for member in playerShip.crew:
         if member.health < 100:
-          result += 35
+          result += dialogButtonHeight.Positive
           break
       for module in playerShip.modules:
         if module.durability < module.maxDurability:
-          result += 35
+          result += dialogButtonHeight.Positive
           break
       try:
         if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
-          result += 35
+          result += dialogButtonHeight.Positive
       except:
         dialog = setError(message = "Can't check if the base has shipyard flag.")
         return
@@ -105,14 +105,14 @@ proc countHeight(baseIndex: ExtendedBasesRange;
           if index notin knownRecipes and index in basesTypesList[skyBases[
               baseIndex].baseType].recipes and recipe.reputation <= skyBases[
               baseIndex].reputation.level:
-            result += 35
+            result += dialogButtonHeight.Positive
             break
         except:
           dialog = setError(message = "Can't check if base has recipes for sale.")
           return
       countMissionHeight(baseIndex = baseIndex, height = result)
       if playerShip.homeBase != baseIndex:
-        result += 35
+        result += dialogButtonHeight.Positive
   else:
     result += 5
     var event: EventsTypes = EventsTypes.none
@@ -121,11 +121,11 @@ proc countHeight(baseIndex: ExtendedBasesRange;
           playerShip.skyY].eventIndex].eType
     case event
     of enemyShip, enemyPatrol:
-      result += 35
+      result += dialogButtonHeight.Positive
     of fullDocks:
-      result += 35
+      result += dialogButtonHeight.Positive
     of attackOnBase:
-      result += 35
+      result += dialogButtonHeight.Positive
     of disease:
       if haveTrader:
         let itemIndex: int = try:
