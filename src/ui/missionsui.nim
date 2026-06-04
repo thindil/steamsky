@@ -180,7 +180,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
     var canAccept: bool = true
     case mission.mType
     of deliver:
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = labelHeight, cols = 2)
       label(str = "Item:")
       try:
         colorLabel(str = itemsList[mission.itemIndex].name,
@@ -199,10 +199,10 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       colorLabel(str = skyBases[skyMap[mission.targetX][
           mission.targetY].baseIndex].name, color = theme.colors[goldenColor])
     of patrol:
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = labelHeight, cols = 1)
       colorLabel(str = "Patrol selected area", color = theme.colors[goldenColor])
     of destroy:
-      setLayoutRowDynamic(height = 60, cols = 2)
+      setLayoutRowDynamic(height = labelHeight * 2, cols = 2)
       label(str = "Target:")
       try:
         colorWrapLabel(str = protoShipsList[mission.shipIndex].name,
@@ -211,10 +211,10 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't get ship's name.")
         return
     of explore:
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = labelHeight, cols = 1)
       colorLabel(str = "Explore selected area", color = theme.colors[goldenColor])
     of passenger:
-      setLayoutRowDynamic(height = 60, cols = 2)
+      setLayoutRowDynamic(height = labelHeight, cols = 2)
       var cabinTaken: bool = false
       canAccept = false
       for module in playerShip.modules:
@@ -251,7 +251,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
     if travelValues[1] > 0:
       var missionInfo: string = ""
       minutesToDate(minutes = travelValues[1], infoText = missionInfo)
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = labelHeight, cols = 2)
       label(str = "ETA:")
       colorLabel(str = missionInfo, color = theme.colors[goldenColor])
       label(str = "Approx fuel usage:")
@@ -261,7 +261,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       except:
         dialog = setError(message = "Can't get fuel name.")
         return
-    setLayoutRowDynamic(height = 30, cols = (if canAccept: 3 else: 2))
+    setLayoutRowDynamic(height = labelHeight, cols = (if canAccept: 3 else: 2))
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[showColoredIcon], label = "Show",
         alignment = right, tooltip = "Show the mission on the map"):
@@ -298,12 +298,12 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = labelHeight, cols = 2)
     label(str = "Reward:")
     colorLabel(str = $(missionReward) & " " & moneyName, color = theme.colors[goldenColor])
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
     label(str = "Percent of " & moneyName & " as reward:")
-    setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.75.cfloat, 0.25])
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
     slider(min = 0, val = missionPercent, max = 200, step = 1,
         tooltip = "Move left - more reputation from mission but less money, move right - more money from mission but less reputation.")
     let newPercent: int = property2(name = "#", min = 0, val = missionPercent,
@@ -312,7 +312,7 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
     if newPercent != missionPercent:
       missionPercent = newPercent
     missionReward = ((mission.reward.float * missionPercent.float) / 100.0).Natural
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[negotiateColoredIcon], label = "Accept",
         alignment = right, tooltip = "Accept the mission"):
@@ -361,7 +361,7 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
   # Show information about amount of missions which the player can take
-  setLayoutRowStatic(height = 30, cols = 3, ratio = missionsWidth)
+  setLayoutRowStatic(height = labelHeight, cols = 3, ratio = missionsWidth)
   label(str = missionsText[0])
   colorLabel(str = missionsText[1], color = theme.colors[goldenColor])
   label(str = missionsText[2])
