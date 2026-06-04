@@ -3229,10 +3229,18 @@ template tooltip*(x, y, width: float; content: untyped) =
     content
     ctx.nk_tooltip_end
 
+# ------
+# Vertex
+# ------
+when defined(nkIncludeVertexBufferOutput):
+  proc nkDrawListInit(list: var DrawList) {.raises: [], tags: [], contractual.} =
+    ## Initialize the drawing list
+    for i in 0..list.circleVtx.high:
+      let a: float = (i.float / list.circleVtx.len.float) * 2.0 * PI
+
 # -------
 # Context
 # -------
-#
 proc nkSetup*(ctx: var Context; font: UserFont = UserFont()) {.raises: [], tags: [],
     contractual.} =
   ## Set the Nuklear context
