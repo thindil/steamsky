@@ -968,6 +968,7 @@ typeGetterSetter(baseType = FactionData, varName = faction, name = healingSkill,
 typeGetterSetter(baseType = FactionData, varName = faction, name = baseIcon, typ = Natural)
 typeGetterSetter(baseType = FactionData, varName = faction, name = weaponSkill, typ = Natural)
 
+{.push ruleOff: "objects".}
 type
   ObjectData* = object
     ## Used to store information about items
@@ -988,6 +989,7 @@ type
     showType: ItemType
     description: Description
     reputation: ReputationRange
+{.pop ruleOn: "objects".}
 
 proc initObjectData*(name: ObjectName = ""; weight: Positive = 1;
     itemType: ItemType = ""; price: Natural = 0; value: array[1..5, int] = [0,
