@@ -38,7 +38,7 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
   ## Returns parameter dialog, modified if any error happened.
   # Show buttons to resize the last messages window
   if withButtons:
-    setLayoutRowDynamic(height = 20, cols = 2)
+    setLayoutRowDynamic(height = mapButtonHeight, cols = 2)
     imageButtonCentered(image = images[contract2Icon],
         tooltip = "Make the list of messages bigger."):
       gameSettings.messagesPosition += gameSettings.interfaceFontSize + 10
@@ -69,7 +69,7 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
           return
     if needLines < 1.0:
       needLines = 1.0
-    setLayoutRowDynamic(height = 25 * needLines, cols = 1)
+    setLayoutRowDynamic(height = labelHeight * needLines, cols = 1)
     if inCombat:
       if message.message.startsWith(prefix = currentTurnTime):
         if message.color == white:
@@ -114,9 +114,9 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   const typesList: array[7, string] = ["All", "Combat", "Trade", "Orders",
       "Craft", "Others", "Missions"]
-  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.2.cfloat, 0.55, 0.25])
+  setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.55, 0.25])
   messagesType = comboList(items = typesList, selected = messagesType,
-      itemHeight = 25, x = 150, y = 150)
+      itemHeight = labelHeight.int, x = 150, y = 150)
   editString(text = messageSearch, maxLen = 64)
   labelButton(title = "Delete all messages"):
     dialog = setQuestion(question = "Are you sure you want to clear all messages?",
@@ -128,7 +128,7 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
     let msgType: MessageType = if messagesType ==
         0: default else: messagesType.MessageType
     if messagesAmount(kind = msgType) == 0:
-      setLayoutRowDynamic(height = 25, cols = 1)
+      setLayoutRowDynamic(height = labelHeight, cols = 1)
       label(str = "There are no messages of that type.")
     else:
 
@@ -148,7 +148,7 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
               return
         if needLines < 1.0:
           needLines = 1.0
-        setLayoutRowDynamic(height = 25 * needLines, cols = 1)
+        setLayoutRowDynamic(height = labelHeight * needLines, cols = 1)
         if message.color == white:
           wrapLabel(str = message.message)
         else:
