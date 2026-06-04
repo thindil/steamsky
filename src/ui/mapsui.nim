@@ -321,8 +321,8 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   window(name = windowName, x = dialogX, y = dialogY,
       w = width, h = height, flags = {windowBorder, windowTitle,
           windowNoScrollbar, windowMovable}):
-    setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35,
-        135, 230])
+    setLayoutRowStatic(height = buttonHeight, cols = 6, ratio =
+        [buttonHeight.cfloat, buttonHeight, buttonHeight, buttonHeight, 135, 230])
     imageButton(image = images[arrowUpLeft]):
       moveMap(direction = northwest)
     imageButton(image = images[arrowUp]):
@@ -348,7 +348,8 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       centerX = skyBases[playerShip.homeBase].skyX
       centerY = skyBases[playerShip.homeBase].skyY
       closeMapMenu(dialog = dialog)
-    setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 230])
+    setLayoutRowStatic(height = buttonHeight, cols = 5, ratio =
+        [buttonHeight.cfloat, buttonHeight, buttonHeight, 175, 230])
     imageButton(image = images[arrowDownLeft]):
       moveMap(direction = southwest)
     imageButton(image = images[arrowDown]):
@@ -654,25 +655,26 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if dialog != none:
       windowDisable()
     if playerShip.speed == docked or playerShip.destinationX == 0:
-      setLayoutRowDynamic(height = 30, cols = 1)
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     else:
-      setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.75.cfloat, 0.25])
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
     labelButton(title = "Ship orders", tooltip = "Show available orders for your ship."):
       setDialog()
       dialog = ordersDialog
     if playerShip.speed != docked and playerShip.destinationX > 0:
       imageButton(image = images[moveToIcon], tooltip = "Auto move your ship to its destination."):
         moveShipOnMap(direction = moveToDestination, dialog = dialog)
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     if playerShip.speed == docked:
       imageButtonCentered(image = images[waitIcon], tooltip = if gameSettings.waitMinutes ==
           1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes."):
         moveShipOnMap(direction = moveOne, dialog = dialog)
     else:
       playerShip.speed = (comboList(items = shipSpeeds,
-          selected = playerShip.speed.ord - 1, itemHeight = 25, x = 200, y = 50,
+          selected = playerShip.speed.ord - 1, itemHeight = labelHeight.int, x = 200, y = 50,
           tooltip = "Set speed for your ship. The faster you move, the more fuel used. But faster movement has bigger chance to evade enemies.") + 1).ShipSpeed
-      setLayoutRowStatic(height = 30, cols = 3, ratio = [40.cfloat, 40, 40])
+      setLayoutRowStatic(height = dialogButtonHeight, cols = 3, ratio =
+        [(dialogButtonHeight + 10).cfloat, (dialogButtonHeight + 10), (dialogButtonHeight + 10)])
       imageButton(image = images[arrowUpLeft],
           tooltip = "Move ship up and left"):
         moveShipOnMap(direction = northWest, dialog = dialog)
