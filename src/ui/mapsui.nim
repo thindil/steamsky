@@ -70,7 +70,7 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
         mapInfoX = (windowWidth - 240.0)
       else:
         mapInfoX = 10
-    layoutStatic(height = 25, cols = 4):
+    layoutStatic(height = labelHeight, cols = 4):
       row(width = 20):
         label(str = "X:")
       row(width = 80):
@@ -84,13 +84,13 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
         distance: Natural = countDistance(destinationX = mapXInfo,
             destinationY = mapYInfo)
         travelValues: TravelArray = travelInfo(distance = distance)
-      layoutStatic(height = 25, cols = 2):
+      layoutStatic(height = labelHeight, cols = 2):
         row(width = 80):
           label(str = "Distance:")
         row(width = 100):
           colorLabel(str = $distance, color = theme.mapColors[mapGoldenYellow])
       if travelValues[1] > 0:
-        layoutStatic(height = 25, cols = 2):
+        layoutStatic(height = labelHeight, cols = 2):
           row(width = 50):
             label(str = "ETA:")
           row(width = 180):
@@ -104,9 +104,9 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
     if skyMap[mapXInfo][mapYInfo].baseIndex > 0:
       let baseIndex: Positive = skyMap[mapXInfo][mapYInfo].baseIndex
       if skyBases[baseIndex].known:
-        setLayoutRowDynamic(height = 25, cols = 1)
+        setLayoutRowDynamic(height = labelHeight, cols = 1)
         colorLabel(str = "Base info:", color = theme.mapColors[mapPinkColor])
-        layoutStatic(height = 25, cols = 2):
+        layoutStatic(height = labelHeight, cols = 2):
           row(width = 60):
             label(str = "Name:")
           row(width = 170):
@@ -138,7 +138,7 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
               row(width = 160):
                 colorLabel(str = factionsList[skyBases[baseIndex].owner].name,
                     color = theme.mapColors[mapGoldenYellow])
-        setLayoutRowDynamic(height = 25, cols = 1)
+        setLayoutRowDynamic(height = labelHeight, cols = 1)
         if getBasePopulation(baseIndex = baseIndex) > empty and skyBases[
             baseIndex].visited.year > 0:
           case skyBases[baseIndex].reputation.level
@@ -167,7 +167,7 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
         if baseIndex == playerShip.homeBase:
           colorLabel(str = "It is your home base", color = theme.mapColors[mapCyanColor])
     if skyMap[mapXInfo][mapYInfo].missionIndex > -1:
-      setLayoutRowDynamic(height = 25, cols = 1)
+      setLayoutRowDynamic(height = labelHeight, cols = 1)
       let missionIndex: int = skyMap[mapXInfo][mapYInfo].missionIndex
       case acceptedMissions[missionIndex].mType
       of deliver:
@@ -186,7 +186,7 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
       for mission in skyBases[skyMap[playerShip.skyX][
           playerShip.skyY].baseIndex].missions:
         if mission.targetX == mapXInfo and mission.targetY == mapYInfo:
-          setLayoutRowDynamic(height = 50, cols = 1)
+          setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
           case mission.mType
           of deliver:
             wrapLabel(str = "Deliver " & itemsList[mission.itemIndex].name)
@@ -213,13 +213,13 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
             currentStory.currentStep].finishCondition else: storiesList[
             currentStory.index].finalStep.finishCondition)
         if finishCondition in {askInBase, destroyShip, explore}:
-          setLayoutRowDynamic(height = 25, cols = 1)
+          setLayoutRowDynamic(height = labelHeight, cols = 1)
           label(str = "Story leads you here")
     if mapXInfo == playerShip.skyX and mapYInfo == playerShip.skyY:
-      setLayoutRowDynamic(height = 25, cols = 1)
+      setLayoutRowDynamic(height = labelHeight, cols = 1)
       colorLabel(str = "You are here", color = theme.mapColors[mapYellowColor])
     if skyMap[mapXInfo][mapYInfo].eventIndex > -1:
-      setLayoutRowDynamic(height = 25, cols = 1)
+      setLayoutRowDynamic(height = labelHeight, cols = 1)
       let eventIndex: Natural = skyMap[mapXInfo][mapYInfo].eventIndex
       label(str = "")
       case eventsList[eventIndex].eType
