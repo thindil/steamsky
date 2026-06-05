@@ -23,7 +23,7 @@
 # OR TORT *(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import std/[colors, hashes, macros, unicode]
+import std/[colors, hashes, macros, math, unicode]
 import contracts, nimalyzer
 import nk_button, nk_colors, nk_context, nk_draw, nk_input, nk_layout, nk_math,
     nk_panel, nk_style, nk_tooltip, nk_types, nk_utf, nk_utils, nk_widget
@@ -3237,6 +3237,8 @@ when defined(nkIncludeVertexBufferOutput):
     ## Initialize the drawing list
     for i in 0..list.circleVtx.high:
       let a: float = (i.float / list.circleVtx.len.float) * 2.0 * PI
+      list.circleVtx[i].x = a.cos
+      list.circleVtx[i].y = a.sin
 
 # -------
 # Context
@@ -3254,4 +3256,4 @@ proc nkSetup*(ctx: var Context; font: UserFont = UserFont()) {.raises: [], tags:
   if font.height > 0.0:
     ctx.style.font = font
   when defined(nkIncludeVertexBufferOutput):
-    discard
+    nkDrawListInit(list = ctx.drawList)
