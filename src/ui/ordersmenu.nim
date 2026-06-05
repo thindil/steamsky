@@ -136,36 +136,36 @@ proc countHeight(baseIndex: ExtendedBasesRange;
             dialog = setError(message = "Can't find medicine in the ship cargo.")
             return
         if itemIndex > -1:
-          result += 70
+          result += (dialogButtonHeight.Positive * 2)
     of EventsTypes.none, doublePrice, baseRecovery:
       if baseIndex > 0:
         if skyBases[baseIndex].reputation.level > -25:
-          result += 35
+          result += dialogButtonHeight.Positive
         for mission in missions.acceptedMissions:
           if haveTrader and mission.targetX == playerShip.skyX and
               mission.targetY == playerShip.skyY and mission.finished:
-            result += 35
+            result += dialogButtonHeight.Positive
       else:
         for mission in missions.acceptedMissions:
           if mission.targetX == playerShip.skyX and mission.targetY ==
               playerShip.skyY and not mission.finished:
             if mission.mType notin {deliver, passenger}:
-              result += 35
+              result += dialogButtonHeight.Positive
     of trader:
       if haveTrader:
-        result += 105
-      result += 35
+        result += (dialogButtonHeight.Positive * 3)
+      result += dialogButtonHeight.Positive
     of friendlyShip:
       if haveTrader:
         try:
           if tradersName in protoShipsList[eventsList[skyMap[playerShip.skyX][
               playerShip.skyY].eventIndex].shipIndex].name:
-            result += 70
+            result += (dialogButtonHeight.Positive * 2)
         except:
           dialog = setError(message = "Can't check if ship is trader.")
           return
-        result += 35
-      result += 35
+        result += dialogButtonHeight.Positive
+      result += dialogButtonHeight.Positive
 
 proc dockingOrder(escape: bool = false; dialog: var GameDialog;
     state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
