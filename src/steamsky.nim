@@ -181,6 +181,19 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main UI loop
   while true:
     let started: float = cpuTime()
+
+    # Input
+    case nuklearInput()
+    of quitEvent:
+      break
+    of sizeChangedEvent:
+      (windowWidth, windowHeight) = nuklearGetWindowSize()
+      redraw = true
+    of noEvent:
+      redraw = state == loadingGame
+    else:
+      redraw = true
+
     if redraw:
       # Reset the UI tooltips if enabled
       if gameSettings.showTooltips:
@@ -228,18 +241,6 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
       # Draw
       nuklearDraw()
-
-    # Input
-    case nuklearInput()
-    of quitEvent:
-      break
-    of sizeChangedEvent:
-      (windowWidth, windowHeight) = nuklearGetWindowSize()
-      redraw = true
-    of noEvent:
-      redraw = state == loadingGame
-    else:
-      redraw = true
 
     # Timing
     let dt: float = cpuTime() - started
