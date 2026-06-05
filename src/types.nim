@@ -1036,6 +1036,18 @@ type
     index*: Positive = 1
     quality*: ObjectQuality = normal
 
+proc initRecruitItem*(index: Positive = 1;
+    quality: ObjectQuality = normal): RecruitItem {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for a recruit's item
+  ##
+  ## * index   - the index of the item's prototype
+  ## * quality - the quality of the item
+  ##
+  ## Returns the new structure with information about the selected item
+  return RecruitItem(index: index, quality: quality)
+
+type
   RecruitData* = object
     ## Used to store information about the recruit in bases
     ##
