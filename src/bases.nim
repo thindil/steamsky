@@ -167,7 +167,7 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
             good
           else:
             excellent
-    inventory.add(y = RecruitItem(index : itemIndex, quality: quality))
+    inventory.add(y = initRecruitItem(index = itemIndex, quality = quality))
     equipment[equipIndex] = inventory.high
     price += getPrice(baseType = skyBases[baseIndex].baseType,
         itemIndex = itemIndex, quality = quality)
