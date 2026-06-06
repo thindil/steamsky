@@ -134,14 +134,14 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   ## * state - the current game's state
   ##
   ## Returns the modified parameters dialog and state.
-  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+  setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
   label(str = "Name:", tooltip = "The name of your ship")
   colorLabel(str = playerShip.name, color = theme.colors[goldenColor],
       tooltip = "The name of your ship")
   imageButton(image = images[editIcon], tooltip = "Set a new name for the ship"):
     dialog = renameDialog
   if playerShip.upgradeModule > -1:
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Upgrade:")
     var
       upgradeInfo: string = playerShip.modules[
@@ -203,14 +203,15 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     var upgradePercent: int = 100 - ((playerShip.modules[
         playerShip.upgradeModule].upgradeProgress.float / maxUpgrade.float) * 100.0).int
     colorLabel(str = upgradeInfo, color = theme.colors[goldenColor])
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.9.cfloat, 0.1])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.9.cfloat, 0.1])
     progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
         tooltip = "The current ship's upgrade progress")
     imageButton(image = images[cancelIcon],
         tooltip = "Stop the current upgrade"):
       cancelUpgrade(dialog = dialog)
   if playerShip.repairModule > -1:
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+        0.5, 0.1])
     label(str = "Repair first:", tooltip = "If damaged, the module will be repaired as the first")
     colorLabel(str = playerShip.modules[playerShip.repairModule].name,
         color = theme.colors[goldenColor],
@@ -219,7 +220,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
         tooltip = "Remove the repair priority"):
       setRepair()
   if playerShip.destinationX > 0 and playerShip.destinationY > 0:
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+        0.5, 0.1])
     label(str = "Destination:", tooltip = "The current travel destination of your ship")
     if skyMap[playerShip.destinationX][playerShip.destinationY].baseIndex > 0:
       colorLabel(str = skyBases[skyMap[playerShip.destinationX][
@@ -233,7 +235,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     imageButton(image = images[cancelIcon]):
       playerShip.destinationX = 0
       playerShip.destinationY = 0
-  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+  setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
   label(str = "Home:", tooltip = "Your ship the current home base")
   colorLabel(str = skyBases[playerShip.homeBase].name, color = theme.colors[
       goldenColor], tooltip = "Your ship the current home base")
@@ -241,7 +243,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     centerX = skyBases[playerShip.homeBase].skyX
     centerY = skyBases[playerShip.homeBase].skyY
     state = map
-  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+  setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
   label(str = "Weight:", tooltip = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines")
   try:
     colorLabel(str = $countShipWeight(ship = playerShip) & "kg",
@@ -250,9 +252,9 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   except:
     dialog = setError(message = "Can't show the ship's weight")
     return
-  setLayoutRowDynamic(height = 35, cols = 1)
+  setLayoutRowDynamic(height = labelHeight, cols = 1)
   label(str = "Reputation:", tooltip = "Your reputation among factions")
-  setLayoutRowDynamic(height = 35, cols = 2)
+  setLayoutRowDynamic(height = buttonHeight, cols = 2)
   for index, faction in factionsList:
     labelButton(title = faction.name, tooltip = "Show information about the faction"):
       try:
