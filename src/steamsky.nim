@@ -189,6 +189,14 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       else:
         disableTooltips()
 
+      # Show dialogs if needed
+      if dialog in GameDialog.errorDialog..GameDialog.mapMenuDialog:
+        showDialog[dialog](dialog = dialog)
+      elif dialog in buyDialog..dropCargoDialog:
+        updateData = showManipulateItem(dialog = dialog)
+      elif dialog == gameMenuDialog:
+        showGameMenu(dialog = dialog, state = state)
+
       # The main window
       window(name = "Main", x = 0, y = 0, w = windowWidth,
           h = windowHeight, flags = {windowNoScrollbar}):
@@ -204,14 +212,6 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         # Set the UI to redraw if state or dialog changed
         if oldState != state or oldDialog != dialog:
           redraw = true
-
-      # Show dialogs if needed
-      if dialog in GameDialog.errorDialog..GameDialog.mapMenuDialog:
-        showDialog[dialog](dialog = dialog)
-      elif dialog in buyDialog..dropCargoDialog:
-        updateData = showManipulateItem(dialog = dialog)
-      elif dialog == gameMenuDialog:
-        showGameMenu(dialog = dialog, state = state)
 
       # Show debug UI if needed
       if debugMode == menu and state notin {
