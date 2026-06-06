@@ -61,8 +61,8 @@ var
       nil]                         ## The list of fonts used by the game
   windowWidth*: float = 800.0      ## The width of the main game window
   windowHeight*: float = 600.0     ## The height of the main game window
-  dialogX*: float = 0              ## The X position of a dialog
-  dialogY*: float = 0              ## The Y position of a dialog
+  dialogX*: float = 250.0          ## The X position of a dialog
+  dialogY*: float = 200.0              ## The Y position of a dialog
   redraw*: bool = true             ## If true, redraw the game
   inCombat*: bool = false          ## If true, the player is in combat
   theme*: ThemeData = defaultTheme ## The current game's theme
