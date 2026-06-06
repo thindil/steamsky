@@ -636,11 +636,11 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
   const
     width: float = 200
     windowName: string = "Game Menu"
-  var height: float = (dialogButtonHeight * 15) + 5
+  var height: float = (dialogButtonHeight * 15) - 5
   if inCombat:
-    height = (dialogButtonHeight * 13) + 5
+    height = (dialogButtonHeight * 13) - 5
   elif playerShip.crew[0].health == 0:
-    height = (dialogButtonHeight * 7) + 5
+    height = (dialogButtonHeight * 7) - 5
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY,
       w = width, h = height, flags = {windowBorder, windowTitle,
