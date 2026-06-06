@@ -1033,8 +1033,8 @@ type
     ##
     ## * index   - the index of the item's prototype
     ## * quality - the quality of the item
-    index*: Positive = 1
-    quality*: ObjectQuality = normal
+    index: Positive = 1
+    quality: ObjectQuality = normal
 
 proc initRecruitItem*(index: Positive = 1;
     quality: ObjectQuality = normal): RecruitItem {.raises: [], tags: [],
@@ -1046,6 +1046,11 @@ proc initRecruitItem*(index: Positive = 1;
   ##
   ## Returns the new structure with information about the selected item
   return RecruitItem(index: index, quality: quality)
+
+typeGetterSetter(baseType = RecruitItem, varName = item, name = index,
+    typ = Positive)
+typeGetterSetter(baseType = RecruitItem, varName = item, name = quality,
+    typ = ObjectQuality)
 
 type
   RecruitData* = object
