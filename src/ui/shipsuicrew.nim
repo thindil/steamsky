@@ -586,7 +586,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.skills.len > 0:
-          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+          setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+              0.4.cfloat, 0.5, 0.1])
           label(str = "Order:")
           try:
             colorLabel(str = getCurrentOrder(memberIndex = crewIndex),
@@ -604,20 +605,22 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setError(message = "Can't get the crew member's faction.")
             return
         if "nogender" notin faction.flags:
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+              0.4.cfloat, 0.6])
           label(str = "Gender:")
           colorLabel(str = (if member.gender == 'M': "Male" else: "Female"),
               color = theme.colors[goldenColor])
-        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
         label(str = "Faction:")
         colorLabel(str = faction.name, color = theme.colors[goldenColor])
         label(str = "Home base:")
         colorLabel(str = skyBases[member.homeBase].name, color = theme.colors[goldenColor])
         if member.skills.len == 0 or member.contractLength == 0:
-          setLayoutRowDynamic(height = 35, cols = 1)
+          setLayoutRowDynamic(height = labelHeight, cols = 1)
           label(str = "Passenger")
           if member.contractLength > 0:
-            setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+            setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+                0.4.cfloat, 0.6])
             label(str = "Time limit:")
             var memberInfo: string = ""
             minutesToDate(minutes = member.contractLength,
@@ -625,7 +628,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             colorLabel(str = memberInfo, color = theme.colors[goldenColor])
         else:
           if crewIndex > 0:
-            setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+            setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+                0.4.cfloat, 0.6])
             label(str = "Contract length:")
             colorLabel(str = (if member.contractLength >
                 0: $member.contractLength & " days" else: "Pernament"),
@@ -642,7 +646,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       # Skills of the selected crew member
       of 2:
         for index, skill in member.skills:
-          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+          setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+              0.4.cfloat, 0.5, 0.1])
           try:
             label(str = skillsList[skill.index].name & ":")
           except:
@@ -669,7 +674,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               tooltip = "Experience need to reach the next level")
       # Order priorites of the selected crew member
       of 3:
-        setLayoutRowDynamic(height = 35, cols = 2)
+        setLayoutRowDynamic(height = editHeight, cols = 2)
         label(str = "Priority")
         label(str = "Level")
         const
@@ -681,7 +686,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         for index, priority in prioritesNames:
           label(str = priority)
           var newPriority: Natural = comboList(items = priorityLevels,
-              selected = setPriorites[index], itemHeight = 25, x = 200, y = 150)
+              selected = setPriorites[index], itemHeight = labelHeight.int,
+                  x = 200, y = 150)
           if newPriority != setPriorites[index]:
             if newPriority == 2:
               for order in playerShip.crew[crewIndex].orders.mitems:
@@ -702,7 +708,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               return
       else:
         discard
-    setLayoutRowDynamic(height = 30, cols = (if playerShip.speed == docked and
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = (if playerShip.speed == docked and
         crewIndex > 0: 3 else: 2))
     imageLabelButton(image = images[inventoryIcon], label = "Inventory",
         alignment = right, tooltip = "Show the crew member inventory"):
