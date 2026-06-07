@@ -1068,15 +1068,16 @@ type
     ## * faction    - The faction index to which the recruit belongs
     attributes*: seq[MobAttributeRecord]
     skills*: seq[SkillInfo]
-    name*: string
+    name*: MobName
     gender*: char
     price*: Positive = 1
     inventory*: seq[RecruitItem]
     equipment*: EquipmentArray
     payment*: Positive = 1
     homeBase*: BasesRange = 1
-    faction*: string
+    faction*: FactionName
 
+type
   BaseCargo* = object
     ## Used to store information about items in bases cargo
     ##
