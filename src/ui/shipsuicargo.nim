@@ -208,14 +208,14 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show information about free cargo space in the player's ship
-  setLayoutRowStatic(height = 30, cols = 2, ratio = cargoWidth)
+  setLayoutRowStatic(height = labelHeight, cols = 2, ratio = cargoWidth)
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   if showCargoOptions:
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.2.cfloat, 0.6])
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
     label(str = "Type:")
     typeIndex = comboList(items = typesList, selected = typeIndex,
-        itemHeight = 25, x = 200, y = 150, tooltip = "Show only items with the selected type")
+        itemHeight = labelHeight.int, x = 200, y = 150, tooltip = "Show only items with the selected type")
   # Show the list of crew members
   addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
       code = sortCargo, dialog = dialog)
