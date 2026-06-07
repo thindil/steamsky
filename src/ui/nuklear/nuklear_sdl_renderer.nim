@@ -304,6 +304,7 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   SDL_RenderSetScale(renderer = sdl.renderer, scaleX = scaleX, scaleY = scaleY)
   fontScale = scaleY
   setContext(newContext = nk_sdl_init(win = sdl.win, renderer = sdl.renderer))
+  #nkInit(ctx = context)
   return getContext()
 
 proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =

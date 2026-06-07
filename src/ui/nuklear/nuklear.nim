@@ -3243,9 +3243,9 @@ when defined(nkIncludeVertexBufferOutput):
 # -------
 # Context
 # -------
-proc nkSetup(ctx: var Context; font: UserFont = UserFont()) {.raises: [], tags: [],
+proc nkInit*(ctx: var Context; font: UserFont = UserFont()) {.raises: [], tags: [],
     contractual.} =
-  ## Set the Nuklear context
+  ## Init the Nuklear library
   ##
   ## * ctx  - the Nuklear context to set
   ## * font - the font used in the UI. If empty, use the default Nuklear font
@@ -3257,13 +3257,3 @@ proc nkSetup(ctx: var Context; font: UserFont = UserFont()) {.raises: [], tags: 
     ctx.style.font = font
   when defined(nkIncludeVertexBufferOutput):
     nkDrawListInit(list = ctx.drawList)
-
-proc nkInit*(ctx: var Context; font: UserFont = UserFont()) {.raises: [], tags: [],
-    contractual.} =
-  ## Init the Nuklear library
-  ##
-  ## * ctx  - the Nuklear context to set
-  ## * font - the font used in the UI. If empty, use the default Nuklear font
-  ##
-  ## Returns the modified parameter ctx
-  nkSetup(ctx = ctx, font = font)
