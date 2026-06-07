@@ -719,12 +719,12 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
     const width: float = 250
     var height: float = 0
     if playerShip.speed == docked:
-      height = (dialogButtonHeight * 3) + 10
+      height = (dialogButtonHeight * 3) + 20
     else:
       if playerShip.destinationX > 0 and playerShip.destinationY > 0:
-        height = (dialogButtonHeight * 5) + 10
+        height = (dialogButtonHeight * 5) + 30
       else:
-        height = (dialogButtonHeight * 4) + 10
+        height = (dialogButtonHeight * 4) + 25
 
     proc closeDialog(dialog: var GameDialog) {.raises: [], tags: [],
         contractual.} =
