@@ -292,7 +292,8 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "General info:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 1,
+          width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[
           expandIcon] else: images[contractIcon]),
               tooltip = "Maximize/minimize the ship general info"):
@@ -306,7 +307,8 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Crew info:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 2, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 2,
+          width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[
           expandIcon] else: images[contractIcon]),
               tooltip = "Maximize/minimize the ship crew info"):
@@ -323,7 +325,8 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Modules info:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 1,
+          width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[
           expandIcon] else: images[contractIcon]),
               tooltip = "Maximize/minimize the ship modules info"):
@@ -337,7 +340,8 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Cargo info:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = 35, cols = 2, width = 35)
+      setLayoutRowStatic(height = buttonHeight, cols = 2,
+          width = buttonHeight.int)
       imageButton(image = (if expandedSection == 0: images[
           expandIcon] else: images[contractIcon]),
               tooltip = "Maximize/minimize the ship cargo info"):
