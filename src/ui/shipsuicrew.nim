@@ -340,7 +340,7 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = 30, cols = 2)
+    setLayoutRowDynamic(height = editHeight, cols = 2)
     label(str = "Current order:")
     try:
       colorLabel(str = getCurrentOrder(memberIndex = crewIndex),
@@ -349,7 +349,7 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
       dialog = setError(message = "Can't get the current order.")
     label(str = "New order:")
     currentOrder = comboList(items = availableOrdersText,
-        selected = currentOrder, itemHeight = 25, x = 200, y = 150)
+        selected = currentOrder, itemHeight = labelHeight.int, x = 200, y = 150)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[giveOrderColoredIcon], label = "Assign",
         alignment = right):
@@ -428,7 +428,8 @@ proc showAttributes(member: MemberData; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter dialog.
   for index, attrib in member.attributes:
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+        0.5, 0.1])
     label(str = attributesList[index].name & ":")
     colorLabel(str = getAttributeLevelName(attributeLevel = attrib.level),
         color = theme.colors[goldenColor])
@@ -468,10 +469,10 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       changeStyle(field = buttonRounding, value = 0):
         var tabs: seq[string] = @[]
         if member.skills.len > 0 and member.contractLength != 0:
-          setLayoutRowDynamic(height = 30, cols = 4)
+          setLayoutRowDynamic(height = tabHeight, cols = 4)
           tabs = @["General", "Attributes", "Skills", "Priorites"]
         else:
-          setLayoutRowDynamic(height = 30, cols = 1)
+          setLayoutRowDynamic(height = tabHeight, cols = 1)
           tabs = @["General"]
         for index, tab in tabs:
           try:
@@ -489,14 +490,16 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       case currentTab
       # General information about the selected crew member
       of 0:
-        setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+            0.4.cfloat, 0.5, 0.1])
         label(str = "Name:")
         colorLabel(str = member.name, color = theme.colors[goldenColor])
         imageButton(image = images[editIcon],
             tooltip = "Set a new name for the crew member"):
           dialog = renameMemberDialog
         if member.health < 100:
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+              0.4.cfloat, 0.6])
           label(str = "Health:")
           if gameSettings.showNumbers:
             colorLabel(str = $member.health & "%", color = theme.colors[goldenColor])
@@ -511,7 +514,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if tiredPoints > 0:
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+              0.4.cfloat, 0.6])
           label(str = "Tiredness:")
           if gameSettings.showNumbers:
             colorLabel(str = $tiredPoints & "%", color = theme.colors[goldenColor])
@@ -528,7 +532,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.thirst > 0:
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+              0.4.cfloat, 0.6])
           label(str = "Thirst:")
           if gameSettings.showNumbers:
             colorLabel(str = $member.thirst & "%", color = theme.colors[goldenColor])
@@ -545,7 +550,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.hunger > 0:
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+              0.4.cfloat, 0.6])
           label(str = "Hunger:")
           if gameSettings.showNumbers:
             colorLabel(str = $member.hunger & "%", color = theme.colors[goldenColor])
@@ -562,7 +568,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.morale[1] != 50:
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+              0.4.cfloat, 0.6])
           label(str = "Morale:")
           if gameSettings.showNumbers:
             colorLabel(str = $member.morale[1] & "%", color = theme.colors[goldenColor])
