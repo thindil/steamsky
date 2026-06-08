@@ -21,9 +21,9 @@ jobs:
         nimble debug -y
 
     - name: Delete old nightly release
-        run: gh release delete nightly -y
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh release delete nightly -y
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run the tests
       run: others/tests.nims 30
