@@ -587,7 +587,7 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
-    setLayoutRowDynamic(height = 35, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     var assigned: Natural = 0
     for index, member in playerShip.crew:
       var checked: bool = index in module.owner
@@ -640,7 +640,7 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
-    setLayoutRowDynamic(height = 35, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     for index, item in playerShip.cargo:
       try:
         if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
@@ -703,7 +703,7 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
-    setLayoutRowDynamic(height = 35, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     addHeader(headers = skillHeaders, ratio = skillRatio, tooltip = "",
         code = sortSkills, dialog = dialog)
     saveButtonStyle()
@@ -749,7 +749,7 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
           dialog = dialog)
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
     restoreButtonStyle()
-    setLayoutRowDynamic(height = 35, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
@@ -773,7 +773,7 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   addOwnersInfo(module = module, ownersName = "Owners", addButton = true,
       dialog = dialog)
   # Show information about cabin's cleanliness
-  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+  setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
   label(str = "Cleanliness:")
   var damagePercent2: Natural = ((module.cleanliness.float /
       module.quality.float) * 100.0).Natural
@@ -807,7 +807,8 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't count the cabin's max value.")
       return
   if module.quality < moduleMaxValue2:
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+        0.5, 0.08])
   else:
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5])
   label(str = "Quality:")
@@ -838,7 +839,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable}):
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+        0.5, 0.08])
     # Show the module's name
     label(str = "Name:")
     colorLabel(str = module.name, color = theme.colors[goldenColor])
@@ -847,7 +849,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       dialog = renameModuleDialog
     # Show the module's status
     showModuleDamage(module = module, dialog = dialog)
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
     # Show the module's weight
     label(str = "Weight:")
     colorLabel(str = $module.weight & " kg", color = theme.colors[goldenColor])
@@ -860,7 +862,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       dialog = setError(message = "Can't show the module's size")
       return
     # Show the module's repair material
-    setLayoutRowDynamic(height = 35, cols = 4, ratio = [0.4.cfloat, 0.2, 0.2, 0.2])
+    setLayoutRowDynamic(height = buttonHeight, cols = 4, ratio = [0.4.cfloat,
+        0.2, 0.2, 0.2])
     label(str = "Repair material:")
     var manyMaterials: bool = false
     for item in itemsList.values:
@@ -877,7 +880,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't count repair material.")
         return
     # Show the module's upgrade skill
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
     label(str = "Repair skill:")
     try:
       colorLabel(str = skillsList[modulesList[
