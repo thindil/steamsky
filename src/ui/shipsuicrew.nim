@@ -764,7 +764,7 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if needRepair:
       cols.inc
       ratio2.add(y = 0.1.cfloat)
-    setLayoutRowDynamic(height = 35, cols = cols, ratio = ratio2)
+    setLayoutRowDynamic(height = buttonHeight, cols = cols, ratio = ratio2)
     label(str = "Orders for all:")
     imageButton(image = images[goRestIcon], tooltip = "Go rest " &
         (if crewDataList.any(pred = proc (x: CrewData): bool = x.checked):
@@ -778,12 +778,12 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       imageButton(image = images[repairOrderIcon],
           tooltip = "Repair the ship everyone"):
         ordersForAll(order = repair, dialog = dialog)
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Skill:", tooltip = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
     skillIndex = comboList(items = crewSkillsList,
-        selected = skillIndex, itemHeight = 25, x = 200, y = 150,
+        selected = skillIndex, itemHeight = labelHeight.int, x = 200, y = 150,
         tooltip = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
-    setLayoutRowStatic(height = 35, cols = 2, width = 35)
+    setLayoutRowStatic(height = buttonHeight, cols = 2, width = buttonHeight.int)
     imageButton(image = images[selectAllIcon],
         tooltip = "Select all crew member"):
       for data in crewDataList.mitems:
