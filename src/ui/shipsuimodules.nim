@@ -249,9 +249,11 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't count the module's max value.")
       return
   if module.maxDurability < moduleMaxValue:
-    setLayoutRowDynamic(height = 35, cols = 4, ratio = [0.4.cfloat, 0.44, 0.08, 0.08])
+    setLayoutRowDynamic(height = buttonHeight, cols = 4, ratio = [0.4.cfloat,
+        0.44, 0.08, 0.08])
   else:
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+        0.5, 0.08])
   label(str = "Status:")
   let damagePercent: float = (module.durability.float /
         module.maxDurability.float)
@@ -356,9 +358,10 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
   if maxUpgrade == 0:
     maxUpgrade = 1
   if playerShip.upgradeModule == moduleIndex:
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+        0.5, 0.08])
   else:
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
   label(str = "Upgrade progress:")
   var upgradePercent: int = 100 - ((module.upgradeProgress.float /
       maxUpgrade.float) * 100.0).int
@@ -400,9 +403,10 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't count the module max value.")
       return
   if module.maxDurability < moduleMaxValue2:
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+        0.5, 0.08])
   else:
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
   label(str = "Max power:")
   colorLabel(str = $module.power & (if module.power ==
       moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
@@ -416,9 +420,10 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't count the module's max value (2).")
       return
   if module.maxDurability > moduleMaxValue2:
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+        0.5, 0.08])
   else:
-    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
   label(str = "Fuel usage:")
   colorLabel(str = $module.fuelUsage & (if moduleMaxValue2 ==
       module.fuelUsage: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
@@ -426,7 +431,7 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     addUpgradeButton(upgradeType = value, buttonTooltip = "engine's fuel usage",
         module = module, dialog = dialog)
   # Show engine state
-  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+  setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
   label(str = "State:")
   colorLabel(str = (if module.disabled: "Disabled" else: "Enabled"),
       color = theme.colors[goldenColor])
@@ -467,7 +472,7 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
   if module.owner.len > 1:
     ownersText.add(y = "s")
   ownersText.add(y = " (max " & $module.owner.len & "):")
-  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+  setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
   label(str = ownersText)
   ownersText = ""
   var haveOwner: bool = false
