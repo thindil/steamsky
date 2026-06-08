@@ -222,7 +222,7 @@ proc showItemMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## loading the game.
   contextualMenu(flags = {windowNoFlags}, x = 300, y = 150,
       triggerBounds = bounds, button = Buttons.left):
-    setLayoutRowDynamic(height = 25, cols = 1)
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
     contextualItemLabel(label = "Equip items", align = centered):
       for item in inventoryDataList:
         if item.checked:
@@ -324,11 +324,12 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
     ## Show information about free inventory space
-    setLayoutRowStatic(height = 30, cols = 2, ratio = spaceWidth)
+    setLayoutRowStatic(height = labelHeight, cols = 2, ratio = spaceWidth)
     label(str = spaceText[0])
     colorLabel(str = spaceText[1], color = theme.colors[goldenColor])
     ## Show select/unselect all items buttons
-    setLayoutRowStatic(height = 35, cols = 2, width = 35)
+    setLayoutRowStatic(height = buttonHeight, cols = 2,
+        width = buttonHeight.int)
     imageButton(image = images[selectAllIcon], tooltip = "Select all items"):
       for data in inventoryDataList.mitems:
         data.checked = true
@@ -398,7 +399,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
         if row == gameSettings.listsLimit + 1:
           break
     restoreButtonStyle()
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
     if showItemsMenu:
       showItemMenu(dialog = dialog)
