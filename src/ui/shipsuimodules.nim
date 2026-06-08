@@ -900,7 +900,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       showEngineInfo(module = module, dialog = dialog)
     # Show information about cargo room
     of cargoRoom:
-      setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
       label(str = "Max cargo:")
       try:
         colorLabel(str = $modulesList[module.protoIndex].maxValue & " kg",
@@ -916,9 +916,10 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           dialog = setError(message = "Can't count the module's max value (3).")
           return
       if module.maxModules < moduleMaxValue2:
-        setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+            0.4.cfloat, 0.5, 0.08])
       else:
-        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
       label(str = "Modules installed:")
       colorLabel(str = $module.installedModules & " / " & $module.maxModules & (
           if module.maxModules == moduleMaxValue2: " (max upgrade)" else: ""),
@@ -946,9 +947,10 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setError(message = "Can't count the gun's max value.")
             return
       if moduleStrength < moduleMaxValue2:
-        setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+            0.4.cfloat, 0.5, 0.08])
       else:
-        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
       label(str = "Strength:")
       colorLabel(str = $moduleStrength & (if moduleStrength ==
           moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
@@ -965,13 +967,14 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       addOwnersInfo(module = module, ownersName = "Gunner", addButton = true,
           dialog = dialog)
       # Show information about gun's ammunition
-      setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+      setLayoutRowDynamic(height = labelHeight * 4, cols = 3, ratio = [
+          0.4.cfloat, 0.5, 0.08])
       label(str = "Ammunition:")
       var haveAmmo: bool = false
       let ammoIndex: int = (if module.mType ==
           ModuleType2.gun: module.ammoIndex else: module.harpoonIndex)
       group(title = "ammoInfo", flags = {windowNoFlags}):
-        setLayoutRowDynamic(height = 30, cols = 1)
+        setLayoutRowDynamic(height = labelHeight, cols = 1)
         try:
           if ammoIndex in playerShip.cargo.low..playerShip.cargo.high and
               itemsList[playerShip.cargo[ammoIndex].protoIndex].itemType ==
@@ -1010,7 +1013,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           return
       # Show information about gun's fire rate
       if module.mType == ModuleType2.gun:
-        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.5])
+        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
         label(str = "Max fire rate:")
         try:
           colorLabel(str = (if modulesList[module.protoIndex].speed >
@@ -1037,7 +1040,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           dialog = setError(message = "Can't get the recipe name.")
           return
       if recipeName.len > 0:
-        setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+        setLayoutRowDynamic(height = labelHeight * 4, cols = 3, ratio = [
+            0.4.cfloat, 0.5, 0.08])
         label(str = "Order:")
         colorLabel(str = recipeName, color = theme.colors[goldenColor])
         imageButton(image = images[cancelIcon],
