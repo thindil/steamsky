@@ -1077,6 +1077,20 @@ type
     homeBase*: BasesRange = 1
     faction*: FactionName
 
+proc initRecruitData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
+    SkillInfo] = @[]; name: MobName = "";
+    gender: char = 'M'): RecruitData {.raises: [], tags: [], contractual.} =
+  ## Create a new data structure for a recruit
+  ##
+  ## * attributes - The recruit's attributes
+  ## * skills     - The recruit's skills
+  ## * name       - The recruit's name
+  ## * gender     - The recruit's gender
+  ##
+  ## Returns the new structure with information about the selected recruit
+  return RecruitData(attributes: attributes, skills: skills, name: name,
+      gender: gender)
+
 type
   BaseCargo* = object
     ## Used to store information about items in bases cargo
