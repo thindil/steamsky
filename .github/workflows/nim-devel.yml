@@ -42,7 +42,7 @@ jobs:
 
     steps:
     - name: Delete release
-      run: gh release delete $TAG -y
+      run: gh release delete nightly -y
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
