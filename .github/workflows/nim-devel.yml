@@ -33,7 +33,7 @@ jobs:
          name: nimalyzer.log
          path: nimalyzer.log
 
-  cleanup:
+  remove_old:
     if: ${{ always() }}
     needs: tests
 
@@ -47,9 +47,8 @@ jobs:
 
 
   build_linux:
-
     if: ${{ always() }}
-    needs: cleanup
+    needs: remove_old
 
     runs-on: ubuntu-latest
 
@@ -77,9 +76,8 @@ jobs:
         prerelease: true
 
   build_windows:
-
     if: ${{ always() }}
-    needs: cleanup
+    needs: build_linux
 
     runs-on: ubuntu-latest
 
