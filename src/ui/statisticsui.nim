@@ -65,39 +65,39 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
         title: "Crafting orders finished:",
         tooltip: "The total amount of crafting orders finished in this game")]
 
-    setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.6.cfloat, 0.4])
+    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.6.cfloat, 0.4])
     for index, stat in statsData:
       addStatistic(title = stat.title, value = statisticsValues[index],
           tooltip = stat.tooltip)
     # Show crafting table
     if finishedCrafts.len > 0:
-      setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.7.cfloat, 0.3])
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.7.cfloat, 0.3])
       colorLabel(str = "Name", color = theme.colors[goldenColor])
       colorLabel(str = "Amount", color = theme.colors[goldenColor])
       for craft in finishedCrafts:
         label(str = craft.name)
         label(str = $craft.amount)
     # Show completed missions statistics
-    setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.6.cfloat, 0.4])
+    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.6.cfloat, 0.4])
     addStatistic(title = "Missions completed:", value = statisticsValues[6],
         tooltip = "The total amount of missions finished in this game")
     if finishedMissions.len > 0:
-      setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.7.cfloat, 0.3])
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.7.cfloat, 0.3])
       colorLabel(str = "Name", color = theme.colors[goldenColor])
       colorLabel(str = "Amount", color = theme.colors[goldenColor])
       for mission in finishedMissions:
         label(str = mission.name)
         label(str = $mission.amount)
     # Show goals's statistics
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     labelButton(title = selectedGoal):
       dialog = newGoalDialog
       setSelectedGoal()
-    setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.6.cfloat, 0.4])
+    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.6.cfloat, 0.4])
     addStatistic(title = "Finished goals:", value = statisticsValues[7],
         tooltip = "The total amount of goals finished in this game")
     if finishedGoals.len > 0:
-      setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.7.cfloat, 0.3])
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.7.cfloat, 0.3])
       colorLabel(str = "Name", color = theme.colors[goldenColor])
       colorLabel(str = "Amount", color = theme.colors[goldenColor])
       for goal in finishedGoals:
@@ -105,22 +105,22 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
         label(str = $goal.amount)
   group(title = "Group2", flags = {}):
     # Show destroyed ships statistics
-    setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.6.cfloat, 0.4])
+    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.6.cfloat, 0.4])
     addStatistic(title = "Destroyed ships:", value = statisticsValues[8],
         tooltip = "The total amount of destroyed ships in this game")
     if destroyedShips.len > 0:
-      setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.7.cfloat, 0.3])
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.7.cfloat, 0.3])
       colorLabel(str = "Name", color = theme.colors[goldenColor])
       colorLabel(str = "Amount", color = theme.colors[goldenColor])
       for ship in destroyedShips:
         label(str = ship.name)
         label(str = $ship.amount)
     # Show killed mobs statistics
-    setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.6.cfloat, 0.4])
+    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.6.cfloat, 0.4])
     addStatistic(title = "Killed enemies:", value = statisticsValues[9],
         tooltip = "The total amount of enemies killed in melee combat in this game")
     if destroyedShips.len > 0:
-      setLayoutRowDynamic(height = 25, cols = 2, ratio = [0.7.cfloat, 0.3])
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.7.cfloat, 0.3])
       colorLabel(str = "Name", color = theme.colors[goldenColor])
       colorLabel(str = "Amount", color = theme.colors[goldenColor])
       for mob in killedMobs:
