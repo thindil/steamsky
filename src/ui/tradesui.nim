@@ -504,22 +504,22 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     baseCargo = skyBases[baseIndex].cargo
   # Show advanced options if needed
   if showOptions:
-    setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
+    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
     label(str = "Type:")
     typeIndex = comboList(items = typesList, selected = typeIndex,
-        itemHeight = 25, x = 200, y = 150,
+        itemHeight = labelHeight.int, x = 200, y = 150,
         tooltip = "Show only items of the selected type")
     editString(text = nameSearch, maxLen = 64,
         tooltip = "Enter a name of an item which you looking for")
   # Show information about money owned by the player and the base
-  setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+  setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len, ratio = moneyWidth)
   for index, text in moneyText:
     if index mod 2 == 0:
       label(str = text)
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
   # Show information about free cargo space in the player's ship
-  setLayoutRowStatic(height = 30, cols = cargoWidth.len, ratio = cargoWidth)
+  setLayoutRowStatic(height = labelHeight, cols = cargoWidth.len, ratio = cargoWidth)
   for index, text in cargoText:
     if index mod 2 == 0:
       label(str = text)
