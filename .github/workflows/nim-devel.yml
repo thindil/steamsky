@@ -33,22 +33,23 @@ jobs:
          name: nimalyzer.log
          path: nimalyzer.log
 
-  remove_old:
+  cleanup:
     if: ${{ always() }}
     needs: tests
 
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
+    steps:
     - name: Delete release
-        run: gh release delete $TAG -y
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh release delete $TAG -y
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   build_linux:
     if: ${{ always() }}
-    needs: remove_old
+    needs: cleanup
 
     runs-on: ubuntu-latest
 
