@@ -1055,11 +1055,11 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           except:
             dialog = setError(message = "Can't cancel the order.")
             return
-        setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5])
+        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
         label(str = "Finish order in:")
         colorLabel(str = $module.craftingTime & " mins", color = theme.colors[goldenColor])
       else:
-        setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5])
+        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
         label(str = "Order:")
         colorLabel(str = "not set", color = theme.colors[goldenColor])
     # Show information about medical rooms
