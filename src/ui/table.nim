@@ -39,7 +39,7 @@ proc addPagination*(page: var Positive; row: Positive) {.raises: [], tags: [
   elif row == gameSettings.listsLimit + 1:
     cols = 1
   if cols > 0:
-    setLayoutRowDynamic(height = 30, cols = cols)
+    setLayoutRowDynamic(height = buttonHeight, cols = cols)
     if page > 1:
       if row < gameSettings.listsLimit + 1:
         labelButton(title = "Previous", tooltip = "Previous page"):
@@ -83,7 +83,7 @@ proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  setLayoutRowStatic(height = 30, cols = headers.len, ratio = ratio)
+  setLayoutRowStatic(height = tableRowHeight, cols = headers.len, ratio = ratio)
   for header in headers:
     labelButton(title = header.label, tooltip = "Press mouse button to sort the " & tooltip & "."):
       code(sortAsc = header.sortAsc, sortDesc = header.sortDesc,
