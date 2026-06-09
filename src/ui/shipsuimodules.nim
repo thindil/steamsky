@@ -1089,7 +1089,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         except:
           dialog = setError(message = "Can't set trainText.")
           return
-      setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
       label(str = "Trained skill:")
       colorLabel(str = trainText, color = theme.colors[goldenColor])
       imageButton(image = images[assignCrewIcon],
@@ -1104,9 +1104,9 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           dialog = setError(message = "Can't count the battering ram max value.")
           return
       if module.damage2 < moduleMaxValue2:
-        setLayoutRowDynamic(height = 100, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
       else:
-        setLayoutRowDynamic(height = 100, cols = 2, ratio = [0.4.cfloat, 0.5])
+        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
       label(str = "Strength:")
       colorLabel(str = $module.damage2 & (if module.damage2 ==
           moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
@@ -1116,14 +1116,14 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = dialog)
     else:
       discard
-    setLayoutRowDynamic(height = 120, cols = 1)
+    setLayoutRowDynamic(height = labelHeight * 5, cols = 1)
     try:
       if modulesList[module.protoIndex].description.len > 0:
         wrapLabel(str = "\n" & modulesList[module.protoIndex].description)
     except:
       dialog = setError(message = "Can't show the description.")
       return
-    setLayoutRowDynamic(height = 30, cols = 1)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
