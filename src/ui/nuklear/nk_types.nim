@@ -313,7 +313,8 @@ type
     panelSetSub = panelSetPopup.int or panelGroup.int
   UserEvents* = enum
     ## The UI events caused by the user
-    noEvent, quitEvent, sizeChangedEvent, keyEvent, mouseButtonEvent, anyEvent
+    noEvent, quitEvent, sizeChangedEvent, keyEvent, mouseButtonEvent,
+      mouseWheelEvent, anyEvent
   ShowStates* = enum
     ## When to change the state of a window
     hidden, shown
