@@ -85,7 +85,8 @@ proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
   ## happened.
   setLayoutRowStatic(height = tableRowHeight, cols = headers.len, ratio = ratio)
   for header in headers:
-    labelButton(title = header.label, tooltip = "Press mouse button to sort the " & tooltip & "."):
+    labelButton(title = header.label, tooltip = "Press mouse button to sort the " &
+        tooltip & "."):
       code(sortAsc = header.sortAsc, sortDesc = header.sortDesc,
           dialog = dialog)
 
@@ -140,10 +141,9 @@ proc addProgressBar*(tooltip: string; value, maxValue, data: int;
   elif percent < 0.26:
     color = redColor
   changeStyle(field = progressbar, color = theme.colors[color]):
-    if widgetIsMouseClicked(button = (if gameSettings.rightButton:
-        Buttons.right else: left)):
+    if progressBar(value = val, maxValue = maxValue, modifyable = true,
+        tooltip = tooltip):
       code(data = data, dialog = dialog)
-    progressBar(value = val, maxValue = maxValue, modifyable = false, tooltip = tooltip)
 
 proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [],
     contractual.} =
