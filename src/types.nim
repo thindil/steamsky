@@ -1081,7 +1081,9 @@ proc initRecruitData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
     SkillInfo] = @[]; name: MobName = ""; gender: char = 'M';
     price: Positive = 1; inventory: seq[RecruitItem] = @[];
     equipment: EquipmentArray = [-1, -1, -1, -1, -1, -1, -1];
-    payment: Positive = 1): RecruitData {.raises: [], tags: [], contractual.} =
+    payment: Positive = 1; homeBase: BasesRange = 1;
+    faction: FactionName = ""): RecruitData {.raises: [], tags: [],
+    contractual.} =
   ## Create a new data structure for a recruit
   ##
   ## * attributes - The recruit's attributes
@@ -1092,11 +1094,13 @@ proc initRecruitData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
   ## * inventory  - The inventory of the recruit
   ## * equipment  - The equipment of the recruit
   ## * payment    - The payment information for the recruit
+  ## * homeBase   - The index of the home base
+  ## * faction    - The faction index to which the recruit belongs
   ##
   ## Returns the new structure with information about the selected recruit
   return RecruitData(attributes: attributes, skills: skills, name: name,
       gender: gender, price: price, inventory: inventory, equipment: equipment,
-      payment: payment)
+      payment: payment, homeBase: homeBase, faction: faction)
 
 type
   BaseCargo* = object
