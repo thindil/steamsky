@@ -30801,14 +30801,6 @@ NK_API int nk_edit_is_active(struct nk_context *ctx)
 {
   return ctx->current->edit.active;
 }
-NK_API int nk_get_input_mouse_pos_x(struct nk_context *ctx)
-{
-  return ctx->input.mouse.pos.x;
-}
-NK_API int nk_get_input_mouse_pos_y(struct nk_context *ctx)
-{
-  return ctx->input.mouse.pos.y;
-}
 #endif /* NK_IMPLEMENTATION */
 
 /*
