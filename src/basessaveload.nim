@@ -199,14 +199,18 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
         recruit.price = baseRecruit.attr(name = "price").parseInt
         recruit.payment = 20
         recruit.homeBase = 1
+        var skills: seq[SkillInfo] = @[]
         for recruitSkill in baseRecruit.findAll(tag = "skill"):
           var skill: SkillInfo = SkillInfo()
           skill.index = recruitSkill.attr(name = "index").parseInt
           skill.level = recruitSkill.attr(name = "level").parseInt
-          recruit.skills.add(y = skill)
+          skills.add(y = skill)
+        recruit.skills = skills
+        var attributes: seq[MobAttributeRecord] = @[]
         for recruitAttr in baseRecruit.findAll(tag = "attribute"):
-          recruit.attributes.add(y = initMobAttributeRecord(level = recruitAttr.attr(
+          attributes.add(y = initMobAttributeRecord(level = recruitAttr.attr(
               name = "level").parseInt, experience = 0))
+        recruit.attributes = attributes
         for item in baseRecruit.findAll(tag = "item"):
           let quality: ObjectQuality = (if item.attr(name = "quality").len ==
               0: normal else: parseEnum[ObjectQuality](s = item.attr(
