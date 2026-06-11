@@ -3049,11 +3049,7 @@ proc editIsActive*(): bool {.raises: [], tags: [], contractual.} =
   ## Check if an edit text is currently active widget
   ##
   ## Returns true when the edit text is active, otherwise false
-  proc nk_edit_is_active(ctx): cint {.importc, nodecl, raises: [], tags: [],
-      contractual.}
-    ## A binding to Nuklear's function. Internal use only
-
-  return nk_edit_is_active(ctx = ctx).bool
+  return ctx.current.edit.active.bool
 
 # -----------
 # Selectables
