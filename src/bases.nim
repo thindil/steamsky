@@ -273,11 +273,11 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
       price = 1
     let recruitBase: Positive = (if getRandom(min = 1, max = 100) <
         99: baseIndex else: getRandom(min = skyBases.low, max = skyBases.high))
-    baseRecruits.add(y = RecruitData(attributes: attributes, skills: skills,
-        name: generateMemberName(gender = gender,
-        factionIndex = recruitFaction), gender: gender, price: price,
-        inventory: inventory, equipment: equipment, payment: payment,
-        homeBase: recruitBase, faction: recruitFaction))
+    baseRecruits.add(y = initRecruitData(attributes = attributes, skills = skills,
+        name = generateMemberName(gender = gender,
+        factionIndex = recruitFaction), gender = gender, price = price,
+        inventory = inventory, equipment = equipment, payment = payment,
+        homeBase = recruitBase, faction = recruitFaction))
   skyBases[baseIndex].recruitDate = gameDate
   skyBases[baseIndex].recruits = baseRecruits
 
