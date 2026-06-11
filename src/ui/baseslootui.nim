@@ -301,22 +301,6 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show the item's info.")
 
-const
-  headers: array[6, HeaderData[ItemsSortOrders]] = [
-    HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
-        sortDesc: nameDesc),
-    HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc,
-        sortDesc: typeDesc),
-    HeaderData[ItemsSortOrders](label: "Durability", sortAsc: durabilityAsc,
-        sortDesc: durabilityDesc),
-    HeaderData[ItemsSortOrders](label: "Quality", sortAsc: qualityAsc,
-        sortDesc: qualityDesc),
-    HeaderData[ItemsSortOrders](label: "Owned", sortAsc: ownedAsc,
-        sortDesc: ownedDesc),
-    HeaderData[ItemsSortOrders](label: "Available", sortAsc: availableAsc,
-        sortDesc: availableDesc)]
-  ratio: array[5, cfloat] = [300.cfloat, 200, 200, 200, 200]
-
 proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the loot UI
@@ -347,6 +331,23 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "LootGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
+
+    const
+      headers: array[6, HeaderData[ItemsSortOrders]] = [
+        HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
+            sortDesc: nameDesc),
+        HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc,
+            sortDesc: typeDesc),
+        HeaderData[ItemsSortOrders](label: "Durability", sortAsc: durabilityAsc,
+            sortDesc: durabilityDesc),
+        HeaderData[ItemsSortOrders](label: "Quality", sortAsc: qualityAsc,
+            sortDesc: qualityDesc),
+        HeaderData[ItemsSortOrders](label: "Owned", sortAsc: ownedAsc,
+            sortDesc: ownedDesc),
+        HeaderData[ItemsSortOrders](label: "Available", sortAsc: availableAsc,
+            sortDesc: availableDesc)]
+      ratio: array[5, cfloat] = [300.cfloat, 200, 200, 200, 200]
+
     addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortLoot, dialog = dialog)
     var
