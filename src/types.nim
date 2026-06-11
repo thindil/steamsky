@@ -1066,8 +1066,8 @@ type
     ## * payment    - The payment information for the recruit
     ## * homeBase   - The index of the home base
     ## * faction    - The faction index to which the recruit belongs
-    attributes*: seq[MobAttributeRecord]
-    skills*: seq[SkillInfo]
+    attributes: seq[MobAttributeRecord]
+    skills: seq[SkillInfo]
     name*: MobName
     gender*: char
     price*: Positive = 1
@@ -1101,6 +1101,11 @@ proc initRecruitData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
   return RecruitData(attributes: attributes, skills: skills, name: name,
       gender: gender, price: price, inventory: inventory, equipment: equipment,
       payment: payment, homeBase: homeBase, faction: faction)
+
+typeGetterSetter(baseType = RecruitData, varName = recruit, name = attributes,
+    typ = seq[MobAttributeRecord])
+typeGetterSetter(baseType = RecruitData, varName = recruit, name = skills,
+    typ = seq[SkillInfo])
 
 type
   BaseCargo* = object
