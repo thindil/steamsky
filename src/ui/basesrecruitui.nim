@@ -211,6 +211,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
   let
     recruit: RecruitData = skyBases[setui.baseIndex].recruits[recruitIndex]
     windowName: string = recruit.name
+  setDialog(x = windowWidth / 4, y = windowHeight / 5)
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
