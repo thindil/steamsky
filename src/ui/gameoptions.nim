@@ -26,6 +26,60 @@ var
   keyLabel: string = ""
   keyIndex: ExtendedNatural = -1
 
+proc showKeyDialog(dialog: var GameDialog) {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect], contractual.} =
+  ## Show the dialog to change the selected keyboard shortcut
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened or dialog was closed.
+  if dialog != setKeyDialog:
+    return
+  try:
+    popup(pType = staticPopup, title = "Set Key", flags = {windowNoFlags},
+        x = windowWidth / 4, y = windowHeight / 4, w = windowWidth / 2, h = 120):
+      setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
+      wrapLabel(str = "Press a key or keys combination to set it as a new value for " &
+          keyLabel & ". Press Escape to cancel.")
+  except NuklearException:
+    dialog = setError(message = "Can't create a popup")
+  var keyPressed: Keys = keyNone
+  for key in keyScrollDown..keyBackspace:
+    if isKeyPressed(key = key):
+      keyPressed = key
+      break
+  if keyPressed != keyNone or getInputTextLen() > 0:
+    var key: SettingString = ""
+    if getInputTextLen() > 0:
+      key = getInputText()
+      if isUpperAscii(c = key[0]):
+        key = "Shift-" & key.toLowerAscii()
+    elif keyPressed notin {keyNone, keyEscape, keyTab}:
+      key = $keyPressed
+    if isKeyPressed(key = keyCtrl):
+      key = "Control-" & key
+    if isKeyPressed(key = keyAlt):
+      key = "Alt-" & key
+    if key.len > 0:
+      case currentTab
+      of 1:
+        movementKeysOptions[keyIndex] = key
+      of 2:
+        menuKeysOptions[keyIndex] = key
+      of 3:
+        mapKeysOptions[keyIndex] = key
+      of 4:
+        generalKeysOptions[keyIndex] = key
+      of 5:
+        fullScreenAccel = key
+      else:
+        discard
+    keyIndex = -1
+    keyLabel = ""
+    dialog = none
+    shortcutsEnabled = true
+
 proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the screen with game options
@@ -98,8 +152,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       ##
       ## Returns the modified parameter value
       label(str = label, tooltip = tooltip)
-      value = comboList(items = items, selected = value, itemHeight = labelHeight.int,
-          x = 350, y = 200, tooltip = tooltip)
+      value = comboList(items = items, selected = value,
+          itemHeight = labelHeight.int, x = 350, y = 200, tooltip = tooltip)
 
     proc addAccelerator(label, tooltip: string; value: var string;
         index: Natural; dialog: var GameDialog) {.raises: [],
@@ -209,7 +263,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip: "set half speed for the ship."), KeyTexts(
           label: "Set full speed for ship",
           tooltip: "set full speed for the ship.")]
-      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
+      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+          0.25, 0.05])
       for index, key in movementKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
             tooltip = "Key used to " & keysTexts[index].tooltip,
@@ -247,7 +302,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           label: "Quit from game", tooltip: "quit from the game"), KeyTexts(
           label: "Resign from game", tooltip: "resign from the game."),
           KeyTexts(label: "Show menu", tooltip: "show main menu.")]
-      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
+      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+          0.25, 0.05])
       for index, key in menuKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
             tooltip = "Key used to " & keysTexts[index].tooltip,
@@ -298,7 +354,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           KeyTexts(label: "Zoom in map", tooltip: "zoom in map."), KeyTexts(
           label: "Zoom out map", tooltip: "zoom out map."), KeyTexts(
           label: "Show move map options", tooltip: "show move map options.")]
-      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
+      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+          0.25, 0.05])
       for index, key in mapKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
             tooltip = "Key used to " & keysTexts[index].tooltip,
@@ -339,7 +396,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tooltip: "resize (maximize or minimize) the third section of information (like ship info, knowledge or in combat)."),
           KeyTexts(label: "Resize fourth section",
           tooltip: "resize (maximize or minimize) the fourth section of information (like ship info, knowledge or in combat).")]
-      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
+      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+          0.25, 0.05])
       for index, key in generalKeysOptions.mpairs:
         addAccelerator(label = keysTexts[index].label & ":",
             tooltip = "Key used to " & keysTexts[index].tooltip,
@@ -368,7 +426,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addCheckbox(label = "Full screen mode:",
           option = interfaceOptions[4],
           tooltip = "Run the game in full screen mode.")
-      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat, 0.25, 0.05])
+      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat,
+          0.25, 0.05])
       addAccelerator(label = "Full screen shortcut:",
           tooltip = "Key used to switch full screen mode.",
           value = fullScreenAccel, index = 0, dialog = dialog)
@@ -415,47 +474,4 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     else:
       discard
     # Start setting the selected key
-    if dialog == setKeyDialog:
-      try:
-        popup(pType = staticPopup, title = "Set Key", flags = {windowNoFlags},
-            x = windowWidth / 4, y = windowHeight / 4, w = windowWidth / 2, h = 120):
-          setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
-          wrapLabel(str = "Press a key or keys combination to set it as a new value for " &
-              keyLabel & ". Press Escape to cancel.")
-      except NuklearException:
-        dialog = setError(message = "Can't create a popup")
-      var keyPressed: Keys = keyNone
-      for key in keyScrollDown..keyBackspace:
-        if isKeyPressed(key = key):
-          keyPressed = key
-          break
-      if keyPressed != keyNone or getInputTextLen() > 0:
-        var key: SettingString = ""
-        if getInputTextLen() > 0:
-          key = getInputText()
-          if isUpperAscii(c = key[0]):
-            key = "Shift-" & key.toLowerAscii()
-        elif keyPressed notin {keyNone, keyEscape, keyTab}:
-          key = $keyPressed
-        if isKeyPressed(key = keyCtrl):
-          key = "Control-" & key
-        if isKeyPressed(key = keyAlt):
-          key = "Alt-" & key
-        if key.len > 0:
-          case currentTab
-          of 1:
-            movementKeysOptions[keyIndex] = key
-          of 2:
-            menuKeysOptions[keyIndex] = key
-          of 3:
-            mapKeysOptions[keyIndex] = key
-          of 4:
-            generalKeysOptions[keyIndex] = key
-          of 5:
-            fullScreenAccel = key
-          else:
-            discard
-        keyIndex = -1
-        keyLabel = ""
-        dialog = none
-        shortcutsEnabled = true
+    showKeyDialog(dialog = dialog)
