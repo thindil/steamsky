@@ -69,7 +69,7 @@ proc countPrice*(price: var Natural; traderIndex: int;
   if skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
     case skyBases[skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex].reputation.level
-    of -24.. -1:
+    of -24 .. -1:
       bonus -= (price.float * 0.05).int
     of 26..50:
       bonus += (price.float * 0.05).int
@@ -157,16 +157,16 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
     if itemIndex == 0:
       return
     let quality: ObjectQuality = case getRandom(min = 1, max = 100)
-          of 1:
-            poor
-          of 2..3:
-            low
-          of 4..97:
-            normal
-          of 98..99:
-            good
-          else:
-            excellent
+      of 1:
+        poor
+      of 2..3:
+        low
+      of 4..97:
+        normal
+      of 98..99:
+        good
+      else:
+        excellent
     inventory.add(y = initRecruitItem(index = itemIndex, quality = quality))
     equipment[equipIndex] = inventory.high
     price += getPrice(baseType = skyBases[baseIndex].baseType,
@@ -177,14 +177,14 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
   if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30:
     return
   var maxRecruits: Positive = case getBasePopulation(baseIndex = baseIndex)
-      of empty:
-        return
-      of small:
-        5
-      of medium:
-        10
-      of large:
-        15
+    of empty:
+      return
+    of small:
+      5
+    of medium:
+      10
+    of large:
+      15
   if "barracks" in basesTypesList[skyBases[baseIndex].baseType].flags:
     maxRecruits *= 2
   if maxRecruits > (skyBases[baseIndex].population / 10).int:
@@ -241,10 +241,11 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
         skills.add(y = initSkillInfo(index = skillNumber, level = skillLevel,
             experience = 0))
       elif skillIndex > -1:
-        skills[skillIndex] = initSkillInfo(index = skillNumber, level = skillLevel, experience = 0)
+        skills[skillIndex] = initSkillInfo(index = skillNumber,
+            level = skillLevel, experience = 0)
     for j in 1..attributesList.len:
-      attributes.add(y = initMobAttributeRecord(level = getRandom(min = 3, max = (
-          maxSkillLevel / 3).int), experience = 0))
+      attributes.add(y = initMobAttributeRecord(level = getRandom(min = 3,
+          max = (maxSkillLevel / 3).int), experience = 0))
     for skill in skills:
       price += skill.level
       payment += skill.level
@@ -317,14 +318,14 @@ proc updatePrices*() {.raises: [], tags: [], contractual.} =
   ## Random changes to the items' prices in the selected base
   let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   var chance: Natural = case getBasePopulation(baseIndex = baseIndex)
-      of empty:
-        return
-      of small:
-        1
-      of medium:
-        2
-      of large:
-        5
+    of empty:
+      return
+    of small:
+      1
+    of medium:
+      2
+    of large:
+      5
   chance += (daysDifference(dateToCompare = skyBases[
       baseIndex].visited) / 10).int
   if getRandom(min = 1, max = 100) > chance:
