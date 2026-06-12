@@ -1068,10 +1068,10 @@ type
     ## * faction    - The faction index to which the recruit belongs
     attributes: seq[MobAttributeRecord]
     skills: seq[SkillInfo]
-    name*: MobName
-    gender*: char
-    price*: Positive = 1
-    inventory*: seq[RecruitItem]
+    name: MobName
+    gender: char
+    price: Positive = 1
+    inventory: seq[RecruitItem]
     equipment*: EquipmentArray
     payment*: Positive = 1
     homeBase*: BasesRange = 1
@@ -1106,6 +1106,12 @@ typeGetterSetter(baseType = RecruitData, varName = recruit, name = attributes,
     typ = seq[MobAttributeRecord])
 typeGetterSetter(baseType = RecruitData, varName = recruit, name = skills,
     typ = seq[SkillInfo])
+typeGetterSetter(baseType = RecruitData, varName = recruit, name = name, typ = MobName)
+typeGetterSetter(baseType = RecruitData, varName = recruit, name = gender, typ = char)
+typeGetterSetter(baseType = RecruitData, varName = recruit, name = price,
+    typ = Positive)
+typeGetterSetter(baseType = RecruitData, varName = recruit, name = inventory,
+    typ = seq[RecruitItem])
 
 type
   BaseCargo* = object
