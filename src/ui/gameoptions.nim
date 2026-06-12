@@ -26,24 +26,27 @@ var
   keyLabel: string = ""
   keyIndex: ExtendedNatural = -1
 
-proc showKeyDialog(dialog: var GameDialog) {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect], contractual.} =
+proc showKeyDialog*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Show the dialog to change the selected keyboard shortcut
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened or dialog was closed.
-  if dialog != setKeyDialog:
-    return
-  try:
-    popup(pType = staticPopup, title = "Set Key", flags = {windowNoFlags},
-        x = windowWidth / 4, y = windowHeight / 4, w = windowWidth / 2, h = 120):
-      setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
-      wrapLabel(str = "Press a key or keys combination to set it as a new value for " &
-          keyLabel & ". Press Escape to cancel.")
-  except NuklearException:
-    dialog = setError(message = "Can't create a popup")
+  const
+    width: float = 300
+    height: float = 200
+    windowName: string = "Set the new shortcut"
+
+  updateDialog(width = width, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+    setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
+    wrapLabel(str = "Press a key or keys combination to set it as a new value for " &
+        keyLabel & ". Press Escape to cancel.")
+
+  windowSetFocus(name = windowName)
   var keyPressed: Keys = keyNone
   for key in keyScrollDown..keyBackspace:
     if isKeyPressed(key = key):
@@ -473,5 +476,3 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         label(str = path, tooltip = pathsTexts[index].tooltip)
     else:
       discard
-    # Start setting the selected key
-    showKeyDialog(dialog = dialog)
