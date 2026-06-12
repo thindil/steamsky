@@ -206,11 +206,11 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   const
     width: float = 400
-    height: float = 400
 
   let
     recruit: RecruitData = skyBases[setui.baseIndex].recruits[recruitIndex]
     windowName: string = recruit.name
+    height: float = labelHeight * 17
   setDialog(x = windowWidth / 4, y = windowHeight / 5)
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
@@ -352,11 +352,11 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   const
     width: float = 400
-    height: float = 420
 
   let
     recruit: RecruitData = skyBases[setui.baseIndex].recruits[recruitIndex]
     windowName: string = "Negotiate with " & recruit.name
+    height: float = (editHeight * 6) + (labelHeight * 7) + dialogButtonHeight
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
