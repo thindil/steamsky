@@ -211,12 +211,14 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
           attributes.add(y = initMobAttributeRecord(level = recruitAttr.attr(
               name = "level").parseInt, experience = 0))
         recruit.attributes = attributes
+        var inventory: seq[RecruitItem] = @[]
         for item in baseRecruit.findAll(tag = "item"):
           let quality: ObjectQuality = (if item.attr(name = "quality").len ==
               0: normal else: parseEnum[ObjectQuality](s = item.attr(
               name = "quality")))
-          recruit.inventory.add(y = initRecruitItem(index = item.attr(
+          inventory.add(y = initRecruitItem(index = item.attr(
               name = "index").parseInt, quality = quality))
+        recruit.inventory = inventory
         for item in recruit.equipment.mitems:
           item = -1
         for equipment in baseRecruit.findAll(tag = "equipment"):
