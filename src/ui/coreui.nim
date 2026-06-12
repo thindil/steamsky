@@ -39,10 +39,10 @@ type
       renameDialog, giveOrderDialog, memberDialog, renameMemberDialog,
       inventoryDialog, moduleInfoDialog, renameModuleDialog, assignCrewDialog,
       assignAmmoDialog, assignSkillDialog, recipeDialog, setRecipeDialog,
-      baseDialog, missionActionDialog, mapMenuDialog, baseActionDialog,
-      ordersDialog, destinationDialog, messageDialog, infoDialog, buyDialog,
-      sellDialog, takeDialog, dropDialog, moveDialog, giveDialog,
-      dropCargoDialog, setKeyDialog
+      baseDialog, missionActionDialog, mapMenuDialog, setKeyDialog,
+      baseActionDialog, ordersDialog, destinationDialog, messageDialog,
+      infoDialog, buyDialog, sellDialog, takeDialog, dropDialog, moveDialog,
+      giveDialog, dropCargoDialog
 
 const
   dtime*: float = 20.0
@@ -62,7 +62,7 @@ var
   windowWidth*: float = 800.0      ## The width of the main game window
   windowHeight*: float = 600.0     ## The height of the main game window
   dialogX*: float = 250.0          ## The X position of a dialog
-  dialogY*: float = 200.0              ## The Y position of a dialog
+  dialogY*: float = 200.0          ## The Y position of a dialog
   redraw*: bool = true             ## If true, redraw the game
   inCombat*: bool = false          ## If true, the player is in combat
   theme*: ThemeData = defaultTheme ## The current game's theme
