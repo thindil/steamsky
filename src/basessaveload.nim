@@ -219,12 +219,14 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
           inventory.add(y = initRecruitItem(index = item.attr(
               name = "index").parseInt, quality = quality))
         recruit.inventory = inventory
-        for item in recruit.equipment.mitems:
+        var equipment: EquipmentArray = [-1, -1, -1, -1, -1, -1, -1]
+        for item in equipment.mitems:
           item = -1
-        for equipment in baseRecruit.findAll(tag = "equipment"):
-          var eqIndex: int = (equipment.attr(name = "slot").parseInt - 1)
-          recruit.equipment[eqIndex.EquipmentLocations] = equipment.attr(
+        for equip in baseRecruit.findAll(tag = "equipment"):
+          var eqIndex: int = (equip.attr(name = "slot").parseInt - 1)
+          equipment[eqIndex.EquipmentLocations] = equip.attr(
               name = "index").parseInt - 1
+        recruit.equipment = equipment
         let payment: string = baseRecruit.attr(name = "payment")
         if payment.len > 0:
           recruit.payment = payment.parseInt
