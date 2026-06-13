@@ -1072,10 +1072,10 @@ type
     gender: char
     price: Positive = 1
     inventory: seq[RecruitItem]
-    equipment*: EquipmentArray
-    payment*: Positive = 1
-    homeBase*: BasesRange = 1
-    faction*: FactionName
+    equipment: EquipmentArray
+    payment: Positive = 1
+    homeBase: BasesRange = 1
+    faction: FactionName
 
 proc initRecruitData*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
     SkillInfo] = @[]; name: MobName = ""; gender: char = 'M';
@@ -1112,6 +1112,14 @@ typeGetterSetter(baseType = RecruitData, varName = recruit, name = price,
     typ = Positive)
 typeGetterSetter(baseType = RecruitData, varName = recruit, name = inventory,
     typ = seq[RecruitItem])
+typeGetterSetter(baseType = RecruitData, varName = recruit, name = equipment,
+    typ = EquipmentArray)
+typeGetterSetter(baseType = RecruitData, varName = recruit, name = payment,
+    typ = Positive)
+typeGetterSetter(baseType = RecruitData, varName = recruit, name = homeBase,
+    typ = BasesRange)
+typeGetterSetter(baseType = RecruitData, varName = recruit, name = faction,
+    typ = FactionName)
 
 type
   BaseCargo* = object
