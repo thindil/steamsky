@@ -760,18 +760,22 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't get module data.")
         return
     windowName: string = module.name
-  setDialog(x = windowWidth / 5, y = windowHeight / 9)
+  setDialog(x = windowWidth / 7, y = windowHeight / 9)
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
-    var btnAmount: Positive = 2
-    setLayoutRowDynamic(height = height - dialogButtonHeight - 60, cols = 1)
-    group(title = "InfoGroup", flags = {windowNoFlags}):
-      if compareList.len > 0:
-        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
-        label(str = "Compare with:")
-        compareIndex = comboList(items = compareList, selected = compareIndex,
+    var
+      btnAmount: Positive = 2
+      groupHeight: float = height - dialogButtonHeight - 65
+    if compareList.len > 0:
+      groupHeight -= editHeight
+      setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat,
+          0.6])
+      label(str = "Compare with:")
+      compareIndex = comboList(items = compareList, selected = compareIndex,
           itemHeight = labelHeight.int, x = 300, y = 150)
+    setLayoutRowDynamic(height = groupHeight, cols = 1)
+    group(title = "InfoGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = labelHeight, cols = 2)
       label(str = "Install cost:")
       var cost: Natural = try:
@@ -824,22 +828,25 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
             break
         except:
           dialog = setError(message = "Can't check unique module.")
-      setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
       if moneyAmount == 0:
-        colorWrapLabel(str = "You don't have any money to buy the module.",
+        setLayoutRowDynamic(height = labelHeight, cols = 1)
+        colorLabel(str = "You don't have any money to buy the module.",
             color = theme.colors[redColor])
         btnAmount = 1
       else:
         try:
           if moneyAmount < cost:
-            colorWrapLabel(str = "You don't have enough money to buy the module.",
+            setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
+            colorLabel(str = "You don't have enough money to buy the module.",
                 color = theme.colors[redColor])
             btnAmount = 1
           elif hasUnique:
+            setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
             colorWrapLabel(str = "Only one module of that type can be installed on the ship.",
                 color = theme.colors[redColor])
             btnAmount = 1
           elif modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, hull}:
+            setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
             if modulesList[moduleIndex].size > maxSize:
               colorWrapLabel(str = "The selected module is too big for your's ship's hull.",
                   color = theme.colors[redColor])
