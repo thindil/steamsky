@@ -30788,7 +30788,7 @@ nk_tooltipfv(struct nk_context *ctx, const char *fmt, va_list args)
 
 
 /* Temporary code needed for Nim */
-NK_API const char* nk_get_input_text(struct nk_context *ctx)
+NK_API char* nk_get_input_text(struct nk_context *ctx)
 {
   return ctx->input.keyboard.text;
 }
