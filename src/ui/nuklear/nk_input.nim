@@ -120,7 +120,8 @@ proc getInputText*(): string {.raises: [], tags: [], contractual.} =
   ## Get the text inserted by the user
   ##
   ## Returns string with the text inserted by the user
-  proc nk_get_input_text(ctx): cchar {.importc, nodecl, raises: [], tags: [], contractual.}
+  proc nk_get_input_text(ctx): cchar {.importc, nodecl, raises: [], tags: [],
+      contractual.}
     ## A binding to Nuklear's function.
   return $nk_get_input_text(ctx = ctx)
 
@@ -128,7 +129,8 @@ proc getInputTextLen*(): Natural {.raises: [], tags: [], contractual.} =
   ## Get the length of the text inserted by the user
   ##
   ## Returns the length of the text inserted by the user
-  proc nk_get_input_text_len(ctx): cint {.importc, nodecl, raises: [], tags: [], contractual.}
+  proc nk_get_input_text_len(ctx): cint {.importc, nodecl, raises: [],
+      tags: [], contractual.}
     ## A binding to Nuklear's function.
   return nk_get_input_text_len(ctx = ctx).Natural
 
