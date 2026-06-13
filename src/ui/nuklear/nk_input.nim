@@ -49,6 +49,9 @@ proc nk_input_button*(ctx; id: Buttons; x, y: cint; down: nk_bool) {.importc,
 proc nk_input_scroll*(ctx; val: nk_vec2) {.importc, nodecl, raises: [],
     tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
+proc nk_input_motion*(ctx; x, y: cint) {.importc, nodecl, raises: [], tags: [],
+    contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ------------------
 # Low level bindings
