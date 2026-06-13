@@ -141,8 +141,8 @@ proc addProgressBar*(tooltip: string; value, maxValue, data: int;
   elif percent < 0.26:
     color = redColor
   changeStyle(field = progressbar, color = theme.colors[color]):
-    if progressBar(value = val, maxValue = maxValue, modifyable = true,
-        tooltip = tooltip):
+    progressBar(value = val, maxValue = maxValue, modifyable = true, tooltip = tooltip)
+    if val != value:
       code(data = data, dialog = dialog)
 
 proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [],
