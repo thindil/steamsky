@@ -887,7 +887,6 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
           dialog = setError(message = "Can't set error label.")
     setLayoutRowDynamic(height = dialogButtonHeight, cols = btnAmount)
     if btnAmount == 2:
-      echo "here"
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       imageLabelButton(image = images[buyIcon], label = "Install", alignment = right):
         manipulateModule(dialog = dialog)
