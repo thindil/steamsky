@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [12.4] - 2026-06-14
 
 ### Added
 - The new user interface for the game
