@@ -62,9 +62,12 @@ type
   RWPtr = ptr SDL_RWops
   SDL_MouseWheelEvent{.importc, nodecl.} = object
     x, y: int32
+  SDL_MouseMotionEvent {.importc, nodecl.} = object
+    xrel, yrel: int32
   SDL_Event {.importc, nodecl.} = object
     `type`: cuint
     wheel: SDL_MouseWheelEvent
+    motion: SDL_MouseMotionEvent
   SDL_WindowEvt {.importc: "SDL_WindowEvent", nodecl.} = object
     `type`: cuint
     event: cuint
