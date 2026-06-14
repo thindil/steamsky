@@ -766,7 +766,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     var
       btnAmount: Positive = 2
-      groupHeight: float = height - dialogButtonHeight - 65
+      groupHeight: float = height - dialogButtonHeight - (labelHeight * 2) - 65
     if compareList.len > 0:
       groupHeight -= editHeight
       setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat,
@@ -774,15 +774,15 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
       label(str = "Compare with:")
       compareIndex = comboList(items = compareList, selected = compareIndex,
           itemHeight = labelHeight.int, x = 300, y = 150)
+    var cost: Natural = try:
+        modulesList[moduleIndex].price
+      except:
+        dialog = setError(message = "Can't set the cost.")
+        return
     setLayoutRowDynamic(height = groupHeight, cols = 1)
     group(title = "InfoGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = labelHeight, cols = 2)
       label(str = "Install cost:")
-      var cost: Natural = try:
-          modulesList[moduleIndex].price
-        except:
-          dialog = setError(message = "Can't set the cost.")
-          return
       try:
         countPrice(price = cost, traderIndex = findMember(order = talk))
       except:
@@ -798,76 +798,76 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
       except:
         dialog = setError(message = "Can't show the module's install time.")
       setModuleInfo(dialog = dialog, installing = true)
-      var
-        maxSize, usedSpace, allSpace: Natural = 0
-        freeTurretIndex: int = -1
-      for index, module in playerShip.modules:
-        case module.mType
-        of hull:
-          try:
-            maxSize = modulesList[module.protoIndex].value
-          except:
-            dialog = setError(message = "Can't get max module size.")
-          usedSpace = module.installedModules
-          allSpace = module.maxModules
-        of turret:
-          try:
-            if module.gunIndex == -1 and modulesList[module.protoIndex].size >=
-                modulesList[moduleIndex].size:
-              freeTurretIndex = index
-          except:
-            dialog = setError(message = "Can't get free turret index.")
-        else:
-          discard
-      var hasUnique: bool = false
-      for module in playerShip.modules:
+    var
+      maxSize, usedSpace, allSpace: Natural = 0
+      freeTurretIndex: int = -1
+    for index, module in playerShip.modules:
+      case module.mType
+      of hull:
         try:
-          if modulesList[module.protoIndex].mType == modulesList[
-              moduleIndex].mType and modulesList[moduleIndex].unique:
-            hasUnique = true
-            break
+          maxSize = modulesList[module.protoIndex].value
         except:
-          dialog = setError(message = "Can't check unique module.")
-      if moneyAmount == 0:
-        setLayoutRowDynamic(height = labelHeight, cols = 1)
-        colorLabel(str = "You don't have any money to buy the module.",
-            color = theme.colors[redColor])
-        btnAmount = 1
+          dialog = setError(message = "Can't get max module size.")
+        usedSpace = module.installedModules
+        allSpace = module.maxModules
+      of turret:
+        try:
+          if module.gunIndex == -1 and modulesList[module.protoIndex].size >=
+              modulesList[moduleIndex].size:
+            freeTurretIndex = index
+        except:
+          dialog = setError(message = "Can't get free turret index.")
       else:
-        try:
-          if moneyAmount < cost:
-            setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
-            colorLabel(str = "You don't have enough money to buy the module.",
+        discard
+    var hasUnique: bool = false
+    for module in playerShip.modules:
+      try:
+        if modulesList[module.protoIndex].mType == modulesList[
+            moduleIndex].mType and modulesList[moduleIndex].unique:
+          hasUnique = true
+          break
+      except:
+        dialog = setError(message = "Can't check unique module.")
+    if moneyAmount == 0:
+      setLayoutRowDynamic(height = labelHeight, cols = 1)
+      colorLabel(str = "You don't have any money to buy the module.",
+          color = theme.colors[redColor])
+      btnAmount = 1
+    else:
+      try:
+        if moneyAmount < cost:
+          setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
+          colorLabel(str = "You don't have enough money to buy the module.",
+              color = theme.colors[redColor])
+          btnAmount = 1
+        elif hasUnique:
+          setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
+          colorWrapLabel(str = "Only one module of that type can be installed on the ship.",
+              color = theme.colors[redColor])
+          btnAmount = 1
+        elif modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, hull}:
+          setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
+          if modulesList[moduleIndex].size > maxSize:
+            colorWrapLabel(str = "The selected module is too big for your's ship's hull.",
                 color = theme.colors[redColor])
             btnAmount = 1
-          elif hasUnique:
-            setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
-            colorWrapLabel(str = "Only one module of that type can be installed on the ship.",
+          elif allSpace - usedSpace < modulesList[moduleIndex].size and
+              modulesList[moduleIndex].mType != ModuleType.armor:
+            colorWrapLabel(str = "You don't have enough space in your ship's hull to install the module.",
                 color = theme.colors[redColor])
             btnAmount = 1
-          elif modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, hull}:
-            setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
-            if modulesList[moduleIndex].size > maxSize:
-              colorWrapLabel(str = "The selected module is too big for your's ship's hull.",
-                  color = theme.colors[redColor])
-              btnAmount = 1
-            elif allSpace - usedSpace < modulesList[moduleIndex].size and
-                modulesList[moduleIndex].mType != ModuleType.armor:
-              colorWrapLabel(str = "You don't have enough space in your ship's hull to install the module.",
-                  color = theme.colors[redColor])
-              btnAmount = 1
-            elif modulesList[moduleIndex].mType == ModuleType.hull and
-                modulesList[moduleIndex].maxValue < usedSpace:
-              colorWrapLabel(str = "The selected hull is too small to replace your current hull.",
-                  color = theme.colors[redColor])
-              btnAmount = 1
-            elif modulesList[moduleIndex].mType in {ModuleType.gun,
-                harpoonGun} and freeTurretIndex == -1:
-              colorWrapLabel(str = "You don't have a free turret to install the selected gun.",
-                  color = theme.colors[redColor])
-              btnAmount = 1
-        except:
-          dialog = setError(message = "Can't set error label.")
+          elif modulesList[moduleIndex].mType == ModuleType.hull and
+              modulesList[moduleIndex].maxValue < usedSpace:
+            colorWrapLabel(str = "The selected hull is too small to replace your current hull.",
+                color = theme.colors[redColor])
+            btnAmount = 1
+          elif modulesList[moduleIndex].mType in {ModuleType.gun,
+              harpoonGun} and freeTurretIndex == -1:
+            colorWrapLabel(str = "You don't have a free turret to install the selected gun.",
+                color = theme.colors[redColor])
+            btnAmount = 1
+      except:
+        dialog = setError(message = "Can't set error label.")
     setLayoutRowDynamic(height = dialogButtonHeight, cols = btnAmount)
     if btnAmount == 2:
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
