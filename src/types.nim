@@ -1139,6 +1139,21 @@ type
     craftBonus*: CraftBonuses = CraftBonuses.none
     craftMalus*: CraftMaluses = CraftMaluses.none
 
+proc initBaseCargo*(protoIndex: Natural = 0; amount: Natural = 0;
+    durability: ItemsDurability = 100;
+    price: Natural = 0): BaseCargo {.raises: [], tags: [], contractual.} =
+  ## Create a new data structure for a cargo in a base
+  ##
+  ## * protoIndex    - The index of the item's prototype
+  ## * amount        - The amount of the item in the inventory
+  ## * durability    - The current durability of the item
+  ## * price         - The price for which the item was bought
+  ##
+  ## Returns the new structure with information about the selected cargo
+  return BaseCargo(protoIndex: protoIndex, amount: amount,
+      durability: durability, price: price)
+
+type
   DateRecord* = object
     ## Used to store the game's time
     ##
