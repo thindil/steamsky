@@ -111,3 +111,38 @@ jobs:
         name: Nightly Development Release
         body: The daily development builds. Can be very unstable or buggy.
         prerelease: true
+
+  build_freebsd:
+    if: ${{ always() }}
+    needs: build_windows
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+
+    - name: Build the program
+      uses: vmactions/freebsd-vm@v1
+      with:
+        usesh: true
+        prepare: |
+          sed -i '' -e 's/quarterly/latest/g' /etc/pkg/FreeBSD.conf
+          pkg install -y git nimble ca_root_nss
+        run: |
+          export PATH=$PATH:$HOME/.nimble/bin:/usr/local/nim/bin
+          git config --global --add safe.directory /home/runner/work/steamsky/steamsky
+          others/build.nims freebsd
+
+    - name: Compress the artifact
+      run: tar -czf steamsky-development-freebsd.tar.gz release/steamsky-freebsd/
+
+    - name: Upload to the nightly release
+      uses: softprops/action-gh-release@v3
+      with:
+        files: steamsky-development-freebsd.tar.gz
+        tag_name: nightly
+        name: Nightly Development Release
+        body: The daily development builds. Can be very unstable or buggy.
+        prerelease: true
