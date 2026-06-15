@@ -63,7 +63,7 @@ type
   SDL_MouseWheelEvent{.importc, nodecl.} = object
     x, y: int32
   SDL_MouseMotionEvent {.importc, nodecl.} = object
-    xrel, yrel: int32
+    xrel, yrel, x, y: int32
   SDL_Event {.importc, nodecl.} = object
     `type`: cuint
     wheel: SDL_MouseWheelEvent
@@ -472,6 +472,15 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
       result = mouseWheelEvent
       nk_input_scroll(ctx = ctx, val = nk_vec2(x: evt.wheel.x.cfloat,
           y: evt.wheel.y.cfloat))
+    of SDL_MOUSEMOTION.cuint:
+      result = mouseMotionEvent
+      if ctx.input.mouse.grabbed > 0:
+        let
+          x: cint = ctx.input.mouse.prev.x.cint
+          y: cint = ctx.input.mouse.prev.y.cint
+        nk_input_motion(ctx = ctx, x = x + evt.motion.xrel, y = y + evt.motion.yrel)
+      else:
+        nk_input_motion(ctx = ctx, x = evt.motion.x, y = evt.motion.y)
     else:
       discard nk_sdl_handle_event(evt = evt)
       result = anyEvent

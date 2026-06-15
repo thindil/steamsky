@@ -284,14 +284,6 @@ nk_sdl_handle_event(SDL_Event *evt)
     switch(evt->type)
     {
 
-        case SDL_MOUSEMOTION:
-            if (ctx->input.mouse.grabbed) {
-                int x = (int)ctx->input.mouse.prev.x, y = (int)ctx->input.mouse.prev.y;
-                nk_input_motion(ctx, x + evt->motion.xrel, y + evt->motion.yrel);
-            }
-            else nk_input_motion(ctx, evt->motion.x, evt->motion.y);
-            return 1;
-
         case SDL_TEXTINPUT:
             {
                 nk_glyph glyph;
