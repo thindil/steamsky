@@ -1081,7 +1081,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
   colorLabel(str = modulesText[3], color = theme.colors[goldenColor])
   label(str = modulesText[4])
   # Show advanced options if needed
-  if showOptions:
+  if showOptions and currentTab == 0:
     setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.3, 0.5])
     label(str = "Show modules:")
     let newType: Natural = comboList(items = typesList, selected = typeIndex,
