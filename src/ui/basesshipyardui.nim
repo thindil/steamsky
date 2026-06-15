@@ -687,14 +687,15 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
     except:
       dialog = setError(message = "Can't show repair skill")
       return
-    setLayoutRowDynamic(height = labelHeight, cols = 1)
     try:
       if modulesList[moduleIndex].unique:
-        colorLabel(str = " The module is unique. Only one module of that type can be installed on the ship.",
+        setLayoutRowDynamic(height = labelHeight * 2, cols = 1)
+        colorWrapLabel(str = " The module is unique. Only one module of that type can be installed on the ship.",
             color = theme.colors[goldenColor])
     except:
       dialog = setError(message = "Can't show module unique info")
       return
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
     try:
       if modulesList[moduleIndex].description.len > 0:
         label(str = "")
