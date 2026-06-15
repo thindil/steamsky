@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Info about unique modules when installing them in shipyards
+
 ## [12.4] - 2026-06-14
 
 ### Added
