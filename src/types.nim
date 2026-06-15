@@ -1130,7 +1130,8 @@ type
     ## * durability    - The current durability of the item
     ## * price         - The price for which the item was bought
     ## * quality       - The quality of the item
-    ## * craftFeature  - The special feature of the item set during crafting it
+    ## * craftBonus - The item's special bonus from crafting
+    ## * craftMalus - The item's special malus from crafting
     protoIndex*: Natural
     amount*: Natural
     durability*: ItemsDurability = 100
@@ -1140,18 +1141,25 @@ type
     craftMalus*: CraftMaluses = CraftMaluses.none
 
 proc initBaseCargo*(protoIndex: Natural = 0; amount: Natural = 0;
-    durability: ItemsDurability = 100;
-    price: Natural = 0): BaseCargo {.raises: [], tags: [], contractual.} =
+    durability: ItemsDurability = 100; price: Natural = 0;
+    quality: ObjectQuality = normal;
+    craftBonus: CraftBonuses = CraftBonuses.none;
+    craftMalus: CraftMaluses = CraftMaluses.none): BaseCargo {.raises: [],
+    tags: [], contractual.} =
   ## Create a new data structure for a cargo in a base
   ##
-  ## * protoIndex    - The index of the item's prototype
-  ## * amount        - The amount of the item in the inventory
-  ## * durability    - The current durability of the item
-  ## * price         - The price for which the item was bought
+  ## * protoIndex - The index of the item's prototype
+  ## * amount     - The amount of the item in the inventory
+  ## * durability - The current durability of the item
+  ## * price      - The price for which the item was bought
+  ## * quality    - The quality of the item
+  ## * craftBonus - The item's special bonus from crafting
+  ## * craftMalus - The item's special malus from crafting
   ##
   ## Returns the new structure with information about the selected cargo
   return BaseCargo(protoIndex: protoIndex, amount: amount,
-      durability: durability, price: price)
+      durability: durability, price: price, quality: quality,
+      craftBonus: craftBonus, craftMalus: craftMalus)
 
 type
   DateRecord* = object
