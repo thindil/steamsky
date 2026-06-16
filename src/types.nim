@@ -1132,8 +1132,8 @@ type
     ## * quality       - The quality of the item
     ## * craftBonus - The item's special bonus from crafting
     ## * craftMalus - The item's special malus from crafting
-    protoIndex*: Natural
-    amount*: Natural
+    protoIndex: Natural
+    amount: Natural
     durability*: ItemsDurability = 100
     price*: Natural
     quality*: ObjectQuality = normal
@@ -1160,6 +1160,9 @@ proc initBaseCargo*(protoIndex: Natural = 0; amount: Natural = 0;
   return BaseCargo(protoIndex: protoIndex, amount: amount,
       durability: durability, price: price, quality: quality,
       craftBonus: craftBonus, craftMalus: craftMalus)
+
+typeGetterSetter(baseType = BaseCargo, varName = cargo, name = protoIndex, typ = Natural)
+typeGetterSetter(baseType = BaseCargo, varName = cargo, name = amount, typ = Natural)
 
 type
   DateRecord* = object
