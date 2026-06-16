@@ -1026,8 +1026,6 @@ var
     HeaderData[ModulesSortOrders](label: "Cost", sortAsc: priceAsc,
         sortDesc: priceDesc)]
   hasOptions: bool = true
-const
-  ratio: array[5, cfloat] = [300.cfloat, 200, 200, 200, 200]
 
 proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -1099,6 +1097,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if dialog != none:
       windowDisable()
     # Show the list of modules
+    const ratio: array[5, cfloat] = [300.cfloat, 200, 200, 200, 200]
     addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortModules, dialog = dialog)
     saveButtonStyle()
