@@ -36,10 +36,10 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
           x = playerShip.skyX, y = playerShip.skyY, speed = fullStop)
     traderCargo = @[]
     for item in traderShip.cargo:
-      traderCargo.add(y = BaseCargo(protoIndex: item.protoIndex,
-          amount: item.amount, durability: defaultItemDurability,
-          price: itemsList[item.protoIndex].price, quality: getQuality(),
-          craftBonus: none, craftMalus: none))
+      traderCargo.add(y = initBaseCargo(protoIndex = item.protoIndex,
+          amount = item.amount, durability = defaultItemDurability,
+          price = itemsList[item.protoIndex].price, quality = getQuality(),
+          craftBonus = none, craftMalus = none))
     var cargoAmount: Natural = if traderShip.crew.len < 5: getRandom(min = 1, max = 3)
         elif traderShip.crew.len < 10: getRandom(min = 1, max = 5)
         else: getRandom(min = 1, max = 10)
@@ -61,16 +61,16 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
           protoIndex = newItemIndex, itemQuality = quality, craftBonus = none,
           craftMalus = none)
       if cargoItemIndex > -1:
-        traderCargo[cargoItemIndex].amount += itemAmount
         {.ruleOff: "assignments".}
+        traderCargo[cargoItemIndex].amount = traderCargo[cargoItemIndex].amount + itemAmount
         traderShip.cargo[cargoItemIndex].amount = traderShip.cargo[cargoItemIndex].amount + itemAmount
         {.ruleOn: "assignments".}
       else:
         if freeCargo(amount = 0 - (itemsList[newItemIndex].weight *
             itemAmount)) > -1:
-          traderCargo.add(y = BaseCargo(protoIndex: newItemIndex,
-            amount: itemAmount, durability: defaultItemDurability,
-            price: itemsList[ newItemIndex].price, quality: quality))
+          traderCargo.add(y = initBaseCargo(protoIndex = newItemIndex,
+            amount = itemAmount, durability = defaultItemDurability,
+            price = itemsList[ newItemIndex].price, quality = quality))
           traderShip.cargo.add(y = initInventoryData(protoIndex = newItemIndex,
               amount = itemAmount, durability = defaultItemDurability, name = "",
               price = 0, quality = quality))
@@ -161,17 +161,19 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
             playerItem.durability and item.quality == playerItem.quality and
             item.craftBonus == playerItem.craftBonus and
             item.craftMalus == playerItem.craftMalus:
-          item.amount += sellAmount
+          {.ruleOff: "assignments".}
+          item.amount = item.amount + sellAmount
+          {.ruleOn: "assignments".}
           cargoAdded = true
           break
       if not cargoAdded:
-        traderCargo.add(y = BaseCargo(protoIndex: protoIndex,
-          amount: sellAmount,
-          durability: playerItem.durability,
-          price: itemsList[protoIndex].price,
-          quality: playerItem.quality,
-          craftBonus: playerItem.craftBonus,
-          craftMalus: playerItem.craftMalus))
+        traderCargo.add(y = initBaseCargo(protoIndex = protoIndex,
+          amount = sellAmount,
+          durability = playerItem.durability,
+          price = itemsList[protoIndex].price,
+          quality = playerItem.quality,
+          craftBonus = playerItem.craftBonus,
+          craftMalus = playerItem.craftMalus))
     updateCargo(ship = playerShip, cargoIndex = itemIndex, amount = -sellAmount,
         price = playerItem.price, quality = playerItem.quality,
         craftBonus = playerItem.craftBonus, craftMalus = playerItem.craftMalus)
@@ -184,7 +186,9 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
           baseIndex].reputation.level:
         gainRep(baseIndex = baseIndex, points = 1)
     else:
-      traderCargo[0].amount -= profit
+      {.ruleOff: "assignments".}
+      traderCargo[0].amount = traderCargo[0].amount - profit
+      {.ruleOn: "assignments".}
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     let gain: int = profit - (sellAmount * price)
     addMessage(message = "You sold " & $sellAmount & " " & itemName & " for " &
@@ -238,7 +242,9 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal,
       craftBonus = none, craftMalus = none)
   else:
-    traderCargo[0].amount += cost
+    {.ruleOff: "assignments".}
+    traderCargo[0].amount = traderCargo[0].amount + cost
+    {.ruleOn: "assignments".}
   if baseIndex > 0:
     let item: BaseCargo = skyBases[baseIndex].cargo[baseItemIndex]
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
@@ -253,9 +259,11 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
         durability = item.durability, price = price, quality = item.quality,
         craftBonus = item.craftBonus, craftMalus = item.craftMalus)
-    traderCargo[baseItemIndex].amount -= buyAmount
+    traderCargo[baseItemIndex].amount = traderCargo[baseItemIndex].amount - buyAmount
     if traderCargo[baseItemIndex].amount == 0:
+      {.ruleOff: "assignments".}
       traderCargo.delete(i = baseItemIndex)
+      {.ruleOn: "assignments".}
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
   let gain: int = (buyAmount * price) - cost
   addMessage(message = "You bought " & $buyAmount & " " & itemName & " for " &

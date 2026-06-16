@@ -47,9 +47,9 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
     else:
       0
   if skyBases[baseIndex].cargo.len == 0:
-    skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: moneyIndex,
-        amount: getRandom(min = 50, max = 200) * population,
-        durability: defaultItemDurability, price: 0, quality: normal))
+    skyBases[baseIndex].cargo.add(y = initBaseCargo(protoIndex = moneyIndex,
+        amount = getRandom(min = 50, max = 200) * population,
+        durability = defaultItemDurability, price = 0, quality = normal))
     var keys: seq[Positive] = itemsList.keys.toSeq
     randomize()
     keys.shuffle()
@@ -63,11 +63,10 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
         else:
           itemsAmount.dec
         let quality: ObjectQuality = getQuality()
-        skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: key,
-            amount: amount, durability: defaultItemDurability, price: getPrice(
-            baseType = skyBases[baseIndex].baseType, itemIndex = key,
-                quality = quality),
-            quality: quality))
+        skyBases[baseIndex].cargo.add(y = initBaseCargo(protoIndex = key,
+            amount = amount, durability = defaultItemDurability,
+            price = getPrice(baseType = skyBases[baseIndex].baseType,
+            itemIndex = key, quality = quality), quality = quality))
     if "blackmarket" in basesTypesList[skyBases[baseIndex].baseType].flags:
       var amount: Positive = (if population < 150: getRandom(min = 1,
           max = 10) elif population < 300: getRandom(min = 1,
@@ -82,12 +81,11 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
             if getPrice(baseType = skyBases[baseIndex].baseType,
                 itemIndex = j, quality = normal) > 0:
               let quality: ObjectQuality = getQuality()
-              skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: j,
-                  amount: getRandom(min = 0, max = 100) * population,
-                  durability: defaultItemDurability, price: getPrice(
+              skyBases[baseIndex].cargo.add(y = initBaseCargo(protoIndex = j,
+                  amount = getRandom(min = 0, max = 100) * population,
+                  durability = defaultItemDurability, price = getPrice(
                   baseType = skyBases[baseIndex].baseType, itemIndex = j,
-                      quality = quality),
-                  quality: quality))
+                  quality = quality), quality = quality))
               break
             itemIndex.inc
     else:
@@ -106,8 +104,10 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
       for item in skyBases[baseIndex].cargo.mitems:
         let roll: Positive = getRandom(min = 1, max = 100)
         if roll < 30 and item.amount > 0:
-          item.amount -= getRandom(min = 1, max = getMaxAmount(
+          {.ruleOff: "assignments".}
+          item.amount = item.amount - getRandom(min = 1, max = getMaxAmount(
               amount = item.amount))
+          {.ruleOn: "assignments".}
         elif roll < 60 and getBasePopulation(baseIndex = baseIndex) > empty:
           item.amount = (if item.amount == 0: getRandom(min = 1, max = 10) *
               population else: item.amount + getRandom(min = 1,
@@ -210,11 +210,11 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
     if itemIndex == -1:
       if countFreeCargo(baseIndex = baseIndex) == 0:
         raise newException(exceptn = NoFreeSpaceError, message = $protoIndex)
-      skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: protoIndex,
-          amount: amount, durability: durability, price: getPrice(
+      skyBases[baseIndex].cargo.add(y = initBaseCargo(protoIndex = protoIndex,
+          amount = amount, durability = durability, price = getPrice(
           baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex,
-          quality = quality), quality: quality, craftBonus: craftBonus,
-          craftMalus: craftMalus))
+          quality = quality), quality = quality, craftBonus = craftBonus,
+          craftMalus = craftMalus))
     else:
       skyBases[baseIndex].cargo[itemIndex].amount = skyBases[baseIndex].cargo[
           itemIndex].amount + amount
