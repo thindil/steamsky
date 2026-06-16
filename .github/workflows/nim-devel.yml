@@ -129,7 +129,7 @@ jobs:
         usesh: true
         prepare: |
           sed -i '' -e 's/quarterly/latest/g' /etc/pkg/FreeBSD.conf
-          pkg install -y git nimble ca_root_nss
+          pkg install -y git nimble ca_root_nss sdl2 sdl2_image
         run: |
           export PATH=$PATH:$HOME/.nimble/bin:/usr/local/nim/bin
           git config --global --add safe.directory /home/runner/work/steamsky/steamsky
