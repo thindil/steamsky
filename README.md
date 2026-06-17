@@ -39,9 +39,10 @@ file is, type: `nimble release -y` for build the release version of the
 game, or `nimble debug -y` to build the debug version of the game.
 
 You can also use the script `build.nims` from `others`. In the main directory,
-where this file is, type `others/build.nims` on Linux or `nim others\build.nims`
-on Windows. It will build the game and put all needed files (except libraries)
-to directory *release* in the project root directory (where this file is).
+where this file is, type `others/build.nims` on Linux and FreeBSD or
+`nim others\build.nims` on Windows. It will build the game and put all needed
+files (with libraries on Linux and Windows) to directory *release* in the project
+root directory (where this file is).
 
 ### Docker way
 
@@ -56,7 +57,7 @@ To build the game for Linux, download `build` image and type in console:
 
 To build the game for Windows 64-bit, download `buildwin64` image and type in console:
 
-`docker run --rm -v [path to source code]:/app ghcr.io/thindil/buildwin64 /bin/bash -c "cd /app && others/build.nims x86_64-windows"`
+`docker run --rm -v [path to source code]:/app ghcr.io/thindil/buildwin64 /bin/bash -c "cd /app && others/build.nims windows"`
 
 It will build the game and put all needed files to directory *release* in the
 project root directory (where this file is).
@@ -83,8 +84,8 @@ It will generate the code documenation in the *htmldoc* directory.
 ## Running Steam Sky
 
 If you compiled the game just clicking on (or executing in console) `steamsky`
-(on Linux) or `steamsky.exe` (on Windows) in `bin` directory should run it.
-If you use the downloaded version, the executable file is in the main
+(on Linux and FreeBSD) or `steamsky.exe` (on Windows) in `bin` directory should
+run it. If you use the downloaded version, the executable file is in the main
 directory.
 
 ### Libraries needed to run the game
@@ -93,7 +94,8 @@ Besides *SDL2* and *SDL2_image* the game doesn't need any additional libraries t
 run. On Windows you will need to download the libraries from [SDL2 releases](https://github.com/libsdl-org/SDL/releases)
 and [SDL2_image releases](https://github.com/libsdl-org/SDL_image/releases)
 pages if you were build the game by yourself. The libraries are included in
-the releases.
+the releases for Linux and Windows. For FreeBSD, please use the libraries
+`sdl2` and `sdl2_image` from official repository.
 
 ### Starting parameters
 You can specify the game directories through command-line parameters.
@@ -131,12 +133,14 @@ of the game, you can also use all of this starting parameters.
 
 Here are available daily testing versions of the game. You can find them
 in [GitHub Releases](https://github.com/thindil/steamsky/releases/tag/nightly).
-They should contain all files and libraries needed to run the game. Available
-versions:
+They should contain all files and libraries (with exception for FreeBSD) needed
+to run the game. Available versions:
 
 * steamsky-development-windows.zip contains Windows 64-bit version of the game.
 
 * steamsky-development-linux.tar.gz contains Linux 64-bit version of the game.
+
+* steamsky-development-freebsd.tar.gz contains FreeBSD 64-bit version of the game.
 
 ## Modding Support
 For detailed information about modifying various game elements or debugging
