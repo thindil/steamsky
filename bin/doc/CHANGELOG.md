@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Better looking dialog with information about installing a module in shipyards
+
 ### Fixed
 - Info about unique modules when installing them in shipyards
 - Showing advanced options in bases' shipyards
