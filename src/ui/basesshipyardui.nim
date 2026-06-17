@@ -899,6 +899,11 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
+var
+  dialogHeight: float = 500
+  damagePercent = 1.0
+  cost: Natural = 0
+
 proc setRemoveInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the selected module information
@@ -909,6 +914,27 @@ proc setRemoveInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog.
   moduleIndex = modulesIndexes[data]
   dialog = moduleDialog
+  dialogHeight = (labelHeight * 10) + dialogButtonHeight
+  damagePercent = (playerShip.modules[moduleIndex].durability.float /
+      playerShip.modules[moduleIndex].maxDurability.float)
+  if damagePercent < 1.0:
+    dialogHeight += labelHeight
+  cost = try:
+      modulesList[playerShip.modules[moduleIndex].protoIndex].price - (
+          modulesList[playerShip.modules[
+          moduleIndex].protoIndex].price.float * (1.0 -
+          damagePercent)).Natural
+    except:
+      dialog = setError(message = "Can't set the cost.")
+      return
+  if cost == 0:
+    cost = 1
+  try:
+    countPrice(price = cost, traderIndex = findMember(order = talk),
+        reduce = false)
+  except:
+    dialog = setError(message = "Can't count the cost.")
+    return
 
 proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -918,35 +944,14 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  const
-    width: float = 600
-    height: float = 500
-
+  const width: float = 600
   let windowName: string = playerShip.modules[moduleIndex].name
   setDialog(x = windowWidth / 5, y = windowHeight / 9)
-  updateDialog(width = width, height = height)
-  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowMovable}):
+  updateDialog(width = width, height = dialogHeight)
+  window(name = windowName, x = dialogX, y = dialogY, w = width, h = dialogHeight,
+      flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     setLayoutRowDynamic(height = labelHeight, cols = 2)
     label(str = "Remove gain:")
-    let damagePercent: float = (playerShip.modules[moduleIndex].durability.float /
-          playerShip.modules[moduleIndex].maxDurability.float)
-    var cost: Natural = try:
-          modulesList[playerShip.modules[moduleIndex].protoIndex].price - (
-              modulesList[playerShip.modules[
-              moduleIndex].protoIndex].price.float * (1.0 -
-              damagePercent)).Natural
-        except:
-          dialog = setError(message = "Can't set the cost.")
-          return
-    if cost == 0:
-      cost = 1
-    try:
-      countPrice(price = cost, traderIndex = findMember(order = talk),
-          reduce = false)
-    except:
-      dialog = setError(message = "Can't count the cost.")
-      return
     colorLabel(str = $cost & " " & moneyName, color = theme.colors[greenColor])
     label(str = "Removing time:")
     try:
@@ -990,7 +995,7 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't show module's description")
       return
-    setLayoutRowDynamic(height = buttonHeight, cols = 2)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[sellIcon], label = "Remove", alignment = right):
       manipulateModule(dialog = dialog)
