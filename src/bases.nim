@@ -19,7 +19,7 @@
 ## counting prices in them, updating populations, generating recruits, etc.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import basestypes, config, factions, game, goals, items, maps, reputation,
     shipscrew, types, utils
 
@@ -332,7 +332,9 @@ proc updatePrices*() {.raises: [], tags: [], contractual.} =
     return
   for item in skyBases[baseIndex].cargo.mitems:
     let roll: Positive = getRandom(min = 1, max = 100)
+    {.ruleOff: "assignments".}
     if roll < 30 and item.price > 1:
-      item.price.dec
+      item.price = item.price - 1
     elif roll < 60 and item.price > 0:
-      item.price.inc
+      item.price = item.price + 1
+    {.ruleOn: "assignments".}
