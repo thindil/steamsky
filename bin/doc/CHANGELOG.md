@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Better looking dialog with information about installing a module in shipyards
+- Updated README.md
 
 ### Fixed
 - Info about unique modules when installing them in shipyards
