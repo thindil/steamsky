@@ -68,7 +68,9 @@ jobs:
         others/build.nims linux
 
     - name: Compress the artifact
-      run: tar -czf steamsky-development-linux.tar.gz release/steamsky-linux/
+      run: |
+        cd release
+        tar -czf ../steamsky-development-linux.tar.gz steamsky-linux/
 
     - name: Upload to the nightly release
       uses: softprops/action-gh-release@v3
@@ -94,14 +96,14 @@ jobs:
     - name: Build the program
       run: |
         git config --global --add safe.directory /__w/steamsky/steamsky
-        apt-get update
-        apt-get install -y gcc
         others/build.nims windows
 
-    - name: Compress the artifact
+    - name: Install zip
       uses: montudor/action-zip@v1
-      with:
-        args: zip -qq -r steamsky-development-windows.zip release/steamsky-windows/
+
+    - name: Compress the artifact
+      run: zip -qq -r ../steamsky-development-windows.zip steamsky-windows/
+      working-directory: release
 
     - name: Upload to the nightly release
       uses: softprops/action-gh-release@v3
@@ -136,7 +138,9 @@ jobs:
           others/build.nims freebsd
 
     - name: Compress the artifact
-      run: tar -czf steamsky-development-freebsd.tar.gz release/steamsky-freebsd/
+      run: |
+        cd release
+        tar -czf ../steamsky-development-freebsd.tar.gz steamsky-freebsd/
 
     - name: Upload to the nightly release
       uses: softprops/action-gh-release@v3
