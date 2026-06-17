@@ -221,13 +221,16 @@ proc SDL_SetWindowResizable(window: WindowPtr; resizable: cint) {.importc,
   ## Internal SDL binding
 proc SDL_GetKeyboardState(numkeys: ptr int = nil): ptr array[512,
     uint8] {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## Internal SDL Image binding
+  ## Internal SDL binding
 proc SDL_SetWindowFullscreen(window: WindowPtr; flags: cint): cint {.importc,
     nodecl, raises: [], tags: [], contractual.}
-  ## Internal SDL Image binding
+  ## Internal SDL binding
 proc SDL_WarpMouseInWindow(window: WindowPtr; x, y: cint) {.importc, nodecl,
     raises: [], tags: [], contractual.}
-  ## Internal SDL Image binding
+  ## Internal SDL binding
+proc SDL_SetRelativeMouseMode(enabled: cint): cint {.importc, nodecl, raises: [],
+    tags: [], contractual.}
+  ## Internal SDL binding
 proc IMG_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL Image binding
 proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl, raises: [], tags: [], contractual.}
@@ -323,6 +326,19 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
   nk_input_begin(ctx = ctx)
   result = noEvent
   while SDL_PollEvent(event = evt) != 0:
+
+    # optional grabbing behavior
+    if ctx.input.mouse.grab > 0:
+      discard SDL_SetRelativeMouseMode(enabled = 1)
+      ctx.input.mouse.grab = 0
+    elif ctx.input.mouse.ungrab > 0:
+      let
+        x: cint = ctx.input.mouse.prev.x.cint
+        y: cint = ctx.input.mouse.prev.y.cint
+      discard SDL_SetRelativeMouseMode(enabled = 0)
+      SDL_WarpMouseInWindow(window = sdl.win, x = x, y = y)
+      ctx.input.mouse.ungrab = 0
+
     case evt.`type`
     of SDL_QUIT.ord:
       return quitEvent
@@ -478,7 +494,8 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
         let
           x: cint = ctx.input.mouse.prev.x.cint
           y: cint = ctx.input.mouse.prev.y.cint
-        nk_input_motion(ctx = ctx, x = x + evt.motion.xrel, y = y + evt.motion.yrel)
+        nk_input_motion(ctx = ctx, x = x + evt.motion.xrel, y = y +
+            evt.motion.yrel)
       else:
         nk_input_motion(ctx = ctx, x = evt.motion.x, y = evt.motion.y)
     else:

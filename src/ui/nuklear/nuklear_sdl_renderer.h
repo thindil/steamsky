@@ -270,17 +270,6 @@ nk_sdl_handle_event(SDL_Event *evt)
 {
     struct nk_context *ctx = &sdl.ctx;
 
-    /* optional grabbing behavior */
-    if (ctx->input.mouse.grab) {
-        SDL_SetRelativeMouseMode(SDL_TRUE);
-        ctx->input.mouse.grab = 0;
-    } else if (ctx->input.mouse.ungrab) {
-        int x = (int)ctx->input.mouse.prev.x, y = (int)ctx->input.mouse.prev.y;
-        SDL_SetRelativeMouseMode(SDL_FALSE);
-        SDL_WarpMouseInWindow(sdl.win, x, y);
-        ctx->input.mouse.ungrab = 0;
-    }
-
     switch(evt->type)
     {
 
