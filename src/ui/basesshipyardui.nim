@@ -922,11 +922,11 @@ proc setRemoveInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
         return
   case mType
   of engine, cabin:
-    dialogHeight += (labelHeight * 4)
+    dialogHeight += (labelHeight * 3) + 10
   of cockpit, turret:
     dialogHeight += labelHeight
   of alchemyLab..greenhouse, cargo, batteringRam:
-    dialogHeight += (labelHeight * 3)
+    dialogHeight += (labelHeight * 2) + 5
   of gun, harpoonGun:
     dialogHeight += (labelHeight * 5)
   else:
