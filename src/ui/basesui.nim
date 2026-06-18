@@ -117,8 +117,8 @@ template showActionMenu(button: string; action: untyped) =
   try:
     const
       width: float = 150
-      height: float = 120
       windowName: string = "Actions"
+    let height: float = (dialogButtonHeight * 2) + (labelHeight * 2) + 5
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = windowName, x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
