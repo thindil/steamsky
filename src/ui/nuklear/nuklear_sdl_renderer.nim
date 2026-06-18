@@ -46,8 +46,8 @@ include nuklear
 type
   SDL_EventType = enum
     SDL_FIRSTEVENT = 0, SDL_QUIT = 0x100, SDL_WINDOWEVENT = 0x200,
-        SDL_KEYDOWN = 0x300, SDL_KEYUP, SDL_MOUSEMOTION = 0x400,
-        SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONUP, SDL_MOUSEWHEEL
+      SDL_KEYDOWN = 0x300, SDL_KEYUP, SDL_TEXTEDITING, SDL_TEXTINPUT,
+      SDL_MOUSEMOTION = 0x400, SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONUP, SDL_MOUSEWHEEL
   SDL_WindowEventId = enum
     SDL_WINDOWEVENT_SIZE_CHANGED = 6
   SDL_Window {.importc, nodecl.} = object
@@ -64,10 +64,13 @@ type
     x, y: int32
   SDL_MouseMotionEvent {.importc, nodecl.} = object
     xrel, yrel, x, y: int32
+  SDL_TextInputEvent {.importc, nodecl.} = object
+    text: array[32, char]
   SDL_Event {.importc, nodecl.} = object
     `type`: cuint
     wheel: SDL_MouseWheelEvent
     motion: SDL_MouseMotionEvent
+    text: SDL_TextInputEvent
   SDL_WindowEvt {.importc: "SDL_WindowEvent", nodecl.} = object
     `type`: cuint
     event: cuint
@@ -228,8 +231,8 @@ proc SDL_SetWindowFullscreen(window: WindowPtr; flags: cint): cint {.importc,
 proc SDL_WarpMouseInWindow(window: WindowPtr; x, y: cint) {.importc, nodecl,
     raises: [], tags: [], contractual.}
   ## Internal SDL binding
-proc SDL_SetRelativeMouseMode(enabled: cint): cint {.importc, nodecl, raises: [],
-    tags: [], contractual.}
+proc SDL_SetRelativeMouseMode(enabled: cint): cint {.importc, nodecl, raises: [
+    ], tags: [], contractual.}
   ## Internal SDL binding
 proc IMG_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL Image binding

@@ -314,7 +314,7 @@ type
   UserEvents* = enum
     ## The UI events caused by the user
     noEvent, quitEvent, sizeChangedEvent, keyEvent, mouseButtonEvent,
-      mouseWheelEvent, mouseMotionEvent, anyEvent
+      mouseWheelEvent, mouseMotionEvent, textInputEvent, anyEvent
   ShowStates* = enum
     ## When to change the state of a window
     hidden, shown
