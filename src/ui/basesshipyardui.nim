@@ -915,6 +915,22 @@ proc setRemoveInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   moduleIndex = modulesIndexes[data]
   dialog = moduleDialog
   dialogHeight = (labelHeight * 10) + dialogButtonHeight
+  let mType: ModuleType = try:
+        modulesList[playerShip.modules[moduleIndex].protoIndex].mType
+      except:
+        dialog = setError(message = "Can't get module type")
+        return
+  case mType
+  of engine, cabin:
+    dialogHeight += (labelHeight * 4)
+  of cockpit, turret:
+    dialogHeight += labelHeight
+  of alchemyLab..greenhouse, cargo, batteringRam:
+    dialogHeight += (labelHeight * 3)
+  of gun, harpoonGun:
+    dialogHeight += (labelHeight * 5)
+  else:
+    discard
   damagePercent = (playerShip.modules[moduleIndex].durability.float /
       playerShip.modules[moduleIndex].maxDurability.float)
   if damagePercent < 1.0:
