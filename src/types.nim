@@ -1188,6 +1188,22 @@ type
     hour*: range[0..48] = 0
     minutes*: range[0..120] = 0
 
+proc initDateRecord*(year: range[0..4_000_000] = 0; month: range[0..24] = 0;
+    day: range[0..62] = 0; hour: range[0..48] = 0; minutes: range[
+    0..120] = 0): DateRecord {.raises: [], tags: [], contractual.} =
+  ## Create a new data structure for a in-game date
+  ##
+  ## * year    - The game's year
+  ## * month   - The game's month
+  ## * day     - The game's day
+  ## * hour    - The game's hour
+  ## * minutes - The game's minutes
+  ##
+  ## Returns the new structure with information about the selected date
+  return DateRecord(year: year, month: month, day: day, hour: hour,
+      minutes: minutes)
+
+type
   ReputationData* = object
     ## Used to store information about the level of the player's reputation
     ##
