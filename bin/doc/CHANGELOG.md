@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Better looking dialogs with information about installing or removing modules
-  in shipyards
+  in shipyards, buying recipes/healing wounded crew members/repairing the ship
+  in bases
 - Updated README.md
 
 ### Fixed
