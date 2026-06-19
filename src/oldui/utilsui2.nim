@@ -220,33 +220,33 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
     case minutesDiff:
     of 518_401..int.high:
       minutesDiff -= 518_400
-      travelTime.year.inc()
+      travelTime.year = travelTime.year + 1
     of 43_201..518_400:
       minutesDiff -= 43_200
-      travelTime.month.inc()
+      travelTime.month = travelTime.month + 1
       if travelTime.month > 12:
-        travelTime.year.inc()
+        travelTime.year = travelTime.year + 1
         travelTime.month = 1
     of 1_441..43_200:
       minutesDiff -= 1_440
-      travelTime.day.inc()
+      travelTime.day = travelTime.day + 1
       if travelTime.day > 31:
-        travelTime.month.inc()
+        travelTime.month = travelTime.month + 1
         if travelTime.month > 12:
-          travelTime.year.inc()
+          travelTime.year = travelTime.year + 1
           travelTime.month = 1
     of 61..1_440:
       minutesDiff -= 60
-      travelTime.hour.inc()
+      travelTime.hour = travelTime.hour + 1
       if travelTime.hour > 23:
         travelTime.hour = 0
-        travelTime.day.inc()
+        travelTime.day = travelTime.day + 1
         if travelTime.day > 31:
           travelTime.day = 1
-          travelTime.month.inc()
+          travelTime.month = travelTime.month + 1
           if travelTime.month > 12:
             travelTime.month = 1
-            travelTime.year.inc()
+            travelTime.year = travelTime.year + 1
     else:
       travelTime.minutes = minutesDiff
       minutesDiff = 0
