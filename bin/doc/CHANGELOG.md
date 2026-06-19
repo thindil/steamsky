@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Info about unique modules when installing them in shipyards
 - Showing advanced options in bases' shipyards
 - Showing items and modules durability on Windows
+- Info about the player's ship's defenders in the combat screen
 
 ## [12.4] - 2026-06-14
 
