@@ -174,24 +174,24 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
         skyBases[baseIndex].known = true
       let visitDate: XmlNode = base.child(name = "visiteddate")
       if visitDate != nil:
-        skyBases[baseIndex].visited = DateRecord(year: visitDate.attr(
-            name = "year").parseInt, month: visitDate.attr(
-            name = "month").parseInt, day: visitDate.attr(
-            name = "day").parseInt, hour: visitDate.attr(
-            name = "hour").parseInt, minutes: visitDate.attr(
+        skyBases[baseIndex].visited = initDateRecord(year = visitDate.attr(
+            name = "year").parseInt, month = visitDate.attr(
+            name = "month").parseInt, day = visitDate.attr(
+            name = "day").parseInt, hour = visitDate.attr(
+            name = "hour").parseInt, minutes = visitDate.attr(
             name = "minutes").parseInt)
       let recruitDate: XmlNode = base.child(name = "recruitdate")
       if recruitDate != nil:
-        skyBases[baseIndex].recruitDate = DateRecord(year: recruitDate.attr(
-            name = "year").parseInt, month: recruitDate.attr(
-            name = "month").parseInt, day: recruitDate.attr(
-            name = "day").parseInt, hour: 0, minutes: 0)
+        skyBases[baseIndex].recruitDate = initDateRecord(
+            year = recruitDate.attr(name = "year").parseInt, month = recruitDate.attr(
+            name = "month").parseInt, day = recruitDate.attr(
+            name = "day").parseInt, hour = 0, minutes = 0)
       let askDate: XmlNode = base.child(name = "askedforeventsdate")
       if askDate != nil:
-        skyBases[baseIndex].askedForEvents = DateRecord(year: askDate.attr(
-            name = "year").parseInt, month: askDate.attr(
-            name = "month").parseInt, day: askDate.attr(name = "day").parseInt,
-            hour: 0, minutes: 0)
+        skyBases[baseIndex].askedForEvents = initDateRecord(year = askDate.attr(
+            name = "year").parseInt, month = askDate.attr(
+            name = "month").parseInt, day = askDate.attr(name = "day").parseInt,
+            hour = 0, minutes = 0)
       for baseRecruit in base.findAll(tag = "recruit"):
         var recruit: RecruitData = RecruitData()
         recruit.name = baseRecruit.attr(name = "name")
@@ -246,10 +246,10 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
           skyBases[baseIndex].reputation.experience = progress.parseInt
       let missionsDate: XmlNode = base.child(name = "missionsdate")
       if missionsDate != nil:
-        skyBases[baseIndex].missionsDate = DateRecord(year: missionsDate.attr(
-            name = "year").parseInt, month: missionsDate.attr(
-                name = "month").parseInt,
-            day: missionsDate.attr(name = "day").parseInt, hour: 0, minutes: 0)
+        skyBases[baseIndex].missionsDate = initDateRecord(
+            year = missionsDate.attr(name = "year").parseInt,
+            month = missionsDate.attr(name = "month").parseInt,
+            day = missionsDate.attr(name = "day").parseInt, hour = 0, minutes = 0)
       for mission in base.findAll(tag = "mission"):
         let mType: MissionsTypes = mission.attr(
             name = "type").parseInt.MissionsTypes

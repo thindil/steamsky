@@ -39,7 +39,9 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.raises: [KeyError,
       CrewNoSpaceError, Exception], tags: [RootEffect], contractual.} =
     ## Update the in-game day, check if the player's ship need cleaning, pay
     ## for docks and to the crew member and check if the game has to be saved
-    gameDate.day.inc
+    {.ruleOff: "assignments".}
+    gameDate.day = gameDate.day + 1
+    {.ruleOn: "assignments".}
     for module in playerShip.modules.mitems:
       if module.mType == ModuleType2.cabin and module.cleanliness > 0:
         {.ruleOff: "assignments".}
@@ -59,25 +61,27 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.raises: [KeyError,
     if (gameDate.minutes + i) mod 15 == 0:
       tiredPoints.inc
   let addedMinutes: Natural = minutes mod 60
-  gameDate.minutes += addedMinutes
+  {.ruleOff: "assignments".}
+  gameDate.minutes = gameDate.minutes + addedMinutes
   if gameDate.minutes > 59:
-    gameDate.minutes -= 60
-    gameDate.hour.inc
+    gameDate.minutes = gameDate.minutes - 60
+    gameDate.hour = gameDate.hour + 1
   var addedHours: Natural = (minutes / 60).int
   while addedHours > 23:
     addedHours -= 24
     updateDay()
-  gameDate.hour += addedHours
+  gameDate.hour = gameDate.hour + addedHours
   while gameDate.hour > 23:
-    gameDate.hour -= 24
+    gameDate.hour = gameDate.hour - 24
     updateDay()
   if needSaveGame:
     saveGame()
   if gameDate.month > 12:
     gameDate.month = 1
-    gameDate.year.inc
+    gameDate.year = gameDate.year + 1
     if $gameSettings.autoSave == $yearly:
       saveGame()
+  {.ruleOn: "assignments".}
   updateCrew(minutes = minutes, tiredPoints = tiredPoints, inCombat = inCombat)
   repairShip(minutes = minutes)
   manufacturing(minutes = minutes)
@@ -396,18 +400,17 @@ proc setBases(maxSpawnRoll: Natural; basesArray: var Table[string, seq[
         medium
       else: big
     skyBase.name = generateBaseName(factionIndex = baseOwner)
-    skyBase.visited = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBase.visited = noDate
     skyBase.skyX = 1
     skyBase.skyY = 1
     skyBase.baseType = baseType
     skyBase.population = basePopulation
-    skyBase.recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBase.recruitDate = noDate
     skyBase.known = false
     skyBase.askedForBases = false
-    skyBase.askedForEvents = DateRecord(year: 0, month: 0, day: 0,
-        hour: 0, minutes: 0)
+    skyBase.askedForEvents = noDate
     skyBase.reputation = ReputationData(level: baseReputation, experience: 0)
-    skyBase.missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBase.missionsDate = noDate
     skyBase.missions = @[]
     skyBase.owner = baseOwner
     skyBase.size = baseSize

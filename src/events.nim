@@ -129,11 +129,9 @@ proc recoverBase*(baseIndex: BasesRange) {.raises: [KeyError],
       break
     factionRoll -= faction.spawnChance
   skyBases[baseIndex].population = getRandom(min = 2, max = 50)
-  skyBases[baseIndex].visited = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
-  skyBases[baseIndex].recruitDate = DateRecord(year: 0, month: 0, day: 0,
-      hour: 0, minutes: 0)
-  skyBases[baseIndex].missionsDate = DateRecord(year: 0, month: 0, day: 0,
-      hour: 0, minutes: 0)
+  skyBases[baseIndex].visited = noDate
+  skyBases[baseIndex].recruitDate = noDate
+  skyBases[baseIndex].missionsDate = noDate
   addMessage(message = "Base " & skyBases[baseIndex].name & " has a new owner.",
       mType = otherMessage, color = cyan)
 
