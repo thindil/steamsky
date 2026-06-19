@@ -71,7 +71,7 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
     flags = {windowBorder, windowTitle, windowMovable}):
-    setLayoutRowStatic(height = buttonHeight, cols = 2, width = buttonHeight.int)
+    setLayoutRowStatic(height = dialogButtonHeight, cols = 2, width = dialogButtonHeight.int)
     imageButton(image = images[selectAllIcon],
         tooltip = "Select all crew members"):
       if dialog == boardingDialog:
@@ -94,7 +94,7 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
         checkbox(label = member.name, checked = boardingParty[index])
       else:
         checkbox(label = member.name, checked = defenders[index])
-    setLayoutRowDynamic(height = buttonHeight, cols = 2)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     imageLabelButton(image = images[assignCrewIcon], label = "Assign",
       alignment = right):
       for index, member in playerShip.crew:
