@@ -52,6 +52,9 @@ proc nk_input_scroll*(ctx; val: nk_vec2) {.importc, nodecl, raises: [],
 proc nk_input_motion*(ctx; x, y: cint) {.importc, nodecl, raises: [], tags: [],
     contractual.}
   ## A binding to Nuklear's function. Internal use only
+proc nk_input_glyph*(ctx; glyph: nk_glyph) {.importc, nodecl, raises: [],
+    tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ------------------
 # Low level bindings

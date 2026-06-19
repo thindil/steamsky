@@ -1085,6 +1085,8 @@ type
     background*, text*: nk_color
   CursorsArray* = array[cursorCount, nk_cursor]
     ## The array of mouse buttons
+  nk_glyph* = array[nkUtfSize, char]
+    ## Internal Nuklear type
 
 {.push ruleOff: "namedParams".}
 template `+`*[T](p: ptr T; off: nk_size): ptr T =
