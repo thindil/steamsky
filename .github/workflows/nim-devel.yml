@@ -101,7 +101,7 @@ jobs:
     - name: Compress the artifact
       uses: montudor/action-zip@v1
       with:
-        args: cd release && zip -qq -r ../steamsky-development-windows.zip steamsky-windows/
+        args: zip -qq -r steamsky-development-windows.zip release/steamsky-windows/
 
     - name: Upload to the nightly release
       uses: softprops/action-gh-release@v3
