@@ -327,7 +327,7 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
             (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
         setLayoutRowDynamic(height = labelHeight2, cols = 1)
         wrapLabel(str = boardingParty)
-        setLayoutRowDynamic(height = labelHeight, cols = 1)
+        setLayoutRowDynamic(height = buttonHeight, cols = 1)
         labelButton(title = "Defenders:", tooltip = "Set your ship's defenders against the enemy party."):
           dialog = defendingDialog
           setDialog(x = windowWidth / 4)
