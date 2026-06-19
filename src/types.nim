@@ -1182,11 +1182,11 @@ type
     ## * day     - The game's day
     ## * hour    - The game's hour
     ## * minutes - The game's minutes
-    year*: range[0..4_000_000] = 0
-    month*: range[0..24] = 0
-    day*: range[0..62] = 0
-    hour*: range[0..48] = 0
-    minutes*: range[0..120] = 0
+    year: range[0..4_000_000] = 0
+    month: range[0..24] = 0
+    day: range[0..62] = 0
+    hour: range[0..48] = 0
+    minutes: range[0..120] = 0
 
 proc initDateRecord*(year: range[0..4_000_000] = 0; month: range[0..24] = 0;
     day: range[0..62] = 0; hour: range[0..48] = 0; minutes: range[
@@ -1202,6 +1202,16 @@ proc initDateRecord*(year: range[0..4_000_000] = 0; month: range[0..24] = 0;
   ## Returns the new structure with information about the selected date
   return DateRecord(year: year, month: month, day: day, hour: hour,
       minutes: minutes)
+
+typeGetterSetter(baseType = DateRecord, varName = date, name = year,
+    typ = range[0..4_000_000])
+typeGetterSetter(baseType = DateRecord, varName = date, name = month,
+    typ = range[0..24])
+typeGetterSetter(baseType = DateRecord, varName = date, name = day, typ = range[0..62])
+typeGetterSetter(baseType = DateRecord, varName = date, name = hour,
+    typ = range[0..48])
+typeGetterSetter(baseType = DateRecord, varName = date, name = minutes,
+    typ = range[0..120])
 
 type
   ReputationData* = object
