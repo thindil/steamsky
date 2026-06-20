@@ -1222,6 +1222,18 @@ type
     level*: ReputationRange
     experience*: Natural
 
+proc initReputationData*(level: ReputationRange = 0;
+    experience: Natural = 0): ReputationData {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for the player's reputation's level
+  ##
+  ## * level      - The level of the reputation
+  ## * experience - The current experience gained in the reputation
+  ##
+  ## Returns the new structure with information about the selected reputation
+  return ReputationData(level: level, experience: experience)
+
+type
   MissionData* = object
     ## Used to store information about missions
     ##
