@@ -97,6 +97,7 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
         else:
           checkbox(label = member.name, checked = defenders[index])
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[assignCrewIcon], label = "Assign",
       alignment = right):
       for index, member in playerShip.crew:
@@ -122,9 +123,12 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
       pilotIndex = findMember(order = pilot) + 1
       engineerIndex = findMember(order = engineer) + 1
       dialog = none
+    restoreButtonStyle()
+    setButtonStyle(field = textNormal, color = theme.colors[redColor])
     imageLabelButton(image = images[cancelIcon], label = "Close",
       alignment = right):
       dialog = none
+    restoreButtonStyle()
 
   windowSetFocus(name = windowName)
 
