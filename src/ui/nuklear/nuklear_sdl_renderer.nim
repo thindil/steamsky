@@ -254,9 +254,6 @@ proc nk_sdl_font_stash_begin(atlas: ptr ptr nk_font_atlas) {.importc, nodecl,
   ## Internal Nuklear binding
 proc nk_sdl_font_stash_end() {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal Nuklear binding
-proc nk_sdl_handle_event(evt: var SDL_Event): cint {.importc, nodecl, raises: [
-    ], tags: [], contractual.}
-  ## Internal Nuklear binding
 proc nk_sdl_render(aa: AntiAliasing) {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal Nuklear binding
 proc nk_sdl_shutdown() {.importc, nodecl, raises: [], tags: [], contractual.}
@@ -501,8 +498,13 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
             evt.motion.yrel)
       else:
         nk_input_motion(ctx = ctx, x = evt.motion.x, y = evt.motion.y)
+    of SDL_TEXTINPUT.cuint:
+      result = textInputEvent
+      var glyph: nk_glyph = ['\0', '\0', '\0', '\0']
+      for i in 0..3:
+        glyph[i] = evt.text.text[i]
+      nk_input_glyph(ctx = ctx, glyph = glyph)
     else:
-      discard nk_sdl_handle_event(evt = evt)
       result = anyEvent
   nk_input_end(ctx = ctx)
 

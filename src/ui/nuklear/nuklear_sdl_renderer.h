@@ -265,25 +265,6 @@ nk_sdl_font_stash_end(void)
         nk_style_set_font(&sdl.ctx, &sdl.atlas.default_font->handle);
 }
 
-NK_API int
-nk_sdl_handle_event(SDL_Event *evt)
-{
-    struct nk_context *ctx = &sdl.ctx;
-
-    switch(evt->type)
-    {
-
-        case SDL_TEXTINPUT:
-            {
-                nk_glyph glyph;
-                memcpy(glyph, evt->text.text, NK_UTF_SIZE);
-                nk_input_glyph(ctx, glyph);
-            }
-            return 1;
-    }
-    return 0;
-}
-
 NK_API
 void nk_sdl_shutdown(void)
 {
