@@ -25,7 +25,7 @@ suite "Unit tests for bases module":
   skyBases[1].population = 100
   skyBases[1].baseType = "1"
   skyBases[1].owner = "POLEIS"
-  gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+  gameDate = initDateRecord(year = 1600, month = 1, day = 1, hour = 8, minutes = 0)
   skyBases[1].recruits = @[]
   resetReputations()
 
@@ -67,7 +67,7 @@ suite "Unit tests for bases module":
 
   test "Generating recruits in a base with negative reputation.":
     skyBases[1].recruits = @[]
-    skyBases[1].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBases[1].recruitDate = noDate
     skyBases[1].reputation.level = -50
     generateRecruits()
     check:
@@ -75,7 +75,7 @@ suite "Unit tests for bases module":
 
   test "Generating recruits in a base with zero reputation":
     skyBases[1].recruits = @[]
-    skyBases[1].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBases[1].recruitDate = noDate
     skyBases[1].reputation.level = 0
     generateRecruits()
     check:

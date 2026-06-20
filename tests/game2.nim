@@ -15,7 +15,7 @@ suite "Unit tests for game2 module":
   loadShips("bin/data/ships.dat".Path)
   loadGoals("bin/data/goals.dat".Path)
 
-  gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+  gameDate = initDateRecord(year = 1600, month = 1, day = 1, hour = 8, minutes = 0)
   playerShip.modules = @[]
   playerShip.modules.add(y = initModuleData(mType = ModuleType2.engine, protoIndex = 3,
       durability = 100, fuelUsage = 4, power = 2000, disabled = false, maxDurability = 100, name = "Engine", weight = 1))

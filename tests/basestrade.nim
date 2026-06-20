@@ -49,7 +49,7 @@ suite "Unit tests for basestrade module":
   for i in 2 .. 100:
     skyBases[i].population = 100
   generateCargo()
-  gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+  gameDate = initDateRecord(year = 1600, month = 1, day = 1, hour = 8, minutes = 0)
   playerCareer = "general"
   generateCargo()
   resetReputations()
