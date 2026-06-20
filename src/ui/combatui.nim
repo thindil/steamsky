@@ -98,7 +98,7 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
           checkbox(label = member.name, checked = defenders[index])
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    imageLabelButton(image = images[assignCrewIcon], label = "Assign",
+    imageLabelButton(image = images[giveOrderColoredIcon], label = "Assign",
       alignment = right):
       for index, member in playerShip.crew:
         let
