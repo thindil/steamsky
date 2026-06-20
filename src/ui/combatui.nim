@@ -70,7 +70,7 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
 
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-    flags = {windowBorder, windowTitle, windowMovable}):
+    flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     setLayoutRowStatic(height = dialogButtonHeight, cols = 2, width = dialogButtonHeight.int)
     imageButton(image = images[selectAllIcon],
         tooltip = "Select all crew members"):
@@ -88,12 +88,14 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
       else:
         for checked in defenders.mitems:
           checked = false
-    setLayoutRowDynamic(height = buttonHeight, cols = 1)
-    for index, member in playerShip.crew:
-      if dialog == boardingDialog:
-        checkbox(label = member.name, checked = boardingParty[index])
-      else:
-        checkbox(label = member.name, checked = defenders[index])
+    setLayoutRowDynamic(height = height - (dialogButtonHeight * 2) - 60, cols = 1)
+    group(title = "CrewMembersGroup", flags = {windowNoFlags}):
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
+      for index, member in playerShip.crew:
+        if dialog == boardingDialog:
+          checkbox(label = member.name, checked = boardingParty[index])
+        else:
+          checkbox(label = member.name, checked = defenders[index])
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     imageLabelButton(image = images[assignCrewIcon], label = "Assign",
       alignment = right):
