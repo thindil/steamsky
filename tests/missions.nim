@@ -42,7 +42,7 @@ suite "Unit tests for missions module":
       acceptedMissions.len == 0
 
   test "Generating missions in a base.":
-    skyBases[1].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBases[1].missionsDate = noDate
     generateMissions()
 
   test "Update accepted missions":

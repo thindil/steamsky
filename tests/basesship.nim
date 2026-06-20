@@ -34,7 +34,7 @@ suite "Unit tests for basesship module":
   skyBases[1].baseType = "1"
   skyBases[1].owner = "POLEIS"
   generateCargo()
-  gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+  gameDate = initDateRecord(year = 1600, month = 1, day = 1, hour = 8, minutes = 0)
 
   test "Paying for docking.":
     payForDock()

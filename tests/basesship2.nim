@@ -74,7 +74,7 @@ suite "Unit tests for basesship2 module":
   skyBases[1].owner = "POLEIS"
   generateCargo()
   skyBases[1].cargo[0].amount = 10_000
-  gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+  gameDate = initDateRecord(year = 1600, month = 1, day = 1, hour = 8, minutes = 0)
   resetReputations()
 
   test "Repairing the player's ship's module in the base.":
