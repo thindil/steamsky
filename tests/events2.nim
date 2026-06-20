@@ -46,7 +46,7 @@ suite "Unit tests for events2 module":
   skyBases[1].population = 100
   skyBases[1].baseType = "1"
   skyBases[1].owner = "POLEIS"
-  gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+  gameDate = initDateRecord(year = 1600, month = 1, day = 1, hour = 8, minutes = 0)
   skyBases[1].recruits = @[]
   for x in 1 .. 1024:
     for y in 1 .. 1024:

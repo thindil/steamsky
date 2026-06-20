@@ -26,7 +26,7 @@ suite "Unit tests for basescargo module.":
   skyBases[1].baseType = "1"
   skyBases[1].owner = "POLEIS"
   skyBases[1].size = big
-  gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+  gameDate = initDateRecord(year = 1600, month = 1, day = 1, hour = 8, minutes = 0)
 
   test "Generate a base's cargo.":
     generateCargo()

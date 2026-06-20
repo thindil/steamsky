@@ -5,9 +5,9 @@ suite "Unit tests for utils module":
 
   test "Testing daysDifference.":
     check:
-      daysDifference(DateRecord(year: 1, month: 1, day: 1, hour: 0,
-          minutes: 0), DateRecord(year: 1, month: 1, day: 2, hour: 0, minutes: 0)) ==
-          1
+      daysDifference(initDateRecord(year = 1, month = 1, day = 1, hour = 0,
+          minutes = 0), initDateRecord(year = 1, month = 1, day = 2, hour = 0,
+          minutes = 0)) == 1
 
   test "Generating a robotic name.":
     check:

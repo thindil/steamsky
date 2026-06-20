@@ -16,11 +16,11 @@ suite "Unit tests for messages module":
 
   test "Getting formatted game time.":
     check:
-      formattedTime(time = DateRecord(year: 1600, month: 1, day: 1, hour: 10,
-          minutes: 1)) == "1600-01-01 10:01"
+      formattedTime(time = initDateRecord(year = 1600, month = 1, day = 1, hour = 10,
+          minutes = 1)) == "1600-01-01 10:01"
 
   test "Getting an existent message.":
-    gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 1)
+    gameDate = initDateRecord(year = 1600, month = 1, day = 1, hour = 8, minutes = 1)
     addMessage("my message", otherMessage, green)
     check:
       getMessage(1).message == "[1600-01-01 08:01] my message"
