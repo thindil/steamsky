@@ -1219,8 +1219,8 @@ type
     ##
     ## * level      - The level of the reputation
     ## * experience - The current experience gained in the reputation
-    level*: ReputationRange
-    experience*: Natural
+    level: ReputationRange
+    experience: Natural
 
 proc initReputationData*(level: ReputationRange = 0;
     experience: Natural = 0): ReputationData {.raises: [], tags: [],
@@ -1232,6 +1232,11 @@ proc initReputationData*(level: ReputationRange = 0;
   ##
   ## Returns the new structure with information about the selected reputation
   return ReputationData(level: level, experience: experience)
+
+typeGetterSetter(baseType = ReputationData, varName = reputation, name = level,
+    typ = ReputationRange)
+typeGetterSetter(baseType = ReputationData, varName = reputation,
+    name = experience, typ = Natural)
 
 type
   MissionData* = object
