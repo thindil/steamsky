@@ -328,7 +328,7 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
         labelButton(title = "Boarding party:",
           tooltip = "Set your boarding party. If you join it, you will be able to give orders them, but not your gunners or engineer."):
           dialog = boardingDialog
-          setDialog(x = windowWidth / 4)
+          setDialog(x = windowWidth / 4, y = windowHeight / 5)
         var labelHeight2: float = ceil(x = getTextWidth(text = boardingParty) /
             (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
         setLayoutRowDynamic(height = labelHeight2, cols = 1)
@@ -336,7 +336,7 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
         setLayoutRowDynamic(height = buttonHeight, cols = 1)
         labelButton(title = "Defenders:", tooltip = "Set your ship's defenders against the enemy party."):
           dialog = defendingDialog
-          setDialog(x = windowWidth / 4)
+          setDialog(x = windowWidth / 4, y = windowHeight / 5)
         labelHeight2 = ceil(x = getTextWidth(text = defenders) /
             (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
         setLayoutRowDynamic(height = labelHeight2, cols = 1)
