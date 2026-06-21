@@ -418,6 +418,7 @@ proc setRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
+  setDialog(x = windowWidth / 4, y = windowHeight / 10)
   recipe = availableRecipes[data]
   craft = try:
       setRecipeData(recipeIndex = recipe.index)
