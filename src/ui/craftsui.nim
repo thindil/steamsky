@@ -200,7 +200,8 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
           color = theme.colors[goldenColor])
     label(str = "Time needed:")
     colorLabel(str = $craft.time & " minutes", color = theme.colors[goldenColor])
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = (if recipe.craftable: 2 else: 1))
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = (
+        if recipe.craftable: 2 else: 1))
     if recipe.craftable:
       imageLabelButton(image = craftImage, label = $recipe.recipeType,
           alignment = right, tooltip = "Set crafting order (" &
@@ -302,7 +303,8 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       # Show special properties setting
       setLayoutRowDynamic(height = labelHeight, cols = 1)
       label(str = "Special:", alignment = centered)
-      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat, 0.2, 0.4])
+      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat,
+          0.2, 0.4])
       var newBonus: Natural = comboList(items = bonuses, selected = bonus,
           itemHeight = labelHeight.int, x = 200, y = 150,
           tooltip = "Optional special bonus for the crafted item. If you select any, you will need also to select a malus for it.")
@@ -357,8 +359,10 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       assign = best
     if option(label = "Assign selected member", selected = assign == selected):
       assign = selected
-    worker = comboList(items = workers, selected = worker, itemHeight = labelHeight.int,
-        x = 380, y = 150, tooltip = "Assign the crew member from the list. The sign + after name means that this crew member has needed skill, the sign ++ after name means that his/her needed skill is the best in the crew.")
+    worker = comboList(items = workers, selected = worker,
+        itemHeight = labelHeight.int,
+
+x = 380, y = 150, tooltip = "Assign the crew member from the list. The sign + after name means that this crew member has needed skill, the sign ++ after name means that his/her needed skill is the best in the crew.")
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = setImage, label = $recipe.recipeType,
@@ -621,7 +625,8 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showOptions and hasOptions:
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
     label(str = "Name:")
-    editString(text = nameSearch, maxLen = 64, tooltip = "Search for the selected recipe.")
+    editString(text = nameSearch, maxLen = 64,
+        tooltip = "Search for the selected recipe.")
     label(str = "Show:")
     const recipesTypes: array[3, string] = ["All", "Craftable only", "Non-craftable only"]
     typeIndex = comboList(items = recipesTypes, selected = typeIndex,
