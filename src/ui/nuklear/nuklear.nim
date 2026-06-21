@@ -25,8 +25,8 @@
 
 import std/[colors, hashes, macros, math, unicode]
 import contracts, nimalyzer
-import nk_button, nk_colors, nk_context, nk_draw, nk_input, nk_layout, nk_math,
-    nk_panel, nk_style, nk_tooltip, nk_types, nk_utf, nk_utils, nk_widget
+import nk_button, nk_colors, nk_context, nk_draw, nk_font, nk_input, nk_layout,
+    nk_math, nk_panel, nk_style, nk_tooltip, nk_types, nk_utf, nk_utils, nk_widget
 export nk_button, nk_colors, nk_context, nk_input, nk_layout, nk_style,
     nk_tooltip, nk_types, nk_widget
 
@@ -189,21 +189,6 @@ proc nk_group_begin(ctx; ctitle: cstring;
     cflags: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 proc nk_group_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-
-# -----
-# Fonts
-# -----
-proc nk_font_atlas_add_default*(atlas: ptr nk_font_atlas; height: cfloat;
-    config: ptr nk_font_config): ptr nk_font {.importc, nodecl, raises: [],
-        tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_font_atlas_add_from_file*(atlas: ptr nk_font_atlas; filePath: cstring;
-    height: cfloat;  config: ptr nk_font_config): ptr nk_font {.importc,
-        nodecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_font_atlas_clear*(atlas: ptr nk_font_atlas) {.importc, nodecl, raises: [
-    ], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
 # ------
@@ -3221,7 +3206,8 @@ template tooltip*(x, y, width: float; content: untyped) =
 # Vertex
 # ------
 when defined(nkIncludeVertexBufferOutput):
-  proc nkDrawListInit(list: var DrawList) {.raises: [], tags: [], contractual.} =
+  proc nkDrawListInit(list: var DrawList) {.raises: [], tags: [],
+      contractual.} =
     ## Initialize the drawing list
     for i in 0..list.circleVtx.high:
       let a: float = (i.float / list.circleVtx.len.float) * 2.0 * PI
@@ -3231,8 +3217,8 @@ when defined(nkIncludeVertexBufferOutput):
 # -------
 # Context
 # -------
-proc nkInit*(ctx: var Context; font: UserFont = UserFont()) {.raises: [], tags: [],
-    contractual.} =
+proc nkInit*(ctx: var Context; font: UserFont = UserFont()) {.raises: [],
+    tags: [], contractual.} =
   ## Init the Nuklear library
   ##
   ## * ctx  - the Nuklear context to set
