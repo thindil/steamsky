@@ -99,107 +99,109 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
   let windowName: string = recipe.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowMovable}):
-    if recipe.recipeType == craftType:
-      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.3.cfloat, 0.7])
-      label(str = "Amount:")
-      colorLabel(str = $craft.resultAmount, color = theme.colors[goldenColor])
-    setLayoutRowDynamic(height = labelHeight, cols = 1)
-    label(str = "Materials needed:")
-    setLayoutRowDynamic(height = labelHeight * 3, cols = 1)
-    group(title = "materialInfo", flags = {windowNoFlags}):
+      flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
+    setLayoutRowDynamic(height = height - dialogButtonHeight - 60, cols = 1)
+    group(title = "RecipeGroup", flags = {windowNoFlags}):
+      if recipe.recipeType == craftType:
+        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.3.cfloat, 0.7])
+        label(str = "Amount:")
+        colorLabel(str = $craft.resultAmount, color = theme.colors[goldenColor])
       setLayoutRowDynamic(height = labelHeight, cols = 1)
-      for mIndex, material in craft.materialTypes:
-        colorLabel(str = $(mIndex + 1) & ":", color = theme.colors[goldenColor])
-        for iIndex, item in itemsList:
-          var isMaterial: bool = false
-          if recipe.recipeType == study:
-            try:
-              if item.name == itemsList[craft.resultIndex].name:
-                isMaterial = true
-            except:
-              dialog = setError(message = "Can't check study material.")
-              return
-          elif recipe.recipeType == deconstruct:
-            try:
-              if iIndex == recipe.index[12 .. ^1].parseInt:
-                isMaterial = true
-            except:
-              dialog = setError(message = "Can't check deconstruct materials.")
-              return
-          else:
-            if item.itemType == material:
-              isMaterial = true
-          if isMaterial:
-            let cargoIndex: int = findItem(inventory = playerShip.cargo,
-                protoIndex = iIndex, itemQuality = any, craftBonus = any,
-                craftMalus = any)
-            if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
-                craft.materialAmounts[mIndex]:
-              colorLabel(str = $craft.materialAmounts[mIndex] & "x" &
-                  item.name & "(owned: " & $playerShip.cargo[
-                  cargoIndex].amount & ")", color = theme.colors[goldenColor])
-            else:
-              colorLabel(str = $craft.materialAmounts[mIndex] & "x" & item.name,
-                  color = theme.colors[redColor])
-    var haveTool: bool = false
-    if craft.tool == "None":
-      haveTool = true
-    else:
-      setLayoutRowDynamic(height = labelHeight, cols = 1)
-      label(str = "Tool needed:")
+      label(str = "Materials needed:")
       setLayoutRowDynamic(height = labelHeight * 3, cols = 1)
-      group(title = "toolInfo", flags = {windowNoFlags}):
+      group(title = "materialInfo", flags = {windowNoFlags}):
         setLayoutRowDynamic(height = labelHeight, cols = 1)
-        for iIndex, item in itemsList:
-          haveTool = false
-          if item.itemType == craft.tool and item.value[1] <= craft.toolQuality:
-            let cargoIndex: int = findItem(inventory = playerShip.cargo,
-                protoIndex = iIndex, quality = craft.toolQuality,
-                itemQuality = any, craftBonus = any, craftMalus = any)
-            if cargoIndex > -1:
-              haveTool = true
-            colorLabel(str = $item.name, color = theme.colors[
-                if haveTool: goldenColor else: redColor])
-    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.3.cfloat, 0.7])
-    label(str = "Workplace:")
-    var
-      haveWorkplace: bool = false
-      workplaceName: string = ""
-    for module in playerShip.modules:
-      try:
-        if modulesList[module.protoIndex].mType == craft.workplace:
-          workplaceName = module.name
-          if module.durability > 0:
-            haveWorkplace = true
+        for mIndex, material in craft.materialTypes:
+          colorLabel(str = $(mIndex + 1) & ":", color = theme.colors[goldenColor])
+          for iIndex, item in itemsList:
+            var isMaterial: bool = false
+            if recipe.recipeType == study:
+              try:
+                if item.name == itemsList[craft.resultIndex].name:
+                  isMaterial = true
+              except:
+                dialog = setError(message = "Can't check study material.")
+                return
+            elif recipe.recipeType == deconstruct:
+              try:
+                if iIndex == recipe.index[12 .. ^1].parseInt:
+                  isMaterial = true
+              except:
+                dialog = setError(message = "Can't check deconstruct materials.")
+                return
+            else:
+              if item.itemType == material:
+                isMaterial = true
+            if isMaterial:
+              let cargoIndex: int = findItem(inventory = playerShip.cargo,
+                  protoIndex = iIndex, itemQuality = any, craftBonus = any,
+                  craftMalus = any)
+              if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
+                  craft.materialAmounts[mIndex]:
+                colorLabel(str = $craft.materialAmounts[mIndex] & "x" &
+                    item.name & "(owned: " & $playerShip.cargo[
+                    cargoIndex].amount & ")", color = theme.colors[goldenColor])
+              else:
+                colorLabel(str = $craft.materialAmounts[mIndex] & "x" & item.name,
+                    color = theme.colors[redColor])
+      var haveTool: bool = false
+      if craft.tool == "None":
+        haveTool = true
+      else:
+        setLayoutRowDynamic(height = labelHeight, cols = 1)
+        label(str = "Tool needed:")
+        setLayoutRowDynamic(height = labelHeight * 3, cols = 1)
+        group(title = "toolInfo", flags = {windowNoFlags}):
+          setLayoutRowDynamic(height = labelHeight, cols = 1)
+          for iIndex, item in itemsList:
+            haveTool = false
+            if item.itemType == craft.tool and item.value[1] <= craft.toolQuality:
+              let cargoIndex: int = findItem(inventory = playerShip.cargo,
+                  protoIndex = iIndex, quality = craft.toolQuality,
+                  itemQuality = any, craftBonus = any, craftMalus = any)
+              if cargoIndex > -1:
+                haveTool = true
+              colorLabel(str = $item.name, color = theme.colors[
+                  if haveTool: goldenColor else: redColor])
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.3.cfloat, 0.7])
+      label(str = "Workplace:")
+      var
+        haveWorkplace: bool = false
+        workplaceName: string = ""
+      for module in playerShip.modules:
+        try:
+          if modulesList[module.protoIndex].mType == craft.workplace:
+            workplaceName = module.name
+            if module.durability > 0:
+              haveWorkplace = true
+              break
+        except:
+          dialog = setError(message = "Can't check workplace.")
+          return
+      if workplaceName.len == 0:
+        for index, module in modulesList:
+          if module.mType == craft.workplace:
+            try:
+              workplaceName = getModuleType(moduleIndex = index)
+            except:
+              dialog = setError(message = "Can't get workplace name.")
+              return
             break
+      colorLabel(str = workplaceName, color = theme.colors[
+          if haveWorkplace: goldenColor else: redColor])
+      label(str = "Skill:")
+      try:
+        colorLabel(str = skillsList[craft.skill].name & "/" & attributesList[
+            skillsList[craft.skill].attribute].name, color = theme.colors[goldenColor])
       except:
-        dialog = setError(message = "Can't check workplace.")
+        dialog = setError(message = "Can't show recipe skill.")
         return
-    if workplaceName.len == 0:
-      for index, module in modulesList:
-        if module.mType == craft.workplace:
-          try:
-            workplaceName = getModuleType(moduleIndex = index)
-          except:
-            dialog = setError(message = "Can't get workplace name.")
-            return
-          break
-    colorLabel(str = workplaceName, color = theme.colors[
-        if haveWorkplace: goldenColor else: redColor])
-    label(str = "Skill:")
-    try:
-      colorLabel(str = skillsList[craft.skill].name & "/" & attributesList[
-          skillsList[craft.skill].attribute].name, color = theme.colors[goldenColor])
-    except:
-      dialog = setError(message = "Can't show recipe skill.")
-      return
-    if recipe.recipeType == craftType:
-      label(str = "Difficulty:")
-      colorLabel(str = getRecipeDifficultyName(difficulty = craft.difficulty),
-          color = theme.colors[goldenColor])
-    label(str = "Time needed:")
-    colorLabel(str = $craft.time & " minutes", color = theme.colors[goldenColor])
+      if recipe.recipeType == craftType:
+        label(str = "Difficulty:")
+        colorLabel(str = getRecipeDifficultyName(difficulty = craft.difficulty),
+            color = theme.colors[goldenColor])
+      label(str = "Time needed:")
+      colorLabel(str = $craft.time & " minutes", color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = dialogButtonHeight, cols = (
         if recipe.craftable: 2 else: 1))
     if recipe.craftable:
