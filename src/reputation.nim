@@ -19,7 +19,7 @@
 ## like updating reputation, storing it, etc.
 
 import std/[tables, xmltree, strutils]
-import contracts
+import contracts, nimalyzer
 import config, factions, types, game
 
 type
@@ -52,7 +52,7 @@ proc resetReputations*() {.raises: [KeyError], tags: [],
         sourceFaction = newGameSettings.playerFaction,
         targetFaction = index): 1 else: -1
     reputationsList.add(y = initReputationObject(factionIndex = index,
-        reputation = ReputationData(level: reputationLevel, experience: 0)))
+        reputation = initReputationData(level = reputationLevel, experience = 0)))
 
 proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
     ReputationError], tags: [], contractual.} =
@@ -89,14 +89,18 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
         index].reputation.experience + (points.float *
         newGameSettings.reputationBonus).int
     while newPoints < 0:
-      reputationsList[index].reputation.level.dec
+      {.ruleOff: "assignments"}
+      reputationsList[index].reputation.level = reputationsList[index].reputation.level - 1
+      {.ruleOn: "assignments"}
       newPoints += abs(x = reputationsList[index].reputation.level * 500)
       if newPoints >= 0:
         reputationsList[index].reputation.experience = newPoints
         return
     while newPoints > abs(x = reputationsList[index].reputation.level * 500):
       newPoints -= abs(x = reputationsList[index].reputation.level * 500)
-      reputationsList[index].reputation.level.inc
+      {.ruleOff: "assignments"}
+      reputationsList[index].reputation.level = reputationsList[index].reputation.level + 1
+      {.ruleOn: "assignments"}
     reputationsList[index].reputation.experience = newPoints
 
   # Gain or lose reputation with other factions, depending if they are friends
@@ -145,8 +149,8 @@ proc loadReputation*(savedGame: XmlNode) {.raises: [ValueError], tags: [],
   ## * savedGame - the XML tree with save data
   for item in savedGame.findAll(tag = "factionrep"):
     reputationsList.add(y = initReputationObject(factionIndex = item.attr(
-        name = "faction"), reputation = ReputationData(level: item.attr(
-        name = "level").parseInt, experience: item.attr(
+        name = "faction"), reputation = initReputationData(level = item.attr(
+        name = "level").parseInt, experience = item.attr(
         name = "experience").parseInt)))
 
 proc getReputationText*(reputationLevel: int): string {.raises: [],

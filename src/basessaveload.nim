@@ -162,7 +162,7 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
       skyBases[baseIndex].known = false
       skyBases[baseIndex].askedForBases = false
       skyBases[baseIndex].askedForEvents = DateRecord()
-      skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
+      skyBases[baseIndex].reputation = initReputationData(level = 0, experience = 0)
       skyBases[baseIndex].missionsDate = DateRecord()
       skyBases[baseIndex].missions = @[]
       skyBases[baseIndex].owner = base.attr(name = "owner")

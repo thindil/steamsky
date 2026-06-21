@@ -409,7 +409,7 @@ proc setBases(maxSpawnRoll: Natural; basesArray: var Table[string, seq[
     skyBase.known = false
     skyBase.askedForBases = false
     skyBase.askedForEvents = noDate
-    skyBase.reputation = ReputationData(level: baseReputation, experience: 0)
+    skyBase.reputation = initReputationData(level = baseReputation, experience = 0)
     skyBase.missionsDate = noDate
     skyBase.missions = @[]
     skyBase.owner = baseOwner

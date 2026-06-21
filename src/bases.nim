@@ -125,7 +125,7 @@ proc updatePopulation*() {.raises: [], tags: [], contractual.} =
       newPopulation = 0
     skyBases[baseIndex].population = newPopulation
     if skyBases[baseIndex].population == 0:
-      skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
+      skyBases[baseIndex].reputation = initReputationData(level = 0, experience = 0)
 
 proc generateRecruits*() {.raises: [KeyError], tags: [],
     contractual.} =
@@ -301,14 +301,18 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.raises: [ReputationError],
   if baseIndex == playerShip.homeBase:
     newPoints += points
   while newPoints < 0:
-    skyBases[baseIndex].reputation.level.dec
+    {.ruleOff: "assignments".}
+    skyBases[baseIndex].reputation.level = skyBases[baseIndex].reputation.level - 1
+    {.ruleOn: "assignments".}
     newPoints += abs(x = skyBases[baseIndex].reputation.level * 5)
     if newPoints >= 0:
       skyBases[baseIndex].reputation.experience = newPoints
       return
   while newPoints > abs(x = skyBases[baseIndex].reputation.level * 5):
     newPoints -= abs(x = skyBases[baseIndex].reputation.level * 5)
-    skyBases[baseIndex].reputation.level.inc
+    {.ruleOff: "assignments".}
+    skyBases[baseIndex].reputation.level = skyBases[baseIndex].reputation.level + 1
+    {.ruleOn: "assignments".}
   skyBases[baseIndex].reputation.experience = newPoints
   if skyBases[baseIndex].reputation.level == 100:
     updateGoal(goalType = GoalTypes.reputation, targetIndex = skyBases[

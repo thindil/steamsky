@@ -101,7 +101,8 @@ proc updateEvents*(minutes: Positive) {.raises: [], tags: [],
         var populationLost: Positive = getRandom(min = 1, max = 10)
         if populationLost > skyBases[baseIndex].population:
           populationLost = skyBases[baseIndex].population
-          skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
+          skyBases[baseIndex].reputation = initReputationData(level = 0,
+              experience = 0)
         skyBases[baseIndex].population -= populationLost
       deleteEvent(eventIndex = key)
     else:
