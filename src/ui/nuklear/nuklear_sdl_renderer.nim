@@ -270,6 +270,7 @@ type
     ## Used to store data about SDL backend
     win: WindowPtr
     renderer: RendererPtr
+    atlas: ptr nk_font_atlas
 
 var
   fontScale: cfloat = 0.0 ## The scale used to resize a font
@@ -518,6 +519,8 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 
 proc nuklearClose*() {.raises: [], tags: [], contractual.} =
   ## Release all resources related to Xlib and Nuklear
+  if sdl.atlas != nil:
+    nk_font_atlas_clear(atlas = sdl.atlas)
   nk_sdl_shutdown()
   SDL_DestroyRenderer(renderer = sdl.renderer)
   SDL_DestroyWindow(window = sdl.win)
@@ -554,14 +557,12 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   ##                  be terminated with zero.
   ##
   ## Returns the pointer for the font
-  var
-    atlas: ptr nk_font_atlas = nil
-    config: nk_font_config = new_nk_font_config(pixelHeight = 0)
+  var config: nk_font_config = new_nk_font_config(pixelHeight = 0)
   if glyphsRanges.len > 0:
     config.`range` = glyphsRanges.addr
-  nk_sdl_font_stash_begin(atlas = atlas.unsafeAddr)
+  nk_sdl_font_stash_begin(atlas = sdl.atlas.unsafeAddr)
   {.ruleOff: "namedParams".}
-  result = nk_font_atlas_add_from_file(atlas = atlas,
+  result = nk_font_atlas_add_from_file(atlas = sdl.atlas,
       filePath = font.path.cstring, height = font.size.cfloat * fontScale, config.addr)
   {.ruleOn: "namedParams".}
   nk_sdl_font_stash_end()

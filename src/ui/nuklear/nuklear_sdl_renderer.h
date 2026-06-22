@@ -269,7 +269,6 @@ NK_API
 void nk_sdl_shutdown(void)
 {
     struct nk_sdl_device *dev = &sdl.ogl;
-    nk_font_atlas_clear(&sdl.atlas);
     nk_free(&sdl.ctx);
     SDL_DestroyTexture(dev->font_tex);
     /* glDeleteTextures(1, &dev->font_tex); */
