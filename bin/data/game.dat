@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <data>
-<!-- Name generating system is based on libtcod name generation.
-All of the lists can contain maximum 128 syllables each. Also,
-each syllable can have maximum 10 characters length.
--->
+<!-- Name generating system is based on libtcod name generation. -->
  <basessyllablepre value="East"/>
  <basessyllablepre value="Fort"/>
  <basessyllablepre value="Great"/>
@@ -618,8 +615,7 @@ one of below settings. To add new item type, just append new line with tag
 `itemtype` and it name as `value` attribute. Each new ammunition type must
 starts with `Ammo` (example: Ammo150). Ammunition for harpoon guns must be
 named `Harpoon`. To remove Item type, just remove line with tag `itemtype` and
-selected item type name as `value` attribute. The maximum length is 64
-characters and there can be maximum 128 items types in the game.-->
+selected item type name as `value` attribute.-->
  <itemtype value="Fuel"/>
  <itemtype value="Food"/>
  <itemtype value="Drink"/>
@@ -731,23 +727,19 @@ attribute of tag `fueltype`. Value must be existing item type. -->
 ships names).-->
  <tradersname value="trader"/>
 <!-- Each attribute starts with tag `attribute`.
-- Attribute `name` is name of selected attribute. The maximum length of the
-  attribute's name is 64 characters.
-- Value between `attribute` tags is description of attribute. The maximum
-  length for the attribute's description is 512 characters.
+- Attribute `name` is name of selected attribute.
+- Value between `attribute` tags is description of attribute.
 After change attribute name, don't forget to made proper changes in this same
 data file (if needed). To edit attribute name, just edit value of attribute
 `name`. To change attribute description, just edit text between `attribute`
 tags. To add new attribute, just append new line with tag `attribute` with
-it name as attribute `name` and description between tags `attribute`. There
-can be maximum 16 attributes declared in the game. -->
+it name as attribute `name` and description between tags `attribute`. -->
  <attribute name="Strength">Physical strength of character, determines damage in combat and carrying capacity. Also used in some craftings.</attribute>
  <attribute name="Dexterity">Nimbleness of character, used in many crafts.</attribute>
  <attribute name="Intelligence">Intellect and perception of character, used in many crafts.</attribute>
  <attribute name="Condition">Endurance of character, determine how long he or she can work before they grow tired.</attribute>
 <!-- Each skill starts with tag `skill`.
-- Attribute `name` is name of selected skill. The maximum length of the
-  skill's name is 64 characters.
+- Attribute `name` is name of selected skill.
 - Attribute `attribute` is name of character attribute (must be defined
 ealier in this same file).
 - Optional attribute `tool` is item type used as tool during training (must be
@@ -760,7 +752,7 @@ maximum level on which the selected tool quality is used. Attribute
 `quality` mean minimum required tool quality (at this moment, chance of the
 tool to break) required for that level of skill. Thus values level="50" and
 quality="5" means if skill is at level 50 or below use tools with quality
-5 or less. The maximum amount of tools qualities entries is 16.
+5 or less.
 After change skill name, you been need to made proper changes in other game
 data files (recipes, items and this same file) if needed. To change skill name,
 just edit value of `name` attribute of selected skill. To change assigned
@@ -771,7 +763,7 @@ tool, edit value of `tool` attribute of selected skill.
 To add new skill, just append new line with tag `skill` with it name as
 attribute `name`, assigned attribute to skill as attribute `attribute`,
 assigned item type as training tool as attribute `tool` and description between
-tags `description`. There can be maximum 64 skills declared in the game. -->
+tags `description`. -->
 <skill attribute="Dexterity" name="Piloting" tool="CockpitSimulator">
    <!-- In game description of the skill. Can have any value. -->
    <description>Used by pilots, determines ship speed and chance to avoid damage in ship combat</description>
