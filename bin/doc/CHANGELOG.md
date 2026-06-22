@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   in shipyards, buying recipes/healing wounded crew members/repairing the ship
   in bases, setting boarding party or defenders in combat
 - Updated README.md
+- Updated modding guide
 
 ### Fixed
 - Info about unique modules when installing them in shipyards
