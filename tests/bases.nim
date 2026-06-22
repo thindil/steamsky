@@ -34,7 +34,7 @@ suite "Unit tests for bases module":
       generateBaseName("POLEIS").len() > 0
 
   test "Gaining reputation in a base.":
-    skyBases[1].reputation = ReputationData(level: 1, experience: 1)
+    skyBases[1].reputation = initReputationData(level = 1, experience = 1)
     gainRep(1, 1)
     check:
       skyBases[1].reputation.experience == 2

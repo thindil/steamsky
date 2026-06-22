@@ -50,7 +50,7 @@ suite "Unit tests for trades module":
   skyBases[1].population = 100
   skyBases[1].baseType = "1"
   skyBases[1].owner = "POLEIS"
-  skyBases[1].reputation = ReputationData(level: 1, experience: 1)
+  skyBases[1].reputation = initReputationData(level = 1, experience = 1)
   for i in 2 .. 100:
     skyBases[i].population = 100
   generateCargo()

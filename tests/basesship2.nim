@@ -22,7 +22,7 @@ suite "Unit tests for basesship2 module":
   if protoShipsList.len == 0:
     loadShips("bin/data/ships.dat".Path)
 
-  skyBases[1].reputation = ReputationData(level: 1, experience: 1)
+  skyBases[1].reputation = initReputationData(level = 1, experience = 1)
   playerShip.skyX = 1
   playerShip.skyY = 1
   const attribute = initMobAttributeRecord(level = 3, experience = 0)
