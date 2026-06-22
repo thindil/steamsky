@@ -30,8 +30,7 @@ you make there will be overwritten when you update the game.
 
 ### Changing an existing items types
 * By editing the *data/game.dat* file you can change the name of an existing
-  item type by changing the `value` attribute. The maximum length is 64
-  characters.
+  item type by changing the `value` attribute.
 * When editing your custom file: you need to remove first selected item type,
   then add new.
 * Item types are referenced in the specifications of items and recipes. Don't
@@ -39,12 +38,10 @@ you make there will be overwritten when you update the game.
 
 ### Adding new items types
 * Add a new item type, by appending a new line with tag `itemtype`. Store the
-  Name of your new type in the `value` attribute. The maximum length is 64
-  characters.
+  Name of your new type in the `value` attribute.
 * All Gun ammunition must have a name beginning with `Ammo`, for example:
   *Ammo150*.
 * All Harpoon Gun Ammunition types must have a name beginning with `Harpoon`.
-* There can be maximum 128 types of items in the game.
 
 ### Removing item types
 * You can remove item types from *data/game.dat* by removing their tag.
@@ -65,9 +62,6 @@ you make there will be overwritten when you update the game.
   used in many crafts</attrbute>*.
 * After changing/removing attribute/s, don't forget to make the proper changes in the game
   data.
-* The maximum length of the name of the attribute is 64 characters and for
-  the attribute's description it is 512 characters.
-* There can be maximum 16 attributes declared in the game.
 
 ### Changing an existing attribute
 * If editing *game.dat* file: just change the selected value of the attribute.
@@ -91,8 +85,7 @@ you make there will be overwritten when you update the game.
 * Open the *game.dat* file in the *data* directory to add/remove/change skills, or
   even better, create a new file in the modifications' directory.
 * Each skill starts with tag `skill`.
-* Attribute `name` is the name of the selected skill. The maximum length of the
-  name of the skill is 64 characters.
+* Attribute `name` is the name of the selected skill.
 * Attribute `attribute` is the name of the character's attribute (must be defined
   earlier in this same file).
 * Optional attribute `tool` is item type used as tool during training (must be
@@ -100,15 +93,14 @@ you make there will be overwritten when you update the game.
 * After changing/removing the skill, you need to make the proper changes in
   other game data files (recipes, items and this same file) if needed.
 * Optional tag `description` is the description of the skill showed to a
-  player. The maximum length of the skill's description is 512 characters.
+  player.
 * Optional tags `toolquality` contains information on tool quality needed to
   train the selected skill on the selected level. Attribute `level` mean
   maximum level on which the selected tool quality is used. Attribute
   `quality` mean minimum required tool quality (at this moment, chance of the
   tool to break) required for that level of skill. Thus values level="50" and
   quality="5" means if skill is at level 50 or below use tools with quality
-  5 or less. The maximum amount of the tools qualities entries is 16.
-* There can be maximum 64 skills declared in the game.
+  5 or less.
 
 ### Changing an existing skill
 * If editing *game.dat* file: just change the selected value of the skill/s.
@@ -241,7 +233,6 @@ Value must be an existing skill name.
   `item` with attribute `index` which value will be the index of selected item
   and attribute `action`. Then, if you modify an existing item, add changed
   values.
-* There can be maximum 512 items' prototypes declared in the game.
 
 ### Item data structure
 * Each item starts with tag `item`.
@@ -252,14 +243,13 @@ Value must be an existing skill name.
   are: "add" (add this item, default option), "remove" (remove this item)
   or "update" (update selected item).
 * `name` attribute: Name of item displayed in various places (cargo info,
-  crafting, etc.). The maximum length is 64 characters.
+  crafting, etc.).
 * Attribute `weight`: Weight of one item in kilograms
 * Attribute `type`: Item type of item (from *game.dat* file, entry
-  *ItemsTypes*). The maximum length is 64 characters.
+  *ItemsTypes*).
 * Attribute `showtype`: optional attribute. If you want to show item type in
   game (for example in cargo or in trade screen) different from item type
-  from *game.dat* file, you can set this parameter to any text value. The
-  maximum length is 64 characters.
+  from *game.dat* file, you can set this parameter to any text value.
 * Attribute `price` is price of the item. If you want that item will be not
   possible to buy or sell in bases, set it price to 0.
 * Optional attribute `reputation`: Minimal reputation in bases needed to
@@ -281,8 +271,7 @@ Value must be an existing skill name.
   for weapon is the amount of hands used (1 for one-handed, 2 for
   two-handed weapons). Fifth entry for weapon is damage type (1 - cutting
   damage, 2 - impaling damage, 3 - blunt damage).
-* Tag `description`: In game description of the item. Can have any value. The
-  maximum length is 512 characters.
+* Tag `description`: In game description of the item. Can have any value.
 
 ## Recipes
 
@@ -299,15 +288,14 @@ Value must be an existing skill name.
 * Each recipe starts with tag `recipe`.
 * Attribute `index` is a recipe index (it can be a number or text) and must be
   unique. This value is used at this moment for set starting recipes and in
-  Craft types of goals. The maximum length of the index is 64 characters.
+  Craft types of goals.
 * Optional attribute `action`: What to do with this recipe. Possible values
   are: "add" (add this recipe, default option), "remove" (remove this recipe)
   or "update" (update selected recipe).
 * Tag `material` contains data about material used to craft recipe. If you want
   to add more materials to recipe, just add new tag `material` with proper
   data.
-    * Attribute `type` is item type of material need for recipe. The maximum
-      length is 64 characters.
+    * Attribute `type` is item type of material need for recipe.
     * Attribute `amount` is amount of crafting materials needed for recipe. Zero
       value for updating recipe means that this material should be removed.
 * Attribute `result`: Item index which will be produced by recipe (you can
@@ -318,7 +306,7 @@ Value must be an existing skill name.
 * Attribute `skill`: Name of skill used during crafting selected recipe (skills
   names are in *game.dat* file).
 * Attribute `tool`: Type of item used as tool in crafting selected recipe
-  (items types are in *game.dat* file). The maximum length is 64 characters.
+  (items types are in *game.dat* file).
 * Attribute `difficulty`: optional attribute. How complicated recipe is. Should
   be between 1 and 100.
 * Attribute `time`: optional attribute. How long in minutes take crafting selected
@@ -340,19 +328,16 @@ Value must be an existing skill name.
   option) add tag `module` with attribute `index` which value will be the index
   of selected ship module and attribute `action`. Then, if you modify an
   existing ship module, add changed values.
-* There can be maximum 1024 modules' prototypes declared in the game.
 
 ### Ship module data structure
 * Each ship module starts with tag `module`.
 * Attribute `index` is a module index (it can be a number or text) and must be
-  unique. This value is used in ships data entries. The maximum length of the
-  index is 64 characters.
+  unique. This value is used in ships data entries.
 * Optional attribute `action`: What to do with this module. Possible values
   are: "add" (add this module, default option), "remove" (remove this module)
   or "update" (update selected module).
 * Attribute `name`: Standard name of module. Will be visible in ship info screen
-  and in shipyards. The maximum length of the name is 64 characters. The maximum
-  length of the name is 64 characters.
+  and in shipyards.
 * Attribute `type`: Type of module. Available options are: Engine, Cabin, Cockpit,
   Turret, Gun, Cargo, Hull, Armor, Battering\_ram, Alchemy\_Lab, Furnace,
   Water\_Collector, Workshop, Greenhouse, Medical\_room, Harpoon\_Gun,
@@ -394,8 +379,7 @@ Value must be an existing skill name.
   rounds.
 * Optional attribute `reputation`: Minimal reputation in bases needed to
   buy that module from them. Default value is -100 (available in all bases).
-* Text between `module` tags is module description. The maximum length of the
-  description is 512 characters.
+* Text between `module` tags is module description.
 
 ## Ships
 
@@ -580,7 +564,6 @@ Value must be an existing skill name.
 
 ### General information
 * Default game mobiles are in *mobs.dat* file which is in *data* directory.
-* There can be maximum 256 mobiles' prototypes declared in the game.
 * If you want to remove or update any existing mobile, you can do it in *mobs.dat*
   file in *data* directory or in modification file (better option) add tag
   `mobile` with attribute `index` which value will be the index of selected
@@ -655,13 +638,12 @@ Value must be an existing skill name.
 * Each faction is between `faction` tags.
 * Attribute `index`: Index of faction (it can be a number or text) and must be
   unique. At this moment this value is used to create bases during starting new
-  game and to determine which ships are enemies or friends. Its maximum length
-  is 64 characters.
+  game and to determine which ships are enemies or friends.
 * Optional attribute `action`: What to do with this faction. Possible values
   are: "add" (add this faction, default option), "remove" (remove this faction)
   or "update" (update selected faction).
 * Attribute `name`: Name of factions displayed in game. Can be any text and
-  have to be unique. Its maximum length is 64 characters.
+  have to be unique.
 * Attribute `membername`: Name of single mobile from this faction. Can be any
   text.
 * Attribute `pluralmembername`: Plural of name of mobiles from this faction.
