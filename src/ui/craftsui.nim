@@ -140,7 +140,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
                   craft.materialAmounts[mIndex]:
                 colorLabel(str = $craft.materialAmounts[mIndex] & "x" &
                     item.name & "(owned: " & $playerShip.cargo[
-                    cargoIndex].amount & ")", color = theme.colors[goldenColor])
+                    cargoIndex].amount & ")", color = theme.colors[greenColor])
               else:
                 colorLabel(str = $craft.materialAmounts[mIndex] & "x" & item.name,
                     color = theme.colors[redColor])
@@ -162,7 +162,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
               if cargoIndex > -1:
                 haveTool = true
               colorLabel(str = $item.name, color = theme.colors[
-                  if haveTool: goldenColor else: redColor])
+                  if haveTool: greenColor else: redColor])
       setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.3.cfloat, 0.7])
       label(str = "Workplace:")
       var
@@ -188,7 +188,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
               return
             break
       colorLabel(str = workplaceName, color = theme.colors[
-          if haveWorkplace: goldenColor else: redColor])
+          if haveWorkplace: greenColor else: redColor])
       label(str = "Skill:")
       try:
         colorLabel(str = skillsList[craft.skill].name & "/" & attributesList[
