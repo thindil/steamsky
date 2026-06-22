@@ -1271,6 +1271,21 @@ type
     else:
       target*: Natural
 
+proc initMissionData*(mType: MissionsTypes; time: Positive = 1; targetX: range[
+    0..MapXRange.high] = 0; targetY: range[
+    0..MapYRange.high] = 0): MissionData {.raises: [], tags: [], contractual.} =
+  ## Create a new data structure for a mission
+  ##
+  ## * mType      - The type of the mission
+  ## * time       - The amount of minutes to finish the mission
+  ## * targetX    - The X position of the target on the map
+  ## * targetY    - The Y position of the target on the map
+  ##
+  ## Returns the new structure with information about the selected mission
+  return MissionData(mType: mType, time: time, targetX: targetX,
+      targetY: targetY)
+
+type
   BaseRecord* = object
     ## Used to store information about bases
     ##
