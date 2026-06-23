@@ -455,7 +455,8 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
             alignment = right):
           discard
     restoreButtonStyle()
-    addCloseButton(dialog = dialog, isPopup = false)
+    addCloseButton(dialog = dialog, isPopup = false, icon = cancelIcon,
+        color = redColor, label = "Cancel")
 
   windowSetFocus(name = windowName)
 
