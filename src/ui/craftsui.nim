@@ -281,7 +281,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
   let windowName: string = recipe.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowMovable}):
+      flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     if recipe.recipeType == craftType:
       # Show amount setting
       setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
