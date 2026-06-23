@@ -1272,18 +1272,25 @@ type
       target*: Natural
 
 proc initMissionData*(mType: MissionsTypes; time: Positive = 1; targetX: range[
-    0..MapXRange.high] = 0; targetY: range[
-    0..MapYRange.high] = 0): MissionData {.raises: [], tags: [], contractual.} =
+    0..MapXRange.high] = 0; targetY: range[0..MapYRange.high] = 0;
+    reward: Positive = 1; startBase: BasesRange = 1; finished: bool = false;
+    multiplier: RewardMultiplier = 1.0): MissionData {.raises: [], tags: [],
+    contractual.} =
   ## Create a new data structure for a mission
   ##
   ## * mType      - The type of the mission
   ## * time       - The amount of minutes to finish the mission
   ## * targetX    - The X position of the target on the map
   ## * targetY    - The Y position of the target on the map
+  ## * reward     - The amount of money as the reward for the mission
+  ## * startBase  - The index of the starting base for the mission
+  ## * finished   - If true, the mission is ready to return, otherwise false
+  ## * multiplier - The multiplier for the mission reward money and reputation
   ##
   ## Returns the new structure with information about the selected mission
   return MissionData(mType: mType, time: time, targetX: targetX,
-      targetY: targetY)
+      targetY: targetY, reward: reward, startBase: startBase,
+      finished: finished, multiplier: multiplier)
 
 type
   BaseRecord* = object
