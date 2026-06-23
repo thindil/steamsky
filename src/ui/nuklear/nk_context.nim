@@ -31,6 +31,17 @@ type
   PContext* = ptr nk_context
     ## Used to store a pointer on nuklear context
 
+# ---------------------
+# Procedures parameters
+# ---------------------
+using ctx: PContext
+
+# ------------------
+# Low level bindings
+# ------------------
+proc nk_free*(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+
 # ---------
 # Variables
 # ---------

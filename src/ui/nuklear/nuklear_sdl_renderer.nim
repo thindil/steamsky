@@ -521,6 +521,7 @@ proc nuklearClose*() {.raises: [], tags: [], contractual.} =
   ## Release all resources related to Xlib and Nuklear
   if sdl.atlas != nil:
     nk_font_atlas_clear(atlas = sdl.atlas)
+  nk_free(ctx = ctx)
   nk_sdl_shutdown()
   SDL_DestroyRenderer(renderer = sdl.renderer)
   SDL_DestroyWindow(window = sdl.win)
