@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Better looking dialogs with information about installing or removing modules
   in shipyards, buying recipes/healing wounded crew members/repairing the ship
-  in bases, setting boarding party or defenders in combat
+  in bases, setting boarding party or defenders in combat, hiring recruits in
+  bases
 - Updated README.md
 - Updated modding guide
 
