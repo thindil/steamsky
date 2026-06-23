@@ -889,20 +889,12 @@ story.
 ## Themes
 
 ### General information
-* To edit default game theme, open file *theme.tcl* in *data/ui* directory.
 * To create new theme, first create new directory in *themes* directory
   (by default it is *data/themes* but you can change it with game starting
   parameter, see [README.md](../README.md) for more info about it). Next,
-  inside new theme directory, create two files: one with extension
-  *.cfg*(theme configuration file) and second with extension *.tcl*. Their can
-  have any names.
+  inside new theme directory, create a file with extension *.cfg*(theme
+  configuration file). It can have any name.
 * To remove theme just delete theme directory from *themes* directory.
-* More information about variables and settings is in default game theme file
-  *data/ui/theme.tcl*.
-* More information about how to set themes in Tk (GUI library used by the game),
-  please look at:
-    https://wiki.tcl-lang.org/page/Changing+Widget+Colors
-    https://tkdocs.com/tutorial/styles.html (Tcl language version)
 * All paths in configuration file should be relative paths and use Unix
   convention for setting them. For example: *icons/piloticon.svq* will work on
   Windows and Linux.
@@ -1038,13 +1030,13 @@ story.
   buttons. Optional.
 * Key `HelpIcon`: Path to the SVG image which will be used for help action
   buttons. Optional.
-* Key `SpecialHelpColor`: The name of the Tcl color used to show special names,
+* Key `SpecialHelpColor`: The RGB code of the color used to show special names,
   like money name and keyboard shortcuts in the help. Optional.
-* Key `UnderlineHelpColor`: The name of the Tcl color used to show underline
+* Key `UnderlineHelpColor`: The name of the RGB color used to show underline
   text in the help. Optional.
-* Key `BoldHelpColor`: The name of the Tcl color used to show bold text in the
+* Key `BoldHelpColor`: The RGB code of the color used to show bold text in the
   help. Optional.
-* Key `ItalicHelpColor`: The name of the Tcl color used to show italic text in
+* Key `ItalicHelpColor`: The RGB code of the color used to show italic text in
   the help. Optional.
 * Key `GiveIcon`: Path to the SVG image which will be used for give item
   button. Optional.
