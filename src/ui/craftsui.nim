@@ -277,9 +277,10 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   const
     width: float = 400
-    height: float = 500
 
-  let windowName: string = recipe.name
+  let
+    windowName: string = recipe.name
+    height: float = (dialogButtonHeight * 2) + (editHeight * 6) + labelHeight + 60
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
