@@ -216,7 +216,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
       # Show debug UI if needed
       if debugMode == menu and state notin {
-          GameState.mainMenu..GameState.newGame}:
+          GameState.quitGame..GameState.newGame}:
         showDebugUI(dialog = dialog)
 
       # Start loading the game
