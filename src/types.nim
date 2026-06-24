@@ -1274,8 +1274,9 @@ type
 proc initMissionData*(mType: MissionsTypes; time: Positive = 1; targetX: range[
     0..MapXRange.high] = 0; targetY: range[0..MapYRange.high] = 0;
     reward: Positive = 1; startBase: BasesRange = 1; finished: bool = false;
-    multiplier: RewardMultiplier = 1.0): MissionData {.raises: [], tags: [],
-    contractual.} =
+    multiplier: RewardMultiplier = 1.0; itemIndex: Natural = 0;
+    data: Natural = 0; shipIndex: Natural = 0;
+    target: Natural = 0): MissionData {.raises: [], tags: [], contractual.} =
   ## Create a new data structure for a mission
   ##
   ## * mType      - The type of the mission
@@ -1286,11 +1287,29 @@ proc initMissionData*(mType: MissionsTypes; time: Positive = 1; targetX: range[
   ## * startBase  - The index of the starting base for the mission
   ## * finished   - If true, the mission is ready to return, otherwise false
   ## * multiplier - The multiplier for the mission reward money and reputation
+  ## * itemIndex  - The index of the proto item to deliver
+  ## * data       - The minumum quality of the cabin (in bases) or passenger index (in accepted)
+  ## * shipIndex  - The index of the prototype ship to destroy
+  ## * target     - The target for the mission (ship, item)
   ##
   ## Returns the new structure with information about the selected mission
-  return MissionData(mType: mType, time: time, targetX: targetX,
-      targetY: targetY, reward: reward, startBase: startBase,
-      finished: finished, multiplier: multiplier)
+  case mType
+  of deliver:
+    return MissionData(mType: mType, time: time, targetX: targetX,
+        targetY: targetY, reward: reward, startBase: startBase,
+        finished: finished, multiplier: multiplier, itemIndex: itemIndex)
+  of passenger:
+    return MissionData(mType: mType, time: time, targetX: targetX,
+        targetY: targetY, reward: reward, startBase: startBase,
+        finished: finished, multiplier: multiplier, data: data)
+  of destroy:
+    return MissionData(mType: mType, time: time, targetX: targetX,
+        targetY: targetY, reward: reward, startBase: startBase,
+        finished: finished, multiplier: multiplier, shipIndex: shipIndex)
+  else:
+    return MissionData(mType: mType, time: time, targetX: targetX,
+        targetY: targetY, reward: reward, startBase: startBase,
+        finished: finished, multiplier: multiplier, target: target)
 
 type
   BaseRecord* = object
