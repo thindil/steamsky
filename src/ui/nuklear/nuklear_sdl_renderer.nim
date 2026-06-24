@@ -266,11 +266,17 @@ type
     ## Used to store data about an application's font
     path*: string
     size*: Positive = 14
+  NkSdlDevice = object
+    ## Used to store data about SDL device
+    fontTexture: TexturePtr
+    cmds: nk_buffer
+    texNull: nk_draw_null_texture
   NkSdl = object
     ## Used to store data about SDL backend
     win: WindowPtr
     renderer: RendererPtr
     atlas: ptr nk_font_atlas
+    dev: NkSdlDevice
 
 var
   fontScale: cfloat = 0.0 ## The scale used to resize a font
