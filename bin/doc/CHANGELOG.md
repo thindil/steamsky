@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Showing items and modules durability on Windows
 - Info about the player's ship's defenders in the combat screen
 - Showing info about the map's cells
+- Crash when quitting from the game in debug mode
 
 ## [12.4] - 2026-06-14
 
