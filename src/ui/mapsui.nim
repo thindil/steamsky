@@ -972,7 +972,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
             except:
               dialog = setError(message = "Can't set map color")
               return
-            if isMouseHovering(rect = getWidgetBounds()):
+            if widgetIsHovered():
               try:
                 showMapInfo(theme = theme, mapXInfo = x, mapYInfo = y)
               except ValueError:
