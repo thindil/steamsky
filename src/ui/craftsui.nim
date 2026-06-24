@@ -142,8 +142,8 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
                     item.name & "(owned: " & $playerShip.cargo[
                     cargoIndex].amount & ")", color = theme.colors[greenColor])
               else:
-                colorLabel(str = $craft.materialAmounts[mIndex] & "x" & item.name,
-                    color = theme.colors[redColor])
+                colorLabel(str = $craft.materialAmounts[mIndex] & "x" &
+                    item.name, color = theme.colors[redColor])
       var haveTool: bool = false
       if craft.tool == "None":
         haveTool = true
@@ -155,7 +155,8 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
           setLayoutRowDynamic(height = labelHeight, cols = 1)
           for iIndex, item in itemsList:
             haveTool = false
-            if item.itemType == craft.tool and item.value[1] <= craft.toolQuality:
+            if item.itemType == craft.tool and item.value[1] <=
+                craft.toolQuality:
               let cargoIndex: int = findItem(inventory = playerShip.cargo,
                   protoIndex = iIndex, quality = craft.toolQuality,
                   itemQuality = any, craftBonus = any, craftMalus = any)
@@ -362,9 +363,8 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
     if option(label = "Assign selected member", selected = assign == selected):
       assign = selected
     worker = comboList(items = workers, selected = worker,
-        itemHeight = labelHeight.int,
-
-x = 380, y = 150, tooltip = "Assign the crew member from the list. The sign + after name means that this crew member has needed skill, the sign ++ after name means that his/her needed skill is the best in the crew.")
+        itemHeight = labelHeight.int, x = 380, y = 150,
+        tooltip = "Assign the crew member from the list. The sign + after name means that this crew member has needed skill, the sign ++ after name means that his/her needed skill is the best in the crew.")
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = setImage, label = $recipe.recipeType,
