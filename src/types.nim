@@ -1254,14 +1254,14 @@ type
     ## * data       - The minumum quality of the cabin (in bases) or passenger index (in accepted)
     ## * shipIndex  - The index of the prototype ship to destroy
     ## * target     - The target for the mission (ship, item)
-    time*: Positive = 1
-    targetX*: range[0..MapXRange.high]
-    targetY*: range[0..MapYRange.high]
+    time: Positive = 1
+    targetX: range[0..MapXRange.high]
+    targetY: range[0..MapYRange.high]
     reward*: Positive = 1
     startBase*: BasesRange = 1
     finished*: bool
     multiplier*: RewardMultiplier
-    case mType*: MissionsTypes
+    case mType: MissionsTypes
     of deliver:
       itemIndex*: Natural
     of passenger:
@@ -1310,6 +1310,15 @@ proc initMissionData*(mType: MissionsTypes; time: Positive = 1; targetX: range[
     return MissionData(mType: mType, time: time, targetX: targetX,
         targetY: targetY, reward: reward, startBase: startBase,
         finished: finished, multiplier: multiplier, target: target)
+
+typeGetterSetter(baseType = MissionData, varName = mission, name = mType,
+    typ = MissionsTypes)
+typeGetterSetter(baseType = MissionData, varName = mission, name = time,
+    typ = Positive)
+typeGetterSetter(baseType = MissionData, varName = mission, name = targetX,
+    typ = range[0..MapXRange.high])
+typeGetterSetter(baseType = MissionData, varName = mission, name = targetY,
+    typ = range[0..MapYRange.high])
 
 type
   BaseRecord* = object
