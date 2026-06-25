@@ -173,7 +173,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
-  setLayoutRowDynamic(height = buttonHeight, cols = 5)
+  setLayoutRowDynamic(height = editHeight, cols = 5)
   labelButton(title = "Move ship"):
     playerShip.skyX = shipX
     playerShip.skyY = shipY
@@ -205,7 +205,7 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Upgrade progress:")
   upgradeProgress = property2(name = "#", min = 1, val = upgradeProgress,
       max = 100, step = 1, incPerPixel = 1)
-  setLayoutRowDynamic(height = buttonHeight, cols = 1)
+  setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
   labelButton(title = "Change"):
     for index, module in modulesList:
       if protoModules[protoSelected] == module.name:
@@ -547,7 +547,7 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     layoutSpaceStatic(height = groupHeight, widgetsCount = 2):
       row(x = 0, y = 0, w = groupOneWidth, h = groupHeight):
         group(title = "debugButtons", flags = {windowNoScrollbar}):
-          setLayoutRowDynamic(height = buttonHeight, cols = 1)
+          setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
           labelButton(title = "Ship"):
             debugTab = ship
           labelButton(title = "Crew"):
