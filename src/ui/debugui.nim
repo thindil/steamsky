@@ -378,7 +378,7 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Money:")
   money = property2(name = "#", min = 0, val = money, max = 1_000_000, step = 1,
       incPerPixel = 1)
-  setLayoutRowDynamic(height = buttonHeight, cols = 1)
+  setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
   labelButton(title = "Update"):
     let baseIndex: BasesRange = baseSelected + 1
     skyBases[baseIndex].baseType = $baseTypeSelected
@@ -445,7 +445,7 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
     label(str = "Duration:")
     shipDuration = property2(name = "#", min = 60, val = shipDuration,
         max = 1_000, step = 1, incPerPixel = 1)
-    setLayoutRowDynamic(height = buttonHeight, cols = 1)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     labelButton(title = "Add ship"):
       var friendlyShips: seq[Positive] = @[]
       try:
@@ -484,7 +484,7 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
     label(str = "Duration:")
     eventDuration = property2(name = "#", min = 15, val = eventDuration,
         max = 12_000, step = 1, incPerPixel = 1)
-    setLayoutRowDynamic(height = buttonHeight, cols = 1)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     labelButton(title = "Add event"):
       case eventSelected
       of 0:
