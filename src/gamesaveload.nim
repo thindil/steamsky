@@ -374,14 +374,14 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
   # Load accepted missions
   logMessage(message = "Loading accepted missions...", messageLevel = lvlInfo)
   for index, mission in savedGame.findAll(tag = "acceptedmission"):
-    var tmpMission: MissionData = MissionData(mtype: mission.attr(name =
-      "type").parseInt.MissionsTypes, time: mission.attr(
-          name = "time").parseInt,
-      targetX: mission.attr(name = "targetx").parseInt, targetY: mission.attr(name =
-      "targety").parseInt, reward: mission.attr(name = "reward").parseInt,
-      startBase: mission.attr(name = "startbase").parseInt,
-          finished: mission.attr(name =
-      "finished") == "Y", multiplier: 1.0)
+    var tmpMission: MissionData = initMissionData(mtype = mission.attr(
+        name = "type").parseInt.MissionsTypes, time = mission.attr(
+        name = "time").parseInt, targetX = mission.attr(
+        name = "targetx").parseInt, targetY = mission.attr(
+        name = "targety").parseInt, reward = mission.attr(
+        name = "reward").parseInt, startBase = mission.attr(
+        name = "startbase").parseInt, finished = mission.attr(
+        name = "finished") == "Y", multiplier = 1.0)
     case tmpMission.mType
     of deliver:
       tmpMission.itemIndex = mission.attr(name = "target").parseInt

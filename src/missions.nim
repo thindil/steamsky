@@ -178,18 +178,18 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
   const qualitiesArray: array[10, int] = [1, 11, 21, 31, 41, 51, 61, 71, 81, 91]
   var index: Natural = missionsAmount
   while index > 0:
-    var mission: MissionData = MissionData(time: 1, reward: 1, startBase: 1)
+    var mission: MissionData = MissionData()
     let mType: MissionsTypes = getRandom(min = MissionsTypes.low.int,
         max = MissionsTypes.high.int).MissionsTypes
     case mType
     of deliver:
-      mission = MissionData(mtype: deliver, time: 1, targetX: 0, targetY: 0,
-          reward: 1, startBase: 1, finished: false, itemIndex: missionsItems[
-          getRandom(min = 0, max = missionsItems.high)], multiplier: 1.0)
+      mission = initMissionData(mtype = deliver, time = 1, targetX = 0, targetY = 0,
+          reward = 1, startBase = 1, finished = false, itemIndex = missionsItems[
+          getRandom(min = 0, max = missionsItems.high)], multiplier = 1.0)
     of destroy:
-      mission = MissionData(mtype: destroy, time: 1, targetX: 0, targetY: 0,
-          reward: 1, startBase: 1, finished: false, shipIndex: enemies[
-          getRandom(min = 0, max = enemies.high)], multiplier: 1.0)
+      mission = initMissionData(mtype = destroy, time = 1, targetX = 0, targetY = 0,
+          reward = 1, startBase = 1, finished = false, shipIndex = enemies[
+          getRandom(min = 0, max = enemies.high)], multiplier = 1.0)
       if mission.shipIndex == 0:
         continue
       while true:
@@ -199,8 +199,8 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
             playerShip.skyX and missionY != playerShip.skyY:
           break
     of patrol:
-      mission = MissionData(mtype: patrol, time: 1, targetX: 0, targetY: 0,
-          reward: 1, startBase: 1, finished: false, multiplier: 1.0, target: 1)
+      mission = initMissionData(mtype = patrol, time = 1, targetX = 0, targetY = 0,
+          reward = 1, startBase = 1, finished = false, multiplier = 1.0, target = 1)
       for j in 1..10:
         missionX = getRandom(min = minX, max = maxX)
         missionY = getRandom(min = minY, max = maxY)
@@ -211,8 +211,8 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
       if mission.target == 1:
         continue
     of explore:
-      mission = MissionData(mtype: explore, time: 1, targetX: 0, targetY: 0,
-          reward: 1, startBase: 1, finished: false, multiplier: 1.0, target: 1)
+      mission = initMissionData(mtype = explore, time = 1, targetX = 0, targetY = 0,
+          reward = 1, startBase = 1, finished = false, multiplier = 1.0, target = 1)
       for j in 1..10:
         missionX = getRandom(min = minX, max = maxX)
         missionY = getRandom(min = minY, max = maxY)
@@ -223,9 +223,9 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
       if mission.target == 1:
         continue
     of passenger:
-      mission = MissionData(mtype: passenger, time: 1, targetX: 0, targetY: 0,
-          reward: 1, startBase: 1, finished: false, multiplier: 1.0,
-          data: qualitiesArray[getRandom(min = qualitiesArray.low,
+      mission = initMissionData(mtype = passenger, time = 1, targetX = 0, targetY = 0,
+          reward = 1, startBase = 1, finished = false, multiplier = 1.0,
+          data = qualitiesArray[getRandom(min = qualitiesArray.low,
               max = qualitiesArray.high)])
     if mission.mType in {deliver, passenger}:
       while true:

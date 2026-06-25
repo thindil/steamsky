@@ -267,32 +267,32 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
           reward: int = mission.attr(name = "reward").parseInt
         case mType
         of deliver:
-          skyBases[baseIndex].missions.add(y = MissionData(mType: deliver,
-              itemIndex: targetIndex.parseInt, time: time, targetX: targetX,
-              targetY: targetY, reward: reward, startBase: baseIndex,
-              finished: false, multiplier: 1.0))
+          skyBases[baseIndex].missions.add(y = initMissionData(mType = deliver,
+              itemIndex = targetIndex.parseInt, time = time, targetX = targetX,
+              targetY = targetY, reward = reward, startBase = baseIndex,
+              finished = false, multiplier = 1.0))
         of destroy:
-          skyBases[baseIndex].missions.add(y = MissionData(mType: destroy,
-              shipIndex: targetIndex.parseInt, time: time, targetX: targetX,
-              targetY: targetY, reward: reward, startBase: baseIndex,
-              finished: false, multiplier: 1.0))
+          skyBases[baseIndex].missions.add(y = initMissionData(mType = destroy,
+              shipIndex = targetIndex.parseInt, time = time, targetX = targetX,
+              targetY = targetY, reward = reward, startBase = baseIndex,
+              finished = false, multiplier = 1.0))
         of patrol:
-          skyBases[baseIndex].missions.add(y = MissionData(mType: patrol,
-              target: target, time: time, targetX: targetX, targetY: targetY,
-              reward: reward, startBase: baseIndex, finished: false,
-              multiplier: 1.0))
+          skyBases[baseIndex].missions.add(y = initMissionData(mType = patrol,
+              target = target, time = time, targetX = targetX, targetY = targetY,
+              reward = reward, startBase = baseIndex, finished = false,
+              multiplier = 1.0))
         of explore:
-          skyBases[baseIndex].missions.add(y = MissionData(mType: explore,
-              target: target, time: time, targetX: targetX, targetY: targetY,
-              reward: reward, startBase: baseIndex, finished: false,
-              multiplier: 1.0))
+          skyBases[baseIndex].missions.add(y = initMissionData(mType = explore,
+              target = target, time = time, targetX = targetX, targetY = targetY,
+              reward = reward, startBase = baseIndex, finished = false,
+              multiplier = 1.0))
         of passenger:
           if target > 91:
             target = 91
-          skyBases[baseIndex].missions.add(y = MissionData(mType: passenger,
-              data: target, time: time, targetX: targetX, targetY: targetY,
-              reward: reward, startBase: baseIndex, finished: false,
-              multiplier: 1.0))
+          skyBases[baseIndex].missions.add(y = initMissionData(mType = passenger,
+              data = target, time = time, targetX = targetX, targetY = targetY,
+              reward = reward, startBase = baseIndex, finished = false,
+              multiplier = 1.0))
       for baseItem in base.findAll(tag = "item"):
         if baseItem.attr(name = "durability").len == 0:
           continue
