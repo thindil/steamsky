@@ -534,10 +534,12 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   ## Returns parameter dialog.
   const
     width: float = 700
-    height: float = 500
-    groupHeight: float = height - 40
     groupOneWidth: float = width * 0.25
     groupTwoWidth: float = width * 0.74
+
+  let
+    height: float = (editHeight * 10) + 60
+    groupHeight: float = height - 40
   updateDialog(width = width, height = height)
   window(name = "Debug options", x = 40, y = 0, w = width, h = height, flags = {
       windowBorder, windowTitle, windowMinimizable, windowMovable,
