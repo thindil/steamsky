@@ -113,7 +113,8 @@ proc setCargoData() {.raises: [], tags: [], contractual.} =
         toLower = false, moreInfo = false))
   cargoSelected = 0
   let item: InventoryData = playerShip.cargo[cargoSelected]
-  cargoName = getItemName(item = item, damageInfo = false, toLower = false, moreInfo = false)
+  cargoName = getItemName(item = item, damageInfo = false, toLower = false,
+      moreInfo = false)
   cargoAmount = item.amount
   cargoQuality = item.quality.ord
 
@@ -269,8 +270,8 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
     for skill in memberSkills:
       for index, pSkill in skillsList:
         if pSkill.name == skill.name:
-          playerShip.crew[crewSelected].skills.add(y = initSkillInfo(index = index,
-              level = skill.value, experience = 0))
+          playerShip.crew[crewSelected].skills.add(y = initSkillInfo(
+              index = index, level = skill.value, experience = 0))
           break
   labelButton(title = "Add skill"):
     memberSkills.add(y = AttributeData(name: availableSkills[skillSelected],
@@ -488,15 +489,18 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
     labelButton(title = "Add event"):
       case eventSelected
       of 0:
-        eventsList.add(y = EventData(skyX: skyBases[base2Selected].skyX, skyY: skyBases[
-            base2Selected].skyY, time: eventDuration, eType: disease))
+        eventsList.add(y = EventData(skyX: skyBases[base2Selected].skyX,
+            skyY: skyBases[base2Selected].skyY, time: eventDuration,
+                eType: disease))
       of 1:
         eventsList.add(y = EventData(skyX: skyBases[base2Selected].skyX,
-            skyY: skyBases[base2Selected].skyY, time: eventDuration, eType: doublePrice,
+            skyY: skyBases[base2Selected].skyY, time: eventDuration,
+                eType: doublePrice,
             itemIndex: item3Selected))
       of 2:
-        eventsList.add(y = EventData(skyX: skyBases[base2Selected].skyX, skyY: skyBases[
-            base2Selected].skyY, time: eventDuration, eType: fullDocks))
+        eventsList.add(y = EventData(skyX: skyBases[base2Selected].skyX,
+            skyY: skyBases[base2Selected].skyY, time: eventDuration,
+                eType: fullDocks))
       else:
         discard
       skyMap[skyBases[base2Selected].skyX][skyBases[
