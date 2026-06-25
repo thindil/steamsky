@@ -30,6 +30,17 @@
 import contracts
 import nk_types
 
+type
+  FontAtlasFormat* = enum
+    ## The format of fonts
+    atlasAlpha8, atlasRGBA32
+
+proc nk_font_atlas_init_default*(atlas: ptr nk_font_atlas) {.importc, nodecl,
+    raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+proc nk_font_atlas_begin*(atlas: ptr nk_font_atlas) {.importc, nodecl, raises: [],
+    tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_font_atlas_add_default*(atlas: ptr nk_font_atlas; height: cfloat;
     config: ptr nk_font_config): ptr nk_font {.importc, nodecl, raises: [],
         tags: [], contractual.}
