@@ -225,8 +225,8 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
   if newMember != crewSelected:
     crewSelected = newMember
     setSelectedMember()
-  setLayoutRowDynamic(height = 370, cols = 3)
-  group(title = "memberProperties", flags = {windowNoScrollbar}):
+  setLayoutRowDynamic(height = (editHeight * 7) + 5, cols = 3)
+  group(title = "memberProperties", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = editHeight, cols = 2)
     label(str = "Health")
     memberProperties[0] = property2(name = "#", min = 1, val = memberProperties[
@@ -253,7 +253,7 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
           val = skill.value, max = 100, step = 1, incPerPixel = 1)
       if newVal != skill.value:
         memberSkills[index].value = newVal
-  setLayoutRowDynamic(height = buttonHeight, cols = 3)
+  setLayoutRowDynamic(height = dialogButtonHeight, cols = 3)
   labelButton(title = "Change"):
     playerShip.crew[crewSelected].health = memberProperties[0]
     playerShip.crew[crewSelected].thirst = memberProperties[1]
