@@ -329,7 +329,7 @@ proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
     setLayoutRowDynamic(height = editHeight, cols = 1)
     itemSelected = comboList(items = itemsNames, selected = itemSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
-    labelButton(title = "Add"):
+    labelButton(title = "Select"):
       itemName = itemsNames[itemSelected]
       debugDialog = none
 
@@ -343,7 +343,7 @@ proc showUpdateItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
     setLayoutRowDynamic(height = editHeight, cols = 1)
     cargoSelected = comboList(items = cargoNames, selected = cargoSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
-    labelButton(title = "Update"):
+    labelButton(title = "Select"):
       cargoName = cargoNames[cargoSelected]
       let item = playerShip.cargo[cargoSelected]
       cargoAmount = item.amount
@@ -429,7 +429,7 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
 
 proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes to the world's events
-  setLayoutRowDynamic(height = 370, cols = 2)
+  setLayoutRowDynamic(height = (editHeight * 7), cols = 2)
   group(title = "shipProperties", flags = {windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.6, 0.2])
     label(str = "Ship:")
@@ -508,8 +508,9 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
 
 proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of proto ships which can be set
-  window(name = "Ships", x = 300, y = 100, w = 300, h = 120, flags = {
-      windowBorder, windowTitle}):
+  window(name = "Ships", x = 300, y = 100, w = 300, h = (editHeight +
+      dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
+      windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
     shipSelected = comboList(items = shipsNames, selected = shipSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
@@ -519,8 +520,9 @@ proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
 
 proc showSetBaseEventDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases for an event
-  window(name = "Bases", x = 300, y = 100, w = 300, h = 120, flags = {
-      windowBorder, windowTitle}):
+  window(name = "Bases", x = 300, y = 100, w = 300, h = (editHeight +
+      dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
+      windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
     base2Selected = comboList(items = basesNames, selected = base2Selected,
         itemHeight = labelHeight.int, x = 290, y = 200)
