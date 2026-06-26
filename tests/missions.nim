@@ -35,8 +35,8 @@ suite "Unit tests for missions module":
 
   test "Deleting a mission.":
     acceptedMissions = @[]
-    acceptedMissions.add(y = MissionData(mType: explore, time: 1, targetX: 1,
-        targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
+    acceptedMissions.add(y = initMissionData(mType = explore, time = 1, targetX = 1,
+        targetY = 1, reward = 1, startBase = 1, finished = true, multiplier = 0.0, target = 0))
     deleteMission(0, false)
     check:
       acceptedMissions.len == 0
@@ -47,8 +47,8 @@ suite "Unit tests for missions module":
 
   test "Update accepted missions":
     acceptedMissions = @[]
-    acceptedMissions.add(y = MissionData(mType: explore, time: 10, targetX: 1,
-        targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
+    acceptedMissions.add(y = initMissionData(mType = explore, time = 10, targetX = 1,
+        targetY = 1, reward = 1, startBase = 1, finished = true, multiplier = 0.0, target = 0))
     updateMissions(8)
     check:
       acceptedMissions[0].time == 2
@@ -64,8 +64,8 @@ suite "Unit tests for missions module":
 
   test "Updating a mission.":
     acceptedMissions = @[]
-    acceptedMissions.add(y = MissionData(mType: explore, time: 10, targetX: 1,
-        targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
+    acceptedMissions.add(y = initMissionData(mType = explore, time = 10, targetX = 1,
+        targetY = 1, reward = 1, startBase = 1, finished = true, multiplier = 0.0, target = 0))
     updateMission(0)
     check:
       acceptedMissions[0].finished

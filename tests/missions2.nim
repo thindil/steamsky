@@ -54,8 +54,8 @@ suite "Unit tests for missions2 module":
 
   test "Finish an accepted mission":
     missions.acceptedMissions = @[]
-    missions.acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
-        targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
+    missions.acceptedMissions.add(y = initMissionData(mType = explore, time = 1000, targetX = 2,
+        targetY = 2, reward = 1, startBase = 1, finished = true, multiplier = 1.0, target = 0))
     finishMission(0)
     check:
       acceptedMissions.len == 0
@@ -65,25 +65,25 @@ suite "Unit tests for missions2 module":
         homeBase = 1, faction = "DRONES", orders = [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
         1, 0, 0], loyalty = 100, health = 100, tired = 0, hunger = 0,
         thirst = 0, skills = @[], attributes = @[attribute, attribute, attribute, attribute], contractLength = 1000))
-    missions.acceptedMissions.add(y = MissionData(mType: passenger, time: 1000,
-        targetX: 1, targetY: 1, reward: 1, startBase: 1, finished: false,
-            multiplier: 1.0, data: 2))
+    missions.acceptedMissions.add(y = initMissionData(mType = passenger, time = 1000,
+        targetX = 1, targetY = 1, reward = 1, startBase = 1, finished = false,
+            multiplier = 1.0, data = 2))
     finishMission(0)
     check:
       acceptedMissions.len == 0
 
   test "Auto finish a mission.":
     missions.acceptedMissions = @[]
-    missions.acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
-        targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
+    missions.acceptedMissions.add(y = initMissionData(mType = explore, time = 1000, targetX = 2,
+        targetY = 2, reward = 1, startBase = 1, finished = true, multiplier = 1.0, target = 0))
     check:
       autoFinishMissions().len == 0 and acceptedMissions.len == 0
 
   test "Accepting a mission.":
     skyBases[1].missions = @[]
-    skyBases[1].missions.add(y = MissionData(mType: explore, time: 1000,
-        targetX: 2, targetY: 2, reward: 1, startBase: 1, finished: true,
-            multiplier: 1.0, target: 0))
+    skyBases[1].missions.add(y = initMissionData(mType = explore, time = 1000,
+        targetX = 2, targetY = 2, reward = 1, startBase = 1, finished = true,
+            multiplier = 1.0, target = 0))
     missions.acceptedMissions = @[]
     acceptMission(0)
     check:
