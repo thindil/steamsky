@@ -1257,10 +1257,10 @@ type
     time: Positive = 1
     targetX: range[0..MapXRange.high]
     targetY: range[0..MapYRange.high]
-    reward*: Positive = 1
-    startBase*: BasesRange = 1
-    finished*: bool
-    multiplier*: RewardMultiplier
+    reward: Positive = 1
+    startBase: BasesRange = 1
+    finished: bool
+    multiplier: RewardMultiplier
     case mType: MissionsTypes
     of deliver:
       itemIndex*: Natural
@@ -1319,6 +1319,13 @@ typeGetterSetter(baseType = MissionData, varName = mission, name = targetX,
     typ = range[0..MapXRange.high])
 typeGetterSetter(baseType = MissionData, varName = mission, name = targetY,
     typ = range[0..MapYRange.high])
+typeGetterSetter(baseType = MissionData, varName = mission, name = reward,
+    typ = Positive)
+typeGetterSetter(baseType = MissionData, varName = mission, name = startBase,
+    typ = BasesRange)
+typeGetterSetter(baseType = MissionData, varName = mission, name = finished, typ = bool)
+typeGetterSetter(baseType = MissionData, varName = mission, name = multiplier,
+    typ = RewardMultiplier)
 
 type
   BaseRecord* = object
