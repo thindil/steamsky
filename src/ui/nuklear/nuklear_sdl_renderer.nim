@@ -275,7 +275,7 @@ type
     ## Used to store data about SDL backend
     win: WindowPtr
     renderer: RendererPtr
-    atlas: ptr nk_font_atlas
+    atlas: AtlasPtr
     dev: NkSdlDevice
 
 var

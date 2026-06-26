@@ -34,21 +34,25 @@ type
   FontAtlasFormat* = enum
     ## The format of fonts
     atlasAlpha8, atlasRGBA32
+  AtlasPtr* = ptr nk_font_atlas
 
-proc nk_font_atlas_init_default*(atlas: ptr nk_font_atlas) {.importc, nodecl,
+proc nk_font_atlas_init_default*(atlas: AtlasPtr) {.importc, nodecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_font_atlas_begin*(atlas: ptr nk_font_atlas) {.importc, nodecl, raises: [],
+proc nk_font_atlas_begin*(atlas: ptr AtlasPtr) {.importc, nodecl, raises: [],
     tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_font_atlas_add_default*(atlas: ptr nk_font_atlas; height: cfloat;
+proc nk_font_atlas_add_default*(atlas: AtlasPtr; height: cfloat;
     config: ptr nk_font_config): ptr nk_font {.importc, nodecl, raises: [],
         tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_font_atlas_add_from_file*(atlas: ptr nk_font_atlas; filePath: cstring;
+proc nk_font_atlas_add_from_file*(atlas: AtlasPtr; filePath: cstring;
     height: cfloat;  config: ptr nk_font_config): ptr nk_font {.importc,
         nodecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_font_atlas_clear*(atlas: ptr nk_font_atlas) {.importc, nodecl, raises: [
+proc nk_font_atlas_clear*(atlas: AtlasPtr) {.importc, nodecl, raises: [
     ], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+proc nk_font_atlas_bake*(atlas: AtlasPtr; width, height: var cint;
+    fmt: FontAtlasFormat): ptr {.importc, nodecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
