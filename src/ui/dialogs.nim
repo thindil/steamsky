@@ -131,9 +131,7 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
   if dialog != questionDialog:
     return
   try:
-    const
-      width: float = 350
-      height: float = 150
+    const width: float = 350
 
     proc setMainMenu(dialog: var GameDialog; state: var GameState) {.raises: [],
     tags: [], contractual.} =
@@ -150,6 +148,8 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
       closePopup()
       dialog = none
 
+    let height: float = (labelHeight * questionData.lines) +
+        dialogButtonHeight + 60
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Question", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
@@ -660,7 +660,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       if dialog == giveDialog:
         label(str = "To:")
         let newMember: Natural = comboList(items = crewList,
-            selected = manipulateData.data, itemHeight = labelHeight.int, x = 200, y = 150)
+            selected = manipulateData.data, itemHeight = labelHeight.int,
+            x = 200, y = 150)
         if newMember != manipulateData.data:
           manipulateData.data = newMember
           updateMaxAmount(dialog = dialog)
