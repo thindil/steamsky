@@ -324,8 +324,9 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be added to the player's
   ## ship's cargo
-  window(name = "Item to add", x = 300, y = 100, w = 300, h = 120, flags = {
-      windowBorder, windowTitle}):
+  window(name = "Item to add", x = 300, y = 100, w = 300, h = (editHeight +
+      dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
+      windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
     itemSelected = comboList(items = itemsNames, selected = itemSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
@@ -338,8 +339,9 @@ proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
 proc showUpdateItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be updated in the player's
   ## ship's cargo
-  window(name = "Item to update", x = 300, y = 100, w = 300, h = 120, flags = {
-      windowBorder, windowTitle}):
+  window(name = "Item to update", x = 300, y = 100, w = 300, h = (editHeight +
+      dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
+      windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
     cargoSelected = comboList(items = cargoNames, selected = cargoSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
@@ -400,8 +402,9 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
 
 proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases which can be set
-  window(name = "Bases", x = 300, y = 100, w = 300, h = 120, flags = {
-      windowBorder, windowTitle}):
+  window(name = "Bases", x = 300, y = 100, w = 300, h = (editHeight +
+      dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
+      windowNoScrollbar}):
     setLayoutRowDynamic(height = buttonHeight, cols = 1)
     baseSelected = comboList(items = basesNames, selected = baseSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
