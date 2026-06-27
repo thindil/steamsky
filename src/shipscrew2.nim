@@ -20,7 +20,7 @@
 ## module to avoid circular dependencies.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import crafts, crewinventory, game, halloffame, items, messages, missions,
     shipscargo, shipscrew, types, utils
 
@@ -46,7 +46,9 @@ proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.raises: [
           break
       for mission in acceptedMissions.mitems:
         if mission.mType == passenger and mission.data > memberIndex:
-          mission.data.inc
+          {.ruleOff: "assignments".}
+          mission.data = mission.data + 1
+          {.ruleOn: "assignments".}
       if deleted:
         return
     ship.crew.delete(i = memberIndex)

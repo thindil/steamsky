@@ -105,7 +105,9 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [
             owner.dec
       for aMission in acceptedMissions.mitems:
         if aMission.mType == passenger and aMission.data > mission.data:
-          aMission.data.dec
+          {.ruleOff: "assignments".}
+          aMission.data  = aMission.data - 1
+          {.ruleOn: "assignments".}
     for index, aMission in acceptedMissions:
       if aMission.finished:
         skyMap[skyBases[aMission.startBase].skyX][skyBases[
