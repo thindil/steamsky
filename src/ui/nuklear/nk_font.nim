@@ -35,6 +35,7 @@ type
     ## The format of fonts
     atlasAlpha8, atlasRGBA32
   AtlasPtr* = ptr nk_font_atlas
+    ## Used to store a pointer to the font data
 
 proc nk_font_atlas_init_default*(atlas: AtlasPtr) {.importc, nodecl,
     raises: [], tags: [], contractual.}
@@ -55,4 +56,7 @@ proc nk_font_atlas_clear*(atlas: AtlasPtr) {.importc, nodecl, raises: [
   ## A binding to Nuklear's function. Internal use only
 proc nk_font_atlas_bake*(atlas: AtlasPtr; width, height: var cint;
     fmt: FontAtlasFormat): ptr {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+proc nk_font_atlas_end*(atlas: AtlasPtr; texture: nk_handle;
+    texNull: nk_draw_null_texture) {.importc, nodecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
