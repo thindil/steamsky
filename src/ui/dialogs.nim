@@ -420,7 +420,10 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
   try:
     var height: float = dialogButtonHeight + 60
     for data in infoData.data:
-      height += (labelHeight * data.lines).float
+      height += (labelHeight * data.lines) + (data.lines * 2)
+    for amount in infoData.widgetsAmount:
+      if amount > 1:
+        height -= (labelHeight * (amount.float - 1))
     updateDialog(width = infoWidth, height = height)
     popup(pType = staticPopup, title = infoData.title, x = dialogX,
         y = dialogY, w = infoWidth, h = height, flags = {windowBorder,
