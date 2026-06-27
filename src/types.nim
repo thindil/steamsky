@@ -1263,13 +1263,13 @@ type
     multiplier: RewardMultiplier
     case mType: MissionsTypes
     of deliver:
-      itemIndex*: Natural
+      itemIndex: Natural
     of passenger:
-      data*: Natural
+      data: Natural
     of destroy:
-      shipIndex*: Natural
+      shipIndex: Natural
     else:
-      target*: Natural
+      target: Natural
 
 proc initMissionData*(mType: MissionsTypes; time: Positive = 1; targetX: range[
     0..MapXRange.high] = 0; targetY: range[0..MapYRange.high] = 0;
@@ -1323,9 +1323,18 @@ typeGetterSetter(baseType = MissionData, varName = mission, name = reward,
     typ = Positive)
 typeGetterSetter(baseType = MissionData, varName = mission, name = startBase,
     typ = BasesRange)
-typeGetterSetter(baseType = MissionData, varName = mission, name = finished, typ = bool)
+typeGetterSetter(baseType = MissionData, varName = mission, name = finished,
+    typ = bool)
 typeGetterSetter(baseType = MissionData, varName = mission, name = multiplier,
     typ = RewardMultiplier)
+typeGetterSetter(baseType = MissionData, varName = mission, name = itemIndex,
+    typ = Natural)
+typeGetterSetter(baseType = MissionData, varName = mission, name = data,
+    typ = Natural)
+typeGetterSetter(baseType = MissionData, varName = mission, name = shipIndex,
+    typ = Natural)
+typeGetterSetter(baseType = MissionData, varName = mission, name = target,
+    typ = Natural)
 
 type
   BaseRecord* = object
