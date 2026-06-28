@@ -721,7 +721,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           ActionData(icon: dropColoredIcon, label: "Drop")
         else:
           ActionData(icon: buyIcon, label: "Invalid")
-      setLayoutRowDynamic(height = buttonHeight, cols = 2)
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       imageLabelButton(image = images[actionButton.icon],
           label = actionButton.label, alignment = right):
