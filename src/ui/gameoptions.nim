@@ -36,8 +36,8 @@ proc showKeyDialog*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened or dialog was closed.
   const
     width: float = 300
-    height: float = 200
     windowName: string = "Set the new shortcut"
+  let height: float = (labelHeight * 4) + 60
 
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
