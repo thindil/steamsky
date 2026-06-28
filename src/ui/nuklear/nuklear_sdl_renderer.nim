@@ -88,6 +88,10 @@ type
     SDL_SCANCODE_RCTRL = 228
   SDL_Mouse_Buttons = enum
     SDL_BUTTON_LEFT = 1, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT
+  SDL_Pixel_Format = enum
+    SDL_PIXELFORMAT_ARGB8888 = 0x16362004u
+  SDL_Texture_Access = enum
+    SDL_TEXTUREACCESS_STATIC, SDL_TEXTUREACCESS_STREAMING, SDL_TEXTUREACCESS_TARGET
 
 const SDLK_SCANCODE_MASK: cint = 1 shl 30
 proc SDL_ScancodeToKeycode(code: SDL_Scancode): uint {.raises: [], tags: [],
@@ -207,6 +211,10 @@ proc SDL_SetWindowIcon(window: WindowPtr; icon: SurfacePtr) {.importc, nodecl,
   ## Internal SDL binding
 proc SDL_CreateTextureFromSurface(renderer: RendererPtr;
     surface: SurfacePtr): TexturePtr {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## Internal SDL binding
+proc SDL_CreteTexture(renderer: RendererPtr; format: SDL_Pixel_Format;
+    access: SDL_Texture_Access; w, h: cint): TexturePtr {.importc, nodecl,
+    raises: [], tags: [], contractual.}
   ## Internal SDL binding
 proc SDL_FreeSurface(surface: SurfacePtr) {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL binding
