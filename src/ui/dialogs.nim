@@ -628,8 +628,12 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
   ## the dialog. Returns true if an item was sold or bought, otherwise false
   result = false
   try:
-    const height: float = 240
     let width: float = windowWidth / 1.5
+    var height: float = editHeight + (dialogButtonHeight * 2) + labelHeight + 70
+    if dialog == giveDialog:
+      height += editHeight
+    elif dialog in buyDialog..dropDialog:
+      height += labelHeight
     updateDialog(width = width, height = height)
     window(name = manipulateData.title, x = dialogX, y = dialogY, w = width,
         h = height, flags = {windowBorder, windowTitle, windowNoScrollbar,
