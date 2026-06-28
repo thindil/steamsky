@@ -20,6 +20,7 @@
 import std/tables
 import contracts, nimalyzer
 
+{.push ruleOff: "objects".}
 type
   CrewNoSpaceError* = object of CatchableError
     ## Raised when there is no space for new item in crew member inventory
@@ -50,7 +51,9 @@ type
 
   NoFreeSpaceError* = object of CatchableError
     ## Raised when there is no space in a trader's cargo to sell an item
+{.push ruleOn: "objects".}
 
+type
   ShipUpgrade* = enum
     ## Available types of the player's ship's upgrades
     none, durability, maxValue, value
