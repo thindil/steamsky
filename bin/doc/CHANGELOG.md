@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Info about the player's ship's defenders in the combat screen
 - Showing info about the map's cells
 - Crash when quitting from the game in debug mode
+- Counting height of dialogs with information about items
 
 ## [12.4] - 2026-06-14
 
