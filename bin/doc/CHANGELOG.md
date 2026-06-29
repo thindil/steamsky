@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Crash when quitting from the game in debug mode
 - Counting height of dialogs with information about items
 - Stopping setting keyboard shortcuts with Escape key
+- Setting the player's goal for a new game
 
 ## [12.4] - 2026-06-14
 
