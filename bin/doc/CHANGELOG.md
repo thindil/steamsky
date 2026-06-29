@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about the map's cells
 - Crash when quitting from the game in debug mode
 - Counting height of dialogs with information about items
+- Stopping setting keyboard shortcuts with Escape key
 
 ## [12.4] - 2026-06-14
 
