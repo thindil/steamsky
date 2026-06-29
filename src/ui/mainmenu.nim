@@ -851,14 +851,7 @@ proc startGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   newGameSettings.playerGender = (if playerGender == 3: 'F' else: 'M')
   if selectedGoal == "Random":
     clearCurrentGoal()
-    currentGoal = try:
-        goalsList[getRandom(min = 1, max = goalsList.len)]
-      except:
-        try:
-          goalsList[getRandom(min = 1, max = goalsList.len)]
-        except:
-          dialog = setError(message = "Can't set the current goal.")
-          return
+    currentGoal.goalType = random
   newGameSettings.playerName = playerName
   newGameSettings.shipName = shipName
   if currentFaction == playerFactions.high:
@@ -890,6 +883,7 @@ proc startGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   newGameSettings.pricesBonus = diffSettings[7].float / 100.0
   try:
     newGame()
+    selectedGoal = goalText(index = currentGoal.index.parseInt)
     if debugMode == menu:
       setDebugData()
   except:
