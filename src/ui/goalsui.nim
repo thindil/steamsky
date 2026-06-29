@@ -122,10 +122,11 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             except:
               dialog = setError(message = "Can't set the current goal.")
           elif dialog != newGoalDialog:
-            try:
-              currentGoal = goalsList[getRandom(min = 1, max = goalsList.len - 1)]
-            except:
-              dialog = setError(message = "Can't set random current goal.")
+            while true:
+              let goalIndex: Positive = getRandom(min = 1, max = goalsList.len - 1)
+              if goalsList.hasKey(key = goalIndex):
+                currentGoal = goalsList[goalIndex]
+                break
           if selectedGoal.len > 16:
             selectedGoal = selectedGoal[0..16] & "..."
       labelButton(title = "Close", tooltip = "Close the goals list without any changes"):
