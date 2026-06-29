@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Counting height of dialogs with information about items
 - Stopping setting keyboard shortcuts with Escape key
 - Setting the player's goal for a new game
+- Crash when setting the player's goal as random
 
 ## [12.4] - 2026-06-14
 
