@@ -182,6 +182,8 @@ type
     ## Used to store a module name
   ShipName* = string
     ## Used to store a ship's name
+  BaseName* = string
+    ## Used to store a base's name
   Description* = string
     ## Used to store an object's description
   MobIndex* = string
@@ -1360,7 +1362,7 @@ type
     ## * owner          - The index of faction which owe the base
     ## * cargo          - The base's cargo
     ## * size           - The size of the base
-    name*: string
+    name*: BaseName
     visited*: DateRecord
     skyX*: MapXRange
     skyY*: MapYRange
@@ -1378,6 +1380,7 @@ type
     cargo*: seq[BaseCargo]
     size*: BasesSize
 
+type
   BaseModuleData* = object
     ## Used to store information about prototypes of ships' modules
     ##
