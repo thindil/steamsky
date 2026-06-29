@@ -40,7 +40,7 @@ type
 proc nk_font_atlas_init_default*(atlas: AtlasPtr) {.importc, nodecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_font_atlas_begin*(atlas: ptr AtlasPtr) {.importc, nodecl, raises: [],
+proc nk_font_atlas_begin*(atlas: AtlasPtr) {.importc, nodecl, raises: [],
     tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 proc nk_font_atlas_add_default*(atlas: AtlasPtr; height: cfloat;

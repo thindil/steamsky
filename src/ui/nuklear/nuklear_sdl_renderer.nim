@@ -212,7 +212,7 @@ proc SDL_SetWindowIcon(window: WindowPtr; icon: SurfacePtr) {.importc, nodecl,
 proc SDL_CreateTextureFromSurface(renderer: RendererPtr;
     surface: SurfacePtr): TexturePtr {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL binding
-proc SDL_CreteTexture(renderer: RendererPtr; format: SDL_Pixel_Format;
+proc SDL_CreateTexture(renderer: RendererPtr; format: SDL_Pixel_Format;
     access: SDL_Texture_Access; w, h: cint): TexturePtr {.importc, nodecl,
     raises: [], tags: [], contractual.}
   ## Internal SDL binding
@@ -576,6 +576,8 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   if glyphsRanges.len > 0:
     config.`range` = glyphsRanges.addr
   nk_sdl_font_stash_begin(atlas = sdl.atlas.unsafeAddr)
+  #nk_font_atlas_init_default(atlas = sdl.atlas)
+  #nk_font_atlas_begin(atlas = sdl.atlas)
   {.ruleOff: "namedParams".}
   result = nk_font_atlas_add_from_file(atlas = sdl.atlas,
       filePath = font.path.cstring, height = font.size.cfloat * fontScale, config.addr)
@@ -590,13 +592,13 @@ proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil;
   ##                 font. If nil, the default Nuklear font will be used.
   ## * fontSize    - the size of the font used in the UI. Default values is 14.
   var
-    atlas: ptr nk_font_atlas = nil
+    atlas: AtlasPtr = nil
     config: nk_font_config = new_nk_font_config(pixelHeight = 0)
     font: ptr nk_font = nil
-  nk_sdl_font_stash_begin(atlas = atlas.unsafeAddr)
+  nk_sdl_font_stash_begin(atlas = atlas.addr)
   if defaultFont == nil:
     font = nk_font_atlas_add_default(atlas = atlas, height = fontSize.cfloat *
-        fontScale, config = config.unsafeAddr)
+        fontScale, config = config.addr)
   else:
     font = defaultFont
   nk_sdl_font_stash_end()
