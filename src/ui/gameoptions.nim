@@ -81,7 +81,6 @@ proc showKeyDialog*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     keyIndex = -1
     keyLabel = ""
     dialog = none
-    shortcutsEnabled = true
 
 proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -94,6 +93,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = previous, state = state):
     return
+  if dialog == none and not shortcutsEnabled:
+    shortcutsEnabled = true
   # Show tab buttons
   changeStyle(field = spacing, x = 0, y = 0):
     changeStyle(field = buttonRounding, value = 0):

@@ -528,7 +528,7 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
   if close != none:
     imageButton(image = images[exitIcon], tooltip = "Back to the " & $close & " screen"):
       closeScreen(close = close, state = state, dialog = dialog)
-    if isKeyPressed(key = keyEscape) and dialog == none:
+    if isKeyPressed(key = keyEscape) and dialog == none and shortcutsEnabled:
       closeScreen(close = close, state = state, dialog = dialog)
   if options:
     imageButton(image = images[moreOptionsIcon], tooltip = "Show more options"):
