@@ -46,11 +46,16 @@ proc setGoalsUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't set the list of goals")
       return
 
-proc setSelectedGoal*() {.raises: [], tags: [], contractual.} =
+proc setSelectedGoal*(state: GameState) {.raises: [], tags: [], contractual.} =
   ## Set the selection in the list of available goals
+  ##
+  ## * state - the current game's state
   selected = -1
   oldSelected = selectedGoal
-  setDialog(x = 20, y = 0)
+  if state == newGame:
+    setDialog(x = 20, y = 20)
+  else:
+    setDialog(x = windowWidth / 6, y = windowHeight / 6)
 
 proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
