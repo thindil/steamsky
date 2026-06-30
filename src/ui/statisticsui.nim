@@ -17,9 +17,10 @@
 
 ## Provides code related to the game's statistics ui, like showing them, etc.
 
+import std/strutils
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
-import coreui, goalsui, header, messagesui, setui, themes
+import ../[config, goals]
+import coreui, errordialog, goalsui, header, messagesui, setui, themes
 
 proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -90,6 +91,11 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
         label(str = $mission.amount)
     # Show goals's statistics
     setLayoutRowDynamic(height = buttonHeight, cols = 1)
+    if selectedGoal == "Random":
+      try:
+        selectedGoal = goalText(index = currentGoal.index.parseInt)
+      except ValueError:
+        dialog = setError(message = "Can't set the selected goal.")
     labelButton(title = selectedGoal):
       dialog = newGoalDialog
       setSelectedGoal()
