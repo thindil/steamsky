@@ -98,7 +98,7 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't set the selected goal.")
     labelButton(title = selectedGoal):
       dialog = newGoalDialog
-      setSelectedGoal()
+      setSelectedGoal(state = state)
     setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.6.cfloat, 0.4])
     addStatistic(title = "Finished goals:", value = statisticsValues[7],
         tooltip = "The total amount of goals finished in this game")

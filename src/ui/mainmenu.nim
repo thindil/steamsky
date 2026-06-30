@@ -634,11 +634,12 @@ proc randomName(forPlayer: bool) {.raises: [], tags: [], contractual.} =
   else:
     shipName = generateShipName(factionIndex = factionIndex)
 
-proc newGamePlayer(dialog: var GameDialog) {.raises: [],
+proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the player's settings for starting a new game
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * state - the current game's state
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
@@ -689,7 +690,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
       infoText = playerTooltips[4]
     labelButton(title = selectedGoal, tooltip = playerTooltips[4]):
       dialog = newGoalDialog
-      setSelectedGoal()
+      setSelectedGoal(state = state)
     # Character's faction
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Character faction:")
@@ -932,7 +933,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
       # Player settings
       if currentTab == 0:
-        newGamePlayer(dialog = dialog)
+        newGamePlayer(dialog = dialog, state = state)
       # Difficulty settings
       else:
         newGameDifficulty()
