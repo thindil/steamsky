@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file.
   in shipyards, buying recipes/healing wounded crew members/repairing the ship
   in bases, setting boarding party or defenders in combat, hiring recruits in
   bases, information about crafting recipe, debug dialog, messages, questions,
-  items' stats, giving, dropping, buying, selling items, setting shortcut keys
+  items' stats, giving, dropping, buying, selling items, setting shortcut keys,
+  setting new goal
 - Updated README.md
 - Updated modding guide
 
