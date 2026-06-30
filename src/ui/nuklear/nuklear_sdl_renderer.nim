@@ -583,6 +583,9 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
       filePath = font.path.cstring, height = font.size.cfloat * fontScale, config.addr)
   {.ruleOn: "namedParams".}
   nk_sdl_font_stash_end()
+  #var w, h: cint = 0
+  #var image: pointer = nk_font_atlas_bake(atlas = sdl.atlas, width = w,
+  #    height = h, fmt = atlasRGBA32)
 
 proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil;
     fontSize: int = 14) {.raises: [], tags: [], contractual.} =
