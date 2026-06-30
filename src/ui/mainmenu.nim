@@ -884,6 +884,8 @@ proc startGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   try:
     newGame()
     selectedGoal = goalText(index = currentGoal.index.parseInt)
+    if selectedGoal.len > 16:
+      selectedGoal = selectedGoal[0..16] & "..."
     if debugMode == menu:
       setDebugData()
   except:
