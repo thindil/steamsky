@@ -1380,6 +1380,19 @@ type
     cargo*: seq[BaseCargo]
     size*: BasesSize
 
+proc initBaseRecord*(name: BaseName = ""; visited: DateRecord = initDateRecord(
+    year = 0, month = 0, day = 0, hour = 0, minutes = 0); skyX: MapXRange = 1;
+    skyY: MapYRange = 1): BaseRecord {.raises: [], tags: [], contractual.} =
+  ## Create a new data structure for a base
+  ##
+  ## * name           - The name of the base
+  ## * visited        - The date when the base was last visited
+  ## * skyX           - The X position of the base on the map
+  ## * skyY           - The Y position of the base on the map
+  ##
+  ## Returns the new structure with information about the selected base
+  return BaseRecord(name: name, visited: visited, skyX: skyX, skyY: skyY)
+
 type
   BaseModuleData* = object
     ## Used to store information about prototypes of ships' modules
