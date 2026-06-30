@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Stopping setting keyboard shortcuts with Escape key
 - Setting the player's goal for a new game
 - Crash when setting the player's goal as random
+- Setting the player's goal for an existing game
 
 ## [12.4] - 2026-06-14
 
