@@ -83,6 +83,7 @@ type
     `type`: cuint
     button, clicks: uint8
     x, y: cint
+  SDL_Rect {.importc, nodecl.} = object
   SDL_Scancode = enum
     SDL_SCANCODE_LCTRL = 224
     SDL_SCANCODE_RCTRL = 228
@@ -214,7 +215,10 @@ proc SDL_CreateTextureFromSurface(renderer: RendererPtr;
   ## Internal SDL binding
 proc SDL_CreateTexture(renderer: RendererPtr; format: SDL_Pixel_Format;
     access: SDL_Texture_Access; w, h: cint): TexturePtr {.importc, nodecl,
-    raises: [], tags: [], contractual.}
+    raises: [], tags: [], contractual, used.}
+  ## Internal SDL binding
+proc SDL_UpdateTexture(texture: TexturePtr; rect: SDL_Rect; pixels: pointer;
+    pitch: cint): cint {.importc, nodecl, raises: [], tags: [], contractual, used.}
   ## Internal SDL binding
 proc SDL_FreeSurface(surface: SurfacePtr) {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL binding
@@ -586,6 +590,10 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   #var w, h: cint = 0
   #var image: pointer = nk_font_atlas_bake(atlas = sdl.atlas, width = w,
   #    height = h, fmt = atlasRGBA32)
+  #let SDLFontTexture: TexturePtr = SDL_CreateTexture(renderer = sdl.renderer, format = SDL_PIXELFORMAT_ARGB8888, access = SDL_TEXTUREACCESS_STATIC, w = w, h = h)
+  #if SDLFontTexture == nil:
+  #  SDL_Log(fmt = "error creating texture")
+  #  return
 
 proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil;
     fontSize: int = 14) {.raises: [], tags: [], contractual.} =
