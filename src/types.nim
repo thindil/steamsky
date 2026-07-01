@@ -1382,16 +1382,25 @@ type
 
 proc initBaseRecord*(name: BaseName = ""; visited: DateRecord = initDateRecord(
     year = 0, month = 0, day = 0, hour = 0, minutes = 0); skyX: MapXRange = 1;
-    skyY: MapYRange = 1): BaseRecord {.raises: [], tags: [], contractual.} =
+    skyY: MapYRange = 1; baseType: BaseType = ""; population: Natural = 0;
+    recruitDate: DateRecord = initDateRecord(year = 0, month = 0, day = 0,
+    hour = 0, minutes = 0); recruits: seq[RecruitData] = @[]): BaseRecord {.raises: [],
+    tags: [], contractual.} =
   ## Create a new data structure for a base
   ##
   ## * name           - The name of the base
   ## * visited        - The date when the base was last visited
   ## * skyX           - The X position of the base on the map
   ## * skyY           - The Y position of the base on the map
+  ## * baseType       - The type of the base
+  ## * population     - The amount of people living in the base
+  ## * recruitDate    - The date when recruits were last checked
+  ## * recruits       - The list of recruits available in the base
   ##
   ## Returns the new structure with information about the selected base
-  return BaseRecord(name: name, visited: visited, skyX: skyX, skyY: skyY)
+  return BaseRecord(name: name, visited: visited, skyX: skyX, skyY: skyY,
+      baseType: baseType, population: population, recruitDate: recruitDate,
+      recruits: recruits)
 
 type
   BaseModuleData* = object
