@@ -79,7 +79,7 @@ proc showEventInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   let baseIndex: ExtendedBasesRange = skyMap[eventsList[setui.eventIndex].skyX][eventsList[
         setui.eventIndex].skyY].baseIndex
   var eventInfo: string = "X: {gold}" & $eventsList[setui.eventIndex].skyX &
-      "{/gold} Y: {gold}" & $eventsList[setui.eventIndex].skyY & "{/gold}"
+      "{/gold}Y: {gold}" & $eventsList[setui.eventIndex].skyY & "{/gold}"
   case eventsList[setui.eventIndex].eType
   of enemyShip, enemyPatrol, trader, friendlyShip:
     try:
