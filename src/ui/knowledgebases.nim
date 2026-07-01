@@ -50,7 +50,9 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
   let
     base: BaseRecord = skyBases[baseIndex]
     windowName: string = base.name
-    height: float = (if base.visited.year > 0: 400 else: 170)
+  var height: float = (labelHeight * 2) + dialogButtonHeight + 70
+  if base.visited.year > 0:
+    height += (labelHeight * 4) + editHeight
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
