@@ -314,7 +314,7 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     dialog = none
 
   const
-    width: float = 540
+    width: float = 550
     windowName: string = "Map Menu"
   let height: float = (3 * buttonHeight) + 60
   updateDialog(width = width, height = height)
