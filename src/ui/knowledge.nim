@@ -107,4 +107,4 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 4
       showStoriesInfo(dialog = dialog)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      height - 75)
+      height - 75, state = state)

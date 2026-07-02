@@ -1010,7 +1010,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   layoutDynamic(height = windowHeight - mapHeight - 75, cols = 2):
     # Draw last messages
     row(width = 0.75):
-      showLastMessages(theme = theme, dialog = dialog, withButtons = false, height = 0)
+      showLastMessages(theme = theme, dialog = dialog, withButtons = false,
+          height = 0, state = state)
     # Draw movement buttons
     row(width = 0.25):
       showButtons(dialog = dialog)

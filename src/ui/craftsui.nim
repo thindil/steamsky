@@ -738,4 +738,4 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
             data = module.index, code = setChangeOrder, dialog = dialog)
       restoreButtonStyle()
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      tableHeight - 20)
+      tableHeight - 20, state = state)
