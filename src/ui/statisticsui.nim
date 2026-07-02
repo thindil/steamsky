@@ -133,4 +133,4 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
         label(str = mob.name)
         label(str = $mob.amount)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      height - 75)
+      height - 75, state = state)
