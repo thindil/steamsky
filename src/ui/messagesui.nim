@@ -23,8 +23,8 @@ import ../[config, messages, types]
 import coreui, dialogs, errordialog, header, themes
 
 proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
-    inCombat: bool = false; withButtons: bool = true;
-    height: float) {.raises: [], tags: [RootEffect], contractual.} =
+    inCombat: bool = false; withButtons: bool = true; height: float;
+    state: GameState) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the last in-game messages to the player
   ##
   ## * theme       - the current game's theme
@@ -34,6 +34,7 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
   ##                 window
   ## * height      - the height of the last messages window. If set to 0,
   ##                 it wil be handled outside the procedure.
+  ## * state - the current game's state
   ##
   ## Returns parameter dialog, modified if any error happened.
   # Show buttons to resize the last messages window
@@ -61,7 +62,7 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
           greenColor], theme.colors[redColor], theme.colors[blueColor],
           theme.colors[cyanColor]]
       currentTurnTime: string = "[" & formattedTime() & "]"
-      width: float = (if inCombat: windowWidth else: windowWidth * 0.75)
+      width: float = (if state == map: windowWidth * 0.75 else: windowWidth)
     var needLines: float = try:
           ceil(x = getTextWidth(text = message.message) / width.float)
         except:
