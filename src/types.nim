@@ -1381,10 +1381,11 @@ type
     size*: BasesSize
 
 proc initBaseRecord*(name: BaseName = ""; visited: DateRecord = initDateRecord(
-    year = 0, month = 0, day = 0, hour = 0, minutes = 0); skyX: MapXRange = 1;
-    skyY: MapYRange = 1; baseType: BaseType = ""; population: Natural = 0;
-    recruitDate: DateRecord = initDateRecord(year = 0, month = 0, day = 0,
-    hour = 0, minutes = 0); recruits: seq[RecruitData] = @[]): BaseRecord {.raises: [],
+    );skyX: MapXRange = 1; skyY: MapYRange = 1; baseType: BaseType = "";
+    population: Natural = 0; recruitDate: DateRecord = initDateRecord();
+    recruits: seq[RecruitData] = @[]; known: bool = false;
+    askedForBases: bool = false; askedForEvents: DateRecord = initDateRecord();
+    reputation: ReputationData = initReputationData()): BaseRecord {.raises: [],
     tags: [], contractual.} =
   ## Create a new data structure for a base
   ##
@@ -1396,11 +1397,16 @@ proc initBaseRecord*(name: BaseName = ""; visited: DateRecord = initDateRecord(
   ## * population     - The amount of people living in the base
   ## * recruitDate    - The date when recruits were last checked
   ## * recruits       - The list of recruits available in the base
+  ## * known          - If true, the base is known to the player, otherwise false
+  ## * askedForBases  - If true, the player asked for other bases in the base
+  ## * askedForEvents - The date when the player asked for event last time
+  ## * reputation     - The player's reputation in the base
   ##
   ## Returns the new structure with information about the selected base
   return BaseRecord(name: name, visited: visited, skyX: skyX, skyY: skyY,
       baseType: baseType, population: population, recruitDate: recruitDate,
-      recruits: recruits)
+      recruits: recruits, known: known, askedForBases: askedForBases,
+      askedForEvents: askedForEvents, reputation: reputation)
 
 type
   BaseModuleData* = object
