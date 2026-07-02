@@ -41,9 +41,7 @@ proc showMissionMenu*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  const
-    width: float = 400
-    height: float = 90
+  const width: float = 400
 
   let
     mission: MissionData = acceptedMissions[missionIndex]
@@ -58,6 +56,7 @@ proc showMissionMenu*(dialog: var GameDialog) {.raises: [], tags: [
         "Explore area"
       of passenger:
         "Transport passenger"
+    height: float = 50 + dialogButtonHeight
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
