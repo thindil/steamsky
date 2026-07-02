@@ -109,4 +109,5 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
         tooltip = "Enter amount of money which you want to spend")
     if newCost != minCost:
       minCost = newCost
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+      tableHeight, state = state)

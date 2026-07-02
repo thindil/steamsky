@@ -239,7 +239,7 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight, state = state)
   if dialog == baseActionDialog:
     showWoundedMenu(dialog = dialog, state = state)
 
@@ -318,7 +318,7 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight, state = state)
   if dialog == baseActionDialog:
     showRepairMenu(dialog = dialog, state = state)
 
@@ -418,6 +418,6 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight, state = state)
   if dialog == baseActionDialog:
     showRecipeMenu(dialog = dialog, state = state)

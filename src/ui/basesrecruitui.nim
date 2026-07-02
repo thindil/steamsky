@@ -531,4 +531,5 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
   # Show the last in-game messages
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+      tableHeight, state = state)
