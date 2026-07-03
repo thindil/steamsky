@@ -588,8 +588,8 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   if glyphsRanges.len > 0:
     config.`range` = glyphsRanges.addr
   nk_sdl_font_stash_begin(atlas = sdl.atlas.unsafeAddr)
-  #nk_font_atlas_init_default(atlas = sdl.atlas)
-  #nk_font_atlas_begin(atlas = sdl.atlas)
+#  nk_font_atlas_init_default(atlas = sdl.atlas)
+#  nk_font_atlas_begin(atlas = sdl.atlas)
   {.ruleOff: "namedParams".}
   result = nk_font_atlas_add_from_file(atlas = sdl.atlas,
       filePath = font.path.cstring, height = font.size.cfloat * fontScale, config.addr)
@@ -598,14 +598,17 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
 #  var w, h: cint = 0
 #  var image: pointer = nk_font_atlas_bake(atlas = sdl.atlas, width = w,
 #      height = h, fmt = atlasRGBA32)
-#  let SDLFontTexture: TexturePtr = SDL_CreateTexture(renderer = sdl.renderer,
+#  let sdlFontTexture: TexturePtr = SDL_CreateTexture(renderer = sdl.renderer,
 #      format = SDL_PIXELFORMAT_ARGB8888, access = SDL_TEXTUREACCESS_STATIC,
 #      w = w, h = h)
-#  if SDLFontTexture == nil:
+#  if sdlFontTexture == nil:
 #    SDL_Log(fmt = "error creating texture")
 #    return
-#  discard SDL_UpdateTexture(texture = SDLFontTexture, rect = nil,
+#  discard SDL_UpdateTexture(texture = sdlFontTexture, rect = nil,
 #      pixels = image, pitch = 4 * w)
+#  SDL_SetTextureBlendMode(texture = sdlFontTexture,
+#      blendMode = SDL_BLENDMODE_BLEND)
+#  sdl.dev.fontTexture = sdlFontTexture
 
 proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil;
     fontSize: int = 14) {.raises: [], tags: [], contractual.} =
