@@ -125,7 +125,8 @@ proc updatePopulation*() {.raises: [], tags: [], contractual.} =
       newPopulation = 0
     skyBases[baseIndex].population = newPopulation
     if skyBases[baseIndex].population == 0:
-      skyBases[baseIndex].reputation = initReputationData(level = 0, experience = 0)
+      skyBases[baseIndex].reputation = initReputationData(level = 0,
+          experience = 0)
 
 proc generateRecruits*() {.raises: [KeyError], tags: [],
     contractual.} =
@@ -273,8 +274,8 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
       price = 1
     let recruitBase: Positive = (if getRandom(min = 1, max = 100) <
         99: baseIndex else: getRandom(min = skyBases.low, max = skyBases.high))
-    baseRecruits.add(y = initRecruitData(attributes = attributes, skills = skills,
-        name = generateMemberName(gender = gender,
+    baseRecruits.add(y = initRecruitData(attributes = attributes,
+        skills = skills, name = generateMemberName(gender = gender,
         factionIndex = recruitFaction), gender = gender, price = price,
         inventory = inventory, equipment = equipment, payment = payment,
         homeBase = recruitBase, faction = recruitFaction))
@@ -302,7 +303,8 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.raises: [ReputationError],
     newPoints += points
   while newPoints < 0:
     {.ruleOff: "assignments".}
-    skyBases[baseIndex].reputation.level = skyBases[baseIndex].reputation.level - 1
+    skyBases[baseIndex].reputation.level = skyBases[
+        baseIndex].reputation.level - 1
     {.ruleOn: "assignments".}
     newPoints += abs(x = skyBases[baseIndex].reputation.level * 5)
     if newPoints >= 0:
@@ -311,7 +313,8 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.raises: [ReputationError],
   while newPoints > abs(x = skyBases[baseIndex].reputation.level * 5):
     newPoints -= abs(x = skyBases[baseIndex].reputation.level * 5)
     {.ruleOff: "assignments".}
-    skyBases[baseIndex].reputation.level = skyBases[baseIndex].reputation.level + 1
+    skyBases[baseIndex].reputation.level = skyBases[
+        baseIndex].reputation.level + 1
     {.ruleOn: "assignments".}
   skyBases[baseIndex].reputation.experience = newPoints
   if skyBases[baseIndex].reputation.level == 100:
