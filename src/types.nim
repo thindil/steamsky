@@ -1380,13 +1380,16 @@ type
     cargo*: seq[BaseCargo]
     size*: BasesSize
 
-proc initBaseRecord*(name: BaseName = ""; visited: DateRecord = initDateRecord(
-    );skyX: MapXRange = 1; skyY: MapYRange = 1; baseType: BaseType = "";
+proc initBaseRecord*(name: BaseName = ""; visited: DateRecord = initDateRecord();
+    skyX: MapXRange = 1; skyY: MapYRange = 1; baseType: BaseType = "";
     population: Natural = 0; recruitDate: DateRecord = initDateRecord();
     recruits: seq[RecruitData] = @[]; known: bool = false;
     askedForBases: bool = false; askedForEvents: DateRecord = initDateRecord();
-    reputation: ReputationData = initReputationData()): BaseRecord {.raises: [],
-    tags: [], contractual.} =
+    reputation: ReputationData = initReputationData();
+    missionsDate: DateRecord = initDateRecord(); missions: seq[MissionData] = @[];
+    owner: FactionIndex = ""; cargo: seq[BaseCargo] = @[];
+    size: BasesSize = unknown): BaseRecord {.raises: [], tags: [],
+    contractual.} =
   ## Create a new data structure for a base
   ##
   ## * name           - The name of the base
@@ -1401,12 +1404,19 @@ proc initBaseRecord*(name: BaseName = ""; visited: DateRecord = initDateRecord(
   ## * askedForBases  - If true, the player asked for other bases in the base
   ## * askedForEvents - The date when the player asked for event last time
   ## * reputation     - The player's reputation in the base
+  ## * missionsDate   - The date when the player last checked missions in the base
+  ## * missions       - The list of available missions in the base
+  ## * owner          - The index of faction which owe the base
+  ## * cargo          - The base's cargo
+  ## * size           - The size of the base
   ##
   ## Returns the new structure with information about the selected base
   return BaseRecord(name: name, visited: visited, skyX: skyX, skyY: skyY,
       baseType: baseType, population: population, recruitDate: recruitDate,
       recruits: recruits, known: known, askedForBases: askedForBases,
-      askedForEvents: askedForEvents, reputation: reputation)
+      askedForEvents: askedForEvents, reputation: reputation,
+      missionsDate: missionsDate, missions: missions, owner: owner,
+      cargo: cargo, size: size)
 
 type
   BaseModuleData* = object
