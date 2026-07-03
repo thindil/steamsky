@@ -261,7 +261,8 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       except:
         dialog = setError(message = "Can't get fuel name.")
         return
-    setLayoutRowDynamic(height = labelHeight, cols = (if canAccept: 3 else: 2))
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = (
+        if canAccept: 3 else: 2))
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[showColoredIcon], label = "Show",
         alignment = right, tooltip = "Show the mission on the map"):
