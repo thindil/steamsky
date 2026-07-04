@@ -168,12 +168,19 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   const
     width: float = 400
-    height: float = 300
 
   let
     mission: MissionData = skyBases[setui.baseIndex].missions[missionIndex]
     windowName: string = "More info about " & getMissionType(
         mType = mission.mType)
+  var height: float = dialogButtonHeight + 70 + (labelHeight * 2)
+  case mission.mType
+  of deliver, passenger:
+    height += labelHeight * 3
+  of destroy:
+    height += labelHeight * 2
+  of patrol, explore:
+    discard
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
