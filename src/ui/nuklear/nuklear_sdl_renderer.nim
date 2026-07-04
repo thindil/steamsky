@@ -588,6 +588,8 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   if glyphsRanges.len > 0:
     config.`range` = glyphsRanges.addr
   nk_sdl_font_stash_begin(atlas = sdl.atlas.unsafeAddr)
+#  var atlas: nk_font_atlas = nk_font_atlas()
+#  sdl.atlas = atlas.addr
 #  nk_font_atlas_init_default(atlas = sdl.atlas)
 #  nk_font_atlas_begin(atlas = sdl.atlas)
   {.ruleOff: "namedParams".}
