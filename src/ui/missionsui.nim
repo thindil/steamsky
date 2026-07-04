@@ -18,7 +18,7 @@
 ## Provides code related to UI in bases' available missions list, like show
 ## the list, accept a mission, show a mission on the map, etc.
 
-import std/[algorithm, tables]
+import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, events, game, items, maps, missions, missions2, ships, types, utils]
 import coreui, dialogs, errordialog, header, mapsui, messagesui, setui, table,
@@ -190,7 +190,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
         return
       label(str = "Weight:")
       try:
-        colorLabel(str = $itemsList[mission.itemIndex].weight,
+        colorLabel(str = $itemsList[mission.itemIndex].weight & " kg",
             color = theme.colors[goldenColor])
       except:
         dialog = setError(message = "Can't get item weight.")
@@ -198,9 +198,6 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       label(str = "To base:")
       colorLabel(str = skyBases[skyMap[mission.targetX][
           mission.targetY].baseIndex].name, color = theme.colors[goldenColor])
-    of patrol:
-      setLayoutRowDynamic(height = labelHeight, cols = 1)
-      colorLabel(str = "Patrol selected area", color = theme.colors[goldenColor])
     of destroy:
       setLayoutRowDynamic(height = labelHeight * 2, cols = 2)
       label(str = "Target:")
@@ -210,11 +207,8 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       except:
         dialog = setError(message = "Can't get ship's name.")
         return
-    of explore:
-      setLayoutRowDynamic(height = labelHeight, cols = 1)
-      colorLabel(str = "Explore selected area", color = theme.colors[goldenColor])
     of passenger:
-      setLayoutRowDynamic(height = labelHeight, cols = 2)
+      setLayoutRowDynamic(height = labelHeight * 2, cols = 2)
       var cabinTaken: bool = false
       canAccept = false
       for module in playerShip.modules:
@@ -237,9 +231,12 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
           color = (if canAccept: theme.colors[
           greenColor] elif cabinTaken: theme.colors[
           goldenColor] else: theme.colors[redColor]))
+      setLayoutRowDynamic(height = labelHeight, cols = 2)
       label(str = "To base:")
       colorLabel(str = skyBases[skyMap[mission.targetX][
           mission.targetY].baseIndex].name, color = theme.colors[goldenColor])
+    of patrol, explore:
+      discard
     let travelValues: TravelArray = try:
             travelInfo(distance = (if mission.mType in {
             deliver, passenger}: countDistance(destinationX = mission.targetX,
@@ -253,7 +250,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       minutesToDate(minutes = travelValues[1], infoText = missionInfo)
       setLayoutRowDynamic(height = labelHeight, cols = 2)
       label(str = "ETA:")
-      colorLabel(str = missionInfo, color = theme.colors[goldenColor])
+      colorLabel(str = missionInfo.strip, color = theme.colors[goldenColor])
       label(str = "Approx fuel usage:")
       try:
         colorLabel(str = $travelValues[2] & " " & itemsList[findProtoItem(
