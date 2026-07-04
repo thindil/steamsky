@@ -162,7 +162,8 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
       skyBases[baseIndex].known = false
       skyBases[baseIndex].askedForBases = false
       skyBases[baseIndex].askedForEvents = DateRecord()
-      skyBases[baseIndex].reputation = initReputationData(level = 0, experience = 0)
+      skyBases[baseIndex].reputation = initReputationData(level = 0,
+          experience = 0)
       skyBases[baseIndex].missionsDate = DateRecord()
       skyBases[baseIndex].missions = @[]
       skyBases[baseIndex].owner = base.attr(name = "owner")
@@ -183,7 +184,8 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
       let recruitDate: XmlNode = base.child(name = "recruitdate")
       if recruitDate != nil:
         skyBases[baseIndex].recruitDate = initDateRecord(
-            year = recruitDate.attr(name = "year").parseInt, month = recruitDate.attr(
+            year = recruitDate.attr(name = "year").parseInt,
+                month = recruitDate.attr(
             name = "month").parseInt, day = recruitDate.attr(
             name = "day").parseInt, hour = 0, minutes = 0)
       let askDate: XmlNode = base.child(name = "askedforeventsdate")
@@ -278,19 +280,22 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
               finished = false, multiplier = 1.0))
         of patrol:
           skyBases[baseIndex].missions.add(y = initMissionData(mType = patrol,
-              target = target, time = time, targetX = targetX, targetY = targetY,
+              target = target, time = time, targetX = targetX,
+              targetY = targetY,
               reward = reward, startBase = baseIndex, finished = false,
               multiplier = 1.0))
         of explore:
           skyBases[baseIndex].missions.add(y = initMissionData(mType = explore,
-              target = target, time = time, targetX = targetX, targetY = targetY,
+              target = target, time = time, targetX = targetX,
+              targetY = targetY,
               reward = reward, startBase = baseIndex, finished = false,
               multiplier = 1.0))
         of passenger:
           if target > 91:
             target = 91
-          skyBases[baseIndex].missions.add(y = initMissionData(mType = passenger,
-              data = target, time = time, targetX = targetX, targetY = targetY,
+          skyBases[baseIndex].missions.add(y = initMissionData(
+              mType = passenger, data = target, time = time, targetX = targetX,
+              targetY = targetY,
               reward = reward, startBase = baseIndex, finished = false,
               multiplier = 1.0))
       for baseItem in base.findAll(tag = "item"):
