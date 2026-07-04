@@ -295,11 +295,11 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   const
     width: float = 400
-    height: float = 200
 
   let
     mission: MissionData = skyBases[setui.baseIndex].missions[missionIndex]
     windowName: string = "Accept " & getMissionType(mType = mission.mType)
+    height: float = (labelHeight * 2) + editHeight + dialogButtonHeight + 70
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
