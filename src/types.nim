@@ -1362,10 +1362,10 @@ type
     ## * owner          - The index of faction which owe the base
     ## * cargo          - The base's cargo
     ## * size           - The size of the base
-    name*: BaseName
-    visited*: DateRecord
-    skyX*: MapXRange
-    skyY*: MapYRange
+    name: BaseName
+    visited: DateRecord
+    skyX: MapXRange
+    skyY: MapYRange
     baseType*: BaseType
     population*: Natural
     recruitDate*: DateRecord
@@ -1380,8 +1380,8 @@ type
     cargo*: seq[BaseCargo]
     size*: BasesSize
 
-proc initBaseRecord*(name: BaseName = ""; visited: DateRecord = initDateRecord();
-    skyX: MapXRange = 1; skyY: MapYRange = 1; baseType: BaseType = "";
+proc initBaseRecord*(name: BaseName = ""; visited: DateRecord = initDateRecord(
+    ); skyX: MapXRange = 1; skyY: MapYRange = 1; baseType: BaseType = "";
     population: Natural = 0; recruitDate: DateRecord = initDateRecord();
     recruits: seq[RecruitData] = @[]; known: bool = false;
     askedForBases: bool = false; askedForEvents: DateRecord = initDateRecord();
@@ -1417,6 +1417,15 @@ proc initBaseRecord*(name: BaseName = ""; visited: DateRecord = initDateRecord()
       askedForEvents: askedForEvents, reputation: reputation,
       missionsDate: missionsDate, missions: missions, owner: owner,
       cargo: cargo, size: size)
+
+typeGetterSetter(baseType = BaseRecord, varName = base, name = name,
+    typ = BaseName)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = visited,
+    typ = DateRecord)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = skyX,
+    typ = MapXRange)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = skyY,
+    typ = MapYRange)
 
 type
   BaseModuleData* = object
