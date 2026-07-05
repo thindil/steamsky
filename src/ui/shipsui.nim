@@ -61,7 +61,7 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
       else:
         "") & ":")
     editString(text = newName, maxLen = 64)
-    setLayoutRowDynamic(height = buttonHeight, cols = 2)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     if newName.len == 0:
       disabled:
