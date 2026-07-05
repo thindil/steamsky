@@ -173,13 +173,17 @@ proc dockShip*(docking: bool; escape: bool = false): ErrorMessage {.raises: [
       while memberIndex < playerShip.crew.len:
         if playerShip.crew[memberIndex].contractLength == 0:
           deleteMember(memberIndex = memberIndex, ship = playerShip)
-          skyBases[baseIndex].population.inc
+          {.ruleOff: "assignments".}
+          skyBases[baseIndex].population = skyBases[baseIndex].population + 1
+          {.ruleOn: "assignments".}
         elif playerShip.crew[memberIndex].loyalty < 20 and getRandom(min = 0,
             max = playerShip.crew[memberIndex].loyalty) < 10:
           addMessage(message = playerShip.crew[memberIndex].name &
               " resigns from working for you.", mType = orderMessage)
           deleteMember(memberIndex = memberIndex, ship = playerShip)
-          skyBases[baseIndex].population.inc
+          {.ruleOff: "assignments".}
+          skyBases[baseIndex].population = skyBases[baseIndex].population + 1
+          {.ruleOn: "assignments".}
           for i in playerShip.crew.low .. playerShip.crew.high:
             updateMorale(ship = playerShip, memberIndex = i, value = getRandom(
                 min = -5, max = -1))

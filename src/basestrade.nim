@@ -92,7 +92,9 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
     addMessage(message = "You hired " & recruit.name & " for " & $price & " " &
         moneyName & ".", mType = tradeMessage)
     skyBases[baseIndex].recruits.delete(i = recruitIndex)
-    skyBases[baseIndex].population.dec
+    {.ruleOff: "assignments".}
+    skyBases[baseIndex].population = skyBases[baseIndex].population - 1
+    {.ruleOn: "assignments".}
     updateGame(minutes = 5)
 
 proc buyRecipe*(recipeIndex: string) {.raises: [CantBuyError,

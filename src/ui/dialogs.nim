@@ -18,7 +18,7 @@
 ## Provides code related to the game's dialogs, like showing questions, etc.
 
 import std/[colors, os, math, strutils, tables, times]
-import contracts, nuklear/nuklear_sdl_renderer
+import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[bases, basescargo, config, crew2, crewinventory, events2, game,
     game2, items, maps, messages, missions, missions2, shipscargo, shipscrew,
     shipscrew2, stories, types, trades, utils]
@@ -226,7 +226,9 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
           except:
             dialog = setError(message = "Can't delete the member.")
             return
-          skyBases[baseIndex].population.inc
+          {.ruleOff: "assignments".}
+          skyBases[baseIndex].population = skyBases[baseIndex].population + 1
+          {.ruleOn: "assignments".}
           for index, _ in playerShip.crew:
             try:
               updateMorale(ship = playerShip, memberIndex = index,

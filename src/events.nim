@@ -103,7 +103,10 @@ proc updateEvents*(minutes: Positive) {.raises: [], tags: [],
           populationLost = skyBases[baseIndex].population
           skyBases[baseIndex].reputation = initReputationData(level = 0,
               experience = 0)
-        skyBases[baseIndex].population -= populationLost
+        {.ruleOff: "assignments".}
+        skyBases[baseIndex].population = skyBases[baseIndex].population -
+            populationLost
+        {.ruleOn: "assignments".}
       deleteEvent(eventIndex = key)
     else:
       eventsList[key].time = newTime

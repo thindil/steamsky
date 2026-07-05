@@ -67,8 +67,11 @@ proc dailyPayment*() {.raises: [KeyError, Exception], tags: [
             memberIndex].name & " has ended.", mType = tradeMessage, color = red)
         if playerShip.speed == docked:
           deleteMember(memberIndex = memberIndex, ship = playerShip)
+          {.ruleOff: "assignments".}
           skyBases[skyMap[playerShip.skyX][
-              playerShip.skyY].baseIndex].population.inc
+              playerShip.skyY].baseIndex].population = skyBases[skyMap[
+              playerShip.skyX][playerShip.skyY].baseIndex].population + 1
+          {.ruleOn: "assignments".}
           memberIndex.dec
         else:
           for order in playerShip.crew[memberIndex].orders.mitems:
