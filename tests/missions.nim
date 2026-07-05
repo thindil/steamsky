@@ -30,7 +30,7 @@ suite "Unit tests for missions module":
   playerShip.cargo.add(y = initInventoryData(protoIndex = 1, amount = 100,
       durability = 100))
   skyMap[1][1].baseIndex = 1
-  skyBases[1] = BaseRecord(skyX: 1, skyY: 1, owner: "POLEIS")
+  skyBases[1] = initBaseRecord(skyX = 1, skyY = 1, owner = "POLEIS")
   resetReputations()
 
   test "Deleting a mission.":
