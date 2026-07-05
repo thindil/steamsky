@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -389,7 +389,9 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
       deleteMember(memberIndex = memberIndex, ship = playerShip)
     except:
       return showError(message = "Can't delete the member.")
-    skyBases[baseIndex].population.inc
+    {.ruleOff: "assignments".}
+    skyBases[baseIndex].population = skyBases[baseIndex].population + 1
+    {.ruleOn: "assignments".}
     for index, _ in playerShip.crew:
       try:
         updateMorale(ship = playerShip, memberIndex = index, value = getRandom(
