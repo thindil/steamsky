@@ -228,6 +228,9 @@ proc SDL_SetTextureBlendMode(texture: TexturePtr;
     blendMode: SDL_BlendMode) {.importc, nodecl, raises: [], tags: [],
     contractual, used.}
   ## Internal SDL binding
+proc SDL_DestroyTexture(texture: TexturePtr) {.importc, nodecl, raises: [],
+    tags: [], contractual, used.}
+  ## Internal SDL binding
 proc SDL_FreeSurface(surface: SurfacePtr) {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL binding
 proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl, raises: [],
@@ -275,8 +278,6 @@ proc nk_sdl_font_stash_begin(atlas: ptr ptr nk_font_atlas) {.importc, nodecl,
 proc nk_sdl_font_stash_end() {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal Nuklear binding
 proc nk_sdl_render(aa: AntiAliasing) {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## Internal Nuklear binding
-proc nk_sdl_shutdown() {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal Nuklear binding
 
 # High level bindings
@@ -548,7 +549,7 @@ proc nuklearClose*() {.raises: [], tags: [], contractual.} =
   if sdl.atlas != nil:
     nk_font_atlas_clear(atlas = sdl.atlas)
   nk_free(ctx = ctx)
-  nk_sdl_shutdown()
+  SDL_DestroyTexture(texture = sdl.dev.fontTexture)
   SDL_DestroyRenderer(renderer = sdl.renderer)
   SDL_DestroyWindow(window = sdl.win)
   IMG_Quit()

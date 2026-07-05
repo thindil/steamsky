@@ -265,14 +265,4 @@ nk_sdl_font_stash_end(void)
         nk_style_set_font(&sdl.ctx, &sdl.atlas.default_font->handle);
 }
 
-NK_API
-void nk_sdl_shutdown(void)
-{
-    struct nk_sdl_device *dev = &sdl.ogl;
-    SDL_DestroyTexture(dev->font_tex);
-    /* glDeleteTextures(1, &dev->font_tex); */
-    nk_buffer_free(&dev->cmds);
-    memset(&sdl, 0, sizeof(sdl));
-}
-
 #endif /* NK_SDL_RENDERER_IMPLEMENTATION */
