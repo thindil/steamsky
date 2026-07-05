@@ -20,7 +20,8 @@
 
 import std/tables
 import contracts
-import bases, basescargo, basestypes, config, game, items, maps, messages, shipscrew, types
+import bases, basescargo, basestypes, config, game, items, maps, messages,
+    shipscrew, types
 
 proc payForDock*() {.raises: [KeyError, ReputationError, NoFreeSpaceError],
     tags: [], contractual.} =
