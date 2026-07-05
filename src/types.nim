@@ -1366,9 +1366,9 @@ type
     visited: DateRecord
     skyX: MapXRange
     skyY: MapYRange
-    baseType*: BaseType
-    population*: Natural
-    recruitDate*: DateRecord
+    baseType: BaseType
+    population: Natural
+    recruitDate: DateRecord
     recruits*: seq[RecruitData]
     known*: bool
     askedForBases*: bool
@@ -1426,6 +1426,14 @@ typeGetterSetter(baseType = BaseRecord, varName = base, name = skyX,
     typ = MapXRange)
 typeGetterSetter(baseType = BaseRecord, varName = base, name = skyY,
     typ = MapYRange)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = baseType,
+    typ = BaseName)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = population,
+    typ = Natural)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = recruitDate,
+    typ = DateRecord)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = recruits,
+    typ = seq[RecruitData])
 
 type
   BaseModuleData* = object
