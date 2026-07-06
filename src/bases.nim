@@ -301,22 +301,19 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.raises: [ReputationError],
       points.float * newGameSettings.reputationBonus).int
   if baseIndex == playerShip.homeBase:
     newPoints += points
+  var repLevel: ReputationRange = skyBases[baseIndex].reputation.level
   while newPoints < 0:
-    {.ruleOff: "assignments".}
-    skyBases[baseIndex].reputation.level = skyBases[
-        baseIndex].reputation.level - 1
-    {.ruleOn: "assignments".}
-    newPoints += abs(x = skyBases[baseIndex].reputation.level * 5)
+    repLevel.dec
+    newPoints += abs(x = repLevel * 5)
     if newPoints >= 0:
-      skyBases[baseIndex].reputation.experience = newPoints
+      skyBases[baseIndex].reputation = initReputationData(level = repLevel,
+          experience = newPoints)
       return
-  while newPoints > abs(x = skyBases[baseIndex].reputation.level * 5):
-    newPoints -= abs(x = skyBases[baseIndex].reputation.level * 5)
-    {.ruleOff: "assignments".}
-    skyBases[baseIndex].reputation.level = skyBases[
-        baseIndex].reputation.level + 1
-    {.ruleOn: "assignments".}
-  skyBases[baseIndex].reputation.experience = newPoints
+  while newPoints > abs(x = repLevel * 5):
+    newPoints -= abs(x = repLevel * 5)
+    repLevel.inc
+  skyBases[baseIndex].reputation = initReputationData(level = repLevel,
+      experience = newPoints)
   if skyBases[baseIndex].reputation.level == 100:
     updateGoal(goalType = GoalTypes.reputation, targetIndex = skyBases[
         baseIndex].owner)

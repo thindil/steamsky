@@ -393,7 +393,7 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
       index.inc
     skyBases[baseIndex].size = sizeSelected.BasesSize
     skyBases[baseIndex].population = population
-    skyBases[baseIndex].reputation.level = reputation
+    skyBases[baseIndex].reputation = initReputationData(level = reputation)
     try:
       updateBaseCargo(protoIndex = moneyIndex, amount = money, quality = normal,
           craftBonus = none, craftMalus = none)

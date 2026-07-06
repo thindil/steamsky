@@ -241,11 +241,12 @@ proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
         skyBases[baseIndex].recruits.add(y = recruit)
       let reputation: XmlNode = base.child(name = "reputation")
       if reputation != nil:
-        skyBases[baseIndex].reputation.level = reputation.attr(
-            name = "level").parseInt
-        let progress: string = reputation.attr(name = "progress")
-        if progress.len > 0:
-          skyBases[baseIndex].reputation.experience = progress.parseInt
+        let
+          level: ReputationRange = reputation.attr(name = "level").parseInt
+          progress: string = reputation.attr(name = "progress")
+          experience: Natural = (if progress.len > 0: progress.parseInt else: 0)
+        skyBases[baseIndex].reputation = initReputationData(level = level,
+            experience = experience)
       let missionsDate: XmlNode = base.child(name = "missionsdate")
       if missionsDate != nil:
         skyBases[baseIndex].missionsDate = initDateRecord(

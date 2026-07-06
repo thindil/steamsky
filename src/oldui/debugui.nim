@@ -603,7 +603,8 @@ proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
         " current").parseInt.ObjectQuality
     updateCargo(ship = playerShip, amount = tclEval2(script = itemBox &
         " get").parseInt, cargoIndex = itemIndex, quality = playerShip.cargo[
-            itemIndex].quality, craftBonus = playerShip.cargo[itemIndex].craftBonus,
+            itemIndex].quality, craftBonus = playerShip.cargo[
+                itemIndex].craftBonus,
             craftMalus = playerShip.cargo[itemIndex].craftMalus)
   except:
     return showError(message = "Can't update the cargo.")
@@ -658,8 +659,8 @@ proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't set the base's population.")
   baseBox = frameName & ".reputation"
   try:
-    skyBases[baseIndex].reputation.level = tclEval2(script = baseBox &
-        " get").parseInt
+    skyBases[baseIndex].reputation = initReputationData(level = tclEval2(
+        script = baseBox & " get").parseInt)
   except:
     return showError(message = "Can't set the base's reputation.")
   baseBox = frameName & ".money"

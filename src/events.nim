@@ -127,9 +127,9 @@ proc recoverBase*(baseIndex: BasesRange) {.raises: [KeyError],
   for index, faction in factionsList:
     if factionRoll < faction.spawnChance:
       skyBases[baseIndex].owner = index
-      skyBases[baseIndex].reputation.level = getReputation(
+      skyBases[baseIndex].reputation = initReputationData(level = getReputation(
           sourceFaction = playerShip.crew[1].faction, targetFaction = skyBases[
-          baseIndex].owner)
+          baseIndex].owner))
       break
     factionRoll -= faction.spawnChance
   skyBases[baseIndex].population = getRandom(min = 2, max = 50)
