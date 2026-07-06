@@ -134,7 +134,14 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   ## * state - the current game's state
   ##
   ## Returns the modified parameters dialog and state.
-  setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+  let
+    groupWidth: float = (if expandedSection == 1: windowWidth -
+        buttonHeight else: (windowWidth / 2) - buttonHeight)
+    col1: float = groupWidth * 0.4
+    col2a: float = groupWidth - col1
+    col2b: float = groupWidth - col1 - buttonHeight
+  setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+      col2b, buttonHeight])
   label(str = "Name:", tooltip = "The name of your ship")
   colorLabel(str = playerShip.name, color = theme.colors[goldenColor],
       tooltip = "The name of your ship")
@@ -235,7 +242,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     imageButton(image = images[cancelIcon]):
       playerShip.destinationX = 0
       playerShip.destinationY = 0
-  setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+  setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+      col2b, buttonHeight])
   label(str = "Home:", tooltip = "Your ship the current home base")
   colorLabel(str = skyBases[playerShip.homeBase].name, color = theme.colors[
       goldenColor], tooltip = "Your ship the current home base")
@@ -243,7 +251,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     centerX = skyBases[playerShip.homeBase].skyX
     centerY = skyBases[playerShip.homeBase].skyY
     state = map
-  setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
+  setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
   label(str = "Weight:", tooltip = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines")
   try:
     colorLabel(str = $countShipWeight(ship = playerShip) & "kg",
