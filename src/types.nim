@@ -1370,10 +1370,10 @@ type
     population: Natural
     recruitDate: DateRecord
     recruits*: seq[RecruitData]
-    known*: bool
-    askedForBases*: bool
-    askedForEvents*: DateRecord
-    reputation*: ReputationData
+    known: bool
+    askedForBases: bool
+    askedForEvents: DateRecord
+    reputation: ReputationData
     missionsDate*: DateRecord
     missions*: seq[MissionData]
     owner*: FactionIndex
@@ -1434,6 +1434,14 @@ typeGetterSetter(baseType = BaseRecord, varName = base, name = recruitDate,
     typ = DateRecord)
 typeGetterSetter(baseType = BaseRecord, varName = base, name = recruits,
     typ = seq[RecruitData])
+typeGetterSetter(baseType = BaseRecord, varName = base, name = known,
+    typ = bool)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = askedForBases,
+    typ = bool)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = askedForEvents,
+    typ = DateRecord)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = reputation,
+    typ = ReputationData)
 
 type
   BaseModuleData* = object
