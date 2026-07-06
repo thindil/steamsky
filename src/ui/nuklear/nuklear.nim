@@ -67,6 +67,9 @@ proc nk_window_find(ctx; name: cstring): ptr nk_window {.importc, nodecl,
 proc nk_labelf(ctx; flags: nk_flags; fmt: cstring) {.importc,
     varargs, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
+proc nk_textedit_paste(state: nk_text_edit; ctext: pointer;
+    len: cint): nk_bool {.importc, nodecl, raises: [], tags: [], contractual, used.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -------
 # Layouts

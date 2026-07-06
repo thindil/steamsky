@@ -186,9 +186,6 @@ proc SDL_CreateRenderer(window: WindowPtr; index,
 proc SDL_GetRendererOutputSize(renderer: RendererPtr; w, h: var cint) {.importc,
     nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL binding
-proc SDL_GetWindowSize(window: WindowPtr; w, h: var cint) {.importc, nodecl,
-    raises: [], tags: [], contractual.}
-  ## Internal SDL binding
 proc SDL_RenderSetScale(renderer: RendererPtr; scaleX,
     scaleY: cfloat) {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL binding
@@ -229,7 +226,7 @@ proc SDL_SetTextureBlendMode(texture: TexturePtr;
     contractual, used.}
   ## Internal SDL binding
 proc SDL_DestroyTexture(texture: TexturePtr) {.importc, nodecl, raises: [],
-    tags: [], contractual, used.}
+    tags: [], contractual.}
   ## Internal SDL binding
 proc SDL_FreeSurface(surface: SurfacePtr) {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL binding
@@ -237,6 +234,9 @@ proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl, raises: [],
     tags: [], contractual.}
   ## Internal SDL binding
 proc SDL_SetWindowSize(window: WindowPtr; w, h: cint) {.importc, nodecl,
+    raises: [], tags: [], contractual.}
+  ## Internal SDL binding
+proc SDL_GetWindowSize(window: WindowPtr; w, h: var cint) {.importc, nodecl,
     raises: [], tags: [], contractual.}
   ## Internal SDL binding
 proc SDL_SetWindowPosition(window: WindowPtr; x, y: cint) {.importc, nodecl,
@@ -256,6 +256,9 @@ proc SDL_WarpMouseInWindow(window: WindowPtr; x, y: cint) {.importc, nodecl,
   ## Internal SDL binding
 proc SDL_SetRelativeMouseMode(enabled: cint): cint {.importc, nodecl, raises: [
     ], tags: [], contractual.}
+  ## Internal SDL binding
+proc SDL_GetClipboardText(): pointer {.importc, nodecl, raises: [], tags: [],
+    contractual, used.}
   ## Internal SDL binding
 proc IMG_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL Image binding
