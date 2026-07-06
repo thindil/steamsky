@@ -148,7 +148,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   imageButton(image = images[editIcon], tooltip = "Set a new name for the ship"):
     dialog = renameDialog
   if playerShip.upgradeModule > -1:
-    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
+    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat, col2a])
     label(str = "Upgrade:")
     var
       upgradeInfo: string = playerShip.modules[
@@ -210,15 +210,16 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     var upgradePercent: int = 100 - ((playerShip.modules[
         playerShip.upgradeModule].upgradeProgress.float / maxUpgrade.float) * 100.0).int
     colorLabel(str = upgradeInfo, color = theme.colors[goldenColor])
-    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.9.cfloat, 0.1])
+    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [(groupWidth *
+        (if expandedSection == 1: 0.95 else: 0.9)).cfloat, buttonHeight])
     progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
         tooltip = "The current ship's upgrade progress")
     imageButton(image = images[cancelIcon],
         tooltip = "Stop the current upgrade"):
       cancelUpgrade(dialog = dialog)
   if playerShip.repairModule > -1:
-    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
-        0.5, 0.1])
+    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+        col2b, buttonHeight])
     label(str = "Repair first:", tooltip = "If damaged, the module will be repaired as the first")
     colorLabel(str = playerShip.modules[playerShip.repairModule].name,
         color = theme.colors[goldenColor],
@@ -227,8 +228,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
         tooltip = "Remove the repair priority"):
       setRepair()
   if playerShip.destinationX > 0 and playerShip.destinationY > 0:
-    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
-        0.5, 0.1])
+    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+        col2b, buttonHeight])
     label(str = "Destination:", tooltip = "The current travel destination of your ship")
     if skyMap[playerShip.destinationX][playerShip.destinationY].baseIndex > 0:
       colorLabel(str = skyBases[skyMap[playerShip.destinationX][
