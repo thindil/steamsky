@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
   bases, information about crafting recipe, debug dialog, messages, questions,
   items' stats, giving, dropping, buying, selling items, setting shortcut keys,
   setting new goal, known bases, known events, accepted missions, map menu,
-  available mission's info, accepting missions in bases
+  available mission's info, accepting missions in bases, renaming the player's
+  ship its modules and crew members
 - Updated README.md
 - Updated modding guide
 
