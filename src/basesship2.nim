@@ -141,7 +141,8 @@ proc installModule(moduleIndex, traderIndex, moneyAmount, hullIndex: int;
               weight = modulesList[
           moduleIndex].weight, durability = modulesList[moduleIndex].durability,
           maxDurability = modulesList[moduleIndex].durability,
-          upgradeAction = none, installedModules = modulesList[moduleIndex].value,
+          upgradeAction = none, installedModules = modulesList[
+              moduleIndex].value,
           maxModules = modulesList[moduleIndex].maxValue), i = hullIndex)
     else:
       var owners: seq[int] = @[]
@@ -172,21 +173,24 @@ proc installModule(moduleIndex, traderIndex, moneyAmount, hullIndex: int;
             moduleIndex].durability, owner = owners, upgradeAction = none,
             trainedSkill = 0))
       of cockpit:
-        playerShip.modules.add(y = initModuleData(mType = cockpit, name = modulesList[
-            moduleIndex].name, protoIndex = moduleIndex, weight = modulesList[
+        playerShip.modules.add(y = initModuleData(mType = cockpit,
+            name = modulesList[moduleIndex].name, protoIndex = moduleIndex,
+                weight = modulesList[
             moduleIndex].weight, durability = modulesList[
             moduleIndex].durability, maxDurability = modulesList[
             moduleIndex].durability, owner = owners, upgradeAction = none))
       of turret:
-        playerShip.modules.add(y = initModuleData(mType = turret, name = modulesList[
-            moduleIndex].name, protoIndex = moduleIndex, weight = modulesList[
+        playerShip.modules.add(y = initModuleData(mType = turret,
+            name = modulesList[moduleIndex].name, protoIndex = moduleIndex,
+                weight = modulesList[
             moduleIndex].weight, durability = modulesList[
             moduleIndex].durability, maxDurability = modulesList[
             moduleIndex].durability, owner = owners, upgradeAction = none,
             gunIndex = -1))
       of cabin:
-        playerShip.modules.add(y = initModuleData(mType = cabin, name = modulesList[
-            moduleIndex].name, protoIndex = moduleIndex, weight = modulesList[
+        playerShip.modules.add(y = initModuleData(mType = cabin,
+            name = modulesList[moduleIndex].name, protoIndex = moduleIndex,
+                weight = modulesList[
             moduleIndex].weight, durability = modulesList[
             moduleIndex].durability, maxDurability = modulesList[
             moduleIndex].durability, owner = owners, upgradeAction = none,
@@ -200,16 +204,18 @@ proc installModule(moduleIndex, traderIndex, moneyAmount, hullIndex: int;
             moduleIndex].durability, maxDurability = modulesList[
             moduleIndex].durability, owner = owners, upgradeAction = none))
       of engine:
-        playerShip.modules.add(y = initModuleData(mType = engine, name = modulesList[
-            moduleIndex].name, protoIndex = moduleIndex, weight = modulesList[
+        playerShip.modules.add(y = initModuleData(mType = engine,
+            name = modulesList[moduleIndex].name, protoIndex = moduleIndex,
+                weight = modulesList[
             moduleIndex].weight, durability = modulesList[
             moduleIndex].durability, maxDurability = modulesList[
             moduleIndex].durability, owner = owners, upgradeAction = none,
             fuelUsage = modulesList[moduleIndex].value, power = modulesList[
             moduleIndex].maxValue, disabled = false))
       of armor:
-        playerShip.modules.add(y = initModuleData(mType = armor, name = modulesList[
-            moduleIndex].name, protoIndex = moduleIndex, weight = modulesList[
+        playerShip.modules.add(y = initModuleData(mType = armor,
+            name = modulesList[moduleIndex].name, protoIndex = moduleIndex,
+                weight = modulesList[
             moduleIndex].weight, durability = modulesList[
             moduleIndex].durability, maxDurability = modulesList[
             moduleIndex].durability, owner = owners, upgradeAction = none))
@@ -221,8 +227,9 @@ proc installModule(moduleIndex, traderIndex, moneyAmount, hullIndex: int;
             moduleIndex].durability, owner = owners, upgradeAction = none,
             damage2 = modulesList[moduleIndex].maxValue, coolingDown = false))
       of gun:
-        playerShip.modules.add(y = initModuleData(mType = gun, name = modulesList[
-            moduleIndex].name, protoIndex = moduleIndex, weight = modulesList[
+        playerShip.modules.add(y = initModuleData(mType = gun,
+            name = modulesList[moduleIndex].name, protoIndex = moduleIndex,
+                weight = modulesList[
             moduleIndex].weight, durability = modulesList[
             moduleIndex].durability, maxDurability = modulesList[
             moduleIndex].durability, owner = owners, upgradeAction = none,
