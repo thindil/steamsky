@@ -429,8 +429,8 @@ proc showAttributes(member: MemberData; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter dialog.
   for index, attrib in member.attributes:
-    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
-        0.5, 0.1])
+    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [140.cfloat,
+        220 - buttonHeight, buttonHeight])
     label(str = attributesList[index].name & ":")
     colorLabel(str = getAttributeLevelName(attributeLevel = attrib.level),
         color = theme.colors[goldenColor])
@@ -459,8 +459,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
   const
     width: float = 400
     height: float = 500
-    col1: float = 160
-    col2: float = 240
+    col1: float = 140
+    col2: float = 220
 
   let
     member: MemberData = playerShip.crew[crewIndex]
@@ -613,7 +613,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
           label(str = "Gender:")
           colorLabel(str = (if member.gender == 'M': "Male" else: "Female"),
               color = theme.colors[goldenColor])
-        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
+        setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2])
         label(str = "Faction:")
         colorLabel(str = faction.name, color = theme.colors[goldenColor])
         label(str = "Home base:")
@@ -622,8 +622,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
           setLayoutRowDynamic(height = labelHeight, cols = 1)
           label(str = "Passenger")
           if member.contractLength > 0:
-            setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-                0.4.cfloat, 0.6])
+            setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+                col1.cfloat, col2])
             label(str = "Time limit:")
             var memberInfo: string = ""
             minutesToDate(minutes = member.contractLength,
@@ -631,8 +631,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             colorLabel(str = memberInfo, color = theme.colors[goldenColor])
         else:
           if crewIndex > 0:
-            setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-                0.4.cfloat, 0.6])
+            setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+                col1.cfloat, col2])
             label(str = "Contract length:")
             colorLabel(str = (if member.contractLength >
                 0: $member.contractLength & " days" else: "Pernament"),
@@ -649,8 +649,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       # Skills of the selected crew member
       of 2:
         for index, skill in member.skills:
-          setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
-              0.4.cfloat, 0.5, 0.1])
+          setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+              col1.cfloat, col2 - buttonHeight, buttonHeight])
           try:
             label(str = skillsList[skill.index].name & ":")
           except:
