@@ -306,6 +306,18 @@ var
   fontScale: cfloat = 0.0 ## The scale used to resize a font
   sdl: NkSdl = NkSdl()    ## The SDL backend settings
 
+proc nkSdlClipboardPaste(usr: nk_handle; edit: nk_text_edit) {.raises: [],
+    tags: [], contractual, used.} =
+  ## Handles pasting a text from a system clipboard to an edit field
+  ##
+  ## * usr  - an additional data. Unused
+  ## * edit - the edit field to which the clipboard text will be pasted
+  let text: pointer = SDL_GetClipboardText()
+  if text != nil:
+    let textLen: cint = cast[cstring](text).len.cint
+    discard nk_textedit_paste(state = edit, ctext = text, len = textLen)
+    discard usr
+
 proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
     iconPath: string = ""): PContext {.discardable, raises: [], tags: [],
         contractual.} =
