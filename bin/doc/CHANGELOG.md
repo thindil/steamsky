@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
   items' stats, giving, dropping, buying, selling items, setting shortcut keys,
   setting new goal, known bases, known events, accepted missions, map menu,
   available mission's info, accepting missions in bases, renaming the player's
-  ship its modules and crew members
+  ship its modules and crew members, giving orders to crew members
 - Better looking general information about the player's ship
 - Updated README.md
 - Updated modding guide
