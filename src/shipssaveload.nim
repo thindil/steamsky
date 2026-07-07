@@ -252,7 +252,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           mType = turret
         of gun:
           mType = gun
-        of cargo:
+        of ModuleType.cargo:
           mType = cargoRoom
         of hull:
           mType = hull
@@ -280,7 +280,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
           mType = turret
         of gun:
           mType = gun
-        of cargo:
+        of ModuleType.cargo:
           mType = cargoRoom
         of hull:
           mType = hull

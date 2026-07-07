@@ -196,7 +196,7 @@ proc installModule(moduleIndex, traderIndex, moneyAmount, hullIndex: int;
             moduleIndex].durability, owner = owners, upgradeAction = none,
             cleanliness = modulesList[moduleIndex].value, quality = modulesList[
             moduleIndex].maxValue))
-      of cargo:
+      of ModuleType.cargo:
         playerShip.modules.add(y = initModuleData(mType = cargoRoom,
             name = modulesList[moduleIndex].name, protoIndex = moduleIndex,
                 weight = modulesList[
@@ -312,7 +312,7 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
           if module.mType == ModuleType2.turret and module.gunIndex == shipModuleIndex:
             module.gunIndex = -1
             break
-      of cargo:
+      of ModuleType.cargo:
         if freeCargo(amount = 0 - modulesList[playerShip.modules[
             shipModuleIndex].protoIndex].maxValue) < 0:
           raise newException(exceptn = RemovingError,

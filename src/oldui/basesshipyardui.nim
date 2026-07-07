@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Bartek thindil Jasicki
+# Copyright 2024-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -919,7 +919,7 @@ proc setModuleInfo(installing: bool; row: var Positive;
         except:
           showError(message = "Can't get module value2")
           return
-    of cargo:
+    of ModuleType.cargo:
       maxValue = try:
           modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxValue
         except:
@@ -970,7 +970,7 @@ proc setModuleInfo(installing: bool; row: var Positive;
   of engine:
     setEngineInfo(installing = installing, row = row, newInfo = newInfo,
       shipModuleIndex = shipModuleIndex, value = value, maxValue = maxValue)
-  of cargo:
+  of ModuleType.cargo:
     setCargoInfo(installing = installing, row = row, newInfo = newInfo,
       shipModuleIndex = shipModuleIndex, maxValue = maxValue)
   of cabin:

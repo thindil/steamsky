@@ -548,7 +548,7 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
         except:
           dialog = setError(message = "Can't get module value2")
           return
-    of cargo:
+    of ModuleType.cargo:
       maxValue = try:
           modulesList[playerShip.modules[moduleIndex].protoIndex].maxValue
         except:
@@ -599,7 +599,7 @@ proc setModuleInfo(dialog: var GameDialog; installing: bool) {.raises: [],
   of engine:
     setEngineInfo(installing = installing, shipModuleIndex = shipModuleIndex,
       value = value, maxValue = maxValue)
-  of cargo:
+  of ModuleType.cargo:
     setCargoInfo(dialog = dialog, installing = installing,
       shipModuleIndex = shipModuleIndex, maxValue = maxValue)
   of cabin:
@@ -925,7 +925,7 @@ proc setRemoveInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     dialogHeight += (labelHeight * 3) + 10
   of cockpit, turret:
     dialogHeight += labelHeight
-  of alchemyLab..greenhouse, cargo, batteringRam:
+  of alchemyLab..greenhouse, ModuleType.cargo, batteringRam:
     dialogHeight += (labelHeight * 2) + 5
   of gun, harpoonGun:
     dialogHeight += (labelHeight * 5)
