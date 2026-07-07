@@ -459,6 +459,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
   const
     width: float = 400
     height: float = 500
+    col1: float = 160
+    col2: float = 240
 
   let
     member: MemberData = playerShip.crew[crewIndex]
@@ -491,16 +493,16 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       case currentTab
       # General information about the selected crew member
       of 0:
-        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
-            0.4.cfloat, 0.5, 0.1])
+        setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+            col1.cfloat, col2 - buttonHeight, buttonHeight])
         label(str = "Name:")
         colorLabel(str = member.name, color = theme.colors[goldenColor])
         imageButton(image = images[editIcon],
             tooltip = "Set a new name for the crew member"):
           dialog = renameMemberDialog
         if member.health < 100:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-              0.4.cfloat, 0.6])
+          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+              col1.cfloat, col2])
           label(str = "Health:")
           if gameSettings.showNumbers:
             colorLabel(str = $member.health & "%", color = theme.colors[goldenColor])
@@ -515,8 +517,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if tiredPoints > 0:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-              0.4.cfloat, 0.6])
+          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+              col1.cfloat, col2])
           label(str = "Tiredness:")
           if gameSettings.showNumbers:
             colorLabel(str = $tiredPoints & "%", color = theme.colors[goldenColor])
@@ -533,8 +535,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.thirst > 0:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-              0.4.cfloat, 0.6])
+          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+              col1.cfloat, col2])
           label(str = "Thirst:")
           if gameSettings.showNumbers:
             colorLabel(str = $member.thirst & "%", color = theme.colors[goldenColor])
@@ -551,8 +553,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.hunger > 0:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-              0.4.cfloat, 0.6])
+          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+              col1.cfloat, col2])
           label(str = "Hunger:")
           if gameSettings.showNumbers:
             colorLabel(str = $member.hunger & "%", color = theme.colors[goldenColor])
@@ -569,8 +571,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.morale[1] != 50:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-              0.4.cfloat, 0.6])
+          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+              col1.cfloat, col2])
           label(str = "Morale:")
           if gameSettings.showNumbers:
             colorLabel(str = $member.morale[1] & "%", color = theme.colors[goldenColor])
@@ -587,8 +589,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.skills.len > 0:
-          setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
-              0.4.cfloat, 0.5, 0.1])
+          setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+              col1.cfloat, col2 - buttonHeight, buttonHeight])
           label(str = "Order:")
           try:
             colorLabel(str = getCurrentOrder(memberIndex = crewIndex),
