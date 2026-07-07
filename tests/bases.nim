@@ -17,9 +17,9 @@ suite "Unit tests for bases module":
   playerShip.crew = @[]
   const attribute = initMobAttributeRecord(level = 3, experience = 0)
   playerShip.crew.add(initMemberData(morale = [1: 50.Natural, 2: 0.Natural],
-      homeBase = 1, faction = "POLEIS", orders = [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
-      1, 0, 0], order = talk, loyalty = 100, skills = @[initSkillInfo(index = 4, level = 4,
-      experience = 0)], attributes = @[attribute,
+      homeBase = 1, faction = "POLEIS", orders = [0.Natural, 0, 0, 1, 1, 1, 2,
+      1, 1, 1, 0, 0], order = talk, loyalty = 100, skills = @[initSkillInfo(
+      index = 4, level = 4, experience = 0)], attributes = @[attribute,
       attribute, attribute, attribute], health = 100))
   skyMap[1][1].baseIndex = 1
   skyBases[1].population = 100
@@ -60,7 +60,7 @@ suite "Unit tests for bases module":
     updatePopulation()
 
   test "Generating recruits in a base with positive reputation.":
-    skyBases[1].reputation.level = 10
+    skyBases[1].reputation = initReputationData(level = 10)
     generateRecruits()
     check:
       skyBases[1].recruits.len > 0
@@ -68,7 +68,7 @@ suite "Unit tests for bases module":
   test "Generating recruits in a base with negative reputation.":
     skyBases[1].recruits = @[]
     skyBases[1].recruitDate = noDate
-    skyBases[1].reputation.level = -50
+    skyBases[1].reputation = initReputationData(level = -50)
     generateRecruits()
     check:
       skyBases[1].recruits.len > 0
@@ -76,7 +76,7 @@ suite "Unit tests for bases module":
   test "Generating recruits in a base with zero reputation":
     skyBases[1].recruits = @[]
     skyBases[1].recruitDate = noDate
-    skyBases[1].reputation.level = 0
+    skyBases[1].reputation = initReputationData(level = 0)
     generateRecruits()
     check:
       skyBases[1].recruits.len > 0
