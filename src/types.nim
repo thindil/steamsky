@@ -1374,11 +1374,11 @@ type
     askedForBases: bool
     askedForEvents: DateRecord
     reputation: ReputationData
-    missionsDate*: DateRecord
+    missionsDate: DateRecord
     missions*: seq[MissionData]
-    owner*: FactionIndex
+    owner: FactionIndex
     cargo*: seq[BaseCargo]
-    size*: BasesSize
+    size: BasesSize
 
 proc initBaseRecord*(name: BaseName = ""; visited: DateRecord = initDateRecord(
     ); skyX: MapXRange = 1; skyY: MapYRange = 1; baseType: BaseType = "";
@@ -1442,6 +1442,15 @@ typeGetterSetter(baseType = BaseRecord, varName = base, name = askedForEvents,
     typ = DateRecord)
 typeGetterSetter(baseType = BaseRecord, varName = base, name = reputation,
     typ = ReputationData)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = missionsDate,
+    typ = DateRecord)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = missions,
+    typ = seq[MissionData])
+typeGetterSetter(baseType = BaseRecord, varName = base, name = owner,
+    typ = FactionIndex)
+typeGetterSetter(baseType = BaseRecord, varName = base, name = cargo, typ = seq[BaseCargo])
+typeGetterSetter(baseType = BaseRecord, varName = base, name = size,
+    typ = BasesSize)
 
 type
   BaseModuleData* = object
