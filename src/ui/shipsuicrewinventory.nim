@@ -338,7 +338,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
       for data in inventoryDataList.mitems:
         data.checked = false
     # Show the list of items in inventory
-    setLayoutRowDynamic(height = height - 170, cols = 1)
+    setLayoutRowDynamic(height = height - labelHeight - buttonHeight - dialogButtonHeight - 80, cols = 1)
     group(title = "InfoGroup", flags = {windowNoFlags}):
       addHeader(headers = headers, ratio = ratio, tooltip = "items",
           code = sortInventory, dialog = dialog)
