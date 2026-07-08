@@ -1341,6 +1341,7 @@ typeGetterSetter(baseType = MissionData, varName = mission, name = shipIndex,
 typeGetterSetter(baseType = MissionData, varName = mission, name = target,
     typ = Natural)
 
+{.push ruleOff: "objects".}
 type
   BaseRecord* = object
     ## Used to store information about bases
@@ -1379,6 +1380,7 @@ type
     owner: FactionIndex
     cargo*: seq[BaseCargo]
     size: BasesSize
+{.pop ruleOn: "objects".}
 
 proc initBaseRecord*(name: BaseName = ""; visited: DateRecord = initDateRecord(
     ); skyX: MapXRange = 1; skyY: MapYRange = 1; baseType: BaseType = "";
