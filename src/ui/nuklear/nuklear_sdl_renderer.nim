@@ -169,13 +169,6 @@ const
   SDL_WINDOW_FULLSCREEN: cint = 0x00000001
   windowCentered*: cint = SDL_WINDOWPOS_CENTERED ## The centered position of a window
 
-proc SDL_SetHint(name, value: cstring) {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## Internal SDL binding
-proc SDL_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## Internal SDL binding
-proc SDL_CreateWindow(title: cstring; x, y, w, h: cint;
-    flags: cuint): WindowPtr {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## Internal SDL binding
 proc SDL_Log(fmt: cstring) {.importc, varargs, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL binding
 proc SDL_GetError(): cstring {.importc, nodecl, raises: [], tags: [], contractual.}
@@ -257,11 +250,6 @@ proc SDL_WarpMouseInWindow(window: WindowPtr; x, y: cint) {.importc, nodecl,
 proc SDL_SetRelativeMouseMode(enabled: cint): cint {.importc, nodecl, raises: [
     ], tags: [], contractual.}
   ## Internal SDL binding
-proc SDL_GetClipboardText(): pointer {.importc, nodecl, raises: [], tags: [],
-    contractual, used.}
-  ## Internal SDL binding
-proc IMG_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## Internal SDL Image binding
 proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal SDL Image binding
 proc IMG_LoadSizedSVG_RW(src: RWPtr; width, height: cint): SurfacePtr {.importc,
@@ -312,6 +300,9 @@ proc nkSdlClipboardPaste(usr: nk_handle; edit: nk_text_edit) {.raises: [],
   ##
   ## * usr  - an additional data. Unused
   ## * edit - the edit field to which the clipboard text will be pasted
+  proc SDL_GetClipboardText(): pointer {.importc, nodecl, raises: [], tags: [],
+      contractual.}
+    ## Internal SDL binding
   let text: pointer = SDL_GetClipboardText()
   if text != nil:
     let textLen: cint = cast[cstring](text).len.cint
@@ -328,6 +319,19 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   ## * windowHeight - the default main window height
   ## * name         - the title of the main window
   ## * iconPath     - the full path to the window's icon. Default value is empty.
+  proc SDL_SetHint(name, value: cstring) {.importc, nodecl, raises: [],
+      tags: [], contractual.}
+    ## Internal SDL binding
+  proc SDL_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [],
+      contractual.}
+    ## Internal SDL binding
+  proc IMG_Init(flags: cint): cint {.importc, nodecl, raises: [], tags: [],
+      contractual.}
+    ## Internal SDL Image binding
+  proc SDL_CreateWindow(title: cstring; x, y, w, h: cint;
+      flags: cuint): WindowPtr {.importc, nodecl, raises: [], tags: [],
+      contractual.}
+    ## Internal SDL binding
   SDL_SetHint(name = "SDL_HINT_VIDEO_HIGHDPI_DISABLED", value = "0")
   discard SDL_Init(flags = SDL_INIT_VIDEO)
   discard IMG_Init(flags = IMG_INIT_PNG)
