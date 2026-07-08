@@ -322,6 +322,7 @@ proc setGiveOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
   dialog = giveOrderDialog
   currentOrder = 0
   setAvailableOrders(memberIndex = crewIndex, dialog = dialog)
+  setDialog(x = windowWidth / 4)
 
 proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
