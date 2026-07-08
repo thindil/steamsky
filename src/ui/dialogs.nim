@@ -980,11 +980,11 @@ proc showInventoryItemInfo*(itemIndex: Natural; memberIndex: int;
     itemInfo.add(y = "\nDamage type: {gold}")
     itemInfo.add(y = case itemsList[protoIndex].value[5]
       of 1:
-        "cutting"
+        "Cutting"
       of 2:
-        "impaling"
+        "Impaling"
       of 3:
-        "blunt"
+        "Blunt"
       else:
         "")
     itemInfo.add(y = "{/gold}")
