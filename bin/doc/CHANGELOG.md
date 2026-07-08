@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Crash when setting the player's goal as random
 - Setting the player's goal for an existing game
 - Showing last messages on various screens
+- Quitting the game in debug mode
 
 ## [12.4] - 2026-06-14
 
