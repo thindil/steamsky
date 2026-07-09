@@ -586,36 +586,40 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
     windowName: string = "Assign a crew member to " & module.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowMovable}):
-    setLayoutRowDynamic(height = buttonHeight, cols = 1)
+      flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     var assigned: Natural = 0
-    for index, member in playerShip.crew:
-      var checked: bool = index in module.owner
-      if checkbox(label = member.name, checked = checked):
-        if checked and assigned == module.owner.len:
-          checked = false
+    setLayoutRowDynamic(height = height - dialogButtonHeight - labelHeight - 60, cols = 1)
+    group(title = "CrewGroup", flags = {windowNoFlags}):
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+      for index, member in playerShip.crew:
+        var checked: bool = index in module.owner
+        if checkbox(label = member.name, checked = checked):
+          if checked and assigned == module.owner.len:
+            checked = false
+          if checked:
+            assignModule(assignAction = crew, assignIndex = index,
+                dialog = dialog)
+          else:
+            for owner in playerShip.modules[moduleIndex].owner.mitems:
+              if owner == index:
+                owner = -1
+                break
+            try:
+              if modulesList[module.protoIndex].mType != ModuleType.cabin:
+                giveOrders(ship = playerShip, memberIndex = crewIndex,
+                    givenOrder = rest, moduleIndex = -1, checkPriorities = false)
+            except CrewOrderError, CrewNoSpaceError:
+              dialog = setMessage(message = getCurrentExceptionMsg(),
+                  title = "Can't give a order")
+              return
+            except:
+              dialog = setError(message = "Can't give order to a crew member.")
+              return
         if checked:
-          assignModule(assignAction = crew, assignIndex = index,
-              dialog = dialog)
-        else:
-          for owner in playerShip.modules[moduleIndex].owner.mitems:
-            if owner == index:
-              owner = -1
-              break
-          try:
-            if modulesList[module.protoIndex].mType != ModuleType.cabin:
-              giveOrders(ship = playerShip, memberIndex = crewIndex,
-                  givenOrder = rest, moduleIndex = -1, checkPriorities = false)
-          except CrewOrderError, CrewNoSpaceError:
-            dialog = setMessage(message = getCurrentExceptionMsg(),
-                title = "Can't give a order")
-            return
-          except:
-            dialog = setError(message = "Can't give order to a crew member.")
-            return
-      if checked:
-        assigned.inc
+          assigned.inc
+    setLayoutRowDynamic(height = labelHeight, cols = 1)
     label(str = "Available: " & $(module.owner.len - assigned))
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
