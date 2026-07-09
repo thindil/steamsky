@@ -77,14 +77,16 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
       if morale > 100:
         morale = 100
     playerShip.crew.add(y = initMemberData(name = recruit.name,
-        gender = recruit.gender, health = 100, tired = 0, skills = recruit.skills,
+        gender = recruit.gender, health = 100, tired = 0,
+        skills = recruit.skills,
         hunger = 0, thirst = 0,
         order = rest, previousOrder = rest, orderTime = 15,
         attributes = recruit.attributes, inventory = inventory,
         equipment = recruit.equipment, payment = [1: dailyPayment,
             2: tradePayment],
         contractLength = contractLength, morale = [1: morale, 2: 0],
-        loyalty = morale, homeBase = recruit.homeBase, faction = recruit.faction))
+        loyalty = morale, homeBase = recruit.homeBase,
+            faction = recruit.faction))
     checkMoney(price = price, message = recruit.name)
     updateMoney(memberIndex = -1, amount = -price, quality = any)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
