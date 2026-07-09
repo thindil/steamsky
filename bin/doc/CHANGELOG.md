@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
   setting new goal, known bases, known events, accepted missions, map menu,
   available mission's info, accepting missions in bases, renaming the player's
   ship its modules and crew members, giving orders to crew members, information
-  about crew members, crew members inventories
+  about crew members, crew members inventories, assigning crew members to a
+  module
 - Better looking general information about the player's ship
 - Updated README.md
 - Updated modding guide
