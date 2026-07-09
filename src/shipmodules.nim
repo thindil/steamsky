@@ -64,15 +64,16 @@ proc loadModules*(fileName: Path) {.raises: [DataLoadingError],
         modulesList.del(key = moduleIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "module removed: '" & $moduleIndex & "'", messageLevel = lvlInfo)
+        logMessage(message = "module removed: '" & $moduleIndex & "'",
+            messageLevel = lvlInfo)
         continue
       var module: BaseModuleData = if moduleAction == DataAction.update:
           try:
             modulesList[moduleIndex]
           except ValueError:
-            BaseModuleData(repairSkill: 1, installTime: 1, size: 1)
+            BaseModuleData(repairSkill: 1, installTime: 1, size: 1, durability: 1)
         else:
-          BaseModuleData(repairSkill: 1, installTime: 1, size: 1)
+          BaseModuleData(repairSkill: 1, installTime: 1, size: 1, durability: 1)
       var attribute: XmlAttribute = moduleNode.attr(name = "name")
       if attribute.len() > 0:
         module.name = attribute
@@ -191,9 +192,11 @@ proc loadModules*(fileName: Path) {.raises: [DataLoadingError],
       if attribute.len() > 0:
         module.description = attribute
       if moduleAction == DataAction.add:
-        logMessage(message = "Module added: '" & $moduleIndex & "'", messageLevel = lvlInfo)
+        logMessage(message = "Module added: '" & $moduleIndex & "'",
+            messageLevel = lvlInfo)
       else:
-        logMessage(message = "Module updated: '" & $moduleIndex & "'", messageLevel = lvlInfo)
+        logMessage(message = "Module updated: '" & $moduleIndex & "'",
+            messageLevel = lvlInfo)
       modulesList[moduleIndex] = module
 
 proc getModuleType*(moduleIndex: Positive): string {.raises: [
