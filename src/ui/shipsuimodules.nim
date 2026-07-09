@@ -588,7 +588,8 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     var assigned: Natural = 0
-    setLayoutRowDynamic(height = height - dialogButtonHeight - labelHeight - 60, cols = 1)
+    setLayoutRowDynamic(height = height - dialogButtonHeight - labelHeight -
+        60, cols = 1)
     group(title = "CrewGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
       for index, member in playerShip.crew:
@@ -607,7 +608,8 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
             try:
               if modulesList[module.protoIndex].mType != ModuleType.cabin:
                 giveOrders(ship = playerShip, memberIndex = crewIndex,
-                    givenOrder = rest, moduleIndex = -1, checkPriorities = false)
+                    givenOrder = rest, moduleIndex = -1,
+                    checkPriorities = false)
             except CrewOrderError, CrewNoSpaceError:
               dialog = setMessage(message = getCurrentExceptionMsg(),
                   title = "Can't give a order")
@@ -1093,7 +1095,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         except:
           dialog = setError(message = "Can't set trainText.")
           return
-      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+          0.5, 0.08])
       label(str = "Trained skill:")
       colorLabel(str = trainText, color = theme.colors[goldenColor])
       imageButton(image = images[assignCrewIcon],
@@ -1108,7 +1111,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           dialog = setError(message = "Can't count the battering ram max value.")
           return
       if module.damage2 < moduleMaxValue2:
-        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+            0.4.cfloat, 0.5, 0.08])
       else:
         setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
       label(str = "Strength:")
