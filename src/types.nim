@@ -1474,12 +1474,12 @@ type
     ## * maxOwners      - The amount of users of the module
     ## * speed          - How fast the gun shoots in the combat
     ## * reputation     - The minumum amount of reputation needed for buy the module
-    name*: string
+    name*: ModuleName
     mType*: ModuleType
     weight*: Natural
-    value*: int
-    maxValue*: int
-    durability*: int
+    value*: Natural
+    maxValue*: Natural
+    durability*: Positive
     repairMaterial*: string
     repairSkill*: Positive
     price*: Natural
@@ -1491,6 +1491,7 @@ type
     speed*: int
     reputation*: ReputationRange
 
+type
   CraftData* = object
     ## Used to store information about crafting recipes
     ##
