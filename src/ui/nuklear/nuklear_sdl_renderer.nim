@@ -309,27 +309,23 @@ proc nkSdlClipboardPaste(usr: nk_handle; edit: nk_text_edit) {.raises: [],
     discard nk_textedit_paste(state = edit, ctext = text, len = textLen)
     discard usr
 
-proc nkSdlClipboardCopy(usr: nk_handle; text: pointer; len: cint) {.raises: [],
-    tags: [], contractual, used.} =
+proc nkSdlClipboardCopy(usr: nk_handle; text: cstring; len: cint) {.raises: [],
+    tags: [], contractual, cdecl.} =
   ## Handles copying a text to a system's clipboard
   ##
   ## * usr  - an aditional data. Unused
   ## * text - the text which will be copied to clipboard
   ## * len  - the length of the text which will be copied to clipboard
-  proc SDL_SetClipboardText(text: pointer): int {.importc, nodecl, raises: [],
+  proc SDL_SetClipboardText(text: cstring): int {.importc, nodecl, raises: [],
       tags: [], contractual.}
     ## Internal SDL binding
   if len == 0:
     return
   discard usr
-  let textArray: array[0..1024, char] = cast[array[0..1024, char]](text)
-  var str: seq[char] = @[]
+  var newText: string = ""
   for i in 0..len:
-    str.add(y = textArray[i])
-    if i == textArray.high:
-      break
-  str.add(y = '\0')
-  discard SDL_SetClipboardText(text = str.addr)
+    newText &= text[i]
+  discard SDL_SetClipboardText(text = newText.cstring)
 
 proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
     iconPath: string = ""): PContext {.discardable, raises: [], tags: [],
@@ -384,6 +380,7 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   fontScale = scaleY
   setContext(newContext = nk_sdl_init(win = sdl.win, renderer = sdl.renderer))
   #nkInit(ctx = context)
+  ctx.clip.copy = nkSdlClipboardCopy
   return getContext()
 
 proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
