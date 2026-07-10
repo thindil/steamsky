@@ -1480,15 +1480,15 @@ type
     value*: Natural
     maxValue*: Natural
     durability*: Positive
-    repairMaterial*: string
+    repairMaterial*: ItemType
     repairSkill*: Positive
     price*: Natural
     installTime*: Positive
     unique*: bool
     size*: range[1..10]
-    description*: string
+    description*: Description
     maxOwners*: range[0..10]
-    speed*: int
+    speed*: range[-100..100]
     reputation*: ReputationRange
 
 type
