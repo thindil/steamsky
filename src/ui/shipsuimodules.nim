@@ -623,6 +623,8 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
     label(str = "Available: " & $(module.owner.len - assigned))
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
+    if dialog == none:
+      dialog = moduleInfoDialog
 
   windowSetFocus(name = windowName)
 
