@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
   available mission's info, accepting missions in bases, renaming the player's
   ship its modules and crew members, giving orders to crew members, information
   about crew members, crew members inventories, assigning crew members to a
-  module
+  module, assigning an ammunition to a gun
 - Better looking general information about the player's ship
 - Updated README.md
 - Updated modding guide
