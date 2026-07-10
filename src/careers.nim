@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -48,8 +48,8 @@ proc skills*(career: CareerData): seq[SkillName] {.raises: [], tags: [],
   ## Returns the value of the selected field
   career.skills
 
-proc initCareerData(name: CareerName = ""; skills: seq[SkillName] = @[]): CareerData {.raises: [],
-    tags: [], contractual.} =
+proc initCareerData(name: CareerName = ""; skills: seq[SkillName] = @[
+    ]): CareerData {.raises: [], tags: [], contractual.} =
   ## Create a new data structure for the player's career's data
   ##
   ## * name   - the name of the career
