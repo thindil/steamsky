@@ -636,28 +636,32 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   const
     width: float = 300
-    height: float = 400
+    height: float = 200
     windowName: string = "Available ammo"
 
-  let ammoIndex: int = (if playerShip.modules[moduleIndex].mType ==
+  let
+    ammoIndex: int = (if playerShip.modules[moduleIndex].mType ==
         ModuleType2.gun: playerShip.modules[
         moduleIndex].ammoIndex else: playerShip.modules[
         moduleIndex].harpoonIndex)
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowMovable}):
-    setLayoutRowDynamic(height = buttonHeight, cols = 1)
-    for index, item in playerShip.cargo:
-      try:
-        if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
-            playerShip.modules[moduleIndex].protoIndex].value - 1] and index != ammoIndex:
-          labelButton(title = itemsList[item.protoIndex].name):
-            dialog = moduleInfoDialog
-            assignModule(assignAction = ammo, assignIndex = index,
-                dialog = dialog)
-      except:
-        dialog = setError(message = "Can't add button.")
-        return
+      flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
+    setLayoutRowDynamic(height = height - dialogButtonHeight - 60, cols = 1)
+    group(title = "AmmoGroup", flags = {windowNoFlags}):
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+      for index, item in playerShip.cargo:
+        try:
+          if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
+              playerShip.modules[moduleIndex].protoIndex].value - 1] and index != ammoIndex:
+            labelButton(title = itemsList[item.protoIndex].name):
+              dialog = moduleInfoDialog
+              assignModule(assignAction = ammo, assignIndex = index,
+                  dialog = dialog)
+        except:
+          dialog = setError(message = "Can't add an ammo button.")
+          return
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
