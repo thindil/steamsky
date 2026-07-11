@@ -722,7 +722,6 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     setLayoutRowDynamic(height = height - dialogButtonHeight - 60, cols = 1)
     group(title = "SkillsGroup", flags = {windowNoFlags}):
-      setLayoutRowDynamic(height = buttonHeight, cols = 2)
       addHeader(headers = skillHeaders, ratio = skillRatio, tooltip = "",
           code = sortSkills, dialog = dialog)
       saveButtonStyle()
@@ -770,6 +769,9 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
       restoreButtonStyle()
     setLayoutRowDynamic(height = buttonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
+    if dialog == none:
+      dialog = moduleInfoDialog
+      setDialog(x = windowWidth / 10, y = windowHeight / 10)
 
   windowSetFocus(name = windowName)
 
