@@ -625,6 +625,7 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
     addCloseButton(dialog = dialog, isPopup = false)
     if dialog == none:
       dialog = moduleInfoDialog
+      setDialog(x = windowWidth / 10, y = windowHeight / 10)
 
   windowSetFocus(name = windowName)
 
@@ -658,6 +659,7 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
               playerShip.modules[moduleIndex].protoIndex].value - 1] and index != ammoIndex:
             labelButton(title = itemsList[item.protoIndex].name):
               dialog = moduleInfoDialog
+              setDialog(x = windowWidth / 10, y = windowHeight / 10)
               assignModule(assignAction = ammo, assignIndex = index,
                   dialog = dialog)
         except:
@@ -665,6 +667,9 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
           return
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
+    if dialog == none:
+      dialog = moduleInfoDialog
+      setDialog(x = windowWidth / 10, y = windowHeight / 10)
 
   windowSetFocus(name = windowName)
 
