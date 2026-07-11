@@ -1491,6 +1491,20 @@ type
     speed*: range[-100..100]
     reputation*: ReputationRange
 
+proc initBaseModuleData*(name: ModuleName = "";
+    mType: ModuleType = ModuleType.any; weight: Natural = 0;
+    value: Natural = 0): BaseModuleData {.raises: [], tags: [], contractual.} =
+  ## Create a new data structure for a prototype of module
+  ##
+  ## * name           - The name of the module
+  ## * mType          - The type of the module
+  ## * weight         - The weight of the module
+  ## * value          - Additional data for the module, for engines it is power
+  ##
+  ## Returns the new structure with information about the selected module's prototype
+  return BaseModuleData(name: name, mType: mType, weight: weight, value: value,
+      durability: 1, repairSkill: 1, installTime: 1, size: 1)
+
 type
   CraftData* = object
     ## Used to store information about crafting recipes
