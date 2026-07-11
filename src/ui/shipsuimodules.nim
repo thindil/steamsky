@@ -712,7 +712,7 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
         ModulesSortOrders](label: "Skill", sortAsc: none, sortDesc: none),
         HeaderData[ModulesSortOrders](label: "Training tool", sortAsc: none,
         sortDesc: none)]
-    skillRatio: array[2, cfloat] = [235.cfloat, 235]
+    skillRatio: array[2, cfloat] = [230.cfloat, 230]
 
   let
     module: ModuleData = playerShip.modules[moduleIndex]
@@ -720,9 +720,9 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
-    setLayoutRowDynamic(height = height - dialogButtonHeight, cols = 1)
+    setLayoutRowDynamic(height = height - dialogButtonHeight - 60, cols = 1)
     group(title = "SkillsGroup", flags = {windowNoFlags}):
-      setLayoutRowDynamic(height = buttonHeight, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 2)
       addHeader(headers = skillHeaders, ratio = skillRatio, tooltip = "",
           code = sortSkills, dialog = dialog)
       saveButtonStyle()
