@@ -719,53 +719,55 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
     windowName: string = "Assign a skill to " & module.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowMovable}):
-    setLayoutRowDynamic(height = buttonHeight, cols = 1)
-    addHeader(headers = skillHeaders, ratio = skillRatio, tooltip = "",
-        code = sortSkills, dialog = dialog)
-    saveButtonStyle()
-    setButtonStyle(field = borderColor, a = 0)
-    try:
-      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    except:
-      dialog = setError(message = "Can't set table color")
-      return
-    setButtonStyle(field = rounding, value = 0)
-    setButtonStyle(field = border, value = 0)
-    for index, skill in skillsList:
-      var
-        protoIndex: int = -1
-        toolName: string = ""
-      if skill.tool.len > 0:
-        protoIndex = findProtoItem(itemType = skill.tool)
-        toolName = try:
-            (if itemsList[protoIndex].showType.len > 0: itemsList[
-                protoIndex].showType else: itemsList[protoIndex].itemType)
-          except:
-            dialog = setError(message = "Can't get the tool name.")
-            return
-      var
-        skillName: string = skill.name
-        toolColor: Color = theme.colors[greenColor]
+      flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
+    setLayoutRowDynamic(height = height - dialogButtonHeight, cols = 1)
+    group(title = "SkillsGroup", flags = {windowNoFlags}):
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
+      addHeader(headers = skillHeaders, ratio = skillRatio, tooltip = "",
+          code = sortSkills, dialog = dialog)
+      saveButtonStyle()
+      setButtonStyle(field = borderColor, a = 0)
       try:
-        if getItemAmount(itemType = itemsList[protoIndex].itemType) == 0:
-          skillName.add(y = " (no tool)")
-          toolColor = theme.colors[redColor]
+        setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+        setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       except:
-        dialog = setError(message = "Can't check item amount.")
+        dialog = setError(message = "Can't set table color")
         return
-      addButton(label = skillName, tooltip = "Press mouse " & (
-          if gameSettings.rightButton: "right" else: "left") &
-          " button to set as trained skill", data = index, code = assignSkill,
-          dialog = dialog)
-      setButtonStyle(field = textNormal, color = toolColor)
-      addButton(label = toolName, tooltip = "Press mouse " & (
-          if gameSettings.rightButton: "right" else: "left") &
-          " button to set as trained skill", data = index, code = assignSkill,
-          dialog = dialog)
-      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    restoreButtonStyle()
+      setButtonStyle(field = rounding, value = 0)
+      setButtonStyle(field = border, value = 0)
+      for index, skill in skillsList:
+        var
+          protoIndex: int = -1
+          toolName: string = ""
+        if skill.tool.len > 0:
+          protoIndex = findProtoItem(itemType = skill.tool)
+          toolName = try:
+              (if itemsList[protoIndex].showType.len > 0: itemsList[
+                  protoIndex].showType else: itemsList[protoIndex].itemType)
+            except:
+              dialog = setError(message = "Can't get the tool name.")
+              return
+        var
+          skillName: string = skill.name
+          toolColor: Color = theme.colors[greenColor]
+        try:
+          if getItemAmount(itemType = itemsList[protoIndex].itemType) == 0:
+            skillName.add(y = " (no tool)")
+            toolColor = theme.colors[redColor]
+        except:
+          dialog = setError(message = "Can't check item amount.")
+          return
+        addButton(label = skillName, tooltip = "Press mouse " & (
+            if gameSettings.rightButton: "right" else: "left") &
+            " button to set as trained skill", data = index, code = assignSkill,
+            dialog = dialog)
+        setButtonStyle(field = textNormal, color = toolColor)
+        addButton(label = toolName, tooltip = "Press mouse " & (
+            if gameSettings.rightButton: "right" else: "left") &
+            " button to set as trained skill", data = index, code = assignSkill,
+            dialog = dialog)
+        setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+      restoreButtonStyle()
     setLayoutRowDynamic(height = buttonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
