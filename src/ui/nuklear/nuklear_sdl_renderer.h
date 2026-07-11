@@ -225,8 +225,6 @@ nk_sdl_init(SDL_Window *win, SDL_Renderer *renderer)
     sdl.win = win;
     sdl.renderer = renderer;
     nk_init_default(&sdl.ctx, 0);
-    sdl.ctx.clip.paste = nk_sdl_clipboard_paste;
-    sdl.ctx.clip.userdata = nk_handle_ptr(0);
     nk_buffer_init_default(&sdl.ogl.cmds);
     return &sdl.ctx;
 }

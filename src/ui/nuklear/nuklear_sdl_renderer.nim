@@ -294,8 +294,8 @@ var
   fontScale: cfloat = 0.0 ## The scale used to resize a font
   sdl: NkSdl = NkSdl()    ## The SDL backend settings
 
-proc nkSdlClipboardPaste(usr: nk_handle; edit: nk_text_edit) {.raises: [],
-    tags: [], contractual, used.} =
+proc nkSdlClipboardPaste(usr: nk_handle; edit: ptr nk_text_edit) {.raises: [],
+    tags: [], contractual, cdecl.} =
   ## Handles pasting a text from a system clipboard to an edit field
   ##
   ## * usr  - an additional data. Unused
@@ -381,6 +381,8 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   setContext(newContext = nk_sdl_init(win = sdl.win, renderer = sdl.renderer))
   #nkInit(ctx = context)
   ctx.clip.copy = nkSdlClipboardCopy
+  ctx.clip.paste = nkSdlClipboardPaste
+  ctx.clip.userdata = nk_handle()
   return getContext()
 
 proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
