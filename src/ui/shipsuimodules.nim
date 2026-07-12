@@ -656,7 +656,8 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
       for index, item in playerShip.cargo:
         try:
           if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
-              playerShip.modules[moduleIndex].protoIndex].value - 1] and index != ammoIndex:
+              playerShip.modules[moduleIndex].protoIndex].value - 1] and
+                  index != ammoIndex:
             labelButton(title = itemsList[item.protoIndex].name):
               dialog = moduleInfoDialog
               setDialog(x = windowWidth / 10, y = windowHeight / 10)
@@ -942,10 +943,11 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
               0.4.cfloat, 0.5, 0.08])
         else:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+              0.4.cfloat, 0.5])
         label(str = "Modules installed:")
-        colorLabel(str = $module.installedModules & " / " & $module.maxModules & (
-            if module.maxModules == moduleMaxValue2: " (max upgrade)" else: ""),
+        colorLabel(str = $module.installedModules & " / " & $module.maxModules &
+            (if module.maxModules == moduleMaxValue2: " (max upgrade)" else: ""),
             color = theme.colors[goldenColor])
         if module.maxModules < moduleMaxValue2:
           addUpgradeButton(upgradeType = maxValue,
@@ -973,7 +975,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
               0.4.cfloat, 0.5, 0.08])
         else:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+              0.4.cfloat, 0.5])
         label(str = "Strength:")
         colorLabel(str = $moduleStrength & (if moduleStrength ==
             moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
@@ -1025,8 +1028,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
                 return
         for index, item in playerShip.cargo:
           try:
-            if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
-                module.protoIndex].value - 1] and index != ammoIndex:
+            if itemsList[item.protoIndex].itemType == itemsTypesList[
+                modulesList[module.protoIndex].value - 1] and index != ammoIndex:
               imageButton(image = images[assignAmmoIcon]):
                 setDialog(y = windowHeight / 10)
                 dialog = assignAmmoDialog
@@ -1036,7 +1039,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             return
         # Show information about gun's fire rate
         if module.mType == ModuleType2.gun:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+              0.4.cfloat, 0.5])
           label(str = "Max fire rate:")
           try:
             colorLabel(str = (if modulesList[module.protoIndex].speed >
@@ -1078,11 +1082,13 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             except:
               dialog = setError(message = "Can't cancel the order.")
               return
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+              0.4.cfloat, 0.5])
           label(str = "Finish order in:")
           colorLabel(str = $module.craftingTime & " mins", color = theme.colors[goldenColor])
         else:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+              0.4.cfloat, 0.5])
           label(str = "Order:")
           colorLabel(str = "not set", color = theme.colors[goldenColor])
       # Show information about medical rooms
@@ -1091,8 +1097,10 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         for member in playerShip.crew:
           try:
             if member.health < 100 and findItem(inventory = playerShip.cargo,
-                itemType = factionsList[playerShip.crew[0].faction].healingTools,
-                    itemQuality = any, craftBonus = any, craftMalus = any) > -1:
+                itemType = factionsList[playerShip.crew[
+                    0].faction].healingTools,
+
+itemQuality = any, craftBonus = any, craftMalus = any) > -1:
               hasHealingTool = true
               break
           except:
@@ -1112,8 +1120,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           except:
             dialog = setError(message = "Can't set trainText.")
             return
-        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
-            0.5, 0.08])
+        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+            0.4.cfloat, 0.5, 0.08])
         label(str = "Trained skill:")
         colorLabel(str = trainText, color = theme.colors[goldenColor])
         imageButton(image = images[assignCrewIcon],
@@ -1131,7 +1139,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
               0.4.cfloat, 0.5, 0.08])
         else:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+              0.4.cfloat, 0.5])
         label(str = "Strength:")
         colorLabel(str = $module.damage2 & (if module.damage2 ==
             moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
