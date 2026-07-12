@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
   ship its modules and crew members, giving orders to crew members, information
   about crew members, crew members inventories, assigning crew members to a
   module, assigning an ammunition to a gun, assigning a skill to a training
-  room
+  room, information about the player's ship's module
 - Better looking general information about the player's ship
 - Updated README.md
 - Updated modding guide
