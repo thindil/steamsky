@@ -858,13 +858,16 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
   let
     module: ModuleData = playerShip.modules[moduleIndex]
     windowName: string = module.name
+    viewWidth: float = width - buttonHeight
+    col1: float = viewWidth * 0.4
+    col2a: float = viewWidth - col1
+    col2b: float = viewWidth - col1 - buttonHeight
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     setLayoutRowDynamic(height = height - dialogButtonHeight - 60, 1)
     group(title = "SkillsGroup", flags = {windowNoFlags}):
-      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
-          0.5, 0.08])
+      setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat, col2b, buttonHeight])
       # Show the module's name
       label(str = "Name:")
       colorLabel(str = module.name, color = theme.colors[goldenColor])
@@ -873,7 +876,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         dialog = renameModuleDialog
       # Show the module's status
       showModuleDamage(module = module, dialog = dialog)
-      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+      setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
       # Show the module's weight
       label(str = "Weight:")
       colorLabel(str = $module.weight & " kg", color = theme.colors[goldenColor])
