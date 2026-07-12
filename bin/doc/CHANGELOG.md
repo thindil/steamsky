@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [12.5] - 2026-07-12
 
 ### Changed
 - Better looking dialogs with information about installing or removing modules
