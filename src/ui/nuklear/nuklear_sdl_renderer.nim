@@ -383,6 +383,7 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   ctx.clip.copy = nkSdlClipboardCopy
   ctx.clip.paste = nkSdlClipboardPaste
   ctx.clip.userdata = nk_handle()
+  nk_init_default(ctx = ctx, font = nil)
   return getContext()
 
 proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =

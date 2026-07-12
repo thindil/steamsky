@@ -53,6 +53,9 @@ proc nk_widget_disable_begin(ctx) {.importc, cdecl, raises: [], tags: [], contra
   ## A binding to Nuklear's function. Internal use only
 proc nk_widget_disable_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
+proc nk_init_default(ctx; font: ptr nk_user_font): nk_bool {.importc, nodecl,
+    raises: [], tags: [], contractual, discardable, used.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -------
 # Windows

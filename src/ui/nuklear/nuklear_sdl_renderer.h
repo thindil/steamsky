@@ -224,7 +224,6 @@ nk_sdl_init(SDL_Window *win, SDL_Renderer *renderer)
 #endif
     sdl.win = win;
     sdl.renderer = renderer;
-    nk_init_default(&sdl.ctx, 0);
     nk_buffer_init_default(&sdl.ogl.cmds);
     return &sdl.ctx;
 }
