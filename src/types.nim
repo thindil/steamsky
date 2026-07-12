@@ -1492,18 +1492,26 @@ type
     reputation*: ReputationRange
 
 proc initBaseModuleData*(name: ModuleName = "";
-    mType: ModuleType = ModuleType.any; weight: Natural = 0;
-    value: Natural = 0): BaseModuleData {.raises: [], tags: [], contractual.} =
+    mType: ModuleType = ModuleType.any; weight: Natural = 0; value: Natural = 0;
+    maxValue: Natural = 0; durability: Positive = 1;
+    repairMaterial: ItemType = "";
+    repairSkill: Positive = 1): BaseModuleData {.raises: [], tags: [],
+    contractual.} =
   ## Create a new data structure for a prototype of module
   ##
   ## * name           - The name of the module
   ## * mType          - The type of the module
   ## * weight         - The weight of the module
   ## * value          - Additional data for the module, for engines it is power
+  ## * maxValue       - Additional data for the mode, for guns it is damage
+  ## * durability     - The base durability of the module
+  ## * repairMaterial - The index of the material used to repair the module
+  ## * repairSkill    - The index of the skill used to repair the module
   ##
   ## Returns the new structure with information about the selected module's prototype
   return BaseModuleData(name: name, mType: mType, weight: weight, value: value,
-      durability: 1, repairSkill: 1, installTime: 1, size: 1)
+      maxValue: maxValue, durability: durability,
+      repairMaterial: repairMaterial, repairSkill: repairSkill, installTime: 1, size: 1)
 
 type
   CraftData* = object
