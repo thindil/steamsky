@@ -859,293 +859,295 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     windowName: string = module.name
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
-      flags = {windowBorder, windowTitle, windowMovable}):
-    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
-        0.5, 0.08])
-    # Show the module's name
-    label(str = "Name:")
-    colorLabel(str = module.name, color = theme.colors[goldenColor])
-    imageButton(image = images[editIcon],
-        tooltip = "Set a new name for the module"):
-      dialog = renameModuleDialog
-    # Show the module's status
-    showModuleDamage(module = module, dialog = dialog)
-    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
-    # Show the module's weight
-    label(str = "Weight:")
-    colorLabel(str = $module.weight & " kg", color = theme.colors[goldenColor])
-    # Show the module's size
-    label(str = "Size:")
-    try:
-      colorLabel(str = $modulesList[module.protoIndex].size,
-          color = theme.colors[goldenColor])
-    except:
-      dialog = setError(message = "Can't show the module's size")
-      return
-    # Show the module's repair material
-    setLayoutRowDynamic(height = buttonHeight, cols = 4, ratio = [0.4.cfloat,
-        0.2, 0.2, 0.2])
-    label(str = "Repair material:")
-    var manyMaterials: bool = false
-    for item in itemsList.values:
-      try:
-        if item.itemType == modulesList[module.protoIndex].repairMaterial:
-          if manyMaterials:
-            label(str = " or ")
-          colorLabel(str = item.name, color = theme.colors[(if findItem(
-              inventory = playerShip.cargo, itemType = item.itemType,
-              itemQuality = any, craftBonus = any, craftMalus = any) ==
-              -1: redColor else: goldenColor)])
-          manyMaterials = true
-      except:
-        dialog = setError(message = "Can't count repair material.")
-        return
-    # Show the module's upgrade skill
-    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
-    label(str = "Repair skill:")
-    try:
-      colorLabel(str = skillsList[modulesList[
-          module.protoIndex].repairSkill].name & "/" & attributesList[skillsList[
-          modulesList[module.protoIndex].repairSkill].attribute].name,
-          color = theme.colors[goldenColor])
-    except:
-      dialog = setError(message = "Can't show repair skill.")
-      return
-    # Show the module's upgrade action
-    if module.upgradeAction != none:
-      showModuleUpgrade(module = module, dialog = dialog)
-    # Show information specific to the module's type
-    case module.mType
-    # Show information about engine
-    of engine:
-      showEngineInfo(module = module, dialog = dialog)
-    # Show information about cargo room
-    of cargoRoom:
-      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
-      label(str = "Max cargo:")
-      try:
-        colorLabel(str = $modulesList[module.protoIndex].maxValue & " kg",
-            color = theme.colors[goldenColor])
-      except:
-        dialog = setError(message = "Can't show the max cargo.")
-        return
-    # Show information about hull
-    of hull:
-      let moduleMaxValue2: int = try:
-          (modulesList[module.protoIndex].maxValue.float * 1.5).int
-        except:
-          dialog = setError(message = "Can't count the module's max value (3).")
-          return
-      if module.maxModules < moduleMaxValue2:
-        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
-            0.4.cfloat, 0.5, 0.08])
-      else:
-        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
-      label(str = "Modules installed:")
-      colorLabel(str = $module.installedModules & " / " & $module.maxModules & (
-          if module.maxModules == moduleMaxValue2: " (max upgrade)" else: ""),
-          color = theme.colors[goldenColor])
-      if module.maxModules < moduleMaxValue2:
-        addUpgradeButton(upgradeType = maxValue,
-            buttonTooltip = "hull's size so it can have more modules installed",
-            module = module, dialog = dialog)
-    # Show information about cabin
-    of cabin:
-      showCabinInfo(module = module, dialog = dialog)
-    # Show information about guns and harpoon guns
-    of gun, harpoonGun:
-      # Show information about gun's strength
-      let
-        moduleStrength: int = try:
-            (if modulesList[module.protoIndex].mType ==
-              ModuleType.gun: module.damage else: module.duration)
-          except:
-            dialog = setError(message = "Can't count the module's strength.")
-            return
-        moduleMaxValue2: Positive = try:
-              (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
-          except:
-            dialog = setError(message = "Can't count the gun's max value.")
-            return
-      if moduleStrength < moduleMaxValue2:
-        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
-            0.4.cfloat, 0.5, 0.08])
-      else:
-        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
-      label(str = "Strength:")
-      colorLabel(str = $moduleStrength & (if moduleStrength ==
-          moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
-      if moduleStrength < moduleMaxValue2:
-        try:
-          addUpgradeButton(upgradeType = maxValue, buttonTooltip = (
-              if modulesList[module.protoIndex].mType ==
-              ModuleType.gun: "damage" else: "strength") & " of gun",
-              module = module, dialog = dialog)
-        except:
-          dialog = setError(message = "Can't show the gun's upgrade button.")
-          return
-      # Show information about gun's owners
-      addOwnersInfo(module = module, ownersName = "Gunner", addButton = true,
-          dialog = dialog)
-      # Show information about gun's ammunition
-      setLayoutRowDynamic(height = labelHeight * 4, cols = 3, ratio = [
-          0.4.cfloat, 0.5, 0.08])
-      label(str = "Ammunition:")
-      var haveAmmo: bool = false
-      let ammoIndex: int = (if module.mType ==
-          ModuleType2.gun: module.ammoIndex else: module.harpoonIndex)
-      group(title = "ammoInfo", flags = {windowNoFlags}):
-        setLayoutRowDynamic(height = labelHeight, cols = 1)
-        try:
-          if ammoIndex in playerShip.cargo.low..playerShip.cargo.high and
-              itemsList[playerShip.cargo[ammoIndex].protoIndex].itemType ==
-                  itemsTypesList[
-              modulesList[module.protoIndex].value - 1]:
-            colorLabel(str = itemsList[playerShip.cargo[
-                ammoIndex].protoIndex].name, color = theme.colors[goldenColor])
-            haveAmmo = true
-        except:
-          dialog = setError(message = "Can't check for the ammo.")
-          return
-        if not haveAmmo:
-          var mAmount: Natural = 0
-          for index, item in itemsList:
-            try:
-              if item.itemType == itemsTypesList[modulesList[
-                  module.protoIndex].value - 1]:
-                colorLabel(str = item.name, color = theme.colors[(if findItem(
-                    inventory = playerShip.cargo, protoIndex = index,
-                    itemQuality = any, craftBonus = any, craftMalus = any) >
-                    -1: goldenColor else: redColor)])
-                mAmount.inc
-            except:
-              dialog = setError(message = "Can't find ammo.")
-              return
-      for index, item in playerShip.cargo:
-        try:
-          if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
-              module.protoIndex].value - 1] and index != ammoIndex:
-            imageButton(image = images[assignAmmoIcon]):
-              setDialog(y = windowHeight / 10)
-              dialog = assignAmmoDialog
-            break
-        except:
-          dialog = setError(message = "Can't set gun's ammo button.")
-          return
-      # Show information about gun's fire rate
-      if module.mType == ModuleType2.gun:
-        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
-        label(str = "Max fire rate:")
-        try:
-          colorLabel(str = (if modulesList[module.protoIndex].speed >
-              0: $modulesList[module.protoIndex].speed &
-              " each turn" else: "1 every " & $(modulesList[
-              module.protoIndex].speed.abs) & " turns"), color = theme.colors[goldenColor])
-        except:
-          dialog = setError(message = "Can't show the info about fire rate.")
-          return
-    # Show information about turrets
-    of turret:
-      label(str = "Weapon:")
-      colorLabel(str = (if module.gunIndex > -1: playerShip.modules[
-          module.gunIndex].name else: "none"), color = theme.colors[goldenColor])
-    # Show information about workshops
-    of workshop:
-      # Show information about workshop owners
-      addOwnersInfo(module = module, ownersName = "Worker",
-          addButton = module.craftingIndex.len > 0, dialog = dialog)
-      # Show information about workshop order
-      let recipeName: string = try:
-          getWorkshopRecipeName(workshop = moduleIndex)
-        except:
-          dialog = setError(message = "Can't get the recipe name.")
-          return
-      if recipeName.len > 0:
-        setLayoutRowDynamic(height = labelHeight * 4, cols = 3, ratio = [
-            0.4.cfloat, 0.5, 0.08])
-        label(str = "Order:")
-        colorLabel(str = recipeName, color = theme.colors[goldenColor])
-        imageButton(image = images[cancelIcon],
-            tooltip = "Cancel the current crafting order"):
-          try:
-            cancelCraftOrder(moduleIndex = moduleIndex)
-          except CrewOrderError, CrewNoSpaceError:
-            dialog = setMessage(message = getCurrentExceptionMsg(),
-                title = "Can't cancel the order")
-            return
-          except:
-            dialog = setError(message = "Can't cancel the order.")
-            return
-        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
-        label(str = "Finish order in:")
-        colorLabel(str = $module.craftingTime & " mins", color = theme.colors[goldenColor])
-      else:
-        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
-        label(str = "Order:")
-        colorLabel(str = "not set", color = theme.colors[goldenColor])
-    # Show information about medical rooms
-    of medicalRoom:
-      var hasHealingTool: bool = false
-      for member in playerShip.crew:
-        try:
-          if member.health < 100 and findItem(inventory = playerShip.cargo,
-              itemType = factionsList[playerShip.crew[0].faction].healingTools,
-                  itemQuality = any, craftBonus = any, craftMalus = any) > -1:
-            hasHealingTool = true
-            break
-        except:
-          dialog = setError(message = "Can't find wounded crew members.")
-          return
-      addOwnersInfo(module = module, ownersName = "Medic",
-          addButton = hasHealingTool, dialog = dialog)
-    # Show information about training rooms
-    of trainingRoom:
-      # Show information about trainees
-      addOwnersInfo(module = module, ownersName = "Trainee",
-          addButton = module.trainedSkill > 0, dialog = dialog)
-      # Show information about trained skill
-      let trainText: string = try:
-          (if module.trainedSkill > 0: skillsList[
-            module.trainedSkill].name else: "not set")
-        except:
-          dialog = setError(message = "Can't set trainText.")
-          return
+      flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
+    setLayoutRowDynamic(height = height - dialogButtonHeight - 60, 1)
+    group(title = "SkillsGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
           0.5, 0.08])
-      label(str = "Trained skill:")
-      colorLabel(str = trainText, color = theme.colors[goldenColor])
-      imageButton(image = images[assignCrewIcon],
-          tooltip = "Assign a skill which will be trained in the training room."):
-        setDialog(y = windowHeight / 10, x = windowWidth / 10)
-        dialog = assignSkillDialog
-    # Show information about battering rams
-    of batteringRam:
-      let moduleMaxValue2: int = try:
-          (modulesList[module.protoIndex].maxValue.float * 1.5).int
+      # Show the module's name
+      label(str = "Name:")
+      colorLabel(str = module.name, color = theme.colors[goldenColor])
+      imageButton(image = images[editIcon],
+          tooltip = "Set a new name for the module"):
+        dialog = renameModuleDialog
+      # Show the module's status
+      showModuleDamage(module = module, dialog = dialog)
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+      # Show the module's weight
+      label(str = "Weight:")
+      colorLabel(str = $module.weight & " kg", color = theme.colors[goldenColor])
+      # Show the module's size
+      label(str = "Size:")
+      try:
+        colorLabel(str = $modulesList[module.protoIndex].size,
+            color = theme.colors[goldenColor])
+      except:
+        dialog = setError(message = "Can't show the module's size")
+        return
+      # Show the module's repair material
+      setLayoutRowDynamic(height = buttonHeight, cols = 4, ratio = [0.4.cfloat,
+          0.2, 0.2, 0.2])
+      label(str = "Repair material:")
+      var manyMaterials: bool = false
+      for item in itemsList.values:
+        try:
+          if item.itemType == modulesList[module.protoIndex].repairMaterial:
+            if manyMaterials:
+              label(str = " or ")
+            colorLabel(str = item.name, color = theme.colors[(if findItem(
+                inventory = playerShip.cargo, itemType = item.itemType,
+                itemQuality = any, craftBonus = any, craftMalus = any) ==
+                -1: redColor else: goldenColor)])
+            manyMaterials = true
         except:
-          dialog = setError(message = "Can't count the battering ram max value.")
+          dialog = setError(message = "Can't count repair material.")
           return
-      if module.damage2 < moduleMaxValue2:
-        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
-            0.4.cfloat, 0.5, 0.08])
-      else:
+      # Show the module's upgrade skill
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+      label(str = "Repair skill:")
+      try:
+        colorLabel(str = skillsList[modulesList[
+            module.protoIndex].repairSkill].name & "/" & attributesList[skillsList[
+            modulesList[module.protoIndex].repairSkill].attribute].name,
+            color = theme.colors[goldenColor])
+      except:
+        dialog = setError(message = "Can't show repair skill.")
+        return
+      # Show the module's upgrade action
+      if module.upgradeAction != none:
+        showModuleUpgrade(module = module, dialog = dialog)
+      # Show information specific to the module's type
+      case module.mType
+      # Show information about engine
+      of engine:
+        showEngineInfo(module = module, dialog = dialog)
+      # Show information about cargo room
+      of cargoRoom:
         setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
-      label(str = "Strength:")
-      colorLabel(str = $module.damage2 & (if module.damage2 ==
-          moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
-      if module.damage2 < moduleMaxValue2:
-        addUpgradeButton(upgradeType = maxValue,
-            buttonTooltip = "damage of battering ram", module = module,
+        label(str = "Max cargo:")
+        try:
+          colorLabel(str = $modulesList[module.protoIndex].maxValue & " kg",
+              color = theme.colors[goldenColor])
+        except:
+          dialog = setError(message = "Can't show the max cargo.")
+          return
+      # Show information about hull
+      of hull:
+        let moduleMaxValue2: int = try:
+            (modulesList[module.protoIndex].maxValue.float * 1.5).int
+          except:
+            dialog = setError(message = "Can't count the module's max value (3).")
+            return
+        if module.maxModules < moduleMaxValue2:
+          setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+              0.4.cfloat, 0.5, 0.08])
+        else:
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+        label(str = "Modules installed:")
+        colorLabel(str = $module.installedModules & " / " & $module.maxModules & (
+            if module.maxModules == moduleMaxValue2: " (max upgrade)" else: ""),
+            color = theme.colors[goldenColor])
+        if module.maxModules < moduleMaxValue2:
+          addUpgradeButton(upgradeType = maxValue,
+              buttonTooltip = "hull's size so it can have more modules installed",
+              module = module, dialog = dialog)
+      # Show information about cabin
+      of cabin:
+        showCabinInfo(module = module, dialog = dialog)
+      # Show information about guns and harpoon guns
+      of gun, harpoonGun:
+        # Show information about gun's strength
+        let
+          moduleStrength: int = try:
+              (if modulesList[module.protoIndex].mType ==
+                ModuleType.gun: module.damage else: module.duration)
+            except:
+              dialog = setError(message = "Can't count the module's strength.")
+              return
+          moduleMaxValue2: Positive = try:
+                (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
+            except:
+              dialog = setError(message = "Can't count the gun's max value.")
+              return
+        if moduleStrength < moduleMaxValue2:
+          setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+              0.4.cfloat, 0.5, 0.08])
+        else:
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+        label(str = "Strength:")
+        colorLabel(str = $moduleStrength & (if moduleStrength ==
+            moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
+        if moduleStrength < moduleMaxValue2:
+          try:
+            addUpgradeButton(upgradeType = maxValue, buttonTooltip = (
+                if modulesList[module.protoIndex].mType ==
+                ModuleType.gun: "damage" else: "strength") & " of gun",
+                module = module, dialog = dialog)
+          except:
+            dialog = setError(message = "Can't show the gun's upgrade button.")
+            return
+        # Show information about gun's owners
+        addOwnersInfo(module = module, ownersName = "Gunner", addButton = true,
             dialog = dialog)
-    else:
-      discard
-    setLayoutRowDynamic(height = labelHeight * 5, cols = 1)
-    try:
-      if modulesList[module.protoIndex].description.len > 0:
-        wrapLabel(str = "\n" & modulesList[module.protoIndex].description)
-    except:
-      dialog = setError(message = "Can't show the description.")
-      return
+        # Show information about gun's ammunition
+        setLayoutRowDynamic(height = labelHeight * 4, cols = 3, ratio = [
+            0.4.cfloat, 0.5, 0.08])
+        label(str = "Ammunition:")
+        var haveAmmo: bool = false
+        let ammoIndex: int = (if module.mType ==
+            ModuleType2.gun: module.ammoIndex else: module.harpoonIndex)
+        group(title = "ammoInfo", flags = {windowNoFlags}):
+          setLayoutRowDynamic(height = labelHeight, cols = 1)
+          try:
+            if ammoIndex in playerShip.cargo.low..playerShip.cargo.high and
+                itemsList[playerShip.cargo[ammoIndex].protoIndex].itemType ==
+                    itemsTypesList[
+                modulesList[module.protoIndex].value - 1]:
+              colorLabel(str = itemsList[playerShip.cargo[
+                  ammoIndex].protoIndex].name, color = theme.colors[goldenColor])
+              haveAmmo = true
+          except:
+            dialog = setError(message = "Can't check for the ammo.")
+            return
+          if not haveAmmo:
+            var mAmount: Natural = 0
+            for index, item in itemsList:
+              try:
+                if item.itemType == itemsTypesList[modulesList[
+                    module.protoIndex].value - 1]:
+                  colorLabel(str = item.name, color = theme.colors[(if findItem(
+                      inventory = playerShip.cargo, protoIndex = index,
+                      itemQuality = any, craftBonus = any, craftMalus = any) >
+                      -1: goldenColor else: redColor)])
+                  mAmount.inc
+              except:
+                dialog = setError(message = "Can't find ammo.")
+                return
+        for index, item in playerShip.cargo:
+          try:
+            if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
+                module.protoIndex].value - 1] and index != ammoIndex:
+              imageButton(image = images[assignAmmoIcon]):
+                setDialog(y = windowHeight / 10)
+                dialog = assignAmmoDialog
+              break
+          except:
+            dialog = setError(message = "Can't set gun's ammo button.")
+            return
+        # Show information about gun's fire rate
+        if module.mType == ModuleType2.gun:
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+          label(str = "Max fire rate:")
+          try:
+            colorLabel(str = (if modulesList[module.protoIndex].speed >
+                0: $modulesList[module.protoIndex].speed &
+                " each turn" else: "1 every " & $(modulesList[
+                module.protoIndex].speed.abs) & " turns"), color = theme.colors[goldenColor])
+          except:
+            dialog = setError(message = "Can't show the info about fire rate.")
+            return
+      # Show information about turrets
+      of turret:
+        label(str = "Weapon:")
+        colorLabel(str = (if module.gunIndex > -1: playerShip.modules[
+            module.gunIndex].name else: "none"), color = theme.colors[goldenColor])
+      # Show information about workshops
+      of workshop:
+        # Show information about workshop owners
+        addOwnersInfo(module = module, ownersName = "Worker",
+            addButton = module.craftingIndex.len > 0, dialog = dialog)
+        # Show information about workshop order
+        let recipeName: string = try:
+            getWorkshopRecipeName(workshop = moduleIndex)
+          except:
+            dialog = setError(message = "Can't get the recipe name.")
+            return
+        if recipeName.len > 0:
+          setLayoutRowDynamic(height = labelHeight * 4, cols = 3, ratio = [
+              0.4.cfloat, 0.5, 0.08])
+          label(str = "Order:")
+          colorLabel(str = recipeName, color = theme.colors[goldenColor])
+          imageButton(image = images[cancelIcon],
+              tooltip = "Cancel the current crafting order"):
+            try:
+              cancelCraftOrder(moduleIndex = moduleIndex)
+            except CrewOrderError, CrewNoSpaceError:
+              dialog = setMessage(message = getCurrentExceptionMsg(),
+                  title = "Can't cancel the order")
+              return
+            except:
+              dialog = setError(message = "Can't cancel the order.")
+              return
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+          label(str = "Finish order in:")
+          colorLabel(str = $module.craftingTime & " mins", color = theme.colors[goldenColor])
+        else:
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+          label(str = "Order:")
+          colorLabel(str = "not set", color = theme.colors[goldenColor])
+      # Show information about medical rooms
+      of medicalRoom:
+        var hasHealingTool: bool = false
+        for member in playerShip.crew:
+          try:
+            if member.health < 100 and findItem(inventory = playerShip.cargo,
+                itemType = factionsList[playerShip.crew[0].faction].healingTools,
+                    itemQuality = any, craftBonus = any, craftMalus = any) > -1:
+              hasHealingTool = true
+              break
+          except:
+            dialog = setError(message = "Can't find wounded crew members.")
+            return
+        addOwnersInfo(module = module, ownersName = "Medic",
+            addButton = hasHealingTool, dialog = dialog)
+      # Show information about training rooms
+      of trainingRoom:
+        # Show information about trainees
+        addOwnersInfo(module = module, ownersName = "Trainee",
+            addButton = module.trainedSkill > 0, dialog = dialog)
+        # Show information about trained skill
+        let trainText: string = try:
+            (if module.trainedSkill > 0: skillsList[
+              module.trainedSkill].name else: "not set")
+          except:
+            dialog = setError(message = "Can't set trainText.")
+            return
+        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
+            0.5, 0.08])
+        label(str = "Trained skill:")
+        colorLabel(str = trainText, color = theme.colors[goldenColor])
+        imageButton(image = images[assignCrewIcon],
+            tooltip = "Assign a skill which will be trained in the training room."):
+          setDialog(y = windowHeight / 10, x = windowWidth / 10)
+          dialog = assignSkillDialog
+      # Show information about battering rams
+      of batteringRam:
+        let moduleMaxValue2: int = try:
+            (modulesList[module.protoIndex].maxValue.float * 1.5).int
+          except:
+            dialog = setError(message = "Can't count the battering ram max value.")
+            return
+        if module.damage2 < moduleMaxValue2:
+          setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+              0.4.cfloat, 0.5, 0.08])
+        else:
+          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+        label(str = "Strength:")
+        colorLabel(str = $module.damage2 & (if module.damage2 ==
+            moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
+        if module.damage2 < moduleMaxValue2:
+          addUpgradeButton(upgradeType = maxValue,
+              buttonTooltip = "damage of battering ram", module = module,
+              dialog = dialog)
+      else:
+        discard
+      setLayoutRowDynamic(height = labelHeight * 5, cols = 1)
+      try:
+        if modulesList[module.protoIndex].description.len > 0:
+          wrapLabel(str = "\n" & modulesList[module.protoIndex].description)
+      except:
+        dialog = setError(message = "Can't show the description.")
+        return
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
