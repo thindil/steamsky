@@ -784,6 +784,12 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
+  const width: float = 600
+  let
+    viewWidth: float = width - buttonHeight
+    col1: float = viewWidth * 0.4
+    col2a: float = viewWidth - col1
+    col2b: float = viewWidth - col1 - buttonHeight
   var isPassenger: bool = false
   block missionLoop:
     for mission in acceptedMissions:
@@ -795,7 +801,7 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   addOwnersInfo(module = module, ownersName = "Owners", addButton = true,
       dialog = dialog)
   # Show information about cabin's cleanliness
-  setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+  setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
   label(str = "Cleanliness:")
   var damagePercent2: Natural = ((module.cleanliness.float /
       module.quality.float) * 100.0).Natural
@@ -829,10 +835,11 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't count the cabin's max value.")
       return
   if module.quality < moduleMaxValue2:
-    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
-        0.5, 0.08])
+    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+        col2b, buttonHeight])
   else:
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5])
+    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat,
+        col2a])
   label(str = "Quality:")
   var quality: Natural = ((module.quality.float / 100.0) * 100.0).Natural
   changeStyle(field = progressbar, color = theme.colors[blueColor]):
