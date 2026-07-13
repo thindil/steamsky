@@ -1086,13 +1086,13 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             except:
               dialog = setError(message = "Can't cancel the order.")
               return
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-              0.4.cfloat, 0.5])
+          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+              col1.cfloat, col2a])
           label(str = "Finish order in:")
           colorLabel(str = $module.craftingTime & " mins", color = theme.colors[goldenColor])
         else:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-              0.4.cfloat, 0.5])
+          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+              col1.cfloat, col2a])
           label(str = "Order:")
           colorLabel(str = "not set", color = theme.colors[goldenColor])
       # Show information about medical rooms
@@ -1124,8 +1124,8 @@ itemQuality = any, craftBonus = any, craftMalus = any) > -1:
           except:
             dialog = setError(message = "Can't set trainText.")
             return
-        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
-            0.4.cfloat, 0.5, 0.08])
+        setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+            col1.cfloat, col2b, buttonHeight])
         label(str = "Trained skill:")
         colorLabel(str = trainText, color = theme.colors[goldenColor])
         imageButton(image = images[assignCrewIcon],
@@ -1140,11 +1140,11 @@ itemQuality = any, craftBonus = any, craftMalus = any) > -1:
             dialog = setError(message = "Can't count the battering ram max value.")
             return
         if module.damage2 < moduleMaxValue2:
-          setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
-              0.4.cfloat, 0.5, 0.08])
+          setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+              col1.cfloat, col2b, buttonHeight])
         else:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-              0.4.cfloat, 0.5])
+          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+              col1.cfloat, col2a])
         label(str = "Strength:")
         colorLabel(str = $module.damage2 & (if module.damage2 ==
             moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
