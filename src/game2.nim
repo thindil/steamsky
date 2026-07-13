@@ -128,10 +128,12 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
 
   {.hint[XCannotRaiseY]: off.}
   type GameDataType = enum
-    factions, goals, help, items, mobiles, recipes, bases, modules, ships, stories, data, careers, invalid
+    factions, goals, help, items, mobiles, recipes, bases, modules, ships,
+      stories, data, careers, invalid
 
-  proc loadSelectedData(dataName: GameDataType; fileName: Path): string {.raises: [
-      DataLoadingError, KeyError, OSError], tags: [WriteIOEffect, RootEffect],
+  proc loadSelectedData(dataName: GameDataType;
+      fileName: Path): string {.raises: [DataLoadingError, KeyError, OSError],
+          tags: [WriteIOEffect, RootEffect],
       contractual.} =
     ## Load the selected game's data from the file
     ##
@@ -211,8 +213,8 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
       name: GameDataType
       fileName: Path
 
-  proc initDataTypeRecord(name: GameDataType; fileName: string): DataTypeRecord {.raises: [], tags: [],
-      contractual.} =
+  proc initDataTypeRecord(name: GameDataType;
+      fileName: string): DataTypeRecord {.raises: [], tags: [], contractual.} =
     ## Create a new data structure for the game data to read from a file
     ##
     ## * name     - the name of the data
@@ -221,8 +223,8 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
     ## Returns the new structure with information about the selected data
     return DataTypeRecord(name: name, fileName: fileName.Path)
 
-  const dataTypes: array[1..12, DataTypeRecord] = [initDataTypeRecord(name = data,
-      fileName = "game.dat"), initDataTypeRecord(name = items,
+  const dataTypes: array[1..12, DataTypeRecord] = [initDataTypeRecord(
+      name = data, fileName = "game.dat"), initDataTypeRecord(name = items,
       fileName = "items.dat"), initDataTypeRecord(name = modules,
       fileName = "shipmodules.dat"), initDataTypeRecord(name = recipes,
       fileName = "recipes.dat"), initDataTypeRecord(name = bases,
@@ -301,12 +303,14 @@ proc createPlayerShip(randomBase: Positive;
           amount = amount, name = "", durability = defaultItemDurability, price = 0))
     {.warning[UnsafeSetLen]: off.}
     const payment: AttributesArray = [0, 0]
-    playerShip.crew.insert(item = initMemberData(name = newGameSettings.playerName,
-        gender = newGameSettings.playerGender, health = 100, tired = 0,
+    playerShip.crew.insert(item = initMemberData(
+        name = newGameSettings.playerName, gender = newGameSettings.playerGender,
+        health = 100, tired = 0,
         skills = protoPlayer.skills, hunger = 0, thirst = 0,
         order = protoPlayer.order, previousOrder = rest, orderTime = 15,
         orders = protoPlayer.priorities, attributes = protoPlayer.attributes,
-        inventory = tmpInventory, equipment = protoPlayer.equipment, payment = payment,
+        inventory = tmpInventory, equipment = protoPlayer.equipment,
+        payment = payment,
         contractLength = -1, morale = [1: playerMorale, 2: 0], loyalty = 100,
         homeBase = randomBase, faction = newGameSettings.playerFaction), i = 0)
     {.warning[UnsafeSetLen]: on.}
@@ -409,7 +413,8 @@ proc setBases(maxSpawnRoll: Natural; basesArray: var Table[string, seq[
     skyBase.known = false
     skyBase.askedForBases = false
     skyBase.askedForEvents = noDate
-    skyBase.reputation = initReputationData(level = baseReputation, experience = 0)
+    skyBase.reputation = initReputationData(level = baseReputation,
+        experience = 0)
     skyBase.missionsDate = noDate
     skyBase.missions = @[]
     skyBase.owner = baseOwner
