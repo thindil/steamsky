@@ -1,4 +1,4 @@
-# Copyright © 2025 Bartek Jasicki
+# Copyright © 2025-2026 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -27,6 +27,10 @@
 
 import contracts, nimalyzer
 import nk_types
+
+proc nk_buffer_init_default*(buffer: ptr nk_buffer) {.importc, nodecl, raises: [],
+    tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 proc nkRoundUpPow2(v: nk_uint): nk_uint {.raises: [], tags: [], contractual.} =
   ## Round up power of 2 in bits. Internal use only
