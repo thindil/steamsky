@@ -908,7 +908,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           dialog = setError(message = "Can't count repair material.")
           return
       # Show the module's upgrade skill
-      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
+      setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
       label(str = "Repair skill:")
       try:
         colorLabel(str = skillsList[modulesList[
@@ -928,7 +928,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         showEngineInfo(module = module, dialog = dialog)
       # Show information about cargo room
       of cargoRoom:
-        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
+        setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
         label(str = "Max cargo:")
         try:
           colorLabel(str = $modulesList[module.protoIndex].maxValue & " kg",
@@ -944,10 +944,10 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setError(message = "Can't count the module's max value (3).")
             return
         if module.maxModules < moduleMaxValue2:
-          setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
+          setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
               col1.cfloat, col2b, buttonHeight])
         else:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
               col1.cfloat, col2a])
         label(str = "Modules installed:")
         colorLabel(str = $module.installedModules & " / " & $module.maxModules &
@@ -976,11 +976,11 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
               dialog = setError(message = "Can't count the gun's max value.")
               return
         if moduleStrength < moduleMaxValue2:
-          setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
-              0.4.cfloat, 0.5, 0.08])
+          setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+              col1.cfloat, col2b, buttonHeight])
         else:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-              0.4.cfloat, 0.5])
+          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+              col1.cfloat, col2a])
         label(str = "Strength:")
         colorLabel(str = $moduleStrength & (if moduleStrength ==
             moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
@@ -997,8 +997,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         addOwnersInfo(module = module, ownersName = "Gunner", addButton = true,
             dialog = dialog)
         # Show information about gun's ammunition
-        setLayoutRowDynamic(height = labelHeight * 4, cols = 3, ratio = [
-            0.4.cfloat, 0.5, 0.08])
+        setLayoutRowStatic(height = labelHeight * 4, cols = 3, ratio = [
+            col1.cfloat, col2b, buttonHeight])
         label(str = "Ammunition:")
         var haveAmmo: bool = false
         let ammoIndex: int = (if module.mType ==
@@ -1043,8 +1043,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             return
         # Show information about gun's fire rate
         if module.mType == ModuleType2.gun:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-              0.4.cfloat, 0.5])
+          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+              col1.cfloat, col2a])
           label(str = "Max fire rate:")
           try:
             colorLabel(str = (if modulesList[module.protoIndex].speed >
@@ -1071,8 +1071,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setError(message = "Can't get the recipe name.")
             return
         if recipeName.len > 0:
-          setLayoutRowDynamic(height = labelHeight * 4, cols = 3, ratio = [
-              0.4.cfloat, 0.5, 0.08])
+          setLayoutRowStatic(height = labelHeight * 4, cols = 3, ratio = [
+              col1.cfloat, col2b, buttonHeight])
           label(str = "Order:")
           colorLabel(str = recipeName, color = theme.colors[goldenColor])
           imageButton(image = images[cancelIcon],
