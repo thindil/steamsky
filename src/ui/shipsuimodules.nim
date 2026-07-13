@@ -862,6 +862,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     col1: float = viewWidth * 0.4
     col2a: float = viewWidth - col1
     col2b: float = viewWidth - col1 - buttonHeight
+    col3: float = col2a / 3
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
@@ -889,8 +890,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't show the module's size")
         return
       # Show the module's repair material
-      setLayoutRowDynamic(height = buttonHeight, cols = 4, ratio = [0.4.cfloat,
-          0.2, 0.2, 0.2])
+      setLayoutRowStatic(height = buttonHeight, cols = 4, ratio = [col1.cfloat,
+          col3, col3, col3])
       label(str = "Repair material:")
       var manyMaterials: bool = false
       for item in itemsList.values:
@@ -907,7 +908,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           dialog = setError(message = "Can't count repair material.")
           return
       # Show the module's upgrade skill
-      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
       label(str = "Repair skill:")
       try:
         colorLabel(str = skillsList[modulesList[
@@ -927,7 +928,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         showEngineInfo(module = module, dialog = dialog)
       # Show information about cargo room
       of cargoRoom:
-        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+        setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
         label(str = "Max cargo:")
         try:
           colorLabel(str = $modulesList[module.protoIndex].maxValue & " kg",
@@ -944,10 +945,10 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             return
         if module.maxModules < moduleMaxValue2:
           setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [
-              0.4.cfloat, 0.5, 0.08])
+              col1.cfloat, col2b, buttonHeight])
         else:
           setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-              0.4.cfloat, 0.5])
+              col1.cfloat, col2a])
         label(str = "Modules installed:")
         colorLabel(str = $module.installedModules & " / " & $module.maxModules &
             (if module.maxModules == moduleMaxValue2: " (max upgrade)" else: ""),
