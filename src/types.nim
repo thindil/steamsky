@@ -1494,8 +1494,9 @@ type
 proc initBaseModuleData*(name: ModuleName = "";
     mType: ModuleType = ModuleType.any; weight: Natural = 0; value: Natural = 0;
     maxValue: Natural = 0; durability: Positive = 1;
-    repairMaterial: ItemType = "";
-    repairSkill: Positive = 1): BaseModuleData {.raises: [], tags: [],
+    repairMaterial: ItemType = ""; repairSkill: Positive = 1;
+    price: Natural = 0; installTime: Positive = 1; unique: bool = false;
+    size: range[1..10] = 1): BaseModuleData {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for a prototype of module
   ##
@@ -1507,11 +1508,16 @@ proc initBaseModuleData*(name: ModuleName = "";
   ## * durability     - The base durability of the module
   ## * repairMaterial - The index of the material used to repair the module
   ## * repairSkill    - The index of the skill used to repair the module
+  ## * price          - The base price of the module in shipyards
+  ## * installTime    - The amount of time needed to install the module
+  ## * unique         - If true, only one that module can be installed on the ship
+  ## * size           - The size of the module
   ##
   ## Returns the new structure with information about the selected module's prototype
   return BaseModuleData(name: name, mType: mType, weight: weight, value: value,
       maxValue: maxValue, durability: durability,
-      repairMaterial: repairMaterial, repairSkill: repairSkill, installTime: 1, size: 1)
+      repairMaterial: repairMaterial, repairSkill: repairSkill, price: price,
+      installTime: installTime, unique: unique, size: size)
 
 type
   CraftData* = object
