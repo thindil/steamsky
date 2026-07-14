@@ -468,11 +468,17 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
   ##
   ## Returns the modified parameter dialog. It is modified when the player
   ## wants to assign crew members to the module.
+  const width: float = 600
+  let
+    viewWidth: float = width - buttonHeight
+    col1: float = viewWidth * 0.4
+    col2b: float = viewWidth - col1 - buttonHeight
   var ownersText: string = ownersName
   if module.owner.len > 1:
     ownersText.add(y = "s")
   ownersText.add(y = " (max " & $module.owner.len & "):")
-  setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+  setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+      col2b, buttonHeight])
   label(str = ownersText)
   ownersText = ""
   var haveOwner: bool = false
