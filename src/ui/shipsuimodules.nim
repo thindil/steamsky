@@ -243,17 +243,23 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
+  const width: float = 600
+  let
+    viewWidth: float = width - (buttonHeight + 5)
+    col1: float = viewWidth * 0.4
+    col2b: float = viewWidth - col1 - buttonHeight
+    col2c: float = viewWidth - col1 - (buttonHeight * 2)
   let moduleMaxValue: Positive = try:
       (modulesList[module.protoIndex].durability.float * 1.5).Positive
     except:
       dialog = setError(message = "Can't count the module's max value.")
       return
   if module.maxDurability < moduleMaxValue:
-    setLayoutRowDynamic(height = buttonHeight, cols = 4, ratio = [0.4.cfloat,
-        0.44, 0.08, 0.08])
+    setLayoutRowStatic(height = buttonHeight, cols = 4, ratio = [col1.cfloat,
+        col2c, buttonHeight, buttonHeight])
   else:
-    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
-        0.5, 0.08])
+    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+        col2b, buttonHeight])
   label(str = "Status:")
   let damagePercent: float = (module.durability.float /
         module.maxDurability.float)
@@ -357,11 +363,18 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
   maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
   if maxUpgrade == 0:
     maxUpgrade = 1
+  const width: float = 600
+  let
+    viewWidth: float = width - buttonHeight
+    col1: float = viewWidth * 0.4
+    col2a: float = viewWidth - col1
+    col2b: float = viewWidth - col1 - buttonHeight
   if playerShip.upgradeModule == moduleIndex:
-    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
-        0.5, 0.08])
+    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+        col2b, buttonHeight])
   else:
-    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [col1.cfloat,
+        col2a])
   label(str = "Upgrade progress:")
   var upgradePercent: int = 100 - ((module.upgradeProgress.float /
       maxUpgrade.float) * 100.0).int
