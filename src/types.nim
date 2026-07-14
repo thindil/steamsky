@@ -1496,7 +1496,9 @@ proc initBaseModuleData*(name: ModuleName = "";
     maxValue: Natural = 0; durability: Positive = 1;
     repairMaterial: ItemType = ""; repairSkill: Positive = 1;
     price: Natural = 0; installTime: Positive = 1; unique: bool = false;
-    size: range[1..10] = 1): BaseModuleData {.raises: [], tags: [],
+    size: range[1..10] = 1; description: Description = ""; maxOwners: range[
+    0..10] = 0; speed: range[-100..100] = 0;
+    reputation: ReputationRange = 0): BaseModuleData {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for a prototype of module
   ##
@@ -1512,12 +1514,18 @@ proc initBaseModuleData*(name: ModuleName = "";
   ## * installTime    - The amount of time needed to install the module
   ## * unique         - If true, only one that module can be installed on the ship
   ## * size           - The size of the module
+  ## * description    - The description of the module
+  ## * maxOwners      - The amount of users of the module
+  ## * speed          - How fast the gun shoots in the combat
+  ## * reputation     - The minumum amount of reputation needed for buy the module
   ##
   ## Returns the new structure with information about the selected module's prototype
   return BaseModuleData(name: name, mType: mType, weight: weight, value: value,
       maxValue: maxValue, durability: durability,
       repairMaterial: repairMaterial, repairSkill: repairSkill, price: price,
-      installTime: installTime, unique: unique, size: size)
+      installTime: installTime, unique: unique, size: size,
+      description: description, maxOwners: maxOwners, speed: speed,
+      reputation: reputation)
 
 type
   CraftData* = object
