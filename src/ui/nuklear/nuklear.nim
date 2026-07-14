@@ -204,6 +204,14 @@ proc nk_image_ptr(iPtr: pointer): nk_image {.importc, nodecl, raises: [],
     tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
+# ------
+# Buffer
+# ------
+proc nk_buffer_init_default(buffer: ptr nk_buffer) {.importc, nodecl, raises: [],
+    tags: [], contractual, used.}
+  ## A binding to Nuklear's function. Internal use only
+
+
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
 # ------------------------------------------------------------------

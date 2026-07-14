@@ -291,8 +291,9 @@ type
     dev: NkSdlDevice
 
 var
-  fontScale: cfloat = 0.0 ## The scale used to resize a font
-  sdl: NkSdl = NkSdl()    ## The SDL backend settings
+  fontScale: cfloat = 0.0   ## The scale used to resize a font
+  sdl: NkSdl = NkSdl()      ## The SDL backend settings
+  cmds: ptr nk_buffer = nil ## The Nuklear commands for drawing
 
 proc nkSdlClipboardPaste(usr: nk_handle; edit: ptr nk_text_edit) {.raises: [],
     tags: [], contractual, cdecl.} =
@@ -384,6 +385,9 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   ctx.clip.paste = nkSdlClipboardPaste
   ctx.clip.userdata = nk_handle()
   nk_init_default(ctx = ctx, font = nil)
+  var tmpCmds: nk_buffer = nk_buffer()
+  cmds = tmpCmds.addr
+  nk_buffer_init_default(buffer = cmds)
   return getContext()
 
 proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
