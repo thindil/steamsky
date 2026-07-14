@@ -397,16 +397,23 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show the engine's power
+  const width: float = 600
+  let
+    viewWidth: float = width - buttonHeight
+    col1: float = viewWidth * 0.4
+    col2a: float = viewWidth - col1
+    col2b: float = viewWidth - col1 - buttonHeight
   var moduleMaxValue2: Natural = try:
       (modulesList[module.protoIndex].maxValue.float * 1.5).int
     except:
       dialog = setError(message = "Can't count the module max value.")
       return
   if module.maxDurability < moduleMaxValue2:
-    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
-        0.5, 0.08])
+    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+        col2b, buttonHeight])
   else:
-    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat,
+        col2a])
   label(str = "Max power:")
   colorLabel(str = $module.power & (if module.power ==
       moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
@@ -420,10 +427,10 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't count the module's max value (2).")
       return
   if module.maxDurability > moduleMaxValue2:
-    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
-        0.5, 0.08])
+    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+        col2b, buttonHeight])
   else:
-    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.4.cfloat, 0.5])
+    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat, col2a])
   label(str = "Fuel usage:")
   colorLabel(str = $module.fuelUsage & (if moduleMaxValue2 ==
       module.fuelUsage: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
@@ -431,7 +438,8 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     addUpgradeButton(upgradeType = value, buttonTooltip = "engine's fuel usage",
         module = module, dialog = dialog)
   # Show engine state
-  setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.08])
+  setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+      col2b, buttonHeight])
   label(str = "State:")
   colorLabel(str = (if module.disabled: "Disabled" else: "Enabled"),
       color = theme.colors[goldenColor])
