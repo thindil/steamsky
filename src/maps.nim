@@ -43,8 +43,8 @@ proc baseIndex*(skyCell: SkyCell): ExtendedBasesRange {.raises: [], tags: [],
   ## Returns the value of the selected field
   skyCell.baseIndex
 
-proc `baseIndex=`*(skyCell: var SkyCell, value: ExtendedBasesRange) {.raises: [],
-    tags: [], contractual.} =
+proc `baseIndex=`*(skyCell: var SkyCell, value: ExtendedBasesRange) {.raises: [
+    ], tags: [], contractual.} =
   ## The setter of a field of SkyCell type
   ##
   ## * skyCell - the SkyCell object which field will be modified
@@ -55,13 +55,14 @@ proc `baseIndex=`*(skyCell: var SkyCell, value: ExtendedBasesRange) {.raises: []
 
 proc visited*(skyCell: SkyCell): bool {.raises: [], tags: [], contractual.} =
   ## The getter of a field of SkyCell type
- ##
+##
   ## * skyCell - the SkyCell object which field will be get
   ##
   ## Returns the value of the selected field
   skyCell.visited
 
-proc `visited=`*(skyCell: var SkyCell, value: bool) {.raises: [], tags: [], contractual.} =
+proc `visited=`*(skyCell: var SkyCell, value: bool) {.raises: [], tags: [],
+    contractual.} =
   ## The setter of a field of SkyCell type
   ##
   ## * skyCell - the SkyCell object which field will be modified
@@ -98,8 +99,8 @@ proc missionIndex*(skyCell: SkyCell): ExtendedNatural {.raises: [], tags: [],
   ## Returns the value of the selected field
   skyCell.missionIndex
 
-proc `missionIndex=`*(skyCell: var SkyCell, value: ExtendedNatural) {.raises: [],
-    tags: [], contractual.} =
+proc `missionIndex=`*(skyCell: var SkyCell, value: ExtendedNatural) {.raises: [
+    ], tags: [], contractual.} =
   ## The setter of a field of SkyCell type
   ##
   ## * skyCell - the SkyCell object which field will be modified
