@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Bartek thindil Jasicki
+# Copyright 2022-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -128,7 +128,8 @@ proc messagesAmount*(kind: MessageType = default): int {.raises: [], tags: [],
     if message.kind == kind:
       result.inc
 
-proc restoreMessage*(message: MessageText; kind: MessageType = MessageType.default;
+proc restoreMessage*(message: MessageText;
+    kind: MessageType = MessageType.default;
     color: MessageColor = white) {.raises: [], tags: [], contractual.} =
   ## Restore the selected message from the save file
   ##
@@ -138,4 +139,5 @@ proc restoreMessage*(message: MessageText; kind: MessageType = MessageType.defau
   require:
     message.len > 0
   body:
-    messagesList.add(y = MessageData(message: message, kind: kind, color: color))
+    messagesList.add(y = MessageData(message: message, kind: kind,
+        color: color))
