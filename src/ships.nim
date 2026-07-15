@@ -585,16 +585,20 @@ proc addModulesToShip(randomUpgrades: bool; protoShip: ProtoShipData;
           let maxUpgradeValue: Positive = (module.durability.float * 1.5).Positive
           module.durability = getRandom(min = module.durability,
               max = maxUpgradeValue)
-          module.weight += (weightGain * module.durability -
+          {.ruleOff: "assignments".}
+          module.weight = module.weight + (weightGain * module.durability -
               modulesList[moduleIndex].durability)
+          {.ruleOn: "assignments".}
         of 51..75:
           if modulesList[moduleIndex].mType == ModuleType.engine:
             weightGain *= 10
             let maxUpgradeValue: Positive = (module.value.float / 2.0).Positive
             module.value = getRandom(min = maxUpgradeValue, max = modulesList[
                 moduleIndex].value)
-            module.weight += (weightGain * modulesList[
+            {.ruleOff: "assignments".}
+            module.weight = module.weight + (weightGain * modulesList[
                 moduleIndex].value - module.value)
+            {.ruleOn: "assignments".}
         of 76..100:
           case modulesList[moduleIndex].mType
           of ModuleType.hull:
@@ -609,8 +613,10 @@ proc addModulesToShip(randomUpgrades: bool; protoShip: ProtoShipData;
             let maxUpgradeValue: Positive = (module.maxValue.float * 1.5).Positive
             module.maxValue = getRandom(min = module.maxValue,
                 max = maxUpgradeValue)
-            module.weight += (weightGain * module.maxValue -
+            {.ruleOff: "assignments".}
+            module.weight = module.weight + (weightGain * module.maxValue -
                 modulesList[moduleIndex].maxValue)
+            {.ruleOn: "assignments".}
         else:
           discard
         upgradesAmount.dec
