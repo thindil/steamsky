@@ -1474,10 +1474,10 @@ type
     ## * maxOwners      - The amount of users of the module
     ## * speed          - How fast the gun shoots in the combat
     ## * reputation     - The minumum amount of reputation needed for buy the module
-    name*: ModuleName
-    mType*: ModuleType
-    weight*: Natural
-    value*: Natural
+    name: ModuleName
+    mType: ModuleType
+    weight: Natural
+    value: Natural
     maxValue*: Natural
     durability*: Positive
     repairMaterial*: ItemType
@@ -1526,6 +1526,15 @@ proc initBaseModuleData*(name: ModuleName = "";
       installTime: installTime, unique: unique, size: size,
       description: description, maxOwners: maxOwners, speed: speed,
       reputation: reputation)
+
+typeGetterSetter(baseType = BaseModuleData, varName = module, name = name,
+    typ = ModuleName)
+typeGetterSetter(baseType = BaseModuleData, varName = module, name = mType,
+    typ = ModuleType)
+typeGetterSetter(baseType = BaseModuleData, varName = module, name = weight,
+    typ = Natural)
+typeGetterSetter(baseType = BaseModuleData, varName = module, name = value,
+    typ = Natural)
 
 type
   CraftData* = object
