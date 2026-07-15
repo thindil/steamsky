@@ -234,6 +234,8 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
       except:
         dialog = setError(message = "Can't update crew orders.")
 
+const dialogWidth: float = 600
+
 proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show information about the selected module's damage
@@ -243,9 +245,8 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  const width: float = 600
   let
-    viewWidth: float = width - (buttonHeight + 5)
+    viewWidth: float = dialogWidth - (buttonHeight + 5)
     col1: float = viewWidth * 0.4
     col2b: float = viewWidth - col1 - buttonHeight
     col2c: float = viewWidth - col1 - (buttonHeight * 2)
@@ -363,9 +364,8 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
   maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
   if maxUpgrade == 0:
     maxUpgrade = 1
-  const width: float = 600
   let
-    viewWidth: float = width - buttonHeight
+    viewWidth: float = dialogWidth - buttonHeight
     col1: float = viewWidth * 0.4
     col2a: float = viewWidth - col1
     col2b: float = viewWidth - col1 - buttonHeight
@@ -410,9 +410,8 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show the engine's power
-  const width: float = 600
   let
-    viewWidth: float = width - buttonHeight
+    viewWidth: float = dialogWidth - buttonHeight
     col1: float = viewWidth * 0.4
     col2a: float = viewWidth - col1
     col2b: float = viewWidth - col1 - buttonHeight
@@ -489,9 +488,8 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
   ##
   ## Returns the modified parameter dialog. It is modified when the player
   ## wants to assign crew members to the module.
-  const width: float = 600
   let
-    viewWidth: float = width - buttonHeight
+    viewWidth: float = dialogWidth - buttonHeight
     col1: float = viewWidth * 0.4
     col2b: float = viewWidth - col1 - buttonHeight
   var ownersText: string = ownersName
@@ -811,9 +809,8 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  const width: float = 600
   let
-    viewWidth: float = width - buttonHeight
+    viewWidth: float = dialogWidth - buttonHeight
     col1: float = viewWidth * 0.4
     col2a: float = viewWidth - col1
     col2b: float = viewWidth - col1 - buttonHeight
@@ -885,20 +882,18 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  const
-    width: float = 600
-    height: float = 500
+  const height: float = 500
 
   let
     module: ModuleData = playerShip.modules[moduleIndex]
     windowName: string = module.name
-    viewWidth: float = width - buttonHeight
+    viewWidth: float = dialogWidth - buttonHeight
     col1: float = viewWidth * 0.4
     col2a: float = viewWidth - col1
     col2b: float = viewWidth - col1 - buttonHeight
     col3: float = col2a / 3
-  updateDialog(width = width, height = height)
-  window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
+  updateDialog(width = dialogWidth, height = height)
+  window(name = windowName, x = dialogX, y = dialogY, w = dialogWidth, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     setLayoutRowDynamic(height = height - dialogButtonHeight - 60, 1)
     group(title = "SkillsGroup", flags = {windowNoFlags}):
