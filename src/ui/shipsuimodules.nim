@@ -893,11 +893,13 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     col2b: float = viewWidth - col1 - buttonHeight
     col3: float = col2a / 3
   updateDialog(width = dialogWidth, height = height)
-  window(name = windowName, x = dialogX, y = dialogY, w = dialogWidth, h = height,
-      flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
+  window(name = windowName, x = dialogX, y = dialogY, w = dialogWidth,
+      h = height, flags = {windowBorder, windowTitle, windowMovable,
+          windowNoScrollbar}):
     setLayoutRowDynamic(height = height - dialogButtonHeight - 60, 1)
     group(title = "SkillsGroup", flags = {windowNoFlags}):
-      setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat, col2b, buttonHeight])
+      setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+          col2b, buttonHeight])
       # Show the module's name
       label(str = "Name:")
       colorLabel(str = module.name, color = theme.colors[goldenColor])
@@ -1131,9 +1133,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           try:
             if member.health < 100 and findItem(inventory = playerShip.cargo,
                 itemType = factionsList[playerShip.crew[
-                    0].faction].healingTools,
-
-itemQuality = any, craftBonus = any, craftMalus = any) > -1:
+                0].faction].healingTools, itemQuality = any, craftBonus = any,
+                craftMalus = any) > -1:
               hasHealingTool = true
               break
           except:
