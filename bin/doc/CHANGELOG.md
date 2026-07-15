@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Better looking dialog with information about the player's ship's module
+
 ## [12.5] - 2026-07-12
 
 ### Changed
