@@ -587,6 +587,8 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
       255).uint8, g = (0.18 * 255).uint8, b = (0.24 * 255).uint8, a = 255)
   discard SDL_RenderClear(renderer = sdl.renderer)
   nk_sdl_render(aa = antiAliasingOn)
+  #type nk_sdl_vertex {.importc: "struct nk_sdl_vertex", nodecl.} = object
+  #var config: nk_convert_config = nk_convert_config()
   SDL_RenderPresent(renderer = sdl.renderer)
 
 proc nuklearClose*() {.raises: [], tags: [], contractual.} =

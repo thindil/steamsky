@@ -996,7 +996,7 @@ type
     line_AA*, shape_AA*: AntiAliasing
     circle_segment_count*, arc_segment_count*, curve_segment_count*: cuint
     tex_null*: nk_draw_null_texture
-    vertex_layout*: nk_draw_vertex_layout_element
+    vertex_layout*: pointer
     vertex_size*, vertex_alignment*: nk_size
   nk_draw_list* {.importc: "struct nk_draw_list", completeStruct.} = object
     ## Internal Nuklear type
