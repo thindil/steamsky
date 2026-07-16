@@ -106,7 +106,7 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [
       for aMission in acceptedMissions.mitems:
         if aMission.mType == passenger and aMission.data > mission.data:
           {.ruleOff: "assignments".}
-          aMission.data  = aMission.data - 1
+          aMission.data = aMission.data - 1
           {.ruleOn: "assignments".}
     for index, aMission in acceptedMissions:
       if aMission.finished:
@@ -185,12 +185,14 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
         max = MissionsTypes.high.int).MissionsTypes
     case mType
     of deliver:
-      mission = initMissionData(mtype = deliver, time = 1, targetX = 0, targetY = 0,
-          reward = 1, startBase = 1, finished = false, itemIndex = missionsItems[
+      mission = initMissionData(mtype = deliver, time = 1, targetX = 0,
+          targetY = 0, reward = 1, startBase = 1, finished = false,
+          itemIndex = missionsItems[
           getRandom(min = 0, max = missionsItems.high)], multiplier = 1.0)
     of destroy:
-      mission = initMissionData(mtype = destroy, time = 1, targetX = 0, targetY = 0,
-          reward = 1, startBase = 1, finished = false, shipIndex = enemies[
+      mission = initMissionData(mtype = destroy, time = 1, targetX = 0,
+          targetY = 0, reward = 1, startBase = 1, finished = false,
+          shipIndex = enemies[
           getRandom(min = 0, max = enemies.high)], multiplier = 1.0)
       if mission.shipIndex == 0:
         continue
@@ -201,8 +203,9 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
             playerShip.skyX and missionY != playerShip.skyY:
           break
     of patrol:
-      mission = initMissionData(mtype = patrol, time = 1, targetX = 0, targetY = 0,
-          reward = 1, startBase = 1, finished = false, multiplier = 1.0, target = 1)
+      mission = initMissionData(mtype = patrol, time = 1, targetX = 0,
+          targetY = 0, reward = 1, startBase = 1, finished = false,
+              multiplier = 1.0, target = 1)
       for j in 1..10:
         missionX = getRandom(min = minX, max = maxX)
         missionY = getRandom(min = minY, max = maxY)
@@ -213,8 +216,9 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
       if mission.target == 1:
         continue
     of explore:
-      mission = initMissionData(mtype = explore, time = 1, targetX = 0, targetY = 0,
-          reward = 1, startBase = 1, finished = false, multiplier = 1.0, target = 1)
+      mission = initMissionData(mtype = explore, time = 1, targetX = 0,
+          targetY = 0, reward = 1, startBase = 1, finished = false,
+              multiplier = 1.0, target = 1)
       for j in 1..10:
         missionX = getRandom(min = minX, max = maxX)
         missionY = getRandom(min = minY, max = maxY)
@@ -225,8 +229,9 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
       if mission.target == 1:
         continue
     of passenger:
-      mission = initMissionData(mtype = passenger, time = 1, targetX = 0, targetY = 0,
-          reward = 1, startBase = 1, finished = false, multiplier = 1.0,
+      mission = initMissionData(mtype = passenger, time = 1, targetX = 0,
+          targetY = 0, reward = 1, startBase = 1, finished = false,
+          multiplier = 1.0,
           data = qualitiesArray[getRandom(min = qualitiesArray.low,
               max = qualitiesArray.high)])
     if mission.mType in {deliver, passenger}:
