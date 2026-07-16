@@ -138,34 +138,33 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
               row(width = 160):
                 colorLabel(str = factionsList[skyBases[baseIndex].owner].name,
                     color = theme.mapColors[mapGoldenYellow])
-        setLayoutRowDynamic(height = labelHeight, cols = 1)
-        if getBasePopulation(baseIndex = baseIndex) > empty and skyBases[
-            baseIndex].visited.year > 0:
-          case skyBases[baseIndex].reputation.level
-          of -100 .. -75:
-            colorLabel(str = "You are hated here", color = theme.mapColors[mapRedColor])
-          of -74 .. -50:
-            colorLabel(str = "You are outlawed here", color = theme.mapColors[mapRedColor])
-          of -49 .. -25:
-            colorLabel(str = "You are disliked here", color = theme.mapColors[mapRedColor])
-          of -24 .. -1:
-            colorLabel(str = "They are unfriendly to you",
-                color = theme.mapColors[mapRedColor])
-          of 0:
-            label(str = "You are unknown here")
-          of 1..25:
-            colorLabel(str = "You are know here as visitor",
-                color = theme.mapColors[mapGreenColor])
-          of 26..50:
-            colorLabel(str = "You are know here as trader",
-                color = theme.mapColors[mapGreenColor])
-          of 51..75:
-            colorLabel(str = "You are know here as friend",
-                color = theme.mapColors[mapGreenColor])
-          of 76..100:
-            colorLabel(str = "You are well known here", color = theme.mapColors[mapGreenColor])
-        if baseIndex == playerShip.homeBase:
-          colorLabel(str = "It is your home base", color = theme.mapColors[mapCyanColor])
+            setLayoutRowDynamic(height = labelHeight, cols = 1)
+            if getBasePopulation(baseIndex = baseIndex) > empty:
+              case skyBases[baseIndex].reputation.level
+              of -100 .. -75:
+                colorLabel(str = "You are hated here", color = theme.mapColors[mapRedColor])
+              of -74 .. -50:
+                colorLabel(str = "You are outlawed here", color = theme.mapColors[mapRedColor])
+              of -49 .. -25:
+                colorLabel(str = "You are disliked here", color = theme.mapColors[mapRedColor])
+              of -24 .. -1:
+                colorLabel(str = "They are unfriendly to you",
+                    color = theme.mapColors[mapRedColor])
+              of 0:
+                label(str = "You are unknown here")
+              of 1..25:
+                colorLabel(str = "You are know here as visitor",
+                    color = theme.mapColors[mapGreenColor])
+              of 26..50:
+                colorLabel(str = "You are know here as trader",
+                    color = theme.mapColors[mapGreenColor])
+              of 51..75:
+                colorLabel(str = "You are know here as friend",
+                    color = theme.mapColors[mapGreenColor])
+              of 76..100:
+                colorLabel(str = "You are well known here", color = theme.mapColors[mapGreenColor])
+            if baseIndex == playerShip.homeBase:
+              colorLabel(str = "It is your home base", color = theme.mapColors[mapCyanColor])
     if skyMap[mapXInfo][mapYInfo].missionIndex > -1:
       setLayoutRowDynamic(height = labelHeight, cols = 1)
       let missionIndex: int = skyMap[mapXInfo][mapYInfo].missionIndex
