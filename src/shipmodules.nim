@@ -71,9 +71,9 @@ proc loadModules*(fileName: Path) {.raises: [DataLoadingError],
           try:
             modulesList[moduleIndex]
           except ValueError:
-            BaseModuleData(repairSkill: 1, installTime: 1, size: 1, durability: 1)
+            initBaseModuleData()
         else:
-          BaseModuleData(repairSkill: 1, installTime: 1, size: 1, durability: 1)
+          initBaseModuleData()
       var attribute: XmlAttribute = moduleNode.attr(name = "name")
       if attribute.len() > 0:
         module.name = attribute
