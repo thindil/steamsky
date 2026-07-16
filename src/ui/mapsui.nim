@@ -138,8 +138,8 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
               row(width = 160):
                 colorLabel(str = factionsList[skyBases[baseIndex].owner].name,
                     color = theme.mapColors[mapGoldenYellow])
-        setLayoutRowDynamic(height = labelHeight, cols = 1)
         if getBasePopulation(baseIndex = baseIndex) > empty:
+          setLayoutRowDynamic(height = labelHeight, cols = 1)
           case skyBases[baseIndex].reputation.level
           of -100 .. -75:
             colorLabel(str = "You are hated here", color = theme.mapColors[mapRedColor])
@@ -164,6 +164,7 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
           of 76..100:
             colorLabel(str = "You are well known here", color = theme.mapColors[mapGreenColor])
         if baseIndex == playerShip.homeBase:
+          setLayoutRowDynamic(height = labelHeight, cols = 1)
           colorLabel(str = "It is your home base", color = theme.mapColors[mapCyanColor])
     if skyMap[mapXInfo][mapYInfo].missionIndex > -1:
       setLayoutRowDynamic(height = labelHeight, cols = 1)
