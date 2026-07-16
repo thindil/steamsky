@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Better looking dialog with information about the player's ship's module
+- Better looking information about not visited base on the map
 
 ## [12.5] - 2026-07-12
 
