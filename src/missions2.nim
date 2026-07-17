@@ -186,7 +186,8 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
         morale = 50
       if morale > 100:
         morale = 100
-    var maxAttributeLevel: ReputationRange = skyBases[baseIndex].reputation.level
+    var maxAttributeLevel: ReputationRange = skyBases[
+        baseIndex].reputation.level
     if maxAttributeLevel < 10:
       maxAttributeLevel = 10
     if getRandom(min = 1, max = 100) > 90:
@@ -198,9 +199,11 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
       attributes.add(y = initMobAttributeRecord(level = getRandom(min = 3,
           max = maxAttributeLevel), experience = 0))
     const equipment: EquipmentArray = [-1, -1, -1, -1, -1, -1, -1]
-    playerShip.crew.add(y = initMemberData(name = generateMemberName(gender = gender,
-        factionIndex = skyBases[passengerBase].owner), gender = gender,
-        health = 100, tired = 100, skills = @[], hunger = 0, thirst = 0, order = rest,
+    playerShip.crew.add(y = initMemberData(name = generateMemberName(
+        gender = gender, factionIndex = skyBases[passengerBase].owner),
+            gender = gender,
+        health = 100, tired = 100, skills = @[], hunger = 0, thirst = 0,
+            order = rest,
         previousOrder = rest, orderTime = 15, orders = [0.Natural, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0], attributes = attributes, inventory = @[],
         equipment = equipment, payment = [1: 0.Natural, 2: 0],
