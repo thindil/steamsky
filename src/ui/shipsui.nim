@@ -318,71 +318,30 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setLayoutRowDynamic(height = height / 2, cols = 2)
   else:
     setLayoutRowDynamic(height = height, cols = 1)
+  case currentTab
   # General info about the player's ship
-  if expandedSection in {0, 1}:
-    group(title = "General info:", flags = {windowBorder, windowTitle}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 1,
-          width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon]),
-              tooltip = "Maximize/minimize the ship general info"):
-        if expandedSection == 1:
-          expandedSection = 0
-        else:
-          expandedSection = 1
-      showGeneralInfo(dialog = dialog, state = state)
+  of 0:
+    showGeneralInfo(dialog = dialog, state = state)
   # The player's ship's crew info
-  if expandedSection in {0, 2}:
-    group(title = "Crew info:", flags = {windowBorder, windowTitle}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 2,
-          width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon]),
-              tooltip = "Maximize/minimize the ship crew info"):
-        if expandedSection == 2:
-          expandedSection = 0
-        else:
-          expandedSection = 2
-      imageButton(image = images[moreOptionsIcon],
-          tooltip = "Show/Hide additional options related to managing the crew"):
-        showCrewOptions = not showCrewOptions
-      showCrewInfo(dialog = dialog)
+  of 1:
+    setLayoutRowStatic(height = buttonHeight, cols = 1,
+        width = buttonHeight.int)
+    imageButton(image = images[moreOptionsIcon],
+        tooltip = "Show/Hide additional options related to managing the crew"):
+      showCrewOptions = not showCrewOptions
+    showCrewInfo(dialog = dialog)
   # The player's ship's modules info
-  if expandedSection in {0, 3}:
-    group(title = "Modules info:", flags = {windowBorder, windowTitle}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 1,
-          width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon]),
-              tooltip = "Maximize/minimize the ship modules info"):
-        if expandedSection == 3:
-          expandedSection = 0
-        else:
-          expandedSection = 3
-      showModulesInfo(dialog = dialog)
+  of 2:
+    showModulesInfo(dialog = dialog)
   # The player's ship's cargo info
-  if expandedSection in {0, 4}:
-    group(title = "Cargo info:", flags = {windowBorder, windowTitle}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 2,
-          width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon]),
-              tooltip = "Maximize/minimize the ship cargo info"):
-        if expandedSection == 4:
-          expandedSection = 0
-        else:
-          expandedSection = 4
-      imageButton(image = images[moreOptionsIcon],
-          tooltip = "Show/Hide additional options related to managing the cargo"):
-        showCargoOptions = not showCargoOptions
-      showCargoInfo(dialog = dialog)
+  of 3:
+    setLayoutRowStatic(height = buttonHeight, cols = 1,
+        width = buttonHeight.int)
+    imageButton(image = images[moreOptionsIcon],
+        tooltip = "Show/Hide additional options related to managing the cargo"):
+      showCargoOptions = not showCargoOptions
+    showCargoInfo(dialog = dialog)
+  else:
+    discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       height - 75, state = state)
