@@ -278,6 +278,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
         0: theme.colors[redColor] else: theme.colors[goldenColor]),
             tooltip = "Your reputation with the faction")
 
+var hasOptions: bool = false
+
 proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the screen with information about the player's ship
@@ -291,7 +293,27 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   if updateData:
     refreshCargoList(dialog = dialog)
-  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+  # Show tab buttons
+  changeStyle(field = spacing, x = 0, y = 0):
+    changeStyle(field = buttonRounding, value = 0):
+      setLayoutRowDynamic(height = tabHeight, cols = 4)
+      const tabs: array[4, string] = ["General", "Crew", "Modules", "Cargo"]
+      for index, tab in tabs:
+        try:
+          if currentTab == index:
+            changeStyle(src = active, dest = normal):
+              labelButton(title = tab):
+                discard
+          else:
+            labelButton(title = tab):
+              currentTab = index.cint
+              if index == 0:
+                hasOptions = false
+              else:
+                hasOptions = true
+        except:
+          dialog = setError(message = "Can't set the tabs buttons.")
+  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float - tabHeight)
   if expandedSection == 0:
     setLayoutRowDynamic(height = height / 2, cols = 2)
   else:
