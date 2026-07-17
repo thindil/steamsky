@@ -52,7 +52,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   centerY = playerShip.skyY
   mapPreview = false
 
-var mapInfoX: float = (windowWidth - 240.0)
+var mapInfoX: float = (windowWidth - 255.0)
 
 proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
     {.raises: [ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect],
@@ -64,10 +64,10 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
   ## * mapYInfo - the Y coordinate of the map cell to show the info
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
-  tooltip(x = mapInfoX, y = 45, width = 230):
+  tooltip(x = mapInfoX, y = 55, width = 250):
     if windowIsHovered():
       if mapInfoX == 10:
-        mapInfoX = (windowWidth - 240.0)
+        mapInfoX = (windowWidth - 255.0)
       else:
         mapInfoX = 10
     layoutStatic(height = labelHeight, cols = 4):
