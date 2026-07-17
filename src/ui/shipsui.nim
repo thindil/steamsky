@@ -314,34 +314,34 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
   let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float - tabHeight)
-  if expandedSection == 0:
-    setLayoutRowDynamic(height = height / 2, cols = 2)
-  else:
-    setLayoutRowDynamic(height = height, cols = 1)
-  case currentTab
-  # General info about the player's ship
-  of 0:
-    showGeneralInfo(dialog = dialog, state = state)
-  # The player's ship's crew info
-  of 1:
-    setLayoutRowStatic(height = buttonHeight, cols = 1,
-        width = buttonHeight.int)
-    imageButton(image = images[moreOptionsIcon],
-        tooltip = "Show/Hide additional options related to managing the crew"):
-      showCrewOptions = not showCrewOptions
-    showCrewInfo(dialog = dialog)
-  # The player's ship's modules info
-  of 2:
-    showModulesInfo(dialog = dialog)
-  # The player's ship's cargo info
-  of 3:
-    setLayoutRowStatic(height = buttonHeight, cols = 1,
-        width = buttonHeight.int)
-    imageButton(image = images[moreOptionsIcon],
-        tooltip = "Show/Hide additional options related to managing the cargo"):
-      showCargoOptions = not showCargoOptions
-    showCargoInfo(dialog = dialog)
-  else:
-    discard
+  setLayoutRowDynamic(height = height, cols = 1)
+  group(title = "ShipInfo", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
+    case currentTab
+    # General info about the player's ship
+    of 0:
+      showGeneralInfo(dialog = dialog, state = state)
+    # The player's ship's crew info
+    of 1:
+      setLayoutRowStatic(height = buttonHeight, cols = 1,
+          width = buttonHeight.int)
+      imageButton(image = images[moreOptionsIcon],
+          tooltip = "Show/Hide additional options related to managing the crew"):
+        showCrewOptions = not showCrewOptions
+      showCrewInfo(dialog = dialog)
+    # The player's ship's modules info
+    of 2:
+      showModulesInfo(dialog = dialog)
+    # The player's ship's cargo info
+    of 3:
+      setLayoutRowStatic(height = buttonHeight, cols = 1,
+          width = buttonHeight.int)
+      imageButton(image = images[moreOptionsIcon],
+          tooltip = "Show/Hide additional options related to managing the cargo"):
+        showCargoOptions = not showCargoOptions
+      showCargoInfo(dialog = dialog)
+    else:
+      discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       height - 75, state = state)
