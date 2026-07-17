@@ -1482,10 +1482,10 @@ type
     durability: Positive
     repairMaterial: ItemType
     repairSkill: Positive
-    price*: Natural
-    installTime*: Positive
-    unique*: bool
-    size*: range[1..10]
+    price: Natural
+    installTime: Positive
+    unique: bool
+    size: range[1..10]
     description*: Description
     maxOwners*: range[0..10]
     speed*: range[-100..100]
@@ -1543,6 +1543,14 @@ typeGetterSetter(baseType = BaseModuleData, varName = module,
     name = repairMaterial, typ = ItemType)
 typeGetterSetter(baseType = BaseModuleData, varName = module,
     name = repairSkill, typ = Positive)
+typeGetterSetter(baseType = BaseModuleData, varName = module, name = price,
+    typ = Natural)
+typeGetterSetter(baseType = BaseModuleData, varName = module,
+    name = installTime, typ = Positive)
+typeGetterSetter(baseType = BaseModuleData, varName = module, name = unique,
+    typ = bool)
+typeGetterSetter(baseType = BaseModuleData, varName = module, name = size,
+    typ = range[1..10])
 
 type
   CraftData* = object
