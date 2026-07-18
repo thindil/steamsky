@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
 - Better looking information about not visited base on the map
 - Redesigned look of the player's ship's info screen
 
+### Fixed
+- Showing orders for the whole player's ship's crew
+
 ## [12.5] - 2026-07-12
 
 ### Changed
