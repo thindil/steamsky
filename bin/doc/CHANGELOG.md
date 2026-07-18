@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Better looking dialog with information about the player's ship's module
 - Better looking information about not visited base on the map
-- Redesigned look of the player's ship's info screen
+- Redesigned look of the player's ship's info screen and the knowledge screen
 
 ### Fixed
 - Showing orders for the whole player's ship's crew
