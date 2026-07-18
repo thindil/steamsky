@@ -761,14 +761,14 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if showCrewOptions:
     var
       cols: Positive = 2
-      ratio2: seq[cfloat] = @[0.4.cfloat, 0.1]
+      ratio2: seq[cfloat] = @[(windowWidth * 0.4).cfloat, buttonHeight]
     if needClean:
       cols.inc
-      ratio2.add(y = 0.1.cfloat)
+      ratio2.add(y = buttonHeight.cfloat)
     if needRepair:
       cols.inc
-      ratio2.add(y = 0.1.cfloat)
-    setLayoutRowDynamic(height = buttonHeight, cols = cols, ratio = ratio2)
+      ratio2.add(y = buttonHeight.cfloat)
+    setLayoutRowStatic(height = buttonHeight, cols = cols, ratio = ratio2)
     label(str = "Orders for all:")
     imageButton(image = images[goRestIcon], tooltip = "Go rest " &
         (if crewDataList.any(pred = proc (x: CrewData): bool = x.checked):
