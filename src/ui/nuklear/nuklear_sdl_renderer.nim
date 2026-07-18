@@ -609,7 +609,7 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #  var vbuf, ebuf: nk_buffer = nk_buffer()
 #  nk_buffer_init_default(buffer = vbuf.addr)
 #  nk_buffer_init_default(buffer = ebuf.addr)
-  
+
   SDL_RenderPresent(renderer = sdl.renderer)
 
 proc nuklearClose*() {.raises: [], tags: [], contractual.} =

@@ -207,9 +207,12 @@ proc nk_image_ptr(iPtr: pointer): nk_image {.importc, nodecl, raises: [],
 # ------
 # Buffer
 # ------
-proc nk_buffer_init_default(buffer: ptr nk_buffer) {.importc, nodecl, raises: [],
-    tags: [], contractual, used.}
+proc nk_buffer_init_default(buffer: ptr nk_buffer) {.importc, nodecl, raises: [
+    ], tags: [], contractual, used.}
   ## A binding to Nuklear's function. Internal use only
+proc nk_convert(ctx; cmds, vertices, elements: ptr nk_buffer;
+    config: nk_convert_config): nk_flags {.importc, nodecl, raises: [], tags: [],
+    contractual, used.}
 
 
 # ------------------------------------------------------------------
