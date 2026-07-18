@@ -62,72 +62,29 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
   let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float - tabHeight)
-  if expandedSection == 0:
-    setLayoutRowDynamic(height = height / 2, cols = 2)
-  else:
-    setLayoutRowDynamic(height = height, cols = 1)
-  # The list of known bases
-  if expandedSection in {0, 1}:
-    group(title = "Known bases:", flags = {windowBorder, windowTitle}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 2,
+  setLayoutRowDynamic(height = height, cols = 1)
+  group(title = "Knowledge", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
+    case currentTab
+    # The list of known bases
+    of 0:
+      setLayoutRowStatic(height = buttonHeight, cols = 1,
           width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon]),
-              tooltip = "Maximize/minimize the list of known bases"):
-        if expandedSection == 1:
-          expandedSection = 0
-        else:
-          expandedSection = 1
       imageButton(image = images[moreOptionsIcon],
           tooltip = "Show/Hide additional options related to managing the list of known bases"):
         showBasesOptions = not showBasesOptions
       showBasesInfo(dialog = dialog)
-  # The list of known events
-  if expandedSection in {0, 2}:
-    group(title = "Known events:", flags = {windowBorder, windowTitle}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 2,
-          width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon]),
-              tooltip = "Maximize/minimize the list of known events"):
-        if expandedSection == 2:
-          expandedSection = 0
-        else:
-          expandedSection = 2
+    # The list of known events
+    of 1:
       showEventsInfo(dialog = dialog)
-  # The list of accepted missions
-  if expandedSection in {0, 3}:
-    group(title = "Accepted missions:", flags = {windowBorder, windowTitle}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 1,
-          width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon]),
-              tooltip = "Maximize/minimize the list of accepted missions"):
-        if expandedSection == 3:
-          expandedSection = 0
-        else:
-          expandedSection = 3
+    # The list of accepted missions
+    of 2:
       showMissionsInfo(dialog = dialog)
-  # The list of known stories
-  if expandedSection in {0, 4}:
-    group(title = "Known stories:", flags = {windowBorder, windowTitle}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 2,
-          width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[
-          expandIcon] else: images[contractIcon]),
-              tooltip = "Maximize/minimize the list of known stories"):
-        if expandedSection == 4:
-          expandedSection = 0
-        else:
-          expandedSection = 4
+    of 3:
+    # The list of known stories
       showStoriesInfo(dialog = dialog)
+    else:
+      discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       height - 75, state = state)
