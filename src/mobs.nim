@@ -70,8 +70,8 @@ proc loadSkills(mobNode: XmlNode; mob: var ProtoMobRecord;
       case skillAction
       of DataAction.add:
         if skillLevel > 0:
-          mob.skills.add(y = initSkillInfo(index = skillIndex, level = skillLevel,
-              experience = 0))
+          mob.skills.add(y = initSkillInfo(index = skillIndex,
+              level = skillLevel, experience = 0))
         else:
           mob.skills.add(y = initSkillInfo(index = skillIndex, level = minLevel,
               experience = maxLevel))
@@ -158,7 +158,8 @@ proc loadMobs*(fileName: Path) {.raises: [DataLoadingError],
             mob.attributes.add(y = initMobAttributeRecord(level = attrLevel,
                 experience = 0))
           else:
-            mob.attributes[i] = initMobAttributeRecord(level = attrLevel, experience = 0)
+            mob.attributes[i] = initMobAttributeRecord(level = attrLevel,
+                experience = 0)
         else:
           let minLevel: Natural = try:
             attributes[i].attr(name = "minlevel").parseInt()
@@ -303,11 +304,12 @@ proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises:
       let skillIndex: int = (if skill.index >
           skillsList.len: faction.weaponSkill else: skill.index)
       if skill.experience == 0:
-        result.skills.add(y = initSkillInfo(index = skillIndex, level = skill.level,
-            experience = 0))
+        result.skills.add(y = initSkillInfo(index = skillIndex,
+            level = skill.level, experience = 0))
       else:
-        result.skills.add(y = initSkillInfo(index = skillIndex, level = getRandom(
-            min = skill.level, max = skill.experience), experience = 0))
+        result.skills.add(y = initSkillInfo(index = skillIndex,
+            level = getRandom(min = skill.level, max = skill.experience),
+                experience = 0))
       if skillIndex == faction.weaponSkill:
         weaponSkillLevel = result.skills[^1].level
       if result.skills[^1].level > highestSkillLevel:
@@ -352,8 +354,9 @@ proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises:
               weaponSkillLevel = weaponSkillLevel,
               factionIndex = result.faction)
         if equipmentItemIndex > 0:
-          result.inventory.add(y = initInventoryData(protoIndex = equipmentItemIndex,
-              amount = 1, name = "", durability = defaultItemDurability, price = 0))
+          result.inventory.add(y = initInventoryData(
+              protoIndex = equipmentItemIndex, amount = 1, name = "",
+              durability = defaultItemDurability, price = 0))
           result.equipment[i] = result.inventory.high
     result.orders = protoMob.priorities
     result.order = protoMob.order
