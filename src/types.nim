@@ -1486,10 +1486,10 @@ type
     installTime: Positive
     unique: bool
     size: range[1..10]
-    description*: Description
-    maxOwners*: range[0..10]
-    speed*: range[-100..100]
-    reputation*: ReputationRange
+    description: Description
+    maxOwners: range[0..10]
+    speed: range[-100..100]
+    reputation: ReputationRange
 
 proc initBaseModuleData*(name: ModuleName = "";
     mType: ModuleType = ModuleType.any; weight: Natural = 0; value: Natural = 0;
@@ -1551,6 +1551,14 @@ typeGetterSetter(baseType = BaseModuleData, varName = module, name = unique,
     typ = bool)
 typeGetterSetter(baseType = BaseModuleData, varName = module, name = size,
     typ = range[1..10])
+typeGetterSetter(baseType = BaseModuleData, varName = module,
+    name = description, typ = Description)
+typeGetterSetter(baseType = BaseModuleData, varName = module, name = maxOwners,
+    typ = range[0..10])
+typeGetterSetter(baseType = BaseModuleData, varName = module, name = speed,
+    typ = range[-100..100])
+typeGetterSetter(baseType = BaseModuleData, varName = module, name = reputation,
+    typ = ReputationRange)
 
 type
   CraftData* = object
