@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing orders for the whole player's ship's crew
+- Showing the last in-game messages in the player's ship's info screen
 
 ## [12.5] - 2026-07-12
 
