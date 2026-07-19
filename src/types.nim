@@ -1587,6 +1587,27 @@ type
     reputation*: ReputationRange = 0
     toolQuality*: Positive = 1
 
+{.warning[UnsafeDefault]: off.}
+{.warning[UnsafeSetLen]: off.}
+proc initCraftData*(materialTypes: seq[string] = @[]; materialAmounts: seq[
+    Positive] = @[]; resultIndex: Natural = 0;
+    resultAmount: Natural = 0): CraftData {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for a crafting recipe
+  ##
+  ## * materialTypes   - The list of materials types used in crafting
+  ## * materialAmounts - The list of materials amount used in crafting
+  ## * resultIndex     - The index of proto item which is the result of the recipe
+  ## * resultAmount    - The amount of items produced by one recipe
+  ##
+  ## Returns the new structure with information about the selected crafting recipe
+  return CraftData(materialTypes: materialTypes,
+      materialAmounts: materialAmounts, resultIndex: resultIndex,
+      resultAmount: resultAmount)
+{.warning[UnsafeDefault]: on.}
+{.warning[UnsafeSetLen]: on.}
+
+type
   GoalData* = object
     ## Used to store information about the in-game goals
     ##
