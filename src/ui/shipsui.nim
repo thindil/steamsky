@@ -344,4 +344,4 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     else:
       discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      height - 75, state = state)
+      height - 110, state = state)
