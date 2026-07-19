@@ -587,6 +587,7 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
       255).uint8, g = (0.18 * 255).uint8, b = (0.24 * 255).uint8, a = 255)
   discard SDL_RenderClear(renderer = sdl.renderer)
   nk_sdl_render(aa = antiAliasingOn)
+#
 #  const vertexLayout: array[4, nk_draw_vertex_layout_element] = [
 #    nk_draw_vertex_layout_element(attribute: vertexPosition),
 #    nk_draw_vertex_layout_element(attribute: vertexTextCoord),
@@ -609,6 +610,8 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #  var vbuf, ebuf: nk_buffer = nk_buffer()
 #  nk_buffer_init_default(buffer = vbuf.addr)
 #  nk_buffer_init_default(buffer = ebuf.addr)
+#  discard nk_convert(ctx = ctx, cmds = cmds, vertices = vbuf.addr,
+#      elements = ebuf.addr, config = config)
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
