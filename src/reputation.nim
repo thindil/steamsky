@@ -52,7 +52,8 @@ proc resetReputations*() {.raises: [KeyError], tags: [],
         sourceFaction = newGameSettings.playerFaction,
         targetFaction = index): 1 else: -1
     reputationsList.add(y = initReputationObject(factionIndex = index,
-        reputation = initReputationData(level = reputationLevel, experience = 0)))
+        reputation = initReputationData(level = reputationLevel,
+            experience = 0)))
 
 proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
     ReputationError], tags: [], contractual.} =
@@ -89,18 +90,20 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
         index].reputation.experience + (points.float *
         newGameSettings.reputationBonus).int
     while newPoints < 0:
-      {.ruleOff: "assignments"}
-      reputationsList[index].reputation.level = reputationsList[index].reputation.level - 1
-      {.ruleOn: "assignments"}
+      {.ruleOff: "assignments".}
+      reputationsList[index].reputation.level = reputationsList[
+          index].reputation.level - 1
+      {.ruleOn: "assignments".}
       newPoints += abs(x = reputationsList[index].reputation.level * 500)
       if newPoints >= 0:
         reputationsList[index].reputation.experience = newPoints
         return
     while newPoints > abs(x = reputationsList[index].reputation.level * 500):
       newPoints -= abs(x = reputationsList[index].reputation.level * 500)
-      {.ruleOff: "assignments"}
-      reputationsList[index].reputation.level = reputationsList[index].reputation.level + 1
-      {.ruleOn: "assignments"}
+      {.ruleOff: "assignments".}
+      reputationsList[index].reputation.level = reputationsList[
+          index].reputation.level + 1
+      {.ruleOn: "assignments".}
     reputationsList[index].reputation.experience = newPoints
 
   # Gain or lose reputation with other factions, depending if they are friends
@@ -116,8 +119,8 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
       raise newException(exceptn = ReputationError,
           message = getCurrentExceptionMsg())
 
-proc getReputation*(factionIndex: string): ReputationRange {.raises: [], tags: [],
-    contractual.} =
+proc getReputation*(factionIndex: string): ReputationRange {.raises: [], tags: [
+    ], contractual.} =
   ## Get the level of the player's reputation with the selected faction
   ##
   ## * factionIndex - the index of faction with which the reputation will be get
