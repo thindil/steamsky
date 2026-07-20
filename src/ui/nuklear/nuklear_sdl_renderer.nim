@@ -611,7 +611,7 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #  nk_buffer_init_default(buffer = vbuf.addr)
 #  nk_buffer_init_default(buffer = ebuf.addr)
 #  discard nk_convert(ctx = ctx, cmds = cmds, vertices = vbuf.addr,
-#      elements = ebuf.addr, config = config)
+#      elements = ebuf.addr, config = config.addr)
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
