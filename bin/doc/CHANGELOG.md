@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Showing orders for the whole player's ship's crew
 - Showing the last in-game messages in the player's ship's info and knowledge
   screens
+- Title for showing the enemy's ship's crew info during boarding
 
 ## [12.5] - 2026-07-12
 
