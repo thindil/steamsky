@@ -57,8 +57,9 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     if itemIndex == -1 and (protoIndex == 0 or amount < 0):
       return
     if itemIndex == -1:
-      ship.cargo.add(y = initInventoryData(protoIndex = protoIndex, amount = amount,
-          name = "", durability = durability, price = price, quality = quality,
+      ship.cargo.add(y = initInventoryData(protoIndex = protoIndex,
+          amount = amount, name = "", durability = durability, price = price,
+          quality = quality,
           craftBonus = craftBonus, craftMalus = craftMalus))
       return
     {.ruleOff: "varDeclared".}
@@ -80,8 +81,8 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     ship.cargo[itemIndex].amount = newAmount
     ship.cargo[itemIndex].price = price
 
-proc getItemWeight*(item: InventoryData | BaseCargo): Positive {.raises: [KeyError],
-    tags: [], contractual.} =
+proc getItemWeight*(item: InventoryData | BaseCargo): Positive {.raises: [
+    KeyError], tags: [], contractual.} =
   ## Get the weight of the selected item
   ##
   ## * item - the item which weight will be get
