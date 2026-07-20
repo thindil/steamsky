@@ -189,13 +189,6 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
   group(title = "Your ship crew orders:", flags = {windowBorder, windowTitle}):
     if dialog != none:
       windowDisable()
-    setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
-    imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon]),
-        tooltip = "Maximize/minimize the ship crew orders"):
-      if expandedSection == 1:
-        expandedSection = 0
-      else:
-        expandedSection = 1
     setLayoutRowDynamic(height = labelHeight, cols = 3)
     label(str = "Position", alignment = centered)
     label(str = "Member", alignment = centered)
@@ -343,6 +336,21 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
         wrapLabel(str = defenders)
     except:
       dialog = setError(message = "Can't show information about boarding party and defenders.")
+    group(title = "Your ship status:", flags = {windowBorder, windowTitle}):
+      if dialog != none:
+        windowDisable()
+      setLayoutRowDynamic(height = labelHeight, cols = 2)
+      for module in playerShip.modules:
+        if module.durability > 0:
+          label(str = module.name)
+        else:
+          colorLabel(str = module.name, color = theme.colors[grayColor])
+        var damagePercent: int = ((module.durability.float / module.maxDurability.float) * 100.0).int
+        changeStyle(field = progressbar,
+          color = (if damagePercent == 100: theme.colors[greenColor]
+            elif damagePercent > 24: theme.colors[yellowColor]
+            else: theme.colors[redColor])):
+          progressBar(value = damagePercent, maxValue = 100, modifyable = false)
 
 proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -366,168 +374,124 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't get the player's faction.")
         return
-  if expandedSection == 0:
-    setLayoutRowDynamic(height = height / 2, cols = 2)
-  else:
-    setLayoutRowDynamic(height = height, cols = 1)
-  # The player's ship's crew orders
-  if expandedSection in {0, 1}:
-    showPlayerCrewOrders(dialog = dialog, faction = faction)
+  setLayoutRowDynamic(height = height, cols = 2)
+  # The player's ship's info
+  showPlayerCrewOrders(dialog = dialog, faction = faction)
   # The enemy's ship's info
-  if expandedSection in {0, 2}:
-    group(title = "Enemy info:", flags = {windowBorder, windowTitle}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon]),
-          tooltip = "Maximize/minimize the enemy's ship info"):
-        if expandedSection == 2:
-          expandedSection = 0
+  group(title = "Enemy info:", flags = {windowBorder, windowTitle}):
+    if dialog != none:
+      windowDisable()
+    setLayoutRowDynamic(height = labelHeight, cols = 2)
+    label(str = "Name:")
+    colorLabel(str = enemyName, color = theme.colors[goldenColor])
+    label(str = "Type:")
+    colorLabel(str = game.enemy.ship.name, color = theme.colors[goldenColor])
+    label(str = "Home:")
+    colorLabel(str = skyBases[game.enemy.ship.homeBase].name, color = theme.colors[goldenColor])
+    label(str = "Distance:")
+    colorLabel(str = (case game.enemy.distance:
+        of 0..999:
+          "Close"
+        of 1_000..4_999:
+          "Short"
+        of 5_000..9_999:
+          "Medium"
+        of 10_000..14_999:
+          "Long"
         else:
-          expandedSection = 2
-      setLayoutRowDynamic(height = labelHeight, cols = 2)
-      label(str = "Name:")
-      colorLabel(str = enemyName, color = theme.colors[goldenColor])
-      label(str = "Type:")
-      colorLabel(str = game.enemy.ship.name, color = theme.colors[goldenColor])
-      label(str = "Home:")
-      colorLabel(str = skyBases[game.enemy.ship.homeBase].name, color = theme.colors[goldenColor])
-      label(str = "Distance:")
-      colorLabel(str = (case game.enemy.distance:
-          of 0..999:
-            "Close"
-          of 1_000..4_999:
-            "Short"
-          of 5_000..9_999:
-            "Medium"
-          of 10_000..14_999:
-            "Long"
-          else:
-            "Escaped"), color = theme.colors[goldenColor])
-      label(str = "Status:")
-      var enemyInfo: string = ""
-      if game.enemy.distance < 15_000:
-        if game.enemy.ship.modules[0].durability == 0:
-          enemyInfo &= "Destroyed"
-        else:
-          var enemyStatus: string = "Ok"
-          for module in game.enemy.ship.modules:
-            if module.durability < module.maxDurability:
-              enemyStatus = "Damaged"
-              break
-          enemyInfo &= enemyStatus
+          "Escaped"), color = theme.colors[goldenColor])
+    label(str = "Status:")
+    var enemyInfo: string = ""
+    if game.enemy.distance < 15_000:
+      if game.enemy.ship.modules[0].durability == 0:
+        enemyInfo &= "Destroyed"
+      else:
+        var enemyStatus: string = "Ok"
         for module in game.enemy.ship.modules:
-          if module.durability > 0:
-            try:
-              case modulesList[module.protoIndex].mType
-              of armor:
-                enemyInfo &= " (armored)"
-              of gun:
-                enemyInfo &= " (gun)"
-              of batteringRam:
-                enemyInfo &= " (battering ram)"
-              of harpoonGun:
-                enemyInfo &= " (harpoon gun)"
-              else:
-                discard
-            except:
-              dialog = setError(message = "Can't show information about the enemy's ship. No proto module with index:" &
-                  $module.protoIndex, e = nil)
-      else:
-        enemyInfo &= "Unknown"
-      colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
-      label(str = "Speed:")
-      enemyInfo = ""
-      if game.enemy.distance < 15_000:
-        case game.enemy.ship.speed
-        of fullStop:
-          enemyInfo &= "Stopped"
-        of quarterSpeed:
-          enemyInfo &= "Slow"
-        of halfSpeed:
-          enemyInfo &= "Medium"
-        of fullSpeed:
-          enemyInfo &= "Fast"
-        else:
-          discard
-        if game.enemy.ship.speed != fullStop:
-          let speedDiff: int = try:
-              realSpeed(ship = game.enemy.ship) - realSpeed(ship = playerShip)
-            except:
-              dialog = setError(message = "Can't count the speed difference.")
-              return
-          case speedDiff
-          of int.low.. -251:
-            enemyInfo &= " (much slower)"
-          of -250.. -1:
-            enemyInfo &= " (slower)"
-          of 0:
-            enemyInfo &= " (equal)"
-          of 1..249:
-            enemyInfo &= " (faster)"
-          else:
-            enemyInfo &= " (much faster)"
-      else:
-        enemyInfo &= "Unknown"
-      colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
-  # The player's ship's status
-  if expandedSection in {0, 3}:
-    group(title = "Your ship status:", flags = {windowBorder, windowTitle}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon]),
-          tooltip = "Maximize/minimize the ship status info"):
-        if expandedSection == 3:
-          expandedSection = 0
-        else:
-          expandedSection = 3
-      setLayoutRowDynamic(height = labelHeight, cols = 2)
-      for module in playerShip.modules:
+          if module.durability < module.maxDurability:
+            enemyStatus = "Damaged"
+            break
+        enemyInfo &= enemyStatus
+      for module in game.enemy.ship.modules:
         if module.durability > 0:
-          label(str = module.name)
+          try:
+            case modulesList[module.protoIndex].mType
+            of armor:
+              enemyInfo &= " (armored)"
+            of gun:
+              enemyInfo &= " (gun)"
+            of batteringRam:
+              enemyInfo &= " (battering ram)"
+            of harpoonGun:
+              enemyInfo &= " (harpoon gun)"
+            else:
+              discard
+          except:
+            dialog = setError(message = "Can't show information about the enemy's ship. No proto module with index:" &
+                $module.protoIndex, e = nil)
+    else:
+      enemyInfo &= "Unknown"
+    colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
+    label(str = "Speed:")
+    enemyInfo = ""
+    if game.enemy.distance < 15_000:
+      case game.enemy.ship.speed
+      of fullStop:
+        enemyInfo &= "Stopped"
+      of quarterSpeed:
+        enemyInfo &= "Slow"
+      of halfSpeed:
+        enemyInfo &= "Medium"
+      of fullSpeed:
+        enemyInfo &= "Fast"
+      else:
+        discard
+      if game.enemy.ship.speed != fullStop:
+        let speedDiff: int = try:
+            realSpeed(ship = game.enemy.ship) - realSpeed(ship = playerShip)
+          except:
+            dialog = setError(message = "Can't count the speed difference.")
+            return
+        case speedDiff
+        of int.low.. -251:
+          enemyInfo &= " (much slower)"
+        of -250.. -1:
+          enemyInfo &= " (slower)"
+        of 0:
+          enemyInfo &= " (equal)"
+        of 1..249:
+          enemyInfo &= " (faster)"
         else:
-          colorLabel(str = module.name, color = theme.colors[grayColor])
-        var damagePercent: int = ((module.durability.float / module.maxDurability.float) * 100.0).int
-        changeStyle(field = progressbar,
-          color = (if damagePercent == 100: theme.colors[greenColor]
-            elif damagePercent > 24: theme.colors[yellowColor]
-            else: theme.colors[redColor])):
-          progressBar(value = damagePercent, maxValue = 100, modifyable = false)
+          enemyInfo &= " (much faster)"
+    else:
+      enemyInfo &= "Unknown"
+    colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
   # The enemy's ship's status
-  if expandedSection in {0, 4}:
-    group(title = "Enemy ship status:", flags = {windowBorder, windowTitle}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon]),
-          tooltip = "Maximize/minimize the ship status info"):
-        if expandedSection == 4:
-          expandedSection = 0
-        else:
-          expandedSection = 4
-      setLayoutRowDynamic(height = labelHeight, cols = 2)
+  group(title = "Enemy ship status:", flags = {windowBorder, windowTitle}):
+    if dialog != none:
+      windowDisable()
+    setLayoutRowDynamic(height = labelHeight, cols = 2)
+    if endCombat:
+      game.enemy.distance = 100
+    for module in game.enemy.ship.modules.mitems:
       if endCombat:
-        game.enemy.distance = 100
-      for module in game.enemy.ship.modules.mitems:
-        if endCombat:
-          module.durability = 0
-        let moduleName: string = try: (if game.enemy.distance > 1_000:
-              getModuleType(moduleIndex = module.protoIndex) else:
-              modulesList[module.protoIndex].name)
-            except:
-              dialog = setError(message = "Can't show the enemy's ship's module name")
-              return
-        if module.durability > 0:
-          label(str = moduleName)
-        else:
-          colorLabel(str = moduleName, color = theme.colors[grayColor])
-        var damagePercent: int = ((module.durability.float / module.maxDurability.float) * 100.0).int
-        changeStyle(field = progressbar,
-          color = (if damagePercent == 100: theme.colors[greenColor]
-            elif damagePercent > 24: theme.colors[yellowColor]
-            else: theme.colors[redColor])):
-          progressBar(value = damagePercent, maxValue = 100, modifyable = false)
+        module.durability = 0
+      let moduleName: string = try: (if game.enemy.distance > 1_000:
+            getModuleType(moduleIndex = module.protoIndex) else:
+            modulesList[module.protoIndex].name)
+          except:
+            dialog = setError(message = "Can't show the enemy's ship's module name")
+            return
+      if module.durability > 0:
+        label(str = moduleName)
+      else:
+        colorLabel(str = moduleName, color = theme.colors[grayColor])
+      var damagePercent: int = ((module.durability.float / module.maxDurability.float) * 100.0).int
+      changeStyle(field = progressbar,
+        color = (if damagePercent == 100: theme.colors[greenColor]
+          elif damagePercent > 24: theme.colors[yellowColor]
+          else: theme.colors[redColor])):
+        progressBar(value = damagePercent, maxValue = 100, modifyable = false)
   if endCombat:
     inCombat = false
     previousState = emptyState
@@ -589,13 +553,6 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Your crew:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else:
-        images[contractIcon]), tooltip = "Maximize/minimize your crew list"):
-        if expandedSection == 1:
-          expandedSection = 0
-        else:
-          expandedSection = 1
       setLayoutRowDynamic(height = labelHeight, cols = 3)
       label(str = "Member", alignment = centered)
       label(str = "Health", alignment = centered)
@@ -627,13 +584,6 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
     group(title = "Enemy's crew:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else:
-        images[contractIcon]), tooltip = "Maximize/minimize enemy's ship's crew list"):
-        if expandedSection == 1:
-          expandedSection = 0
-        else:
-          expandedSection = 1
       setLayoutRowDynamic(height = labelHeight, cols = 3)
       label(str = "Member", alignment = centered)
       label(str = "Health", alignment = centered)
