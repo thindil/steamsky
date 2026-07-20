@@ -624,7 +624,7 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
         orderIndex.inc
   # The enemy's ship's crew info
   if expandedSection in {0, 2}:
-    group(title = "Your crew:", flags = {windowBorder, windowTitle}):
+    group(title = "Enemy's crew:", flags = {windowBorder, windowTitle}):
       if dialog != none:
         windowDisable()
       setLayoutRowStatic(height = buttonHeight, cols = 1, width = buttonHeight.int)
