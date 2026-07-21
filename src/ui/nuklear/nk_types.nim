@@ -1674,7 +1674,7 @@ type
     lineAA*, shapeAA*: AntiAliasing
     circleSegmentCount*, arcSegmentCount*, curveSegmentCount*: uint
     texNull*: DrawNullTexture
-    vertexLayout*: DrawVertexLayoutElement
+    vertexLayout*: seq[DrawVertexLayoutElement]
     vertexSize*, vertexAlignment*: int
   DrawList* = object
     ## Used to store data for drawing

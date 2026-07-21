@@ -587,15 +587,14 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
       255).uint8, g = (0.18 * 255).uint8, b = (0.24 * 255).uint8, a = 255)
   discard SDL_RenderClear(renderer = sdl.renderer)
   nk_sdl_render(aa = antiAliasingOn)
-#
-#  const vertexLayout: array[4, nk_draw_vertex_layout_element] = [
-#    nk_draw_vertex_layout_element(attribute: vertexPosition),
-#    nk_draw_vertex_layout_element(attribute: vertexTextCoord),
-#    nk_draw_vertex_layout_element(attribute: vertexColor),
-#    nk_draw_vertex_layout_element(attribute: vertexAttributeCount)]
-#  type nk_sdl_vertex {.importc: "struct nk_sdl_vertex", nodecl.} = object
-#  var config: nk_convert_config = nk_convert_config()
-#  config.vertex_layout = vertexLayout.addr
+
+#  const vertexLayout: seq[DrawVertexLayoutElement] = @[
+#    DrawVertexLayoutElement(attribute: vertexPosition),
+#    DrawVertexLayoutElement(attribute: vertexTextCoord),
+#    DrawVertexLayoutElement(attribute: vertexColor),
+#    DrawVertexLayoutElement(attribute: vertexAttributeCount)]
+#  var config: ConvertConfig = ConvertConfig()
+#  config.vertex_layout = vertexLayout
 #  config.vertex_size = nk_sdl_vertex.sizeof
 #  config.vertex_alignment = nk_sdl_vertex.alignof
 #  config.tex_null = sdl.dev.texNull
