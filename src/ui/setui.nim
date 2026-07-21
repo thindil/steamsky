@@ -218,6 +218,10 @@ var
   defenders*: seq[bool] = @[]
     ## The list of the player's ship's defenders. If true, the selected
     ## player's ship's crew member defeding the ship.
+  playerTab*: Natural = 0
+    ## The current tab on the player's ship info
+  enemyTab*: Natural = 0
+    ## The current tab on the enemy's info
 
 proc updateCrewLists*() {.raises: [], tags: [RootEffect], contractual.} =
   ## Update the list of available crew members for all positions in combat
@@ -266,6 +270,8 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   inCombat = true
   dialog = none
   engineerOrder = 3
+  playerTab = 0
+  enemyTab = 0
   pilotIndex = findMember(order = pilot) + 1
   engineerIndex = findMember(order = engineer) + 1
   gunnersIndex = @[]
