@@ -336,21 +336,6 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
         wrapLabel(str = defenders)
     except:
       dialog = setError(message = "Can't show information about boarding party and defenders.")
-    group(title = "Your ship status:", flags = {windowBorder, windowTitle}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowDynamic(height = labelHeight, cols = 2)
-      for module in playerShip.modules:
-        if module.durability > 0:
-          label(str = module.name)
-        else:
-          colorLabel(str = module.name, color = theme.colors[grayColor])
-        var damagePercent: int = ((module.durability.float / module.maxDurability.float) * 100.0).int
-        changeStyle(field = progressbar,
-          color = (if damagePercent == 100: theme.colors[greenColor]
-            elif damagePercent > 24: theme.colors[yellowColor]
-            else: theme.colors[redColor])):
-          progressBar(value = damagePercent, maxValue = 100, modifyable = false)
 
 proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -368,7 +353,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if pilotList.len != playerShip.crew.len + 1:
     updateCrewLists()
   let
-    height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+    height: float = (windowHeight - 35 - gameSettings.messagesPosition.float) / 2
     faction: FactionData = try:
         factionsList[playerShip.crew[0].faction]
       except:
@@ -466,6 +451,22 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     else:
       enemyInfo &= "Unknown"
     colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
+  # The player's ship's status
+  group(title = "Your ship status:", flags = {windowBorder, windowTitle}):
+    if dialog != none:
+      windowDisable()
+    setLayoutRowDynamic(height = labelHeight, cols = 2)
+    for module in playerShip.modules:
+      if module.durability > 0:
+        label(str = module.name)
+      else:
+        colorLabel(str = module.name, color = theme.colors[grayColor])
+      var damagePercent: int = ((module.durability.float / module.maxDurability.float) * 100.0).int
+      changeStyle(field = progressbar,
+        color = (if damagePercent == 100: theme.colors[greenColor]
+          elif damagePercent > 24: theme.colors[yellowColor]
+          else: theme.colors[redColor])):
+        progressBar(value = damagePercent, maxValue = 100, modifyable = false)
   # The enemy's ship's status
   group(title = "Enemy ship status:", flags = {windowBorder, windowTitle}):
     if dialog != none:
