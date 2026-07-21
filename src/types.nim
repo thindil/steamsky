@@ -1592,7 +1592,10 @@ type
 proc initCraftData*(materialTypes: seq[string] = @[]; materialAmounts: seq[
     Positive] = @[]; resultIndex: Natural = 0; resultAmount: Natural = 0;
     workplace: ModuleType = alchemyLab; skill: Natural = 0; time: Positive = 1;
-    difficulty: Positive = 1): CraftData {.raises: [], tags: [], contractual.} =
+    difficulty: Positive = 1; tool: SettingString = "";
+    reputation: ReputationRange = 0;
+    toolQuality: Positive = 1): CraftData {.raises: [], tags: [],
+    contractual.} =
   ## Create a new data structure for a crafting recipe
   ##
   ## * materialTypes   - The list of materials types used in crafting
@@ -1603,12 +1606,16 @@ proc initCraftData*(materialTypes: seq[string] = @[]; materialAmounts: seq[
   ## * skill           - The index of the skill used in crafting
   ## * time            - The amount of minutes needed to finish the recipe
   ## * difficulty      - The difficulty level of the recipe
+  ## * tool            - The type of item used as a tool in crafting
+  ## * reputation      - The minimal amount of reputation needed to buy the recipe in bases
+  ## * toolQuality     - The minimal quality of tool used in crafting
   ##
   ## Returns the new structure with information about the selected crafting recipe
   return CraftData(materialTypes: materialTypes,
       materialAmounts: materialAmounts, resultIndex: resultIndex,
       resultAmount: resultAmount, workplace: workplace, skill: skill,
-      time: time, difficulty: difficulty)
+      time: time, difficulty: difficulty, tool: tool, reputation: reputation,
+      toolQuality: toolQuality)
 {.warning[UnsafeDefault]: on.}
 {.warning[UnsafeSetLen]: on.}
 
