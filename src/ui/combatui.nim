@@ -186,156 +186,187 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  group(title = "Your ship crew orders:", flags = {windowBorder, windowTitle}):
+  group(title = "Your ship info:", flags = {windowBorder, windowTitle}):
     if dialog != none:
       windowDisable()
-    setLayoutRowDynamic(height = labelHeight, cols = 3)
-    label(str = "Position", alignment = centered)
-    label(str = "Member", alignment = centered)
-    label(str = "Order", alignment = centered)
-    # Show pilot settings
-    showPilotSettings(dialog = dialog, faction = faction)
-    # Show engineer settings
-    if engineerIndex == 0:
-      setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.33.cfloat, 0.33])
-    else:
-      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
-    label(str = "Engineer:", alignment = left)
-    let newEngineer: Natural = comboList(items = engineerList,
-        selected = engineerIndex, itemHeight = labelHeight.int, x = 200, y = 150,
-        tooltip = "Select the crew member which will be the engineer during the combat. The sign + after name means that this crew member has engineering skill, the sign ++ after name means that his/her engineering skill is the best in the crew")
-    if engineerIndex > 0:
-      let newOrder: Natural = comboList(items = engineerOrders,
-          selected = (engineerOrder - 1), itemHeight = labelHeight.int,
-              x = 200, y = 150, tooltip = "Select the order for the engineer")
-      if newOrder != engineerOrder - 1:
-        engineerOrder = newOrder + 1
-        if "sentientships" in faction.flags:
-          addMessage(message = "Order for ship was set on: " & engineerOrders[
-            newOrder], mType = combatMessage)
-        else:
-          addMessage(message = "Order for " & playerShip.crew[findMember(
-              order = engineer)].name & " was set on: " & engineerOrders[
-              newOrder], mType = combatMessage)
-    if newEngineer != engineerIndex:
-      if newEngineer > 0:
-        try:
-          giveOrders(ship = playerShip, memberIndex = newEngineer - 1,
-              givenOrder = engineer)
-        except:
-          dialog = setError(message = "Can't give order to the engineer.")
-      else:
-        try:
-          giveOrders(ship = playerShip, memberIndex = engineerIndex - 1,
-              givenOrder = rest)
-        except:
-          dialog = setError(message = "Can't give rest order to the engineer.")
-      engineerIndex = findMember(order = engineer) + 1
-      pilotIndex = findMember(order = pilot) + 1
-    # Show the guns settings
-    for gunIndex, gun in guns.mpairs:
-      var hasGunner: bool = playerShip.modules[gun[1]].owner[0] > 0
-      if hasGunner:
-        setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
-      else:
+    # Show tab buttons
+    changeStyle(field = spacing, x = 0, y = 0):
+      changeStyle(field = buttonRounding, value = 0):
+        setLayoutRowDynamic(height = tabHeight, cols = 2)
+        const tabs: array[2, string] = ["Crew orders", "Ship status"]
+        for index, tab in tabs:
+          try:
+            if currentTab == index:
+              changeStyle(src = active, dest = normal):
+                labelButton(title = tab):
+                  discard
+            else:
+              labelButton(title = tab):
+                currentTab = index.cint
+          except:
+            dialog = setError(message = "Can't set the tabs buttons.")
+    if currentTab == 0:
+      setLayoutRowDynamic(height = labelHeight, cols = 3)
+      label(str = "Position", alignment = centered)
+      label(str = "Member", alignment = centered)
+      label(str = "Order", alignment = centered)
+      # Show pilot settings
+      showPilotSettings(dialog = dialog, faction = faction)
+      # Show engineer settings
+      if engineerIndex == 0:
         setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.33.cfloat, 0.33])
-      var
-        haveAmmo: bool = false
-        ammoAmount: Natural = 0
-      let aIndex: int = (if playerShip.modules[gun[1]].mType ==
-          ModuleType2.gun: playerShip.modules[gun[
-          1]].ammoIndex else: playerShip.modules[gun[1]].harpoonIndex)
-      try:
-        if aIndex in playerShip.cargo.low .. playerShip.cargo.high and
-            itemsList[playerShip.cargo[aIndex].protoIndex].itemType ==
-                itemsTypesList[modulesList[
-            playerShip.modules[gun[1]].protoIndex].value]:
-          ammoAmount = playerShip.cargo[aIndex].amount
-          haveAmmo = true
-      except:
-        dialog = setError(message = "Can't show the player's ship's gun settings. No proto item with index: " &
-            $playerShip.cargo[aIndex].protoIndex, e = nil)
-        return
-      if not haveAmmo:
-        ammoAmount = 0
-        for itemIndex, item in itemsList:
-          try:
-            if item.itemType == itemsTypesList[modulesList[playerShip.modules[
-                gun[1]].protoIndex].value - 1]:
-              let ammoIndex: int = findItem(inventory = playerShip.cargo,
-                  protoIndex = itemIndex, itemQuality = any,
-                  craftBonus = any, craftMalus = any)
-              if ammoIndex > -1:
-                ammoAmount += playerShip.cargo[ammoIndex].amount
-          except:
-            dialog = setError(message = "Can't show the gun's ammo information. No proto module with index: " &
-                $playerShip.modules[gun[1]].protoIndex, e = nil)
-            return
-      wrapLabel(str = playerShip.modules[gun[1]].name & ": (Ammo: " &
-          $ammoAmount & ")")
-      let newGunner: Natural = comboList(items = gunnerList,
-          selected = gunnersIndex[gunIndex], itemHeight = labelHeight.int, x = 200, y = 150,
-          tooltip = "Select the crew member which will be operating the gun during the combat. The sign + after name means that this crew member has gunnery skill, the sign ++ after name means that his/her gunnery skill is the best in the crew")
-      hasGunner = newGunner > 0
-      if hasGunner:
-        var gunnerOrders: array[1..6, string] = gunnersOrders
-        for orderIndex, order in gunnersOrders:
-          try:
-            gunnerOrders[orderIndex] = order & getGunSpeed(
-                position = gunIndex, index = orderIndex)
-          except:
-            dialog = setError(message = "Can't show gunner's order.")
-            return
-        let newOrder: Natural = comboList(items = gunnerOrders,
-            selected = (gun[2] - 1), itemHeight = labelHeight.int, x = 200, y = 150,
-            tooltip = "Select the order for the gunner. Shooting in the selected part of enemy ship is less precise but always hit the selected part.")
-        if newOrder != gun[2] - 1:
-          gun[2] = newOrder + 1
-          addMessage(message = "Order for " & playerShip.crew[
-              playerShip.modules[guns[gunIndex][1]].owner[0]].name &
-              " was set on: " & gunnerOrders[gun[2]], mType = combatMessage)
-      if newGunner != gunnersIndex[gunIndex]:
-        gunnersIndex[gunIndex] = newGunner
-    # Show boarding/defending settings
-    try:
-      if (harpoonDuration > 0 or game.enemy.harpoonDuration > 0) and
-          protoShipsList[enemyShipIndex].crew.len > 0:
-        setLayoutRowDynamic(height = buttonHeight, cols = 1)
-        var boardingParty, defenders: string = ""
-        for member in playerShip.crew:
-          case member.order
-          of boarding:
-            boardingParty = boardingParty & member.name & ", "
-          of defend:
-            defenders = defenders & member.name & ", "
+      else:
+        setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
+      label(str = "Engineer:", alignment = left)
+      let newEngineer: Natural = comboList(items = engineerList,
+          selected = engineerIndex, itemHeight = labelHeight.int, x = 200, y = 150,
+          tooltip = "Select the crew member which will be the engineer during the combat. The sign + after name means that this crew member has engineering skill, the sign ++ after name means that his/her engineering skill is the best in the crew")
+      if engineerIndex > 0:
+        let newOrder: Natural = comboList(items = engineerOrders,
+            selected = (engineerOrder - 1), itemHeight = labelHeight.int,
+                x = 200, y = 150, tooltip = "Select the order for the engineer")
+        if newOrder != engineerOrder - 1:
+          engineerOrder = newOrder + 1
+          if "sentientships" in faction.flags:
+            addMessage(message = "Order for ship was set on: " & engineerOrders[
+              newOrder], mType = combatMessage)
           else:
-            discard
-        if boardingParty.len > 0:
-          boardingParty.strip(chars = {' ', ','})
+            addMessage(message = "Order for " & playerShip.crew[findMember(
+                order = engineer)].name & " was set on: " & engineerOrders[
+                newOrder], mType = combatMessage)
+      if newEngineer != engineerIndex:
+        if newEngineer > 0:
+          try:
+            giveOrders(ship = playerShip, memberIndex = newEngineer - 1,
+                givenOrder = engineer)
+          except:
+            dialog = setError(message = "Can't give order to the engineer.")
         else:
-          boardingParty = "None"
-        if defenders.len > 0:
-          defenders.strip(chars = {' ', ','})
+          try:
+            giveOrders(ship = playerShip, memberIndex = engineerIndex - 1,
+                givenOrder = rest)
+          except:
+            dialog = setError(message = "Can't give rest order to the engineer.")
+        engineerIndex = findMember(order = engineer) + 1
+        pilotIndex = findMember(order = pilot) + 1
+      # Show the guns settings
+      for gunIndex, gun in guns.mpairs:
+        var hasGunner: bool = playerShip.modules[gun[1]].owner[0] > 0
+        if hasGunner:
+          setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
         else:
-          defenders = "None"
-        labelButton(title = "Boarding party:",
-          tooltip = "Set your boarding party. If you join it, you will be able to give orders them, but not your gunners or engineer."):
-          dialog = boardingDialog
-          setDialog(x = windowWidth / 4, y = windowHeight / 5)
-        var labelHeight2: float = ceil(x = getTextWidth(text = boardingParty) /
-            (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
-        setLayoutRowDynamic(height = labelHeight2, cols = 1)
-        wrapLabel(str = boardingParty)
-        setLayoutRowDynamic(height = buttonHeight, cols = 1)
-        labelButton(title = "Defenders:", tooltip = "Set your ship's defenders against the enemy party."):
-          dialog = defendingDialog
-          setDialog(x = windowWidth / 4, y = windowHeight / 5)
-        labelHeight2 = ceil(x = getTextWidth(text = defenders) /
-            (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
-        setLayoutRowDynamic(height = labelHeight2, cols = 1)
-        wrapLabel(str = defenders)
-    except:
-      dialog = setError(message = "Can't show information about boarding party and defenders.")
+          setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.33.cfloat, 0.33])
+        var
+          haveAmmo: bool = false
+          ammoAmount: Natural = 0
+        let aIndex: int = (if playerShip.modules[gun[1]].mType ==
+            ModuleType2.gun: playerShip.modules[gun[
+            1]].ammoIndex else: playerShip.modules[gun[1]].harpoonIndex)
+        try:
+          if aIndex in playerShip.cargo.low .. playerShip.cargo.high and
+              itemsList[playerShip.cargo[aIndex].protoIndex].itemType ==
+                  itemsTypesList[modulesList[
+              playerShip.modules[gun[1]].protoIndex].value]:
+            ammoAmount = playerShip.cargo[aIndex].amount
+            haveAmmo = true
+        except:
+          dialog = setError(message = "Can't show the player's ship's gun settings. No proto item with index: " &
+              $playerShip.cargo[aIndex].protoIndex, e = nil)
+          return
+        if not haveAmmo:
+          ammoAmount = 0
+          for itemIndex, item in itemsList:
+            try:
+              if item.itemType == itemsTypesList[modulesList[playerShip.modules[
+                  gun[1]].protoIndex].value - 1]:
+                let ammoIndex: int = findItem(inventory = playerShip.cargo,
+                    protoIndex = itemIndex, itemQuality = any,
+                    craftBonus = any, craftMalus = any)
+                if ammoIndex > -1:
+                  ammoAmount += playerShip.cargo[ammoIndex].amount
+            except:
+              dialog = setError(message = "Can't show the gun's ammo information. No proto module with index: " &
+                  $playerShip.modules[gun[1]].protoIndex, e = nil)
+              return
+        wrapLabel(str = playerShip.modules[gun[1]].name & ": (Ammo: " &
+            $ammoAmount & ")")
+        let newGunner: Natural = comboList(items = gunnerList,
+            selected = gunnersIndex[gunIndex], itemHeight = labelHeight.int, x = 200, y = 150,
+            tooltip = "Select the crew member which will be operating the gun during the combat. The sign + after name means that this crew member has gunnery skill, the sign ++ after name means that his/her gunnery skill is the best in the crew")
+        hasGunner = newGunner > 0
+        if hasGunner:
+          var gunnerOrders: array[1..6, string] = gunnersOrders
+          for orderIndex, order in gunnersOrders:
+            try:
+              gunnerOrders[orderIndex] = order & getGunSpeed(
+                  position = gunIndex, index = orderIndex)
+            except:
+              dialog = setError(message = "Can't show gunner's order.")
+              return
+          let newOrder: Natural = comboList(items = gunnerOrders,
+              selected = (gun[2] - 1), itemHeight = labelHeight.int, x = 200, y = 150,
+              tooltip = "Select the order for the gunner. Shooting in the selected part of enemy ship is less precise but always hit the selected part.")
+          if newOrder != gun[2] - 1:
+            gun[2] = newOrder + 1
+            addMessage(message = "Order for " & playerShip.crew[
+                playerShip.modules[guns[gunIndex][1]].owner[0]].name &
+                " was set on: " & gunnerOrders[gun[2]], mType = combatMessage)
+        if newGunner != gunnersIndex[gunIndex]:
+          gunnersIndex[gunIndex] = newGunner
+      # Show boarding/defending settings
+      try:
+        if (harpoonDuration > 0 or game.enemy.harpoonDuration > 0) and
+            protoShipsList[enemyShipIndex].crew.len > 0:
+          setLayoutRowDynamic(height = buttonHeight, cols = 1)
+          var boardingParty, defenders: string = ""
+          for member in playerShip.crew:
+            case member.order
+            of boarding:
+              boardingParty = boardingParty & member.name & ", "
+            of defend:
+              defenders = defenders & member.name & ", "
+            else:
+              discard
+          if boardingParty.len > 0:
+            boardingParty.strip(chars = {' ', ','})
+          else:
+            boardingParty = "None"
+          if defenders.len > 0:
+            defenders.strip(chars = {' ', ','})
+          else:
+            defenders = "None"
+          labelButton(title = "Boarding party:",
+            tooltip = "Set your boarding party. If you join it, you will be able to give orders them, but not your gunners or engineer."):
+            dialog = boardingDialog
+            setDialog(x = windowWidth / 4, y = windowHeight / 5)
+          var labelHeight2: float = ceil(x = getTextWidth(text = boardingParty) /
+              (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
+          setLayoutRowDynamic(height = labelHeight2, cols = 1)
+          wrapLabel(str = boardingParty)
+          setLayoutRowDynamic(height = buttonHeight, cols = 1)
+          labelButton(title = "Defenders:", tooltip = "Set your ship's defenders against the enemy party."):
+            dialog = defendingDialog
+            setDialog(x = windowWidth / 4, y = windowHeight / 5)
+          labelHeight2 = ceil(x = getTextWidth(text = defenders) /
+              (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
+          setLayoutRowDynamic(height = labelHeight2, cols = 1)
+          wrapLabel(str = defenders)
+      except:
+        dialog = setError(message = "Can't show information about boarding party and defenders.")
+    else:
+      # The player's ship's damage
+      setLayoutRowDynamic(height = labelHeight, cols = 2)
+      for module in playerShip.modules:
+        if module.durability > 0:
+          label(str = module.name)
+        else:
+          colorLabel(str = module.name, color = theme.colors[grayColor])
+        var damagePercent: int = ((module.durability.float / module.maxDurability.float) * 100.0).int
+        changeStyle(field = progressbar,
+          color = (if damagePercent == 100: theme.colors[greenColor]
+            elif damagePercent > 24: theme.colors[yellowColor]
+            else: theme.colors[redColor])):
+          progressBar(value = damagePercent, maxValue = 100, modifyable = false)
 
 proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -451,22 +482,6 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     else:
       enemyInfo &= "Unknown"
     colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
-  # The player's ship's status
-  group(title = "Your ship status:", flags = {windowBorder, windowTitle}):
-    if dialog != none:
-      windowDisable()
-    setLayoutRowDynamic(height = labelHeight, cols = 2)
-    for module in playerShip.modules:
-      if module.durability > 0:
-        label(str = module.name)
-      else:
-        colorLabel(str = module.name, color = theme.colors[grayColor])
-      var damagePercent: int = ((module.durability.float / module.maxDurability.float) * 100.0).int
-      changeStyle(field = progressbar,
-        color = (if damagePercent == 100: theme.colors[greenColor]
-          elif damagePercent > 24: theme.colors[yellowColor]
-          else: theme.colors[redColor])):
-        progressBar(value = damagePercent, maxValue = 100, modifyable = false)
   # The enemy's ship's status
   group(title = "Enemy ship status:", flags = {windowBorder, windowTitle}):
     if dialog != none:
