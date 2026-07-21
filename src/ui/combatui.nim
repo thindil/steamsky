@@ -196,16 +196,16 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
         const tabs: array[2, string] = ["Crew orders", "Ship status"]
         for index, tab in tabs:
           try:
-            if currentTab == index:
+            if playerTab == index:
               changeStyle(src = active, dest = normal):
                 labelButton(title = tab):
                   discard
             else:
               labelButton(title = tab):
-                currentTab = index.cint
+                playerTab = index.cint
           except:
             dialog = setError(message = "Can't set the tabs buttons.")
-    if currentTab == 0:
+    if playerTab == 0:
       setLayoutRowDynamic(height = labelHeight, cols = 3)
       label(str = "Position", alignment = centered)
       label(str = "Member", alignment = centered)
@@ -404,16 +404,16 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
         const tabs: array[2, string] = ["General info", "Enemy status"]
         for index, tab in tabs:
           try:
-            if currentTab == index:
+            if enemyTab == index:
               changeStyle(src = active, dest = normal):
                 labelButton(title = tab):
                   discard
             else:
               labelButton(title = tab):
-                currentTab = index.cint
+                enemyTab = index.cint
           except:
             dialog = setError(message = "Can't set the tabs buttons.")
-    if currentTab == 0:
+    if enemyTab == 0:
       setLayoutRowDynamic(height = labelHeight, cols = 2)
       label(str = "Name:")
       colorLabel(str = enemyName, color = theme.colors[goldenColor])
