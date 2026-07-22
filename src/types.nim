@@ -1577,8 +1577,8 @@ type
     ## * toolQuality     - The minimal quality of tool used in crafting
     materialTypes*: seq[string] = @[]
     materialAmounts*: seq[Positive] = @[]
-    resultIndex*: Natural = 0
-    resultAmount*: Natural = 0
+    resultIndex: Natural = 0
+    resultAmount: Natural = 0
     workplace*: ModuleType = alchemyLab
     skill*: Natural = 0
     time*: Positive = 1
@@ -1618,6 +1618,15 @@ proc initCraftData*(materialTypes: seq[string] = @[]; materialAmounts: seq[
       toolQuality: toolQuality)
 {.warning[UnsafeDefault]: on.}
 {.warning[UnsafeSetLen]: on.}
+
+typeGetterSetter(baseType = CraftData, varName = recipe, name = materialTypes,
+    typ = seq[string])
+typeGetterSetter(baseType = CraftData, varName = recipe, name = materialAmounts,
+    typ = seq[Positive])
+typeGetterSetter(baseType = CraftData, varName = recipe, name = resultIndex,
+    typ = Natural)
+typeGetterSetter(baseType = CraftData, varName = recipe, name = resultAmount,
+    typ = Natural)
 
 type
   GoalData* = object
