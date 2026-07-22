@@ -300,13 +300,13 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       const tabs: array[4, string] = ["General", "Crew", "Modules", "Cargo"]
       for index, tab in tabs:
         try:
-          if currentTab == index:
+          if shipInfoTab == index:
             changeStyle(src = active, dest = normal):
               labelButton(title = tab):
                 discard
           else:
             labelButton(title = tab):
-              currentTab = index.cint
+              shipInfoTab = index.cint
               if index == 0:
                 hasOptions = false
               else:
@@ -318,7 +318,7 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "ShipInfo", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
-    case currentTab
+    case shipInfoTab
     # General info about the player's ship
     of 0:
       showGeneralInfo(dialog = dialog, state = state)
