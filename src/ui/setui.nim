@@ -1155,6 +1155,8 @@ var
     ## The list of accepted missions
   knownStoriesList*: seq[string] = @[]
     ## The list of known stories
+  knowledgeTab*: Natural = 0
+    ## The current tab on the knowledge screen
 
 proc setKnowledge*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
