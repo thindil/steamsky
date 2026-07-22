@@ -324,6 +324,13 @@ type
   PageDataType* = enum
     ## Types of page data
     tableType, panelType, windowType
+  ConvertResult* = enum
+    ## The result of conversion of backend data to Nuklear
+    convertSuccess = 0,
+    convertInvalidParam = 1,
+    convertCommandBufferFull = 1 shl 1,
+    convertVertexBufferFull = 1 shl 2,
+    convertElementBufferFull = 1 shl 3
 
 # ---------
 # Constants
