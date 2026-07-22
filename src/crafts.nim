@@ -219,7 +219,9 @@ proc setRecipeData*(recipeIndex: string;
           result.resultIndex = findProtoItem(itemType = recipe.materialTypes[0])
           result.resultAmount = (recipe.materialAmounts[0].float * 0.8).int
           if result.resultAmount == recipe.resultAmount:
-            result.resultAmount.dec
+            {.ruleOff: "assignments".}
+            result.resultAmount = result.resultAmount - 1
+            {.ruleOn: "assignments".}
           if result.resultAmount == 0:
             result.resultAmount = 1
           break
