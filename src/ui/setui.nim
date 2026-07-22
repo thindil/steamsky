@@ -270,8 +270,6 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   inCombat = true
   dialog = none
   engineerOrder = 3
-  playerTab = 0
-  enemyTab = 0
   pilotIndex = findMember(order = pilot) + 1
   engineerIndex = findMember(order = engineer) + 1
   gunnersIndex = @[]
@@ -857,6 +855,8 @@ var
     ## listed
   crewDataList*: seq[CrewData] = @[]
     ## The list of data related to the player's ship's crew members
+  shipInfoTab*: Natural = 0
+    ## The current tab on the ship's info screen
 
 proc refreshCrewList*() {.raises: [], tags: [], contractual.} =
   ## Set the list of crew members in the player's ship
