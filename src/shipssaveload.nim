@@ -502,7 +502,8 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
             0: CraftMaluses.none else: parseEnum[CraftMaluses](s = cargo.attr(
             name = "craftmalus")))
       playerShip.cargo.add(y = initInventoryData(protoIndex = protoIndex,
-          amount = amount, name = name, durability = itemDurability, price = price,
+          amount = amount, name = name, durability = itemDurability,
+          price = price,
           quality = quality,
           craftBonus = bonus, craftMalus = malus))
     for crew in shipNode.findAll(tag = "member"):
