@@ -201,8 +201,9 @@ proc dockingOrder(escape: bool = false; dialog: var GameDialog;
     if message.len > 0:
       dialog = setMessage(message = message, title = "Can't dock to base")
       return
-  dialog = none
-  closePopup()
+  if playerShip.speed != docked:
+    dialog = none
+    closePopup()
 
 proc completeMission(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
