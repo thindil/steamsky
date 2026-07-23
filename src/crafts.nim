@@ -77,9 +77,9 @@ proc loadRecipes*(fileName: Path) {.raises: [DataLoadingError],
           try:
             recipesList[recipeIndex]
           except ValueError:
-            CraftData(time: 1, difficulty: 1, toolQuality: 1)
+            initCraftData()
         else:
-          CraftData(time: 1, difficulty: 1, toolQuality: 1)
+          initCraftData()
       for material in recipeNode.findAll(tag = "material"):
         let
           amount: Natural = try:
@@ -192,7 +192,7 @@ proc setRecipeData*(recipeIndex: string;
   require:
     recipeIndex.len > 0
   body:
-    result = CraftData(time: 15, difficulty: 1, toolQuality: 100)
+    result = initCraftData(time = 15, difficulty = 1, toolQuality = 100)
     var itemIndex: int = 0
     if recipeIndex.startsWith(prefix = "Study"):
       itemIndex = recipeIndex[6..^1].strip.parseInt
@@ -229,10 +229,12 @@ proc setRecipeData*(recipeIndex: string;
     else:
       result = recipesList[recipeIndex]
       if quality != normal:
-        result.difficulty += countItemBonus(value = result.difficulty,
+        {.ruleOff: "assignments".}
+        result.difficulty = result.difficulty + countItemBonus(
+            value = result.difficulty, quality = quality)
+        result.time = result.time + countItemBonus(value = result.difficulty,
             quality = quality)
-        result.time += countItemBonus(value = result.difficulty,
-            quality = quality)
+        {.ruleOn: "assignments".}
 
 proc checkRecipe*(recipeIndex: string): Positive {.raises: [
     ValueError, CraftingNoWorkshopError, CraftingNoMaterialsError,
