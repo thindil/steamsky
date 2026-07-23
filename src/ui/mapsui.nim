@@ -23,7 +23,7 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basestypes, config, crew2, events2, game, game2, maps,
     messages, missions, missions2, shipscrew, shipscargo, shipsmovement,
     stories, types]
-import coreui, dialogs, errordialog, header, messagesui, themes, utilsui2
+import coreui, dialogs, errordialog, header, messagesui, setui, themes, utilsui2
 
 var
   centerX*: MapXRange = 1
@@ -498,7 +498,7 @@ type
     north, northEast, east, southEast, south, southWest, west, northWest,
       moveOne, moveToDestination
 
-proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog) {.raises: [
+proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog; state: var GameState) {.raises: [
     ], tags: [TimeEffect, RootEffect], contractual.} =
   ## Move ship in the selected direction
   ##
@@ -643,8 +643,10 @@ proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog) {.raises: [
     discard
   centerX = playerShip.skyX
   centerY = playerShip.skyY
+  if startsCombat:
+    setCombat(state = state, dialog = dialog)
 
-proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc showButtons(dialog: var GameDialog; state: var GameState) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the buttons for manage the ship, like orders, movement or wait
   ##
@@ -663,12 +665,12 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = ordersDialog
     if playerShip.speed != docked and playerShip.destinationX > 0:
       imageButton(image = images[moveToIcon], tooltip = "Auto move your ship to its destination."):
-        moveShipOnMap(direction = moveToDestination, dialog = dialog)
+        moveShipOnMap(direction = moveToDestination, dialog = dialog, state = state)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     if playerShip.speed == docked:
       imageButtonCentered(image = images[waitIcon], tooltip = if gameSettings.waitMinutes ==
           1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes."):
-        moveShipOnMap(direction = moveOne, dialog = dialog)
+        moveShipOnMap(direction = moveOne, dialog = dialog, state = state)
     else:
       playerShip.speed = (comboList(items = shipSpeeds,
           selected = playerShip.speed.ord - 1, itemHeight = labelHeight.int, x = 200, y = 50,
@@ -677,32 +679,32 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         [(dialogButtonHeight + 10).cfloat, (dialogButtonHeight + 10), (dialogButtonHeight + 10)])
       imageButton(image = images[arrowUpLeft],
           tooltip = "Move ship up and left"):
-        moveShipOnMap(direction = northWest, dialog = dialog)
+        moveShipOnMap(direction = northWest, dialog = dialog, state = state)
       imageButton(image = images[arrowUp], tooltip = "Move ship up"):
-        moveShipOnMap(direction = north, dialog = dialog)
+        moveShipOnMap(direction = north, dialog = dialog, state = state)
       imageButton(image = images[arrowUpRight],
           tooltip = "Move ship up and right"):
-        moveShipOnMap(direction = northEast, dialog = dialog)
+        moveShipOnMap(direction = northEast, dialog = dialog, state = state)
       imageButton(image = images[arrowLeft], tooltip = "Move ship left"):
-        moveShipOnMap(direction = west, dialog = dialog)
+        moveShipOnMap(direction = west, dialog = dialog, state = state)
       if playerShip.destinationX == 0:
         imageButton(image = images[waitIcon], tooltip = if gameSettings.waitMinutes ==
               1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes."):
-          moveShipOnMap(direction = moveOne, dialog = dialog)
+          moveShipOnMap(direction = moveOne, dialog = dialog, state = state)
       else:
         imageButton(image = images[moveStepIcon],
             tooltip = "Move ship one map field toward destination"):
-          moveShipOnMap(direction = moveOne, dialog = dialog)
+          moveShipOnMap(direction = moveOne, dialog = dialog, state = state)
       imageButton(image = images[arrowRight], tooltip = "Move ship right"):
-        moveShipOnMap(direction = east, dialog = dialog)
+        moveShipOnMap(direction = east, dialog = dialog, state = state)
       imageButton(image = images[arrowDownLeft],
           tooltip = "Move ship down and left"):
-        moveShipOnMap(direction = southWest, dialog = dialog)
+        moveShipOnMap(direction = southWest, dialog = dialog, state = state)
       imageButton(image = images[arrowDown], tooltip = "Move ship down"):
-        moveShipOnMap(direction = south, dialog = dialog)
+        moveShipOnMap(direction = south, dialog = dialog, state = state)
       imageButton(image = images[arrowDownRight],
           tooltip = "Move ship down and right"):
-        moveShipOnMap(direction = southEast, dialog = dialog)
+        moveShipOnMap(direction = southEast, dialog = dialog, state = state)
 
 var mapX, mapY: Natural = 0
 
@@ -1014,7 +1016,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
           height = 0, state = state)
     # Draw movement buttons
     row(width = 0.25):
-      showButtons(dialog = dialog)
+      showButtons(dialog = dialog, state = state)
   # Keyboard shortcuts
   const specialKeys: set[Keys] = {keyShift, keyCtrl, keyAlt}
   for sKey in specialKeys:
@@ -1043,25 +1045,25 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     elif key == mapAccelerators[4]:
       zoomMap(dialog = dialog, zoomIn = false)
     elif key == mapAccelerators[5]:
-      moveShipOnMap(direction = northWest, dialog = dialog)
+      moveShipOnMap(direction = northWest, dialog = dialog, state = state)
     elif key == mapAccelerators[6]:
-      moveShipOnMap(direction = north, dialog = dialog)
+      moveShipOnMap(direction = north, dialog = dialog, state = state)
     elif key == mapAccelerators[7]:
-      moveShipOnMap(direction = northEast, dialog = dialog)
+      moveShipOnMap(direction = northEast, dialog = dialog, state = state)
     elif key == mapAccelerators[8]:
-      moveShipOnMap(direction = west, dialog = dialog)
+      moveShipOnMap(direction = west, dialog = dialog, state = state)
     elif key == mapAccelerators[9]:
-      moveShipOnMap(direction = moveOne, dialog = dialog)
+      moveShipOnMap(direction = moveOne, dialog = dialog, state = state)
     elif key == mapAccelerators[10]:
-      moveShipOnMap(direction = east, dialog = dialog)
+      moveShipOnMap(direction = east, dialog = dialog, state = state)
     elif key == mapAccelerators[11]:
-      moveShipOnMap(direction = southWest, dialog = dialog)
+      moveShipOnMap(direction = southWest, dialog = dialog, state = state)
     elif key == mapAccelerators[12]:
-      moveShipOnMap(direction = south, dialog = dialog)
+      moveShipOnMap(direction = south, dialog = dialog, state = state)
     elif key == mapAccelerators[13]:
-      moveShipOnMap(direction = southEast, dialog = dialog)
+      moveShipOnMap(direction = southEast, dialog = dialog, state = state)
     elif key == mapAccelerators[14]:
-      moveShipOnMap(direction = moveToDestination, dialog = dialog)
+      moveShipOnMap(direction = moveToDestination, dialog = dialog, state = state)
     elif key == mapAccelerators[15]:
       centerX = playerShip.skyX
       centerY = playerShip.skyY
