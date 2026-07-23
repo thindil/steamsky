@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Showing the last in-game messages in the player's ship's info and knowledge
   screens
 - Title for showing the enemy's ship's crew info during boarding
+- Showing orders menu after docking to a base
 
 ## [12.5] - 2026-07-12
 
