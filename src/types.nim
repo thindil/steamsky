@@ -1579,10 +1579,10 @@ type
     materialAmounts*: seq[Positive] = @[]
     resultIndex: Natural = 0
     resultAmount: Natural = 0
-    workplace*: ModuleType = alchemyLab
-    skill*: Natural = 0
-    time*: Positive = 1
-    difficulty*: Positive = 1
+    workplace: ModuleType = alchemyLab
+    skill: Natural = 0
+    time: Positive = 1
+    difficulty: Positive = 1
     tool*: SettingString = ""
     reputation*: ReputationRange = 0
     toolQuality*: Positive = 1
@@ -1627,6 +1627,14 @@ typeGetterSetter(baseType = CraftData, varName = recipe, name = resultIndex,
     typ = Natural)
 typeGetterSetter(baseType = CraftData, varName = recipe, name = resultAmount,
     typ = Natural)
+typeGetterSetter(baseType = CraftData, varName = recipe, name = workplace,
+    typ = ModuleType)
+typeGetterSetter(baseType = CraftData, varName = recipe, name = skill,
+    typ = Natural)
+typeGetterSetter(baseType = CraftData, varName = recipe, name = time,
+    typ = Positive)
+typeGetterSetter(baseType = CraftData, varName = recipe, name = difficulty,
+    typ = Positive)
 
 type
   GoalData* = object
