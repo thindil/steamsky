@@ -48,13 +48,13 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
           "Accepted missions", "Known stories"]
       for index, tab in tabs:
         try:
-          if currentTab == index:
+          if knowledgeTab == index:
             changeStyle(src = active, dest = normal):
               labelButton(title = tab):
                 discard
           else:
             labelButton(title = tab):
-              currentTab = index.cint
+              knowledgeTab = index.cint
               if index == 0:
                 hasOptions = false
               else:
@@ -66,7 +66,7 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "Knowledge", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
-    case currentTab
+    case knowledgeTab
     # The list of known bases
     of 0:
       setLayoutRowStatic(height = buttonHeight, cols = 1,
