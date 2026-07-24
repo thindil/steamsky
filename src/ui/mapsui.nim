@@ -503,9 +503,11 @@ proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog; state: var 
   ## Move ship in the selected direction
   ##
   ## * direction - the direction in which the ship should be moved
-  ## * dialog - the current in-game dialog displayed on the screen
+  ## * dialog    - the current in-game dialog displayed on the screen
+  ## * state     - the current game's state
   ##
-  ## Returns the modified parameters dialog.
+  ## Returns the modified parameters dialog and state. The latter is modified
+  ## if combat started.
   var
     res: Natural = 0
     message: string = ""
@@ -651,8 +653,10 @@ proc showButtons(dialog: var GameDialog; state: var GameState) {.raises: [], tag
   ## Show the buttons for manage the ship, like orders, movement or wait
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current game's state
   ##
-  ## Returns the modified parameters dialog.
+  ## Returns the modified parameters dialog and state. The latter is modified if
+  ## combat started.
   group(title = "ButtonsGroup", flags = {windowNoScrollbar}):
     if dialog != none:
       windowDisable()
