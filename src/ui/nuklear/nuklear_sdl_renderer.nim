@@ -593,7 +593,7 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #    nk_draw_vertex_layout_element(attribute: vertexTextCoord),
 #    nk_draw_vertex_layout_element(attribute: vertexColor),
 #    nk_draw_vertex_layout_element(attribute: vertexAttributeCount)]
-#  type nk_sdl_vertex {.importc.} = object
+#  type nk_sdl_vertex {.importc: "struct nk_sdl_vertex".} = object
 #  var config: nk_convert_config = nk_convert_config()
 #  config.vertex_layout = vertexLayout.addr
 #  config.vertex_size = nk_sdl_vertex.sizeof
