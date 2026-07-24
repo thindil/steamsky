@@ -201,7 +201,8 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if dialog != none:
       windowDisable()
     # Show information about money owned by the player
-    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len, ratio = moneyWidth)
+    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len,
+        ratio = moneyWidth)
     for index, text in moneyText:
       if index mod 2 == 0:
         label(str = text)
@@ -239,7 +240,8 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight, state = state)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+      tableHeight, state = state)
   if dialog == baseActionDialog:
     showWoundedMenu(dialog = dialog, state = state)
 
@@ -280,7 +282,8 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if dialog != none:
       windowDisable()
     # Show information about money owned by the player
-    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len, ratio = moneyWidth)
+    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len,
+        ratio = moneyWidth)
     for index, text in moneyText:
       if index mod 2 == 0:
         label(str = text)
@@ -318,7 +321,8 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight, state = state)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+      tableHeight, state = state)
   if dialog == baseActionDialog:
     showRepairMenu(dialog = dialog, state = state)
 
@@ -375,7 +379,8 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
       editString(text = nameSearch, maxLen = 64,
           tooltip = "Search for the selected recipe.")
     # Show information about money owned by the player
-    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len, ratio = moneyWidth)
+    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len,
+        ratio = moneyWidth)
     for index, text in moneyText:
       if index mod 2 == 0:
         label(str = text)
@@ -418,6 +423,7 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight - tableHeight, state = state)
+  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+      tableHeight, state = state)
   if dialog == baseActionDialog:
     showRecipeMenu(dialog = dialog, state = state)
