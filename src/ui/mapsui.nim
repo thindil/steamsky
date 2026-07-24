@@ -382,7 +382,7 @@ proc updateCoordinates(newX, newY: var int) {.raises: [], tags: [],
   elif playerShip.destinationY < playerShip.skyY:
     newY = -1
 
-proc moveShipToDestination(dialog: var GameDialog): Natural {.raises: [],
+proc moveShipToDestination(dialog: var GameDialog; state: var GameState): Natural {.raises: [],
   tags: [RootEffect], contractual.} =
   ## Move the player's ship on the map
   ##
@@ -437,6 +437,7 @@ proc moveShipToDestination(dialog: var GameDialog): Natural {.raises: [],
           return
       if startsCombat:
         result = 4
+        setCombat(state = state, dialog = dialog)
         break
     if gameSettings.autoMoveStop != never and skyMap[playerShip.skyX][
         playerShip.skyY].eventIndex > -1:
@@ -583,7 +584,7 @@ proc moveShipOnMap(direction: MoveDirection; dialog: var GameDialog; state: var 
     except:
       dialog = setError(message = "Can't move the ship.")
   of moveToDestination:
-    res = moveShipToDestination(dialog = dialog)
+    res = moveShipToDestination(dialog = dialog, state = state)
   case res
   # Ship moved, check for events
   of 1:
@@ -712,7 +713,7 @@ proc showButtons(dialog: var GameDialog; state: var GameState) {.raises: [], tag
 
 var mapX, mapY: Natural = 0
 
-proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
+proc showDestinationMenu(dialog: var GameDialog; state: var GameState) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the menu for setting a destination for the player's ship
   ##
@@ -764,11 +765,11 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
       if playerShip.speed != docked:
         labelButton(title = "Set destination and move"):
           setDestination(dialog = dialog)
-          discard moveShipToDestination(dialog = dialog)
+          discard moveShipToDestination(dialog = dialog, state = state)
         if playerShip.destinationX > 0 and playerShip.destinationY > 0:
           labelButton(title = "Move to"):
             closeDialog(dialog = dialog)
-            discard moveShipToDestination(dialog = dialog)
+            discard moveShipToDestination(dialog = dialog, state = state)
       labelButton(title = "Close"):
         closeDialog(dialog = dialog)
   except:
@@ -836,7 +837,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if playerShip.speed != docked and mapPreview:
     mapPreview = false
   # draw dialogs
-  showDestinationMenu(dialog = dialog)
+  showDestinationMenu(dialog = dialog, state = state)
   # draw map
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
