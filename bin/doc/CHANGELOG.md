@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
   screens
 - Title for showing the enemy's ship's crew info during boarding
 - Showing orders menu after docking to a base
+- Starting combat when an enemy's ship intercepts the player
 
 ## [12.5] - 2026-07-12
 
