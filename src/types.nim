@@ -1583,9 +1583,9 @@ type
     skill: Natural = 0
     time: Positive = 1
     difficulty: Positive = 1
-    tool*: SettingString = ""
-    reputation*: ReputationRange = 0
-    toolQuality*: Positive = 1
+    tool: SettingString = ""
+    reputation: ReputationRange = 0
+    toolQuality: Positive = 1
 
 {.warning[UnsafeDefault]: off.}
 {.warning[UnsafeSetLen]: off.}
@@ -1634,6 +1634,12 @@ typeGetterSetter(baseType = CraftData, varName = recipe, name = skill,
 typeGetterSetter(baseType = CraftData, varName = recipe, name = time,
     typ = Positive)
 typeGetterSetter(baseType = CraftData, varName = recipe, name = difficulty,
+    typ = Positive)
+typeGetterSetter(baseType = CraftData, varName = recipe, name = tool,
+    typ = SettingString)
+typeGetterSetter(baseType = CraftData, varName = recipe, name = reputation,
+    typ = ReputationRange)
+typeGetterSetter(baseType = CraftData, varName = recipe, name = toolQuality,
     typ = Positive)
 
 type
