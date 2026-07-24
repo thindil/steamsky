@@ -411,6 +411,7 @@ proc moveShipToDestination(dialog: var GameDialog; state: var GameState): Natura
         return
     if startsCombat:
       result = 4
+      setCombat(state = state, dialog = dialog)
       break
     if result == 8:
       try:
