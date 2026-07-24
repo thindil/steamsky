@@ -387,8 +387,9 @@ proc moveShipToDestination(dialog: var GameDialog; state: var GameState): Natura
   ## Move the player's ship on the map
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current game's state
   ##
-  ## Returns the modified parameters dialog and the result's code of the
+  ## Returns the modified parameters dialog, state and the result's code of the
   ## movement.
   result = 0
   while true:
@@ -718,8 +719,9 @@ proc showDestinationMenu(dialog: var GameDialog; state: var GameState) {.raises:
   ## Show the menu for setting a destination for the player's ship
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current game's state
   ##
-  ## Returns the modified parameter dialog.
+  ## Returns the modified parameters dialog and state.
   if dialog != destinationDialog:
     return
   try:
