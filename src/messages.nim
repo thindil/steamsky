@@ -21,6 +21,10 @@
 import contracts
 import config, game, types
 
+var
+  messageAdded*: bool = false
+    ## If true, a new message was added to the list
+
 proc formattedTime*(time: DateRecord = gameDate): string {.raises: [], tags: [],
     contractual.} =
   ## Format the selected the game time, add leading zeroes, marks between
@@ -59,6 +63,7 @@ proc addMessage*(message: MessageText; mType: MessageType;
       messagesList.delete(i = 0)
     messagesList.add(y = MessageData(message: "[" & formattedTime(
         time = gameDate) & "] " & message, kind: mType, color: color))
+    messageAdded = true
 
 proc getLastMessageIndex*(): int {.raises: [], tags: [], contractual.} =
   ## Get the index of the last message in the messagesList
@@ -141,3 +146,4 @@ proc restoreMessage*(message: MessageText;
   body:
     messagesList.add(y = MessageData(message: message, kind: kind,
         color: color))
+    messageAdded = true
