@@ -64,7 +64,8 @@ proc showMissionMenu*(dialog: var GameDialog) {.raises: [], tags: [
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[destinationIcon], label = "Target",
         alignment = right, tooltip = "Set the mission as the ship destination"):
-      if mission.targetX == playerShip.skyX and mission.targetY == playerShip.skyY:
+      if mission.targetX == playerShip.skyX and mission.targetY ==
+          playerShip.skyY:
         dialog = setMessage(message = "You are at this location now.",
             title = "Can't set destination")
         return
