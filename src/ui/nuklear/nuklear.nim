@@ -196,6 +196,12 @@ proc nk_group_begin(ctx; ctitle: cstring;
   ## A binding to Nuklear's function. Internal use only
 proc nk_group_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
+proc nk_group_scrolled_offset_begin(ctx; x_offset, y_offset: nk_uint;
+    ctitle: cstring; cflags: nk_flags): nk_bool {.importc, cdecl, raises: [],
+    tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+proc nk_group_scrolled_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ------
 # Images
@@ -3001,6 +3007,25 @@ template group*(title, tooltip: string; flags: set[PanelFlags];
       nimFlags = flags)):
     content
     nk_group_end(ctx = ctx)
+  if showTips:
+    showTooltip2(text = tooltip)
+
+template groupScrolled*(xOffset, yOffset: Natural; title, tooltip: string;
+    flags: set[PanelFlags]; content: untyped) =
+  ## Set a group of widgets inside the parent
+  ##
+  ## * xOffset - the starting x offset of the scrollbar
+  ## * yOffset - the starting y offset of the
+  ## * title   - the title of the group
+  ## * tooltip - the tooltip to show on the group.
+  ## * flags   - the set of PanelFlags for the group
+  ## * content - the content of the group
+  let showTips: bool = widgetIsHovered()
+  if nk_group_scrolled_offset_begin(ctx = ctx, x_offset = xOffset.nk_uint,
+      y_Offset = yOffset.nk_unit, ctitle = title.cstring, cflags = winSetToInt(
+      nimFlags = flags)):
+    content
+    nk_group_scrolled_end(ctx = ctx)
   if showTips:
     showTooltip2(text = tooltip)
 
