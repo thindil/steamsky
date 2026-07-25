@@ -3022,7 +3022,7 @@ template groupScrolled*(x, y: Natural; title, tooltip: string;
   ## * content - the content of the group
   let showTips: bool = widgetIsHovered()
   if nk_group_scrolled_offset_begin(ctx = ctx, x_offset = x.nk_uint,
-      y_Offset = y.nk_uint, ctitle = title.cstring, cflags = winSetToInt(
+      y_offset = y.nk_uint, ctitle = title.cstring, cflags = winSetToInt(
       nimFlags = flags)):
     content
     nk_group_scrolled_end(ctx = ctx)
