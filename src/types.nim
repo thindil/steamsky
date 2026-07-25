@@ -1560,6 +1560,7 @@ typeGetterSetter(baseType = BaseModuleData, varName = module, name = speed,
 typeGetterSetter(baseType = BaseModuleData, varName = module, name = reputation,
     typ = ReputationRange)
 
+{.push ruleOff: "objects".}
 type
   CraftData* = object
     ## Used to store information about crafting recipes
@@ -1586,6 +1587,7 @@ type
     tool: SettingString = ""
     reputation: ReputationRange = 0
     toolQuality: Positive = 1
+{.pop ruleOn: "objects".}
 
 {.warning[UnsafeDefault]: off.}
 {.warning[UnsafeSetLen]: off.}
