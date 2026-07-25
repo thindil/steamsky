@@ -97,6 +97,9 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
     else:
       for i in countdown(a = -1, b = loopStart):
         showMessage(message = getMessage(messageIndex = i + 1), dialog = dialog)
+  if messageAdded and gameSettings.messagesOrder == olderFirst:
+    groupSetScrollbar(title = "LastMessagesGroup", xOffset = 0, yOffset = 300)
+    messageAdded = false
 
 var
   messagesType: Natural = 0
