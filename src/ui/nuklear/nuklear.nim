@@ -3004,6 +3004,19 @@ template group*(title, tooltip: string; flags: set[PanelFlags];
   if showTips:
     showTooltip2(text = tooltip)
 
+proc groupSetScrollbar*(title: string; xOffset, yOffset: Natural) {.raises: [],
+    tags: [], contractual.} =
+  ## Set the scrollbar position of the given group
+  ##
+  ## * title   - the title of the group
+  ## * xOffset - the x offset to scroll to
+  ## * yOffset - the y offset to scroll to
+  proc nk_group_set_scroll(ctx; id: cstring; x_offset,
+      y_offset: nk_uint) {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  nk_group_set_scroll(ctx = ctx, id = title.cstring, x_offset = xOffset.nk_uint,
+      y_offset = yOffset.nk_uint)
+
 # ---------
 # Edit text
 # ---------
