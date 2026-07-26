@@ -187,14 +187,14 @@ const
   headers: array[6, HeaderData[CargoSortOrders]] = [
     HeaderData[CargoSortOrders](label: "Name", sortAsc: nameAsc,
         sortDesc: nameDesc),
+    HeaderData[CargoSortOrders](label: "Amount", sortAsc: amountAsc,
+        sortDesc: amountDesc),
     HeaderData[CargoSortOrders](label: "Durability", sortAsc: durabilityAsc,
         sortDesc: durabilityDesc),
     HeaderData[CargoSortOrders](label: "Quality", sortAsc: qualityAsc,
         sortDesc: qualityDesc),
     HeaderData[CargoSortOrders](label: "Type", sortAsc: typeAsc,
         sortDesc: typeDesc),
-    HeaderData[CargoSortOrders](label: "Amount", sortAsc: amountAsc,
-        sortDesc: amountDesc),
     HeaderData[CargoSortOrders](label: "Weight", sortAsc: weightAsc,
         sortDesc: weightDesc)]
   ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
@@ -250,6 +250,8 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     addButton(label = getItemName(item = item),
         tooltip = "Show item's description and actions", data = index,
         code = showItemInfo, dialog = dialog)
+    addButton(label = $item.amount, tooltip = "The amount of the selected item",
+        data = index, code = showItemInfo, dialog = dialog)
     addProgressBar(tooltip = "The current durability of the selected item",
         value = item.durability, maxValue = getItemMaxDurability(item = item), data = index,
         code = showItemInfo, dialog = dialog)
@@ -257,8 +259,6 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         tooltip = "The quality of the selected item", data = index,
         code = showItemInfo, dialog = dialog)
     addButton(label = itemType, tooltip = "The type of the selected item",
-        data = index, code = showItemInfo, dialog = dialog)
-    addButton(label = $item.amount, tooltip = "The amount of the selected item",
         data = index, code = showItemInfo, dialog = dialog)
     try:
       addButton(label = $(item.amount * getItemWeight(item = item)) & " kg",

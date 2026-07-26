@@ -221,6 +221,7 @@ proc closeScreen(close: CloseDestination; state: var GameState;
   ## only when an error happened.
   showOptions = false
   expandedSection = 0
+  messageAdded = true
   case close
   of combat:
     state = combat
