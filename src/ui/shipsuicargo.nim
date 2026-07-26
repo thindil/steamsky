@@ -193,10 +193,10 @@ const
         sortDesc: durabilityDesc),
     HeaderData[CargoSortOrders](label: "Quality", sortAsc: qualityAsc,
         sortDesc: qualityDesc),
-    HeaderData[CargoSortOrders](label: "Type", sortAsc: typeAsc,
-        sortDesc: typeDesc),
     HeaderData[CargoSortOrders](label: "Weight", sortAsc: weightAsc,
-        sortDesc: weightDesc)]
+        sortDesc: weightDesc),
+    HeaderData[CargoSortOrders](label: "Type", sortAsc: typeAsc,
+        sortDesc: typeDesc)]
   ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
 proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -258,14 +258,14 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     addButton(label = ($item.quality).capitalizeAscii,
         tooltip = "The quality of the selected item", data = index,
         code = showItemInfo, dialog = dialog)
-    addButton(label = itemType, tooltip = "The type of the selected item",
-        data = index, code = showItemInfo, dialog = dialog)
     try:
       addButton(label = $(item.amount * getItemWeight(item = item)) & " kg",
           tooltip = "The total weight of the selected item", data = index,
           code = showItemInfo, dialog = dialog)
     except KeyError:
       dialog = setError(message = "Can't show the item's weight.")
+    addButton(label = itemType, tooltip = "The type of the selected item",
+        data = index, code = showItemInfo, dialog = dialog)
     row.inc
     if row == gameSettings.listsLimit + 1:
       break
