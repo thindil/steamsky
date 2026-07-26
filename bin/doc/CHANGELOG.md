@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Better looking information about not visited base on the map
 - Redesigned look of the player's ship's info screen, the knowledge screen and
   the combat screen
+- Order of columns in the player's ship's cargo info section
 
 ### Fixed
 - Showing orders for the whole player's ship's crew
