@@ -80,7 +80,8 @@ proc showStoriesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           of destroyShip:
             try:
               storyText.add(y = "You must find " & protoShipsList[storyData[
-                  2].parseInt].name & " at X: " & storyData[0] & " Y: " & storyData[1])
+                  2].parseInt].name & " at X: " & storyData[0] & " Y: " &
+                      storyData[1])
             except:
               dialog = setError(message = "Can't get the destroy ship step.")
               return
