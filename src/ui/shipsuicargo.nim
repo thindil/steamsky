@@ -183,22 +183,6 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show the item's info.")
 
-const
-  headers: array[6, HeaderData[CargoSortOrders]] = [
-    HeaderData[CargoSortOrders](label: "Name", sortAsc: nameAsc,
-        sortDesc: nameDesc),
-    HeaderData[CargoSortOrders](label: "Amount", sortAsc: amountAsc,
-        sortDesc: amountDesc),
-    HeaderData[CargoSortOrders](label: "Durability", sortAsc: durabilityAsc,
-        sortDesc: durabilityDesc),
-    HeaderData[CargoSortOrders](label: "Quality", sortAsc: qualityAsc,
-        sortDesc: qualityDesc),
-    HeaderData[CargoSortOrders](label: "Weight", sortAsc: weightAsc,
-        sortDesc: weightDesc),
-    HeaderData[CargoSortOrders](label: "Type", sortAsc: typeAsc,
-        sortDesc: typeDesc)]
-  ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
-
 proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the list of the player's ship's cargo
@@ -216,6 +200,23 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     label(str = "Type:")
     typeIndex = comboList(items = typesList, selected = typeIndex,
         itemHeight = labelHeight.int, x = 200, y = 150, tooltip = "Show only items with the selected type")
+
+  const
+    headers: array[6, HeaderData[CargoSortOrders]] = [
+      HeaderData[CargoSortOrders](label: "Name", sortAsc: nameAsc,
+          sortDesc: nameDesc),
+      HeaderData[CargoSortOrders](label: "Amount", sortAsc: amountAsc,
+          sortDesc: amountDesc),
+      HeaderData[CargoSortOrders](label: "Durability", sortAsc: durabilityAsc,
+          sortDesc: durabilityDesc),
+      HeaderData[CargoSortOrders](label: "Quality", sortAsc: qualityAsc,
+          sortDesc: qualityDesc),
+      HeaderData[CargoSortOrders](label: "Weight", sortAsc: weightAsc,
+          sortDesc: weightDesc),
+      HeaderData[CargoSortOrders](label: "Type", sortAsc: typeAsc,
+          sortDesc: typeDesc)]
+    ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
+
   # Show the list of crew members
   addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
       code = sortCargo, dialog = dialog)
