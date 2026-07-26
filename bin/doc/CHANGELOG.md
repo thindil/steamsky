@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Auto scroll the last messages window on a new message
+
 ### Changed
 - Better looking dialog with information about the player's ship's module
 - Better looking information about not visited base on the map
