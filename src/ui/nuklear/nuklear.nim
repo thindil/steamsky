@@ -220,6 +220,9 @@ proc nk_convert(ctx; cmds, vertices, elements: ptr nk_buffer;
     config: ptr nk_convert_config): nk_flags {.importc, nodecl, raises: [],
     tags: [], contractual, used.}
   ## A binding to Nuklear's function. Internal use only
+proc nk_buffer_memory_const(buffer: ptr nk_buffer): pointer {.importc, nodecl,
+    raises: [], tags: [], contractual, used.}
+  ## A binding to Nuklear's function. Internal use only
 
 
 # ------------------------------------------------------------------
