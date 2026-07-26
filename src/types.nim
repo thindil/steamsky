@@ -196,6 +196,10 @@ type
     ## Used to store a faction's members' names
   ItemType* = string
     ## Used to store names of objects (items) types
+  GoalIndex* = string
+    ## Used to store prototypes of goals indexes
+  GoalTargetIndex* = string
+    ## Used to store prototypes of goals' targets indexes
 
 template typeGetterSetter(baseType: typedesc; varName, name: untyped;
     typ: typedesc) =
@@ -1654,12 +1658,13 @@ type
     ## * targetIndex - The index of the target needed for finish the goal. If empty
     ##                 means all targets of the selected type (bases, ships, etc.)
     ## * multiplier  - The muliplier for points awarded for finishing the goal
-    index*: string
+    index*: GoalIndex
     goalType*: GoalTypes
     amount*: Natural
-    targetIndex*: string
+    targetIndex*: GoalTargetIndex
     multiplier*: Positive
 
+type
   MessageData* = object
     ## Used to store data about the game's messages
     ##
