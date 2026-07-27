@@ -1664,6 +1664,22 @@ type
     targetIndex*: GoalTargetIndex
     multiplier*: Positive
 
+proc initGoalData*(index: GoalIndex = ""; goalType: GoalTypes = random;
+    amount: Natural = 0; targetIndex: GoalTargetIndex = "";
+    multiplier: Positive = 1): GoalData {.raises: [], tags: [], contractual.} =
+  ## Create a new data structure for a player's in-game goal
+  ##
+  ## * index       - The index of the goal prototype
+  ## * goalType    - The type of the goal
+  ## * amount      - The amount of targets needed for finishe the goal
+  ## * targetIndex - The index of the target needed for finish the goal. If empty
+  ##                 means all targets of the selected type (bases, ships, etc.)
+  ## * multiplier  - The muliplier for points awarded for finishing the goal
+  ##
+  ## Returns the new structure with information about the selected in-game goal
+  return GoalData(index: index, goalType: goalType, amount: amount,
+      targetIndex: targetIndex, multiplier: multiplier)
+
 type
   MessageData* = object
     ## Used to store data about the game's messages
