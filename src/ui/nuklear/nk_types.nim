@@ -44,6 +44,13 @@ type
     ## Internal Nuklear type
   nk_uint* = cuint
     ## Internal Nuklear type
+when defined(nkUintDrawIndex):
+  type nk_draw_type* = nk_uint
+    ## Internal Nuklear type
+else:
+  type nk_draw_type* = nk_ushort
+    ## Internal Nuklear type
+
 
 # ------------
 # Enumerations
