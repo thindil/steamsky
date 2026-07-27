@@ -63,7 +63,8 @@ proc sortCargo(sortAsc, sortDesc: CargoSortOrders;
   for index, item in playerShip.cargo:
     try:
       localCargo.add(y = LocalCargoData(name: getItemName(item = item,
-          damageInfo = false, toLower = false, moreInfo = false), damage: (item.durability.float /
+          damageInfo = false, toLower = false, moreInfo = false), damage: (
+          item.durability.float /
           getItemMaxDurability(item = item).float), itemType: (if itemsList[
           item.protoIndex].showType.len > 0: itemsList[
           item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
@@ -199,7 +200,8 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
     label(str = "Type:")
     typeIndex = comboList(items = typesList, selected = typeIndex,
-        itemHeight = labelHeight.int, x = 200, y = 150, tooltip = "Show only items with the selected type")
+        itemHeight = labelHeight.int, x = 200, y = 150,
+        tooltip = "Show only items with the selected type")
 
   const
     headers: array[6, HeaderData[CargoSortOrders]] = [
@@ -254,7 +256,8 @@ proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     addButton(label = $item.amount, tooltip = "The amount of the selected item",
         data = index, code = showItemInfo, dialog = dialog)
     addProgressBar(tooltip = "The current durability of the selected item",
-        value = item.durability, maxValue = getItemMaxDurability(item = item), data = index,
+        value = item.durability, maxValue = getItemMaxDurability(item = item),
+            data = index,
         code = showItemInfo, dialog = dialog)
     addButton(label = ($item.quality).capitalizeAscii,
         tooltip = "The quality of the selected item", data = index,
