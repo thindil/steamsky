@@ -74,9 +74,13 @@ proc checkbox*(label: string; checked: var bool; tooltip: string = "";
     tags: [], contractual.} =
   ## Create a Nuklear checkbox widget
   ##
-  ## * label   - the text to show with the checkbox
-  ## * checked - the state of the checkbox, if true, the checkbox is checked
-  ## * tooltip - the tooltip to show on the checkbox. Can be empty
+  ## * label           - the text to show with the checkbox
+  ## * checked         - the state of the checkbox, if true, the checkbox is
+  ##                     checked
+  ## * tooltip         - the tooltip to show on the checkbox. Can be empty
+  ## * widgetAlignment - the alignment of the checkbox widget. Can be empty
+  ## * textAlignment   - the alignment of the text to show with the checkbox.
+  ##                     Can be empty
   ##
   ## Returns true if the state of the checkbox was changed, otherwise false.
   proc nk_checkbox_label_align(ctx; text: cstring; active: var cint;
