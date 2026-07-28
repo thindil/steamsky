@@ -1658,11 +1658,11 @@ type
     ## * targetIndex - The index of the target needed for finish the goal. If empty
     ##                 means all targets of the selected type (bases, ships, etc.)
     ## * multiplier  - The muliplier for points awarded for finishing the goal
-    index*: GoalIndex
-    goalType*: GoalTypes
-    amount*: Natural
-    targetIndex*: GoalTargetIndex
-    multiplier*: Positive
+    index: GoalIndex
+    goalType: GoalTypes
+    amount: Natural
+    targetIndex: GoalTargetIndex
+    multiplier: Positive
 
 proc initGoalData*(index: GoalIndex = ""; goalType: GoalTypes = random;
     amount: Natural = 0; targetIndex: GoalTargetIndex = "";
@@ -1679,6 +1679,17 @@ proc initGoalData*(index: GoalIndex = ""; goalType: GoalTypes = random;
   ## Returns the new structure with information about the selected in-game goal
   return GoalData(index: index, goalType: goalType, amount: amount,
       targetIndex: targetIndex, multiplier: multiplier)
+
+typeGetterSetter(baseType = GoalData, varName = goal, name = index,
+    typ = GoalIndex)
+typeGetterSetter(baseType = GoalData, varName = goal, name = goalType,
+    typ = GoalTypes)
+typeGetterSetter(baseType = GoalData, varName = goal, name = amount,
+    typ = Natural)
+typeGetterSetter(baseType = GoalData, varName = goal, name = targetIndex,
+    typ = GoalTargetIndex)
+typeGetterSetter(baseType = GoalData, varName = goal, name = multiplier,
+    typ = Positive)
 
 type
   MessageData* = object
