@@ -338,7 +338,7 @@ type
     convertCommandBufferFull = 1 shl 1,
     convertVertexBufferFull = 1 shl 2,
     convertElementBufferFull = 1 shl 3
-  widgetAlign* = enum
+  WidgetAlign* = enum
     ## The basic alignment for widgets
     widgetAlignLeft = 0x01,
     widgetAlignCentered = 0x02,
