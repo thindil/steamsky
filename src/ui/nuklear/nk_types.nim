@@ -346,6 +346,11 @@ type
     widgetAlignTop = 0x08,
     widgetAlignMiddle = 0x10,
     widgetAlignBottom = 0x20
+  WidgetAlignment* = enum
+    ## The advanced alignment for widgets
+    widgetLeft = widgetAlignMiddle.int or widgetAlignLeft.int,
+    widgetCentered = widgetAlignMiddle.int or widgetAlignCentered.int,
+    widgetRight = widgetAlignMiddle.int or widgetAlignRight.int
 
 # ---------
 # Constants
