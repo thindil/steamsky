@@ -712,8 +712,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               return
       else:
         discard
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = (if playerShip.speed == docked and
-        crewIndex > 0: 3 else: 2))
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = (
+        if playerShip.speed == docked and crewIndex > 0: 3 else: 2))
     imageLabelButton(image = images[inventoryIcon], label = "Inventory",
         alignment = right, tooltip = "Show the crew member inventory"):
       dialog = inventoryDialog
@@ -787,7 +787,8 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     skillIndex = comboList(items = crewSkillsList,
         selected = skillIndex, itemHeight = labelHeight.int, x = 200, y = 150,
         tooltip = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
-    setLayoutRowStatic(height = buttonHeight, cols = 2, width = buttonHeight.int)
+    setLayoutRowStatic(height = buttonHeight, cols = 2,
+        width = buttonHeight.int)
     imageButton(image = images[selectAllIcon],
         tooltip = "Select all crew member"):
       for data in crewDataList.mitems:
