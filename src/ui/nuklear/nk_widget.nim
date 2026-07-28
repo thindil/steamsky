@@ -68,9 +68,10 @@ proc widgetIsMouseClicked*(button: Buttons): bool {.raises: [], tags: [],
     ## Nuklear C binding
   return nk_widget_is_mouse_clicked(ctx = ctx, btn = button) == nkTrue
 
-proc checkbox*(label: string; checked: var bool;
-    tooltip: string = ""): bool {.discardable, raises: [], tags: [],
-    contractual.} =
+proc checkbox*(label: string; checked: var bool; tooltip: string = "";
+    widgetAlignment: WidgetAlign = widgetAlignLeft;
+    textAlignment: TextAlign = textLeft): bool {.discardable, raises: [],
+    tags: [], contractual.} =
   ## Create a Nuklear checkbox widget
   ##
   ## * label   - the text to show with the checkbox
@@ -78,13 +79,15 @@ proc checkbox*(label: string; checked: var bool;
   ## * tooltip - the tooltip to show on the checkbox. Can be empty
   ##
   ## Returns true if the state of the checkbox was changed, otherwise false.
-  proc nk_checkbox_label(ctx; text: cstring;
-      active: var cint): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+  proc nk_checkbox_label_align(ctx; text: cstring; active: var cint;
+      widgetAlignment, textAlignment: nk_flags): nk_bool {.importc, nodecl,
+      raises: [], tags: [], contractual.}
     ## Nuklear C binding
   var active: cint = (if checked: 1 else: 0)
   let showTips: bool = widgetIsHovered()
-  result = nk_checkbox_label(ctx = ctx, text = label.cstring,
-      active = active) == nkTrue
+  result = nk_checkbox_label_align(ctx = ctx, text = label.cstring,
+      active = active, widget_alignment = widgetAlignment.nk_flags,
+      text_alignment = textAlignment.nk_flags) == nkTrue
   checked = active == 1
   if showTips and tooltip.len > 0:
     showTooltip2(text = tooltip)
