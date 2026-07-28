@@ -424,10 +424,10 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
   # Load the player's current goal
   logMessage(message = "Loading game current goal...", messageLevel = lvlInfo)
   var goalNode: XmlNode = savedGame.child(name = "currentgoal")
-  currentGoal = GoalData(index: goalNode.attr(name = "index"),
-      goalType: goalNode.attr(name =
-    "type").parseInt.GoalTypes, amount: goalNode.attr(name = "amount").parseInt,
-    targetIndex: goalNode.attr(name = "target"), multiplier: goalNode.attr(name =
+  currentGoal = initGoalData(index = goalNode.attr(name = "index"),
+      goalType = goalNode.attr(name =
+    "type").parseInt.GoalTypes, amount = goalNode.attr(name = "amount").parseInt,
+    targetIndex = goalNode.attr(name = "target"), multiplier = goalNode.attr(name =
     "multiplier").parseInt)
   logMessage(message = "done", messageLevel = lvlInfo)
   # Load the player's career

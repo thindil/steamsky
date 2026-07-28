@@ -19,7 +19,7 @@
 
 import std/strutils
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, goals]
+import ../[config, goals, types]
 import coreui, errordialog, goalsui, header, messagesui, setui, themes
 
 proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],

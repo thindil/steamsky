@@ -22,7 +22,7 @@ import std/[logging, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, messages, statistics, types, utils
 
-var currentGoal*: GoalData = GoalData(multiplier: 1) ## The player's current goal
+var currentGoal*: GoalData = initGoalData() ## The player's current goal
 
 proc loadGoals*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
@@ -72,9 +72,9 @@ proc loadGoals*(fileName: Path) {.raises: [DataLoadingError],
           try:
             goalsList[goalIndex]
           except ValueError:
-            GoalData(multiplier: 1)
+            initGoalData()
         else:
-          GoalData(multiplier: 1)
+          initGoalData()
       goal.index = $goalIndex
       var attribute: string = goalNode.attr(name = "type")
       if attribute.len() > 0:
@@ -134,8 +134,7 @@ proc updateGoal*(goalType: GoalTypes; targetIndex: string;
 
 proc clearCurrentGoal*() {.raises: [], tags: [], contractual.} =
   ## Reset the player's current goal
-  currentGoal = GoalData(index: "", goalType: random, amount: 0,
-      targetIndex: "", multiplier: 1)
+  currentGoal = initGoalData()
 
 proc goalText*(index: int): string {.raises: [KeyError], tags: [],
     contractual.} =

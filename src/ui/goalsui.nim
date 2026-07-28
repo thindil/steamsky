@@ -20,7 +20,7 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, goals, utils]
+import ../[config, game, goals, types, utils]
 import coreui, errordialog
 
 var
