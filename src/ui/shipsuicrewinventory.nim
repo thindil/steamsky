@@ -290,22 +290,6 @@ proc setItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show information about the item.")
 
-const
-  headers: array[6, HeaderData[InventorySortOrders]] = [
-    HeaderData[InventorySortOrders](label: "", sortAsc: selectedAsc,
-        sortDesc: selectedDesc),
-    HeaderData[InventorySortOrders](label: "Name", sortAsc: nameAsc,
-        sortDesc: nameDesc),
-    HeaderData[InventorySortOrders](label: "Amount", sortAsc: amountAsc,
-        sortDesc: amountDesc),
-    HeaderData[InventorySortOrders](label: "Used", sortAsc: usedAsc,
-        sortDesc: usedDesc),
-    HeaderData[InventorySortOrders](label: "Durability", sortAsc: durabilityAsc,
-        sortDesc: durabilityDesc),
-    HeaderData[InventorySortOrders](label: "Weight", sortAsc: weightAsc,
-        sortDesc: weightDesc)]
-  ratio: array[6, cfloat] = [40.cfloat, 300, 100, 50, 200, 150]
-
 proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the dialog with information about inventory of the selected crew member
@@ -338,6 +322,22 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
       for data in inventoryDataList.mitems:
         data.checked = false
     # Show the list of items in inventory
+    const
+      headers: array[6, HeaderData[InventorySortOrders]] = [
+        HeaderData[InventorySortOrders](label: "", sortAsc: selectedAsc,
+            sortDesc: selectedDesc),
+        HeaderData[InventorySortOrders](label: "Name", sortAsc: nameAsc,
+            sortDesc: nameDesc),
+        HeaderData[InventorySortOrders](label: "Amount", sortAsc: amountAsc,
+            sortDesc: amountDesc),
+        HeaderData[InventorySortOrders](label: "Used", sortAsc: usedAsc,
+            sortDesc: usedDesc),
+        HeaderData[InventorySortOrders](label: "Durability", sortAsc: durabilityAsc,
+            sortDesc: durabilityDesc),
+        HeaderData[InventorySortOrders](label: "Weight", sortAsc: weightAsc,
+            sortDesc: weightDesc)]
+      ratio: array[6, cfloat] = [40.cfloat, 300, 100, 50, 200, 150]
+
     setLayoutRowDynamic(height = height - labelHeight - buttonHeight -
         dialogButtonHeight - 80, cols = 1)
     group(title = "InfoGroup", flags = {windowNoFlags}):
