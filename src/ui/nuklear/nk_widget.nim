@@ -69,7 +69,7 @@ proc widgetIsMouseClicked*(button: Buttons): bool {.raises: [], tags: [],
   return nk_widget_is_mouse_clicked(ctx = ctx, btn = button) == nkTrue
 
 proc checkbox*(label: string; checked: var bool; tooltip: string = "";
-    widgetAlignment: WidgetAlign = widgetAlignLeft;
+    widgetAlignment: WidgetAlignment = widgetLeft;
     textAlignment: TextAlign = textLeft): bool {.discardable, raises: [],
     tags: [], contractual.} =
   ## Create a Nuklear checkbox widget
