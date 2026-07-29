@@ -296,15 +296,15 @@ const
         sortDesc: selectedDesc),
     HeaderData[InventorySortOrders](label: "Name", sortAsc: nameAsc,
         sortDesc: nameDesc),
-    HeaderData[InventorySortOrders](label: "Durability", sortAsc: durabilityAsc,
-        sortDesc: durabilityDesc),
-    HeaderData[InventorySortOrders](label: "Used", sortAsc: usedAsc,
-        sortDesc: usedDesc),
     HeaderData[InventorySortOrders](label: "Amount", sortAsc: amountAsc,
         sortDesc: amountDesc),
+    HeaderData[InventorySortOrders](label: "Used", sortAsc: usedAsc,
+        sortDesc: usedDesc),
+    HeaderData[InventorySortOrders](label: "Durability", sortAsc: durabilityAsc,
+        sortDesc: durabilityDesc),
     HeaderData[InventorySortOrders](label: "Weight", sortAsc: weightAsc,
         sortDesc: weightDesc)]
-  ratio: array[6, cfloat] = [40.cfloat, 300, 200, 50, 150, 150]
+  ratio: array[6, cfloat] = [40.cfloat, 300, 100, 50, 200, 150]
 
 proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -366,11 +366,9 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
             damageInfo = false, toLower = false, moreInfo = false),
             tooltip = "Show the selected item's info.", data = data.index,
             code = setItemInfo, dialog = dialog)
-        addProgressBar(tooltip = "The current durability level of the selected item.",
-            value = member.inventory[data.index].durability,
-            maxValue = getItemMaxDurability(item = member.inventory[
-                data.index]), data = data.index,
-            code = setItemInfo, dialog = dialog)
+        addButton(label = $member.inventory[data.index].amount,
+            tooltip = "The amount of the item owned by the crew member.",
+            data = data.index, code = setItemInfo, dialog = dialog)
         var
           checked: bool = false
           tooltip: string = ""
@@ -385,9 +383,11 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
         addCheckButton(tooltip = tooltip, checked = checked)
         if checked != used:
           setUseItem(dialog = dialog, data = data, used = used)
-        addButton(label = $member.inventory[data.index].amount,
-            tooltip = "The amount of the item owned by the crew member.",
-            data = data.index, code = setItemInfo, dialog = dialog)
+        addProgressBar(tooltip = "The current durability level of the selected item.",
+            value = member.inventory[data.index].durability,
+            maxValue = getItemMaxDurability(item = member.inventory[
+                data.index]), data = data.index,
+            code = setItemInfo, dialog = dialog)
         try:
           addButton(label = $(member.inventory[data.index].amount *
               getItemWeight(item = member.inventory[data.index])) & " kg",
