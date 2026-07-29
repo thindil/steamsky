@@ -1702,6 +1702,19 @@ type
     kind*: MessageType
     color*: MessageColor
 
+proc initMessageData*(message: MessageText = ""; kind: MessageType = default;
+    color: MessageColor = white): MessageData {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for an in-game message
+  ##
+  ## * message - The message itself
+  ## * kind    - The type of message
+  ## * color   - The color used to show the message
+  ##
+  ## Returns the new structure with information about the selected in-game message
+  return MessageData(message: message, kind: kind, color: color)
+
+type
   EventData* = object
     ## Used to store data about an event
     ##
