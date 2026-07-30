@@ -1698,9 +1698,9 @@ type
     ## * message - The message itself
     ## * kind    - The type of message
     ## * color   - The color used to show the message
-    message*: MessageText
-    kind*: MessageType
-    color*: MessageColor
+    message: MessageText
+    kind: MessageType
+    color: MessageColor
 
 proc initMessageData*(message: MessageText = ""; kind: MessageType = default;
     color: MessageColor = white): MessageData {.raises: [], tags: [],
@@ -1713,6 +1713,13 @@ proc initMessageData*(message: MessageText = ""; kind: MessageType = default;
   ##
   ## Returns the new structure with information about the selected in-game message
   return MessageData(message: message, kind: kind, color: color)
+
+typeGetterSetter(baseType = MessageData, varName = message, name = message,
+    typ = MessageText)
+typeGetterSetter(baseType = MessageData, varName = message, name = kind,
+    typ = MessageType)
+typeGetterSetter(baseType = MessageData, varName = message, name = color,
+    typ = MessageColor)
 
 type
   EventData* = object
