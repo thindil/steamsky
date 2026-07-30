@@ -718,12 +718,12 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         alignment = right, tooltip = "Show the crew member inventory"):
       dialog = inventoryDialog
       setDialog(x = windowWidth / 9, y = windowHeight / 8)
-    addCloseButton(dialog = dialog, isPopup = false)
     if playerShip.speed == docked and crewIndex > 0:
       imageLabelButton(image = images[dismissIcon], label = "Dismiss",
           alignment = right, tooltip = "Remove the crew member from the ship's crew."):
         dialog = setQuestion(question = "Are you sure want to dismiss " &
             member.name & "?", qType = dismissMember, data = $crewIndex)
+    addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
 
