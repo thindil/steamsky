@@ -61,8 +61,8 @@ proc addMessage*(message: MessageText; mType: MessageType;
   body:
     if messagesList.len() == gameSettings.messagesLimit:
       messagesList.delete(i = 0)
-    messagesList.add(y = MessageData(message: "[" & formattedTime(
-        time = gameDate) & "] " & message, kind: mType, color: color))
+    messagesList.add(y = initMessageData(message = "[" & formattedTime(
+        time = gameDate) & "] " & message, kind = mType, color = color))
     messageAdded = true
 
 proc getLastMessageIndex*(): int {.raises: [], tags: [], contractual.} =
@@ -82,7 +82,7 @@ proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.
   ##
   ## Returns the selected message data or empty message if the message with the selected
   ## index doesn't exist
-  result = MessageData(message: "", kind: default, color: white)
+  result = initMessageData()
   if messageIndex - 1 > messagesList.len:
     return
   var index: int = -1
@@ -90,12 +90,12 @@ proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.
     if messagesList.len + messageIndex > 0:
       if kind == default:
         index = messagesList.len + messageIndex - 1
-        return MessageData(message: messagesList[index].message,
-            kind: messagesList[index].kind, color: messagesList[index].color)
+        return initMessageData(message = messagesList[index].message,
+            kind = messagesList[index].kind, color = messagesList[index].color)
       index = 1
       for i in countdown(a = messagesList.len - 1, b = 0):
-        let message: MessageData = MessageData(message: messagesList[i].message,
-            kind: messagesList[i].kind, color: messagesList[i].color)
+        let message: MessageData = initMessageData(message = messagesList[
+            i].message, kind = messagesList[i].kind, color = messagesList[i].color)
         if message.kind == kind:
           index.dec()
         if index == messageIndex:
@@ -103,13 +103,13 @@ proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.
     return
   if kind == MessageType.default:
     index = messageIndex - 1
-    return MessageData(message: messagesList[index].message, kind:
-      messagesList[index].kind, color: messagesList[
+    return initMessageData(message = messagesList[index].message, kind =
+      messagesList[index].kind, color = messagesList[
       index].color)
   index = 0
   for i in countup(a = 0, b = messagesList.len - 1):
-    let message: MessageData = MessageData(message: messagesList[i].message,
-        kind: messagesList[i].kind, color: messagesList[i].color)
+    let message: MessageData = initMessageData(message = messagesList[
+        i].message, kind = messagesList[i].kind, color = messagesList[i].color)
     if message.kind == kind:
       index.inc()
     if index == messageIndex:
@@ -144,6 +144,6 @@ proc restoreMessage*(message: MessageText;
   require:
     message.len > 0
   body:
-    messagesList.add(y = MessageData(message: message, kind: kind,
-        color: color))
+    messagesList.add(y = initMessageData(message = message, kind = kind,
+        color = color))
     messageAdded = true
