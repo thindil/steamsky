@@ -458,7 +458,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   const
-    width: float = 400
+    width: float = 500
     height: float = 500
     col1: float = 140
     col2: float = 220
