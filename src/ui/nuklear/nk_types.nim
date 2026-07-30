@@ -45,10 +45,10 @@ type
   nk_uint* = cuint
     ## Internal Nuklear type
 when defined(nkUintDrawIndex):
-  type nk_draw_type* = nk_uint
+  type nk_draw_index* = nk_uint
     ## Internal Nuklear type
 else:
-  type nk_draw_type* = nk_ushort
+  type nk_draw_index* = nk_ushort
     ## Internal Nuklear type
 
 

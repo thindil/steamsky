@@ -614,7 +614,7 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #      elements = ebuf.addr, config = config.addr)
 #
 #  # iterate over and execute each draw command
-#  let offset: ptr nk_draw_index = cast[ptr nk_draw_index](nk_buffer_memory_const(buffer = ebuf))
+#  let offset: ptr nk_draw_index = cast[ptr nk_draw_index](nk_buffer_memory_const(buffer = ebuf.addr))
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
