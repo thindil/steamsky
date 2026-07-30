@@ -727,28 +727,6 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
-const
-  headers: array[9, HeaderData[CrewSortOrders]] = [
-    HeaderData[CrewSortOrders](label: "", sortAsc: selectedAsc,
-        sortDesc: selectedDesc),
-    HeaderData[CrewSortOrders](label: "Name", sortAsc: nameAsc,
-        sortDesc: nameDesc),
-    HeaderData[CrewSortOrders](label: "Order", sortAsc: orderAsc,
-        sortDesc: orderDesc),
-    HeaderData[CrewSortOrders](label: "Skill", sortAsc: skillAsc,
-        sortDesc: skillDesc),
-    HeaderData[CrewSortOrders](label: "Health", sortAsc: healthAsc,
-        sortDesc: healthDesc),
-    HeaderData[CrewSortOrders](label: "Fatigue", sortAsc: fatigueAsc,
-        sortDesc: fatigueDesc),
-    HeaderData[CrewSortOrders](label: "Thirst", sortAsc: thirstAsc,
-        sortDesc: thirstDesc),
-    HeaderData[CrewSortOrders](label: "Hunger", sortAsc: hungerAsc,
-        sortDesc: hungerDesc),
-    HeaderData[CrewSortOrders](label: "Morale", sortAsc: moraleAsc,
-        sortDesc: moraleDesc)]
-  ratio: array[9, cfloat] = [40.cfloat, 300, 200, 200, 200, 200, 200, 200, 200]
-
 proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the list of the player's ship's crew members
@@ -798,6 +776,28 @@ proc showCrewInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       for data in crewDataList.mitems:
         data.checked = false
   # Show the list of crew members
+  const
+    headers: array[9, HeaderData[CrewSortOrders]] = [
+      HeaderData[CrewSortOrders](label: "", sortAsc: selectedAsc,
+          sortDesc: selectedDesc),
+      HeaderData[CrewSortOrders](label: "Name", sortAsc: nameAsc,
+          sortDesc: nameDesc),
+      HeaderData[CrewSortOrders](label: "Order", sortAsc: orderAsc,
+          sortDesc: orderDesc),
+      HeaderData[CrewSortOrders](label: "Skill", sortAsc: skillAsc,
+          sortDesc: skillDesc),
+      HeaderData[CrewSortOrders](label: "Health", sortAsc: healthAsc,
+          sortDesc: healthDesc),
+      HeaderData[CrewSortOrders](label: "Fatigue", sortAsc: fatigueAsc,
+          sortDesc: fatigueDesc),
+      HeaderData[CrewSortOrders](label: "Thirst", sortAsc: thirstAsc,
+          sortDesc: thirstDesc),
+      HeaderData[CrewSortOrders](label: "Hunger", sortAsc: hungerAsc,
+          sortDesc: hungerDesc),
+      HeaderData[CrewSortOrders](label: "Morale", sortAsc: moraleAsc,
+          sortDesc: moraleDesc)]
+    ratio: array[9, cfloat] = [40.cfloat, 300, 200, 200, 200, 200, 200, 200, 200]
+
   addHeader(headers = headers, ratio = ratio, tooltip = "crew members",
       code = sortCrew, dialog = dialog)
   var currentRow: Positive = 1
