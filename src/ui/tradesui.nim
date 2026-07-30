@@ -512,14 +512,16 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     editString(text = nameSearch, maxLen = 64,
         tooltip = "Enter a name of an item which you looking for")
   # Show information about money owned by the player and the base
-  setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len, ratio = moneyWidth)
+  setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len,
+      ratio = moneyWidth)
   for index, text in moneyText:
     if index mod 2 == 0:
       label(str = text)
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
   # Show information about free cargo space in the player's ship
-  setLayoutRowStatic(height = labelHeight, cols = cargoWidth.len, ratio = cargoWidth)
+  setLayoutRowStatic(height = labelHeight, cols = cargoWidth.len,
+      ratio = cargoWidth)
   for index, text in cargoText:
     if index mod 2 == 0:
       label(str = text)
