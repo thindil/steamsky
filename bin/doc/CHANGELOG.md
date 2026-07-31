@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Title for showing the enemy's ship's crew info during boarding
 - Showing orders menu after docking to a base
 - Starting combat when an enemy's ship intercepts the player
+- Showing info about gender in the player's ship's crew members' info dialog
 
 ## [12.5] - 2026-07-12
 
