@@ -348,28 +348,6 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show the item's info.")
 
-const
-  headers: array[9, HeaderData[ItemsSortOrders]] = [
-    HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
-        sortDesc: nameDesc),
-    HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc,
-        sortDesc: typeDesc),
-    HeaderData[ItemsSortOrders](label: "Durability", sortAsc: durabilityAsc,
-        sortDesc: durabilityDesc),
-    HeaderData[ItemsSortOrders](label: "Quality", sortAsc: qualityAsc,
-        sortDesc: qualityDesc),
-    HeaderData[ItemsSortOrders](label: "Price", sortAsc: priceAsc,
-        sortDesc: priceDesc),
-    HeaderData[ItemsSortOrders](label: "Profit", sortAsc: profitAsc,
-        sortDesc: profitDesc),
-    HeaderData[ItemsSortOrders](label: "Weight", sortAsc: weightAsc,
-        sortDesc: weightDesc),
-    HeaderData[ItemsSortOrders](label: "Owned", sortAsc: ownedAsc,
-        sortDesc: ownedDesc),
-    HeaderData[ItemsSortOrders](label: "Available", sortAsc: availableAsc,
-        sortDesc: availableDesc)]
-  ratio: array[9, cfloat] = [300.cfloat, 200, 200, 200, 200, 200, 200, 200, 200]
-
 proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
     currentRow, row: var Positive; startRow: Positive) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -534,6 +512,30 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "TradeGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
+
+    const
+      headers: array[9, HeaderData[ItemsSortOrders]] = [
+        HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
+            sortDesc: nameDesc),
+        HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc,
+            sortDesc: typeDesc),
+        HeaderData[ItemsSortOrders](label: "Durability", sortAsc: durabilityAsc,
+            sortDesc: durabilityDesc),
+        HeaderData[ItemsSortOrders](label: "Quality", sortAsc: qualityAsc,
+            sortDesc: qualityDesc),
+        HeaderData[ItemsSortOrders](label: "Price", sortAsc: priceAsc,
+            sortDesc: priceDesc),
+        HeaderData[ItemsSortOrders](label: "Profit", sortAsc: profitAsc,
+            sortDesc: profitDesc),
+        HeaderData[ItemsSortOrders](label: "Weight", sortAsc: weightAsc,
+            sortDesc: weightDesc),
+        HeaderData[ItemsSortOrders](label: "Owned", sortAsc: ownedAsc,
+            sortDesc: ownedDesc),
+        HeaderData[ItemsSortOrders](label: "Available", sortAsc: availableAsc,
+            sortDesc: availableDesc)]
+      ratio: array[9, cfloat] = [300.cfloat, 200, 200, 200, 200, 200, 200, 200,
+          200]
+
     addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortTrades, dialog = dialog)
     var
