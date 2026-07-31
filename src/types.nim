@@ -1743,6 +1743,26 @@ type
     else:
       data*: int
 
+proc initEventData*(eType: EventsTypes; skyX: MapXRange = 1;
+    skyY: MapYRange = 1; time: Positive = 1): EventData {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for an in-game event
+  ##
+  ## * eType     - The type of the event
+  ## * skyX      - The X coordinate of the event on the map
+  ## * skyY      - The Y coordinate of the event on the map
+  ## * time      - The time in minutes by how long the event will be available
+  ##
+  ## Returns the new structure with information about the selected in-game event
+  case eType
+  of doublePrice:
+    return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time)
+  of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
+    return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time)
+  else:
+    return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time)
+
+type
   MobInventoryRecord* = object
     ## Used to store data about the inventory of the mob's prototype
     ##
