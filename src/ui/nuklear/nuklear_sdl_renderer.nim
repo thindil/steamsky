@@ -583,6 +583,9 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
 
 proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
   ## Draw the main window content
+#  proc SDL_RenderIsClipEnabled(renderer: RendererPtr): cint {.importc, nodecl,
+#      raises: [], tags: [], contractual.}
+#    ## Internal SDL binding
   discard SDL_SetRenderDrawColor(renderer = sdl.renderer, r = (0.10 *
       255).uint8, g = (0.18 * 255).uint8, b = (0.24 * 255).uint8, a = 255)
   discard SDL_RenderClear(renderer = sdl.renderer)
@@ -614,7 +617,10 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #      elements = ebuf.addr, config = config.addr)
 #
 #  # iterate over and execute each draw command
-#  let offset: ptr nk_draw_index = cast[ptr nk_draw_index](nk_buffer_memory_const(buffer = ebuf.addr))
+#  let
+#    offset: ptr nk_draw_index = cast[ptr nk_draw_index](
+#      nk_buffer_memory_const(buffer = ebuf.addr))
+#    clippingEnabled: bool = SDL_RenderIsClipEnabled(renderer = sdl.renderer).bool
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
