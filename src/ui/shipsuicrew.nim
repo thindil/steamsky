@@ -609,8 +609,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setError(message = "Can't get the crew member's faction.")
             return
         if "nogender" notin faction.flags:
-          setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [
-              0.4.cfloat, 0.6])
+          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+              col1.cfloat, col2])
           label(str = "Gender:")
           colorLabel(str = (if member.gender == 'M': "Male" else: "Female"),
               color = theme.colors[goldenColor])
