@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - Auto scroll the last messages window on a new message
 
 ### Changed
-- Better looking dialog with information about the player's ship's module
+- Better looking dialogs with information about the player's ship's modules and
+  crew members
 - Better looking information about not visited base on the map
 - Redesigned look of the player's ship's info screen, the knowledge screen and
   the combat screen
