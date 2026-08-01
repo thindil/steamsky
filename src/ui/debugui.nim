@@ -545,12 +545,13 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     width: float = 700
     groupOneWidth: float = width * 0.25
     groupTwoWidth: float = width * 0.74
+    windowName = "Debug options"
 
   let
     height: float = (editHeight * 10) + 60
     groupHeight: float = height - 40
   updateDialog(width = width, height = height)
-  window(name = "Debug options", x = 40, y = 0, w = width, h = height, flags = {
+  window(name = windowName, x = 40, y = 0, w = width, h = height, flags = {
       windowBorder, windowTitle, windowMinimizable, windowMovable,
       windowNoScrollbar}):
     layoutSpaceStatic(height = groupHeight, widgetsCount = 2):
@@ -599,4 +600,4 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   of setBaseEvent:
     showSetBaseEventDialog()
   of none:
-    windowSetFocus(name = "Debug options")
+    windowSetFocus(name = windowName)
