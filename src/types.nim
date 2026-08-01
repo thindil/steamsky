@@ -1737,11 +1737,13 @@ type
     time*: Positive = 1
     case eType*: EventsTypes
     of doublePrice:
-      itemIndex*: int
+      itemIndex*: ExtendedNatural
     of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
-      shipIndex*: int
-    else:
-      data*: int
+      shipIndex*: ExtendedNatural
+    of disease, fullDocks:
+      data*: range[-1_000_000..100_000]
+    of EventsTypes.none, baseRecovery:
+      discard
 
 proc initEventData*(eType: EventsTypes; skyX: MapXRange = 1;
     skyY: MapYRange = 1; time: Positive = 1): EventData {.raises: [], tags: [],
