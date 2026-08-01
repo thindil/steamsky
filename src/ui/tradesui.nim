@@ -533,8 +533,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
             sortDesc: qualityDesc),
         HeaderData[ItemsSortOrders](label: "Weight", sortAsc: weightAsc,
             sortDesc: weightDesc)]
-      ratio: array[9, cfloat] = [300.cfloat, 200, 200, 200, 200, 200, 200, 200,
-          200]
+      ratio: array[9, cfloat] = [300.cfloat, 150, 150, 100, 100, 200, 200, 150,
+          100]
 
     addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortTrades, dialog = dialog)
