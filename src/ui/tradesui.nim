@@ -631,12 +631,6 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
           i]].quality).capitalizeAscii,
           tooltip = "Show available options of item.", data = i,
           code = showItemInfo, dialog = dialog)
-      addButton(label = $price, tooltip = "Show available options of item.",
-        data = i, code = showItemInfo, dialog = dialog)
-      setButtonStyle(field = textNormal, color = theme.colors[redColor])
-      addButton(label = $(-price), tooltip = "Show available options of item.",
-        data = i, code = showItemInfo, dialog = dialog)
-      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       try:
         addButton(label = $getItemWeight(item = baseCargo[itemsIndexes[i]]) &
             " kg",
