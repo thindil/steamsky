@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Order of columns in the player's ship's cargo info section, crew members'
   inventory dialog and the trading screen
 - Better looking checkboxes in tables
+- Better looking trading screen
 
 ### Fixed
 - Showing orders for the whole player's ship's crew
