@@ -443,8 +443,6 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
         if profit >
         0: greenColor elif profit < 0: redColor else: tableTextColor))
     setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    addButton(label = itemType, tooltip = "Show available options of item.",
-      data = index, code = showItemInfo, dialog = dialog)
     addProgressBar(tooltip = (if playerShip.cargo[i].durability < 100:
       getItemDamage(item = item)
       else: "Unused"), value = item.durability,
@@ -461,6 +459,8 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
     except:
       dialog = setError(message = "Can't show weight")
       return
+    addButton(label = itemType, tooltip = "Show available options of item.",
+      data = index, code = showItemInfo, dialog = dialog)
     row.inc
     if row == gameSettings.listsLimit + 1:
       break
@@ -525,16 +525,16 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
             sortDesc: priceDesc),
         HeaderData[ItemsSortOrders](label: "Profit", sortAsc: profitAsc,
             sortDesc: profitDesc),
-        HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc,
-            sortDesc: typeDesc),
         HeaderData[ItemsSortOrders](label: "Durability", sortAsc: durabilityAsc,
             sortDesc: durabilityDesc),
         HeaderData[ItemsSortOrders](label: "Quality", sortAsc: qualityAsc,
             sortDesc: qualityDesc),
         HeaderData[ItemsSortOrders](label: "Weight", sortAsc: weightAsc,
-            sortDesc: weightDesc)]
-      ratio: array[9, cfloat] = [300.cfloat, 150, 150, 100, 100, 200, 200, 150,
-          100]
+            sortDesc: weightDesc),
+        HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc,
+            sortDesc: typeDesc)]
+      ratio: array[9, cfloat] = [300.cfloat, 150, 150, 100, 100, 200, 150, 150,
+          200]
 
     addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortTrades, dialog = dialog)
@@ -615,8 +615,6 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = $(-price), tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-      addButton(label = itemType, tooltip = "Show available options of item.",
-        data = i, code = showItemInfo, dialog = dialog)
       var durability: int = (if baseIndex == 0: traderCargo[itemsIndexes[
           i]].durability else: skyBases[baseIndex].cargo[itemsIndexes[i]].durability)
       var maxDurability: int = (if baseIndex == 0: getItemMaxDurability(
@@ -639,6 +637,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't show weight")
         return
+      addButton(label = itemType, tooltip = "Show available options of item.",
+        data = i, code = showItemInfo, dialog = dialog)
       row.inc
       if row == gameSettings.listsLimit + 1:
         break
