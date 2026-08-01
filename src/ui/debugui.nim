@@ -600,4 +600,5 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   of setBaseEvent:
     showSetBaseEventDialog()
   of none:
+    shortcutsEnabled = false
     windowSetFocus(name = windowName)
