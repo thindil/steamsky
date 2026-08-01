@@ -586,6 +586,9 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #  proc SDL_RenderIsClipEnabled(renderer: RendererPtr): cint {.importc, nodecl,
 #      raises: [], tags: [], contractual.}
 #    ## Internal SDL binding
+#  proc SDL_RenderGetClipRect(renderer: RendererPtr; rect: RectPtr) {.importc,
+#      nodecl, raises: [], tags: [], contractual.}
+#    ## Internal SDL binding
   discard SDL_SetRenderDrawColor(renderer = sdl.renderer, r = (0.10 *
       255).uint8, g = (0.18 * 255).uint8, b = (0.24 * 255).uint8, a = 255)
   discard SDL_RenderClear(renderer = sdl.renderer)
@@ -620,7 +623,10 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #  let
 #    offset: ptr nk_draw_index = cast[ptr nk_draw_index](
 #      nk_buffer_memory_const(buffer = ebuf.addr))
-#    clippingEnabled: bool = SDL_RenderIsClipEnabled(renderer = sdl.renderer).bool
+#    clippingEnabled: bool = SDL_RenderIsClipEnabled(
+#        renderer = sdl.renderer).bool
+#  var savedClip: SDL_Rect = SDL_Rect()
+#  SDL_RenderGetClipRect(renderer = sdl.renderer, rect = savedClip.addr)
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
