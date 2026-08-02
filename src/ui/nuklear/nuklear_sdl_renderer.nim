@@ -627,6 +627,12 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #        renderer = sdl.renderer).bool
 #  var savedClip: SDL_Rect = SDL_Rect()
 #  SDL_RenderGetClipRect(renderer = sdl.renderer, rect = savedClip.addr)
+#  when defined(nkSDLClampClipRect):
+#    proc SDL_RenderGetViewport(renderer: RendererPtr; rect: RectPtr) {.importc,
+#        nodecl, raises: [], tags: [], contractual.}
+#    ## Internal SDL binding
+#    var viewport: SDL_Rect = SDL_Rect()
+#    SDL_RenderGetViewport(renderer = sdl.renderer, rect = viewport.addr)
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
