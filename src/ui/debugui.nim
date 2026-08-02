@@ -330,8 +330,11 @@ proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
     setLayoutRowDynamic(height = editHeight, cols = 1)
     itemSelected = comboList(items = itemsNames, selected = itemSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     labelButton(title = "Select"):
       itemName = itemsNames[itemSelected]
+      debugDialog = none
+    labelButton(title = "Cancel"):
       debugDialog = none
 
   windowSetFocus(name = "Item to add")
@@ -345,11 +348,14 @@ proc showUpdateItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
     setLayoutRowDynamic(height = editHeight, cols = 1)
     cargoSelected = comboList(items = cargoNames, selected = cargoSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     labelButton(title = "Select"):
       cargoName = cargoNames[cargoSelected]
       let item = playerShip.cargo[cargoSelected]
       cargoAmount = item.amount
       cargoQuality = item.quality.ord
+      debugDialog = none
+    labelButton(title = "Cancel"):
       debugDialog = none
 
   windowSetFocus(name = "Item to update")
@@ -405,9 +411,10 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
   window(name = "Bases", x = 300, y = 100, w = 300, h = (editHeight +
       dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
-    setLayoutRowDynamic(height = buttonHeight, cols = 1)
+    setLayoutRowDynamic(height = editHeight, cols = 1)
     baseSelected = comboList(items = basesNames, selected = baseSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     labelButton(title = "Select"):
       baseName = basesNames[baseSelected]
       let base: BaseRecord = skyBases[baseSelected + 1]
@@ -428,6 +435,8 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
         money = base.cargo[0].amount
       else:
         money = 0
+      debugDialog = none
+    labelButton(title = "Cancel"):
       debugDialog = none
 
 proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
@@ -517,8 +526,11 @@ proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
     setLayoutRowDynamic(height = editHeight, cols = 1)
     shipSelected = comboList(items = shipsNames, selected = shipSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     labelButton(title = "Select"):
       shipName = shipsNames[shipSelected]
+      debugDialog = none
+    labelButton(title = "Cancel"):
       debugDialog = none
 
 proc showSetBaseEventDialog() {.raises: [], tags: [RootEffect], contractual.} =
@@ -529,9 +541,12 @@ proc showSetBaseEventDialog() {.raises: [], tags: [RootEffect], contractual.} =
     setLayoutRowDynamic(height = editHeight, cols = 1)
     base2Selected = comboList(items = basesNames, selected = base2Selected,
         itemHeight = labelHeight.int, x = 290, y = 200)
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     labelButton(title = "Select"):
       base2Name = basesNames[base2Selected]
       base2Selected.inc
+      debugDialog = none
+    labelButton(title = "Cancel"):
       debugDialog = none
 
 proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
