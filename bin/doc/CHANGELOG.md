@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Auto scroll the last messages window on a new message
+- Cancel buttons to vairuos dialogs in debug menu
 
 ### Changed
 - Better looking dialogs with information about the player's ship's modules and
