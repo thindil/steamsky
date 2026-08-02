@@ -355,10 +355,23 @@ proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
 proc showUpdateItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be updated in the player's
   ## ship's cargo
-  window(name = "Item to update", x = 300, y = 100, w = 300, h = (editHeight +
-      dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
+  window(name = "Item to update", x = 300, y = 100, w = 300, h = ((editHeight *
+      2) + dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
+    var newSearchText: string = searchText
+    editString(text = newSearchText, maxLen = 64)
+    if newSearchText != searchText:
+      searchText = newSearchText
+      cargoNames = @[]
+      let searchTerm: string = searchText.toLowerAscii()
+      for item in playerShip.cargo:
+        let itemName = getItemName(item = item, damageInfo = false,
+            toLower = false, moreInfo = false)
+        if itemName.toLowerAscii.contains(sub = searchTerm):
+          cargoNames.add(y = itemName)
+      if cargoNames.len == 0:
+        cargoNames.add(y = "No items")
     cargoSelected = comboList(items = cargoNames, selected = cargoSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
