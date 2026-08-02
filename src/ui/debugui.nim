@@ -323,16 +323,6 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
 
 var searchText: string = ""
 
-proc updateNames() {.raises: [], tags: [], contractual.} =
-  ## Update the list of selected names
-  itemsNames = @[]
-  let searchTerm: string = searchText.toLowerAscii()
-  for item in itemsList.values:
-    if item.name.toLowerAscii.contains(sub = searchTerm):
-      itemsNames.add(y = item.name)
-  if itemsNames.len == 0:
-    itemsNames.add(y = "No items")
-
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be added to the player's
   ## ship's cargo
@@ -344,7 +334,13 @@ proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
     editString(text = newSearchText, maxLen = 64)
     if newSearchText != searchText:
       searchText = newSearchText
-      updateNames()
+      itemsNames = @[]
+      let searchTerm: string = searchText.toLowerAscii()
+      for item in itemsList.values:
+        if item.name.toLowerAscii.contains(sub = searchTerm):
+          itemsNames.add(y = item.name)
+      if itemsNames.len == 0:
+        itemsNames.add(y = "No items")
     itemSelected = comboList(items = itemsNames, selected = itemSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
