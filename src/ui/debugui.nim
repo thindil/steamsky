@@ -321,6 +321,15 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
   cargoQuality = comboList(items = itemQualities, selected = cargoQuality,
       itemHeight = labelHeight.int, x = 235, y = 125)
 
+var searchText: string = ""
+
+proc updateNames() {.raises: [], tags: [], contractual.} =
+  ## Update the list of selected names
+  itemsNames = @[]
+  for item in itemsList.values:
+    if item.name.contains(sub = searchText):
+      itemsNames.add(y = item.name)
+
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be added to the player's
   ## ship's cargo
@@ -328,6 +337,11 @@ proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
       dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
+    var newSearchText: string = searchText
+    editString(text = newSearchText, maxLen = 64)
+    if newSearchText != searchText:
+      searchText = newSearchText
+      updateNames()
     itemSelected = comboList(items = itemsNames, selected = itemSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
