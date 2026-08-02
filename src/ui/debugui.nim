@@ -326,15 +326,18 @@ var searchText: string = ""
 proc updateNames() {.raises: [], tags: [], contractual.} =
   ## Update the list of selected names
   itemsNames = @[]
+  let searchTerm: string = searchText.toLowerAscii()
   for item in itemsList.values:
-    if item.name.contains(sub = searchText):
+    if item.name.toLowerAscii.contains(sub = searchTerm):
       itemsNames.add(y = item.name)
+  if itemsNames.len == 0:
+    itemsNames.add(y = "No items")
 
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be added to the player's
   ## ship's cargo
-  window(name = "Item to add", x = 300, y = 100, w = 300, h = (editHeight +
-      dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
+  window(name = "Item to add", x = 300, y = 100, w = 300, h = ((editHeight *
+      2) + dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
     var newSearchText: string = searchText
