@@ -1746,8 +1746,9 @@ type
       discard
 
 proc initEventData*(eType: EventsTypes; skyX: MapXRange = 1;
-    skyY: MapYRange = 1; time: Positive = 1): EventData {.raises: [], tags: [],
-    contractual.} =
+    skyY: MapYRange = 1; time: Positive = 1; itemIndex: ExtendedNatural = 0;
+    shipIndex: ExtendedNatural = 0; data: range[
+    -1_000_000..100_000] = 0): EventData {.raises: [], tags: [], contractual.} =
   ## Create a new data structure for an in-game event
   ##
   ## * eType     - The type of the event
@@ -1758,9 +1759,13 @@ proc initEventData*(eType: EventsTypes; skyX: MapXRange = 1;
   ## Returns the new structure with information about the selected in-game event
   case eType
   of doublePrice:
-    return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time)
+    return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time,
+        itemIndex: itemIndex)
   of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
-    return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time)
+    return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time,
+        shipIndex: shipIndex)
+  of disease, fullDocks:
+    return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time, data: data)
   else:
     return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time)
 
