@@ -1740,9 +1740,7 @@ type
       itemIndex*: ExtendedNatural
     of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
       shipIndex*: ExtendedNatural
-    of disease, fullDocks:
-      data*: range[-1_000_000..100_000]
-    of EventsTypes.none, baseRecovery:
+    of EventsTypes.none, baseRecovery, disease, fullDocks:
       discard
 
 proc initEventData*(eType: EventsTypes; skyX: MapXRange = 1;
@@ -1764,9 +1762,7 @@ proc initEventData*(eType: EventsTypes; skyX: MapXRange = 1;
   of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
     return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time,
         shipIndex: shipIndex)
-  of disease, fullDocks:
-    return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time, data: data)
-  else:
+  of EventsTypes.none, baseRecovery, disease, fullDocks:
     return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time)
 
 type
