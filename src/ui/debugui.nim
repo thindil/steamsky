@@ -322,7 +322,7 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
       itemHeight = labelHeight.int, x = 235, y = 125)
 
 var
-  searchItem, searchItem2, searchBase: string = ""
+  searchItem, searchItem2, searchBase, searchBase2: string = ""
 
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be added to the player's
@@ -573,10 +573,21 @@ proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
 
 proc showSetBaseEventDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases for an event
-  window(name = "Bases", x = 300, y = 100, w = 300, h = (editHeight +
+  window(name = "Bases", x = 300, y = 100, w = 300, h = ((editHeight * 2) +
       dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
+    var newSearchText: string = searchBase2
+    editString(text = newSearchText, maxLen = 64)
+    if newSearchText != searchBase2:
+      searchBase2 = newSearchText
+      let searchTerm: string = searchBase2.toLowerAscii()
+      basesNames = @[]
+      for base in skyBases:
+        if base.name.toLowerAscii.contains(sub = searchTerm):
+          basesNames.add(y = base.name)
+      if basesNames.len == 0:
+        basesNames.add(y = "No bases")
     base2Selected = comboList(items = basesNames, selected = base2Selected,
         itemHeight = labelHeight.int, x = 290, y = 200)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
