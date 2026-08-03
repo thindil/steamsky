@@ -321,7 +321,8 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
   cargoQuality = comboList(items = itemQualities, selected = cargoQuality,
       itemHeight = labelHeight.int, x = 235, y = 125)
 
-var searchText: string = ""
+var
+  searchItem, searchItem2, searchBase: string = ""
 
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be added to the player's
@@ -330,12 +331,12 @@ proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
       2) + dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
-    var newSearchText: string = searchText
+    var newSearchText: string = searchItem
     editString(text = newSearchText, maxLen = 64)
-    if newSearchText != searchText:
-      searchText = newSearchText
+    if newSearchText != searchItem:
+      searchItem = newSearchText
       itemsNames = @[]
-      let searchTerm: string = searchText.toLowerAscii()
+      let searchTerm: string = searchItem.toLowerAscii()
       for item in itemsList.values:
         if item.name.toLowerAscii.contains(sub = searchTerm):
           itemsNames.add(y = item.name)
@@ -359,12 +360,12 @@ proc showUpdateItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
       2) + dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
-    var newSearchText: string = searchText
+    var newSearchText: string = searchItem2
     editString(text = newSearchText, maxLen = 64)
-    if newSearchText != searchText:
-      searchText = newSearchText
+    if newSearchText != searchItem2:
+      searchItem2 = newSearchText
       cargoNames = @[]
-      let searchTerm: string = searchText.toLowerAscii()
+      let searchTerm: string = searchItem2.toLowerAscii()
       for item in playerShip.cargo:
         let itemName = getItemName(item = item, damageInfo = false,
             toLower = false, moreInfo = false)
@@ -438,11 +439,11 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
       dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
-    var newSearchText: string = searchText
+    var newSearchText: string = searchBase
     editString(text = newSearchText, maxLen = 64)
-    if newSearchText != searchText:
-      searchText = newSearchText
-      let searchTerm: string = searchText.toLowerAscii()
+    if newSearchText != searchBase:
+      searchBase = newSearchText
+      let searchTerm: string = searchBase.toLowerAscii()
       basesNames = @[]
       for base in skyBases:
         if base.name.toLowerAscii.contains(sub = searchTerm):
