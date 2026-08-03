@@ -207,7 +207,7 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
     # Disease in base
     of 21:
       eventsList.add(y = EventData(eType: disease, skyX: playerShip.skyX,
-          skyY: playerShip.skyY, time: getRandom(min = 10_000, max = 12_000), data: 1))
+          skyY: playerShip.skyY, time: getRandom(min = 10_000, max = 12_000)))
       addMessage(message = "You can't dock to the base now, it is closed due to a disease.",
           mType = otherMessage)
     of 22..30:
@@ -247,7 +247,7 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
         return startCombat(enemyIndex = eventsList[eventsList.high].shipIndex)
       # Full docks
       eventsList.add(y = EventData(eType: fullDocks, skyX: playerShip.skyX,
-          skyY: playerShip.skyY, time: getRandom(min = 15, max = 30), data: 1))
+          skyY: playerShip.skyY, time: getRandom(min = 15, max = 30)))
       addMessage(message = "You can't dock to the base now, because its docks are full.",
           mType = otherMessage, color = red)
     skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high

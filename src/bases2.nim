@@ -129,7 +129,7 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
       generateEnemies(enemies = enemies)
     of disease:
       eventsList.add(y = EventData(eType: disease, skyX: eventX,
-          skyY: eventY, time: getRandom(min = 10_000, max = 12_000), data: 1))
+          skyY: eventY, time: getRandom(min = 10_000, max = 12_000)))
     of doublePrice:
       var newItemIndex: int = 0
       block setDoublePrice:

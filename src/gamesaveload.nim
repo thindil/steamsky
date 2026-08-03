@@ -111,7 +111,7 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
     of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
       eventData = $event.shipIndex
     else:
-      eventData = $event.data
+      eventData = ""
     eventElement.attrs = {"data": eventData, "type": $event.eType.ord,
         "x": $event.skyX, "y": $event.skyY, "time": $event.time}.toXmlAttributes
     saveTree.add(son = eventElement)
@@ -335,8 +335,8 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
         event.itemIndex = savedEvent.attr(name = "data").parseInt
       of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
         event.shipIndex = savedEvent.attr(name = "data").parseInt
-      else:
-        event.data = savedEvent.attr(name = "data").parseInt
+      of EventsTypes.none, disease, baseRecovery, fullDocks:
+        discard
     eventsList.add(y = event)
     skyMap[event.skyX][event.skyY].eventIndex = index
   logMessage(message = "done", messageLevel = lvlInfo)
