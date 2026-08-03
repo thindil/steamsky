@@ -322,7 +322,7 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
       itemHeight = labelHeight.int, x = 235, y = 125)
 
 var
-  searchItem, searchItem2, searchBase, searchBase2: string = ""
+  searchItem, searchItem2, searchBase, searchBase2, searchShip: string = ""
 
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be added to the player's
@@ -558,10 +558,21 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
 
 proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of proto ships which can be set
-  window(name = "Ships", x = 300, y = 100, w = 300, h = (editHeight +
+  window(name = "Ships", x = 300, y = 100, w = 300, h = ((editHeight * 2) +
       dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
+    var newSearchText: string = searchShip
+    editString(text = newSearchText, maxLen = 64)
+    if newSearchText != searchShip:
+      searchShip = newSearchText
+      let searchTerm: string = searchShip.toLowerAscii()
+      shipsNames = @[]
+      for ship in protoShipsList.values:
+        if ship.name.toLowerAscii.contains(sub = searchTerm):
+          shipsNames.add(y = ship.name)
+      if shipsNames.len == 0:
+        shipsNames.add(y = "No ships")
     shipSelected = comboList(items = shipsNames, selected = shipSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
