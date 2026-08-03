@@ -434,10 +434,21 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
 
 proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases which can be set
-  window(name = "Bases", x = 300, y = 100, w = 300, h = (editHeight +
+  window(name = "Bases", x = 300, y = 100, w = 300, h = ((editHeight * 2) +
       dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
+    var newSearchText: string = searchText
+    editString(text = newSearchText, maxLen = 64)
+    if newSearchText != searchText:
+      searchText = newSearchText
+      let searchTerm: string = searchText.toLowerAscii()
+      basesNames = @[]
+      for base in skyBases:
+        if base.name.toLowerAscii.contains(sub = searchTerm):
+          basesNames.add(y = base.name)
+      if basesNames.len == 0:
+        basesNames.add(y = "No bases")
     baseSelected = comboList(items = basesNames, selected = baseSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
