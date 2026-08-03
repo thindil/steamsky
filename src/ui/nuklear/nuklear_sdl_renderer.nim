@@ -583,17 +583,17 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
 
 proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
   ## Draw the main window content
+  discard SDL_SetRenderDrawColor(renderer = sdl.renderer, r = (0.10 *
+      255).uint8, g = (0.18 * 255).uint8, b = (0.24 * 255).uint8, a = 255)
+  discard SDL_RenderClear(renderer = sdl.renderer)
+  nk_sdl_render(aa = antiAliasingOn)
+
 #  proc SDL_RenderIsClipEnabled(renderer: RendererPtr): cint {.importc, nodecl,
 #      raises: [], tags: [], contractual.}
 #    ## Internal SDL binding
 #  proc SDL_RenderGetClipRect(renderer: RendererPtr; rect: RectPtr) {.importc,
 #      nodecl, raises: [], tags: [], contractual.}
 #    ## Internal SDL binding
-  discard SDL_SetRenderDrawColor(renderer = sdl.renderer, r = (0.10 *
-      255).uint8, g = (0.18 * 255).uint8, b = (0.24 * 255).uint8, a = 255)
-  discard SDL_RenderClear(renderer = sdl.renderer)
-  nk_sdl_render(aa = antiAliasingOn)
-
 #  const vertexLayout: array[4, nk_draw_vertex_layout_element] = [
 #    nk_draw_vertex_layout_element(attribute: vertexPosition),
 #    nk_draw_vertex_layout_element(attribute: vertexTextCoord),
