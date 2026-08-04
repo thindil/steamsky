@@ -118,18 +118,18 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
           2).float)).Natural
     case event
     of enemyShip:
-      eventsList.add(y = EventData(eType: enemyShip, skyX: eventX,
-          skyY: eventY, time: getRandom(min = eventTime, max = eventTime + 60),
-          shipIndex: enemies[getRandom(min = 0, max = enemies.len - 1)]))
+      eventsList.add(y = initEventData(eType = enemyShip, skyX = eventX,
+          skyY = eventY, time = getRandom(min = eventTime, max = eventTime + 60),
+          shipIndex = enemies[getRandom(min = 0, max = enemies.len - 1)]))
     of attackOnBase:
       generateEnemies(enemies = enemies, owner = "Any", withTraders = false)
-      eventsList.add(y = EventData(eType: attackOnBase, skyX: eventX,
-          skyY: eventY, time: getRandom(min = eventTime, max = eventTime + 120),
-          shipIndex: enemies[getRandom(min = 0, max = enemies.len - 1)]))
+      eventsList.add(y = initEventData(eType = attackOnBase, skyX = eventX,
+          skyY = eventY, time = getRandom(min = eventTime, max = eventTime + 120),
+          shipIndex = enemies[getRandom(min = 0, max = enemies.len - 1)]))
       generateEnemies(enemies = enemies)
     of disease:
-      eventsList.add(y = EventData(eType: disease, skyX: eventX,
-          skyY: eventY, time: getRandom(min = 10_000, max = 12_000)))
+      eventsList.add(y = initEventData(eType = disease, skyX = eventX,
+          skyY = eventY, time = getRandom(min = 10_000, max = 12_000)))
     of doublePrice:
       var newItemIndex: int = 0
       block setDoublePrice:
@@ -141,9 +141,9 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
                 eventY].baseIndex].baseType, itemIndex = j, quality = normal) > 0:
               newItemIndex = j
               break setDoublePrice
-      eventsList.add(y = EventData(eType: doublePrice, skyX: eventX,
-          skyY: eventY, time: getRandom(min = eventTime * 3, max = eventTime *
-              4), itemIndex: newItemIndex))
+      eventsList.add(y = initEventData(eType = doublePrice, skyX = eventX,
+          skyY = eventY, time = getRandom(min = eventTime * 3, max = eventTime *
+              4), itemIndex = newItemIndex))
     of baseRecovery:
       recoverBase(baseIndex = skyMap[eventX][eventY].baseIndex)
     else:

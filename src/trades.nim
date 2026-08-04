@@ -196,7 +196,9 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
         if gain > 0: "gain " else: "lost ") & $(gain.abs) & " " & moneyName &
         " compared to the base price."), mType = tradeMessage)
     if baseIndex > 0 and eventIndex > -1:
-      eventsList[eventIndex].time += 5
+      {.ruleOff: "assignments".}
+      eventsList[eventIndex].time = eventsList[eventIndex].time + 5
+      {.ruleOn: "assignments".}
     updateGame(minutes = 5)
 
 proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
@@ -271,7 +273,9 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
       if gain > 0: "gain " else: "lost ") & $(gain.abs) & " " & moneyName &
       " compared to the base price."), mType = tradeMessage)
   if baseIndex == 0 and eventIndex > -1:
-    eventsList[eventIndex].time += 5
+    {.ruleOff: "assignments".}
+    eventsList[eventIndex].time = eventsList[eventIndex].time + 5
+    {.ruleOn: "assignments".}
   updateGame(minutes = 5)
 
 proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,

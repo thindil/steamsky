@@ -326,9 +326,9 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
   # Load events
   logMessage(message = "Loading events...", messageLevel = lvlInfo)
   for index, savedEvent in savedGame.findAll(tag = "event"):
-    var event: EventData = EventData(skyX: savedEvent.attr(name = "x").parseInt,
-        skyY: savedEvent.attr(name = "y").parseInt, time: savedEvent.attr(
-        name = "time").parseInt, eType: savedEvent.attr(
+    var event: EventData = initEventData(skyX = savedEvent.attr(name = "x").parseInt,
+        skyY = savedEvent.attr(name = "y").parseInt, time = savedEvent.attr(
+        name = "time").parseInt, eType = savedEvent.attr(
             name = "type").parseInt.EventsTypes)
     case event.eType
       of doublePrice:

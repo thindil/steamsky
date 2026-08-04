@@ -91,9 +91,9 @@ proc checkForOpenSpaceEvents(roll: Positive): bool {.raises: [KeyError, IOError,
     generateTraders(ships = traders)
     if traders.len == 0:
       return false
-    eventsList.add(y = EventData(eType: trader, skyX: playerShip.skyX,
-        skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
-        shipIndex: traders[getRandom(min = traders.low, max = traders.high)]))
+    eventsList.add(y = initEventData(eType = trader, skyX = playerShip.skyX,
+        skyY = playerShip.skyY, time = getRandom(min = 30, max = 45),
+        shipIndex = traders[getRandom(min = traders.low, max = traders.high)]))
     skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
     addMessage(message = "You've meet a friendly trader.",
         mType = otherMessage)
@@ -105,9 +105,9 @@ proc checkForOpenSpaceEvents(roll: Positive): bool {.raises: [KeyError, IOError,
     generateFriendlyShips(ships = friendlyShips)
     if friendlyShips.len == 0:
       return false
-    eventsList.add(y = EventData(eType: friendlyShip, skyX: playerShip.skyX,
-        skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
-        shipIndex: friendlyShips[getRandom(min = friendlyShips.low,
+    eventsList.add(y = initEventData(eType = friendlyShip, skyX = playerShip.skyX,
+        skyY = playerShip.skyY, time = getRandom(min = 30, max = 45),
+        shipIndex = friendlyShips[getRandom(min = friendlyShips.low,
         max = friendlyShips.high)]))
     skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
     addMessage(message = "You've spotted a friendly ship.",
@@ -118,9 +118,9 @@ proc checkForOpenSpaceEvents(roll: Positive): bool {.raises: [KeyError, IOError,
   else:
     var enemies: seq[Positive] = @[]
     generateEnemies(enemies = enemies)
-    eventsList.add(y = EventData(eType: enemyShip, skyX: playerShip.skyX,
-        skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
-        shipIndex: enemies[getRandom(min = enemies.low, max = enemies.high)]))
+    eventsList.add(y = initEventData(eType = enemyShip, skyX = playerShip.skyX,
+        skyY = playerShip.skyY, time = getRandom(min = 30, max = 45),
+        shipIndex = enemies[getRandom(min = enemies.low, max = enemies.high)]))
     skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
     return startCombat(enemyIndex = eventsList[eventsList.high].shipIndex)
   return false
@@ -197,17 +197,17 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
     of 1..20:
       var enemies: seq[Positive] = @[]
       generateEnemies(enemies = enemies, owner = "Any", withTraders = false)
-      eventsList.add(y = EventData(eType: attackOnBase, skyX: playerShip.skyX,
-          skyY: playerShip.skyY, time: getRandom(min = 60, max = 90),
-          shipIndex: enemies[getRandom(min = enemies.low,
+      eventsList.add(y = initEventData(eType = attackOnBase, skyX = playerShip.skyX,
+          skyY = playerShip.skyY, time = getRandom(min = 60, max = 90),
+          shipIndex = enemies[getRandom(min = enemies.low,
           max = enemies.high)]))
       addMessage(message = "You can't dock to the base now, because the base is under attack. You can help defend it.",
           mType = otherMessage)
       return startCombat(enemyIndex = eventsList[eventsList.high].shipIndex)
     # Disease in base
     of 21:
-      eventsList.add(y = EventData(eType: disease, skyX: playerShip.skyX,
-          skyY: playerShip.skyY, time: getRandom(min = 10_000, max = 12_000)))
+      eventsList.add(y = initEventData(eType = disease, skyX = playerShip.skyX,
+          skyY = playerShip.skyY, time = getRandom(min = 10_000, max = 12_000)))
       addMessage(message = "You can't dock to the base now, it is closed due to a disease.",
           mType = otherMessage)
     of 22..30:
@@ -225,9 +225,9 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
             playerShip.skyY].baseIndex].baseType, itemIndex = newItemIndex,
             quality = normal) > 0:
           break
-      eventsList.add(y = EventData(eType: doublePrice, skyX: playerShip.skyX,
-          skyY: playerShip.skyY, time: getRandom(min = 1_440, max = 2_880),
-          itemIndex: newItemIndex))
+      eventsList.add(y = initEventData(eType = doublePrice, skyX = playerShip.skyX,
+          skyY = playerShip.skyY, time = getRandom(min = 1_440, max = 2_880),
+          itemIndex = newItemIndex))
     # Full docks or enemy patrol
     else:
       # Enemy patrol (only at an enemy base)
@@ -236,18 +236,18 @@ proc checkForEvent*(): bool {.raises: [ValueError, IOError,
         var enemies: seq[Positive] = @[]
         generateEnemies(enemies = enemies, owner = skyBases[baseIndex].owner,
             withTraders = false)
-        eventsList.add(y = EventData(eType: enemyPatrol,
-            skyX: playerShip.skyX, skyY: playerShip.skyY, time: getRandom(
+        eventsList.add(y = initEventData(eType = enemyPatrol,
+            skyX = playerShip.skyX, skyY = playerShip.skyY, time = getRandom(
                 min = 30, max = 45),
-            shipIndex: enemies[getRandom(min = enemies.low,
+            shipIndex = enemies[getRandom(min = enemies.low,
             max = enemies.high)]))
         skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
         addMessage(message = "You spotted an enemy patrol.",
             mType = otherMessage, color = red)
         return startCombat(enemyIndex = eventsList[eventsList.high].shipIndex)
       # Full docks
-      eventsList.add(y = EventData(eType: fullDocks, skyX: playerShip.skyX,
-          skyY: playerShip.skyY, time: getRandom(min = 15, max = 30)))
+      eventsList.add(y = initEventData(eType = fullDocks, skyX = playerShip.skyX,
+          skyY = playerShip.skyY, time = getRandom(min = 15, max = 30)))
       addMessage(message = "You can't dock to the base now, because its docks are full.",
           mType = otherMessage, color = red)
     skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
