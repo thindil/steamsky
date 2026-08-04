@@ -1732,10 +1732,10 @@ type
     ## * itemIndex - The index of the prototype item used by the event
     ## * shipIndex - The index of the prototype ship used by the event
     ## * data      - General data of the event
-    skyX*: MapXRange = 1
-    skyY*: MapYRange = 1
-    time*: Positive = 1
-    case eType*: EventsTypes
+    skyX: MapXRange = 1
+    skyY: MapYRange = 1
+    time: Positive = 1
+    case eType: EventsTypes
     of doublePrice:
       itemIndex*: ExtendedNatural
     of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
@@ -1764,6 +1764,15 @@ proc initEventData*(eType: EventsTypes; skyX: MapXRange = 1;
         shipIndex: shipIndex)
   of EventsTypes.none, baseRecovery, disease, fullDocks:
     return EventData(eType: eType, skyX: skyX, skyY: skyY, time: time)
+
+typeGetterSetter(baseType = EventData, varName = event, name = eType,
+    typ = EventsTypes)
+typeGetterSetter(baseType = EventData, varName = event, name = skyX,
+    typ = MapXRange)
+typeGetterSetter(baseType = EventData, varName = event, name = skyY,
+    typ = MapYRange)
+typeGetterSetter(baseType = EventData, varName = event, name = time,
+    typ = Positive)
 
 type
   MobInventoryRecord* = object
