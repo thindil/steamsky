@@ -224,6 +224,16 @@ proc nk_buffer_memory_const(buffer: ptr nk_buffer): pointer {.importc, nodecl,
     raises: [], tags: [], contractual, used.}
   ## A binding to Nuklear's function. Internal use only
 
+# -------
+# Drawing
+# -------
+proc nk_draw_begin(ctx; buffer: ptr nk_buffer): ptr nk_draw_command {.importc: "nk__draw_begin",
+    nodecl, raises: [], tags: [], contractual, used.}
+  ## A binding to Nuklear's function. Internal use only
+proc nk_draw_next(cmd: ptr nk_draw_command; buffer: ptr nk_buffer;
+    ctx): ptr nk_draw_command {.importc: "nk__draw_next", nodecl, raises: [],
+    tags: [], contractual, used.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
