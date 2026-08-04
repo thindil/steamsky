@@ -541,16 +541,15 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
       of 0:
         eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
             skyY = skyBases[base2Selected].skyY, time = eventDuration,
-                eType = disease))
+            eType = disease))
       of 1:
         eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
             skyY = skyBases[base2Selected].skyY, time = eventDuration,
-                eType = doublePrice,
-            itemIndex = item3Selected))
+            eType = doublePrice, itemIndex = item3Selected))
       of 2:
         eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
             skyY = skyBases[base2Selected].skyY, time = eventDuration,
-                eType = fullDocks))
+            eType = fullDocks))
       else:
         discard
       skyMap[skyBases[base2Selected].skyX][skyBases[
