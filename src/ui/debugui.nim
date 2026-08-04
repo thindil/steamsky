@@ -508,14 +508,14 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
       for index, ship in protoShipsList:
         if ship.name == shipName:
           if index in traders:
-            eventsList.add(y = EventData(skyX: ship2X, skyY: ship2Y,
-                time: shipDuration, eType: trader, shipIndex: index))
+            eventsList.add(y = initEventData(skyX = ship2X, skyY = ship2Y,
+                time = shipDuration, eType = trader, shipIndex = index))
           elif index in friendlyShips:
-            eventsList.add(y = EventData(skyX: ship2X, skyY: ship2Y,
-                time: shipDuration, eType: friendlyShip, shipIndex: index))
+            eventsList.add(y = initEventData(skyX = ship2X, skyY = ship2Y,
+                time = shipDuration, eType = friendlyShip, shipIndex = index))
           else:
-            eventsList.add(y = EventData(skyX: ship2X, skyY: ship2Y,
-                time: shipDuration, eType: enemyShip, shipIndex: index))
+            eventsList.add(y = initEventData(skyX = ship2X, skyY = ship2Y,
+                time = shipDuration, eType = enemyShip, shipIndex = index))
           skyMap[ship2X][ship2Y].eventIndex = eventsList.high
   group(title = "baseProperties", flags = {windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.6, 0.2])
@@ -539,18 +539,18 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
     labelButton(title = "Add event"):
       case eventSelected
       of 0:
-        eventsList.add(y = EventData(skyX: skyBases[base2Selected].skyX,
-            skyY: skyBases[base2Selected].skyY, time: eventDuration,
-                eType: disease))
+        eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
+            skyY = skyBases[base2Selected].skyY, time = eventDuration,
+                eType = disease))
       of 1:
-        eventsList.add(y = EventData(skyX: skyBases[base2Selected].skyX,
-            skyY: skyBases[base2Selected].skyY, time: eventDuration,
-                eType: doublePrice,
-            itemIndex: item3Selected))
+        eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
+            skyY = skyBases[base2Selected].skyY, time = eventDuration,
+                eType = doublePrice,
+            itemIndex = item3Selected))
       of 2:
-        eventsList.add(y = EventData(skyX: skyBases[base2Selected].skyX,
-            skyY: skyBases[base2Selected].skyY, time: eventDuration,
-                eType: fullDocks))
+        eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
+            skyY = skyBases[base2Selected].skyY, time = eventDuration,
+                eType = fullDocks))
       else:
         discard
       skyMap[skyBases[base2Selected].skyX][skyBases[
