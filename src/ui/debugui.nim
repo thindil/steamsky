@@ -158,6 +158,7 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   population = 0
   reputation = 0
   money = 0
+  shipsNames = @[]
   for ship in protoShipsList.values:
     shipsNames.add(y = ship.name)
   shipName = ""
