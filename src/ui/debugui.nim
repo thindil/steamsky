@@ -555,6 +555,10 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
         discard
       skyMap[skyBases[base2Selected].skyX][skyBases[
           base2Selected].skyY].eventIndex = eventsList.high
+  if eventsList.len > 0:
+    setLayoutRowDynamic(height = editHeight, cols = 2)
+    labelButton(title = "Delete event"):
+      discard
 
 proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of proto ships which can be set
