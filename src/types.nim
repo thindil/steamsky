@@ -1737,9 +1737,9 @@ type
     time: Positive = 1
     case eType: EventsTypes
     of doublePrice:
-      itemIndex*: ExtendedNatural
+      itemIndex: ExtendedNatural
     of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
-      shipIndex*: ExtendedNatural
+      shipIndex: ExtendedNatural
     of EventsTypes.none, baseRecovery, disease, fullDocks:
       discard
 
@@ -1773,6 +1773,10 @@ typeGetterSetter(baseType = EventData, varName = event, name = skyY,
     typ = MapYRange)
 typeGetterSetter(baseType = EventData, varName = event, name = time,
     typ = Positive)
+typeGetterSetter(baseType = EventData, varName = event, name = itemIndex,
+    typ = ExtendedNatural)
+typeGetterSetter(baseType = EventData, varName = event, name = shipIndex,
+    typ = ExtendedNatural)
 
 type
   MobInventoryRecord* = object
