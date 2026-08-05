@@ -604,7 +604,9 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
   if eventsList.len > 0:
     setLayoutRowDynamic(height = editHeight, cols = 2)
     labelButton(title = "Delete event"):
-      discard
+      deleteEvent(eventIndex = event2Selected)
+    event2Selected = comboList(items = eventsNames2, selected = event2Selected,
+        itemHeight = labelHeight.int, x = 290, y = 200)
 
 proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of proto ships which can be set
