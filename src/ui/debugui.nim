@@ -547,17 +547,17 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
             if index in traders:
               eventsList.add(y = initEventData(skyX = ship2X, skyY = ship2Y,
                   time = shipDuration, eType = trader, shipIndex = index))
-              eventsNames2.add(y = " {Trader: " & protoShipsList[index].name & "}")
+              eventsNames2.add(y = "Trader: " & protoShipsList[index].name)
             elif index in friendlyShips:
               eventsList.add(y = initEventData(skyX = ship2X, skyY = ship2Y,
                   time = shipDuration, eType = friendlyShip, shipIndex = index))
-              eventsNames2.add(y = " {Friendly ship: " & protoShipsList[
-                  index].name & "}")
+              eventsNames2.add(y = "Friendly ship: " & protoShipsList[
+                  index].name)
             else:
               eventsList.add(y = initEventData(skyX = ship2X, skyY = ship2Y,
                   time = shipDuration, eType = enemyShip, shipIndex = index))
-              eventsNames2.add(y = " {Enemy ship: " & protoShipsList[
-                  index].name & "}")
+              eventsNames2.add(y = "Enemy ship: " & protoShipsList[
+                  index].name)
           except KeyError:
             discard
           skyMap[ship2X][ship2Y].eventIndex = eventsList.high
@@ -586,17 +586,17 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
         eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
             skyY = skyBases[base2Selected].skyY, time = eventDuration,
             eType = disease))
-        eventsNames2.add(y = " {Disease in base: " & skyBases[base2Selected].name & "}")
+        eventsNames2.add(y = "Disease in base: " & skyBases[base2Selected].name)
       of 1:
         eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
             skyY = skyBases[base2Selected].skyY, time = eventDuration,
             eType = doublePrice, itemIndex = item3Selected))
-        eventsNames2.add(y = " {Double price in base: " & skyBases[base2Selected].name & "}")
+        eventsNames2.add(y = "Double price in base: " & skyBases[base2Selected].name)
       of 2:
         eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
             skyY = skyBases[base2Selected].skyY, time = eventDuration,
             eType = fullDocks))
-        eventsNames2.add(y = " {Full docks in base: " & skyBases[base2Selected].name & "}")
+        eventsNames2.add(y = "Full docks in base: " & skyBases[base2Selected].name)
       else:
         discard
       skyMap[skyBases[base2Selected].skyX][skyBases[
