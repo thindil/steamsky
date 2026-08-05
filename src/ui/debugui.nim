@@ -39,13 +39,13 @@ var
   shipX, shipY, weight, maxDurability, itemAmount, cargoAmount, ship2X, ship2Y,
     shipDuration, eventDuration: Positive = 1
   playerModules, protoModules, crewList, availableSkills, itemsNames,
-    cargoNames, basesNames, basesTypesNames, ownersNames, shipsNames: seq[
-      string] = @[]
+    cargoNames, basesNames, basesTypesNames, ownersNames, shipsNames,
+    eventsNames: seq[string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
     skillSelected, itemQuality, itemSelected, cargoSelected, cargoQuality,
     baseSelected, baseTypeSelected, ownerSelected, sizeSelected, population,
     money, shipSelected, base2Selected, item2Selected,
-    eventSelected, item3Selected: Natural = 0
+    eventSelected, item3Selected, event2Selected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
   itemName, cargoName, baseName, shipName, base2Name, searchItem, searchItem2,
@@ -178,6 +178,38 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   searchBase = ""
   searchBase2 = ""
   searchShip = ""
+  eventsNames = @[]
+  for event in eventsList:
+    try:
+      case event.eType
+      of enemyShip:
+        eventsNames.add(y = " {Enemy ship: " & protoShipsList[
+            event.shipIndex].name & "}")
+      of attackOnBase:
+        eventsNames.add(y = " {Attack on base: " & protoShipsList[
+            event.shipIndex].name & "}")
+      of disease:
+        eventsNames.add(y = " {Disease in base: " & skyBases[skyMap[event.skyX][
+            event.skyY].baseIndex].name & "}")
+      of doublePrice:
+        eventsNames.add(y = " {Double price in base: " & skyBases[skyMap[
+            event.skyX][event.skyY].baseIndex].name & "}")
+      of fullDocks:
+        eventsNames.add(y = " {Full docks in base: " & skyBases[skyMap[
+            event.skyX][event.skyY].baseIndex].name & "}")
+      of enemyPatrol:
+        eventsNames.add(y = " {Enemy patrol: " & protoShipsList[
+            event.shipIndex].name & "}")
+      of trader:
+        eventsNames.add(y = " {Trader: " & protoShipsList[event.shipIndex].name & "}")
+      of friendlyShip:
+        eventsNames.add(y = " {Friendly ship: " & protoShipsList[
+            event.shipIndex].name & "}")
+      else:
+        discard
+    except:
+      discard
+  event2Selected = 0
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
