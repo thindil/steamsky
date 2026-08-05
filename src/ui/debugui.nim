@@ -40,7 +40,7 @@ var
     shipDuration, eventDuration: Positive = 1
   playerModules, protoModules, crewList, availableSkills, itemsNames,
     cargoNames, basesNames, basesTypesNames, ownersNames, shipsNames,
-    eventsNames: seq[string] = @[]
+    eventsNames2: seq[string] = @[]
   moduleSelected, protoSelected, durability, upgradeProgress, crewSelected,
     skillSelected, itemQuality, itemSelected, cargoSelected, cargoQuality,
     baseSelected, baseTypeSelected, ownerSelected, sizeSelected, population,
@@ -178,32 +178,32 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   searchBase = ""
   searchBase2 = ""
   searchShip = ""
-  eventsNames = @[]
+  eventsNames2 = @[]
   for event in eventsList:
     try:
       case event.eType
       of enemyShip:
-        eventsNames.add(y = " {Enemy ship: " & protoShipsList[
+        eventsNames2.add(y = " {Enemy ship: " & protoShipsList[
             event.shipIndex].name & "}")
       of attackOnBase:
-        eventsNames.add(y = " {Attack on base: " & protoShipsList[
+        eventsNames2.add(y = " {Attack on base: " & protoShipsList[
             event.shipIndex].name & "}")
       of disease:
-        eventsNames.add(y = " {Disease in base: " & skyBases[skyMap[event.skyX][
+        eventsNames2.add(y = " {Disease in base: " & skyBases[skyMap[event.skyX][
             event.skyY].baseIndex].name & "}")
       of doublePrice:
-        eventsNames.add(y = " {Double price in base: " & skyBases[skyMap[
+        eventsNames2.add(y = " {Double price in base: " & skyBases[skyMap[
             event.skyX][event.skyY].baseIndex].name & "}")
       of fullDocks:
-        eventsNames.add(y = " {Full docks in base: " & skyBases[skyMap[
+        eventsNames2.add(y = " {Full docks in base: " & skyBases[skyMap[
             event.skyX][event.skyY].baseIndex].name & "}")
       of enemyPatrol:
-        eventsNames.add(y = " {Enemy patrol: " & protoShipsList[
+        eventsNames2.add(y = " {Enemy patrol: " & protoShipsList[
             event.shipIndex].name & "}")
       of trader:
-        eventsNames.add(y = " {Trader: " & protoShipsList[event.shipIndex].name & "}")
+        eventsNames2.add(y = " {Trader: " & protoShipsList[event.shipIndex].name & "}")
       of friendlyShip:
-        eventsNames.add(y = " {Friendly ship: " & protoShipsList[
+        eventsNames2.add(y = " {Friendly ship: " & protoShipsList[
             event.shipIndex].name & "}")
       else:
         discard
@@ -543,15 +543,23 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
       generateTraders(ships = traders)
       for index, ship in protoShipsList:
         if ship.name == shipName:
-          if index in traders:
-            eventsList.add(y = initEventData(skyX = ship2X, skyY = ship2Y,
-                time = shipDuration, eType = trader, shipIndex = index))
-          elif index in friendlyShips:
-            eventsList.add(y = initEventData(skyX = ship2X, skyY = ship2Y,
-                time = shipDuration, eType = friendlyShip, shipIndex = index))
-          else:
-            eventsList.add(y = initEventData(skyX = ship2X, skyY = ship2Y,
-                time = shipDuration, eType = enemyShip, shipIndex = index))
+          try:
+            if index in traders:
+              eventsList.add(y = initEventData(skyX = ship2X, skyY = ship2Y,
+                  time = shipDuration, eType = trader, shipIndex = index))
+              eventsNames2.add(y = " {Trader: " & protoShipsList[index].name & "}")
+            elif index in friendlyShips:
+              eventsList.add(y = initEventData(skyX = ship2X, skyY = ship2Y,
+                  time = shipDuration, eType = friendlyShip, shipIndex = index))
+              eventsNames2.add(y = " {Friendly ship: " & protoShipsList[
+                  index].name & "}")
+            else:
+              eventsList.add(y = initEventData(skyX = ship2X, skyY = ship2Y,
+                  time = shipDuration, eType = enemyShip, shipIndex = index))
+              eventsNames2.add(y = " {Enemy ship: " & protoShipsList[
+                  index].name & "}")
+          except KeyError:
+            discard
           skyMap[ship2X][ship2Y].eventIndex = eventsList.high
   group(title = "baseProperties", flags = {windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.6, 0.2])
@@ -578,14 +586,17 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
         eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
             skyY = skyBases[base2Selected].skyY, time = eventDuration,
             eType = disease))
+        eventsNames2.add(y = " {Disease in base: " & skyBases[base2Selected].name & "}")
       of 1:
         eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
             skyY = skyBases[base2Selected].skyY, time = eventDuration,
             eType = doublePrice, itemIndex = item3Selected))
+        eventsNames2.add(y = " {Double price in base: " & skyBases[base2Selected].name & "}")
       of 2:
         eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
             skyY = skyBases[base2Selected].skyY, time = eventDuration,
             eType = fullDocks))
+        eventsNames2.add(y = " {Full docks in base: " & skyBases[base2Selected].name & "}")
       else:
         discard
       skyMap[skyBases[base2Selected].skyX][skyBases[
