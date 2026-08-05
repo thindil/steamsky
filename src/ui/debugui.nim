@@ -48,7 +48,8 @@ var
     eventSelected, item3Selected: Natural = 0
   memberProperties: array[6, Natural] = [0, 0, 0, 0, 0, 0]
   memberAttribs, memberSkills: seq[AttributeData] = @[]
-  itemName, cargoName, baseName, shipName, base2Name: string = ""
+  itemName, cargoName, baseName, shipName, base2Name, searchItem, searchItem2,
+    searchBase, searchBase2, searchShip: string = ""
   debugDialog: DebugDialogs = none
   debugTab: DebugTabs = ship
   reputation: ReputationRange = 0
@@ -172,6 +173,11 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
   eventSelected = 0
   item2Selected = 0
   eventDuration = 15
+  searchItem = ""
+  searchItem2 = ""
+  searchBase = ""
+  searchBase2 = ""
+  searchShip = ""
 
 proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the tab which allows changes in the player's ship
@@ -321,9 +327,6 @@ proc showCargoTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Quality:")
   cargoQuality = comboList(items = itemQualities, selected = cargoQuality,
       itemHeight = labelHeight.int, x = 235, y = 125)
-
-var
-  searchItem, searchItem2, searchBase, searchBase2, searchShip: string = ""
 
 proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be added to the player's
