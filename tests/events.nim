@@ -45,7 +45,7 @@ suite "Unit tests for events module":
     updateEvents(1)
 
   test "Deleting an event.":
-    eventsList.add(EventData(eType: doublePrice, skyX: 1, skyY: 1, itemIndex: 1, time: 10))
+    eventsList.add(initEventData(eType = doublePrice, skyX = 1, skyY = 1, itemIndex = 1, time = 10))
     deleteEvent(0)
     check:
       eventsList.len == 0
