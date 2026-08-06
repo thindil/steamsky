@@ -20,6 +20,9 @@ All notable changes to this project will be documented in this file.
 - Better looking checkboxes in tables
 - Better looking trading screen
 
+### Removed
+- Unused keyboard shortcuts
+
 ### Fixed
 - Showing orders for the whole player's ship's crew
 - Showing the last in-game messages in the player's ship's info and knowledge
