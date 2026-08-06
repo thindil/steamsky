@@ -1745,8 +1745,7 @@ type
 
 proc initEventData*(eType: EventsTypes; skyX: MapXRange = 1;
     skyY: MapYRange = 1; time: Positive = 1; itemIndex: ExtendedNatural = 0;
-    shipIndex: ExtendedNatural = 0; data: range[
-    -1_000_000..100_000] = 0): EventData {.raises: [], tags: [], contractual.} =
+    shipIndex: ExtendedNatural = 0): EventData {.raises: [], tags: [], contractual.} =
   ## Create a new data structure for an in-game event
   ##
   ## * eType     - The type of the event
@@ -1789,6 +1788,20 @@ type
     minAmount*: Natural
     maxAmount*: Natural
 
+proc initMobInventoryRecord*(protoIndex: Natural = 0; minAmount: Natural = 0;
+    maxAmount: Natural = 0): MobInventoryRecord {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for a mob's inventory's items
+  ##
+  ## * protoIndex - The index of the item's prototype
+  ## * minAmount  - The minimal amount of the item
+  ## * maxAmount  - The maximum amount of the item
+  ##
+  ## Returns the new structure with information about the selected item
+  return MobInventoryRecord(protoIndex: protoIndex, minAmount: minAmount,
+      maxAmount: maxAmount)
+
+type
   ShipBonusData* = object
     ## Used to store data for proto ships bonuses, like accuracy, evasion, etc
     ##
