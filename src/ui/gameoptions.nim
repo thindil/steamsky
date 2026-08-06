@@ -98,8 +98,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # Show tab buttons
   changeStyle(field = spacing, x = 0, y = 0):
     changeStyle(field = buttonRounding, value = 0):
-      const tabs: array[7, string] = ["General", "Movement keys", "Menu keys",
-          "Map keys", "General keys", "Interface", "Info"]
+      const tabs: array[6, string] = ["General", "Movement keys", "Menu keys",
+          "Map keys", "Interface", "Info"]
       setLayoutRowDynamic(height = tabHeight, cols = tabs.len)
       for index, tab in tabs:
         try:
@@ -389,32 +389,8 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         mapAccelerators[4] = "-"
         mapAccelerators[2] = "v"
         setMapKeys()
-    # General keys
-    of 4:
-      const keysTexts: array[4, KeyTexts] = [KeyTexts(
-          label: "Resize first section",
-          tooltip: "resize (maximize or minimize) the first section of information (like ship info, knowledge or in combat)."),
-          KeyTexts(label: "Resize second section",
-          tooltip: "resize (maximize or minimize) the second section of information (like ship info, knowledge or in combat)."),
-          KeyTexts(label: "Resize third section",
-          tooltip: "resize (maximize or minimize) the third section of information (like ship info, knowledge or in combat)."),
-          KeyTexts(label: "Resize fourth section",
-          tooltip: "resize (maximize or minimize) the fourth section of information (like ship info, knowledge or in combat).")]
-      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
-          0.25, 0.05])
-      for index, key in generalKeysOptions.mpairs:
-        addAccelerator(label = keysTexts[index].label & ":",
-            tooltip = "Key used to " & keysTexts[index].tooltip,
-            value = key, index = index, dialog = dialog)
-      setLayoutRowDynamic(height = buttonHeight, cols = 1)
-      labelButton(title = "Reset general keys to default"):
-        mapAccelerators[34] = "Control-a"
-        mapAccelerators[35] = "Control-b"
-        mapAccelerators[36] = "Control-c"
-        mapAccelerators[37] = "Control-d"
-        setGeneralKeys()
     # Interface options
-    of 5:
+    of 4:
       setLayoutRowDynamic(height = editHeight, cols = 2)
       addComboList(label = "Interace theme:", tooltip = "Select UI theme.",
           items = interfaceThemes, value = interfaceOptions[0])
@@ -461,7 +437,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         gameSettings.interfaceFontSize = 14
         setFontsSizes()
     # Paths information
-    of 6:
+    of 5:
       const pathsTexts: array[4, KeyTexts] = [KeyTexts(
           label: "Data directory path:",
           tooltip: "Place where all standard game data are."),
