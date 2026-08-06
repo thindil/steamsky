@@ -576,27 +576,6 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     elif key == fullScreenAccel:
       gameSettings.fullScreen = not gameSettings.fullScreen
       nuklearSetWindowFullScreen(fullScreen = gameSettings.fullScreen)
-    elif state in {shipInfo, knowledgeLists}:
-      if key == generalAccelerators[0]:
-        if expandedSection == 1:
-          expandedSection = 0
-        else:
-          expandedSection = 1
-      elif key == generalAccelerators[1]:
-        if expandedSection == 2:
-          expandedSection = 0
-        else:
-          expandedSection = 2
-      elif key == generalAccelerators[2]:
-        if expandedSection == 3:
-          expandedSection = 0
-        else:
-          expandedSection = 3
-      elif key == generalAccelerators[3]:
-        if expandedSection == 4:
-          expandedSection = 0
-        else:
-          expandedSection = 4
     elif playerShip.crew[0].health > 0:
       if key == menuAccelerators[8]:
         showHelpScreen(dialog = dialog, state = state)
