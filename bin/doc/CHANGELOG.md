@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Cancel buttons to vairuos dialogs in debug menu
 - Ability to search for various things when modifying the game via debug menu
 - Deleting events in the debug menu
+- Resizing the map's font with mouse wheel
 
 ### Changed
 - Better looking dialogs with information about the player's ship's modules and
