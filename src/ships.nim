@@ -149,11 +149,11 @@ proc loadShipCargo(shipNode: XmlNode; shipAction: DataAction;
       case itemAction
       of DataAction.add:
         if itemAmount > 0:
-          ship.cargo.add(y = MobInventoryRecord(protoIndex: itemIndex,
-              minAmount: itemAmount, maxAmount: 0))
+          ship.cargo.add(y = initMobInventoryRecord(protoIndex = itemIndex,
+              minAmount = itemAmount, maxAmount = 0))
         else:
-          ship.cargo.add(y = MobInventoryRecord(protoIndex: itemIndex,
-              minAmount: minAmount, maxAmount: maxAmount))
+          ship.cargo.add(y = initMobInventoryRecord(protoIndex = itemIndex,
+              minAmount = minAmount, maxAmount = maxAmount))
       of DataAction.update:
         for cargoItem in ship.cargo.mitems:
           if cargoItem.protoIndex == itemIndex:

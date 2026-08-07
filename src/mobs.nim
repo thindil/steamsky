@@ -231,20 +231,20 @@ proc loadMobs*(fileName: Path) {.raises: [DataLoadingError],
         case itemAction
         of DataAction.add:
           if amount > 0:
-            mob.inventory.add(y = MobInventoryRecord(protoIndex: itemIndex,
-                minAmount: amount, maxAmount: 0))
+            mob.inventory.add(y = initMobInventoryRecord(protoIndex = itemIndex,
+                minAmount = amount, maxAmount = 0))
           else:
-            mob.inventory.add(y = MobInventoryRecord(protoIndex: itemIndex,
-                minAmount: minAmount, maxAmount: maxAmount))
+            mob.inventory.add(y = initMobInventoryRecord(protoIndex = itemIndex,
+                minAmount = minAmount, maxAmount = maxAmount))
         of DataAction.update:
           for mitem in mob.inventory.mitems:
             if mitem.protoIndex == itemIndex:
               if amount > 0:
-                mitem = MobInventoryRecord(protoIndex: itemIndex,
-                    minAmount: amount, maxAmount: 0)
+                mitem = initMobInventoryRecord(protoIndex = itemIndex,
+                    minAmount = amount, maxAmount = 0)
               else:
-                mitem = MobInventoryRecord(protoIndex: itemIndex,
-                    minAmount: minAmount, maxAmount: maxAmount)
+                mitem = initMobInventoryRecord(protoIndex = itemIndex,
+                    minAmount = minAmount, maxAmount = maxAmount)
               break
         of DataAction.remove:
           var deleteIndex: int = -1
