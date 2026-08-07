@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
   inventory dialog and the trading screen
 - Better looking checkboxes in tables
 - Better looking trading screen
+- Size of the player's ship's movement buttons
 
 ### Removed
 - Unused keyboard shortcuts
