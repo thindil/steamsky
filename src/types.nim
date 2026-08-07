@@ -1745,7 +1745,8 @@ type
 
 proc initEventData*(eType: EventsTypes; skyX: MapXRange = 1;
     skyY: MapYRange = 1; time: Positive = 1; itemIndex: ExtendedNatural = 0;
-    shipIndex: ExtendedNatural = 0): EventData {.raises: [], tags: [], contractual.} =
+    shipIndex: ExtendedNatural = 0): EventData {.raises: [], tags: [],
+        contractual.} =
   ## Create a new data structure for an in-game event
   ##
   ## * eType     - The type of the event
@@ -1784,9 +1785,16 @@ type
     ## * protoIndex - The index of the item's prototype
     ## * minAmount  - The minimal amount of the item
     ## * maxAmount  - The maximum amount of the item
-    protoIndex*: Natural
-    minAmount*: Natural
-    maxAmount*: Natural
+    protoIndex: Natural
+    minAmount: Natural
+    maxAmount: Natural
+
+typeGetterSetter(baseType = MobInventoryRecord, varName = item,
+    name = protoIndex, typ = Natural)
+typeGetterSetter(baseType = MobInventoryRecord, varName = item,
+    name = minAmount, typ = Natural)
+typeGetterSetter(baseType = MobInventoryRecord, varName = item,
+    name = maxAmount, typ = Natural)
 
 proc initMobInventoryRecord*(protoIndex: Natural = 0; minAmount: Natural = 0;
     maxAmount: Natural = 0): MobInventoryRecord {.raises: [], tags: [],
