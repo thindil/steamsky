@@ -495,6 +495,8 @@ proc moveShipToDestination(dialog: var GameDialog; state: var GameState): Natura
       break
     if result in 6..7:
       break
+  centerX = playerShip.skyX
+  centerY = playerShip.skyY
 
 type
   MoveDirection = enum
