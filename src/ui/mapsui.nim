@@ -856,6 +856,11 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   let mapHeight: float = (height * rows).float - 15.0
   setLayoutRowDynamic(height = mapHeight, cols = 1)
   group(title = "MapGroup", flags = {windowNoScrollbar}):
+    let scrollValue: range[-1000..1000] = getInputScroll()
+    if scrollValue > 0:
+      zoomMap(dialog = dialog)
+    elif scrollValue < 0:
+      zoomMap(dialog = dialog, zoomIn = false)
     var
       startX: int = centerX - (cols / 2).int
       startY: int = centerY - (rows / 2).int
