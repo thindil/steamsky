@@ -683,7 +683,7 @@ proc showButtons(dialog: var GameDialog; state: var GameState) {.raises: [], tag
           selected = playerShip.speed.ord - 1, itemHeight = labelHeight.int, x = 200, y = 50,
           tooltip = "Set speed for your ship. The faster you move, the more fuel used. But faster movement has bigger chance to evade enemies.") + 1).ShipSpeed
       setLayoutRowStatic(height = dialogButtonHeight, cols = 3, ratio =
-        [(dialogButtonHeight + 10).cfloat, (dialogButtonHeight + 10), (dialogButtonHeight + 10)])
+        [(dialogButtonHeight + 5).cfloat, (dialogButtonHeight + 5), (dialogButtonHeight + 5)])
       imageButton(image = images[arrowUpLeft],
           tooltip = "Move ship up and left"):
         moveShipOnMap(direction = northWest, dialog = dialog, state = state)
