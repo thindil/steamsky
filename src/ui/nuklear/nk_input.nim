@@ -147,3 +147,12 @@ proc inputButton*(id: Buttons; x, y: Natural; down: bool = false) {.raises: [],
   ## * down - if true, the button is hold
   nk_input_button(ctx = ctx, id = id, x = x.cint, y = y.cint,
       down = down.nk_bool)
+
+proc getInputScroll*(): int {.raises: [], tags: [], contractual.} =
+  ## Get the value of the last mouse scroll in Y axis
+  ##
+  ## Returns the value of the last mouse scroll in Y axis
+  proc nk_get_input_scroll(ctx): cint {.importc, nodecl, raises: [], tags: [],
+      contractual.}
+    ## A binding to Nuklear's function.
+  return nk_get_input_scroll(ctx = ctx).int
