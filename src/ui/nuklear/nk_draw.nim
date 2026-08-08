@@ -43,13 +43,14 @@ proc nk_draw_next*(cmd: ptr nk_draw_command; buffer: ptr nk_buffer;
     ctx): ptr nk_draw_command {.importc: "nk__draw_next", nodecl, raises: [],
     tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-template nkDrawForeach*(ctx; b: ptr nk_buffer; code: untyped) =
+template nkDrawForeach*(cmd: ptr nk_draw_command; ctx; b: ptr nk_buffer; code: untyped) =
   ## Draw the UI with commands from the buffer
   ##
+  ## * cmd  - the Nuklear drawing command
   ## * ctx  - the Nuklear context
   ## * b    - the buffer with Nuklear commands
   ## * code - the code to exexute
-  var cmd: ptr nk_draw_command = nk_draw_begin(ctx = ctx, buffer = b)
+  cmd = nk_draw_begin(ctx = ctx, buffer = b)
   while cmd != nil:
     code
     cmd = nk_draw_next(cmd = cmd, buffer = b, ctx = ctx)

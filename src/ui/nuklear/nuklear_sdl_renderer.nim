@@ -633,6 +633,9 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #    ## Internal SDL binding
 #    var viewport: SDL_Rect = SDL_Rect()
 #    SDL_RenderGetViewport(renderer = sdl.renderer, rect = viewport.addr)
+#  var cmd: ptr nk_draw_command = nil
+#  nkDrawForeach(cmd = cmd, ctx = ctx, b = cmds):
+#    discard
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
