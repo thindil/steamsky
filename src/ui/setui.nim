@@ -878,8 +878,7 @@ proc refreshCargoList*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   setCargoText(baseIndex = 0, dialog = dialog)
   typesList = @["All"]
   # Set indexes of items in the cargo
-  if itemsSortOrder == defaultItemsSortOrder:
-    itemsIndexes = @[]
+  if itemsIndexes.len == 0:
     for index in playerShip.cargo.low .. playerShip.cargo.high:
       itemsIndexes.add(y = index)
   # Set the list of types of items in the cargo
@@ -925,6 +924,7 @@ proc setShipInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   modulesIndexes = @[]
   for index in playerShip.modules.low..playerShip.modules.high:
     modulesIndexes.add(y = index)
+  itemsIndexes = @[]
   refreshCargoList(dialog = dialog)
   crewIndex = 0
 
