@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Refreshing the list of ships prototypes in the debug menu
 - Centering the map on the player's ship's after moving to the destination
 - Showing reputation in not visited bases
+- Size of the player's ship's orders' menu
 
 ## [12.5] - 2026-07-12
 
