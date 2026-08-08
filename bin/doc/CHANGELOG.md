@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Starting combat when an enemy's ship intercepts the player
 - Showing info about gender in the player's ship's crew members' info dialog
 - Refreshing the list of ships prototypes in the debug menu
+- Centering the map on the player's ship's after moving to the destination
 
 ## [12.5] - 2026-07-12
 
