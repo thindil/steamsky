@@ -1818,6 +1818,18 @@ type
     minValue*: Natural
     maxValue*: Natural
 
+proc initShipBonusData*(minValue: Natural = 0;
+    maxValue: Natural = 0): ShipBonusData {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for a ship's bonuses
+  ##
+  ## * minValue - The minimum value of the bonus
+  ## * maxValue - The maximum value of the bonus
+  ##
+  ## Returns the new structure with information about the selected bonus
+  return ShipBonusData(minValue: minValue, maxValue: maxValue)
+
+type
   ProtoMemberData* = object
     ## Used to store data about the crew member in prototypes of ships
     ##
