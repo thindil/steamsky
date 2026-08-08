@@ -65,38 +65,38 @@ proc countHeight(baseIndex: ExtendedBasesRange;
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog if error happened.
-  result = (dialogButtonHeight * 2).Positive + 5
+  result = (dialogButtonHeight * 2).Positive + 20
   if playerShip.speed == docked:
     result += dialogButtonHeight.Positive
     if getBasePopulation(baseIndex = baseIndex) == empty:
-      result += dialogButtonHeight.Positive
+      result += dialogButtonHeight.Positive + 5
     else:
       result += dialogButtonHeight.Positive
       if haveTrader:
-        result += (dialogButtonHeight.Positive * 2)
+        result += (dialogButtonHeight.Positive * 2) + 10
         if skyBases[baseIndex].recruits.len > 0:
-          result += dialogButtonHeight.Positive
+          result += dialogButtonHeight.Positive + 5
       if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
-        result += dialogButtonHeight.Positive
+        result += dialogButtonHeight.Positive + 5
       if not skyBases[baseIndex].askedForBases:
-        result += dialogButtonHeight.Positive
+        result += dialogButtonHeight.Positive + 5
       try:
         if "temple" in basesTypesList[skyBases[baseIndex].baseType].flags:
-          result += dialogButtonHeight.Positive
+          result += dialogButtonHeight.Positive + 5
       except:
         dialog = setError(message = "Can't check if base has temple flag.")
         return
       for member in playerShip.crew:
         if member.health < 100:
-          result += dialogButtonHeight.Positive
+          result += dialogButtonHeight.Positive + 5
           break
       for module in playerShip.modules:
         if module.durability < module.maxDurability:
-          result += dialogButtonHeight.Positive
+          result += dialogButtonHeight.Positive + 5
           break
       try:
         if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
-          result += dialogButtonHeight.Positive
+          result += dialogButtonHeight.Positive + 5
       except:
         dialog = setError(message = "Can't check if the base has shipyard flag.")
         return
@@ -105,14 +105,14 @@ proc countHeight(baseIndex: ExtendedBasesRange;
           if index notin knownRecipes and index in basesTypesList[skyBases[
               baseIndex].baseType].recipes and recipe.reputation <= skyBases[
               baseIndex].reputation.level:
-            result += dialogButtonHeight.Positive
+            result += dialogButtonHeight.Positive + 5
             break
         except:
           dialog = setError(message = "Can't check if base has recipes for sale.")
           return
       countMissionHeight(baseIndex = baseIndex, height = result)
       if playerShip.homeBase != baseIndex:
-        result += dialogButtonHeight.Positive
+        result += dialogButtonHeight.Positive + 5
   else:
     result += 5
     var event: EventsTypes = EventsTypes.none
@@ -121,11 +121,11 @@ proc countHeight(baseIndex: ExtendedBasesRange;
           playerShip.skyY].eventIndex].eType
     case event
     of enemyShip, enemyPatrol:
-      result += dialogButtonHeight.Positive
+      result += dialogButtonHeight.Positive + 5
     of fullDocks:
-      result += dialogButtonHeight.Positive
+      result += dialogButtonHeight.Positive + 5
     of attackOnBase:
-      result += dialogButtonHeight.Positive
+      result += dialogButtonHeight.Positive + 5
     of disease:
       if haveTrader:
         let itemIndex: int = try:
@@ -136,36 +136,36 @@ proc countHeight(baseIndex: ExtendedBasesRange;
             dialog = setError(message = "Can't find medicine in the ship cargo.")
             return
         if itemIndex > -1:
-          result += (dialogButtonHeight.Positive * 2)
+          result += (dialogButtonHeight.Positive * 2) + 10
     of EventsTypes.none, doublePrice, baseRecovery:
       if baseIndex > 0:
         if skyBases[baseIndex].reputation.level > -25:
-          result += dialogButtonHeight.Positive
+          result += dialogButtonHeight.Positive + 5
         for mission in missions.acceptedMissions:
           if haveTrader and mission.targetX == playerShip.skyX and
               mission.targetY == playerShip.skyY and mission.finished:
-            result += dialogButtonHeight.Positive
+            result += dialogButtonHeight.Positive + 5
       else:
         for mission in missions.acceptedMissions:
           if mission.targetX == playerShip.skyX and mission.targetY ==
               playerShip.skyY and not mission.finished:
             if mission.mType notin {deliver, passenger}:
-              result += dialogButtonHeight.Positive
+              result += dialogButtonHeight.Positive + 5
     of trader:
       if haveTrader:
-        result += (dialogButtonHeight.Positive * 3)
-      result += dialogButtonHeight.Positive
+        result += (dialogButtonHeight.Positive * 3) + 15
+      result += dialogButtonHeight.Positive + 5
     of friendlyShip:
       if haveTrader:
         try:
           if tradersName in protoShipsList[eventsList[skyMap[playerShip.skyX][
               playerShip.skyY].eventIndex].shipIndex].name:
-            result += (dialogButtonHeight.Positive * 2)
+            result += (dialogButtonHeight.Positive * 2) + 10
         except:
           dialog = setError(message = "Can't check if ship is trader.")
           return
-        result += dialogButtonHeight.Positive
-      result += dialogButtonHeight.Positive
+        result += dialogButtonHeight.Positive + 5
+      result += dialogButtonHeight.Positive + 5
 
 proc dockingOrder(escape: bool = false; dialog: var GameDialog;
     state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
@@ -648,7 +648,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
     popup(pType = staticPopup, title = "Ship orders", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
-      setLayoutRowDynamic(height = tabHeight, cols = 1)
+      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
       if currentStory.index.len > 0:
         let step: StepData = try:
             (if currentStory.currentStep == -1: storiesList[
