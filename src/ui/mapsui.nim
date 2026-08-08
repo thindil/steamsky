@@ -138,7 +138,8 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
               row(width = 160):
                 colorLabel(str = factionsList[skyBases[baseIndex].owner].name,
                     color = theme.mapColors[mapGoldenYellow])
-        if getBasePopulation(baseIndex = baseIndex) > empty:
+        if getBasePopulation(baseIndex = baseIndex) > empty and
+              skyBases[baseIndex].visited.year > 0:
           setLayoutRowDynamic(height = labelHeight, cols = 1)
           case skyBases[baseIndex].reputation.level
           of -100 .. -75:
