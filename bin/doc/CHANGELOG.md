@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - Showing reputation in not visited bases
 - Size of the player's ship's orders' menu
 - Crash when entering the player's ship's info screen after trading items
+- Crash when trading items in bases
 
 ## [12.5] - 2026-07-12
 
