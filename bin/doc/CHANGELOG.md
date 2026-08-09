@@ -27,8 +27,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing orders for the whole player's ship's crew
-- Showing the last in-game messages in the player's ship's info and knowledge
-  screens
+- Showing the last in-game messages in the player's ship's info, knowledge and
+  trade screens
 - Title for showing the enemy's ship's crew info during boarding
 - Showing orders menu after docking to a base
 - Starting combat when an enemy's ship intercepts the player
