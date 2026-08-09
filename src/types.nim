@@ -1815,8 +1815,8 @@ type
     ##
     ## * minValue - The minimum value of the bonus
     ## * maxValue - The maximum value of the bonus
-    minValue*: Natural
-    maxValue*: Natural
+    minValue: Natural
+    maxValue: Natural
 
 proc initShipBonusData*(minValue: Natural = 0;
     maxValue: Natural = 0): ShipBonusData {.raises: [], tags: [],
@@ -1828,6 +1828,11 @@ proc initShipBonusData*(minValue: Natural = 0;
   ##
   ## Returns the new structure with information about the selected bonus
   return ShipBonusData(minValue: minValue, maxValue: maxValue)
+
+typeGetterSetter(baseType = ShipBonusData, varName = bonus, name = minValue,
+    typ = Natural)
+typeGetterSetter(baseType = ShipBonusData, varName = bonus, name = maxValue,
+    typ = Natural)
 
 type
   ProtoMemberData* = object
