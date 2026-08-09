@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [12.6] - 2026-08-09
 
 ### Added
 - Auto scroll the last messages window on a new message
