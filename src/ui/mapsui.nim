@@ -860,10 +860,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = mapHeight, cols = 1)
   group(title = "MapGroup", flags = {windowNoScrollbar}):
     let scrollValue: range[-1000..1000] = getInputScroll()
-    if scrollValue > 0:
-      zoomMap(dialog = dialog)
-    elif scrollValue < 0:
-      zoomMap(dialog = dialog, zoomIn = false)
     var
       startX: int = centerX - (cols / 2).int
       startY: int = centerY - (rows / 2).int
@@ -991,6 +987,10 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               dialog = setError(message = "Can't set map color")
               return
             if widgetIsHovered():
+              if scrollValue > 0:
+                zoomMap(dialog = dialog)
+              elif scrollValue < 0:
+                zoomMap(dialog = dialog, zoomIn = false)
               try:
                 showMapInfo(theme = theme, mapXInfo = x, mapYInfo = y)
               except ValueError:
