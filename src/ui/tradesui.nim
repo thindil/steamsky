@@ -478,6 +478,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     options = true):
     return
   if updateData:
+    itemsSortOrder = defaultItemsSortOrder
     refreshItemsList(dialog = dialog)
     baseCargo = skyBases[baseIndex].cargo
   # Show advanced options if needed
