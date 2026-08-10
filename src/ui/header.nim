@@ -222,6 +222,8 @@ proc closeScreen(close: CloseDestination; state: var GameState;
   showOptions = false
   expandedSection = 0
   messageAdded = true
+  if state == options:
+    updateOptions(dialog = dialog)
   case close
   of combat:
     state = combat
@@ -231,8 +233,6 @@ proc closeScreen(close: CloseDestination; state: var GameState;
     state = previousState
   of none:
     discard
-  if previousState == options:
-    updateOptions(dialog = dialog)
 
 proc showShipInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     tags: [RootEffect], contractual.} =
