@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typos in changelog
+- Setting the game options in the options screen
 
 ## [12.6] - 2026-08-09
 
