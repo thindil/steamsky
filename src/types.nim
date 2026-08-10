@@ -1845,6 +1845,20 @@ type
     minAmount*: Positive = 1
     maxAmount*: Natural = 0
 
+proc initProtoMemberData*(protoIndex: Positive = 1; minAmount: Positive = 1;
+    maxAmount: Natural = 0): ProtoMemberData {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for a prototype crew member
+  ##
+  ## * protoIndex - The index of mob's prototype which will be used to create the crew member
+  ## * minAmount  - The minimum amount of the mob as crew members on the ship
+  ## * maxAmount  - The maximum amount of the mob as crew members on the ship
+  ##
+  ## Returns the new structure with information about the selected crew member
+  return ProtoMemberData(protoIndex: protoIndex, minAmount: minAmount,
+      maxAmount: maxAmount)
+
+type
   ProtoShipData* = object
     ## Used to store data about the prototype of the ship
     ##
