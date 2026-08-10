@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Auto scroll the last messages window on a new message
-- Cancel buttons to vairuos dialogs in debug menu
+- Cancel buttons to various dialogs in debug menu
 - Ability to search for various things when modifying the game via debug menu
 - Deleting events in the debug menu
 - Resizing the map's font with mouse wheel
