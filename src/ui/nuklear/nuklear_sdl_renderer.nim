@@ -643,6 +643,17 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #    r.y = cmd.clip_rect.y.cint
 #    r.w = cmd.clip_rect.w.cint
 #    r.h = cmd.clip_rect.h.cint
+#    when defined(nkSDLClampClipRect):
+#      if r.x < 0:
+#        r.w += r.x
+#        r.x = 0
+#      if r.y < 0:
+#        r.h += r.y
+#        r.y = 0
+#      if r.h > viewport.h:
+#        r.h = viewport.h
+#      if r.w > viewport.w:
+#        r.w = viewport.w
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
