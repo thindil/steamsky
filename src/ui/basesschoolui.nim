@@ -110,4 +110,4 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if newCost != minCost:
       minCost = newCost
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      tableHeight, state = state)
+      tableHeight - 80, state = state)
