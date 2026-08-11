@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Typos in changelog
 - Setting the game options in the options screen
+- Showing the last in-game messages in the school screen
 
 ## [12.6] - 2026-08-09
 
