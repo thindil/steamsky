@@ -595,6 +595,9 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #  proc SDL_RenderGetClipRect(renderer: RendererPtr; rect: RectPtr) {.importc,
 #      nodecl, raises: [], tags: [], contractual.}
 #    ## Internal SDL binding
+#  proc SDL_RenderSetClipRect(renderer: RendererPtr;
+#      rect: RectPtr): cint {.importc, nodecl, raises: [], tags: [], contractual.}
+#    ## Internal SDL binding
 #  const vertexLayout: array[4, nk_draw_vertex_layout_element] = [
 #    nk_draw_vertex_layout_element(attribute: vertexPosition),
 #    nk_draw_vertex_layout_element(attribute: vertexTextCoord),
@@ -654,6 +657,10 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #        r.h = viewport.h
 #      if r.w > viewport.w:
 #        r.w = viewport.w
+#    discard SDL_RenderSetClipRect(renderer = sdl.renderer, rect = r.addr)
+#
+#    let vertices: ptr nk_draw_index = cast[ptr nk_draw_index](
+#        nk_buffer_memory_const(buffer = vbuf.addr))
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
