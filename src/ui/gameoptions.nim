@@ -73,8 +73,6 @@ proc showKeyDialog*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       of 3:
         mapKeysOptions[keyIndex] = key
       of 4:
-        generalKeysOptions[keyIndex] = key
-      of 5:
         fullScreenAccel = key
       else:
         discard
