@@ -1833,13 +1833,6 @@ proc setMapKeys*() {.raises: [], tags: [], contractual.} =
   mapKeysOptions[20] = mapAccelerators[4]
   mapKeysOptions[21] = mapAccelerators[2]
 
-proc setGeneralKeys*() {.raises: [], tags: [], contractual.} =
-  ## Set data for general keys in the game options screen
-  generalKeysOptions[0] = mapAccelerators[34]
-  generalKeysOptions[1] = mapAccelerators[35]
-  generalKeysOptions[2] = mapAccelerators[36]
-  generalKeysOptions[3] = mapAccelerators[37]
-
 proc setFontsSizes*() {.raises: [], tags: [], contractual.} =
   ## Set the data for the game's fonts sizes
   interfaceOptions[8] = gameSettings.mapFontSize
@@ -1869,7 +1862,6 @@ proc setOptions*() {.raises: [], tags: [], contractual.} =
   setMovementKeys()
   setMenuKeys()
   setMapKeys()
-  setGeneralKeys()
   var themeIndex: Natural = 0
   for index, theme in themesList:
     interfaceThemes.add(y = theme.name)
