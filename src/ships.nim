@@ -221,11 +221,11 @@ proc loadShipCrew(shipNode: XmlNode; shipAction: DataAction;
       case memberAction
       of DataAction.add:
         if memberAmount > 0:
-          ship.crew.add(y = ProtoMemberData(protoIndex: memberIndex,
-              minAmount: memberAmount, maxAmount: 0))
+          ship.crew.add(y = initProtoMemberData(protoIndex = memberIndex,
+              minAmount = memberAmount))
         else:
-          ship.crew.add(y = ProtoMemberData(protoIndex: memberIndex,
-              minAmount: minAmount, maxAmount: maxAmount))
+          ship.crew.add(y = initProtoMemberData(protoIndex = memberIndex,
+              minAmount = minAmount, maxAmount = maxAmount))
       of DataAction.update:
         for crewMember in ship.crew.mitems:
           if crewMember.protoIndex == memberIndex:
