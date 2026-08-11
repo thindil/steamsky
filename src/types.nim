@@ -1841,9 +1841,9 @@ type
     ## * protoIndex - The index of mob's prototype which will be used to create the crew member
     ## * minAmount  - The minimum amount of the mob as crew members on the ship
     ## * maxAmount  - The maximum amount of the mob as crew members on the ship
-    protoIndex*: Positive = 1
-    minAmount*: Positive = 1
-    maxAmount*: Natural = 0
+    protoIndex: Positive = 1
+    minAmount: Positive = 1
+    maxAmount: Natural = 0
 
 proc initProtoMemberData*(protoIndex: Positive = 1; minAmount: Positive = 1;
     maxAmount: Natural = 0): ProtoMemberData {.raises: [], tags: [],
@@ -1857,6 +1857,13 @@ proc initProtoMemberData*(protoIndex: Positive = 1; minAmount: Positive = 1;
   ## Returns the new structure with information about the selected crew member
   return ProtoMemberData(protoIndex: protoIndex, minAmount: minAmount,
       maxAmount: maxAmount)
+
+typeGetterSetter(baseType = ProtoMemberData, varName = member,
+    name = protoIndex, typ = Positive)
+typeGetterSetter(baseType = ProtoMemberData, varName = member, name = minAmount,
+    typ = Positive)
+typeGetterSetter(baseType = ProtoMemberData, varName = member, name = maxAmount,
+    typ = Natural)
 
 type
   ProtoShipData* = object
