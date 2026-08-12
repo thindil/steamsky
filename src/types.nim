@@ -1884,7 +1884,7 @@ type
     ## * knownRecipes - The list of known recipes (used only by the player's ship)
     ## * reputation   - The level of reputation at which the ship will appear.
     ##                  an enemy, it is negative value, for friendly positive
-    name*: string
+    name*: ShipName
     modules*: seq[Positive]
     accuracy*: ShipBonusData
     combatAi*: ShipCombatAi
@@ -1894,11 +1894,12 @@ type
     cargo*: seq[MobInventoryRecord]
     combatValue*: Positive
     crew*: seq[ProtoMemberData]
-    description*: string
+    description*: Description
     owner*: FactionIndex
     knownRecipes*: seq[string]
     reputation*: Natural
 
+type
   ProtoMobRecord* = object
     ## Used to store data about mobs prototypes
     ##
