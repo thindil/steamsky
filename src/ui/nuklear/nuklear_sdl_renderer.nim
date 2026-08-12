@@ -86,6 +86,8 @@ type
     `type`: cuint
     button, clicks: uint8
     x, y: cint
+  SDL_Color{.importc, nodecl.} = object
+  ColorPtr{.used.} = ptr SDL_Color
   SDL_Scancode = enum
     SDL_SCANCODE_LCTRL = 224
     SDL_SCANCODE_RCTRL = 228
@@ -597,6 +599,11 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #    ## Internal SDL binding
 #  proc SDL_RenderSetClipRect(renderer: RendererPtr;
 #      rect: RectPtr): cint {.importc, nodecl, raises: [], tags: [], contractual.}
+#    ## Internal SDL binding
+#  proc SDL_RenderGeometryRaw(renderer: RendererPtr; texture: TexturePtr;
+#      xy: cfloat; xy_stride: cint; color: ColorPtr; color_stride: cint;
+#      uv: cfloat; uv_stride, num_vertices: cint; indices: pointer; num_indices,
+#      size_indices: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
 #    ## Internal SDL binding
 #  const vertexLayout: array[4, nk_draw_vertex_layout_element] = [
 #    nk_draw_vertex_layout_element(attribute: vertexPosition),
