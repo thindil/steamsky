@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Setting the game options in the options screen
 - Showing the last in-game messages in the school screen
 - Setting keyboard shortcuts in the in-game options screen
+- Setting keyboard shortcuts for the player's ship's speed
 
 ## [12.6] - 2026-08-09
 
