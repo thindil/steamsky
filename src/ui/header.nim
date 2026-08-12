@@ -224,9 +224,11 @@ proc closeScreen(close: CloseDestination; state: var GameState;
   messageAdded = true
   if state == options:
     updateOptions(dialog = dialog)
-    const menuKeysNames: array[1..11, string] = ["ShipInfo", "Orders",
-        "Crafting", "LastMessages", "Knowledge", "WaitOrders", "GameStats",
-        "Help", "GameOptions", "Quit", "Resign"]
+    const
+      menuKeysNames: array[1..11, string] = ["ShipInfo", "Orders", "Crafting",
+          "LastMessages", "Knowledge", "WaitOrders", "GameStats", "Help",
+          "GameOptions", "Quit", "Resign"]
+      mapKeysNames: array[1..37, string] = ["GameMenu", "MapOptions", "ZoomInMap", "ZoomOutMap", "MoveUpLeft", "MoveUp", "MoveUpRight", "MoveLeft", "WaitInPlace", "MoveRight", "MoveDownLeft", "MoveDown", "MoveDownRight", "MoveTo", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
     let keyFile: File = try:
           open(filename = saveDirectory.string & "keys.cfg", mode = fmWrite)
         except:
@@ -235,6 +237,8 @@ proc closeScreen(close: CloseDestination; state: var GameState;
     try:
       for i, key in menuAccelerators:
         keyFile.writeLine(x = menuKeysNames[i] & " = " & key)
+      for i, key in mapAccelerators:
+        keyFile.writeLine(x = mapKeysNames[i] & " = " & key)
     except:
       dialog = setError(message = "Can't save keyboard accelerator.")
       return
