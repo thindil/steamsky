@@ -228,7 +228,16 @@ proc closeScreen(close: CloseDestination; state: var GameState;
       menuKeysNames: array[1..11, string] = ["ShipInfo", "Orders", "Crafting",
           "LastMessages", "Knowledge", "WaitOrders", "GameStats", "Help",
           "GameOptions", "Quit", "Resign"]
-      mapKeysNames: array[1..37, string] = ["GameMenu", "MapOptions", "ZoomInMap", "ZoomOutMap", "MoveUpLeft", "MoveUp", "MoveUpRight", "MoveLeft", "WaitInPlace", "MoveRight", "MoveDownLeft", "MoveDown", "MoveDownRight", "MoveTo", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+      mapKeysNames: array[1..37, string] = ["GameMenu", "MapOptions",
+          "ZoomInMap", "ZoomOutMap", "MoveUpLeft", "MoveUp", "MoveUpRight",
+          "MoveLeft", "WaitInPlace", "MoveRight", "MoveDownLeft", "MoveDown",
+          "MoveDownRight", "MoveTo", "CenterMap", "CenterMapOnHomeBase",
+          "MoveMapUpLeft", "MoveMapUp", "MoveMapUpRight", "MoveMapLeft",
+          "MoveMapRight", "MoveMapDownLeft", "MoveMapDown", "MoveMapDownRight",
+          "MoveCursorUpLeft", "MoveCursorUp", "MoveCursorUpRight",
+          "MoveCursorLeft", "MoveCursorRight", "MoveCursorDownLeft",
+          "MoveCursorDown", "MoveCursorDownRight", "LeftClickMouse", "FullStop",
+          "QuarterSpeed", "HalfSpeed", "FullSpeed"]
     let keyFile: File = try:
           open(filename = saveDirectory.string & "keys.cfg", mode = fmWrite)
         except:
