@@ -224,16 +224,21 @@ proc closeScreen(close: CloseDestination; state: var GameState;
   messageAdded = true
   if state == options:
     updateOptions(dialog = dialog)
-#    let keyFile: File = try:
-#          open(filename = saveDirectory.string & "keys.cfg", mode = fmWrite)
-#        except:
-#          dialog = setError(message = "Can't open keys configuration file.")
-#          return
-#    try:
-#      keyFile.writeLine(x = accel.configName & " = " & accel.shortcut)
-#    except:
-#      return showError(message = "Can't save keyboard accelerator.")
-#    keyFile.close
+    const menuKeysNames: array[1..11, string] = ["ShipInfo", "Orders",
+        "Crafting", "LastMessages", "Knowledge", "WaitOrders", "GameStats",
+        "Help", "GameOptions", "Quit", "Resign"]
+    let keyFile: File = try:
+          open(filename = saveDirectory.string & "keys.cfg", mode = fmWrite)
+        except:
+          dialog = setError(message = "Can't open keys configuration file.")
+          return
+    try:
+      for i, key in menuAccelerators:
+        keyFile.writeLine(x = menuKeysNames[i] & " = " & key)
+    except:
+      dialog = setError(message = "Can't save keyboard accelerator.")
+      return
+    keyFile.close
   case close
   of combat:
     state = combat
