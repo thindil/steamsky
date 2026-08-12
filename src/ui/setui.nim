@@ -1954,10 +1954,6 @@ proc updateOptions*(dialog: var GameDialog) {.raises: [], tags: [WriteIOEffect,
   mapAccelerators[3] = mapKeysOptions[19]
   mapAccelerators[4] = mapKeysOptions[20]
   mapAccelerators[2] = mapKeysOptions[21]
-  mapAccelerators[34] = generalKeysOptions[0]
-  mapAccelerators[35] = generalKeysOptions[1]
-  mapAccelerators[36] = generalKeysOptions[2]
-  mapAccelerators[37] = generalKeysOptions[3]
   var themeIndex: Natural = 0
   for index, theme in themesList:
     if themeIndex == interfaceOptions[0]:
