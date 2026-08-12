@@ -248,6 +248,7 @@ proc closeScreen(close: CloseDestination; state: var GameState;
         keyFile.writeLine(x = menuKeysNames[i] & " = " & key)
       for i, key in mapAccelerators:
         keyFile.writeLine(x = mapKeysNames[i] & " = " & key)
+      keyFile.writeLine(x = "FullScreen = " & fullScreenAccel)
     except:
       dialog = setError(message = "Can't save keyboard accelerator.")
       return
