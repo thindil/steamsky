@@ -208,6 +208,23 @@ proc showInfo(dialog: var GameDialog): bool {.raises: [], tags: [RootEffect],
   else:
     label(str = formattedTime(), alignment = centered, tooltip = "Game time.")
 
+const
+  menuKeysNames*: array[1..11, string] = ["ShipInfo", "Orders", "Crafting",
+      "LastMessages", "Knowledge", "WaitOrders", "GameStats", "Help",
+      "GameOptions", "Quit", "Resign"]
+    ## Configuration names for menu keyboard shortcuts
+  mapKeysNames*: array[1..37, string] = ["GameMenu", "MapOptions",
+      "ZoomInMap", "ZoomOutMap", "MoveUpLeft", "MoveUp", "MoveUpRight",
+      "MoveLeft", "WaitInPlace", "MoveRight", "MoveDownLeft", "MoveDown",
+      "MoveDownRight", "MoveTo", "CenterMap", "CenterMapOnHomeBase",
+      "MoveMapUpLeft", "MoveMapUp", "MoveMapUpRight", "MoveMapLeft",
+      "MoveMapRight", "MoveMapDownLeft", "MoveMapDown", "MoveMapDownRight",
+      "MoveCursorUpLeft", "MoveCursorUp", "MoveCursorUpRight",
+      "MoveCursorLeft", "MoveCursorRight", "MoveCursorDownLeft",
+      "MoveCursorDown", "MoveCursorDownRight", "LeftClickMouse", "FullStop",
+      "QuarterSpeed", "HalfSpeed", "FullSpeed"]
+    ## Configuration names for map keyboard shortcuts
+
 proc closeScreen(close: CloseDestination; state: var GameState;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -224,20 +241,6 @@ proc closeScreen(close: CloseDestination; state: var GameState;
   messageAdded = true
   if state == options:
     updateOptions(dialog = dialog)
-    const
-      menuKeysNames: array[1..11, string] = ["ShipInfo", "Orders", "Crafting",
-          "LastMessages", "Knowledge", "WaitOrders", "GameStats", "Help",
-          "GameOptions", "Quit", "Resign"]
-      mapKeysNames: array[1..37, string] = ["GameMenu", "MapOptions",
-          "ZoomInMap", "ZoomOutMap", "MoveUpLeft", "MoveUp", "MoveUpRight",
-          "MoveLeft", "WaitInPlace", "MoveRight", "MoveDownLeft", "MoveDown",
-          "MoveDownRight", "MoveTo", "CenterMap", "CenterMapOnHomeBase",
-          "MoveMapUpLeft", "MoveMapUp", "MoveMapUpRight", "MoveMapLeft",
-          "MoveMapRight", "MoveMapDownLeft", "MoveMapDown", "MoveMapDownRight",
-          "MoveCursorUpLeft", "MoveCursorUp", "MoveCursorUpRight",
-          "MoveCursorLeft", "MoveCursorRight", "MoveCursorDownLeft",
-          "MoveCursorDown", "MoveCursorDownRight", "LeftClickMouse", "FullStop",
-          "QuarterSpeed", "HalfSpeed", "FullSpeed"]
     var config: Config = newConfig()
     try:
       for i, key in menuAccelerators:
