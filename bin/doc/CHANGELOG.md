@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Saving keyboard shortcuts to file
+
 ### Fixed
 - Typos in changelog
 - Setting the game options in the options screen
