@@ -18,7 +18,7 @@
 ## Provides code related to the game's header, like showing buttons and icons
 ## on it, the game's menu, etc.
 
-import std/[colors, math, tables, strutils]
+import std/[colors, math, parsecfg, tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, messages, shipscargo, shipsmovement, types]
 import coreui, dialogs, errordialog, ordersmenu, setui, themes, waitmenu
@@ -238,21 +238,22 @@ proc closeScreen(close: CloseDestination; state: var GameState;
           "MoveCursorLeft", "MoveCursorRight", "MoveCursorDownLeft",
           "MoveCursorDown", "MoveCursorDownRight", "LeftClickMouse", "FullStop",
           "QuarterSpeed", "HalfSpeed", "FullSpeed"]
-    let keyFile: File = try:
-          open(filename = saveDirectory.string & "keys.cfg", mode = fmWrite)
-        except:
-          dialog = setError(message = "Can't open keys configuration file.")
-          return
+    var config: Config = newConfig()
     try:
       for i, key in menuAccelerators:
-        keyFile.writeLine(x = menuKeysNames[i] & " = " & key)
+        config.setSectionKey(section = "", key = menuKeysNames[i], value = key)
       for i, key in mapAccelerators:
-        keyFile.writeLine(x = mapKeysNames[i] & " = " & key)
-      keyFile.writeLine(x = "FullScreen = " & fullScreenAccel)
+        config.setSectionKey(section = "", key = mapKeysNames[i], value = key)
+      config.setSectionKey(section = "", key = "FullScreen",
+          value = fullScreenAccel)
     except:
       dialog = setError(message = "Can't save keyboard accelerator.")
       return
-    keyFile.close
+    try:
+      config.writeConfig(filename = saveDirectory.string & "keys.cfg")
+    except OSError, IOError:
+      dialog = setError(message = "Can't save file with keyboard accelerators.")
+      return
   case close
   of combat:
     state = combat
