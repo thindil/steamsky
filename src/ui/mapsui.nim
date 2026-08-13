@@ -18,7 +18,7 @@
 ## Provides code related to the game's main map, like, creating the game's UI,
 ## etc.
 
-import std/[colors, math, strutils, tables, unicode]
+import std/[colors, math, parsecfg, streams, strutils, tables, unicode]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, basestypes, config, crew2, events2, game, game2, maps,
     messages, missions, missions2, shipscrew, shipscargo, shipsmovement,
@@ -51,6 +51,17 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   centerX = playerShip.skyX
   centerY = playerShip.skyY
   mapPreview = false
+  # Load keyboard shortcuts
+  let fileName: string = saveDirectory.string & "keys.cfg"
+  var configFile: FileStream = newFileStream(filename = fileName, mode = fmRead)
+  if configFile == nil:
+    return
+  var parser: CfgParser = CfgParser()
+  try:
+    parser.open(input = configFile, filename = fileName)
+  except OSError, IOError, Exception:
+    dialog = setError(message = "Can't initialize configuration file parser.")
+    return
 
 var mapInfoX: float = (windowWidth - 255.0)
 
