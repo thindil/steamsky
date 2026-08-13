@@ -62,6 +62,30 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   except OSError, IOError, Exception:
     dialog = setError(message = "Can't initialize configuration file parser.")
     return
+  while true:
+    try:
+      let entry: CfgEvent = parser.next()
+      case entry.kind
+      of cfgEof:
+        break
+      of cfgKeyValuePair, cfgOption:
+        case entry.key
+        of "PlayerName":
+          newGameSettings.playerName = entry.value
+        else:
+          discard
+      of cfgError:
+        dialog = setError(message = entry.msg)
+        return
+      of cfgSectionStart:
+        discard
+    except ValueError, OSError, IOError:
+      dialog = setError(message =  "Invalid data in the game configuration file.")
+      continue
+  try:
+    parser.close()
+  except OSError, IOError, Exception:
+    dialog = setError(message = "Can't close configuration file parser.")
 
 var mapInfoX: float = (windowWidth - 255.0)
 
