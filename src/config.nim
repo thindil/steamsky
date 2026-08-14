@@ -273,28 +273,28 @@ proc loadConfig*() {.raises: [], tags: [RootEffect], contractual.} =
         of "AutoFinish":
           gameSettings.autoFinish = entry.value.parseAdaBool()
         of "LowFuel":
-          gameSettings.lowFuel = entry.value.parseInt().cint
+          gameSettings.lowFuel = entry.value.parseInt()
         of "LowDrinks":
-          gameSettings.lowDrinks = entry.value.parseInt().cint
+          gameSettings.lowDrinks = entry.value.parseInt()
         of "LowFood":
-          gameSettings.lowFood = entry.value.parseInt().cint
+          gameSettings.lowFood = entry.value.parseInt()
         of "AutoMoveStop":
           gameSettings.autoMoveStop = parseEnum[AutoMoveBreak](s =
             entry.value.toLowerAscii)
         of "WindowWidth":
-          gameSettings.windowWidth = entry.value.parseInt().cint
+          gameSettings.windowWidth = entry.value.parseInt()
         of "WindowHeight":
-          gameSettings.windowHeight = entry.value.parseInt().cint
+          gameSettings.windowHeight = entry.value.parseInt()
         of "MessagesLimit":
-          gameSettings.messagesLimit = entry.value.parseInt().cint
+          gameSettings.messagesLimit = entry.value.parseInt()
         of "SavedMessages":
-          gameSettings.savedMessages = entry.value.parseInt().cint
+          gameSettings.savedMessages = entry.value.parseInt()
         of "HelpFontSize":
-          gameSettings.helpFontSize = entry.value.parseInt().cint
+          gameSettings.helpFontSize = entry.value.parseInt()
         of "MapFontSize":
-          gameSettings.mapFontSize = entry.value.parseInt().cint
+          gameSettings.mapFontSize = entry.value.parseInt()
         of "InterfaceFontSize":
-          gameSettings.interfaceFontSize = entry.value.parseInt().cint
+          gameSettings.interfaceFontSize = entry.value.parseInt()
         of "InterfaceTheme":
           gameSettings.interfaceTheme = entry.value
         of "MessagesOrder":
@@ -309,24 +309,24 @@ proc loadConfig*() {.raises: [], tags: [RootEffect], contractual.} =
         of "ShowLastMessages":
           gameSettings.showLastMessages = entry.value.parseAdaBool()
         of "MessagesPosition":
-          gameSettings.messagesPosition = entry.value.parseInt().cint
+          gameSettings.messagesPosition = entry.value.parseInt()
         of "FullScreen":
           gameSettings.fullScreen = entry.value.parseAdaBool()
         of "AutoCloseMessagesTime":
-          gameSettings.autoCloseMessagesTime = entry.value.parseInt().cint
+          gameSettings.autoCloseMessagesTime = entry.value.parseInt()
         of "AutoSave":
           gameSettings.autoSave = parseEnum[AutoSaveTime](s =
             entry.value.toLowerAscii)
         of "TopicsPosition":
-          gameSettings.topicsPosition = entry.value.parseInt().cint
+          gameSettings.topicsPosition = entry.value.parseInt()
         of "ShowNumbers":
           gameSettings.showNumbers = entry.value.parseAdaBool()
         of "RightButton":
           gameSettings.rightButton = entry.value.parseAdaBool()
         of "ListsLimit":
-          gameSettings.listsLimit = entry.value.parseInt().cint
+          gameSettings.listsLimit = entry.value.parseInt()
         of "WaitMinutes":
-          gameSettings.waitMinutes = entry.value.parseInt().cint
+          gameSettings.waitMinutes = entry.value.parseInt()
         of "AutoDestination":
           gameSettings.autoDestination = entry.value.parseAdaBool()
         else:
