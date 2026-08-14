@@ -1062,7 +1062,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     zoomMap(dialog = dialog)
   labelButton(title = "-", tooltip = "Zoom out the map."):
     zoomMap(dialog = dialog, zoomIn = false)
-  layoutDynamic(height = windowHeight - mapHeight - 75, cols = 2):
+  layoutDynamic(height = windowHeight - mapHeight - 80, cols = 2):
     # Draw last messages
     row(width = 0.75):
       showLastMessages(theme = theme, dialog = dialog, withButtons = false,
