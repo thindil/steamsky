@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Saving keyboard shortcuts to file
+- Saving and loading keyboard shortcuts from a file
 
 ### Fixed
 - Typos in changelog
