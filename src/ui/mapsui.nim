@@ -69,11 +69,13 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       of cfgEof:
         break
       of cfgKeyValuePair, cfgOption:
-        case entry.key
-        of "PlayerName":
-          newGameSettings.playerName = entry.value
+        var index: ExtendedNatural = menuKeysNames.find(item = entry.key)
+        if index > -1:
+          menuAccelerators[index + 1] = entry.value
         else:
-          discard
+          index = mapKeysNames.find(item = entry.key)
+          if index > -1:
+            mapAccelerators[index + 1] = entry.value
       of cfgError:
         dialog = setError(message = entry.msg)
         return
