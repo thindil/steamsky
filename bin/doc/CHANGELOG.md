@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Saving and loading keyboard shortcuts from a file
 
+### Changed
+- Size of last messages window in the map screen
+
 ### Fixed
 - Typos in changelog
 - Setting the game options in the options screen
