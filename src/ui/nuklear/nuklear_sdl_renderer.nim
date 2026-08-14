@@ -611,6 +611,8 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #    nk_draw_vertex_layout_element(attribute: vertexColor),
 #    nk_draw_vertex_layout_element(attribute: vertexAttributeCount)]
 #  type nk_sdl_vertex {.importc: "struct nk_sdl_vertex".} = object
+#    position, uv: array[2, cfloat]
+#    col: array[4, nk_byte]
 #  var config: nk_convert_config = nk_convert_config()
 #  config.vertex_layout = vertexLayout.addr
 #  config.vertex_size = nk_sdl_vertex.sizeof
@@ -645,6 +647,11 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #    var viewport: SDL_Rect = SDL_Rect()
 #    SDL_RenderGetViewport(renderer = sdl.renderer, rect = viewport.addr)
 #  var cmd: ptr nk_draw_command = nil
+#  let
+#    vp: int = nk_sdl_vertex.offsetof(member = position)
+#    vt: int = nk_sdl_vertex.offsetof(member = uv)
+#    vc: int = nk_sdl_vertex.offsetof(member = col)
+#    vs: int = nk_sdl_vertex.sizeof
 #  nkDrawForeach(cmd = cmd, ctx = ctx, b = cmds):
 #    if cmd.elem_count == 0:
 #      continue
@@ -670,9 +677,9 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #        nk_buffer_memory_const(buffer = vbuf.addr))
 #    SDL_RenderGeometryRaw(renderer = sdl.renderer, texture = cast[TexturePtr](
 #        cmd.texture.ptr), xy = (vertices + vp).cfloat, xy_stride = vs,
-#        color = vertices + vc, color_stride = vs, uv = vertices + vt,
-#        uv_stride = vs, nim_vertices = (vbuff.needed / vs), indices = offset,
-#        num_indices = cmd.elem_count, size_indices = 2)
+#        color = cast[ColorPtr](vertices + vc), color_stride = vs,
+#        uv = vertices + vt, uv_stride = vs, nim_vertices = (vbuff.needed / vs),
+#        indices = offset, num_indices = cmd.elem_count, size_indices = 2)
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
