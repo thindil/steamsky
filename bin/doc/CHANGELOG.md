@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Typos in changelog
 - Setting the game options in the options screen
-- Showing the last in-game messages in the school and recruits screens
+- Showing the last in-game messages in the school, recruits, buying recipes,
+  healing wounded crew memebers and repair the ship screens
 - Setting keyboard shortcuts in the in-game options screen
 - Setting keyboard shortcuts for the player's ship's speed
 
