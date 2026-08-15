@@ -476,4 +476,4 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     addPagination(page = currentPage, row = row)
   # Show the last in-game messages
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      tableHeight, state = state)
+      tableHeight - 120, state = state)
