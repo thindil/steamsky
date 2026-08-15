@@ -675,11 +675,12 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 #
 #    let vertices: ptr nk_draw_index = cast[ptr nk_draw_index](
 #        nk_buffer_memory_const(buffer = vbuf.addr))
-#    SDL_RenderGeometryRaw(renderer = sdl.renderer, texture = cast[TexturePtr](
-#        cmd.texture.ptr), xy = (vertices + vp).cfloat, xy_stride = vs,
-#        color = cast[ColorPtr](vertices + vc), color_stride = vs,
-#        uv = vertices + vt, uv_stride = vs, nim_vertices = (vbuff.needed / vs),
-#        indices = offset, num_indices = cmd.elem_count, size_indices = 2)
+#    discard SDL_RenderGeometryRaw(renderer = sdl.renderer, texture = cast[
+#        TexturePtr](cmd.texture.ptr), xy = (cast[int](vertices) + vp).cfloat,
+#        xy_stride = vs.cint, color = cast[ColorPtr](vertices + vc),
+#        color_stride = vs.cint, uv = (cast[int](vertices) + vt).cfloat,
+#        uv_stride = vs.cint, num_vertices = (vbuf.needed / vs).cint,
+#        indices = offset, num_indices = cmd.elem_count.cint, size_indices = 2)
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
