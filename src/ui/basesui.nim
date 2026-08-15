@@ -424,6 +424,6 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      tableHeight, state = state)
+      tableHeight - 80, state = state)
   if dialog == baseActionDialog:
     showRecipeMenu(dialog = dialog, state = state)
