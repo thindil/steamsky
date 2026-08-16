@@ -1112,7 +1112,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     editString(text = nameSearch, maxLen = 64,
         tooltip = "Enter a name of a module which you looking for")
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
-      80 - (if showOptions: 45 else: 0)
+      80 - (2 * labelHeight) - tabHeight - (if showOptions: 45 else: 0)
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "ShipyardGroup", flags = {windowNoFlags}):
     if dialog != none:
