@@ -1907,7 +1907,8 @@ proc initProtoShipData*(name: ShipName = ""; modules: seq[Positive] = @[];
     perception: ShipBonusData = initShipBonusData(); cargo: seq[
     MobInventoryRecord] = @[]; combatValue: Positive = 1; crew: seq[
     ProtoMemberData] = @[]; description: Description = "";
-    owner: FactionIndex = ""): ProtoShipData {.raises: [], tags: [],
+    owner: FactionIndex = ""; knownRecipes: seq[string] = @[];
+    reputation: Natural = 0): ProtoShipData {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for a ship's prototype
   ##
@@ -1923,12 +1924,16 @@ proc initProtoShipData*(name: ShipName = ""; modules: seq[Positive] = @[];
   ## * crew         - The crew of the ship
   ## * description  - The ship's description
   ## * owner        - The faction to which the ship belongs
+  ## * knownRecipes - The list of known recipes (used only by the player's ship)
+  ## * reputation   - The level of reputation at which the ship will appear.
+  ##                  an enemy, it is negative value, for friendly positive
   ##
   ## Returns the new structure with information about the selected prototype ship
   return ProtoShipData(name: name, modules: modules, accuracy: accuracy,
       combatAi: combatAi, evasion: evasion, loot: loot, perception: perception,
       cargo: cargo, combatValue: combatValue, crew: crew,
-      description: description, owner: owner)
+      description: description, owner: owner, knownRecipes: knownRecipes,
+      reputation: reputation)
 
 type
   ProtoMobRecord* = object
