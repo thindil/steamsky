@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Size of last messages window in the map screen
+- Better looking the shipyard screen
 
 ### Fixed
 - Typos in changelog
