@@ -491,7 +491,11 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     labelButton(title = "Select"):
       baseName = basesNames[baseSelected]
-      let base: BaseRecord = skyBases[baseSelected + 1]
+      var base: BaseRecord = initBaseRecord()
+      for base2 in skyBases:
+        if base2.name == baseName:
+          base = base2
+          break
       try:
         baseTypeSelected = base.baseType.parseInt
       except:
