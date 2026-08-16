@@ -1249,4 +1249,4 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      tableHeight, state = state)
+      tableHeight - 200, state = state)
