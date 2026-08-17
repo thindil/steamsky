@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Setting keyboard shortcuts in the in-game options screen
 - Setting keyboard shortcuts for the player's ship's speed
 - Setting a base in debug menu
+- Setting type of a base in debug menu
 
 ## [12.6] - 2026-08-09
 
