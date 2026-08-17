@@ -271,8 +271,6 @@ proc nk_sdl_font_stash_begin(atlas: ptr ptr nk_font_atlas) {.importc, nodecl,
   ## Internal Nuklear binding
 proc nk_sdl_font_stash_end() {.importc, nodecl, raises: [], tags: [], contractual.}
   ## Internal Nuklear binding
-proc nk_sdl_render(aa: AntiAliasing) {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## Internal Nuklear binding
 
 # High level bindings
 
@@ -589,7 +587,117 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
   discard SDL_SetRenderDrawColor(renderer = sdl.renderer, r = (0.10 *
       255).uint8, g = (0.18 * 255).uint8, b = (0.24 * 255).uint8, a = 255)
   discard SDL_RenderClear(renderer = sdl.renderer)
-  nk_sdl_render(aa = antiAliasingOn)
+
+  {.emit: """
+    /* setup global state */
+    struct nk_sdl_device *dev = &sdl.ogl;
+
+    {
+        SDL_Rect saved_clip;
+#ifdef NK_SDL_CLAMP_CLIP_RECT
+        SDL_Rect viewport;
+#endif
+        SDL_bool clipping_enabled;
+        int vs = sizeof(struct nk_sdl_vertex);
+        size_t vp = offsetof(struct nk_sdl_vertex, position);
+        size_t vt = offsetof(struct nk_sdl_vertex, uv);
+        size_t vc = offsetof(struct nk_sdl_vertex, col);
+
+        /* convert from command queue into draw list and draw to screen */
+        const struct nk_draw_command *cmd;
+        const nk_draw_index *offset = NULL;
+        struct nk_buffer vbuf, ebuf;
+
+        /* fill converting configuration */
+        struct nk_convert_config config;
+        static const struct nk_draw_vertex_layout_element vertex_layout[] = {
+            {NK_VERTEX_POSITION, NK_FORMAT_FLOAT, NK_OFFSETOF(struct nk_sdl_vertex, position)},
+            {NK_VERTEX_TEXCOORD, NK_FORMAT_FLOAT, NK_OFFSETOF(struct nk_sdl_vertex, uv)},
+            {NK_VERTEX_COLOR, NK_FORMAT_R8G8B8A8, NK_OFFSETOF(struct nk_sdl_vertex, col)},
+            {NK_VERTEX_LAYOUT_END}
+        };
+        NK_MEMSET(&config, 0, sizeof(config));
+        config.vertex_layout = vertex_layout;
+        config.vertex_size = sizeof(struct nk_sdl_vertex);
+        config.vertex_alignment = NK_ALIGNOF(struct nk_sdl_vertex);
+        config.tex_null = dev->tex_null;
+        config.circle_segment_count = 22;
+        config.curve_segment_count = 22;
+        config.arc_segment_count = 22;
+        config.global_alpha = 1.0f;
+        config.shape_AA = NK_ANTI_ALIASING_ON;
+        config.line_AA = NK_ANTI_ALIASING_ON;
+
+        /* convert shapes into vertexes */
+        nk_buffer_init_default(&vbuf);
+        nk_buffer_init_default(&ebuf);
+        nk_convert(&sdl.ctx, &dev->cmds, &vbuf, &ebuf, &config);
+
+        /* iterate over and execute each draw command */
+        offset = (const nk_draw_index*)nk_buffer_memory_const(&ebuf);
+
+        clipping_enabled = SDL_RenderIsClipEnabled(sdl.renderer);
+        SDL_RenderGetClipRect(sdl.renderer, &saved_clip);
+#ifdef NK_SDL_CLAMP_CLIP_RECT
+        SDL_RenderGetViewport(sdl.renderer, &viewport);
+#endif
+
+        nk_draw_foreach(cmd, &sdl.ctx, &dev->cmds)
+        {
+            if (!cmd->elem_count) continue;
+
+            {
+                SDL_Rect r;
+                r.x = cmd->clip_rect.x;
+                r.y = cmd->clip_rect.y;
+                r.w = cmd->clip_rect.w;
+                r.h = cmd->clip_rect.h;
+#ifdef NK_SDL_CLAMP_CLIP_RECT
+                if (r.x < 0) {
+                    r.w += r.x;
+                    r.x = 0;
+                }
+                if (r.y < 0) {
+                    r.h += r.y;
+                    r.y = 0;
+                }
+                if (r.h > viewport.h) {
+                    r.h = viewport.h;
+                }
+                if (r.w > viewport.w) {
+                    r.w = viewport.w;
+                }
+#endif
+                SDL_RenderSetClipRect(sdl.renderer, &r);
+            }
+
+            {
+                const void *vertices = nk_buffer_memory_const(&vbuf);
+
+                SDL_RenderGeometryRaw(sdl.renderer,
+                        (SDL_Texture *)cmd->texture.ptr,
+                        (const float*)((const nk_byte*)vertices + vp), vs,
+                        (const SDL_Color*)((const nk_byte*)vertices + vc), vs,
+                        (const float*)((const nk_byte*)vertices + vt), vs,
+                        (vbuf.needed / vs),
+                        (void *) offset, cmd->elem_count, 2);
+
+                offset += cmd->elem_count;
+            }
+        }
+
+        SDL_RenderSetClipRect(sdl.renderer, &saved_clip);
+        if (!clipping_enabled) {
+            SDL_RenderSetClipRect(sdl.renderer, NULL);
+        }
+
+        nk_clear(&sdl.ctx);
+        nk_buffer_clear(&dev->cmds);
+        nk_buffer_free(&vbuf);
+        nk_buffer_free(&ebuf);
+    }
+  """
+  .}
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
