@@ -189,8 +189,8 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
         eventsNames2.add(y = " {Attack on base: " & protoShipsList[
             event.shipIndex].name & "}")
       of disease:
-        eventsNames2.add(y = " {Disease in base: " & skyBases[skyMap[event.skyX][
-            event.skyY].baseIndex].name & "}")
+        eventsNames2.add(y = " {Disease in base: " & skyBases[skyMap[
+            event.skyX][event.skyY].baseIndex].name & "}")
       of doublePrice:
         eventsNames2.add(y = " {Double price in base: " & skyBases[skyMap[
             event.skyX][event.skyY].baseIndex].name & "}")
@@ -201,7 +201,8 @@ proc setDebugData*() {.raises: [], tags: [], contractual.} =
         eventsNames2.add(y = " {Enemy patrol: " & protoShipsList[
             event.shipIndex].name & "}")
       of trader:
-        eventsNames2.add(y = " {Trader: " & protoShipsList[event.shipIndex].name & "}")
+        eventsNames2.add(y = " {Trader: " & protoShipsList[
+            event.shipIndex].name & "}")
       of friendlyShip:
         eventsNames2.add(y = " {Friendly ship: " & protoShipsList[
             event.shipIndex].name & "}")
@@ -497,7 +498,8 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
           base = base2
           break
       try:
-        baseTypeSelected = basesTypesNames.find(item = basesTypesList[base.baseType].name)
+        baseTypeSelected = basesTypesNames.find(item = basesTypesList[
+            base.baseType].name)
       except KeyError:
         discard
       var index: Natural = 0
@@ -595,12 +597,14 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
         eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
             skyY = skyBases[base2Selected].skyY, time = eventDuration,
             eType = doublePrice, itemIndex = item3Selected))
-        eventsNames2.add(y = "Double price in base: " & skyBases[base2Selected].name)
+        eventsNames2.add(y = "Double price in base: " & skyBases[
+            base2Selected].name)
       of 2:
         eventsList.add(y = initEventData(skyX = skyBases[base2Selected].skyX,
             skyY = skyBases[base2Selected].skyY, time = eventDuration,
             eType = fullDocks))
-        eventsNames2.add(y = "Full docks in base: " & skyBases[base2Selected].name)
+        eventsNames2.add(y = "Full docks in base: " & skyBases[
+            base2Selected].name)
       else:
         discard
       skyMap[skyBases[base2Selected].skyX][skyBases[
