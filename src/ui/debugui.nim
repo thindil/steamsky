@@ -491,31 +491,32 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
         itemHeight = labelHeight.int, x = 290, y = 200)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     labelButton(title = "Select"):
-      baseName = basesNames[baseSelected]
-      var base: BaseRecord = initBaseRecord()
-      for base2 in skyBases:
-        if base2.name == baseName:
-          base = base2
-          break
-      try:
-        baseTypeSelected = basesTypesNames.find(item = basesTypesList[
-            base.baseType].name)
-      except KeyError:
-        discard
-      var index: Natural = 0
-      for i in factionsList.keys:
-        if i == base.owner:
-          ownerSelected = index
-          break
-        index.inc
-      sizeSelected = base.size.ord
-      population = base.population
-      reputation = base.reputation.level
-      if base.cargo.len > 0:
-        money = base.cargo[0].amount
-      else:
-        money = 0
-      debugDialog = none
+      if basesNames[0] != "No bases":
+        baseName = basesNames[baseSelected]
+        var base: BaseRecord = initBaseRecord()
+        for base2 in skyBases:
+          if base2.name == baseName:
+            base = base2
+            break
+        try:
+          baseTypeSelected = basesTypesNames.find(item = basesTypesList[
+              base.baseType].name)
+        except KeyError:
+          discard
+        var index: Natural = 0
+        for i in factionsList.keys:
+          if i == base.owner:
+            ownerSelected = index
+            break
+          index.inc
+        sizeSelected = base.size.ord
+        population = base.population
+        reputation = base.reputation.level
+        if base.cargo.len > 0:
+          money = base.cargo[0].amount
+        else:
+          money = 0
+        debugDialog = none
     labelButton(title = "Cancel"):
       debugDialog = none
 
