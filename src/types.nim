@@ -1884,10 +1884,10 @@ type
     ## * knownRecipes - The list of known recipes (used only by the player's ship)
     ## * reputation   - The level of reputation at which the ship will appear.
     ##                  an enemy, it is negative value, for friendly positive
-    name*: ShipName
+    name: ShipName
     modules*: seq[Positive]
     accuracy*: ShipBonusData
-    combatAi*: ShipCombatAi
+    combatAi: ShipCombatAi
     evasion*: ShipBonusData
     loot*: ShipBonusData
     perception*: ShipBonusData
@@ -1934,6 +1934,15 @@ proc initProtoShipData*(name: ShipName = ""; modules: seq[Positive] = @[];
       cargo: cargo, combatValue: combatValue, crew: crew,
       description: description, owner: owner, knownRecipes: knownRecipes,
       reputation: reputation)
+
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = name,
+    typ = ShipName)
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = modules,
+    typ = seq[Positive])
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = accuracy,
+    typ = ShipBonusData)
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = combatAi,
+    typ = ShipCombatAi)
 
 type
   ProtoMobRecord* = object
