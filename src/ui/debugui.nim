@@ -497,8 +497,8 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
           base = base2
           break
       try:
-        baseTypeSelected = base.baseType.parseInt
-      except:
+        baseTypeSelected = basesTypesNames.find(item = basesTypesList[base.baseType].name)
+      except KeyError:
         discard
       var index: Natural = 0
       for i in factionsList.keys:
