@@ -308,7 +308,8 @@ proc loadShips*(fileName: Path) {.raises: [DataLoadingError],
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus accuracy.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship bonus accuracy.")
         ship.accuracy.maxValue = 0
       attribute = shipNode.attr(name = "minaccuracy")
       if attribute.len() > 0:
@@ -316,30 +317,35 @@ proc loadShips*(fileName: Path) {.raises: [DataLoadingError],
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus minimum accuracy.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship bonus minimum accuracy.")
         attribute = shipNode.attr(name = "maxaccuracy")
         ship.accuracy.maxValue = try:
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus maximum accuracy.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship bonus maximum accuracy.")
         if ship.accuracy.maxValue < ship.accuracy.minValue:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship bonus accuracy.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid range for ship bonus accuracy.")
       attribute = shipNode.attr(name = "combatai")
       if attribute.len() > 0:
         ship.combatAi = try:
             parseEnum[ShipCombatAi](s = attribute.toLowerAscii)
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship combat AI.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship combat AI.")
       attribute = shipNode.attr(name = "evasion")
       if attribute.len() > 0:
         ship.evasion.minValue = try:
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus evasion.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship bonus evasion.")
         ship.evasion.maxValue = 0
       attribute = shipNode.attr(name = "minevasion")
       if attribute.len() > 0:
@@ -347,23 +353,27 @@ proc loadShips*(fileName: Path) {.raises: [DataLoadingError],
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus minimum evasion.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship bonus minimum evasion.")
         attribute = shipNode.attr(name = "maxevasion")
         ship.evasion.maxValue = try:
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus maximum evasion.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship bonus maximum evasion.")
         if ship.evasion.maxValue < ship.evasion.minValue:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship bonus evasion.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid range for ship bonus evasion.")
       attribute = shipNode.attr(name = "loot")
       if attribute.len() > 0:
         ship.loot.minValue = try:
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship loot.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship loot.")
         ship.loot.maxValue = 0
       attribute = shipNode.attr(name = "minloot")
       if attribute.len() > 0:
@@ -371,23 +381,27 @@ proc loadShips*(fileName: Path) {.raises: [DataLoadingError],
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship minimum loot.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship minimum loot.")
         attribute = shipNode.attr(name = "maxloot")
         ship.loot.maxValue = try:
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship maximum loot.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship maximum loot.")
         if ship.loot.maxValue < ship.loot.minValue:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship loot.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid range for ship loot.")
       attribute = shipNode.attr(name = "perception")
       if attribute.len() > 0:
         ship.perception.minValue = try:
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus perception.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship bonus perception.")
         ship.perception.maxValue = 0
       attribute = shipNode.attr(name = "minperception")
       if attribute.len() > 0:
@@ -395,23 +409,27 @@ proc loadShips*(fileName: Path) {.raises: [DataLoadingError],
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus minimum perception.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship bonus minimum perception.")
         attribute = shipNode.attr(name = "maxperception")
         ship.perception.maxValue = try:
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus maximum perception.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship bonus maximum perception.")
         if ship.perception.maxValue < ship.perception.minValue:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship bonus perception.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid range for ship bonus perception.")
       attribute = shipNode.attr(name = "reputation")
       if attribute.len() > 0:
         ship.reputation = try:
             attribute.parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship reputation.")
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for ship reputation.")
       loadShipCargo(shipNode = shipNode, shipAction = shipAction,
           shipIndex = shipIndex, ship = ship)
       attribute = shipNode.attr(name = "owner")
