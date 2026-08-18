@@ -1943,6 +1943,14 @@ typeGetterSetter(baseType = ProtoShipData, varName = ship, name = accuracy,
     typ = ShipBonusData)
 typeGetterSetter(baseType = ProtoShipData, varName = ship, name = combatAi,
     typ = ShipCombatAi)
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = evasion,
+    typ = ShipBonusData)
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = loot,
+    typ = ShipBonusData)
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = perception,
+    typ = ShipBonusData)
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = cargo,
+    typ = seq[MobInventoryRecord])
 
 type
   ProtoMobRecord* = object
