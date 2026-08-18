@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Setting type of a base in debug menu
 - Crash when no base was selected in the debug menu
 - Selecting non-existing items in the debug menu
+- Updating bases in the debug menu
 
 ## [12.6] - 2026-08-09
 
