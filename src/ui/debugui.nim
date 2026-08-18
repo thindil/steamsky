@@ -383,8 +383,9 @@ proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
         itemHeight = labelHeight.int, x = 290, y = 200)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     labelButton(title = "Select"):
-      itemName = itemsNames[itemSelected]
-      debugDialog = none
+      if itemsNames[0] != "No items":
+        itemName = itemsNames[itemSelected]
+        debugDialog = none
     labelButton(title = "Cancel"):
       debugDialog = none
 
@@ -414,11 +415,12 @@ proc showUpdateItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
         itemHeight = labelHeight.int, x = 290, y = 200)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     labelButton(title = "Select"):
-      cargoName = cargoNames[cargoSelected]
-      let item = playerShip.cargo[cargoSelected]
-      cargoAmount = item.amount
-      cargoQuality = item.quality.ord
-      debugDialog = none
+      if cargoNames[0] != "No items":
+        cargoName = cargoNames[cargoSelected]
+        let item = playerShip.cargo[cargoSelected]
+        cargoAmount = item.amount
+        cargoQuality = item.quality.ord
+        debugDialog = none
     labelButton(title = "Cancel"):
       debugDialog = none
 
