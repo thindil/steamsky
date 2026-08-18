@@ -461,7 +461,10 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
       if base.name == baseName:
         baseIndex = index
         break
-    skyBases[baseIndex].baseType = $baseTypeSelected
+    for index, baseType in basesTypesList:
+      if baseType.name == basesTypesNames[baseTypeSelected]:
+        skyBases[baseIndex].baseType = index
+        break
     var index: Natural = 0
     for i in factionsList.keys:
       if index == ownerSelected:
