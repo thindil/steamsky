@@ -455,7 +455,12 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
       incPerPixel = 1)
   setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
   labelButton(title = "Update"):
-    let baseIndex: BasesRange = baseSelected + 1
+    var baseIndex: BasesRange = 1
+    baseName = basesNames[baseSelected]
+    for index, base in skyBases:
+      if base.name == baseName:
+        baseIndex = index
+        break
     skyBases[baseIndex].baseType = $baseTypeSelected
     var index: Natural = 0
     for i in factionsList.keys:
