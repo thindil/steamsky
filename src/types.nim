@@ -1892,10 +1892,10 @@ type
     loot*: ShipBonusData
     perception*: ShipBonusData
     cargo*: seq[MobInventoryRecord]
-    combatValue*: Positive
+    combatValue: Positive
     crew*: seq[ProtoMemberData]
-    description*: Description
-    owner*: FactionIndex
+    description: Description
+    owner: FactionIndex
     knownRecipes*: seq[string]
     reputation*: Natural
 
@@ -1951,6 +1951,14 @@ typeGetterSetter(baseType = ProtoShipData, varName = ship, name = perception,
     typ = ShipBonusData)
 typeGetterSetter(baseType = ProtoShipData, varName = ship, name = cargo,
     typ = seq[MobInventoryRecord])
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = combatValue,
+    typ = Positive)
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = crew,
+    typ = seq[ProtoMemberData])
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = description,
+    typ = Description)
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = owner,
+    typ = FactionIndex)
 
 type
   ProtoMobRecord* = object
