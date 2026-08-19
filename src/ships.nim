@@ -294,9 +294,9 @@ proc loadShips*(fileName: Path) {.raises: [DataLoadingError],
           try:
             protoShipsList[shipIndex]
           except ValueError:
-            ProtoShipData(combatValue: 1)
+            initProtoShipData()
         else:
-          ProtoShipData(combatValue: 1)
+          initProtoShipData()
       var attribute: string = shipNode.attr(name = "name")
       if attribute.len > 0:
         ship.name = attribute
@@ -469,8 +469,11 @@ proc loadShips*(fileName: Path) {.raises: [DataLoadingError],
         for item in ship.cargo:
           if itemsList[item.protoIndex].itemType == itemsTypesList[
               itemTypeIndex - 1]:
-            ship.combatValue += (itemsList[item.protoIndex].value[1] * multiple)
+            {.ruleOff: "assignments".}
+            ship.combatValue = ship.combatValue + (itemsList[item.protoIndex].value[1] * multiple)
+            {.ruleOn: "assignments".}
 
+      {.ruleOff: "assignments".}
       for moduleIndex in ship.modules:
         try:
           let module: BaseModuleData = modulesList[moduleIndex]
@@ -481,9 +484,9 @@ proc loadShips*(fileName: Path) {.raises: [DataLoadingError],
             if module.mType == ModuleType.gun:
               countAmmoValue(itemTypeIndex = module.value, multiple = 10)
           of ModuleType.armor:
-            ship.combatValue += module.durability
+            ship.combatValue = ship.combatValue + module.durability
           of ModuleType.harpoonGun:
-            ship.combatValue += module.durability + (
+            ship.combatValue = ship.combatValue + module.durability + (
                 module.maxValue * 5)
             countAmmoValue(itemTypeIndex = module.value, multiple = 5)
           else:
@@ -492,7 +495,8 @@ proc loadShips*(fileName: Path) {.raises: [DataLoadingError],
           raise newException(exceptn = DataLoadingError,
             message = "Can't " & $shipAction & " ship '" & $shipIndex &
                 "', invalid index for module during counting the ship's combat value.")
-      ship.combatValue.dec
+      ship.combatValue = ship.combatValue - 1
+      {.ruleOn: "assignments".}
       if shipAction == DataAction.add:
         logMessage(message = "Ship added: '" & $shipIndex & "'",
             messageLevel = lvlInfo)
