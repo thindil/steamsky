@@ -675,9 +675,10 @@ proc showSetBaseEventDialog() {.raises: [], tags: [RootEffect], contractual.} =
         itemHeight = labelHeight.int, x = 290, y = 200)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     labelButton(title = "Select"):
-      base2Name = basesNames[base2Selected]
-      base2Selected.inc
-      debugDialog = none
+      if basesNames[0] != "No bases":
+        base2Name = basesNames[base2Selected]
+        base2Selected.inc
+        debugDialog = none
     labelButton(title = "Cancel"):
       debugDialog = none
 
