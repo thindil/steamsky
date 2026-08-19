@@ -42,6 +42,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns parameter dialog, modified if any error happened.
+  dialog = none
   if menuImages[0] == nil:
     # Load images
     try:
