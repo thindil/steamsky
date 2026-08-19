@@ -80,14 +80,6 @@ nk_sdl_device_upload_atlas(const void *image, int width, int height)
     dev->font_tex = g_SDLFontTexture;
 }
 
-static void
-nk_sdl_clipboard_paste(nk_handle usr, struct nk_text_edit *edit)
-{
-    const char *text = SDL_GetClipboardText();
-    if (text) nk_textedit_paste(edit, text, nk_strlen(text));
-    (void)usr;
-}
-
 NK_API struct nk_context*
 nk_sdl_init(SDL_Window *win, SDL_Renderer *renderer)
 {
