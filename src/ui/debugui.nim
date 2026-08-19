@@ -648,8 +648,9 @@ proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
         itemHeight = labelHeight.int, x = 290, y = 200)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     labelButton(title = "Select"):
-      shipName = shipsNames[shipSelected]
-      debugDialog = none
+      if shipsNames[0] != "No ships":
+        shipName = shipsNames[shipSelected]
+        debugDialog = none
     labelButton(title = "Cancel"):
       debugDialog = none
 
