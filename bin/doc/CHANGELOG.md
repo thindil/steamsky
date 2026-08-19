@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
 - Setting a base in debug menu
 - Setting type of a base in debug menu
 - Crash when no base was selected in the debug menu
-- Selecting non-existing items in the debug menu
+- Selecting non-existing items and ships in the debug menu
 - Updating bases in the debug menu
 - Setting bases' types in the debug menu
 
