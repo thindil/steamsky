@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Selecting non-existing items, ships and bases in the debug menu
 - Updating bases in the debug menu
 - Setting bases' types in the debug menu
+- Blocked main menu after quitting the game in the debug mode
 
 ## [12.6] - 2026-08-09
 
