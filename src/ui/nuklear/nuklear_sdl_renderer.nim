@@ -696,8 +696,7 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
         nk_buffer_free(&vbuf);
         nk_buffer_free(&ebuf);
     }
-  """
-  .}
+  """.}
 
   SDL_RenderPresent(renderer = sdl.renderer)
 
