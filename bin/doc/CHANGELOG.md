@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Updating bases in the debug menu
 - Setting bases' types in the debug menu
 - Blocked main menu after quitting the game in the debug mode
+- Information about an abandoned base on the map
 
 ## [12.6] - 2026-08-09
 
