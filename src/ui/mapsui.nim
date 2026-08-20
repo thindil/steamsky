@@ -156,8 +156,10 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
                   baseIndex].baseType].name, color = basesTypesList[skyBases[
                   baseIndex].baseType].color)
             if getBasePopulation(baseIndex = baseIndex) == empty:
-              row(width = 230):
+              row(width = 220):
                 label(str = "Base is abandoned")
+              row(width = 10):
+                label(str = "")
             else:
               row(width = 100):
                 label(str = "Population:")
