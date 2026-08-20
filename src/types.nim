@@ -1897,7 +1897,7 @@ type
     description: Description
     owner: FactionIndex
     knownRecipes*: seq[string]
-    reputation*: Natural
+    reputation: Natural
 
 proc initProtoShipData*(name: ShipName = ""; modules: seq[Positive] = @[];
     accuracy: ShipBonusData = initShipBonusData();
@@ -1959,6 +1959,10 @@ typeGetterSetter(baseType = ProtoShipData, varName = ship, name = description,
     typ = Description)
 typeGetterSetter(baseType = ProtoShipData, varName = ship, name = owner,
     typ = FactionIndex)
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = knownRecipes,
+    typ = seq[string])
+typeGetterSetter(baseType = ProtoShipData, varName = ship, name = reputation,
+    typ = Natural)
 
 type
   ProtoMobRecord* = object
