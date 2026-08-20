@@ -139,7 +139,7 @@ proc buyRecipe*(recipeIndex: string) {.raises: [CantBuyError,
     updateMoney(memberIndex = -1, amount = -cost, quality = any)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost, quality = normal,
         craftBonus = none, craftMalus = none)
-    knownRecipes.add(y = recipeIndex)
+    game.knownRecipes.add(y = recipeIndex)
     addMessage(message = "You bought the recipe for " & recipeName & " for " &
         $cost & " of " & moneyName & ".", mType = tradeMessage)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)

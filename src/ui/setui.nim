@@ -1045,7 +1045,7 @@ proc setCrafting*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           deconstructs.add(y = item.protoIndex)
   if availableRecipes.len != knownRecipes.len + studies.len + deconstructs.len:
     availableRecipes = @[]
-    for recipe in knownRecipes:
+    for recipe in game.knownRecipes:
       try:
         var rec: RecipeData = RecipeData(index: recipe, name: "Craft " &
             itemsList[recipesList[recipe].resultIndex].name,
