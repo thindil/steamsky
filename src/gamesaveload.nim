@@ -85,7 +85,7 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
   savePlayerShip(saveData = saveTree)
   logMessage(message = "done", messageLevel = lvlInfo)
   logMessage(message = "Saving known recipes...", messageLevel = lvlInfo)
-  for recipe in knownRecipes:
+  for recipe in game.knownRecipes:
     var recipeElement: XmlNode = newElement(tag = "recipe")
     recipeElement.attrs = {"index": recipe}.toXmlAttributes
     saveTree.add(son = recipeElement)
@@ -314,7 +314,7 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
   # Load known recipes
   logMessage(message = "Loading known recipes...", messageLevel = lvlInfo)
   for recipe in savedGame.findAll(tag = "recipe"):
-    knownRecipes.add(y = recipe.attr(name = "index"))
+    game.knownRecipes.add(y = recipe.attr(name = "index"))
   logMessage(message = "done", messageLevel = lvlInfo)
   # Load messages
   logMessage(message = "Loading messages...", messageLevel = lvlInfo)

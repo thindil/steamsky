@@ -829,7 +829,7 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange; y: MapYRange;
     result.modules[hullIndex].installedModules = amount
     # Set known crafting recipes
     for recipe in protoShip.knownRecipes:
-      knownRecipes.add(y = recipe)
+      game.knownRecipes.add(y = recipe)
     # Set home base for ship
     if skyMap[x][y].baseIndex > 0:
       result.homeBase = skyMap[x][y].baseIndex

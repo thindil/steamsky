@@ -266,7 +266,7 @@ proc endGame*(save: bool) {.raises: [KeyError, IOError, OSError],
   clearGameStats()
   clearCurrentGoal()
   messagesList = @[]
-  knownRecipes = @[]
+  game.knownRecipes = @[]
   eventsList = @[]
   missions.acceptedMissions = @[]
 
