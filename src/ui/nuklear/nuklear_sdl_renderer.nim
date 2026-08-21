@@ -716,6 +716,7 @@ proc nuklearLoadSVGImage*(filePath: string; width,
   ## Load the selected SVG image from a file
   ##
   ## * filePath - the full path to the file from which the image will be loaded
+  ## * height   - the height of the image
   ##
   ## Returns the nk_image structure
   let img: RWPtr = SDL_RWFromFile(file = filePath.cstring, mode = "r")
