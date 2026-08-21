@@ -1865,6 +1865,7 @@ typeGetterSetter(baseType = ProtoMemberData, varName = member, name = minAmount,
 typeGetterSetter(baseType = ProtoMemberData, varName = member, name = maxAmount,
     typ = Natural)
 
+{.push ruleOff: "objects".}
 type
   ProtoShipData* = object
     ## Used to store data about the prototype of the ship
@@ -1898,6 +1899,7 @@ type
     owner: FactionIndex
     knownRecipes*: seq[string]
     reputation: Natural
+{.pop ruleOn: "objects".}
 
 proc initProtoShipData*(name: ShipName = ""; modules: seq[Positive] = @[];
     accuracy: ShipBonusData = initShipBonusData();
