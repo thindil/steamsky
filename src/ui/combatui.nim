@@ -535,7 +535,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't make next turn in combat.")
       if playerShip.crew[0].order == boarding:
         state = boarding
-  let heightDiff: float = (if endCombat: 55 else: 90)
+  let heightDiff: float = (if endCombat: 70 else: 105)
   showLastMessages(theme = theme, dialog = dialog, inCombat = true,
     height = windowHeight - heightDiff - height - 20, state = state)
 
@@ -643,6 +643,6 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if playerShip.crew[0].order != boarding:
         state = combat
         updateParties()
-  let heightDiff: float = (if endCombat: 55 else: 90)
+  let heightDiff: float = (if endCombat: 70 else: 105)
   showLastMessages(theme = theme, dialog = dialog, inCombat = true,
       height = windowHeight - heightDiff - height, state = state)
