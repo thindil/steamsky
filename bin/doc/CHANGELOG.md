@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Setting bases' types in the debug menu
 - Blocked main menu after quitting the game in the debug mode
 - Information about an abandoned base on the map
+- Size of the last in-game messages window in crafting screen
 
 ## [12.6] - 2026-08-09
 
