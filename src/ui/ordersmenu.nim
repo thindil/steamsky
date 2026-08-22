@@ -295,17 +295,20 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
         state = trade
         dialog = none
         closePopup()
+        messageAdded = true
         setTrade(dialog = dialog)
       labelButton(title = "School"):
         state = school
         dialog = none
         closePopup()
+        messageAdded = true
         setSchool(dialog = dialog)
       if skyBases[baseIndex].recruits.len > 0:
         labelButton(title = "Recruit"):
           state = recruits
           dialog = none
           closePopup()
+          messageAdded = true
           setRecruits()
     if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
       labelButton(title = "Ask for events"):
@@ -344,6 +347,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
           state = healWounded
           dialog = none
           closePopup()
+          messageAdded = true
           setWounded(dialog = dialog)
         break
     for module in playerShip.modules:
@@ -352,6 +356,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
           state = repairShip
           dialog = none
           closePopup()
+          messageAdded = true
           setRepairs(dialog = dialog)
         break
     try:
@@ -360,6 +365,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
           state = shipyard
           dialog = none
           closePopup()
+          messageAdded = true
           setShipyard(dialog = dialog)
     except:
       dialog = setError(message = "Can't check if the base has shipyard flag.")
@@ -373,6 +379,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
             state = buyRecipes
             dialog = none
             closePopup()
+            messageAdded = true
             setRecipes(dialog = dialog)
           break
       except:
