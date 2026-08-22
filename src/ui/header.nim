@@ -599,12 +599,15 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     elif keyPressed notin {keyEscape, keyTab, keyAlt}:
       key &= $keyPressed
     if key == menuAccelerators[1]:
+      messageAdded = true
       showShipInfo(dialog = dialog, state = state)
     elif key == menuAccelerators[4]:
       showLastMessagesScreen(dialog = dialog, state = state)
     elif key == menuAccelerators[5]:
+      messageAdded = true
       showKnowledgeScreen(dialog = dialog, state = state)
     elif key == menuAccelerators[7]:
+      messageAdded = true
       showStatsScreen(dialog = dialog, state = state)
     elif key == fullScreenAccel:
       gameSettings.fullScreen = not gameSettings.fullScreen
