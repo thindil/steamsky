@@ -1983,6 +1983,22 @@ type
     inventory*: seq[MobInventoryRecord]
     equipment*: EquipmentArray
 
+proc initProtoMobRecord*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
+    SkillInfo] = @[]; order: CrewOrders = rest; priorities: array[1..12,
+    Natural] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): ProtoMobRecord {.raises: [],
+    tags: [], contractual.} =
+  ## Create a new data structure for a mob's prototype
+  ##
+  ## * attributes - The mob's attributes
+  ## * skills     - The mob's skills
+  ## * order      - The current order of the mob
+  ## * priorities - The orders priorities of the mob
+  ##
+  ## Returns the new structure with information about the selected prototype mob
+  return ProtoMobRecord(attributes: attributes, skills: skills, order: order,
+      priorities: priorities)
+
+type
   EnemyRecord* = object
     ## Used to store information about the enemy
     ##
