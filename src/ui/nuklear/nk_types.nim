@@ -1086,8 +1086,11 @@ type
     glyphs*, fallback*: ptr nk_font_glyph
     fallback_codepoint*: nk_rune
     texture*: nk_handle
-  nk_font_atlas* {.importc: "struct nk_font_atlas", nodecl.} = object
+  nk_font_atlas* {.importc: "struct nk_font_atlas", completeStruct.} = object
     ## Internal Nuklear type
+    pixel: pointer
+    tex_width, tex_height: cint
+    pernament, temporary: nk_allocator
   nk_baked_font* {.importc: "struct nk_baked_font", completeStruct.} = object
     ## Internal Nuklear type
     height*: cfloat
