@@ -355,7 +355,7 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
         dialog = setError(message = "Can't show information about boarding party and defenders.")
     else:
       # The player's ship's damage
-      setLayoutRowDynamic(height = labelHeight, cols = 2)
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.6.cfloat, 0.4])
       for module in playerShip.modules:
         if module.durability > 0:
           label(str = module.name)
@@ -501,7 +501,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
     else:
       # The enemy's ship's status
-      setLayoutRowDynamic(height = labelHeight, cols = 2)
+      setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.6.cfloat,
+          0.4])
       if endCombat:
         game.enemy.distance = 100
       for module in game.enemy.ship.modules.mitems:
