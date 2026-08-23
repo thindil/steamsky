@@ -517,7 +517,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
           label(str = moduleName)
         else:
           colorLabel(str = moduleName, color = theme.colors[grayColor])
-        var damagePercent: int = ((module.durability.float / module.maxDurability.float) * 100.0).int
+        var damagePercent: int = ((module.durability.float /
+            module.maxDurability.float) * 100.0).int
         changeStyle(field = progressbar,
           color = (if damagePercent == 100: theme.colors[greenColor]
             elif damagePercent > 24: theme.colors[yellowColor]
