@@ -1057,9 +1057,11 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   imageButtonCentered(image = images[contract2Icon],
       tooltip = "Make the map smaller by one row."):
     gameSettings.messagesPosition += height
+    messageAdded = true
   imageButtonCentered(image = images[expand2Icon],
       tooltip = "Make the map bigger by one row."):
     gameSettings.messagesPosition -= height
+    messageAdded = true
   labelButton(title = "+", tooltip = "Zoom in the map."):
     zoomMap(dialog = dialog)
   labelButton(title = "-", tooltip = "Zoom out the map."):
