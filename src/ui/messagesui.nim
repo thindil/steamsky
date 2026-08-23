@@ -43,9 +43,11 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
     imageButtonCentered(image = images[contract2Icon],
         tooltip = "Make the list of messages bigger."):
       gameSettings.messagesPosition += gameSettings.interfaceFontSize + 10
+      messageAdded = true
     imageButtonCentered(image = images[expand2Icon],
         tooltip = "Make the list of messages smaller."):
       gameSettings.messagesPosition -= gameSettings.interfaceFontSize + 10
+      messageAdded = true
   var loopStart: int = 0 - messagesAmount()
   if loopStart == 0:
     return
