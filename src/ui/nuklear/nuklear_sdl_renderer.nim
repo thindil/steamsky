@@ -293,7 +293,8 @@ type
 
 var
   fontScale: cfloat = 0.0   ## The scale used to resize a font
-  sdl: NkSdl = NkSdl()      ## The SDL backend settings
+  tmpAtlas: nk_font_atlas = nk_font_atlas()
+  sdl: NkSdl = NkSdl(atlas: tmpAtlas.addr)      ## The SDL backend settings
   cmds: ptr nk_buffer = nil ## The Nuklear commands for drawing
 
 proc nkSdlClipboardPaste(usr: nk_handle; edit: ptr nk_text_edit) {.raises: [],
@@ -746,8 +747,6 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   if glyphsRanges.len > 0:
     config.`range` = glyphsRanges.addr
   nk_sdl_font_stash_begin(atlas = sdl.atlas.addr)
-#  var atlas: nk_font_atlas = nk_font_atlas()
-#  sdl.atlas = atlas.addr
 #  nk_font_atlas_init_default(atlas = sdl.atlas)
 #  nk_font_atlas_begin(atlas = sdl.atlas)
   {.ruleOff: "namedParams".}
