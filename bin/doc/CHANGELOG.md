@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Size of the last in-game messages window in crafting screen
 - Scrolling the last messages window when switching screens with keyboard
   shortcuts
+- Scrolling the last messages window after resizing it
 
 ## [12.6] - 2026-08-09
 
