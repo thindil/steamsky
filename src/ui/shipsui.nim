@@ -135,8 +135,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   ##
   ## Returns the modified parameters dialog and state.
   let
-    groupWidth: float = (if expandedSection == 1: windowWidth -
-        buttonHeight else: (windowWidth / 2) - buttonHeight)
+    groupWidth: float = (windowWidth - buttonHeight)
     col1: float = groupWidth * 0.4
     col2a: float = groupWidth - col1
     col2b: float = groupWidth - col1 - buttonHeight
@@ -212,8 +211,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     var upgradePercent: int = 100 - ((playerShip.modules[
         playerShip.upgradeModule].upgradeProgress.float / maxUpgrade.float) * 100.0).int
     colorLabel(str = upgradeInfo, color = theme.colors[goldenColor])
-    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [(groupWidth *
-        (if expandedSection == 1: 0.95 else: 0.9)).cfloat, buttonHeight])
+    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [(col1 +
+        col2b + 4).cfloat, buttonHeight])
     progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
         tooltip = "The current ship's upgrade progress")
     imageButton(image = images[cancelIcon],
