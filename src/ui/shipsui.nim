@@ -143,7 +143,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
       col2b, buttonHeight])
   label(str = "Name:", tooltip = "The name of your ship")
   colorLabel(str = playerShip.name, color = theme.colors[goldenColor],
-      tooltip = "The name of your ship")
+      tooltip = "The name of your ship", align = centered)
   imageButton(image = images[editIcon], tooltip = "Set a new name for the ship"):
     dialog = renameDialog
   if playerShip.upgradeModule > -1:
@@ -264,7 +264,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     return
   setLayoutRowDynamic(height = labelHeight, cols = 1)
   label(str = "Reputation:", tooltip = "Your reputation among factions")
-  setLayoutRowDynamic(height = buttonHeight, cols = 2)
+  setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
   for index, faction in factionsList:
     labelButton(title = faction.name, tooltip = "Show information about the faction"):
       try:
@@ -277,7 +277,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     colorLabel(str = getReputationText(reputationLevel = repLevel), color = (
         if repLevel > 0: theme.colors[greenColor] elif repLevel <
         0: theme.colors[redColor] else: theme.colors[goldenColor]),
-            tooltip = "Your reputation with the faction")
+            tooltip = "Your reputation with the faction", align = centered)
 
 var hasOptions: bool = false
 
