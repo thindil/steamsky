@@ -313,7 +313,8 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 hasOptions = true
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
-  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float - tabHeight)
+  let height: float = (windowHeight - 35 -
+      gameSettings.messagesPosition.float - tabHeight)
   setLayoutRowDynamic(height = height, cols = 1)
   group(title = "ShipInfo", flags = {windowNoFlags}):
     if dialog != none:
