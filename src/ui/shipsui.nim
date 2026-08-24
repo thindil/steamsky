@@ -67,10 +67,11 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
       disabled:
         imageLabelButton(image = images[editColoredIcon], label = "Rename",
             alignment = right):
-          discard
+          dialog = setError(message = "Disabled button clicked")
     else:
       imageLabelButton(image = images[editColoredIcon], label = "Rename",
           alignment = right):
+        dialog = none
         case dialog
         of renameDialog:
           playerShip.name = newName
@@ -79,9 +80,8 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
         of renameModuleDialog:
           playerShip.modules[moduleIndex].name = newName
         else:
-          discard
+          dialog = setError(message = "Unknown rename option")
         newName = ""
-        dialog = none
     restoreButtonStyle()
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
         isPopup = false, label = "Cancel")
@@ -343,6 +343,6 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
         showCargoOptions = not showCargoOptions
       showCargoInfo(dialog = dialog)
     else:
-      discard
+      dialog = setError(message = "Wrong number of tab")
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       height - 110, state = state)
