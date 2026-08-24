@@ -136,7 +136,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   ## Returns the modified parameters dialog and state.
   let
     groupWidth: float = (windowWidth - buttonHeight)
-    col1: float = groupWidth * 0.4
+    col1: float = groupWidth * 0.3
     col2a: float = groupWidth - col1
     col2b: float = groupWidth - col1 - buttonHeight
   setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
