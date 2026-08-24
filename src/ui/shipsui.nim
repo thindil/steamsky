@@ -188,7 +188,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
           maxUpgrade = modulesList[playerShip.modules[
               playerShip.upgradeModule].protoIndex].maxValue * 10
         else:
-          discard
+          dialog = setError(message = "Invalid info about module maxValue upgrade.")
+          return
       except:
         dialog = setError(message = "Can't set upgrade info.")
         return
@@ -203,7 +204,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
         dialog = setError(message = "Can't set upgrade fuel usage info.")
         return
     else:
-      discard
+      dialog = setError(message = "Invalid type of module upgrade.")
+      return
     maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
     if maxUpgrade == 0:
       maxUpgrade = 1
