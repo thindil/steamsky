@@ -1978,7 +1978,7 @@ type
     ## * equipment  - The equipment of the mob
     attributes*: seq[MobAttributeRecord]
     skills*: seq[SkillInfo]
-    order*: CrewOrders
+    order: CrewOrders
     priorities*: array[1..12, Natural]
     inventory*: seq[MobInventoryRecord]
     equipment*: EquipmentArray
@@ -2000,6 +2000,15 @@ proc initProtoMobRecord*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
   ## Returns the new structure with information about the selected prototype mob
   return ProtoMobRecord(attributes: attributes, skills: skills, order: order,
       priorities: priorities, inventory: inventory, equipment: equipment)
+
+typeGetterSetter(baseType = ProtoMobRecord, varName = mob, name = attributes,
+    typ = seq[MobAttributeRecord])
+typeGetterSetter(baseType = ProtoMobRecord, varName = mob, name = skills,
+    typ = seq[SkillInfo])
+typeGetterSetter(baseType = ProtoMobRecord, varName = mob, name = order,
+    typ = CrewOrders)
+typeGetterSetter(baseType = ProtoMobRecord, varName = mob, name = priorities,
+    typ = array[1..12, Natural])
 
 type
   EnemyRecord* = object
