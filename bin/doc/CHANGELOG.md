@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Better looking the shipyard screen
 - Better looking information about the player's ship's and enemy's ship's
   damage in combat
+- Better looking general information about the player's ship
 
 ### Fixed
 - Typos in changelog
