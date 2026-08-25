@@ -340,8 +340,8 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       showModulesInfo(dialog = dialog)
     # The player's ship's cargo info
     of 3:
-      setLayoutRowStatic(height = buttonHeight, cols = 1,
-          width = buttonHeight.int)
+      setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+          buttonHeight.cfloat, cargoWidth[0], cargoWidth[1]])
       imageButton(image = images[moreOptionsIcon],
           tooltip = "Show/Hide additional options related to managing the cargo"):
         showCargoOptions = not showCargoOptions
