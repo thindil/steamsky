@@ -319,36 +319,44 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
           dialog = setError(message = "Can't set the tabs buttons.")
   let height: float = (windowHeight - 35 -
       gameSettings.messagesPosition.float - tabHeight)
-  setLayoutRowDynamic(height = height, cols = 1)
-  group(title = "ShipInfo", flags = {windowNoFlags}):
-    if dialog != none:
-      windowDisable()
-    case shipInfoTab
-    # General info about the player's ship
-    of 0:
+  case shipInfoTab
+  # General info about the player's ship
+  of 0:
+    setLayoutRowDynamic(height = height, cols = 1)
+    group(title = "ShipInfo", flags = {windowNoFlags}):
+      if dialog != none:
+        windowDisable()
       showGeneralInfo(dialog = dialog, state = state)
-    # The player's ship's crew info
-    of 1:
+  # The player's ship's crew info
+  of 1:
+    setLayoutRowDynamic(height = height, cols = 1)
+    group(title = "ShipInfo", flags = {windowNoFlags}):
+      if dialog != none:
+        windowDisable()
       setLayoutRowStatic(height = buttonHeight, cols = 1,
           width = buttonHeight.int)
       imageButton(image = images[moreOptionsIcon],
           tooltip = "Show/Hide additional options related to managing the crew"):
         showCrewOptions = not showCrewOptions
       showCrewInfo(dialog = dialog)
-    # The player's ship's modules info
-    of 2:
+  # The player's ship's modules info
+  of 2:
+    setLayoutRowDynamic(height = height, cols = 1)
+    group(title = "ShipInfo", flags = {windowNoFlags}):
+      if dialog != none:
+        windowDisable()
       showModulesInfo(dialog = dialog)
-    # The player's ship's cargo info
-    of 3:
-      setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-          200.cfloat, cargoWidth[0], cargoWidth[1]])
-      imageLabelButton(image = images[moreOptionsIcon],
-          tooltip = "Show/Hide additional options related to managing the cargo",
-          label = (if showCargoOptions: "Hide options" else: "Show options"),
-          alignment = right):
-        showCargoOptions = not showCargoOptions
-      showCargoInfo(dialog = dialog)
-    else:
-      dialog = setError(message = "Wrong number of tab")
+  # The player's ship's cargo info
+  of 3:
+    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+        200.cfloat, cargoWidth[0], cargoWidth[1]])
+    imageLabelButton(image = images[moreOptionsIcon],
+        tooltip = "Show/Hide additional options related to managing the cargo",
+        label = (if showCargoOptions: "Hide options" else: "Show options"),
+        alignment = right):
+      showCargoOptions = not showCargoOptions
+    showCargoInfo(dialog = dialog, height = height - buttonHeight)
+  else:
+    dialog = setError(message = "Wrong number of tab")
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       height - 110, state = state)
