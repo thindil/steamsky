@@ -1966,6 +1966,7 @@ typeGetterSetter(baseType = ProtoShipData, varName = ship, name = knownRecipes,
 typeGetterSetter(baseType = ProtoShipData, varName = ship, name = reputation,
     typ = Natural)
 
+{.push ruleOff: "objects".}
 type
   ProtoMobRecord* = object
     ## Used to store data about mobs prototypes
@@ -1982,6 +1983,7 @@ type
     priorities*: array[1..12, Natural]
     inventory*: seq[MobInventoryRecord]
     equipment*: EquipmentArray
+{.pop ruleOn: "objects".}
 
 proc initProtoMobRecord*(attributes: seq[MobAttributeRecord] = @[]; skills: seq[
     SkillInfo] = @[]; order: CrewOrders = rest; priorities: array[1..12,
