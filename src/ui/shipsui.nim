@@ -341,9 +341,11 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     # The player's ship's cargo info
     of 3:
       setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-          buttonHeight.cfloat, cargoWidth[0], cargoWidth[1]])
-      imageButton(image = images[moreOptionsIcon],
-          tooltip = "Show/Hide additional options related to managing the cargo"):
+          200.cfloat, cargoWidth[0], cargoWidth[1]])
+      imageLabelButton(image = images[moreOptionsIcon],
+          tooltip = "Show/Hide additional options related to managing the cargo",
+          label = (if showCargoOptions: "Hide options" else: "Show options"),
+          alignment = right):
         showCargoOptions = not showCargoOptions
       showCargoInfo(dialog = dialog)
     else:
