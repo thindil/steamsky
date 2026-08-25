@@ -210,7 +210,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
       maxUpgrade = 1
     var upgradePercent: int = 100 - ((playerShip.modules[
         playerShip.upgradeModule].upgradeProgress.float / maxUpgrade.float) * 100.0).int
-    colorLabel(str = upgradeInfo, color = theme.colors[goldenColor])
+    colorLabel(str = upgradeInfo, color = theme.colors[goldenColor],
+        align = centered)
     setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [(col1 +
         col2b + 4).cfloat, buttonHeight])
     progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
@@ -224,7 +225,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     label(str = "Repair first:", tooltip = "If damaged, the module will be repaired as the first")
     colorLabel(str = playerShip.modules[playerShip.repairModule].name,
         color = theme.colors[goldenColor],
-            tooltip = "If damaged, the module will be repaired as the first")
+        tooltip = "If damaged, the module will be repaired as the first",
+        align = centered)
     imageButton(image = images[cancelIcon],
         tooltip = "Remove the repair priority"):
       setRepair()
@@ -235,8 +237,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     if skyMap[playerShip.destinationX][playerShip.destinationY].baseIndex > 0:
       colorLabel(str = skyBases[skyMap[playerShip.destinationX][
           playerShip.destinationY].baseIndex].name, color = theme.colors[
-              goldenColor],
-              tooltip = "The current travel destination of your ship")
+          goldenColor], tooltip = "The current travel destination of your ship",
+          align = centered)
     else:
       colorLabel(str = "X: " & $playerShip.destinationX & " Y: " &
           $playerShip.destinationY, color = theme.colors[goldenColor],
@@ -248,7 +250,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
       col2b, buttonHeight])
   label(str = "Home:", tooltip = "Your ship the current home base")
   colorLabel(str = skyBases[playerShip.homeBase].name, color = theme.colors[
-      goldenColor], tooltip = "Your ship the current home base")
+      goldenColor], tooltip = "Your ship the current home base",
+      align = centered)
   imageButton(image = images[showIcon], tooltip = "Show the home base on map"):
     centerX = skyBases[playerShip.homeBase].skyX
     centerY = skyBases[playerShip.homeBase].skyY
@@ -258,7 +261,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   try:
     colorLabel(str = $countShipWeight(ship = playerShip) & "kg",
         color = theme.colors[goldenColor],
-            tooltip = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines")
+        tooltip = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines",
+        align = centered)
   except:
     dialog = setError(message = "Can't show the ship's weight")
     return
