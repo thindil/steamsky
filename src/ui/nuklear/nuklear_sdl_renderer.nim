@@ -298,9 +298,9 @@ type
 const tmpAtlas: nk_font_atlas = nk_font_atlas()
 
 var
-  fontScale: cfloat = 0.0   ## The scale used to resize a font
-  sdl: NkSdl = NkSdl(atlas: tmpAtlas.addr)      ## The SDL backend settings
-  cmds: ptr nk_buffer = nil ## The Nuklear commands for drawing
+  fontScale: cfloat = 0.0                  ## The scale used to resize a font
+  sdl: NkSdl = NkSdl(atlas: tmpAtlas.addr) ## The SDL backend settings
+  cmds: ptr nk_buffer = nil                ## The Nuklear commands for drawing
 
 proc nkSdlClipboardPaste(usr: nk_handle; edit: ptr nk_text_edit) {.raises: [],
     tags: [], contractual, cdecl.} =
@@ -708,7 +708,7 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 
 proc nuklearClose*() {.raises: [], tags: [], contractual.} =
   ## Release all resources related to Xlib and Nuklear
-  if sdl.atlas != nil:
+  if sdl.atlas != tmpAtlas.addr:
     nk_font_atlas_clear(atlas = sdl.atlas)
   nk_free(ctx = ctx)
   SDL_DestroyTexture(texture = sdl.dev.fontTexture)
