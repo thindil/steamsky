@@ -196,7 +196,6 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   # Show information about free cargo space in the player's ship
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
-  # Show the additional options for the cargo list
   if showCargoOptions:
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
     label(str = "Type:")
@@ -207,6 +206,7 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   group(title = "ShipInfo", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
+
     const
       headers: array[6, HeaderData[CargoSortOrders]] = [
         HeaderData[CargoSortOrders](label: "Name", sortAsc: nameAsc,
