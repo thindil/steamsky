@@ -193,8 +193,6 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  if dialog != none:
-    windowDisable()
   # Show information about free cargo space in the player's ship
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
@@ -205,28 +203,29 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     typeIndex = comboList(items = typesList, selected = typeIndex,
         itemHeight = labelHeight.int, x = 200, y = 150,
         tooltip = "Show only items with the selected type")
-  # Show the table's headers
-  const
-    headers: array[6, HeaderData[CargoSortOrders]] = [
-      HeaderData[CargoSortOrders](label: "Name", sortAsc: nameAsc,
-          sortDesc: nameDesc),
-      HeaderData[CargoSortOrders](label: "Amount", sortAsc: amountAsc,
-          sortDesc: amountDesc),
-      HeaderData[CargoSortOrders](label: "Durability", sortAsc: durabilityAsc,
-          sortDesc: durabilityDesc),
-      HeaderData[CargoSortOrders](label: "Quality", sortAsc: qualityAsc,
-          sortDesc: qualityDesc),
-      HeaderData[CargoSortOrders](label: "Weight", sortAsc: weightAsc,
-          sortDesc: weightDesc),
-      HeaderData[CargoSortOrders](label: "Type", sortAsc: typeAsc,
-          sortDesc: typeDesc)]
-    ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
-  addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
-      code = sortCargo, dialog = dialog)
   setLayoutRowDynamic(height = height, cols = 1)
   group(title = "ShipInfo", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
+    const
+      headers: array[6, HeaderData[CargoSortOrders]] = [
+        HeaderData[CargoSortOrders](label: "Name", sortAsc: nameAsc,
+            sortDesc: nameDesc),
+        HeaderData[CargoSortOrders](label: "Amount", sortAsc: amountAsc,
+            sortDesc: amountDesc),
+        HeaderData[CargoSortOrders](label: "Durability", sortAsc: durabilityAsc,
+            sortDesc: durabilityDesc),
+        HeaderData[CargoSortOrders](label: "Quality", sortAsc: qualityAsc,
+            sortDesc: qualityDesc),
+        HeaderData[CargoSortOrders](label: "Weight", sortAsc: weightAsc,
+            sortDesc: weightDesc),
+        HeaderData[CargoSortOrders](label: "Type", sortAsc: typeAsc,
+            sortDesc: typeDesc)]
+      ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
+
     # Show the list of crew members
-    setLayoutRowStatic(height = tableRowHeight, cols = headers.len, ratio = ratio)
+    addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
+        code = sortCargo, dialog = dialog)
     var currentRow: Positive = 1
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)

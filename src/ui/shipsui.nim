@@ -355,8 +355,7 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
         label = (if showCargoOptions: "Hide options" else: "Show options"),
         alignment = right):
       showCargoOptions = not showCargoOptions
-    showCargoInfo(dialog = dialog, height = (height - buttonHeight -
-        editHeight - tableRowHeight))
+    showCargoInfo(dialog = dialog, height = (height - buttonHeight - editHeight))
   else:
     dialog = setError(message = "Wrong number of tab")
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
