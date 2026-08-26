@@ -1292,9 +1292,10 @@ proc combatTurn*() {.raises: [KeyError, IOError, ValueError,
       discard
   else:
     distanceTraveled -= realSpeed(ship = playerShip)
-  game.enemy.distance += distanceTraveled
-  if game.enemy.distance < 10:
+  if game.enemy.distance + distanceTraveled < 10:
     game.enemy.distance = 10
+  else:
+    game.enemy.distance += distanceTraveled
   case game.enemy.distance:
   of 0 .. 999:
     accuracyBonus += 20
