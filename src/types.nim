@@ -2032,7 +2032,7 @@ type
     ##                     gun shoot once per that amount of rounds
     ship*: ShipRecord
     accuracy*: Natural
-    distance*: int
+    distance*: Natural
     combatAi*: ShipCombatAi
     evasion*: Natural
     loot*: Natural
