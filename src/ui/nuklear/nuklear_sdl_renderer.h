@@ -63,8 +63,6 @@ static struct nk_sdl {
     struct nk_font_atlas atlas;
 } sdl;
 
-
-
 NK_INTERN void
 nk_sdl_device_upload_atlas(const void *image, int width, int height)
 {
