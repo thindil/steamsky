@@ -223,7 +223,7 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
             sortDesc: typeDesc)]
       ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
-    # Show the list of crew members
+    # Show the list of items in cargo
     addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
         code = sortCargo, dialog = dialog)
     var currentRow: Positive = 1
