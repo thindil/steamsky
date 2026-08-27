@@ -230,7 +230,9 @@ type
     windowNoScrollbar = 1 shl 5,
     windowTitle = 1 shl 6,
     windowScaleLeft = 1 shl 9
-    windowNoInput = 1 shl 10
+    windowNoInput = 1 shl 10,
+    windowNoHScrollbar = 1 shl 11,
+    windowNoVScrollbar = 1 shl 12
   PopupType* = enum
     ## The types of popup windows
     staticPopup, dynamicPopup
