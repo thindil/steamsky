@@ -2039,3 +2039,18 @@ type
     perception*: Natural
     harpoonDuration*: Natural
     guns*: seq[array[1..3, int]]
+
+proc initEnemyRecord*(ship: ShipRecord = initShipRecord();
+    accuracy: Natural = 0; distance: Natural = 0;
+    combatAi: ShipCombatAi = ShipCombatAi.none): EnemyRecord {.raises: [],
+    tags: [], contractual.} =
+  ## Create a new data structure for an enemy
+  ##
+  ## * ship            - The enemy's ship
+  ## * accuracy        - The enemy's bonus to accuracy
+  ## * distance        - The distance to the enemy's ship in combat
+  ## * combatAi        - The type of enemy's AI
+  ##
+  ## Returns the new structure with information about the selected enemy
+  return EnemyRecord(ship: ship, accuracy: accuracy, distance: distance,
+      combatAi: combatAi)
