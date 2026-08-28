@@ -184,101 +184,85 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show the item's info.")
 
-proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [RootEffect],
+proc showCargoInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the list of the player's ship's cargo
   ##
   ## * dialog - the current in-game dialog displayed on the screen
-  ## * height - the height of the cargo window
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show information about free cargo space in the player's ship
-  label(str = cargoText[0])
-  colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
-  if showCargoOptions:
-    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
-    label(str = "Type:")
-    typeIndex = comboList(items = typesList, selected = typeIndex,
-        itemHeight = labelHeight.int, x = 200, y = 150,
-        tooltip = "Show only items with the selected type")
-  setLayoutRowDynamic(height = height, cols = 1)
-  group(title = "CargoTable", flags = {windowNoVScrollbar}):
-    if dialog != none:
-      windowDisable()
 
-    const
-      headers: array[6, HeaderData[CargoSortOrders]] = [
-        HeaderData[CargoSortOrders](label: "Name", sortAsc: nameAsc,
-            sortDesc: nameDesc),
-        HeaderData[CargoSortOrders](label: "Amount", sortAsc: amountAsc,
-            sortDesc: amountDesc),
-        HeaderData[CargoSortOrders](label: "Durability", sortAsc: durabilityAsc,
-            sortDesc: durabilityDesc),
-        HeaderData[CargoSortOrders](label: "Quality", sortAsc: qualityAsc,
-            sortDesc: qualityDesc),
-        HeaderData[CargoSortOrders](label: "Weight", sortAsc: weightAsc,
-            sortDesc: weightDesc),
-        HeaderData[CargoSortOrders](label: "Type", sortAsc: typeAsc,
-            sortDesc: typeDesc)]
-      ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
+  const
+    headers: array[6, HeaderData[CargoSortOrders]] = [
+      HeaderData[CargoSortOrders](label: "Name", sortAsc: nameAsc,
+          sortDesc: nameDesc),
+      HeaderData[CargoSortOrders](label: "Amount", sortAsc: amountAsc,
+          sortDesc: amountDesc),
+      HeaderData[CargoSortOrders](label: "Durability", sortAsc: durabilityAsc,
+          sortDesc: durabilityDesc),
+      HeaderData[CargoSortOrders](label: "Quality", sortAsc: qualityAsc,
+          sortDesc: qualityDesc),
+      HeaderData[CargoSortOrders](label: "Weight", sortAsc: weightAsc,
+          sortDesc: weightDesc),
+      HeaderData[CargoSortOrders](label: "Type", sortAsc: typeAsc,
+          sortDesc: typeDesc)]
+    ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
-    # Show the list of items in cargo
-    addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
-        code = sortCargo, dialog = dialog)
-    setLayoutRowDynamic(height = height - tableRowHeight - 15, cols = 1)
-    group(title = "CargoRows", flags = {windowNoHScrollbar}):
-      setLayoutRowStatic(height = tableRowHeight, cols = headers.len, ratio = ratio)
-      var currentRow: Positive = 1
-      saveButtonStyle()
-      setButtonStyle(field = borderColor, a = 0)
-      try:
-        setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-        setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-      except:
-        dialog = setError(message = "Can't set table color")
-        return
-      setButtonStyle(field = rounding, value = 0)
-      setButtonStyle(field = border, value = 0)
-      let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-      var row: Positive = 1
-      for index in itemsIndexes:
-        if currentRow < startRow:
-          currentRow.inc
-          continue
-        let
-          item: InventoryData = playerShip.cargo[index]
-          protoItem: ObjectData = try:
-              itemsList[item.protoIndex]
-            except:
-              dialog = setError(message = "Can't get the proto item.")
-              return
-          itemType: string = (if protoItem.showType.len >
-              0: protoItem.showType else: protoItem.itemType)
-        if typesList[typeIndex] != "All" and itemType != typesList[typeIndex]:
-          continue
-        addButton(label = getItemName(item = item),
-            tooltip = "Show item's description and actions", data = index,
-            code = showItemInfo, dialog = dialog)
-        addButton(label = $item.amount, tooltip = "The amount of the selected item",
-            data = index, code = showItemInfo, dialog = dialog)
-        addProgressBar(tooltip = "The current durability of the selected item",
-            value = item.durability, maxValue = getItemMaxDurability(item = item),
-                data = index,
-            code = showItemInfo, dialog = dialog)
-        addButton(label = ($item.quality).capitalizeAscii,
-            tooltip = "The quality of the selected item", data = index,
-            code = showItemInfo, dialog = dialog)
-        try:
-          addButton(label = $(item.amount * getItemWeight(item = item)) & " kg",
-              tooltip = "The total weight of the selected item", data = index,
-              code = showItemInfo, dialog = dialog)
-        except KeyError:
-          dialog = setError(message = "Can't show the item's weight.")
-        addButton(label = itemType, tooltip = "The type of the selected item",
-            data = index, code = showItemInfo, dialog = dialog)
-        row.inc
-        if row == gameSettings.listsLimit + 1:
-          break
-      restoreButtonStyle()
-      addPagination(page = currentPage, row = row)
+  # Show the list of items in cargo
+  addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
+      code = sortCargo, dialog = dialog)
+  var currentRow: Positive = 1
+  saveButtonStyle()
+  setButtonStyle(field = borderColor, a = 0)
+  try:
+    setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+  except:
+    dialog = setError(message = "Can't set table color")
+    return
+  setButtonStyle(field = rounding, value = 0)
+  setButtonStyle(field = border, value = 0)
+  let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+  var row: Positive = 1
+  for index in itemsIndexes:
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    let
+      item: InventoryData = playerShip.cargo[index]
+      protoItem: ObjectData = try:
+          itemsList[item.protoIndex]
+        except:
+          dialog = setError(message = "Can't get the proto item.")
+          return
+      itemType: string = (if protoItem.showType.len >
+          0: protoItem.showType else: protoItem.itemType)
+    if typesList[typeIndex] != "All" and itemType != typesList[typeIndex]:
+      continue
+    addButton(label = getItemName(item = item),
+        tooltip = "Show item's description and actions", data = index,
+        code = showItemInfo, dialog = dialog)
+    addButton(label = $item.amount, tooltip = "The amount of the selected item",
+        data = index, code = showItemInfo, dialog = dialog)
+    addProgressBar(tooltip = "The current durability of the selected item",
+        value = item.durability, maxValue = getItemMaxDurability(item = item),
+            data = index,
+        code = showItemInfo, dialog = dialog)
+    addButton(label = ($item.quality).capitalizeAscii,
+        tooltip = "The quality of the selected item", data = index,
+        code = showItemInfo, dialog = dialog)
+    try:
+      addButton(label = $(item.amount * getItemWeight(item = item)) & " kg",
+          tooltip = "The total weight of the selected item", data = index,
+          code = showItemInfo, dialog = dialog)
+    except KeyError:
+      dialog = setError(message = "Can't show the item's weight.")
+    addButton(label = itemType, tooltip = "The type of the selected item",
+        data = index, code = showItemInfo, dialog = dialog)
+    row.inc
+    if row == gameSettings.listsLimit + 1:
+      break
+  restoreButtonStyle()
+  addPagination(page = currentPage, row = row)
