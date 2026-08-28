@@ -203,7 +203,7 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
         itemHeight = labelHeight.int, x = 200, y = 150,
         tooltip = "Show only items with the selected type")
   setLayoutRowDynamic(height = height, cols = 1)
-  groupScrolled(x = 0, y = 0, title = "CargoTable", flags = {windowNoScrollbar}):
+  group(title = "CargoTable", flags = {windowNoVScrollbar}):
     if dialog != none:
       windowDisable()
 
@@ -227,7 +227,7 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
         code = sortCargo, dialog = dialog)
     setLayoutRowDynamic(height = height - tableRowHeight - 15, cols = 1)
-    group(title = "CargoRows", flags = {windowNoFlags}):
+    group(title = "CargoRows", flags = {windowNoHScrollbar}):
       setLayoutRowStatic(height = tableRowHeight, cols = headers.len, ratio = ratio)
       var currentRow: Positive = 1
       saveButtonStyle()
