@@ -348,14 +348,26 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       showModulesInfo(dialog = dialog)
   # The player's ship's cargo info
   of 3:
-    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-        200.cfloat, cargoWidth[0], cargoWidth[1]])
-    imageLabelButton(image = images[moreOptionsIcon],
-        tooltip = "Show/Hide additional options related to managing the cargo",
-        label = (if showCargoOptions: "Hide options" else: "Show options"),
-        alignment = right):
-      showCargoOptions = not showCargoOptions
-    showCargoInfo(dialog = dialog, height = (height - buttonHeight - editHeight))
+    setLayoutRowDynamic(height = height, cols = 1)
+    group(title = "CargoTable", flags = {windowNoFlags}):
+      if dialog != none:
+        windowDisable()
+      setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+          200.cfloat, cargoWidth[0], cargoWidth[1]])
+      imageLabelButton(image = images[moreOptionsIcon],
+          tooltip = "Show/Hide additional options related to managing the cargo",
+          label = (if showCargoOptions: "Hide options" else: "Show options"),
+          alignment = right):
+        showCargoOptions = not showCargoOptions
+      label(str = cargoText[0])
+      colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
+      if showCargoOptions:
+        setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
+        label(str = "Type:")
+        typeIndex = comboList(items = typesList, selected = typeIndex,
+            itemHeight = labelHeight.int, x = 200, y = 150,
+            tooltip = "Show only items with the selected type")
+      showCargoInfo(dialog = dialog)
   else:
     dialog = setError(message = "Wrong number of tab")
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
