@@ -203,7 +203,7 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
         itemHeight = labelHeight.int, x = 200, y = 150,
         tooltip = "Show only items with the selected type")
   setLayoutRowDynamic(height = height, cols = 1)
-  group(title = "CargoTable", flags = {windowNoScrollbar}):
+  groupScrolled(x = 0, y = 0, title = "CargoTable", flags = {windowNoScrollbar}):
     if dialog != none:
       windowDisable()
 
