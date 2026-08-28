@@ -2042,15 +2042,28 @@ type
 
 proc initEnemyRecord*(ship: ShipRecord = initShipRecord();
     accuracy: Natural = 0; distance: Natural = 0;
-    combatAi: ShipCombatAi = ShipCombatAi.none): EnemyRecord {.raises: [],
-    tags: [], contractual.} =
+    combatAi: ShipCombatAi = ShipCombatAi.none; evasion: Natural = 0;
+    loot: Natural = 0; perception: Natural = 0; harpoonDuration: Natural = 0;
+    guns: seq[array[1..3, int]] = @[]): EnemyRecord {.raises: [], tags: [],
+    contractual.} =
   ## Create a new data structure for an enemy
   ##
   ## * ship            - The enemy's ship
   ## * accuracy        - The enemy's bonus to accuracy
   ## * distance        - The distance to the enemy's ship in combat
   ## * combatAi        - The type of enemy's AI
+  ## * evasion         - The enemy's bonus to evasion
+  ## * loot            - The amount of money looted from the enemy after win
+  ##                     the fight with it
+  ## * perception      - The enemy's bonus to perception
+  ## * harpoonDuration - How long in combat rounds the enemy's ship will be
+  ##                     stopped by the player's harpoon
+  ## * guns            - The list of guns on the enemy's ship, 0 - gun index
+  ##                     in ship modules list, 1 - gunner order, 2 - amount
+  ##                     of shoots from the gun, value below zero means that
+  ##                     gun shoot once per that amount of rounds
   ##
   ## Returns the new structure with information about the selected enemy
   return EnemyRecord(ship: ship, accuracy: accuracy, distance: distance,
-      combatAi: combatAi)
+      combatAi: combatAi, evasion: evasion, loot: loot, perception: perception,
+      harpoonDuration: harpoonDuration, guns: guns)
