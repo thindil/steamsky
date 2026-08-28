@@ -20303,8 +20303,7 @@ nk_panel_end(struct nk_context *ctx)
         if (layout->flags & NK_WINDOW_SCALE_LEFT)
             scaler.x = layout->bounds.x - panel_padding.x * 0.5f;
         else scaler.x = layout->bounds.x + layout->bounds.w + panel_padding.x;
-        if ((layout->flags & NK_WINDOW_NO_SCROLLBAR) ||
-            (layout->flags & NK_WINDOW_NO_VSCROLLBAR))
+        if ((layout->flags & NK_WINDOW_NO_SCROLLBAR))
             scaler.x -= scaler.w;
 
         /* draw scaler */
