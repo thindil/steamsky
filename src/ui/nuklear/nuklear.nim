@@ -3013,7 +3013,7 @@ template group*(title, tooltip: string; flags: set[PanelFlags];
     showTooltip2(text = tooltip)
 
 template groupScrolled*(x, y: var Natural; title: string; flags: set[
-    PanelFlags];content: untyped) =
+    PanelFlags]; content: untyped) =
   ## Set a group of widgets inside the parent
   ##
   ## * x       - the starting x offset of the scrollbar
@@ -3062,6 +3062,23 @@ proc groupSetScrollbar*(title: string; xOffset, yOffset: Natural) {.raises: [],
     ## A binding to Nuklear's function. Internal use only
   nk_group_set_scroll(ctx = ctx, id = title.cstring, x_offset = xOffset.nk_uint,
       y_offset = yOffset.nk_uint)
+
+proc groupGetScrollbar*(title: string; xOffset,
+    yOffset: var Natural) {.raises: [], tags: [], contractual.} =
+  ## Get the scrollbar position of the given group
+  ##
+  ## * title   - the title of the group
+  ## * xOffset - the x offset the group's scrollbar
+  ## * yOffset - the y offset the group's scrollbar
+  ##
+  ## Returns modified parameters xOffset and yOffset
+  proc nk_group_get_scroll(ctx; id: cstring; x_offset,
+      y_offset: nk_uint) {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  var x, y: nk_uint = 0
+  nk_group_get_scroll(ctx = ctx, id = title.cstring, x_offset = x, y_offset = y)
+  xOffset = x
+  yOffset = y
 
 # ---------
 # Edit text
