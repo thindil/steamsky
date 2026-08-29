@@ -2031,9 +2031,9 @@ type
     ##                     of shoots from the gun, value below zero means that
     ##                     gun shoot once per that amount of rounds
     ship*: ShipRecord
-    accuracy*: Natural
-    distance*: Natural
-    combatAi*: ShipCombatAi
+    accuracy: Natural
+    distance: Natural
+    combatAi: ShipCombatAi
     evasion*: Natural
     loot*: Natural
     perception*: Natural
@@ -2067,3 +2067,10 @@ proc initEnemyRecord*(ship: ShipRecord = initShipRecord();
   return EnemyRecord(ship: ship, accuracy: accuracy, distance: distance,
       combatAi: combatAi, evasion: evasion, loot: loot, perception: perception,
       harpoonDuration: harpoonDuration, guns: guns)
+
+typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = ship,
+    typ = ShipRecord)
+typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = accuracy, typ = Natural)
+typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = distance, typ = Natural)
+typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = combatAi,
+    typ = ShipCombatAi)
