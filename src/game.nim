@@ -342,7 +342,7 @@ var
     ## The current trader's ship's cargo
   harpoonDuration*: Natural = 0
     ## How long in combat rounds the player's ship will be stopped by an enemy's harpoon
-  enemy*: EnemyRecord = EnemyRecord(ship: initShipRecord(skyX = 1, skyY = 1))
+  enemy*: EnemyRecord = initEnemyRecord(ship = initShipRecord(skyX = 1, skyY = 1))
     ## The enemy information
 {.warning[UnsafeDefault]: on.}
 {.warning[UnsafeSetLen]: on.}

@@ -125,24 +125,24 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
           else:
             modulesList[module.protoIndex].speed
       enemyGuns.add(y = [1: index, 2: 1, 3: shootingSpeed])
-  game.enemy = EnemyRecord(ship: enemyShip, accuracy: (if protoShipsList[
+  game.enemy = initEnemyRecord(ship = enemyShip, accuracy = (if protoShipsList[
       enemyIndex].accuracy.maxValue == 0: protoShipsList[
       enemyIndex].accuracy.minValue else: getRandom(min = protoShipsList[
       enemyIndex].accuracy.minValue, max = protoShipsList[
-      enemyIndex].accuracy.maxValue)), distance: 10_000,
-      combatAi: protoShipsList[enemyIndex].combatAi, evasion: (
+      enemyIndex].accuracy.maxValue)), distance = 10_000,
+      combatAi = protoShipsList[enemyIndex].combatAi, evasion = (
       if protoShipsList[enemyIndex].evasion.maxValue == 0: protoShipsList[
       enemyIndex].evasion.minValue else: getRandom(min = protoShipsList[
       enemyIndex].evasion.minValue, max = protoShipsList[
-      enemyIndex].evasion.maxValue)), loot: (if protoShipsList[
+      enemyIndex].evasion.maxValue)), loot = (if protoShipsList[
       enemyIndex].loot.maxValue == 0: protoShipsList[
       enemyIndex].loot.minValue else: getRandom(min = protoShipsList[
       enemyIndex].loot.minValue, max = protoShipsList[
-      enemyIndex].loot.maxValue)), perception: (if protoShipsList[
+      enemyIndex].loot.maxValue)), perception = (if protoShipsList[
       enemyIndex].perception.maxValue == 0: protoShipsList[
       enemyIndex].perception.minValue else: getRandom(min = protoShipsList[
       enemyIndex].perception.minValue, max = protoShipsList[
-      enemyIndex].perception.maxValue)), harpoonDuration: 0, guns: enemyGuns)
+      enemyIndex].perception.maxValue)), harpoonDuration = 0, guns = enemyGuns)
   if pilotOrder == 0:
     pilotOrder = 2
     engineerOrder = 3
@@ -1295,7 +1295,9 @@ proc combatTurn*() {.raises: [KeyError, IOError, ValueError,
   if game.enemy.distance + distanceTraveled < 10:
     game.enemy.distance = 10
   else:
-    game.enemy.distance += distanceTraveled
+    {.ruleOff: "assignments".}
+    game.enemy.distance = game.enemy.distance + distanceTraveled
+    {.ruleOn: "assignments".}
   case game.enemy.distance:
   of 0 .. 999:
     accuracyBonus += 20
