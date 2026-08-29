@@ -317,7 +317,7 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 hasOptions = true
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
-  let height: float = (windowHeight - 35 -
+  var height: float = (windowHeight - 35 -
       gameSettings.messagesPosition.float - tabHeight)
   case shipInfoTab
   # General info about the player's ship
@@ -348,26 +348,24 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       showModulesInfo(dialog = dialog)
   # The player's ship's cargo info
   of 3:
-    setLayoutRowDynamic(height = height, cols = 1)
-    group(title = "ShipInfo", flags = {windowNoFlags}):
-      if dialog != none:
-        windowDisable()
-      setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-          200.cfloat, cargoWidth[0], cargoWidth[1]])
-      imageLabelButton(image = images[moreOptionsIcon],
-          tooltip = "Show/Hide additional options related to managing the cargo",
-          label = (if showCargoOptions: "Hide options" else: "Show options"),
-          alignment = right):
-        showCargoOptions = not showCargoOptions
-      label(str = cargoText[0])
-      colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
-      if showCargoOptions:
-        setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
-        label(str = "Type:")
-        typeIndex = comboList(items = typesList, selected = typeIndex,
-            itemHeight = labelHeight.int, x = 200, y = 150,
-            tooltip = "Show only items with the selected type")
-      showCargoInfo(dialog = dialog)
+    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+        200.cfloat, cargoWidth[0], cargoWidth[1]])
+    imageLabelButton(image = images[moreOptionsIcon],
+        tooltip = "Show/Hide additional options related to managing the cargo",
+        label = (if showCargoOptions: "Hide options" else: "Show options"),
+        alignment = right):
+      showCargoOptions = not showCargoOptions
+    label(str = cargoText[0])
+    colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
+    height -= buttonHeight
+    if showCargoOptions:
+      setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
+      label(str = "Type:")
+      typeIndex = comboList(items = typesList, selected = typeIndex,
+          itemHeight = labelHeight.int, x = 200, y = 150,
+          tooltip = "Show only items with the selected type")
+      height -= editHeight
+    showCargoInfo(dialog = dialog, height = height)
   else:
     dialog = setError(message = "Wrong number of tab")
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
