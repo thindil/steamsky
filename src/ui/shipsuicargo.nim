@@ -184,8 +184,8 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show the item's info.")
 
-proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Show the list of the player's ship's cargo
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -194,30 +194,34 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show information about free cargo space in the player's ship
+  const
+    headers: array[6, HeaderData[CargoSortOrders]] = [
+      HeaderData[CargoSortOrders](label: "Name", sortAsc: nameAsc,
+          sortDesc: nameDesc),
+      HeaderData[CargoSortOrders](label: "Amount", sortAsc: amountAsc,
+          sortDesc: amountDesc),
+      HeaderData[CargoSortOrders](label: "Durability", sortAsc: durabilityAsc,
+          sortDesc: durabilityDesc),
+      HeaderData[CargoSortOrders](label: "Quality", sortAsc: qualityAsc,
+          sortDesc: qualityDesc),
+      HeaderData[CargoSortOrders](label: "Weight", sortAsc: weightAsc,
+          sortDesc: weightDesc),
+      HeaderData[CargoSortOrders](label: "Type", sortAsc: typeAsc,
+          sortDesc: typeDesc)]
+    ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
-  setLayoutRowDynamic(height = height, cols = 1)
-  group(title = "CargoInfo", flags = {windowNoFlags}):
+  setLayoutRowDynamic(height = tableRowHeight + 5, cols = 1)
+  group(title = "CargoTableHeader", flags = {windowNoScrollbar}):
     if dialog != none:
       windowDisable()
-    const
-      headers: array[6, HeaderData[CargoSortOrders]] = [
-        HeaderData[CargoSortOrders](label: "Name", sortAsc: nameAsc,
-            sortDesc: nameDesc),
-        HeaderData[CargoSortOrders](label: "Amount", sortAsc: amountAsc,
-            sortDesc: amountDesc),
-        HeaderData[CargoSortOrders](label: "Durability", sortAsc: durabilityAsc,
-            sortDesc: durabilityDesc),
-        HeaderData[CargoSortOrders](label: "Quality", sortAsc: qualityAsc,
-            sortDesc: qualityDesc),
-        HeaderData[CargoSortOrders](label: "Weight", sortAsc: weightAsc,
-            sortDesc: weightDesc),
-        HeaderData[CargoSortOrders](label: "Type", sortAsc: typeAsc,
-            sortDesc: typeDesc)]
-      ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
-
     # Show the list of items in cargo
     addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
         code = sortCargo, dialog = dialog)
+  setLayoutRowDynamic(height = height - tableRowHeight, cols = 1)
+  group(title = "CargoTableRows", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
+    setLayoutRowStatic(height = tableRowHeight, cols = headers.len, ratio = ratio)
     var currentRow: Positive = 1
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
