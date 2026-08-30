@@ -2034,10 +2034,10 @@ type
     accuracy: Natural
     distance: Natural
     combatAi: ShipCombatAi
-    evasion*: Natural
-    loot*: Natural
-    perception*: Natural
-    harpoonDuration*: Natural
+    evasion: Natural
+    loot: Natural
+    perception: Natural
+    harpoonDuration: Natural
     guns*: seq[array[1..3, int]]
 
 proc initEnemyRecord*(ship: ShipRecord = initShipRecord();
@@ -2070,7 +2070,19 @@ proc initEnemyRecord*(ship: ShipRecord = initShipRecord();
 
 typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = ship,
     typ = ShipRecord)
-typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = accuracy, typ = Natural)
-typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = distance, typ = Natural)
+typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = accuracy,
+    typ = Natural)
+typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = distance,
+    typ = Natural)
 typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = combatAi,
     typ = ShipCombatAi)
+typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = evasion,
+    typ = Natural)
+typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = loot,
+    typ = Natural)
+typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = perception,
+    typ = Natural)
+typeGetterSetter(baseType = EnemyRecord, varName = enemy,
+    name = harpoonDuration, typ = Natural)
+typeGetterSetter(baseType = EnemyRecord, varName = enemy, name = guns,
+    typ = seq[array[1..3, int]])
