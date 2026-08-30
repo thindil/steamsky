@@ -3031,7 +3031,7 @@ template groupScrolled*(x, y: var Natural; title: string; flags: set[
   x = cx
   y = cy
 
-template groupScrolled*(x, y: Natural; title, tooltip: string;
+template groupScrolled*(x, y: var Natural; title, tooltip: string;
     flags: set[PanelFlags]; content: untyped) =
   ## Set a group of widgets inside the parent
   ##
@@ -3042,13 +3042,18 @@ template groupScrolled*(x, y: Natural; title, tooltip: string;
   ## * flags   - the set of PanelFlags for the group
   ## * content - the content of the group
   let showTips: bool = widgetIsHovered()
-  if nk_group_scrolled_offset_begin(ctx = ctx, x_offset = x.nk_uint,
-      y_offset = y.nk_uint, ctitle = title.cstring, cflags = winSetToInt(
+  var
+    cx: nk_uint = x.nk_uint
+    cy: nk_uint = y.nk_uint
+  if nk_group_scrolled_offset_begin(ctx = ctx, x_offset = cx,
+      y_offset = cy, ctitle = title.cstring, cflags = winSetToInt(
       nimFlags = flags)):
     content
     nk_group_scrolled_end(ctx = ctx)
   if showTips:
     showTooltip2(text = tooltip)
+  x = cx
+  y = cy
 
 proc groupSetScrollbar*(title: string; xOffset, yOffset: Natural) {.raises: [],
     tags: [], contractual.} =
