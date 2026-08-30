@@ -184,7 +184,7 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show the item's info.")
 
-var xOffset, yOffset: Natural = 10
+var xOffset, yOffset: Natural = 0
 
 proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -213,8 +213,8 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
   setLayoutRowDynamic(height = tableRowHeight + 10, cols = 1)
-  group(title = "CargoTableHeader", flags = {
-      windowNoVScrollbar}):
+  groupScrolled(x = xOffset, y = yOffset, title = "CargoTableHeader", flags = {
+      windowNoScrollbar}):
     if dialog != none:
       windowDisable()
     # Show the list of items in cargo
@@ -278,3 +278,4 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
         break
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
+  groupGetScrollbar(title = "CargoTableRows", xOffset = xOffset, yOffset = yOffset)
