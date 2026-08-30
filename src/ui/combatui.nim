@@ -250,7 +250,7 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
         engineerIndex = findMember(order = engineer) + 1
         pilotIndex = findMember(order = pilot) + 1
       # Show the guns settings
-      for gunIndex, gun in guns.mpairs:
+      for gunIndex, gun in combat.guns.mpairs:
         var hasGunner: bool = playerShip.modules[gun[1]].owner[0] > 0
         if hasGunner:
           setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])

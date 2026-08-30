@@ -274,7 +274,7 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   engineerIndex = findMember(order = engineer) + 1
   gunnersIndex = @[]
   updateParties()
-  for gun in guns:
+  for gun in combat.guns:
     gunnersIndex.add(y = playerShip.modules[gun[1]].owner[0] + 1)
   updateCrewLists()
 

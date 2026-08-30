@@ -62,7 +62,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
   ## as first. Otherwise returns false.
   enemyShipIndex = enemyIndex
   factionName = factionsList[protoShipsList[enemyIndex].owner].name
-  harpoonDuration = 0
+  game.harpoonDuration = 0
   boardingOrders = @[]
   var enemyShip: ShipRecord = createShip(protoIndex = enemyIndex, name = "",
       x = playerShip.skyX, y = playerShip.skyY, speed = fullSpeed)
@@ -802,15 +802,19 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
                 weaponDamage = 1
               break
           if ship.crew == playerShip.crew:
-            game.enemy.harpoonDuration += weaponDamage
+            {.ruleOff: "assignments".}
+            game.enemy.harpoonDuration = game.enemy.harpoonDuration + weaponDamage
+            {.ruleOn: "assignments".}
           else:
-            harpoonDuration += weaponDamage
+            game.harpoonDuration += weaponDamage
           weaponDamage = 1
         elif module.mType == ModuleType2.batteringRam:
           if ship.crew == playerShip.crew:
-            game.enemy.harpoonDuration += 2
+            {.ruleOff: "assignments".}
+            game.enemy.harpoonDuration = game.enemy.harpoonDuration + 2
+            {.ruleOn: "assignments".}
           else:
-            harpoonDuration += 2
+            game.harpoonDuration += 2
       damageModule(ship = enemyShip, moduleIndex = hitLocation,
           damage = weaponDamage,
           deathReason = "enemy fire in ship combat")
@@ -1352,9 +1356,9 @@ proc combatTurn*() {.raises: [KeyError, IOError, ValueError,
             defenders = playerShip.crew, playerAttack = false)
   if not endCombat:
     if game.enemy.harpoonDuration > 0:
-      game.enemy.harpoonDuration.dec
+      game.enemy.harpoonDuration = game.enemy.harpoonDuration - 1
     if harpoonDuration > 0:
-      harpoonDuration.dec
+      game.harpoonDuration.dec
     if game.enemy.harpoonDuration > 0 or harpoonDuration > 0:
       updateOrders(ship = playerShip, combat = true)
     updateGame(minutes = 1, inCombat = true)
