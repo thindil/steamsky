@@ -210,7 +210,7 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
           sortDesc: typeDesc)]
     ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
-  setLayoutRowDynamic(height = tableRowHeight + 5, cols = 1)
+  setLayoutRowDynamic(height = tableRowHeight + 10, cols = 1)
   group(title = "CargoTableHeader", flags = {windowNoScrollbar}):
     if dialog != none:
       windowDisable()
