@@ -2012,6 +2012,7 @@ typeGetterSetter(baseType = ProtoMobRecord, varName = mob, name = order,
 typeGetterSetter(baseType = ProtoMobRecord, varName = mob, name = priorities,
     typ = array[1..12, Natural])
 
+{.push ruleOff: "objects".}
 type
   EnemyRecord* = object
     ## Used to store information about the enemy
@@ -2039,6 +2040,7 @@ type
     perception: Natural
     harpoonDuration: Natural
     guns*: seq[array[1..3, int]]
+{.pop ruleOn: "objects".}
 
 proc initEnemyRecord*(ship: ShipRecord = initShipRecord();
     accuracy: Natural = 0; distance: Natural = 0;
