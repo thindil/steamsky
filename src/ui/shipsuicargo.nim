@@ -212,35 +212,10 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
           sortDesc: typeDesc)]
     ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
-  setLayoutRowDynamic(height = tableRowHeight + 10, cols = 1)
-  groupScrolled(x = xOffset, y = yOffset, title = "CargoTableHeader", flags = {
-      windowNoScrollbar}):
-    if dialog != none:
-      windowDisable()
-    # Show the list of items in cargo
-    addHeader(headers = headers, ratio = ratio, tooltip = "cargo",
-        code = sortCargo, dialog = dialog)
-  setLayoutRowDynamic(height = height - tableRowHeight, cols = 1)
-  group(title = "CargoTableRows", flags = {windowNoFlags}):
-    if dialog != none:
-      windowDisable()
-    setLayoutRowStatic(height = tableRowHeight, cols = headers.len, ratio = ratio)
-    var currentRow: Positive = 1
-    saveButtonStyle()
-    setButtonStyle(field = borderColor, a = 0)
-    try:
-      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    except:
-      dialog = setError(message = "Can't set table color")
-      return
-    setButtonStyle(field = rounding, value = 0)
-    setButtonStyle(field = border, value = 0)
-    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-    var row: Positive = 1
+  table(name = "CargoTable", xScroll = xOffset, yScroll = yOffset,
+      headers = headers, ratio = ratio, tableTooltip = "cargo", height = height):
     for index in itemsIndexes:
-      if currentRow < startRow:
-        currentRow.inc
+      if not isStartingRow():
         continue
       let
         item: InventoryData = playerShip.cargo[index]
@@ -273,9 +248,5 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
         dialog = setError(message = "Can't show the item's weight.")
       addButton(label = itemType, tooltip = "The type of the selected item",
           data = index, code = showItemInfo, dialog = dialog)
-      row.inc
-      if row == gameSettings.listsLimit + 1:
+      if isLastRow():
         break
-    restoreButtonStyle()
-    addPagination(page = currentPage, row = row)
-  groupGetScrollbar(title = "CargoTableRows", xOffset = xOffset, yOffset = yOffset)
