@@ -158,6 +158,20 @@ proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [],
   checkbox(label = "", checked = checked, tooltip = tooltip,
       widgetAlignment = widgetCentered)
 
+var startRow, currentRow, row: Positive = 1
+
+proc isStartingRow*(): bool {.raises: [], tags: [], contractual.} =
+  if currentRow < startRow:
+    currentRow.inc
+    return false
+  return true
+
+proc isLastRow*(): bool {.raises: [], tags: [], contractual.} =
+  row.inc
+  if row == gameSettings.listsLimit + 1:
+    return true
+  return false
+
 template table*(name: string; xScroll, yScroll: Natural; headers: openArray[
     HeaderData]; ratio: openArray[cfloat]; tableTooltip: string; height: float;
     code: untyped) =
@@ -174,7 +188,7 @@ template table*(name: string; xScroll, yScroll: Natural; headers: openArray[
     if dialog != none:
       windowDisable()
     setLayoutRowStatic(height = tableRowHeight, cols = headers.len, ratio = ratio)
-    var currentRow: Positive = 1
+    currentRow = 1
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
     try:
@@ -185,8 +199,8 @@ template table*(name: string; xScroll, yScroll: Natural; headers: openArray[
       return
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
-    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-    var row: Positive = 1
+    startRow = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    row = 1
     code
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
