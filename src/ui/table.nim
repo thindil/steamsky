@@ -157,3 +157,37 @@ proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [],
   ## or uncheck the button.
   checkbox(label = "", checked = checked, tooltip = tooltip,
       widgetAlignment = widgetCentered)
+
+template table*(name: string; xScroll, yScroll: Natural; headers: openArray[
+    HeaderData]; ratio: openArray[cfloat]; tooltip: string; height: float;
+    code: untyped) =
+  setLayoutRowDynamic(height = tableRowHeight + 10, cols = 1)
+  groupScrolled(x = xOffset, y = yOffset, title = name & "Header", flags = {
+      windowNoScrollbar}):
+    if dialog != none:
+      windowDisable()
+    # Show the list of items in cargo
+    addHeader(headers = headers, ratio = ratio, tooltip = tooltip,
+        code = sortCargo, dialog = dialog)
+  setLayoutRowDynamic(height = height - tableRowHeight, cols = 1)
+  group(title = "CargoTableRows", flags = {windowNoFlags}):
+    if dialog != none:
+      windowDisable()
+    setLayoutRowStatic(height = tableRowHeight, cols = headers.len, ratio = ratio)
+    var currentRow: Positive = 1
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    var row: Positive = 1
+    code
+    restoreButtonStyle()
+    addPagination(page = currentPage, row = row)
+  groupGetScrollbar(title = name & "Rows", xOffset = xOffset, yOffset = yOffset)
