@@ -205,3 +205,4 @@ template table*(name: string; xScroll, yScroll: Natural; headers: openArray[
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
   groupGetScrollbar(title = name & "Rows", xOffset = xOffset, yOffset = yOffset)
+  yOffset = 0
