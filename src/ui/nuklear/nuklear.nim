@@ -3078,7 +3078,7 @@ proc groupGetScrollbar*(title: string; xOffset,
   ##
   ## Returns modified parameters xOffset and yOffset
   proc nk_group_get_scroll(ctx; id: cstring; x_offset,
-      y_offset: nk_uint) {.importc, nodecl, raises: [], tags: [], contractual.}
+      y_offset: var nk_uint) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   var x, y: nk_uint = 0
   nk_group_get_scroll(ctx = ctx, id = title.cstring, x_offset = x, y_offset = y)
