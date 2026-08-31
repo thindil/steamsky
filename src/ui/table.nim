@@ -174,14 +174,14 @@ proc isLastRow*(): bool {.raises: [], tags: [], contractual.} =
 
 template table*(name: string; xScroll, yScroll: Natural; headers: openArray[
     HeaderData]; ratio: openArray[cfloat]; tableTooltip: string; height: float;
-    code: untyped) =
+    tableCode: untyped) =
   setLayoutRowDynamic(height = tableRowHeight + 10, cols = 1)
   groupScrolled(x = xOffset, y = yOffset, title = name & "Header", flags = {
       windowNoScrollbar}):
     if dialog != none:
       windowDisable()
     # Show the list of items in cargo
-    addHeader(headers = headers, ratio = ratio, tooltip = tooltip,
+    addHeader(headers = headers, ratio = ratio, tooltip = tableTooltip,
         code = sortCargo, dialog = dialog)
   setLayoutRowDynamic(height = height - tableRowHeight, cols = 1)
   group(title = "CargoTableRows", flags = {windowNoFlags}):
@@ -201,7 +201,7 @@ template table*(name: string; xScroll, yScroll: Natural; headers: openArray[
     setButtonStyle(field = border, value = 0)
     startRow = ((currentPage - 1) * gameSettings.listsLimit) + 1
     row = 1
-    code
+    tableCode
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
   groupGetScrollbar(title = name & "Rows", xOffset = xOffset, yOffset = yOffset)
