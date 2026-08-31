@@ -159,7 +159,7 @@ proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [],
       widgetAlignment = widgetCentered)
 
 template table*(name: string; xScroll, yScroll: Natural; headers: openArray[
-    HeaderData]; ratio: openArray[cfloat]; tooltip: string; height: float;
+    HeaderData]; ratio: openArray[cfloat]; tableTooltip: string; height: float;
     code: untyped) =
   setLayoutRowDynamic(height = tableRowHeight + 10, cols = 1)
   groupScrolled(x = xOffset, y = yOffset, title = name & "Header", flags = {
