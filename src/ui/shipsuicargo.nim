@@ -213,7 +213,8 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
   table(name = "CargoTable", xScroll = xOffset, yScroll = yOffset,
-      headers = headers, ratio = ratio, tableTooltip = "cargo", height = height):
+      headers = headers, ratio = ratio, tableTooltip = "cargo", height = height,
+      headerCode = sortCargo):
     for index in itemsIndexes:
       if not isStartingRow():
         continue
