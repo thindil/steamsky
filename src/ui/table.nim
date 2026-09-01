@@ -183,14 +183,28 @@ proc isLastRow*(): bool {.raises: [], tags: [], contractual.} =
 template table*(name: string; xScroll, yScroll: Natural; headers: openArray[
     HeaderData]; ratio: openArray[cfloat]; tableTooltip: string; height: float;
     tableCode: untyped) =
+  ## Show the table
+  ##
+  ## * name         - the name of the table
+  ## * xScroll      - the x offset of the scroll used to scrolling the table's
+  ##                  header
+  ## * headers      - the list of headers to add
+  ## * ratio        - the list of width for each column in the table
+  ## * tableTooltip - the name of things to sort, like items, etc. Will be
+  ##                  added to the headers' tooltips. If empty, disables
+  ##                  tooltips for the header.
+  ## * headerCode   - the code executed when a header was clicked
+  ## * height       - the height of the table
+  ## * tableCode    - the code executed to show the table's data
+  # Show the table's header
   setLayoutRowDynamic(height = tableRowHeight + 10, cols = 1)
   groupScrolled(x = xOffset, y = yOffset, title = name & "Header", flags = {
       windowNoScrollbar}):
     if dialog != none:
       windowDisable()
-    # Show the list of items in cargo
     addHeader(headers = headers, ratio = ratio, tooltip = tableTooltip,
         code = sortCargo, dialog = dialog)
+  # Show the table's rows
   setLayoutRowDynamic(height = height - tableRowHeight, cols = 1)
   group(title = "CargoTableRows", flags = {windowNoFlags}):
     if dialog != none:
