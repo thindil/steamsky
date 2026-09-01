@@ -109,8 +109,6 @@ nk_sdl_init(SDL_Window *win, SDL_Renderer *renderer)
 NK_API void
 nk_sdl_font_stash_begin(struct nk_font_atlas **atlas)
 {
-    nk_font_atlas_init_default(&sdl.atlas);
-    nk_font_atlas_begin(&sdl.atlas);
     *atlas = &sdl.atlas;
 }
 

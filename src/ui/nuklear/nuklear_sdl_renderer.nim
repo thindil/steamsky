@@ -751,9 +751,11 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   var config: nk_font_config = new_nk_font_config(pixelHeight = 0)
   if glyphsRanges.len > 0:
     config.`range` = glyphsRanges.addr
+  {.emit: """
+    nk_font_atlas_init_default(&sdl.atlas);
+    nk_font_atlas_begin(&sdl.atlas);
+  """.}
   nk_sdl_font_stash_begin(atlas = sdl.atlas.addr)
-#  nk_font_atlas_init_default(atlas = sdl.atlas)
-#  nk_font_atlas_begin(atlas = sdl.atlas)
   {.ruleOff: "namedParams".}
   result = nk_font_atlas_add_from_file(atlas = sdl.atlas,
       filePath = font.path.cstring, height = font.size.cfloat * fontScale, config.addr)
