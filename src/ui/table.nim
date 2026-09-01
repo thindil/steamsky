@@ -161,6 +161,10 @@ proc addCheckButton*(tooltip: string; checked: var bool) {.raises: [], tags: [],
 var startRow, currentRow, row: Positive = 1
 
 proc isStartingRow*(): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the current row in a table is the first row to show. It is
+  ## needed for pagination
+  ##
+  ## Returns true if the current row is the starting one, otherwise false.
   if currentRow < startRow:
     currentRow.inc
     return false
