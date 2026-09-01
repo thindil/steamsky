@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Bartek thindil Jasicki
+# Copyright 2023-2026 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -27,7 +27,7 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
     WriteIOEffect, RootEffect], contractual.} =
   ## Ask for known events in a base or a friendly ship. Generates new
   ## events
-  let traderIndex: int = findMember(order = talk)
+  let traderIndex: ExtendedNatural = findMember(order = talk)
   if traderIndex == -1:
     return
   let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
@@ -54,21 +54,22 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
         playerShip.skyY].eventIndex)
     updateOrders(ship = playerShip)
   let eventsAmount: Positive = getRandom(min = 1, max = maxEvents)
-  var minX: int = playerShip.skyX - 100
+  type MapRange = range[-200..MapXRange.high + 200]
+  var minX: MapRange = playerShip.skyX - 100
   normalizeCoord(coord = minX)
-  var maxX: int = playerShip.skyX + 100
+  var maxX: MapRange = playerShip.skyX + 100
   normalizeCoord(coord = maxX)
-  var minY: int = playerShip.skyY - 100
+  var minY: MapRange = playerShip.skyY - 100
   normalizeCoord(coord = minY, isXAxis = false)
-  var maxY: int = playerShip.skyY + 100
+  var maxY: MapRange = playerShip.skyY + 100
   normalizeCoord(coord = maxY, isXAxis = false)
   var enemies: seq[Positive] = @[]
   generateEnemies(enemies = enemies)
   for i in 1..eventsAmount:
     var
       event: EventsTypes = getRandom(min = 1, max = 5).EventsTypes
-      attempts: int = 10
-      eventX, eventY: int = 0
+      attempts: Natural = 10
+      eventX, eventY: MapRange = 0
     while true:
       if event == enemyShip:
         eventX = getRandom(min = minX, max = maxX)
