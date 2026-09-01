@@ -171,6 +171,10 @@ proc isStartingRow*(): bool {.raises: [], tags: [], contractual.} =
   return true
 
 proc isLastRow*(): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the current row in a table is the last row to show. It is needed
+  ## for pagination.
+  ##
+  ## Returns true if the current row is the last one, otherwise false.
   row.inc
   if row == gameSettings.listsLimit + 1:
     return true
