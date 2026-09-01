@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Better looking information about the player's ship's and enemy's ship's
   damage in combat
 - Better looking general information about the player's ship
+- Better looking information about the player's ship's cargo
 
 ### Fixed
 - Typos in changelog
