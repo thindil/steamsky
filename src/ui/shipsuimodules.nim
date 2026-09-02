@@ -1196,16 +1196,6 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
-const
-  headers: array[3, HeaderData[ModulesSortOrders]] = [
-    HeaderData[ModulesSortOrders](label: "Name", sortAsc: nameAsc,
-        sortDesc: nameDesc),
-    HeaderData[ModulesSortOrders](label: "Durability", sortAsc: damageAsc,
-        sortDesc: damageDesc),
-    HeaderData[ModulesSortOrders](label: "Additional info", sortAsc: infoAsc,
-        sortDesc: infoDesc)]
-  ratio: array[3, cfloat] = [300.cfloat, 200, 500]
-
 proc showModulesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the list of the player's ship's modules
@@ -1215,6 +1205,16 @@ proc showModulesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show the list of modules
+  const
+    headers: array[3, HeaderData[ModulesSortOrders]] = [
+      HeaderData[ModulesSortOrders](label: "Name", sortAsc: nameAsc,
+          sortDesc: nameDesc),
+      HeaderData[ModulesSortOrders](label: "Durability", sortAsc: damageAsc,
+          sortDesc: damageDesc),
+      HeaderData[ModulesSortOrders](label: "Additional info", sortAsc: infoAsc,
+          sortDesc: infoDesc)]
+    ratio: array[3, cfloat] = [300.cfloat, 200, 500]
+
   addHeader(headers = headers, ratio = ratio, tooltip = "modules",
       code = sortModules, dialog = dialog)
   var currentRow: Positive = 1
