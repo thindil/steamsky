@@ -132,11 +132,11 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
       eventsList.add(y = initEventData(eType = disease, skyX = eventX,
           skyY = eventY, time = getRandom(min = 10_000, max = 12_000)))
     of doublePrice:
-      var newItemIndex: int = 0
+      var newItemIndex: Natural = 0
       block setDoublePrice:
         while true:
           var itemIndex: Natural = getRandom(min = 1, max = itemsList.len)
-          for j in 1 .. itemsList.len:
+          for j in 1..itemsList.len:
             itemIndex.dec
             if itemIndex <= 0 and getPrice(baseType = skyBases[skyMap[eventX][
                 eventY].baseIndex].baseType, itemIndex = j, quality = normal) > 0:
@@ -157,7 +157,7 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
 proc askForBases*() {.raises: [KeyError, Exception], tags: [
     WriteIOEffect, RootEffect], contractual.} =
   ## Ask for known bases in a base or a friendly ship.
-  let traderIndex: int = findMember(order = talk)
+  let traderIndex: ExtendedNatural = findMember(order = talk)
   if traderIndex == -1:
     return
   let
@@ -199,8 +199,8 @@ proc askForBases*() {.raises: [KeyError, Exception], tags: [
     for x in -radius..radius:
       for y in -radius..radius:
         var
-          tempX: int = playerShip.skyX + x
-          tempY: int = playerShip.skyY + y
+          tempX: range[-100..2_000] = playerShip.skyX + x
+          tempY: range[-100..2_000] = playerShip.skyY + y
         normalizeCoord(coord = tempX)
         normalizeCoord(coord = tempY, isXAxis = false)
         let tmpBaseIndex: Natural = skyMap[tempX][tempY].baseIndex
@@ -220,7 +220,7 @@ proc askForBases*() {.raises: [KeyError, Exception], tags: [
     else:
       amount = (if protoShipsList[shipIndex].crew.len <
           5: 1 elif protoShipsList[shipIndex].crew.len < 10: 2 else: 4)
-    var unknownBases: int = 0
+    var unknownBases: Natural = 0
     for base in skyBases:
       if not base.known:
         unknownBases.inc
