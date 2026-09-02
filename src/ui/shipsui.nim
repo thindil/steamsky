@@ -341,11 +341,7 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       showCrewInfo(dialog = dialog)
   # The player's ship's modules info
   of 2:
-    setLayoutRowDynamic(height = height, cols = 1)
-    group(title = "ShipInfo", flags = {windowNoFlags}):
-      if dialog != none:
-        windowDisable()
-      showModulesInfo(dialog = dialog)
+    showModulesInfo(dialog = dialog, height = height)
   # The player's ship's cargo info
   of 3:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
