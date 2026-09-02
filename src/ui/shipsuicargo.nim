@@ -184,7 +184,7 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show the item's info.")
 
-var xOffset, yOffset: Natural = 0
+var xOffset: Natural = 0
 
 proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -212,8 +212,8 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
           sortDesc: typeDesc)]
     ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
-  table(name = "CargoTable", xScroll = xOffset, yScroll = yOffset,
-      headers = headers, ratio = ratio, tableTooltip = "cargo", height = height,
+  table(name = "CargoTable", xScroll = xOffset, headers = headers,
+      ratio = ratio, tableTooltip = "cargo", height = height,
       headerCode = sortCargo):
     for index in itemsIndexes:
       if not isStartingRow():
