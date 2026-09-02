@@ -1196,6 +1196,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
+var xOffset: Natural = 0
+
 proc showModulesInfo*(dialog: var GameDialog; height: float) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the list of the player's ship's modules
@@ -1216,37 +1218,21 @@ proc showModulesInfo*(dialog: var GameDialog; height: float) {.raises: [],
           sortDesc: infoDesc)]
     ratio: array[3, cfloat] = [300.cfloat, 200, 500]
 
-  addHeader(headers = headers, ratio = ratio, tooltip = "modules",
-      code = sortModules, dialog = dialog)
-  var currentRow: Positive = 1
-  saveButtonStyle()
-  setButtonStyle(field = borderColor, a = 0)
-  try:
-    setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-  except:
-    dialog = setError(message = "Can't set table color")
-    return
-  setButtonStyle(field = rounding, value = 0)
-  setButtonStyle(field = border, value = 0)
-  let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-  var row: Positive = 1
-  for index in modulesIndexes:
-    if currentRow < startRow:
-      currentRow.inc
-      continue
-    addButton(label = playerShip.modules[index].name,
-        tooltip = "Show the module's info", data = index, code = setModuleInfo,
-        dialog = dialog)
-    addProgressBar(tooltip = "Show the module's info",
-        value = playerShip.modules[index].durability,
-        maxValue = playerShip.modules[index].maxDurability, data = index,
-        code = setModuleInfo, dialog = dialog)
-    addButton(label = getModuleInfo(moduleIndex = index),
-        tooltip = "Show the module's info", data = index, code = setModuleInfo,
-        dialog = dialog)
-    row.inc
-    if row == gameSettings.listsLimit + 1:
-      break
-  restoreButtonStyle()
-  addPagination(page = currentPage, row = row)
+  table(name = "ModulesTable", xScroll = xOffset, headers = headers,
+      ratio = ratio, tableTooltip = "modules", height = height,
+      headerCode = sortModules):
+    for index in modulesIndexes:
+      if not isStartingRow():
+        continue
+      addButton(label = playerShip.modules[index].name,
+          tooltip = "Show the module's info", data = index, code = setModuleInfo,
+          dialog = dialog)
+      addProgressBar(tooltip = "Show the module's info",
+          value = playerShip.modules[index].durability,
+          maxValue = playerShip.modules[index].maxDurability, data = index,
+          code = setModuleInfo, dialog = dialog)
+      addButton(label = getModuleInfo(moduleIndex = index),
+          tooltip = "Show the module's info", data = index, code = setModuleInfo,
+          dialog = dialog)
+      if isLastRow():
+        break
