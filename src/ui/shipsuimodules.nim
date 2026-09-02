@@ -1196,11 +1196,12 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
-proc showModulesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showModulesInfo*(dialog: var GameDialog; height: float) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show the list of the player's ship's modules
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * height - the height of the cargo table
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
