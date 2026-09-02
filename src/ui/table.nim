@@ -180,7 +180,7 @@ proc isLastRow*(): bool {.raises: [], tags: [], contractual.} =
     return true
   return false
 
-template table*(name: string; xScroll, yScroll: Natural; headers: openArray[
+template table*(name: string; xScroll: Natural; headers: openArray[
     HeaderData]; ratio: openArray[cfloat]; tableTooltip: string; height: float;
     headerCode: HeaderCode; tableCode: untyped) =
   ## Show the table
@@ -197,6 +197,7 @@ template table*(name: string; xScroll, yScroll: Natural; headers: openArray[
   ## * headerCode   - the code executed when a header was clicked
   ## * tableCode    - the code executed to show the table's data
   # Show the table's header
+  var yOffset: Natural = 0
   setLayoutRowDynamic(height = tableRowHeight + 10, cols = 1)
   groupScrolled(x = xOffset, y = yOffset, title = name & "Header", flags = {
       windowNoScrollbar}):
@@ -227,4 +228,3 @@ template table*(name: string; xScroll, yScroll: Natural; headers: openArray[
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
   groupGetScrollbar(title = name & "Rows", xOffset = xOffset, yOffset = yOffset)
-  yOffset = 0
