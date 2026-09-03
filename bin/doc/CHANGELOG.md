@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
   damage in combat
 - Better looking general information about the player's ship
 - Better looking information about the player's ship's cargo
+- Better looking information about the player's ship's modules
 
 ### Fixed
 - Typos in changelog
