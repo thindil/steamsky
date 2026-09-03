@@ -261,11 +261,11 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
         durability = item.durability, price = price, quality = item.quality,
         craftBonus = item.craftBonus, craftMalus = item.craftMalus)
+    {.ruleOff: "assignments".}
     traderCargo[baseItemIndex].amount = traderCargo[baseItemIndex].amount - buyAmount
     if traderCargo[baseItemIndex].amount == 0:
-      {.ruleOff: "assignments".}
       traderCargo.delete(i = baseItemIndex)
-      {.ruleOn: "assignments".}
+    {.ruleOn: "assignments".}
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
   let gain: int = (buyAmount * price) - cost
   addMessage(message = "You bought " & $buyAmount & " " & itemName & " for " &
