@@ -339,7 +339,7 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
           label = (if showCargoOptions: "Hide options" else: "Show options"),
           alignment = right):
         showCrewOptions = not showCrewOptions
-      showCrewInfo(dialog = dialog)
+      showCrewInfo(dialog = dialog, height = height)
   # The player's ship's modules info
   of 2:
     showModulesInfo(dialog = dialog, height = height)
