@@ -207,7 +207,7 @@ template table*(name: string; xScroll: Natural; headers: openArray[
         code = headerCode, dialog = dialog)
   # Show the table's rows
   setLayoutRowDynamic(height = height - tableRowHeight, cols = 1)
-  group(title = "CargoTableRows", flags = {windowNoFlags}):
+  group(title = name & "Rows", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
     setLayoutRowStatic(height = tableRowHeight, cols = headers.len, ratio = ratio)
