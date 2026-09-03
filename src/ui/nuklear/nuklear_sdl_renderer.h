@@ -15,10 +15,6 @@
 #include <SDL2/SDL_image.h>
 NK_API struct nk_context*   nk_sdl_init(SDL_Window *win, SDL_Renderer *renderer);
 NK_API void                 nk_sdl_font_stash_begin(struct nk_font_atlas **atlas);
-NK_API void                 nk_sdl_font_stash_end(void);
-NK_API int                  nk_sdl_handle_event(SDL_Event *evt);
-NK_API void                 nk_sdl_render(enum nk_anti_aliasing);
-NK_API void                 nk_sdl_shutdown(void);
 
 #if SDL_COMPILEDVERSION < SDL_VERSIONNUM(2, 0, 22)
 /* Metal API does not support cliprects with negative coordinates or large
@@ -110,17 +106,6 @@ NK_API void
 nk_sdl_font_stash_begin(struct nk_font_atlas **atlas)
 {
     *atlas = &sdl.atlas;
-}
-
-NK_API void
-nk_sdl_font_stash_end(void)
-{
-    const void *image; int w, h;
-    image = nk_font_atlas_bake(&sdl.atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
-    nk_sdl_device_upload_atlas(image, w, h);
-    nk_font_atlas_end(&sdl.atlas, nk_handle_ptr(sdl.ogl.font_tex), &sdl.ogl.tex_null);
-    if (sdl.atlas.default_font)
-        nk_style_set_font(&sdl.ctx, &sdl.atlas.default_font->handle);
 }
 
 #endif /* NK_SDL_RENDERER_IMPLEMENTATION */
