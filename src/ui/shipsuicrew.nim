@@ -727,6 +727,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
 
   windowSetFocus(name = windowName)
 
+var xOffset: Natural = 0
+
 proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the list of the player's ship's crew members
@@ -809,70 +811,54 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [R
           sortDesc: moraleDesc)]
     ratio: array[9, cfloat] = [40.cfloat, 300, 200, 200, 200, 200, 200, 200, 200]
 
-  addHeader(headers = headers, ratio = ratio, tooltip = "crew members",
-      code = sortCrew, dialog = dialog)
-  var currentRow: Positive = 1
-  saveButtonStyle()
-  setButtonStyle(field = borderColor, a = 0)
-  try:
-    setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-  except:
-    dialog = setError(message = "Can't set table color")
-    return
-  setButtonStyle(field = rounding, value = 0)
-  setButtonStyle(field = border, value = 0)
-  let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-  var row: Positive = 1
-  for index, data in crewDataList.mpairs:
-    if currentRow < startRow:
-      currentRow.inc
-      continue
-    addCheckButton(tooltip = "Select the crew member to give orders to them.",
-        checked = data.checked)
-    addButton(label = playerShip.crew[data.index].name,
-        tooltip = "Show available crew member's options", data = data.index,
-        code = setMemberInfo, dialog = dialog)
-    addButton(label = ($playerShip.crew[data.index].order).capitalizeAscii,
-        tooltip = "The current order for the selected crew member. Press the mouse button to change it.",
-        data = data.index, code = setGiveOrder, dialog = dialog)
-    if skillIndex == 0:
-      addButton(label = getHighestSkill(memberIndex = data.index,
-          dialog = dialog),
-          tooltip = "The highest skill of the selected crew member",
+  table(name = "CrewTable", xScroll = xOffset, headers = headers,
+      ratio = ratio, tableTooltip = "crew members", tableHeight = tableHeight,
+      headerCode = sortCrew):
+    for index, data in crewDataList.mpairs:
+      if not isStartingRow():
+        continue
+      addCheckButton(tooltip = "Select the crew member to give orders to them.",
+          checked = data.checked)
+      addButton(label = playerShip.crew[data.index].name,
+          tooltip = "Show available crew member's options", data = data.index,
+          code = setMemberInfo, dialog = dialog)
+      addButton(label = ($playerShip.crew[data.index].order).capitalizeAscii,
+          tooltip = "The current order for the selected crew member. Press the mouse button to change it.",
+          data = data.index, code = setGiveOrder, dialog = dialog)
+      if skillIndex == 0:
+        addButton(label = getHighestSkill(memberIndex = data.index,
+            dialog = dialog),
+            tooltip = "The highest skill of the selected crew member",
+            data = data.index, code = setMemberInfo, dialog = dialog)
+      else:
+        try:
+          addButton(label = getSkillLevelName(skillLevel = getSkillLevel(
+              member = playerShip.crew[data.index], skillIndex = findSkillIndex(
+              skillName = crewSkillsList[skillIndex]))),
+              tooltip = "The level of " & crewSkillsList[skillIndex] &
+              " of the selected crew member", data = data.index,
+              code = setMemberInfo, dialog = dialog)
+        except KeyError:
+          dialog = setError(message = "Can't get the level of the skill.")
+      addProgressBar(tooltip = "The current health level of the selected crew member",
+          value = playerShip.crew[data.index].health, maxValue = SkillRange.high,
           data = data.index, code = setMemberInfo, dialog = dialog)
-    else:
-      try:
-        addButton(label = getSkillLevelName(skillLevel = getSkillLevel(
-            member = playerShip.crew[data.index], skillIndex = findSkillIndex(
-            skillName = crewSkillsList[skillIndex]))),
-            tooltip = "The level of " & crewSkillsList[skillIndex] &
-            " of the selected crew member", data = data.index,
-            code = setMemberInfo, dialog = dialog)
-      except KeyError:
-        dialog = setError(message = "Can't get the level of the skill.")
-    addProgressBar(tooltip = "The current health level of the selected crew member",
-        value = playerShip.crew[data.index].health, maxValue = SkillRange.high,
-        data = data.index, code = setMemberInfo, dialog = dialog)
-    var tiredLevel: int = playerShip.crew[data.index].tired - playerShip.crew[
-        data.index].attributes[conditionIndex].level
-    if tiredLevel < 0:
-      tiredLevel = 0
-    addProgressBar(tooltip = "The current tired level of the selected crew member",
-        value = tiredLevel, maxValue = SkillRange.high, data = data.index,
-        code = setMemberInfo, dialog = dialog)
-    addProgressBar(tooltip = "The current thirst level of the selected crew member",
-        value = playerShip.crew[data.index].thirst, maxValue = SkillRange.high,
-        data = data.index, code = setMemberInfo, dialog = dialog)
-    addProgressBar(tooltip = "The current hunger level of the selected crew member",
-        value = playerShip.crew[data.index].hunger, maxValue = SkillRange.high,
-        data = data.index, code = setMemberInfo, dialog = dialog)
-    addProgressBar(tooltip = "The current morale level of the selected crew member",
-        value = playerShip.crew[data.index].morale[1],
-            maxValue = SkillRange.high,
-        data = data.index, code = setMemberInfo, dialog = dialog)
-    row.inc
-    if row == gameSettings.listsLimit + 1:
-      break
-  restoreButtonStyle()
-  addPagination(page = currentPage, row = row)
+      var tiredLevel: int = playerShip.crew[data.index].tired - playerShip.crew[
+          data.index].attributes[conditionIndex].level
+      if tiredLevel < 0:
+        tiredLevel = 0
+      addProgressBar(tooltip = "The current tired level of the selected crew member",
+          value = tiredLevel, maxValue = SkillRange.high, data = data.index,
+          code = setMemberInfo, dialog = dialog)
+      addProgressBar(tooltip = "The current thirst level of the selected crew member",
+          value = playerShip.crew[data.index].thirst, maxValue = SkillRange.high,
+          data = data.index, code = setMemberInfo, dialog = dialog)
+      addProgressBar(tooltip = "The current hunger level of the selected crew member",
+          value = playerShip.crew[data.index].hunger, maxValue = SkillRange.high,
+          data = data.index, code = setMemberInfo, dialog = dialog)
+      addProgressBar(tooltip = "The current morale level of the selected crew member",
+          value = playerShip.crew[data.index].morale[1],
+              maxValue = SkillRange.high,
+          data = data.index, code = setMemberInfo, dialog = dialog)
+      if isLastRow():
+        break
