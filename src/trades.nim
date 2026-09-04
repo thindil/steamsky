@@ -409,5 +409,3 @@ proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
         countPrice(price = maxPrice, traderIndex = findMember(order = talk))
         weight = freeCargo(amount = maxPrice - (itemsList[
             result.protoIndex].weight * result.maxBuyAmount))
-    if itemIndex == -1:
-      itemIndex = -(baseCargoIndex)
