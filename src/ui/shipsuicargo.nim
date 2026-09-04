@@ -195,6 +195,25 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
+  # Show options button
+  setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+      200.cfloat, cargoWidth[0], cargoWidth[1]])
+  imageLabelButton(image = images[moreOptionsIcon],
+      tooltip = "Show/Hide additional options related to managing the cargo",
+      label = (if showCargoOptions: "Hide options" else: "Show options"),
+      alignment = right):
+    showCargoOptions = not showCargoOptions
+  label(str = cargoText[0])
+  colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
+  var tableHeight: float = height - buttonHeight
+  # Show the additional options for cargo
+  if showCargoOptions:
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
+    label(str = "Type:")
+    typeIndex = comboList(items = typesList, selected = typeIndex,
+        itemHeight = labelHeight.int, x = 200, y = 150,
+        tooltip = "Show only items with the selected type")
+    tableHeight -= editHeight
   # Show information about free cargo space in the player's ship
   const
     headers: array[6, HeaderData[CargoSortOrders]] = [
@@ -213,7 +232,7 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
 
   table(name = "CargoTable", xScroll = xOffset, headers = headers,
-      ratio = ratio, tableTooltip = "cargo", height = height,
+      ratio = ratio, tableTooltip = "cargo", tableHeight = tableHeight,
       headerCode = sortCargo):
     for index in itemsIndexes:
       if not isStartingRow():
