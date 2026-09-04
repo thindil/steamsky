@@ -181,7 +181,7 @@ proc isLastRow*(): bool {.raises: [], tags: [], contractual.} =
   return false
 
 template table*(name: string; xScroll: Natural; headers: openArray[
-    HeaderData]; ratio: openArray[cfloat]; tableTooltip: string; height: float;
+    HeaderData]; ratio: openArray[cfloat]; tableTooltip: string; tableHeight: float;
     headerCode: HeaderCode; tableCode: untyped) =
   ## Show the table
   ##
@@ -193,7 +193,7 @@ template table*(name: string; xScroll: Natural; headers: openArray[
   ## * tableTooltip - the name of things to sort, like items, etc. Will be
   ##                  added to the headers' tooltips. If empty, disables
   ##                  tooltips for the header.
-  ## * height       - the height of the table
+  ## * tableHeight  - the height of the table
   ## * headerCode   - the code executed when a header was clicked
   ## * tableCode    - the code executed to show the table's data
   # Show the table's header
@@ -206,7 +206,7 @@ template table*(name: string; xScroll: Natural; headers: openArray[
     addHeader(headers = headers, ratio = ratio, tooltip = tableTooltip,
         code = headerCode, dialog = dialog)
   # Show the table's rows
-  setLayoutRowDynamic(height = height - tableRowHeight, cols = 1)
+  setLayoutRowDynamic(height = tableHeight - tableRowHeight, cols = 1)
   group(title = name & "Rows", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
