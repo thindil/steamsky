@@ -737,16 +737,26 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [R
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show options related to managing the crew
+  setLayoutRowStatic(height = buttonHeight, cols = 1, width = 200)
+  imageLabelButton(image = images[moreOptionsIcon],
+      tooltip = "Show/Hide additional options related to managing the crew",
+      label = (if showCrewOptions: "Hide options" else: "Show options"),
+      alignment = right):
+    showCrewOptions = not showCrewOptions
+  var tableHeight = height - buttonHeight
   if showCrewOptions:
     var
       cols: Positive = 2
       ratio2: seq[cfloat] = @[(windowWidth * 0.4).cfloat, buttonHeight]
+    tableHeight -= buttonHeight
     if needClean:
       cols.inc
       ratio2.add(y = buttonHeight.cfloat)
+      tableHeight -= buttonHeight
     if needRepair:
       cols.inc
       ratio2.add(y = buttonHeight.cfloat)
+      tableHeight -= buttonHeight
     setLayoutRowStatic(height = buttonHeight, cols = cols, ratio = ratio2)
     label(str = "Orders for all:")
     imageButton(image = images[goRestIcon], tooltip = "Go rest " &
