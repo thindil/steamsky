@@ -759,9 +759,18 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
       filePath = font.path.cstring, height = font.size.cfloat * fontScale, config.addr)
   {.ruleOn: "namedParams".}
   {.emit: """
-    const void *image; int w, h;
-    image = nk_font_atlas_bake(&sdl.atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
-    nk_sdl_device_upload_atlas(image, w, h);
+    const void *image; int width, height;
+    image = nk_font_atlas_bake(&sdl.atlas, &width, &height, NK_FONT_ATLAS_RGBA32);
+    struct nk_sdl_device *dev = &sdl.ogl;
+
+    SDL_Texture *g_SDLFontTexture = SDL_CreateTexture(sdl.renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, width, height);
+    if (g_SDLFontTexture == NULL) {
+        SDL_Log("error creating texture");
+        return;
+    }
+    SDL_UpdateTexture(g_SDLFontTexture, NULL, image, 4 * width);
+    SDL_SetTextureBlendMode(g_SDLFontTexture, SDL_BLENDMODE_BLEND);
+    dev->font_tex = g_SDLFontTexture;
     nk_font_atlas_end(&sdl.atlas, nk_handle_ptr(sdl.ogl.font_tex), &sdl.ogl.tex_null);
     if (sdl.atlas.default_font)
         nk_style_set_font(&sdl.ctx, &sdl.atlas.default_font->handle);
@@ -789,9 +798,18 @@ proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil;
   else:
     font = defaultFont
   {.emit: """
-    const void *image; int w, h;
-    image = nk_font_atlas_bake(&sdl.atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
-    nk_sdl_device_upload_atlas(image, w, h);
+    const void *image; int width, height;
+    image = nk_font_atlas_bake(&sdl.atlas, &width, &height, NK_FONT_ATLAS_RGBA32);
+    struct nk_sdl_device *dev = &sdl.ogl;
+
+    SDL_Texture *g_SDLFontTexture = SDL_CreateTexture(sdl.renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, width, height);
+    if (g_SDLFontTexture == NULL) {
+        SDL_Log("error creating texture");
+        return;
+    }
+    SDL_UpdateTexture(g_SDLFontTexture, NULL, image, 4 * width);
+    SDL_SetTextureBlendMode(g_SDLFontTexture, SDL_BLENDMODE_BLEND);
+    dev->font_tex = g_SDLFontTexture;
     nk_font_atlas_end(&sdl.atlas, nk_handle_ptr(sdl.ogl.font_tex), &sdl.ogl.tex_null);
     if (sdl.atlas.default_font)
         nk_style_set_font(&sdl.ctx, &sdl.atlas.default_font->handle);
