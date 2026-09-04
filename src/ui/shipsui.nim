@@ -329,13 +329,6 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
       showGeneralInfo(dialog = dialog, state = state)
   # The player's ship's crew info
   of 1:
-    setLayoutRowStatic(height = buttonHeight, cols = 1, width = 200)
-    imageLabelButton(image = images[moreOptionsIcon],
-        tooltip = "Show/Hide additional options related to managing the crew",
-        label = (if showCargoOptions: "Hide options" else: "Show options"),
-        alignment = right):
-      showCrewOptions = not showCrewOptions
-    height -= buttonHeight
     showCrewInfo(dialog = dialog, height = height)
   # The player's ship's modules info
   of 2:
