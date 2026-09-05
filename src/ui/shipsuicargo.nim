@@ -205,7 +205,7 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     showCargoOptions = not showCargoOptions
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
-  var tableHeight: float = height - buttonHeight
+  var tableHeight: float = height - buttonHeight - 18
   # Show the additional options for cargo
   if showCargoOptions:
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
@@ -213,7 +213,7 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     typeIndex = comboList(items = typesList, selected = typeIndex,
         itemHeight = labelHeight.int, x = 200, y = 150,
         tooltip = "Show only items with the selected type")
-    tableHeight -= editHeight
+    tableHeight -= editHeight + 9
   # Show information about free cargo space in the player's ship
   const
     headers: array[6, HeaderData[CargoSortOrders]] = [
