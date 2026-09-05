@@ -745,20 +745,18 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [R
       label = (if showCrewOptions: "Hide options" else: "Show options"),
       alignment = right):
     showCrewOptions = not showCrewOptions
-  var tableHeight = height - buttonHeight
+  var tableHeight = height - buttonHeight - 15
   if showCrewOptions:
     var
       cols: Positive = 2
       ratio2: seq[cfloat] = @[(windowWidth * 0.4).cfloat, buttonHeight]
-    tableHeight -= buttonHeight
+    tableHeight -= (buttonHeight + editHeight + buttonHeight) + 15
     if needClean:
       cols.inc
       ratio2.add(y = buttonHeight.cfloat)
-      tableHeight -= buttonHeight
     if needRepair:
       cols.inc
       ratio2.add(y = buttonHeight.cfloat)
-      tableHeight -= buttonHeight
     setLayoutRowStatic(height = buttonHeight, cols = cols, ratio = ratio2)
     label(str = "Orders for all:")
     imageButton(image = images[goRestIcon], tooltip = "Go rest " &
