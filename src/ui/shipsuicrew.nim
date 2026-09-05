@@ -749,27 +749,30 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [R
   if showCrewOptions:
     var
       cols: Positive = 2
-      ratio2: seq[cfloat] = @[(windowWidth * 0.4).cfloat, buttonHeight]
+      ratio2: seq[cfloat] = @[(windowWidth * 0.4).cfloat, 150]
     tableHeight -= (buttonHeight + editHeight + buttonHeight) + 17
     if needClean:
       cols.inc
-      ratio2.add(y = buttonHeight.cfloat)
+      ratio2.add(y = 150.cfloat)
     if needRepair:
       cols.inc
-      ratio2.add(y = buttonHeight.cfloat)
+      ratio2.add(y = 150.cfloat)
     setLayoutRowStatic(height = buttonHeight, cols = cols, ratio = ratio2)
     label(str = "Orders for all:")
-    imageButton(image = images[goRestIcon], tooltip = "Go rest " &
+    imageLabelButton(image = images[goRestIcon], tooltip = "Go rest " &
         (if crewDataList.any(pred = proc (x: CrewData): bool = x.checked):
-          "selected crew members" else: "everyone")):
+          "selected crew members" else: "everyone"), label = "Rest",
+        alignment = right):
       ordersForAll(order = rest, dialog = dialog)
     if needClean:
-      imageButton(image = images[cleanOrderIcon],
-          tooltip = "Clean the ship everyone"):
+      imageLabelButton(image = images[cleanOrderIcon],
+          tooltip = "Clean the ship everyone", label = "Clean",
+          alignment = right):
         ordersForAll(order = clean, dialog = dialog)
     if needRepair:
-      imageButton(image = images[repairOrderIcon],
-          tooltip = "Repair the ship everyone"):
+      imageLabelButton(image = images[repairOrderIcon],
+          tooltip = "Repair the ship everyone", label = "Repair",
+          alignment = right):
         ordersForAll(order = repair, dialog = dialog)
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Skill:", tooltip = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
