@@ -332,7 +332,9 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     showCrewInfo(dialog = dialog, height = height)
   # The player's ship's modules info
   of 2:
+    height -= 15
     showModulesInfo(dialog = dialog, height = height)
+    height += 14
   # The player's ship's cargo info
   of 3:
     showCargoInfo(dialog = dialog, height = height)
