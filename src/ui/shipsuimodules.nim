@@ -1219,7 +1219,7 @@ proc showModulesInfo*(dialog: var GameDialog; height: float) {.raises: [],
     ratio: array[3, cfloat] = [300.cfloat, 200, 500]
 
   table(name = "ModulesTable", xScroll = xOffset, headers = headers,
-      ratio = ratio, tableTooltip = "modules", tableHeight = height,
+      ratio = ratio, tableTooltip = "modules", tableHeight = height - 15,
       headerCode = sortModules):
     for index in modulesIndexes:
       if not isStartingRow():
