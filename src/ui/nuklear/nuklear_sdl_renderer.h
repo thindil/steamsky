@@ -59,21 +59,6 @@ static struct nk_sdl {
     struct nk_font_atlas atlas;
 } sdl;
 
-NK_INTERN void
-nk_sdl_device_upload_atlas(const void *image, int width, int height)
-{
-    struct nk_sdl_device *dev = &sdl.ogl;
-
-    SDL_Texture *g_SDLFontTexture = SDL_CreateTexture(sdl.renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, width, height);
-    if (g_SDLFontTexture == NULL) {
-        SDL_Log("error creating texture");
-        return;
-    }
-    SDL_UpdateTexture(g_SDLFontTexture, NULL, image, 4 * width);
-    SDL_SetTextureBlendMode(g_SDLFontTexture, SDL_BLENDMODE_BLEND);
-    dev->font_tex = g_SDLFontTexture;
-}
-
 NK_API struct nk_context*
 nk_sdl_init(SDL_Window *win, SDL_Renderer *renderer)
 {
