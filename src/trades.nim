@@ -278,9 +278,15 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     {.ruleOn: "assignments".}
   updateGame(minutes = 5)
 
-proc getTradeData*(iIndex: int): tuple[protoIndex, maxSellAmount, maxBuyAmount,
-    price: int; quality: ObjectQuality; maxDurability: ItemsDurability;
-    weight: Natural] {.raises: [KeyError], tags: [], contractual.} =
+type
+  TradeData = tuple
+    protoIndex, maxSellAmount, maxBuyAmount, price: int
+    quality: ObjectQuality
+    maxDurability: ItemsDurability
+    weight: Natural
+
+proc getTradeData*(iIndex: int): TradeData {.raises: [KeyError], tags: [],
+    contractual.} =
   ## Get the data related to the item during trading
   ##
   ## * iIndex - the index of the item which data will be get. If positive, the
