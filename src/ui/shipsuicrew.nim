@@ -745,12 +745,12 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [R
       label = (if showCrewOptions: "Hide options" else: "Show options"),
       alignment = right):
     showCrewOptions = not showCrewOptions
-  var tableHeight = height - buttonHeight - 15
+  var tableHeight = height - buttonHeight - 18
   if showCrewOptions:
     var
       cols: Positive = 2
       ratio2: seq[cfloat] = @[(windowWidth * 0.4).cfloat, buttonHeight]
-    tableHeight -= (buttonHeight + editHeight + buttonHeight) + 15
+    tableHeight -= (buttonHeight + editHeight + buttonHeight) + 17
     if needClean:
       cols.inc
       ratio2.add(y = buttonHeight.cfloat)
