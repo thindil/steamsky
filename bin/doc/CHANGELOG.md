@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Better looking general information about the player's ship
 - Better looking information about the player's ship's cargo
 - Better looking information about the player's ship's modules
+- Better looking information about the player's ship's crew
 
 ### Fixed
 - Typos in changelog
