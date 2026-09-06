@@ -285,6 +285,49 @@ type
     maxDurability: ItemsDurability
     weight: Natural
 
+proc countBuyAmount(data: var TradeData; baseCargoIndex, baseIndex: int;
+    baseType: string) {.raises: [KeyError], tags: [], contractual.} =
+  ## Count the maximum amount of an item to buy from a trader or a base
+  ##
+  ## * data           - all information related to the trade transaction
+  ## * baseCargoIndex - the index of the item in the base's cargo
+  ## * baseIndex      - the index of the base on the map, 0 means a trader ship
+  ## * baseType       - the type of the base
+  ##
+  ## Returns modified parameter data
+  let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
+  if baseCargoIndex > -1 and moneyAmount > 0 and ((baseIndex > -1 and
+      isBuyable(baseType = baseType, itemIndex = data.protoIndex)) or
+          baseIndex == 0):
+    data.maxBuyAmount = (moneyAmount / data.price).int
+    var maxPrice: Natural = data.maxBuyAmount * data.price
+    if data.maxBuyAmount > 0:
+      countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+      if maxPrice < data.maxBuyAmount * data.price:
+        data.maxBuyAmount = (data.maxBuyAmount.float * ((data.maxBuyAmount.float *
+            data.price.float) / maxPrice.float)).floor.int
+      if baseIndex > 0 and data.maxBuyAmount > skyBases[baseIndex].cargo[
+          baseCargoIndex].amount:
+        data.maxBuyAmount = skyBases[baseIndex].cargo[baseCargoIndex].amount
+      elif baseIndex == 0 and data.maxBuyAmount > traderCargo[
+          baseCargoIndex].amount:
+        data.maxBuyAmount = traderCargo[baseCargoIndex].amount
+      maxPrice = data.maxBuyAmount * data.price
+      countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+      var weight: int = freeCargo(amount = maxPrice - (itemsList[
+          data.protoIndex].weight * data.maxBuyAmount))
+      while weight < 0:
+        data.maxBuyAmount = data.maxBuyAmount + (weight / itemsList[
+            data.protoIndex].weight).int - 1
+        if data.maxBuyAmount < 0:
+          data.maxBuyAmount = 0
+        if data.maxBuyAmount == 0:
+          break
+        maxPrice = data.maxBuyAmount * data.price
+        countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+        weight = freeCargo(amount = maxPrice - (itemsList[
+            data.protoIndex].weight * data.maxBuyAmount))
+
 proc getTradeData*(iIndex: int): TradeData {.raises: [KeyError], tags: [],
     contractual.} =
   ## Get the data related to the item during trading
@@ -383,35 +426,4 @@ proc getTradeData*(iIndex: int): TradeData {.raises: [KeyError], tags: [],
       weight = freeCargo(amount = (itemsList[result.protoIndex].weight * result.maxSellAmount) - maxPrice)
     if baseIndex > 0 and countFreeCargo(baseIndex = baseIndex) == 0 and baseCargoIndex == -1:
       result.maxSellAmount = 0
-  let moneyAmount: Natural = moneyAmount(inventory = playerShip.cargo)
-  if baseCargoIndex > -1 and moneyAmount > 0 and ((baseIndex > -1 and
-      isBuyable(baseType = baseType, itemIndex = result.protoIndex)) or
-          baseIndex == 0):
-    result.maxBuyAmount = (moneyAmount / result.price).int
-    var maxPrice: Natural = result.maxBuyAmount * result.price
-    if result.maxBuyAmount > 0:
-      countPrice(price = maxPrice, traderIndex = findMember(order = talk))
-      if maxPrice < result.maxBuyAmount * result.price:
-        result.maxBuyAmount = (result.maxBuyAmount.float * ((result.maxBuyAmount.float *
-            result.price.float) / maxPrice.float)).floor.int
-      if baseIndex > 0 and result.maxBuyAmount > skyBases[baseIndex].cargo[
-          baseCargoIndex].amount:
-        result.maxBuyAmount = skyBases[baseIndex].cargo[baseCargoIndex].amount
-      elif baseIndex == 0 and result.maxBuyAmount > traderCargo[
-          baseCargoIndex].amount:
-        result.maxBuyAmount = traderCargo[baseCargoIndex].amount
-      maxPrice = result.maxBuyAmount * result.price
-      countPrice(price = maxPrice, traderIndex = findMember(order = talk))
-      var weight: int = freeCargo(amount = maxPrice - (itemsList[
-          result.protoIndex].weight * result.maxBuyAmount))
-      while weight < 0:
-        result.maxBuyAmount = result.maxBuyAmount + (weight / itemsList[
-            result.protoIndex].weight).int - 1
-        if result.maxBuyAmount < 0:
-          result.maxBuyAmount = 0
-        if result.maxBuyAmount == 0:
-          break
-        maxPrice = result.maxBuyAmount * result.price
-        countPrice(price = maxPrice, traderIndex = findMember(order = talk))
-        weight = freeCargo(amount = maxPrice - (itemsList[
-            result.protoIndex].weight * result.maxBuyAmount))
+  countBuyAmount(data = result, baseCargoIndex = baseCargoIndex, baseIndex = baseIndex, baseType = baseType)
