@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Better looking information about the player's ship's cargo
 - Better looking information about the player's ship's modules
 - Better looking information about the player's ship's crew
+- Better looking dialog to change the order of the player's ship's crew member
 
 ### Fixed
 - Typos in changelog
