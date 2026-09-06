@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [12.7] - 2026-09-06
 
 ### Added
 - Saving and loading keyboard shortcuts from a file
