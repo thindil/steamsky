@@ -22,7 +22,7 @@ requires "unittest2"
 
 task release, "builds the project in release mode":
   exec "nim c -d:release --app:gui --passC:-flto --passL:-Wl,-s --passL:-Wl,--disable-new-dtags,-rpath,$ORIGIN/lib --outdir:" &
-      binDir & " --passl:\"-lm -lSDL2 -lSDL2_image\" --passc:\"-Isrc/ui/nuklear -Wno-int-conversion -Wno-incompatible-function-pointer-types\" " &
+      binDir & " --passl:\"-lm -lSDL2 -lSDL2_image\" --passc:\"-Isrc/ui/nuklear -Wno-int-conversion -Wno-incompatible-function-pointer-types -Wno-return-mismatch\" " &
       srcDir & DirSep & "steamsky.nim"
 
 task releasewindows, "builds the project in release mode for Windows 64-bit on Linux":
@@ -43,7 +43,7 @@ task docs, "builds the project's documentation":
 
 task debug, "builds the project in debug mode":
   exec "nim c -d:debug --app:gui --styleCheck:hint --spellSuggest:auto --errorMax:0 --outdir:" &
-      binDir & " --passl:\"-lm -lSDL2 -lSDL2_image\" --passc:\"-Isrc/ui/nuklear -Wno-int-conversion -Wno-incompatible-function-pointer-types\" " &
+      binDir & " --passl:\"-lm -lSDL2 -lSDL2_image\" --passc:\"-Isrc/ui/nuklear -Wno-int-conversion -Wno-incompatible-function-pointer-types -Wno-return-mismatch\" " &
       srcDir & DirSep & "steamsky.nim"
 
 task debugwindows, "builds the project in debug mode for Windows 64-bit on Linux":
