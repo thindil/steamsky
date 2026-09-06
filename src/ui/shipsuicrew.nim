@@ -331,8 +331,8 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  const width: float = 400
-  let height: float = 60 + labelHeight + editHeight + dialogButtonHeight
+  const width: float = 450
+  let height: float = 80 + labelHeight + editHeight + dialogButtonHeight
 
   let
     member: MemberData = playerShip.crew[crewIndex]
@@ -340,17 +340,17 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = labelHeight, cols = 2)
+    setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.35.cfloat, 0.65])
     label(str = "Current order:")
     try:
       colorLabel(str = getCurrentOrder(memberIndex = crewIndex),
           color = theme.colors[goldenColor])
     except:
       dialog = setError(message = "Can't get the current order.")
-    setLayoutRowDynamic(height = editHeight, cols = 2)
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.35.cfloat, 0.65])
     label(str = "New order:")
     currentOrder = comboList(items = availableOrdersText,
-        selected = currentOrder, itemHeight = labelHeight.int, x = 200, y = 150)
+        selected = currentOrder, itemHeight = labelHeight.int, x = 300, y = 150)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[giveOrderColoredIcon], label = "Assign",
