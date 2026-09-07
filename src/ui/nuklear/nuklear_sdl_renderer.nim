@@ -598,9 +598,6 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 
     {
         SDL_Rect saved_clip;
-#ifdef NK_SDL_CLAMP_CLIP_RECT
-        SDL_Rect viewport;
-#endif
         SDL_bool clipping_enabled;
         int vs = sizeof(struct nk_sdl_vertex);
         size_t vp = offsetof(struct nk_sdl_vertex, position);
@@ -642,9 +639,6 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
 
         clipping_enabled = SDL_RenderIsClipEnabled(sdl.renderer);
         SDL_RenderGetClipRect(sdl.renderer, &saved_clip);
-#ifdef NK_SDL_CLAMP_CLIP_RECT
-        SDL_RenderGetViewport(sdl.renderer, &viewport);
-#endif
 
         nk_draw_foreach(cmd, &sdl.ctx, &dev->cmds)
         {
@@ -656,22 +650,6 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
                 r.y = cmd->clip_rect.y;
                 r.w = cmd->clip_rect.w;
                 r.h = cmd->clip_rect.h;
-#ifdef NK_SDL_CLAMP_CLIP_RECT
-                if (r.x < 0) {
-                    r.w += r.x;
-                    r.x = 0;
-                }
-                if (r.y < 0) {
-                    r.h += r.y;
-                    r.y = 0;
-                }
-                if (r.h > viewport.h) {
-                    r.h = viewport.h;
-                }
-                if (r.w > viewport.w) {
-                    r.w = viewport.w;
-                }
-#endif
                 SDL_RenderSetClipRect(sdl.renderer, &r);
             }
 
