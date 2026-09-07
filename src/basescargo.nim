@@ -115,8 +115,8 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
 
 proc findBaseCargo*(protoIndex: Natural;
     durability: ItemsDurability = defaultItemDurability; quality: ObjectQuality;
-    craftBonus: CraftBonuses; craftMalus: CraftMaluses): ExtendedNatural {.raises: [],
-        tags: [],
+    craftBonus: CraftBonuses;
+    craftMalus: CraftMaluses): ExtendedNatural {.raises: [], tags: [],
     contractual.} =
   ## Find the selected item in the currently visited base's cargo
   ##
