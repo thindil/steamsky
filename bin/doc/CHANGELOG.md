@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Icon used for showing more options in various places. Author: Lorc
+  (https://game-icons.net), license CC BY 3.0
+
 ## [12.7] - 2026-09-06
 
 ### Added
