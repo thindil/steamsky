@@ -57,7 +57,7 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
           break
       let
         quality: ObjectQuality = getQuality()
-        cargoItemIndex: int = findItem(inventory = traderShip.cargo,
+        cargoItemIndex: ExtendedNatural = findItem(inventory = traderShip.cargo,
           protoIndex = newItemIndex, itemQuality = quality, craftBonus = none,
           craftMalus = none)
       if cargoItemIndex > -1:
@@ -88,7 +88,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
   require:
     itemIndex < playerShip.cargo.len
   body:
-    let traderIndex: int = findMember(order = talk)
+    let traderIndex: ExtendedNatural = findMember(order = talk)
     if traderIndex == -1:
       raise newException(exceptn = NoTraderError, message = "")
     let
