@@ -678,8 +678,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       # Order priorites of the selected crew member
       of 3:
         setLayoutRowDynamic(height = editHeight, cols = 2)
-        label(str = "Priority")
-        label(str = "Level")
+        label(str = "PRIORITY", alignment = centered)
+        label(str = "LEVEL", alignment = centered)
         const
           priorityLevels: array[3, string] = ["None", "Normal", "Highest"]
           prioritesNames: array[1..12, string] = ["Piloting:", "Engineering:",
