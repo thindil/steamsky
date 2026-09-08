@@ -95,7 +95,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
       baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
       protoIndex: Natural = playerShip.cargo[itemIndex].protoIndex
       playerItem: InventoryData = playerShip.cargo[itemIndex]
-    var baseItemIndex: int = -1
+    var baseItemIndex: ExtendedNatural = -1
     if baseIndex > 0:
       baseItemIndex = findBaseCargo(protoIndex = protoIndex,
           quality = playerItem.quality, craftBonus = playerItem.craftBonus,
@@ -114,7 +114,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
           skyBases[baseIndex].cargo[baseItemIndex].price
         else:
           traderCargo[baseItemIndex].price
-    let eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+    let eventIndex: ExtendedNatural = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
     if eventIndex > -1 and eventsList[eventIndex].eType == doublePrice and
         eventsList[eventIndex].itemIndex == protoIndex:
       price *= 2
@@ -145,7 +145,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
         profit = 0
     if freeCargo(amount = itemsList[protoIndex].weight * sellAmount) - profit < 0:
       raise newException(exceptn = NoFreeCargoError, message = "")
-    let itemName: string = itemsList[protoIndex].name
+    let itemName: ObjectName = itemsList[protoIndex].name
     if baseIndex > 0:
       if profit > skyBases[baseIndex].cargo[0].amount:
         raise newException(exceptn = NoMoneyInBaseError, message = itemName)
