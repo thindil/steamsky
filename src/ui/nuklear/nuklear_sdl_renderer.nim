@@ -597,6 +597,12 @@ proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
     struct nk_sdl_device *dev = &sdl.ogl;
 
     {
+        struct nk_sdl_vertex {
+            float position[2];
+            float uv[2];
+            nk_byte col[4];
+        };
+
         SDL_Rect saved_clip;
         SDL_bool clipping_enabled;
         int vs = sizeof(struct nk_sdl_vertex);

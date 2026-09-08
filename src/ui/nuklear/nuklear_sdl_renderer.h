@@ -35,11 +35,11 @@ struct nk_sdl_device {
     SDL_Texture *font_tex;
 };
 
-struct nk_sdl_vertex {
+/*struct nk_sdl_vertex {
     float position[2];
     float uv[2];
     nk_byte col[4];
-};
+};*/
 
 static struct nk_sdl {
     SDL_Window *win;
