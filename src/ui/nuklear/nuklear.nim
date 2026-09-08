@@ -2032,7 +2032,8 @@ template imageButtonStyled*(image: PImage; style: ButtonStyle;
 
 proc createImageLabelButton(img: PImage; txt: string;
     align: TextAlignment): bool {.raises: [], tags: [], contractual.} =
-  ## Draw the button with the selected image and text, internal use only, temporary code
+  ## Draw the button with the selected image and text, internal use only,
+  ## temporary code
   ##
   ## * image - the image to show on the button
   ## * text  - the text to show on the button
