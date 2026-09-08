@@ -2040,9 +2040,8 @@ proc createImageLabelButton(img: PImage; txt: string;
   ##
   ## Returns true if button was created, otherwise false
   proc nk_button_image_label(ctx; image: nk_image; text: cstring;
-      textAlignment: nk_flags): nk_bool {.importc, nodecl,
-
-raises: [], tags: [], contractual.}
+      textAlignment: nk_flags): nk_bool {.importc, nodecl, raises: [],
+      tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   return nk_button_image_label(ctx = ctx, image = nk_image_ptr(iPtr = img),
       text = txt.cstring, text_alignment = align.nk_flags)
