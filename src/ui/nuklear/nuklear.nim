@@ -2061,6 +2061,18 @@ template imageLabelButton*(image: PImage; label: string;
   if createImageLabelButton(img = image, txt = label, align = alignment):
     onPressCode
 
+template imageLabelButton*(image: PImage; label: string; onPressCode: untyped) =
+  ## Draw the button with the selected image and text. Execute the selected code
+  ## on pressing it.
+  ##
+  ## * image       - the image to shown on the button
+  ## * label       - the text to show on the button
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  ##
+  ## Returns true if button was pressed
+  if createImageLabelButton(img = image, txt = label, align = right):
+    onPressCode
+
 template imageLabelButton*(image: PImage; label, tooltip: string;
     alignment: TextAlignment; onPressCode: untyped) =
   ## Draw the button with the selected image and text. Execute the selected code
@@ -2075,6 +2087,23 @@ template imageLabelButton*(image: PImage; label, tooltip: string;
   ## Returns true if button was pressed
   let showTips: bool = widgetIsHovered()
   if createImageLabelButton(img = image, txt = label, align = alignment):
+    onPressCode
+  if showTips:
+    showTooltip2(text = tooltip)
+
+template imageLabelButton*(image: PImage; label, tooltip: string;
+    onPressCode: untyped) =
+  ## Draw the button with the selected image and text. Execute the selected code
+  ## on pressing it.
+  ##
+  ## * image       - the image to shown on the button
+  ## * label        - the text to show on the button
+  ## * tooltip     - the tooltip to show when mouse is hovering over the widget
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  ##
+  ## Returns true if button was pressed
+  let showTips: bool = widgetIsHovered()
+  if createImageLabelButton(img = image, txt = label, align = right):
     onPressCode
   if showTips:
     showTooltip2(text = tooltip)
