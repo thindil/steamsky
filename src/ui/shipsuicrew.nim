@@ -650,7 +650,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       of 2:
         for index, skill in member.skills:
           setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-              col1.cfloat, col2 - buttonHeight, buttonHeight])
+              col1.cfloat, col2 - 130, 130])
           try:
             label(str = skillsList[skill.index].name & ":")
           except:
@@ -658,8 +658,9 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             return
           colorLabel(str = getSkillLevelName(skillLevel = skill.level),
               color = theme.colors[goldenColor])
-          imageButton(image = images[helpIcon],
-              tooltip = "Show detailed information about the selected skill."):
+          imageLabelButton(image = images[helpIcon],
+              tooltip = "Show detailed information about the selected skill.",
+              label = "Info", alignment = right):
             try:
               let skill: SkillRecord = skillsList[skill.index]
               dialog = setInfo(text = skill.description, title = skill.name)
@@ -728,8 +729,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
 
 var xOffset: Natural = 0
 
-proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Show the list of the player's ship's crew members
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -843,7 +844,8 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [R
         except KeyError:
           dialog = setError(message = "Can't get the level of the skill.")
       addProgressBar(tooltip = "The current health level of the selected crew member",
-          value = playerShip.crew[data.index].health, maxValue = SkillRange.high,
+          value = playerShip.crew[data.index].health,
+              maxValue = SkillRange.high,
           data = data.index, code = setMemberInfo, dialog = dialog)
       var tiredLevel: int = playerShip.crew[data.index].tired - playerShip.crew[
           data.index].attributes[conditionIndex].level
@@ -853,10 +855,12 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [R
           value = tiredLevel, maxValue = SkillRange.high, data = data.index,
           code = setMemberInfo, dialog = dialog)
       addProgressBar(tooltip = "The current thirst level of the selected crew member",
-          value = playerShip.crew[data.index].thirst, maxValue = SkillRange.high,
+          value = playerShip.crew[data.index].thirst,
+              maxValue = SkillRange.high,
           data = data.index, code = setMemberInfo, dialog = dialog)
       addProgressBar(tooltip = "The current hunger level of the selected crew member",
-          value = playerShip.crew[data.index].hunger, maxValue = SkillRange.high,
+          value = playerShip.crew[data.index].hunger,
+              maxValue = SkillRange.high,
           data = data.index, code = setMemberInfo, dialog = dialog)
       addProgressBar(tooltip = "The current morale level of the selected crew member",
           value = playerShip.crew[data.index].morale[1],
