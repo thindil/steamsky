@@ -429,20 +429,21 @@ proc showAttributes(member: MemberData; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameter dialog.
   for index, attrib in member.attributes:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [140.cfloat,
-        320 - buttonHeight, buttonHeight])
+        190, 130])
     label(str = attributesList[index].name & ":")
     colorLabel(str = getAttributeLevelName(attributeLevel = attrib.level),
         color = theme.colors[goldenColor])
-    imageButton(image = images[helpIcon],
-        tooltip = "Show detailed information about the selected attribute."):
+    imageLabelButton(image = images[helpIcon],
+        tooltip = "Show detailed information about the selected attribute.",
+        label = "Info"):
       let attribute: AttributeRecord = attributesList[index]
       dialog = setInfo(text = attribute.description,
           title = attribute.name)
-    setLayoutRowDynamic(height = 20, cols = 1)
+    setLayoutRowDynamic(height = 30, cols = 1)
     var level: int = (if attrib.level > 2: attrib.level * 2 else: 6)
     progressBar(value = level, maxValue = SkillRange.high,
         modifyable = false, tooltip = "The current level of the attribute.")
-    setLayoutRowDynamic(height = 5, cols = 1)
+    setLayoutRowDynamic(height = 10, cols = 1)
     var exp: int = ((attrib.experience.float / (attrib.level.float *
         250.0)) * 100.0).int
     progressBar(value = exp, maxValue = 100, modifyable = false,
