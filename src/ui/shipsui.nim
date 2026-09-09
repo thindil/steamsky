@@ -65,12 +65,10 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     if newName.len == 0:
       disabled:
-        imageLabelButton(image = images[editColoredIcon], label = "Rename",
-            alignment = right):
+        imageLabelButton(image = images[editColoredIcon], label = "Rename"):
           dialog = setError(message = "Disabled button clicked")
     else:
-      imageLabelButton(image = images[editColoredIcon], label = "Rename",
-          alignment = right):
+      imageLabelButton(image = images[editColoredIcon], label = "Rename"):
         dialog = none
         case dialog
         of renameDialog:
