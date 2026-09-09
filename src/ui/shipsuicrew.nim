@@ -352,8 +352,7 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
         selected = currentOrder, itemHeight = labelHeight.int, x = 285, y = 150)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    imageLabelButton(image = images[giveOrderColoredIcon], label = "Assign",
-        alignment = right):
+    imageLabelButton(image = images[giveOrderColoredIcon], label = "Assign"):
       dialog = none
       try:
         giveOrders(ship = playerShip, memberIndex = crewIndex,
@@ -715,12 +714,12 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = dialogButtonHeight, cols = (
         if playerShip.speed == docked and crewIndex > 0: 3 else: 2))
     imageLabelButton(image = images[inventoryIcon], label = "Inventory",
-        alignment = right, tooltip = "Show the crew member inventory"):
+        tooltip = "Show the crew member inventory"):
       dialog = inventoryDialog
       setDialog(x = windowWidth / 9, y = windowHeight / 8)
     if playerShip.speed == docked and crewIndex > 0:
       imageLabelButton(image = images[dismissIcon], label = "Dismiss",
-          alignment = right, tooltip = "Remove the crew member from the ship's crew."):
+          tooltip = "Remove the crew member from the ship's crew."):
         dialog = setQuestion(question = "Are you sure want to dismiss " &
             member.name & "?", qType = dismissMember, data = $crewIndex)
     addCloseButton(dialog = dialog, isPopup = false)
@@ -742,8 +741,7 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   setLayoutRowStatic(height = buttonHeight, cols = 1, width = 200)
   imageLabelButton(image = images[moreOptionsIcon],
       tooltip = "Show/Hide additional options related to managing the crew",
-      label = (if showCrewOptions: "Hide options" else: "Show options"),
-      alignment = right):
+      label = (if showCrewOptions: "Hide options" else: "Show options")):
     showCrewOptions = not showCrewOptions
   var tableHeight = height - buttonHeight - 18
   if showCrewOptions:
@@ -761,18 +759,15 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     label(str = "Orders for all:")
     imageLabelButton(image = images[goRestIcon], tooltip = "Go rest " &
         (if crewDataList.any(pred = proc (x: CrewData): bool = x.checked):
-          "selected crew members" else: "everyone"), label = "Rest",
-        alignment = right):
+          "selected crew members" else: "everyone"), label = "Rest"):
       ordersForAll(order = rest, dialog = dialog)
     if needClean:
       imageLabelButton(image = images[cleanOrderIcon],
-          tooltip = "Clean the ship everyone", label = "Clean",
-          alignment = right):
+          tooltip = "Clean the ship everyone", label = "Clean"):
         ordersForAll(order = clean, dialog = dialog)
     if needRepair:
       imageLabelButton(image = images[repairOrderIcon],
-          tooltip = "Repair the ship everyone", label = "Repair",
-          alignment = right):
+          tooltip = "Repair the ship everyone", label = "Repair"):
         ordersForAll(order = repair, dialog = dialog)
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Skill:", tooltip = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
@@ -782,13 +777,11 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     setLayoutRowStatic(height = buttonHeight, cols = 2,
         width = 200)
     imageLabelButton(image = images[selectAllIcon],
-        tooltip = "Select all crew member", label = "Select all",
-        alignment = right):
+        tooltip = "Select all crew member", label = "Select all"):
       for data in crewDataList.mitems:
         data.checked = true
     imageLabelButton(image = images[unselectAllIcon],
-        tooltip = "Unselect all crew member", label = "Unselect all",
-        alignment = right):
+        tooltip = "Unselect all crew member", label = "Unselect all"):
       for data in crewDataList.mitems:
         data.checked = false
   # Show the list of crew members

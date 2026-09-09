@@ -730,7 +730,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       imageLabelButton(image = images[actionButton.icon],
-          label = actionButton.label, alignment = right):
+          label = actionButton.label):
         let
           baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
               playerShip.skyY].baseIndex

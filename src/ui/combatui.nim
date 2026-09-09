@@ -98,8 +98,7 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
           checkbox(label = member.name, checked = defenders[index])
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    imageLabelButton(image = images[giveOrderColoredIcon], label = "Assign",
-      alignment = right):
+    imageLabelButton(image = images[giveOrderColoredIcon], label = "Assign"):
       for index, member in playerShip.crew:
         let
           order: CrewOrders = (if dialog == boardingDialog: boarding else: defend)
@@ -125,8 +124,7 @@ proc showPartyMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], co
       dialog = none
     restoreButtonStyle()
     setButtonStyle(field = textNormal, color = theme.colors[redColor])
-    imageLabelButton(image = images[cancelIcon], label = "Close",
-      alignment = right):
+    imageLabelButton(image = images[cancelIcon], label = "Close"):
       dialog = none
     restoreButtonStyle()
 

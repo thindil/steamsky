@@ -63,7 +63,7 @@ proc showMissionMenu*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 3)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[destinationIcon], label = "Target",
-        alignment = right, tooltip = "Set the mission as the ship destination"):
+        tooltip = "Set the mission as the ship destination"):
       if mission.targetX == playerShip.skyX and mission.targetY ==
           playerShip.skyY:
         dialog = setMessage(message = "You are at this location now.",
@@ -78,7 +78,7 @@ proc showMissionMenu*(dialog: var GameDialog) {.raises: [], tags: [
     addCloseButton(dialog = dialog, isPopup = false)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[showColoredIcon], label = "Show",
-        alignment = right, tooltip = "Show the mission on the map"):
+        tooltip = "Show the mission on the map"):
       centerX = mission.targetX
       centerY = mission.targetY
       dialog = none
