@@ -660,7 +660,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               color = theme.colors[goldenColor])
           imageLabelButton(image = images[helpIcon],
               tooltip = "Show detailed information about the selected skill.",
-              label = "Info", alignment = right):
+              label = "Info"):
             try:
               let skill: SkillRecord = skillsList[skill.index]
               dialog = setInfo(text = skill.description, title = skill.name)

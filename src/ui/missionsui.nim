@@ -269,7 +269,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
         if canAccept: 3 else: 2))
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[showColoredIcon], label = "Show",
-        alignment = right, tooltip = "Show the mission on the map"):
+        tooltip = "Show the mission on the map"):
       centerX = mission.targetX
       centerY = mission.targetY
       dialog = none
@@ -278,7 +278,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
     addCloseButton(dialog = dialog, isPopup = false)
     if canAccept:
       imageLabelButton(image = images[negotiateIcon], label = "Accept",
-          alignment = right, tooltip = "Start negotiating accepting the mission"):
+          tooltip = "Start negotiating accepting the mission"):
         dialog = acceptMissionDialog
         missionReward = (mission.reward.float * mission.multiplier).Natural
         missionPercent = 100
@@ -320,7 +320,7 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[negotiateColoredIcon], label = "Accept",
-        alignment = right, tooltip = "Accept the mission"):
+        tooltip = "Accept the mission"):
       dialog = none
       skyBases[setui.baseIndex].missions[missionIndex].multiplier = (
         missionPercent.float / 100.0)

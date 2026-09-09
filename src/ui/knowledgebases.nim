@@ -149,7 +149,7 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 3)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[destinationIcon], label = "Target",
-        alignment = right, tooltip = "Set the base as the ship destination"):
+        tooltip = "Set the base as the ship destination"):
       if base.skyX == playerShip.skyX and base.skyY == playerShip.skyY:
         dialog = setMessage(message = "You are at this location now.",
             title = "Can't set destination")
@@ -163,7 +163,7 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
     addCloseButton(dialog = dialog, isPopup = false)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[showColoredIcon], label = "Show",
-        alignment = right, tooltip = "Show the base on the map"):
+        tooltip = "Show the base on the map"):
       centerX = base.skyX
       centerY = base.skyY
       dialog = none

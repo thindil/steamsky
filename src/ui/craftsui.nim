@@ -207,8 +207,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
         if recipe.craftable: 2 else: 1))
     if recipe.craftable:
       imageLabelButton(image = craftImage, label = $recipe.recipeType,
-          alignment = right, tooltip = "Set crafting order (" &
-          $recipe.recipeType & ")"):
+          tooltip = "Set crafting order (" & $recipe.recipeType & ")"):
         dialog = setRecipeDialog
         craftAmount = 1
         maxAmount = try:
@@ -368,8 +367,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
         tooltip = "Assign the crew member from the list. The sign + after name means that this crew member has needed skill, the sign ++ after name means that his/her needed skill is the best in the crew.")
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    imageLabelButton(image = setImage, label = $recipe.recipeType,
-        alignment = right):
+    imageLabelButton(image = setImage, label = $recipe.recipeType):
       dialog = none
       let moduleName: string = workshops[craftWorkshop]
       for index, module in playerShip.modules:

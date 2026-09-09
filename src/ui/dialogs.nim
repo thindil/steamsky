@@ -290,7 +290,7 @@ proc addCloseButton*(dialog: var GameDialog; icon: IconsNames = exitIcon;
   ## Returns the parameter dialog. It is modified only when the player closed
   ## the dialog.
   setButtonStyle(field = textNormal, color = theme.colors[color])
-  imageLabelButton(image = images[icon], label = label, alignment = right,
+  imageLabelButton(image = images[icon], label = label,
       tooltip = "Close the dialog [Escape key]"):
     if isPopup:
       closePopup()
@@ -458,7 +458,7 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
               button.code(dialog = dialog)
           else:
             imageLabelButton(image = images[button.icon.IconsNames],
-                label = button.text, alignment = right):
+                label = button.text):
               button.code(dialog = dialog)
         else:
           labelButton(title = button.text):
@@ -477,7 +477,7 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
               button.code(dialog = dialog)
           else:
             imageLabelButton(image = images[button.icon.IconsNames],
-                label = button.text, alignment = right):
+                label = button.text):
               button.code(dialog = dialog)
         else:
           labelButton(title = button.text):
