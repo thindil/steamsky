@@ -190,7 +190,9 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
       traderCargo[0].amount = traderCargo[0].amount - profit
       {.ruleOn: "assignments".}
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+    {.ruleOff: "varDeclared".}
     let gain: int = profit - (sellAmount * price)
+    {.ruleOn: "varDeclared".}
     addMessage(message = "You sold " & $sellAmount & " " & itemName & " for " &
         $profit & " " & moneyName & "." & (if gain == 0: "" else: " You " & (
         if gain > 0: "gain " else: "lost ") & $(gain.abs) & " " & moneyName &
