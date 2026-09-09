@@ -666,11 +666,11 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             except:
               dialog = setError(message = "Can't get the skill info")
               return
-          setLayoutRowDynamic(height = 20, cols = 1)
+          setLayoutRowDynamic(height = 30, cols = 1)
           var level: int = skill.level
           progressBar(value = level, maxValue = SkillRange.high,
               modifyable = false, tooltip = "The current level of the skill.")
-          setLayoutRowDynamic(height = 5, cols = 1)
+          setLayoutRowDynamic(height = 10, cols = 1)
           var exp: int = ((skill.experience.float / (skill.level.float *
               25.0)) * 100.0).int
           progressBar(value = exp, maxValue = 100, modifyable = false,
