@@ -718,7 +718,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     imageLabelButton(image = images[inventoryIcon], label = "Inventory",
         tooltip = "Show the crew member inventory"):
       dialog = inventoryDialog
-      setDialog(x = windowWidth / 9, y = windowHeight / 8)
+      setDialog(x = windowWidth / 12, y = windowHeight / 10)
     if playerShip.speed == docked and crewIndex > 0:
       imageLabelButton(image = images[dismissIcon], label = "Dismiss",
           tooltip = "Remove the crew member from the ship's crew."):
