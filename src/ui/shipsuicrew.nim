@@ -494,11 +494,11 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       # General information about the selected crew member
       of 0:
         setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-            col1.cfloat, col2 - buttonHeight, buttonHeight])
+            col1.cfloat, col2 - 150, 150])
         label(str = "Name:")
         colorLabel(str = member.name, color = theme.colors[goldenColor])
-        imageButton(image = images[editIcon],
-            tooltip = "Set a new name for the crew member"):
+        imageLabelButton(image = images[editIcon],
+            tooltip = "Set a new name for the crew member", label = "Rename"):
           dialog = renameMemberDialog
         if member.health < 100:
           setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
@@ -590,7 +590,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               discard
         if member.skills.len > 0:
           setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-              col1.cfloat, col2 - buttonHeight, buttonHeight])
+              col1.cfloat, col2 - 150, 150])
           label(str = "Order:")
           try:
             colorLabel(str = getCurrentOrder(memberIndex = crewIndex),
@@ -598,8 +598,9 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
           except:
             dialog = setError(message = "Can't show the order info.")
             return
-          imageButton(image = images[giveOrderIcon],
-              tooltip = "Set a new order for the crew member"):
+          imageLabelButton(image = images[giveOrderIcon],
+              tooltip = "Set a new order for the crew member",
+              label = "Change"):
             dialog = giveOrderDialog
             setGiveOrder(data = crewIndex, dialog = dialog)
         let faction: FactionData = try:
