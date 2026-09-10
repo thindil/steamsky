@@ -332,8 +332,8 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
             sortDesc: amountDesc),
         HeaderData[InventorySortOrders](label: "Used", sortAsc: usedAsc,
             sortDesc: usedDesc),
-        HeaderData[InventorySortOrders](label: "Durability", sortAsc: durabilityAsc,
-            sortDesc: durabilityDesc),
+        HeaderData[InventorySortOrders](label: "Durability",
+            sortAsc: durabilityAsc, sortDesc: durabilityDesc),
         HeaderData[InventorySortOrders](label: "Weight", sortAsc: weightAsc,
             sortDesc: weightDesc)]
       ratio: array[6, cfloat] = [40.cfloat, 300, 100, 50, 200, 150]
