@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Icon used for showing more options in various places. Author: Lorc
   (https://game-icons.net), license CC BY 3.0
+- Better looking dialog with information about the selected crew member of the
+  player's ship
 
 ## [12.7] - 2026-09-06
 
