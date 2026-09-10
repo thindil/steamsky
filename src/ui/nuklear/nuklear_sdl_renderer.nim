@@ -36,6 +36,13 @@
 #define NK_IMPLEMENTATION
 #define NK_SDL_RENDERER_IMPLEMENTATION
 #include "nuklear.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+struct nk_sdl_device {
+    struct nk_buffer cmds;
+    struct nk_draw_null_texture tex_null;
+    SDL_Texture *font_tex;
+};
 #include "nuklear_sdl_renderer.h"
 """.}
 
