@@ -429,7 +429,7 @@ proc showAttributes(member: MemberData; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameter dialog.
   for index, attrib in member.attributes:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [140.cfloat,
-        190, 130])
+        290, 130])
     label(str = attributesList[index].name & ":")
     colorLabel(str = getAttributeLevelName(attributeLevel = attrib.level),
         color = theme.colors[goldenColor])
@@ -457,10 +457,10 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   const
-    width: float = 500
+    width: float = 600
     height: float = 510
     col1: float = 140
-    col2: float = 320
+    col2: float = 420
 
   let
     member: MemberData = playerShip.crew[crewIndex]
