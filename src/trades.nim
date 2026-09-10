@@ -211,15 +211,15 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
   ##
   ## * baseItemIndex - the index of the item to buy in the trader's cargo
   ## * amount        - the amount of the item to buy
-  let traderIndex: int = findMember(order = talk)
+  let traderIndex: ExtendedNatural = findMember(order = talk)
   if traderIndex == -1:
     raise newException(exceptn = NoTraderError, message = "")
   let
     baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+    eventIndex: ExtendedNatural = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
   var
     itemIndex, price: Natural = 0
-    itemName: string = ""
+    itemName: ObjectName = ""
   if baseIndex > 0:
     itemIndex = skyBases[baseIndex].cargo[baseItemIndex].protoIndex
     itemName = itemsList[itemIndex].name
