@@ -338,8 +338,9 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
             sortDesc: weightDesc)]
       ratio: array[6, cfloat] = [40.cfloat, 300, 100, 50, 200, 150]
 
-    setLayoutRowDynamic(height = height - labelHeight - (dialogButtonHeight *
-        2) - 80, cols = 1)
+    let tableHeight: float = height - labelHeight - (dialogButtonHeight * 2) -
+        80
+    setLayoutRowDynamic(height = tableHeight, cols = 1)
     group(title = "InfoGroup", flags = {windowNoFlags}):
       addHeader(headers = headers, ratio = ratio, tooltip = "items",
           code = sortInventory, dialog = dialog)
