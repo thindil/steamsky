@@ -312,13 +312,13 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     label(str = spaceText[0])
     colorLabel(str = spaceText[1], color = theme.colors[goldenColor])
     ## Show select/unselect all items buttons
-    setLayoutRowStatic(height = buttonHeight, cols = 2,
-        width = buttonHeight.int)
-    imageButton(image = images[selectAllIcon], tooltip = "Select all items"):
+    setLayoutRowStatic(height = dialogButtonHeight, cols = 2, width = 200)
+    imageLabelButton(image = images[selectAllIcon],
+        tooltip = "Select all items", label = "Select all"):
       for data in inventoryDataList.mitems:
         data.checked = true
-    imageButton(image = images[unselectAllIcon],
-        tooltip = "Unselect all items"):
+    imageLabelButton(image = images[unselectAllIcon],
+        tooltip = "Unselect all items", label = "Unselect all"):
       for data in inventoryDataList.mitems:
         data.checked = false
     # Show the list of items in inventory
@@ -338,8 +338,8 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
             sortDesc: weightDesc)]
       ratio: array[6, cfloat] = [40.cfloat, 300, 100, 50, 200, 150]
 
-    setLayoutRowDynamic(height = height - labelHeight - buttonHeight -
-        dialogButtonHeight - 80, cols = 1)
+    setLayoutRowDynamic(height = height - labelHeight - (dialogButtonHeight *
+        2) - 80, cols = 1)
     group(title = "InfoGroup", flags = {windowNoFlags}):
       addHeader(headers = headers, ratio = ratio, tooltip = "items",
           code = sortInventory, dialog = dialog)
