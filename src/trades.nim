@@ -78,6 +78,9 @@ proc generateTraderCargo*(protoIndex: Positive) {.raises: [
           cargoAmount = 1
       cargoAmount.dec
 
+type
+  GainAmount = range[-100_000..100_000]
+
 proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
     NoTraderError, NoFreeCargoError, NoMoneyInBaseError, KeyError, ValueError,
     IOError, Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
@@ -190,9 +193,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
       traderCargo[0].amount = traderCargo[0].amount - profit
       {.ruleOn: "assignments".}
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-    {.ruleOff: "varDeclared".}
-    let gain: int = profit - (sellAmount * price)
-    {.ruleOn: "varDeclared".}
+    let gain: GainAmount = profit - (sellAmount * price)
     addMessage(message = "You sold " & $sellAmount & " " & itemName & " for " &
         $profit & " " & moneyName & "." & (if gain == 0: "" else: " You " & (
         if gain > 0: "gain " else: "lost ") & $(gain.abs) & " " & moneyName &
@@ -269,7 +270,7 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
       traderCargo.delete(i = baseItemIndex)
     {.ruleOn: "assignments".}
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-  let gain: int = (buyAmount * price) - cost
+  let gain: GainAmount = (buyAmount * price) - cost
   addMessage(message = "You bought " & $buyAmount & " " & itemName & " for " &
       $cost & " " & moneyName & "." & (if gain == 0: "" else: "You " & (
       if gain > 0: "gain " else: "lost ") & $(gain.abs) & " " & moneyName &
