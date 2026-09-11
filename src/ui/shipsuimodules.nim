@@ -177,6 +177,12 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
 var
   moduleIndex*: Natural = 0 ## The index of currently selected module
   dialogWidth: float = windowWidth - 20
+  viewWidth: float = dialogWidth - buttonHeight - 5
+  col1: float = viewWidth * 0.4
+  col2a: float = viewWidth - col1
+  col2b: float = viewWidth - col1 - buttonHeight
+  col2c: float = viewWidth - col1 - (buttonHeight * 2)
+  col3: float = col2a / 3
 
 proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -190,6 +196,12 @@ proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   moduleIndex = data
   dialog = moduleInfoDialog
   dialogWidth = windowWidth - 20
+  viewWidth = dialogWidth - buttonHeight - 5
+  col1 = viewWidth * 0.4
+  col2a = viewWidth - col1
+  col2b = viewWidth - col1 - buttonHeight
+  col2c = viewWidth - col1 - (buttonHeight * 2)
+  col3 = col2a / 3
   setDialog(x = 10, y = windowHeight / 10)
 
 proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
@@ -246,11 +258,6 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  let
-    viewWidth: float = dialogWidth - (buttonHeight + 5)
-    col1: float = viewWidth * 0.4
-    col2b: float = viewWidth - col1 - buttonHeight
-    col2c: float = viewWidth - col1 - (buttonHeight * 2)
   let moduleMaxValue: Positive = try:
       (modulesList[module.protoIndex].durability.float * 1.5).Positive
     except:
@@ -365,11 +372,6 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
   maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
   if maxUpgrade == 0:
     maxUpgrade = 1
-  let
-    viewWidth: float = dialogWidth - buttonHeight
-    col1: float = viewWidth * 0.4
-    col2a: float = viewWidth - col1
-    col2b: float = viewWidth - col1 - buttonHeight
   if playerShip.upgradeModule == moduleIndex:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
         col2b, buttonHeight])
@@ -411,11 +413,6 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show the engine's power
-  let
-    viewWidth: float = dialogWidth - buttonHeight
-    col1: float = viewWidth * 0.4
-    col2a: float = viewWidth - col1
-    col2b: float = viewWidth - col1 - buttonHeight
   var moduleMaxValue2: Natural = try:
       (modulesList[module.protoIndex].maxValue.float * 1.5).int
     except:
@@ -489,10 +486,6 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
   ##
   ## Returns the modified parameter dialog. It is modified when the player
   ## wants to assign crew members to the module.
-  let
-    viewWidth: float = dialogWidth - buttonHeight
-    col1: float = viewWidth * 0.4
-    col2b: float = viewWidth - col1 - buttonHeight
   var ownersText: string = ownersName
   if module.owner.len > 1:
     ownersText.add(y = "s")
@@ -810,11 +803,6 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  let
-    viewWidth: float = dialogWidth - buttonHeight
-    col1: float = viewWidth * 0.4
-    col2a: float = viewWidth - col1
-    col2b: float = viewWidth - col1 - buttonHeight
   var isPassenger: bool = false
   block missionLoop:
     for mission in acceptedMissions:
@@ -888,11 +876,6 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
   let
     module: ModuleData = playerShip.modules[moduleIndex]
     windowName: string = module.name
-    viewWidth: float = dialogWidth - buttonHeight
-    col1: float = viewWidth * 0.4
-    col2a: float = viewWidth - col1
-    col2b: float = viewWidth - col1 - buttonHeight
-    col3: float = col2a / 3
   updateDialog(width = dialogWidth, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = dialogWidth,
       h = height, flags = {windowBorder, windowTitle, windowMovable,
