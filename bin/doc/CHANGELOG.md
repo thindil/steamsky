@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
   (https://game-icons.net), license CC BY 3.0
 - Better looking dialog with information about the selected crew member of the
   player's ship
+- Better looking dialog wiht information about the selected crew member's
+  inventory
 
 ## [12.7] - 2026-09-06
 
