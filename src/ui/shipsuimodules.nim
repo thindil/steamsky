@@ -174,7 +174,9 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
   for module in localModules:
     modulesIndexes.add(y = module.id)
 
-var moduleIndex*: Natural = 0 ## The index of currently selected module
+var
+  moduleIndex*: Natural = 0 ## The index of currently selected module
+  dialogWidth: float = windowWidth - 20
 
 proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -187,7 +189,8 @@ proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   moduleIndex = data
   dialog = moduleInfoDialog
-  setDialog(x = windowWidth / 10, y = windowHeight / 10)
+  dialogWidth = windowWidth - 20
+  setDialog(x = 10, y = windowHeight / 10)
 
 proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
     module: ModuleData; dialog: var GameDialog) {.raises: [], tags: [
@@ -233,8 +236,6 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
         updateOrders(ship = playerShip)
       except:
         dialog = setError(message = "Can't update crew orders.")
-
-const dialogWidth: float = 600
 
 proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
