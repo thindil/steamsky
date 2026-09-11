@@ -399,7 +399,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
         row.inc
         if row == gameSettings.listsLimit + 1:
           break
-    restoreButtonStyle()
+      restoreButtonStyle()
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
     if showItemsMenu:
