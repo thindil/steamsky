@@ -178,7 +178,7 @@ var
   moduleIndex*: Natural = 0 ## The index of currently selected module
   dialogWidth: float = windowWidth - 20
   viewWidth: float = dialogWidth - buttonHeight - 5
-  col1: float = viewWidth * 0.4
+  col1: float = viewWidth * 0.3
   col2a: float = viewWidth - col1
   col2b: float = viewWidth - col1 - buttonHeight
   col2c: float = viewWidth - col1 - (buttonHeight * 2)
@@ -197,7 +197,7 @@ proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   dialog = moduleInfoDialog
   dialogWidth = windowWidth - 20
   viewWidth = dialogWidth - buttonHeight - 5
-  col1 = viewWidth * 0.4
+  col1 = viewWidth * 0.3
   col2a = viewWidth - col1
   col2b = viewWidth - col1 - buttonHeight
   col2c = viewWidth - col1 - (buttonHeight * 2)
