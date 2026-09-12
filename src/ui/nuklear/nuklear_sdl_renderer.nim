@@ -38,6 +38,7 @@
 #include "nuklear.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <strings.h>
 struct nk_sdl_device {
     struct nk_buffer cmds;
     struct nk_draw_null_texture tex_null;

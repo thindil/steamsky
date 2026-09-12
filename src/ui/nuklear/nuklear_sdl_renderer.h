@@ -25,7 +25,7 @@ NK_API void                 nk_sdl_font_stash_begin(struct nk_font_atlas **atlas
  */
 #ifdef NK_SDL_RENDERER_IMPLEMENTATION
 
-#include <strings.h>
+/*#include <strings.h>*/
 
 static struct nk_sdl {
     SDL_Window *win;
