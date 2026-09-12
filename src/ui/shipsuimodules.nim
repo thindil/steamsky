@@ -180,8 +180,8 @@ var
   viewWidth: float = dialogWidth - buttonHeight - 5
   col1: float = viewWidth * 0.3
   col2a: float = viewWidth - col1
-  col2b: float = viewWidth - col1 - buttonHeight
-  col2c: float = viewWidth - col1 - (buttonHeight * 2)
+  col2b: float = viewWidth - col1 - 100
+  col2c: float = viewWidth - col1 - 200
   col3: float = col2a / 3
 
 proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
@@ -199,8 +199,8 @@ proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   viewWidth = dialogWidth - buttonHeight - 5
   col1 = viewWidth * 0.3
   col2a = viewWidth - col1
-  col2b = viewWidth - col1 - buttonHeight
-  col2c = viewWidth - col1 - (buttonHeight * 2)
+  col2b = viewWidth - col1 - 100
+  col2c = viewWidth - col1 - 200
   col3 = col2a / 3
   setDialog(x = 10, y = windowHeight / 10)
 
@@ -218,8 +218,8 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   if module.upgradeAction == upgradeType and playerShip.upgradeModule == moduleIndex:
-    imageButton(image = images[cancelIcon], tooltip = "Stop upgrading the " &
-        buttonTooltip):
+    imageLabelButton(image = images[cancelIcon], tooltip = "Stop upgrading the " &
+        buttonTooltip, label = "      Stop"):
       try:
         stopUpgrade()
       except CrewOrderError:
@@ -229,8 +229,8 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
         dialog = setError(message = "Can't give orders to a crew member.")
       dialog = none
   else:
-    imageButton(image = images[upgradeButtonIcon],
-        tooltip = "Start upgrading the " & buttonTooltip):
+    imageLabelButton(image = images[upgradeButtonIcon],
+        tooltip = "Start upgrading the " & buttonTooltip, label = "      Start"):
       dialog = none
       let upgradeNumber: Positive = case upgradeType
         of maxValue:
@@ -265,7 +265,7 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
       return
   if module.maxDurability < moduleMaxValue:
     setLayoutRowStatic(height = buttonHeight, cols = 4, ratio = [col1.cfloat,
-        col2c, buttonHeight, buttonHeight])
+        col2c, buttonHeight, 100])
   else:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
         col2b, buttonHeight])
@@ -422,7 +422,7 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       return
   if module.maxDurability < moduleMaxValue2:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-        col2b, buttonHeight])
+        col2b, 100])
   else:
     setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat,
         col2a])
@@ -440,7 +440,7 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       return
   if module.maxDurability > moduleMaxValue2:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-        col2b, buttonHeight])
+        col2b, 100])
   else:
     setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat, col2a])
   label(str = "Fuel usage:")
@@ -851,7 +851,7 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       return
   if module.quality < moduleMaxValue2:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-        col2b, buttonHeight])
+        col2b, 100])
   else:
     setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat,
         col2a])
@@ -961,7 +961,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             return
         if module.maxModules < moduleMaxValue2:
           setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-              col1.cfloat, col2b, buttonHeight])
+              col1.cfloat, col2b, 100])
         else:
           setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
               col1.cfloat, col2a])
@@ -993,7 +993,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
               return
         if moduleStrength < moduleMaxValue2:
           setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-              col1.cfloat, col2b, buttonHeight])
+              col1.cfloat, col2b, 100])
         else:
           setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
               col1.cfloat, col2a])
@@ -1156,7 +1156,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             return
         if module.damage2 < moduleMaxValue2:
           setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-              col1.cfloat, col2b, buttonHeight])
+              col1.cfloat, col2b, 100])
         else:
           setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
               col1.cfloat, col2a])
