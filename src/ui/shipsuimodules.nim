@@ -325,6 +325,8 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
+  if module.upgradeAction == none:
+    return
   var
     moduleInfo: string = ""
     maxUpgrade: Natural = 0
@@ -934,8 +936,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't show repair skill.")
         return
       # Show the module's upgrade action
-      if module.upgradeAction != none:
-        showModuleUpgrade(module = module, dialog = dialog)
+      showModuleUpgrade(module = module, dialog = dialog)
       # Show information specific to the module's type
       case module.mType
       # Show information about engine
