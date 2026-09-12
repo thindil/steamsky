@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 - Better looking dialog wiht information about the selected crew member's
   inventory
 
+### Fixed
+- Showing information about the player's ship's modules' upgrade progresss
+
 ## [12.7] - 2026-09-06
 
 ### Added
