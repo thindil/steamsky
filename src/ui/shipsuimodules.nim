@@ -378,7 +378,7 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
         col2b, buttonHeight])
   else:
-    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [col1.cfloat,
+    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat,
         col2a])
   label(str = "Upgrade progress:")
   var upgradePercent: int = 100 - ((module.upgradeProgress.float /
