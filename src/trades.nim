@@ -317,8 +317,10 @@ proc countBuyAmount(data: var TradeData; baseCargoIndex, baseIndex: int;
         data.maxBuyAmount = traderCargo[baseCargoIndex].amount
       maxPrice = data.maxBuyAmount * data.price
       countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+      {.ruleOff: "varDeclared".}
       var weight: int = freeCargo(amount = maxPrice - (itemsList[
           data.protoIndex].weight * data.maxBuyAmount))
+      {.ruleOn: "varDeclared".}
       while weight < 0:
         data.maxBuyAmount = data.maxBuyAmount + (weight / itemsList[
             data.protoIndex].weight).int - 1
