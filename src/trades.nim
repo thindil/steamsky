@@ -344,14 +344,14 @@ proc getTradeData*(iIndex: int): TradeData {.raises: [KeyError], tags: [],
   ## Returns tuple with trade data: proto index of the item, max amount of item
   ## to sell, max amount item to buy, its price and quality
   result = (-1, 0, 0, 0, normal, defaultItemDurability, 0)
-  var baseCargoIndex, cargoIndex: int = -1
+  var baseCargoIndex, cargoIndex: ExtendedNatural = -1
   if iIndex < 0:
     baseCargoIndex = iIndex.abs
   else:
     cargoIndex = iIndex
   if cargoIndex > playerShip.cargo.high:
     return
-  let baseIndex: int = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if baseIndex == 0 and baseCargoIndex > traderCargo.high:
     return
   elif baseIndex > 0 and baseCargoIndex > skyBases[baseIndex].cargo.high:
