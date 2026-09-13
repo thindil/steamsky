@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
   inventory
 
 ### Fixed
-- Showing information about the player's ship's modules' upgrade progresss
+- Showing information about the player's ship's modules' upgrade progress
 
 ## [12.7] - 2026-09-06
 
