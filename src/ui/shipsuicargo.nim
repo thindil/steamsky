@@ -197,10 +197,10 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   ## happened.
   # Show options button
   setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-      200.cfloat, cargoWidth[0], cargoWidth[1]])
+      175.cfloat, cargoWidth[0], cargoWidth[1]])
   imageLabelButton(image = images[moreOptionsIcon],
       tooltip = "Show/Hide additional options related to managing the cargo",
-      label = (if showCargoOptions: "Hide options" else: "Show options")):
+      label = (if showCargoOptions: "    Hide options" else: "    Show options")):
     showCargoOptions = not showCargoOptions
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
