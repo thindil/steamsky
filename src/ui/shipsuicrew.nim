@@ -777,13 +777,13 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
         selected = skillIndex, itemHeight = labelHeight.int, x = 200, y = 150,
         tooltip = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
     setLayoutRowStatic(height = buttonHeight, cols = 2,
-        width = 200)
+        width = 150)
     imageLabelButton(image = images[selectAllIcon],
-        tooltip = "Select all crew member", label = "Select all"):
+        tooltip = "Select all crew member", label = "    Select all"):
       for data in crewDataList.mitems:
         data.checked = true
     imageLabelButton(image = images[unselectAllIcon],
-        tooltip = "Unselect all crew member", label = "Unselect all"):
+        tooltip = "Unselect all crew member", label = "    Unselect all"):
       for data in crewDataList.mitems:
         data.checked = false
   # Show the list of crew members
