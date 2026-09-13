@@ -265,7 +265,7 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
       return
   if module.maxDurability < moduleMaxValue:
     setLayoutRowStatic(height = buttonHeight, cols = 4, ratio = [col1.cfloat,
-        col2c, buttonHeight, 100])
+        col2c, 100, 100])
   else:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
         col2b, buttonHeight])
@@ -299,8 +299,8 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
     progressBar(value = value, maxValue = module.maxDurability,
         modifyable = false, tooltip = statusTooltip)
   if playerShip.repairModule == moduleIndex:
-    imageButton(image = images[cancelIcon],
-        tooltip = "Remove the repair priority"):
+    imageLabelButton(image = images[cancelIcon],
+        tooltip = "Remove the repair priority", label = "      Clear"):
       playerShip.repairModule = -1
       addMessage(message = "You removed the repair's priority.",
           mType = orderMessage)
