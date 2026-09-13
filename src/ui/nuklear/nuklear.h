@@ -24754,10 +24754,10 @@ nk_do_button_text_image(nk_flags *state,
         icon.x = NK_MAX(icon.x, 0);
     } else icon.x = bounds.x + 2 * style->padding.x;
 
-    icon.x += style->image_padding.x;
-    icon.y += style->image_padding.y;
-    icon.w -= 2 * style->image_padding.x;
-    icon.h -= 2 * style->image_padding.y;
+    icon.x += style->image_padding.x + 5;
+    icon.y += style->image_padding.y + 5;
+    icon.w -= 2 * style->image_padding.x + 10;
+    icon.h -= 2 * style->image_padding.y + 10;
 
     if (style->draw_begin) style->draw_begin(out, style->userdata);
     nk_draw_button_text_image(out, &bounds, &content, &icon, *state, style, str, len, font, &img);
