@@ -218,8 +218,8 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   if module.upgradeAction == upgradeType and playerShip.upgradeModule == moduleIndex:
-    imageLabelButton(image = images[cancelIcon], tooltip = "Stop upgrading the " &
-        buttonTooltip, label = "    Stop"):
+    imageLabelButton(image = images[cancelIcon],
+        tooltip = "Stop upgrading the " & buttonTooltip, label = "    Stop"):
       try:
         stopUpgrade()
       except CrewOrderError:
@@ -1214,14 +1214,16 @@ proc showModulesInfo*(dialog: var GameDialog; height: float) {.raises: [],
       if not isStartingRow():
         continue
       addButton(label = playerShip.modules[index].name,
-          tooltip = "Show the module's info", data = index, code = setModuleInfo,
+          tooltip = "Show the module's info", data = index,
+              code = setModuleInfo,
           dialog = dialog)
       addProgressBar(tooltip = "Show the module's info",
           value = playerShip.modules[index].durability,
           maxValue = playerShip.modules[index].maxDurability, data = index,
           code = setModuleInfo, dialog = dialog)
       addButton(label = getModuleInfo(moduleIndex = index),
-          tooltip = "Show the module's info", data = index, code = setModuleInfo,
+          tooltip = "Show the module's info", data = index,
+              code = setModuleInfo,
           dialog = dialog)
       if isLastRow():
         break
