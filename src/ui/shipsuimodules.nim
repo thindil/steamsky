@@ -306,8 +306,9 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
           mType = orderMessage)
       dialog = none
   else:
-    imageButton(image = images[repairPriorityIcon],
-        tooltip = "Repair the selected module as first when damaged"):
+    imageLabelButton(image = images[repairPriorityIcon],
+        tooltip = "Repair the selected module as first when damaged",
+        label = "    Focus"):
       playerShip.repairModule = moduleIndex
       addMessage(message = "You assigned " & module.name &
           " as the repair's priority.", mType = orderMessage)
