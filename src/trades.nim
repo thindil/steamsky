@@ -377,7 +377,9 @@ proc getTradeData*(iIndex: int): TradeData {.raises: [KeyError], tags: [],
       result.weight = getItemWeight(item = skyBases[baseIndex].cargo[baseCargoIndex])
   else:
       result.weight = getItemWeight(item = playerShip.cargo[cargoIndex])
+  {.ruleOff: "varDeclared".}
   var itemIndex: int = iIndex
+  {.ruleOn: "varDeclared".}
   if cargoIndex > -1:
     result.protoIndex = playerShip.cargo[cargoIndex].protoIndex
   else:
