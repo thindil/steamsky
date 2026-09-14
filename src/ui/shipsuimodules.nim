@@ -456,9 +456,11 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   label(str = "State:")
   colorLabel(str = (if module.disabled: "Disabled" else: "Enabled"),
       color = theme.colors[goldenColor])
-  imageLabelButton(image = images[powerIcon], tooltip = "Turn " & (
-        if module.disabled: "on " else: "off ") & " the engine", label = "    " &
-        (if module.disabled: "On" else: "Off")):
+  let
+    tooltip: string = "Turn " & (if module.disabled: "on " else: "off ") &
+        " the engine"
+    label: string = "    " & (if module.disabled: "On" else: "Off")
+  imageLabelButton(image = images[powerIcon], tooltip = tooltip, label = label):
     if playerShip.modules[moduleIndex].disabled:
       playerShip.modules[moduleIndex].disabled = false
       addMessage(message = "You enabled " & playerShip.modules[
