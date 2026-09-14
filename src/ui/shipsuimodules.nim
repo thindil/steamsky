@@ -219,7 +219,7 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
   ## happened.
   if module.upgradeAction == upgradeType and playerShip.upgradeModule == moduleIndex:
     imageLabelButton(image = images[cancelIcon], tooltip = "Stop upgrading the " &
-        buttonTooltip, label = "      Stop"):
+        buttonTooltip, label = "    Stop"):
       try:
         stopUpgrade()
       except CrewOrderError:
@@ -230,7 +230,7 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
       dialog = none
   else:
     imageLabelButton(image = images[upgradeButtonIcon],
-        tooltip = "Start upgrading the " & buttonTooltip, label = "      Start"):
+        tooltip = "Start upgrading the " & buttonTooltip, label = "     Start"):
       dialog = none
       let upgradeNumber: Positive = case upgradeType
         of maxValue:
@@ -300,7 +300,7 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
         modifyable = false, tooltip = statusTooltip)
   if playerShip.repairModule == moduleIndex:
     imageLabelButton(image = images[cancelIcon],
-        tooltip = "Remove the repair priority", label = "      Clear"):
+        tooltip = "Remove the repair priority", label = "     Clear"):
       playerShip.repairModule = -1
       addMessage(message = "You removed the repair's priority.",
           mType = orderMessage)
@@ -377,7 +377,7 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
     maxUpgrade = 1
   if playerShip.upgradeModule == moduleIndex:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-        col2b, buttonHeight])
+        col2b, 100])
   else:
     setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat,
         col2a])
@@ -396,8 +396,8 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
       progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
           tooltip = moduleInfo)
   if playerShip.upgradeModule == moduleIndex:
-    imageButton(image = images[cancelIcon],
-        tooltip = "Stop upgrading the module"):
+    imageLabelButton(image = images[cancelIcon],
+        tooltip = "Stop upgrading the module", label = "    Stop"):
       try:
         stopUpgrade()
       except CrewOrderError:
