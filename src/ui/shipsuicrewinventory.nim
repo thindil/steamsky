@@ -312,13 +312,13 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     label(str = spaceText[0])
     colorLabel(str = spaceText[1], color = theme.colors[goldenColor])
     ## Show select/unselect all items buttons
-    setLayoutRowStatic(height = dialogButtonHeight, cols = 2, width = 200)
+    setLayoutRowStatic(height = dialogButtonHeight, cols = 2, width = 150)
     imageLabelButton(image = images[selectAllIcon],
-        tooltip = "Select all items", label = "Select all"):
+        tooltip = "Select all items", label = "   Select all"):
       for data in inventoryDataList.mitems:
         data.checked = true
     imageLabelButton(image = images[unselectAllIcon],
-        tooltip = "Unselect all items", label = "Unselect all"):
+        tooltip = "Unselect all items", label = "   Unselect all"):
       for data in inventoryDataList.mitems:
         data.checked = false
     # Show the list of items in inventory
