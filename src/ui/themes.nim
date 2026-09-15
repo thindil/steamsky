@@ -62,8 +62,8 @@ type
       dropIcon, editIcon, editColoredIcon, showIcon, goRestIcon, cleanOrderIcon,
       repairOrderIcon, giveOrderColoredIcon, inventoryIcon, dismissIcon,
       giveOrderIcon, cargoIcon, moveIcon, repairPriorityIcon, upgradeButtonIcon,
-      powerIcon, assignAmmoIcon, giveColoredIcon, dropColoredIcon, craftIcon,
-      studyIcon, deconstructIcon, craftColoredIcon, studyColoredIcon,
+      powerOnIcon, powerOffIcon, assignAmmoIcon, giveColoredIcon, dropColoredIcon,
+      craftIcon, studyIcon, deconstructIcon, craftColoredIcon, studyColoredIcon,
       deconstructColoredIcon, destinationIcon, mapMenuIcon
   MapIconsNames* = enum
     ## Names of icons used in the game's map
@@ -135,9 +135,10 @@ let
       defaultThemeIconPath & "giveorder.svg", defaultThemeIconPath &
       "cargo.svg", defaultThemeIconPath & "cargo2.svg",
       defaultThemeIconPath & "repair-priority.svg", defaultThemeIconPath &
-      "upgrade-button.svg", defaultThemeIconPath & "power.svg",
-      defaultThemeIconPath & "assignammo.svg", defaultThemeIconPath &
-      "give2.svg", defaultThemeIconPath & "drop2.svg", defaultThemeIconPath &
+      "upgrade-button.svg", defaultThemeIconPath & "poweron.svg",
+      defaultThemeIconPath & "poweroff.svg", defaultThemeIconPath &
+      "assignammo.svg", defaultThemeIconPath & "give2.svg",
+      defaultThemeIconPath & "drop2.svg", defaultThemeIconPath &
       "craft-order.svg", defaultThemeIconPath & "study.svg",
       defaultThemeIconPath & "deconstruct.svg", defaultThemeIconPath &
       "craft-order2.svg", defaultThemeIconPath & "study2.svg",
