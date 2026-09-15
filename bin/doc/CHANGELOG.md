@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file.
   inventory
 - Split the old engine's power management icon into two
 
+### Removed
+- Old icon used to manage the player's ship's engines' power
+
 ### Fixed
 - Showing information about the player's ship's modules' upgrade progress
 
