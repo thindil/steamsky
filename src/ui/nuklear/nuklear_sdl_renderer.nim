@@ -44,6 +44,13 @@ struct nk_sdl_device {
     struct nk_draw_null_texture tex_null;
     SDL_Texture *font_tex;
 };
+static struct nk_sdl {
+    SDL_Window *win;
+    SDL_Renderer *renderer;
+    struct nk_sdl_device ogl;
+    struct nk_context ctx;
+    struct nk_font_atlas atlas;
+} sdl;
 #include "nuklear_sdl_renderer.h"
 """.}
 

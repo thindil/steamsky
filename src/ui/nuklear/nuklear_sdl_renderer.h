@@ -25,13 +25,13 @@ NK_API void                 nk_sdl_font_stash_begin(struct nk_font_atlas **atlas
  */
 #ifdef NK_SDL_RENDERER_IMPLEMENTATION
 
-static struct nk_sdl {
+/*static struct nk_sdl {
     SDL_Window *win;
     SDL_Renderer *renderer;
     struct nk_sdl_device ogl;
     struct nk_context ctx;
     struct nk_font_atlas atlas;
-} sdl;
+} sdl;*/
 
 NK_API struct nk_context*
 nk_sdl_init(SDL_Window *win, SDL_Renderer *renderer)
