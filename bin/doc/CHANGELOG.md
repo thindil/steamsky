@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
   player's ship
 - Better looking dialog wiht information about the selected crew member's
   inventory
+- Split the old engine's power management icon into two
 
 ### Fixed
 - Showing information about the player's ship's modules' upgrade progress
