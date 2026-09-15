@@ -386,7 +386,7 @@ proc getTradeData*(iIndex: int): TradeData {.raises: [KeyError], tags: [],
     result.protoIndex = (if baseIndex == 0: traderCargo[
         baseCargoIndex].protoIndex else: skyBases[baseIndex].cargo[
         baseCargoIndex].protoIndex)
-  let baseType: string = (if baseIndex > 0: skyBases[baseIndex].baseType else: "0")
+  let baseType: BaseType = (if baseIndex > 0: skyBases[baseIndex].baseType else: "0")
   if iIndex > -1:
     baseCargoIndex = findBaseCargo(protoIndex = result.protoIndex,
       durability = playerShip.cargo[cargoIndex].durability,
