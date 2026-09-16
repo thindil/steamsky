@@ -1081,9 +1081,10 @@ story.
   the repair priority for the selected module button. Optional.
 * Key `UpgradeButtonIcon`: Path to the SVG image which will be used for setting
   upgrades for the player's ship modules button. Optional.
-* Key `PowerIcon`: Path to the SVG image which will be used for enable or
-  disable the player's ship's engine button in the module info dialog.
-  Optional.
+* Key `PowerOnIcon`: Path to the SVG image which will be used for enable the
+  player's ship's engine button in the module info dialog. Optional.
+* Key `PowerOffIcon`: Path to the SVG image which will be used for disable the
+  player's ship's engine button in the module info dialog. Optional.
 * Key `AssignCrewIcon`: Path to the SVG image which will be used for assign a
   crew member as an owner to a module in the player' ship in the module info
   dialog. Optional.
