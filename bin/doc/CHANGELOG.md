@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Better looking dialog wiht information about the selected crew member's
   inventory
 - Split the old engine's power management icon into two
+- Updated modding guide
 
 ### Removed
 - Old icon used to manage the player's ship's engines' power
