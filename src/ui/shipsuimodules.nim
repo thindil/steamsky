@@ -819,7 +819,7 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
           if mission.data == owner:
             isPassenger = true
             break missionLoop
-  addOwnersInfo(module = module, ownersName = "Owners", addButton = true,
+  addOwnersInfo(module = module, ownersName = "Owner", addButton = true,
       dialog = dialog)
   # Show information about cabin's cleanliness
   setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
