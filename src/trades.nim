@@ -421,7 +421,9 @@ proc getTradeData*(iIndex: int): TradeData {.raises: [KeyError], tags: [],
     if maxPrice > 0:
       countPrice(price = maxPrice, traderIndex = findMember(order = talk),
           reduce = false)
+    {.ruleOff: "varDeclared".}
     var weight: int = freeCargo(amount = (itemsList[result.protoIndex].weight * result.maxSellAmount) - maxPrice)
+    {.ruleOn: "varDeclared".}
     while weight < 0:
       result.maxSellAmount = (result.maxSellAmount.float * ((maxPrice + weight).float /
           maxPrice.float)).floor.int
