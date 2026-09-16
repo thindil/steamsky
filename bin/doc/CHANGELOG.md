@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing information about the player's ship's modules' upgrade progress
+- Typo in information about owners of the player's ship's cabin
 
 ## [12.7] - 2026-09-06
 
