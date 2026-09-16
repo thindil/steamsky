@@ -891,12 +891,12 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = height - dialogButtonHeight - 60, 1)
     group(title = "SkillsGroup", flags = {windowNoFlags}):
       setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-          col2b, buttonHeight])
+          col2b - 10, 110])
       # Show the module's name
       label(str = "Name:")
       colorLabel(str = module.name, color = theme.colors[goldenColor])
-      imageButton(image = images[editIcon],
-          tooltip = "Set a new name for the module"):
+      imageLabelButton(image = images[editIcon],
+          tooltip = "Set a new name for the module", label = "    Rename"):
         dialog = renameModuleDialog
       # Show the module's status
       showModuleDamage(module = module, dialog = dialog)
