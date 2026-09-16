@@ -499,7 +499,7 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
     ownersText.add(y = "s")
   ownersText.add(y = " (max " & $module.owner.len & "):")
   setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-      col2b, buttonHeight])
+      col2b, 100])
   label(str = ownersText)
   ownersText = ""
   var haveOwner: bool = false
@@ -513,8 +513,8 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
     ownersText.add(y = "none")
   colorLabel(str = ownersText, color = theme.colors[goldenColor])
   if addButton:
-    imageButton(image = images[assignCrewIcon],
-        tooltip = "Assign crew members to the module."):
+    imageLabelButton(image = images[assignCrewIcon],
+        tooltip = "Assign crew members to the module.", label = "     Assign"):
       setDialog(y = windowHeight / 10)
       dialog = assignCrewDialog
 
