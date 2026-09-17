@@ -51,6 +51,14 @@ static struct nk_sdl {
     struct nk_context ctx;
     struct nk_font_atlas atlas;
 } sdl;
+NK_API struct nk_context*
+nk_sdl_init(SDL_Window *win, SDL_Renderer *renderer)
+{
+    sdl.win = win;
+    sdl.renderer = renderer;
+    nk_buffer_init_default(&sdl.ogl.cmds);
+    return &sdl.ctx;
+}
 #include "nuklear_sdl_renderer.h"
 """.}
 
