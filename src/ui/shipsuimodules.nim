@@ -898,6 +898,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       imageLabelButton(image = images[editIcon],
           tooltip = "Set a new name for the module", label = "    Rename"):
         dialog = renameModuleDialog
+        setDialog(x = windowWidth / 4)
       # Show the module's status
       showModuleDamage(module = module, dialog = dialog)
       setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])

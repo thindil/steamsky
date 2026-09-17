@@ -500,6 +500,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         imageLabelButton(image = images[editIcon],
             tooltip = "Set a new name for the crew member", label = "Rename"):
           dialog = renameMemberDialog
+          setDialog(x = windowWidth / 4)
         if member.health < 100:
           setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
               col1.cfloat, col2])

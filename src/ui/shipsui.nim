@@ -143,6 +143,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
       tooltip = "The name of your ship", align = centered)
   imageButton(image = images[editIcon], tooltip = "Set a new name for the ship"):
     dialog = renameDialog
+    setDialog(x = windowWidth / 4)
   if playerShip.upgradeModule > -1:
     setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat, col2])
     label(str = "Upgrade:")
