@@ -1026,16 +1026,21 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         var haveAmmo: bool = false
         let ammoIndex: int = (if module.mType ==
             ModuleType2.gun: module.ammoIndex else: module.harpoonIndex)
-        group(title = "ammoInfo", flags = {windowNoFlags}):
+        try:
+          if ammoIndex in playerShip.cargo.low..playerShip.cargo.high and
+              itemsList[playerShip.cargo[ammoIndex].protoIndex].itemType ==
+                  itemsTypesList[
+              modulesList[module.protoIndex].value - 1]:
+            haveAmmo = true
+        except:
+          dialog = setError(message = "Can't check for the ammo.")
+          return
+        group(title = "ammoInfo", flags = (if haveAmmo: {windowNoScrollbar} else: {windowNoFlags})):
           setLayoutRowDynamic(height = labelHeight, cols = 1)
           try:
-            if ammoIndex in playerShip.cargo.low..playerShip.cargo.high and
-                itemsList[playerShip.cargo[ammoIndex].protoIndex].itemType ==
-                    itemsTypesList[
-                modulesList[module.protoIndex].value - 1]:
+            if haveAmmo:
               colorLabel(str = itemsList[playerShip.cargo[
                   ammoIndex].protoIndex].name, color = theme.colors[goldenColor])
-              haveAmmo = true
           except:
             dialog = setError(message = "Can't check for the ammo.")
             return
