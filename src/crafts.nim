@@ -23,6 +23,7 @@ import contracts, nimalyzer
 import config, crewinventory, game, goals, items, log, messages, shipscargo,
     shipscrew, statistics, types, utils
 
+{.push ruleOff: "objects".}
 type
   CraftingNoWorkshopError* = object of CatchableError
     ## Used to mark problems during crafting with lack of proper workshop
@@ -32,6 +33,7 @@ type
 
   CraftingNoToolsError* = object of CatchableError
     ## Used to mark problems during crafting with lack of proper crafting tools
+{.pop ruleOn: "objects".}
 
 proc loadRecipes*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
