@@ -461,7 +461,7 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
         " the engine"
     label: string = "    " & (if module.disabled: "On" else: "Off")
     icon: PImage = (if module.disabled: images[powerOnIcon] else:
-        images[powerOffIcon])
+      images[powerOffIcon])
   imageLabelButton(image = icon, tooltip = tooltip, label = label):
     if playerShip.modules[moduleIndex].disabled:
       playerShip.modules[moduleIndex].disabled = false
@@ -1029,13 +1029,13 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         try:
           if ammoIndex in playerShip.cargo.low..playerShip.cargo.high and
               itemsList[playerShip.cargo[ammoIndex].protoIndex].itemType ==
-                  itemsTypesList[
-              modulesList[module.protoIndex].value - 1]:
+              itemsTypesList[modulesList[module.protoIndex].value - 1]:
             haveAmmo = true
         except:
           dialog = setError(message = "Can't check for the ammo.")
           return
-        group(title = "ammoInfo", flags = (if haveAmmo: {windowNoScrollbar} else: {windowNoFlags})):
+        group(title = "ammoInfo", flags = (if haveAmmo: {
+            windowNoScrollbar} else: {windowNoFlags})):
           setLayoutRowDynamic(height = labelHeight, cols = 1)
           try:
             if haveAmmo:
@@ -1062,7 +1062,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           try:
             if itemsList[item.protoIndex].itemType == itemsTypesList[
                 modulesList[module.protoIndex].value - 1] and index != ammoIndex:
-              imageLabelButton(image = images[assignAmmoIcon], label = "     Assign"):
+              imageLabelButton(image = images[assignAmmoIcon],
+                  label = "     Assign"):
                 setDialog(y = windowHeight / 10)
                 dialog = assignAmmoDialog
               break
