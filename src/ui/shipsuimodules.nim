@@ -652,7 +652,7 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
     addCloseButton(dialog = dialog, isPopup = false)
     if dialog == none:
       dialog = moduleInfoDialog
-      setDialog(x = windowWidth / 10, y = windowHeight / 10)
+      setDialog(x = 10, y = windowHeight / 10)
 
   windowSetFocus(name = windowName)
 
@@ -687,7 +687,7 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
                   index != ammoIndex:
             labelButton(title = itemsList[item.protoIndex].name):
               dialog = moduleInfoDialog
-              setDialog(x = windowWidth / 10, y = windowHeight / 10)
+              setDialog(x = 10, y = windowHeight / 10)
               assignModule(assignAction = ammo, assignIndex = index,
                   dialog = dialog)
         except:
@@ -697,7 +697,7 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
     addCloseButton(dialog = dialog, isPopup = false)
     if dialog == none:
       dialog = moduleInfoDialog
-      setDialog(x = windowWidth / 10, y = windowHeight / 10)
+      setDialog(x = 10, y = windowHeight / 10)
 
   windowSetFocus(name = windowName)
 
@@ -799,7 +799,7 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
     addCloseButton(dialog = dialog, isPopup = false)
     if dialog == none:
       dialog = moduleInfoDialog
-      setDialog(x = windowWidth / 10, y = windowHeight / 10)
+      setDialog(x = 10, y = windowHeight / 10)
 
   windowSetFocus(name = windowName)
 
