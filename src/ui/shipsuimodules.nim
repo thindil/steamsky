@@ -1021,7 +1021,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = dialog)
         # Show information about gun's ammunition
         setLayoutRowStatic(height = labelHeight * 4, cols = 3, ratio = [
-            col1.cfloat, col2b, buttonHeight])
+            col1.cfloat, col2b, 100])
         label(str = "Ammunition:")
         var haveAmmo: bool = false
         let ammoIndex: int = (if module.mType ==
@@ -1057,7 +1057,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           try:
             if itemsList[item.protoIndex].itemType == itemsTypesList[
                 modulesList[module.protoIndex].value - 1] and index != ammoIndex:
-              imageButton(image = images[assignAmmoIcon]):
+              imageLabelButton(image = images[assignAmmoIcon], label = "     Assign"):
                 setDialog(y = windowHeight / 10)
                 dialog = assignAmmoDialog
               break
