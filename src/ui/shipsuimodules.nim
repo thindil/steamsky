@@ -1154,8 +1154,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             col1.cfloat, col2b, buttonHeight])
         label(str = "Trained skill:")
         colorLabel(str = trainText, color = theme.colors[goldenColor])
-        imageButton(image = images[assignCrewIcon],
-            tooltip = "Assign a skill which will be trained in the training room."):
+        imageLabelButton(image = images[assignCrewIcon],
+            tooltip = "Assign a skill which will be trained in the training room.", label = "     Assign"):
           setDialog(y = windowHeight / 10, x = windowWidth / 10)
           dialog = assignSkillDialog
       # Show information about battering rams
