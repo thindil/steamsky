@@ -53,7 +53,7 @@ proc loadRecipes*(fileName: Path) {.raises: [DataLoadingError],
       if recipeNode.kind != xnElement:
         continue
       let
-        recipeIndex: string = recipeNode.attr(name = "index")
+        recipeIndex: RecipeIndex = recipeNode.attr(name = "index")
         recipeAction: DataAction = try:
             parseEnum[DataAction](s = recipeNode.attr(
                 name = "action").toLowerAscii)
