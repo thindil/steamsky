@@ -313,14 +313,15 @@ var
   modulesList*: Table[Positive, BaseModuleData] = initTable[Positive,
       BaseModuleData]()
     ## The list of prototypes of all ships' modules available in the game
-  recipesList*: Table[string, CraftData] = initTable[string, CraftData]()
+  recipesList*: Table[RecipeIndex, CraftData] = initTable[RecipeIndex,
+      CraftData]()
     ## The list of all available crafting recipes in the game
   goalsList*: OrderedTable[Positive, GoalData] = initOrderedTable[Positive,
       GoalData]()
     ## The list of available goals in the game
   playerCareer*: CareerName = ""
     ## Index of the career of the player selected when starting a new game
-  knownRecipes*: seq[string] = @[]
+  knownRecipes*: seq[RecipeIndex] = @[]
     ## The list of known recipes by the player
   messagesList*: seq[MessageData] = @[]
     ## The list of in-game messages
