@@ -227,11 +227,9 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
             title = "Can't give orders")
       except:
         dialog = setError(message = "Can't give orders to a crew member.")
-      dialog = none
   else:
     imageLabelButton(image = images[upgradeButtonIcon],
         tooltip = "Start upgrading the " & buttonTooltip, label = "     Start"):
-      dialog = none
       let upgradeNumber: Positive = case upgradeType
         of maxValue:
           2
