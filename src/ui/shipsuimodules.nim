@@ -1099,11 +1099,11 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             return
         if recipeName.len > 0:
           setLayoutRowStatic(height = labelHeight * 4, cols = 3, ratio = [
-              col1.cfloat, col2b, buttonHeight])
+              col1.cfloat, col2b, 100])
           label(str = "Order:")
           colorLabel(str = recipeName, color = theme.colors[goldenColor])
-          imageButton(image = images[cancelIcon],
-              tooltip = "Cancel the current crafting order"):
+          imageLabelButton(image = images[cancelIcon],
+              tooltip = "Cancel the current crafting order", label = "     Cancel"):
             try:
               cancelCraftOrder(moduleIndex = moduleIndex)
             except CrewOrderError, CrewNoSpaceError:
