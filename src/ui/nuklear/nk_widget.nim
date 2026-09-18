@@ -134,6 +134,8 @@ proc progressBar*(value: var int; maxValue: int; modifyable: bool = true;
   var curr: nk_size = value.nk_size
   result = nk_progress(ctx = ctx, cur = curr, max = maxValue.nk_size,
       modifyable = modifyable.nk_bool, reversed = reversed.nk_bool) == nkTrue
+  if not result:
+    return
   value = curr.int
   if showTips and tooltip.len > 0:
     showTooltip2(text = tooltip)
