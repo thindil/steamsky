@@ -59,7 +59,11 @@ nk_sdl_init(SDL_Window *win, SDL_Renderer *renderer)
     nk_buffer_init_default(&sdl.ogl.cmds);
     return &sdl.ctx;
 }
-#include "nuklear_sdl_renderer.h"
+NK_API void
+nk_sdl_font_stash_begin(struct nk_font_atlas **atlas)
+{
+    *atlas = &sdl.atlas;
+}
 """.}
 
 include nuklear
