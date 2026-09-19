@@ -218,6 +218,7 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   if module.upgradeAction == upgradeType and playerShip.upgradeModule == moduleIndex:
+    setButtonStyle(field = textNormal, color = theme.colors[redColor])
     imageLabelButton(image = images[cancelIcon],
         tooltip = "Stop upgrading the " & buttonTooltip, label = "    Stop"):
       try:
@@ -227,6 +228,7 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
             title = "Can't give orders")
       except:
         dialog = setError(message = "Can't give orders to a crew member.")
+    restoreButtonStyle()
   else:
     imageLabelButton(image = images[upgradeButtonIcon],
         tooltip = "Start upgrading the " & buttonTooltip, label = "     Start"):
@@ -297,12 +299,14 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
     progressBar(value = value, maxValue = module.maxDurability,
         modifyable = false, tooltip = statusTooltip)
   if playerShip.repairModule == moduleIndex:
+    setButtonStyle(field = textNormal, color = theme.colors[redColor])
     imageLabelButton(image = images[cancelIcon],
         tooltip = "Remove the repair priority", label = "     Clear"):
       playerShip.repairModule = -1
       addMessage(message = "You removed the repair's priority.",
           mType = orderMessage)
       dialog = none
+    restoreButtonStyle()
   else:
     imageLabelButton(image = images[repairPriorityIcon],
         tooltip = "Repair the selected module as first when damaged",
@@ -394,6 +398,7 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
       progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
           tooltip = moduleInfo)
   if playerShip.upgradeModule == moduleIndex:
+    setButtonStyle(field = textNormal, color = theme.colors[redColor])
     imageLabelButton(image = images[cancelIcon],
         tooltip = "Stop upgrading the module", label = "    Stop"):
       try:
@@ -403,6 +408,7 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
             title = "Can't give orders")
       except:
         dialog = setError(message = "Can't give orders to a crew member.")
+    restoreButtonStyle()
 
 proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -1102,6 +1108,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
               col1.cfloat, col2b, 100])
           label(str = "Order:")
           colorLabel(str = recipeName, color = theme.colors[goldenColor])
+          setButtonStyle(field = textNormal, color = theme.colors[redColor])
           imageLabelButton(image = images[cancelIcon],
               tooltip = "Cancel the current crafting order",
                   label = "     Cancel"):
@@ -1114,6 +1121,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             except:
               dialog = setError(message = "Can't cancel the order.")
               return
+          restoreButtonStyle()
           setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
               col1.cfloat, col2a])
           label(str = "Finish order in:")
