@@ -305,7 +305,6 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
       playerShip.repairModule = -1
       addMessage(message = "You removed the repair's priority.",
           mType = orderMessage)
-      dialog = none
     restoreButtonStyle()
   else:
     imageLabelButton(image = images[repairPriorityIcon],
@@ -314,7 +313,6 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
       playerShip.repairModule = moduleIndex
       addMessage(message = "You assigned " & module.name &
           " as the repair's priority.", mType = orderMessage)
-      dialog = none
   if module.maxDurability < moduleMaxValue:
     addUpgradeButton(upgradeType = durability,
         buttonTooltip = "module's durability", module = module, dialog = dialog)
