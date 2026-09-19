@@ -1103,7 +1103,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           label(str = "Order:")
           colorLabel(str = recipeName, color = theme.colors[goldenColor])
           imageLabelButton(image = images[cancelIcon],
-              tooltip = "Cancel the current crafting order", label = "     Cancel"):
+              tooltip = "Cancel the current crafting order",
+                  label = "     Cancel"):
             try:
               cancelCraftOrder(moduleIndex = moduleIndex)
             except CrewOrderError, CrewNoSpaceError:
@@ -1155,7 +1156,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         label(str = "Trained skill:")
         colorLabel(str = trainText, color = theme.colors[goldenColor])
         imageLabelButton(image = images[assignCrewIcon],
-            tooltip = "Assign a skill which will be trained in the training room.", label = "     Assign"):
+            tooltip = "Assign a skill which will be trained in the training room.",
+                label = "     Assign"):
           setDialog(y = windowHeight / 10, x = windowWidth / 10)
           dialog = assignSkillDialog
       # Show information about battering rams
