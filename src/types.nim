@@ -1580,7 +1580,7 @@ type
     ## * tool            - The type of item used as a tool in crafting
     ## * reputation      - The minimal amount of reputation needed to buy the recipe in bases
     ## * toolQuality     - The minimal quality of tool used in crafting
-    materialTypes*: seq[string] = @[]
+    materialTypes*: seq[ItemType] = @[]
     materialAmounts*: seq[Positive] = @[]
     resultIndex: Natural = 0
     resultAmount: Natural = 0
