@@ -88,7 +88,7 @@ proc loadRecipes*(fileName: Path) {.raises: [DataLoadingError],
               material.attr(name = "amount").parseInt()
             except ValueError:
               0
-          materialType: string = material.attr(name = "type")
+          materialType: ItemType = material.attr(name = "type")
         if amount > 0:
           if materialType notin recipe.materialTypes:
             recipe.materialTypes.add(y = materialType)
@@ -103,7 +103,7 @@ proc loadRecipes*(fileName: Path) {.raises: [DataLoadingError],
           {.warning[UnsafeSetLen]: off.}
           recipe.materialAmounts.delete(i = deleteIndex)
           {.warning[UnsafeSetLen]: on.}
-      var attribute: string = recipeNode.attr(name = "result")
+      var attribute: XmlAttribute = recipeNode.attr(name = "result")
       if attribute.len() > 0:
         recipe.resultIndex = try:
           attribute.parseInt()
@@ -126,7 +126,7 @@ proc loadRecipes*(fileName: Path) {.raises: [DataLoadingError],
                 $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe workplace.")
       attribute = recipeNode.attr(name = "skill")
       if attribute.len() > 0:
-        let skillIndex: int = findSkillIndex(skillName = attribute)
+        let skillIndex: Natural = findSkillIndex(skillName = attribute)
         if skillIndex == 0:
           raise newException(exceptn = DataLoadingError, message = "Can't " &
               $recipeAction & " recipe '" & $recipeIndex &
@@ -195,7 +195,7 @@ proc setRecipeData*(recipeIndex: string;
     recipeIndex.len > 0
   body:
     result = initCraftData(time = 15, difficulty = 1, toolQuality = 100)
-    var itemIndex: int = 0
+    var itemIndex: Natural = 0
     if recipeIndex.startsWith(prefix = "Study"):
       itemIndex = recipeIndex[6..^1].strip.parseInt
       result.materialTypes.add(y = itemsList[itemIndex].itemType)
@@ -253,7 +253,7 @@ proc checkRecipe*(recipeIndex: string): Positive {.raises: [
   body:
     let recipe: CraftData = setRecipeData(recipeIndex = recipeIndex)
     var
-      recipeName: string = ""
+      recipeName: ErrorMessage = ""
       itemIndex: Natural = 0
       mType: ModuleType = alchemyLab
     if recipeIndex.startsWith(prefix = "Study"):
