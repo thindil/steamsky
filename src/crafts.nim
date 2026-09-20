@@ -556,7 +556,7 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
   ## Execute the currently set crafting orders in the player's ship
   ##
   ## * minutes - the amount of minutes passed in the game time
-  var toolIndex, crafterIndex: int = -1
+  var toolIndex, crafterIndex: ExtendedNatural = -1
   for module in playerShip.modules.mitems:
     if module.mType != ModuleType2.workshop:
       continue
