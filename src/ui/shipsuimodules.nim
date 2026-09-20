@@ -270,7 +270,7 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
         col2c, 100, 100])
   else:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-        col2b, buttonHeight])
+        col2b, 100])
   label(str = "Status:")
   let damagePercent: float = (module.durability.float /
         module.maxDurability.float)
