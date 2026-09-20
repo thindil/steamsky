@@ -230,6 +230,7 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
         dialog = setError(message = "Can't give orders to a crew member.")
     restoreButtonStyle()
   else:
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[upgradeButtonIcon],
         tooltip = "Start upgrading the " & buttonTooltip, label = "     Start"):
       let upgradeNumber: Positive = case upgradeType
@@ -248,6 +249,7 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
         updateOrders(ship = playerShip)
       except:
         dialog = setError(message = "Can't update crew orders.")
+    restoreButtonStyle()
 
 proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
