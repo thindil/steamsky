@@ -307,12 +307,14 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
           mType = orderMessage)
     restoreButtonStyle()
   else:
+    setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[repairPriorityIcon],
         tooltip = "Repair the selected module as first when damaged",
         label = "    Focus"):
       playerShip.repairModule = moduleIndex
       addMessage(message = "You assigned " & module.name &
           " as the repair's priority.", mType = orderMessage)
+    restoreButtonStyle()
   if module.maxDurability < moduleMaxValue:
     addUpgradeButton(upgradeType = durability,
         buttonTooltip = "module's durability", module = module, dialog = dialog)
@@ -893,7 +895,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
     setLayoutRowDynamic(height = height - dialogButtonHeight - 60, 1)
     group(title = "SkillsGroup", flags = {windowNoFlags}):
       setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-          col2b - 10, 110])
+          col2b - 15, 115])
       # Show the module's name
       label(str = "Name:")
       colorLabel(str = module.name, color = theme.colors[goldenColor])
