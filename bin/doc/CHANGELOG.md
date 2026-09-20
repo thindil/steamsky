@@ -12,8 +12,8 @@ All notable changes to this project will be documented in this file.
   inventory
 - Split the old engine's power management icon into two
 - Updated modding guide
-- Color of the icon used for setting repair priority for the player's ship's
-  modules
+- Color of the icons used for setting repair priority and starting upgrades
+  for the player's ship's modules
 
 ### Removed
 - Old icon used to manage the player's ship's engines' power
