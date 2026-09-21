@@ -1162,7 +1162,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setError(message = "Can't set trainText.")
             return
         setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-            col1.cfloat, col2b, buttonHeight])
+            col1.cfloat, col2b, 100])
         label(str = "Trained skill:")
         colorLabel(str = trainText, color = theme.colors[goldenColor])
         imageLabelButton(image = images[assignCrewIcon],
