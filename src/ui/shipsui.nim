@@ -231,7 +231,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
       setRepair()
   if playerShip.destinationX > 0 and playerShip.destinationY > 0:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-        col2, buttonHeight])
+        col2, 100])
     label(str = "Destination:", tooltip = "The current travel destination of your ship")
     if skyMap[playerShip.destinationX][playerShip.destinationY].baseIndex > 0:
       colorLabel(str = skyBases[skyMap[playerShip.destinationX][
@@ -242,16 +242,17 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
       colorLabel(str = "X: " & $playerShip.destinationX & " Y: " &
           $playerShip.destinationY, color = theme.colors[goldenColor],
               tooltip = "The current travel destination of your ship")
-    imageButton(image = images[cancelIcon]):
+    imageLabelButton(image = images[cancelIcon], label = "     Cancel"):
       playerShip.destinationX = 0
       playerShip.destinationY = 0
   setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-      col2, buttonHeight])
+      col2, 100])
   label(str = "Home:", tooltip = "Your ship the current home base")
   colorLabel(str = skyBases[playerShip.homeBase].name, color = theme.colors[
       goldenColor], tooltip = "Your ship the current home base",
       align = centered)
-  imageButton(image = images[showIcon], tooltip = "Show the home base on map"):
+  imageLabelButton(image = images[showIcon],
+      tooltip = "Show the home base on map", label = "     Show"):
     centerX = skyBases[playerShip.homeBase].skyX
     centerY = skyBases[playerShip.homeBase].skyY
     state = map
