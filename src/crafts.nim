@@ -568,10 +568,12 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
       crafterIndex = owner
       if playerShip.crew[crafterIndex].order != craft:
         continue
+      {.ruleOff: "varDeclared".}
       var
         currentMinutes: int = minutes
         recipeTime: int = module.craftingTime
-        recipeName: string = ""
+      {.ruleOn: "varDeclared".}
+      var recipeName: string = ""
       let recipe: CraftData = setRecipeData(recipeIndex = module.craftingIndex,
           quality = module.craftingQuality)
       if module.craftingIndex.startsWith(prefix = "Study"):
