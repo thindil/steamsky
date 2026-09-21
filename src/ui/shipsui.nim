@@ -241,7 +241,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     else:
       colorLabel(str = "X: " & $playerShip.destinationX & " Y: " &
           $playerShip.destinationY, color = theme.colors[goldenColor],
-              tooltip = "The current travel destination of your ship")
+          tooltip = "The current travel destination of your ship",
+          align = centered)
     imageLabelButton(image = images[cancelIcon], label = "     Cancel"):
       playerShip.destinationX = 0
       playerShip.destinationY = 0
