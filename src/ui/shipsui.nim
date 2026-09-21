@@ -212,22 +212,22 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     colorLabel(str = upgradeInfo, color = theme.colors[goldenColor],
         align = centered)
     setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [(col1 +
-        col2 + 4).cfloat, buttonHeight])
+        col2 + 4).cfloat, 100])
     progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
         tooltip = "The current ship's upgrade progress")
-    imageButton(image = images[cancelIcon],
-        tooltip = "Stop the current upgrade"):
+    imageLabelButton(image = images[cancelIcon],
+        tooltip = "Stop the current upgrade", label = "     Cancel"):
       cancelUpgrade(dialog = dialog)
   if playerShip.repairModule > -1:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-        col2, buttonHeight])
+        col2, 100])
     label(str = "Repair first:", tooltip = "If damaged, the module will be repaired as the first")
     colorLabel(str = playerShip.modules[playerShip.repairModule].name,
         color = theme.colors[goldenColor],
         tooltip = "If damaged, the module will be repaired as the first",
         align = centered)
-    imageButton(image = images[cancelIcon],
-        tooltip = "Remove the repair priority"):
+    imageLabelButton(image = images[cancelIcon],
+        tooltip = "Remove the repair priority", label = "     Cancel"):
       setRepair()
   if playerShip.destinationX > 0 and playerShip.destinationY > 0:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
