@@ -135,13 +135,14 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   let
     groupWidth: float = (windowWidth - buttonHeight)
     col1: float = groupWidth * 0.3
-    col2: float = groupWidth - col1 - buttonHeight
+    col2: float = groupWidth - col1 - 110
   setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-      col2, buttonHeight])
+      col2, 115])
   label(str = "Name:", tooltip = "The name of your ship")
   colorLabel(str = playerShip.name, color = theme.colors[goldenColor],
       tooltip = "The name of your ship", align = centered)
-  imageButton(image = images[editIcon], tooltip = "Set a new name for the ship"):
+  imageLabelButton(image = images[editIcon],
+      tooltip = "Set a new name for the ship", label = "    Rename"):
     dialog = renameDialog
     setDialog(x = windowWidth / 4)
   if playerShip.upgradeModule > -1:
