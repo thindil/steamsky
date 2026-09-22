@@ -301,7 +301,8 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  if showHeader(dialog = dialog, close = previous, state = state):
+  if showHeader(dialog = dialog, close = previous, state = state,
+      options = shipInfoTab in {1, 3}):
     return
   if updateData:
     refreshCargoList(dialog = dialog)
