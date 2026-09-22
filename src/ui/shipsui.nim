@@ -215,9 +215,11 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
         col2 + 4).cfloat, 100])
     progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
         tooltip = "The current ship's upgrade progress")
+    setButtonStyle(field = textNormal, color = theme.colors[redColor])
     imageLabelButton(image = images[cancelIcon],
         tooltip = "Stop the current upgrade", label = "     Cancel"):
       cancelUpgrade(dialog = dialog)
+    restoreButtonStyle()
   if playerShip.repairModule > -1:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
         col2, 100])
@@ -226,9 +228,11 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
         color = theme.colors[goldenColor],
         tooltip = "If damaged, the module will be repaired as the first",
         align = centered)
+    setButtonStyle(field = textNormal, color = theme.colors[redColor])
     imageLabelButton(image = images[cancelIcon],
         tooltip = "Remove the repair priority", label = "     Cancel"):
       setRepair()
+    restoreButtonStyle()
   if playerShip.destinationX > 0 and playerShip.destinationY > 0:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
         col2, 100])
@@ -243,9 +247,11 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
           $playerShip.destinationY, color = theme.colors[goldenColor],
           tooltip = "The current travel destination of your ship",
           align = centered)
+    setButtonStyle(field = textNormal, color = theme.colors[redColor])
     imageLabelButton(image = images[cancelIcon], label = "     Cancel"):
       playerShip.destinationX = 0
       playerShip.destinationY = 0
+    restoreButtonStyle()
   setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
       col2, 100])
   label(str = "Home:", tooltip = "Your ship the current home base")
