@@ -760,6 +760,8 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   var config: nk_font_config = new_nk_font_config(pixelHeight = 0)
   if glyphsRanges.len > 0:
     config.`range` = glyphsRanges.addr
+  #nk_font_atlas_init_default(atlas = sdl.atlas)
+  #nk_font_atlas_begin(atlas = sdl.atlas)
   {.emit: """
     nk_font_atlas_init_default(&sdl.atlas);
     nk_font_atlas_begin(&sdl.atlas);
