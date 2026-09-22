@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 - Color of the icons used for setting repair priority and starting upgrades
   for the player's ship's modules
-- Better looking dialog wiht information about the selected module of the
+- Better looking dialog with information about the selected module of the
   player's ship
 - Better looking general information about the player's ship
 
