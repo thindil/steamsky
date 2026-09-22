@@ -206,7 +206,7 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   var tableHeight: float = height - buttonHeight - 18
   # Show the additional options for cargo
-  if showCargoOptions:
+  if showOptions:
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
     label(str = "Type:")
     typeIndex = comboList(items = typesList, selected = typeIndex,
