@@ -212,7 +212,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     colorLabel(str = upgradeInfo, color = theme.colors[goldenColor],
         align = centered)
     setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [(col1 +
-        col2 + 4).cfloat, 100])
+        col2 + 4).cfloat, 115])
     progressBar(value = upgradePercent, maxValue = 100, modifyable = false,
         tooltip = "The current ship's upgrade progress")
     setButtonStyle(field = textNormal, color = theme.colors[redColor])
@@ -222,7 +222,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     restoreButtonStyle()
   if playerShip.repairModule > -1:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-        col2, 100])
+        col2, 115])
     label(str = "Repair first:", tooltip = "If damaged, the module will be repaired as the first")
     colorLabel(str = playerShip.modules[playerShip.repairModule].name,
         color = theme.colors[goldenColor],
@@ -235,7 +235,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     restoreButtonStyle()
   if playerShip.destinationX > 0 and playerShip.destinationY > 0:
     setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-        col2, 100])
+        col2, 115])
     label(str = "Destination:", tooltip = "The current travel destination of your ship")
     if skyMap[playerShip.destinationX][playerShip.destinationY].baseIndex > 0:
       colorLabel(str = skyBases[skyMap[playerShip.destinationX][
@@ -253,7 +253,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
       playerShip.destinationY = 0
     restoreButtonStyle()
   setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
-      col2, 100])
+      col2, 115])
   label(str = "Home:", tooltip = "Your ship the current home base")
   colorLabel(str = skyBases[playerShip.homeBase].name, color = theme.colors[
       goldenColor], tooltip = "Your ship the current home base",
