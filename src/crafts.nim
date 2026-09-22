@@ -573,7 +573,8 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
         currentMinutes: int = minutes
         recipeTime: int = module.craftingTime
       {.ruleOn: "varDeclared".}
-      var recipeName: string = ""
+      type RecipeName = string
+      var recipeName: RecipeName = ""
       let recipe: CraftData = setRecipeData(recipeIndex = module.craftingIndex,
           quality = module.craftingQuality)
       if module.craftingIndex.startsWith(prefix = "Study"):
