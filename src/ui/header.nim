@@ -565,7 +565,8 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     if isKeyPressed(key = keyEscape) and dialog == none and shortcutsEnabled:
       closeScreen(close = close, state = state, dialog = dialog)
   if options:
-    imageButton(image = images[moreOptionsIcon], tooltip = "Show more options"):
+    imageButton(image = images[moreOptionsIcon], tooltip = (
+        if showOptions: "Hide " else: "Show ") & "options"):
       showOptions = not showOptions
   if showInfo(dialog = dialog):
     return true
