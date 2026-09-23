@@ -31,8 +31,6 @@ type CargoSortOrders = enum
 const defaultCargoSortOrder: CargoSortOrders = none
 
 var
-  showCargoOptions*: bool = false
-    ## Show additonal options for managing the player's ship's cargo
   cargoSortOrder: CargoSortOrders = defaultCargoSortOrder
   typeIndex: Natural = 0
   itemIndex: int = -1
@@ -196,12 +194,8 @@ proc showCargoInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show options button
-  setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
-      175.cfloat, cargoWidth[0], cargoWidth[1]])
-  imageLabelButton(image = images[moreOptionsIcon],
-      tooltip = "Show/Hide additional options related to managing the cargo",
-      label = (if showCargoOptions: "    Hide options" else: "    Show options")):
-    showCargoOptions = not showCargoOptions
+  setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [cargoWidth[0],
+      cargoWidth[1]])
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   var tableHeight: float = height - buttonHeight - 18
