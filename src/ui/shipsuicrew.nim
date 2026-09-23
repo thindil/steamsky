@@ -43,8 +43,6 @@ type
 const defaultCrewSortOrder: CrewSortOrders = none
 
 var
-  showCrewOptions*: bool = false
-    ## Show additonal options for managing the player's ship's crew
   skillIndex, currentOrder: Natural = 0
   crewSortOrder: CrewSortOrders = defaultCrewSortOrder
   availableOrdersText: seq[string] = @[]
@@ -741,12 +739,7 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show options related to managing the crew
-  setLayoutRowStatic(height = buttonHeight, cols = 1, width = 175)
-  imageLabelButton(image = images[moreOptionsIcon],
-      tooltip = "Show/Hide additional options related to managing the crew",
-      label = (if showCrewOptions: "    Hide options" else: "    Show options")):
-    showCrewOptions = not showCrewOptions
-  var tableHeight = height - buttonHeight - 18
+  var tableHeight = height - 18
   if showOptions:
     var
       cols: Positive = 2
