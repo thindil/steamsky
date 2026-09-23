@@ -591,9 +591,10 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
         resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex,
             crafterIndex = crafterIndex)
         currentMinutes = 0
-      var
-        workTime: int = playerShip.crew[crafterIndex].orderTime
-        craftedAmount: Natural = 0
+      {.ruleOff: "varDeclared".}
+      var workTime: int = playerShip.crew[crafterIndex].orderTime
+      {.ruleOn: "varDeclared".}
+      var  craftedAmount: Natural = 0
       while currentMinutes > 0:
         if currentMinutes < recipeTime:
           recipeTime.dec(y = currentMinutes)
