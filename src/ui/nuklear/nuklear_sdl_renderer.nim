@@ -771,6 +771,10 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   result = nk_font_atlas_add_from_file(atlas = sdl.atlas,
       filePath = font.path.cstring, height = font.size.cfloat * fontScale, config.addr)
   {.ruleOn: "namedParams".}
+  #var width, height: cint
+  #let image: pointer = nk_font_atlas_bake(atlas = sdl.atlas, width = width,
+  #    height = height, fmt = atlasRGBA32)
+  #let dev: ptr NkSdlDevice = sdl.dev.addr
   {.emit: """
     const void *image; int width, height;
     image = nk_font_atlas_bake(&sdl.atlas, &width, &height, NK_FONT_ATLAS_RGBA32);
