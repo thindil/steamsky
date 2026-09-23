@@ -747,7 +747,7 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
       label = (if showCrewOptions: "    Hide options" else: "    Show options")):
     showCrewOptions = not showCrewOptions
   var tableHeight = height - buttonHeight - 18
-  if showCrewOptions:
+  if showOptions:
     var
       cols: Positive = 2
       ratio2: seq[cfloat] = @[(windowWidth * 0.4).cfloat, 150]
