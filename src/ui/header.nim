@@ -630,7 +630,7 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
           dialog = gameMenuDialog
       elif not inCombat:
         if key == menuAccelerators[2]:
-          setDialog()
+          setDialog(y = windowHeight / 7)
           dialog = ordersDialog
         elif key == menuAccelerators[3]:
           showCraftScreen(dialog = dialog, state = state)
@@ -669,7 +669,7 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
       showShipInfo(dialog = dialog, state = state)
     if playerShip.crew[0].health > 0 and not inCombat:
       labelButton(title = "Ship orders"):
-        setDialog()
+        setDialog(y = windowHeight / 7)
         dialog = ordersDialog
     if playerShip.crew[0].health > 0:
       labelButton(title = "Crafting"):

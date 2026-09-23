@@ -710,7 +710,7 @@ proc showButtons(dialog: var GameDialog; state: var GameState) {.raises: [], tag
     else:
       setLayoutRowDynamic(height = dialogButtonHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
     labelButton(title = "Ship orders", tooltip = "Show available orders for your ship."):
-      setDialog()
+      setDialog(y = windowHeight / 7)
       dialog = ordersDialog
     if playerShip.speed != docked and playerShip.destinationX > 0:
       imageButton(image = images[moveToIcon], tooltip = "Auto move your ship to its destination."):
