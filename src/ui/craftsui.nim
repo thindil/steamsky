@@ -590,6 +590,8 @@ proc sortWorkshops(sortAsc, sortDesc: WorkshopsSortOrders;
   workshopsList2.sort(cmp = sortWorkshops)
   dialog = none
 
+var xOffset: Natural = 0
+
 proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show information about available crafting recipes
@@ -640,7 +642,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
   let tableHeight: float = windowHeight - 50 - (if showOptions: 135 else: 0) -
       gameSettings.messagesPosition.float
   setLayoutRowDynamic(height = tableHeight, cols = 1)
-  group(title = "CraftingGroup", flags = {windowNoFlags}):
+  group(title = "CraftingGroup", flags = {windowNoScrollbar}):
     if dialog != none:
       windowDisable()
     # Show the list of recipes to craft
@@ -658,50 +660,36 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
               sortAsc: materialsAsc, sortDesc: materialsDesc)]
         ratio: array[4, cfloat] = [400.cfloat, 100, 100, 100]
 
-      addHeader(headers = headers, ratio = ratio, tooltip = "recipes",
-        code = sortRecipes, dialog = dialog)
-      var
-        currentRow, row: Positive = 1
-      let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-      saveButtonStyle()
-      setButtonStyle(field = borderColor, a = 0)
-      try:
-        setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-        setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-      except:
-        dialog = setError(message = "Can't set table color")
-        return
-      setButtonStyle(field = rounding, value = 0)
-      setButtonStyle(field = border, value = 0)
-      for index, rec in availableRecipes:
-        if nameSearch.len > 0 and rec.name.toLowerAscii.find(
-            sub = nameSearch.toLowerAscii) == -1:
-          continue
-        if typeIndex == 1 and not rec.craftable:
-          continue
-        if typeIndex == 2 and rec.craftable:
-          continue
-        try:
-          if workshopIndex > 0 and rec.workshop != modulesList[
-              playerShip.modules[workshopIndex].protoIndex].mType:
+      table(name = "CraftTable", xScroll = xOffset, headers = headers,
+          ratio = ratio, tableTooltip = "recipes", tableHeight = tableHeight,
+          headerCode = sortRecipes):
+        for index, rec in availableRecipes:
+          if nameSearch.len > 0 and rec.name.toLowerAscii.find(
+              sub = nameSearch.toLowerAscii) == -1:
             continue
-        except:
-          dialog = setError(message = "Can't check workshop.")
-          return
-        if currentRow < startRow:
-          currentRow.inc
-          continue
-        addButton(label = rec.name, tooltip = "Show recipe's details.",
-          data = index, code = setRecipeInfo, dialog = dialog)
-        var checked: bool = rec.workplace
-        addCheckButton(tooltip = "", checked = checked)
-        checked = rec.tools
-        addCheckButton(tooltip = "", checked = checked)
-        checked = rec.materials
-        addCheckButton(tooltip = "", checked = checked)
-        row.inc
-      restoreButtonStyle()
-      addPagination(page = currentPage, row = row)
+          if typeIndex == 1 and not rec.craftable:
+            continue
+          if typeIndex == 2 and rec.craftable:
+            continue
+          try:
+            if workshopIndex > 0 and rec.workshop != modulesList[
+                playerShip.modules[workshopIndex].protoIndex].mType:
+              continue
+          except:
+            dialog = setError(message = "Can't check workshop.")
+            return
+          if not isStartingRow():
+            continue
+          addButton(label = rec.name, tooltip = "Show recipe's details.",
+            data = index, code = setRecipeInfo, dialog = dialog)
+          var checked: bool = rec.workplace
+          addCheckButton(tooltip = "", checked = checked)
+          checked = rec.tools
+          addCheckButton(tooltip = "", checked = checked)
+          checked = rec.materials
+          addCheckButton(tooltip = "", checked = checked)
+          if isLastRow():
+            break
     # Show the list of installed workshops
     else:
 
