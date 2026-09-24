@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Starting position of rename dialog
 - Showing information about the player's ship's destination
 - Starting position of the player's ship's orders menu
+- Giving orders to crew members
 
 ## [12.7] - 2026-09-06
 
