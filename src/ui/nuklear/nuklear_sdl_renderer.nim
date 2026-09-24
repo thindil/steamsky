@@ -412,7 +412,6 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   SDL_RenderSetScale(renderer = sdl.renderer, scaleX = scaleX, scaleY = scaleY)
   fontScale = scaleY
   setContext(newContext = nk_sdl_init(win = sdl.win, renderer = sdl.renderer))
-  #nkInit(ctx = context)
   ctx.clip.copy = nkSdlClipboardCopy
   ctx.clip.paste = nkSdlClipboardPaste
   ctx.clip.userdata = nk_handle()
@@ -760,8 +759,6 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   var config: nk_font_config = new_nk_font_config(pixelHeight = 0)
   if glyphsRanges.len > 0:
     config.`range` = glyphsRanges.addr
-  #nk_font_atlas_init_default(atlas = sdl.atlas)
-  #nk_font_atlas_begin(atlas = sdl.atlas)
   {.emit: """
     nk_font_atlas_init_default(&sdl.atlas);
     nk_font_atlas_begin(&sdl.atlas);
@@ -771,10 +768,6 @@ proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = [
   result = nk_font_atlas_add_from_file(atlas = sdl.atlas,
       filePath = font.path.cstring, height = font.size.cfloat * fontScale, config.addr)
   {.ruleOn: "namedParams".}
-  #var width, height: cint
-  #let image: pointer = nk_font_atlas_bake(atlas = sdl.atlas, width = width,
-  #    height = height, fmt = atlasRGBA32)
-  #let dev: ptr NkSdlDevice = sdl.dev.addr
   {.emit: """
     const void *image; int width, height;
     image = nk_font_atlas_bake(&sdl.atlas, &width, &height, NK_FONT_ATLAS_RGBA32);
