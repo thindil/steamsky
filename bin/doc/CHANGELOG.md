@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
   player's ship
 - Better looking general information about the player's ship
 - Better looking the list of known crafting recipes
+- Better looking the list of workshops in the crafting screen
 
 ### Removed
 - Old icon used to manage the player's ship's engines' power
