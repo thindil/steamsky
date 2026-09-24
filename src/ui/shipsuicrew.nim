@@ -39,6 +39,9 @@ type
     hunger: SkillRange
     morale: SkillRange
     id: Natural
+  AvailableOrder = object
+    order: CrewOrders
+    module: ExtendedNatural
 
 const defaultCrewSortOrder: CrewSortOrders = none
 
@@ -46,7 +49,7 @@ var
   skillIndex, currentOrder: Natural = 0
   crewSortOrder: CrewSortOrders = defaultCrewSortOrder
   availableOrdersText: seq[string] = @[]
-  availableOrders: seq[CrewOrders] = @[]
+  availableOrders: seq[AvailableOrder] = @[]
 
 proc sortMembers(x, y: LocalMemberData): int {.raises: [], tags: [],
     contractual.} =
@@ -236,14 +239,14 @@ proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog)
       member.order != rest) or member.skills.len == 0 or
       member.contractLength == 0:
     availableOrdersText.add(y = "Go on break")
-    availableOrders.add(y = rest)
+    availableOrders.add(y = AvailableOrder(order: rest, module: -1))
   else:
     if member.order != pilot:
       availableOrdersText.add(y = "Go piloting the ship")
-      availableOrders.add(y = pilot)
+      availableOrders.add(y = AvailableOrder(order: pilot, module: -1))
     if member.order != engineer:
       availableOrdersText.add(y = "Go engineering the ship")
-      availableOrders.add(y = engineer)
+      availableOrders.add(y = AvailableOrder(order: engineer, module: -1))
 
     proc isWorking(owners: seq[int]; mIndex: Natural): bool =
       for owner in owners:
@@ -258,7 +261,7 @@ proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog)
         of gun, harpoonGun:
           if module.owner[0] != memberIndex:
             availableOrdersText.add(y = "Operate " & module.name)
-            availableOrders.add(y = gunner)
+            availableOrders.add(y = AvailableOrder(order: gunner, module: index))
         of workshop:
           if not isWorking(owners = module.owner, mIndex = memberIndex) and
               module.craftingIndex.len > 0:
@@ -273,39 +276,39 @@ proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog)
                   12..^1].strip.parseInt].name else: "Manufacture " &
                   $module.craftingAmount & "x " & itemsList[recipesList[
                   module.craftingIndex].resultIndex].name))
-              availableOrders.add(y = craft)
+              availableOrders.add(y = AvailableOrder(order: craft, module: index))
             except:
               dialog = setError(message = "Can't add an available order.")
               return
         of cabin:
           if module.cleanliness < module.quality and member.order != clean and needClean:
             availableOrdersText.add(y = "Clean ship")
-            availableOrders.add(y = clean)
+            availableOrders.add(y = AvailableOrder(order: clean, module: -1))
             needClean = false
         of trainingRoom:
           if not isWorking(owners = module.owner, mIndex = memberIndex):
             availableOrdersText.add(y = "Go training in " & module.name)
-            availableOrders.add(y = train)
+            availableOrders.add(y = AvailableOrder(order: train, module: index))
         else:
           discard
         if needRepair and not orderAdded:
           availableOrdersText.add(y = "Repair ship")
-          availableOrders.add(y = repair)
+          availableOrders.add(y = AvailableOrder(order: repair, module: -1))
           orderAdded = true
     for index, member2 in playerShip.crew:
       if member2.health < 100 and index != memberIndex and member2.order != heal:
         availableOrdersText.add(y = "Heal wounded crew members")
-        availableOrders.add(y = heal)
+        availableOrders.add(y = AvailableOrder(order: heal, module: -1))
         break
     if playerShip.upgradeModule > -1 and member.order != upgrading:
       availableOrdersText.add(y = "Upgrade module")
-      availableOrders.add(y = upgrading)
+      availableOrders.add(y = AvailableOrder(order: upgrading, module: playerShip.upgradeModule))
     if member.order != talk:
       availableOrdersText.add(y = "Talk with others")
-      availableOrders.add(y = talk)
+      availableOrders.add(y = AvailableOrder(order: talk, module: -1))
     if member.order != rest:
       availableOrdersText.add(y = "Go on break")
-      availableOrders.add(y = rest)
+      availableOrders.add(y = AvailableOrder(order: rest, module: -1))
 
 proc setGiveOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -354,7 +357,8 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
       dialog = none
       try:
         giveOrders(ship = playerShip, memberIndex = crewIndex,
-            givenOrder = availableOrders[currentOrder])
+            givenOrder = availableOrders[currentOrder].order,
+            moduleIndex = availableOrders[currentOrder].module)
       except CrewOrderError, CrewNoSpaceError:
         addMessage(message = getCurrentExceptionMsg(), mType = orderMessage)
       except IndexDefect, KeyError, Exception:
