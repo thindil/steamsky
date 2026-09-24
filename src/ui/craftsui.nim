@@ -590,7 +590,7 @@ proc sortWorkshops(sortAsc, sortDesc: WorkshopsSortOrders;
   workshopsList2.sort(cmp = sortWorkshops)
   dialog = none
 
-var xOffset: Natural = 0
+var xOffset, xOffset2: Natural = 0
 
 proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -703,25 +703,19 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
               sortDesc: workersDesc)]
         ratio: array[3, cfloat] = [400.cfloat, 400, 100]
 
-      addHeader(headers = headers, ratio = ratio, tooltip = "workshops",
-        code = sortWorkshops, dialog = dialog)
-      saveButtonStyle()
-      setButtonStyle(field = borderColor, a = 0)
-      try:
-        setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-        setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-      except:
-        dialog = setError(message = "Can't set table color")
-        return
-      setButtonStyle(field = rounding, value = 0)
-      setButtonStyle(field = border, value = 0)
-      for module in workshopsList2:
-        addButton(label = module.name, tooltip = module.tooltip,
-            data = module.index, code = setChangeOrder, dialog = dialog)
-        addButton(label = module.order, tooltip = module.tooltip,
-            data = module.index, code = setChangeOrder, dialog = dialog)
-        addButton(label = module.workers, tooltip = module.tooltip,
-            data = module.index, code = setChangeOrder, dialog = dialog)
-      restoreButtonStyle()
+      table(name = "WorkshopsTable", xScroll = xOffset2, headers = headers,
+          ratio = ratio, tableTooltip = "workshops", tableHeight = tableHeight,
+          headerCode = sortWorkshops):
+        for module in workshopsList2:
+          if not isStartingRow():
+            continue
+          addButton(label = module.name, tooltip = module.tooltip,
+              data = module.index, code = setChangeOrder, dialog = dialog)
+          addButton(label = module.order, tooltip = module.tooltip,
+              data = module.index, code = setChangeOrder, dialog = dialog)
+          addButton(label = module.workers, tooltip = module.tooltip,
+              data = module.index, code = setChangeOrder, dialog = dialog)
+          if isLastRow():
+            break
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - 110, state = state)
