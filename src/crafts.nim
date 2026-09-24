@@ -573,8 +573,7 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
         currentMinutes: int = minutes
         recipeTime: int = module.craftingTime
       {.ruleOn: "varDeclared".}
-      type RecipeName = string
-      var recipeName: RecipeName = ""
+      var recipeName: MessageText = ""
       let recipe: CraftData = setRecipeData(recipeIndex = module.craftingIndex,
           quality = module.craftingQuality)
       if module.craftingIndex.startsWith(prefix = "Study"):
@@ -594,7 +593,7 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
       {.ruleOff: "varDeclared".}
       var workTime: int = playerShip.crew[crafterIndex].orderTime
       {.ruleOn: "varDeclared".}
-      var  craftedAmount: Natural = 0
+      var craftedAmount: Natural = 0
       while currentMinutes > 0:
         if currentMinutes < recipeTime:
           recipeTime.dec(y = currentMinutes)
@@ -608,7 +607,7 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
         var
           materialIndexes: seq[Positive] = getMaterialIndexes(module = module,
               recipe = recipe)
-          craftingMaterial: int = -1
+          craftingMaterial: ExtendedNatural = -1
           toolQuality, materialQuality: ObjectQuality = normal
         for materialIndex in materialIndexes.mitems:
           if module.craftingQuality == normal:
@@ -673,8 +672,8 @@ proc manufacturing*(minutes: Positive) {.raises: [ValueError,
               ship = playerShip)
         if module.craftingIndex.len < 6 or (module.craftingIndex.len > 6 and
             module.craftingIndex[0..4] != "Study"):
-          var roll: int = getRandom(min = 1, max = 100) + skillLevel -
-              recipe.difficulty
+          var roll: range[-500..500] = getRandom(min = 1, max = 100) +
+              skillLevel - recipe.difficulty
           case materialQuality
           of poor:
             roll -= 50
@@ -755,7 +754,7 @@ proc setRecipe*(workshop: Natural; amount: Positive; recipeIndex: string;
     playerShip.modules[workshop].craftingMalus = malus
     var
       itemIndex: Natural = 0
-      recipeName: string = ""
+      recipeName: MessageText = ""
     if recipeIndex.startsWith(prefix = "Study"):
       itemIndex = recipeIndex[6..^1].strip.parseInt
       for recipe in recipesList.values:
@@ -868,7 +867,7 @@ proc checkTool*(toolNeeded: string): bool {.raises: [], tags: [],
     return true
   for index, item in itemsList:
     if item.itemType == toolNeeded:
-      let cargoIndex: int = findItem(inventory = playerShip.cargo,
+      let cargoIndex: ExtendedNatural = findItem(inventory = playerShip.cargo,
           protoIndex = index, itemQuality = any, craftBonus = any,
           craftMalus = any)
       if cargoIndex > -1:
@@ -904,7 +903,7 @@ proc isCraftable*(recipe: CraftData; canCraft, hasWorkplace, hasTool,
     hasMaterials = false
     for itemIndex, item in itemsList:
       if item.itemType == material:
-        var cargoIndex: int = findItem(inventory = playerShip.cargo,
+        var cargoIndex: ExtendedNatural = findItem(inventory = playerShip.cargo,
             protoIndex = itemIndex, itemQuality = any, craftBonus = any,
             craftMalus = any)
         if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
