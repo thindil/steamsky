@@ -32,8 +32,6 @@ const
   defaultBasesSortOrder: BasesSortOrders = none
 
 var
-  showBasesOptions*: bool = false
-    ## Show additonal options for managing the list of known bases
   basesType, basesStatus, basesOwner: Natural = 0
   basesSortOrder: BasesSortOrders = defaultBasesSortOrder
 
