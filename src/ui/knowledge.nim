@@ -21,7 +21,7 @@
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config]
 import coreui, errordialog, header, knowledgebases, knowledgeevents,
-    knowledgemissions, knowledgestories, messagesui, setui, themes
+    knowledgemissions, knowledgestories, messagesui, setui
 
 proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -64,11 +64,6 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
     case knowledgeTab
     # The list of known bases
     of 0:
-      setLayoutRowStatic(height = buttonHeight, cols = 1,
-          width = buttonHeight.int)
-      imageButton(image = images[moreOptionsIcon],
-          tooltip = "Show/Hide additional options related to managing the list of known bases"):
-        showBasesOptions = not showBasesOptions
       showBasesInfo(dialog = dialog)
     # The list of known events
     of 1:
