@@ -321,7 +321,7 @@ proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show options related to managing the list
-  if showBasesOptions:
+  if showOptions:
     setLayoutRowStatic(height = editHeight, cols = 6, ratio = [50.cfloat, 150,
         75, 150, 75, 150])
     label(str = "Type:")
