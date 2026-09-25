@@ -23,8 +23,6 @@ import ../[config]
 import coreui, errordialog, header, knowledgebases, knowledgeevents,
     knowledgemissions, knowledgestories, messagesui, setui, themes
 
-var hasOptions: bool = false
-
 proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the screen with information about the player's character's knowledge
@@ -56,10 +54,6 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
           else:
             labelButton(title = tab):
               knowledgeTab = index.cint
-              if index == 0:
-                hasOptions = false
-              else:
-                hasOptions = true
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
   let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float - tabHeight)
