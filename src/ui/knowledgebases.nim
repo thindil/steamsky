@@ -310,11 +310,12 @@ proc sortBases(sortAsc, sortDesc: BasesSortOrders;
     except:
       dialog = setError(message = "Can't set the list of known bases")
 
-proc showBasesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showBasesInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Show the list of the known bases
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * height - the height of the known bases table
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.

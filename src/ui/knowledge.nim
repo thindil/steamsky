@@ -64,7 +64,7 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
     case knowledgeTab
     # The list of known bases
     of 0:
-      showBasesInfo(dialog = dialog)
+      showBasesInfo(dialog = dialog, height = height)
     # The list of known events
     of 1:
       showEventsInfo(dialog = dialog)
