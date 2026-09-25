@@ -38,6 +38,9 @@ type
     ## undock from a base, every game day, every game month, every game year
     none, dock, undock, daily, monthly, yearly
 
+  ThemeName* = string
+    ## Used to store the game's themes' names
+
   GameSettingsRecord* = object
     ## Used to store the game's configuration
     ##
@@ -98,7 +101,7 @@ type
     helpFontSize*: Positive
     mapFontSize*: Positive
     interfaceFontSize*: Positive
-    interfaceTheme*: string
+    interfaceTheme*: ThemeName
     messagesOrder*: MessagesOrder
     autoAskForBases*: bool
     autoAskForEvents*: bool
