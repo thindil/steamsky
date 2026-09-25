@@ -38,7 +38,8 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if mapPreview:
     state = map
     return
-  if showHeader(dialog = dialog, close = previous, state = state):
+  if showHeader(dialog = dialog, close = previous, state = state,
+      options = knowledgeTab == 0):
     return
   # Show tab buttons
   changeStyle(field = spacing, x = 0, y = 0):
