@@ -56,25 +56,34 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
               knowledgeTab = index.cint
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
-  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float - tabHeight)
-  setLayoutRowDynamic(height = height, cols = 1)
-  group(title = "Knowledge", flags = {windowNoFlags}):
-    if dialog != none:
-      windowDisable()
-    case knowledgeTab
-    # The list of known bases
-    of 0:
-      showBasesInfo(dialog = dialog, height = height)
-    # The list of known events
-    of 1:
+  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float -
+      tabHeight)
+  case knowledgeTab
+  # The list of known bases
+  of 0:
+    showBasesInfo(dialog = dialog, height = height)
+  # The list of known events
+  of 1:
+    setLayoutRowDynamic(height = height, cols = 1)
+    group(title = "Knowledge", flags = {windowNoFlags}):
+      if dialog != none:
+        windowDisable()
       showEventsInfo(dialog = dialog)
-    # The list of accepted missions
-    of 2:
+  # The list of accepted missions
+  of 2:
+    setLayoutRowDynamic(height = height, cols = 1)
+    group(title = "Knowledge", flags = {windowNoFlags}):
+      if dialog != none:
+        windowDisable()
       showMissionsInfo(dialog = dialog)
-    of 3:
-    # The list of known stories
+  # The list of known stories
+  of 3:
+    setLayoutRowDynamic(height = height, cols = 1)
+    group(title = "Knowledge", flags = {windowNoFlags}):
+      if dialog != none:
+        windowDisable()
       showStoriesInfo(dialog = dialog)
-    else:
-      discard
+  else:
+    discard
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       height - 115, state = state)
