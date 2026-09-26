@@ -310,6 +310,8 @@ proc sortBases(sortAsc, sortDesc: BasesSortOrders;
     except:
       dialog = setError(message = "Can't set the list of known bases")
 
+var xOffset: Natural = 0
+
 proc showBasesInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the list of the known bases
@@ -320,7 +322,9 @@ proc showBasesInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show options related to managing the list
+  var tableHeight: float = height - 18
   if showOptions:
+    tableHeight -= ((editHeight * 2) + 17)
     setLayoutRowStatic(height = editHeight, cols = 6, ratio = [50.cfloat, 150,
         75, 150, 75, 150])
     label(str = "Type:")
@@ -359,71 +363,55 @@ proc showBasesInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
           sortAsc: reputationAsc, sortDesc: reputationDesc)]
     ratio: array[8, cfloat] = [200.cfloat, 100, 100, 100, 100, 100, 100, 100]
 
-  addHeader(headers = headers, ratio = ratio, tooltip = "bases",
-      code = sortBases, dialog = dialog)
-  let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-  saveButtonStyle()
-  setButtonStyle(field = borderColor, a = 0)
-  try:
-    setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-  except:
-    dialog = setError(message = "Can't set table color")
-    return
-  setButtonStyle(field = rounding, value = 0)
-  setButtonStyle(field = border, value = 0)
-  var
-    row, currentRow: Positive = 1
-  # Show the list of known bases
-  for base in knownBasesList:
-    if nameSearch.len > 0 and base.name.toLowerAscii.find(
-        sub = nameSearch.toLowerAscii) == -1:
-      continue
-    if basesStatus > 0 and (basesStatus - 1) != base.visited.ord:
-      continue
-    if basesOwner > 0 and (not base.visited or basesOwners[basesOwner] != base.owner):
-      continue
-    if currentRow < startRow:
-      currentRow.inc
-      continue
-    if base.visited:
-      setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    elif skyBases[base.index].skyX == playerShip.destinationX and skyBases[
-        base.index].skyY == playerShip.destinationY:
-      setButtonStyle(field = textNormal, color = theme.colors[yellowColor])
-    addButton(label = base.name, tooltip = "Show the base's details",
-      data = base.index, code = setBaseInfo, dialog = dialog)
-    addButton(label = $base.distance, tooltip = "The distance to the base",
-      data = base.index, code = setBaseInfo, dialog = dialog)
-    addButton(label = base.coords, tooltip = "The coordinates of the base",
-      data = base.index, code = setBaseInfo, dialog = dialog)
-    if base.visited:
-      addButton(label = $base.population,
-        tooltip = "The population size of the base",
+  table(name = "BasesTable", xScroll = xOffset, headers = headers,
+      ratio = ratio, tableTooltip = "bases", tableHeight = tableHeight,
+      headerCode = sortBases):
+    # Show the list of known bases
+    for base in knownBasesList:
+      if nameSearch.len > 0 and base.name.toLowerAscii.find(
+          sub = nameSearch.toLowerAscii) == -1:
+        continue
+      if basesStatus > 0 and (basesStatus - 1) != base.visited.ord:
+        continue
+      if basesOwner > 0 and (not base.visited or basesOwners[basesOwner] != base.owner):
+        continue
+      if not isStartingRow():
+        continue
+      if base.visited:
+        setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+      elif skyBases[base.index].skyX == playerShip.destinationX and skyBases[
+          base.index].skyY == playerShip.destinationY:
+        setButtonStyle(field = textNormal, color = theme.colors[yellowColor])
+      addButton(label = base.name, tooltip = "Show the base's details",
         data = base.index, code = setBaseInfo, dialog = dialog)
-      addButton(label = $base.size, tooltip = "The size of the base",
+      addButton(label = $base.distance, tooltip = "The distance to the base",
         data = base.index, code = setBaseInfo, dialog = dialog)
-      addButton(label = base.owner, tooltip = "The faction which own the base",
+      addButton(label = base.coords, tooltip = "The coordinates of the base",
         data = base.index, code = setBaseInfo, dialog = dialog)
-      addButton(label = base.baseType, tooltip = "The type of the base",
-        data = base.index, code = setBaseInfo, dialog = dialog)
-      addButton(label = base.reputation,
-        tooltip = "Your reputation in the base",
-        data = base.index, code = setBaseInfo, dialog = dialog)
-    else:
-      addButton(label = "not", tooltip = "Show the base's details",
+      if base.visited:
+        addButton(label = $base.population,
+          tooltip = "The population size of the base",
           data = base.index, code = setBaseInfo, dialog = dialog)
-      addButton(label = "", tooltip = "Show the base's details",
+        addButton(label = $base.size, tooltip = "The size of the base",
           data = base.index, code = setBaseInfo, dialog = dialog)
-      addButton(label = "visited", tooltip = "Show the base's details",
+        addButton(label = base.owner, tooltip = "The faction which own the base",
           data = base.index, code = setBaseInfo, dialog = dialog)
-      addButton(label = "", tooltip = "Show the base's details",
+        addButton(label = base.baseType, tooltip = "The type of the base",
           data = base.index, code = setBaseInfo, dialog = dialog)
-      addButton(label = "yet", tooltip = "Show the base's details",
+        addButton(label = base.reputation,
+          tooltip = "Your reputation in the base",
           data = base.index, code = setBaseInfo, dialog = dialog)
-    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    row.inc
-    if row == gameSettings.listsLimit + 1:
-      break
-  restoreButtonStyle()
-  addPagination(page = currentPage, row = row)
+      else:
+        addButton(label = "not", tooltip = "Show the base's details",
+            data = base.index, code = setBaseInfo, dialog = dialog)
+        addButton(label = "", tooltip = "Show the base's details",
+            data = base.index, code = setBaseInfo, dialog = dialog)
+        addButton(label = "visited", tooltip = "Show the base's details",
+            data = base.index, code = setBaseInfo, dialog = dialog)
+        addButton(label = "", tooltip = "Show the base's details",
+            data = base.index, code = setBaseInfo, dialog = dialog)
+        addButton(label = "yet", tooltip = "Show the base's details",
+            data = base.index, code = setBaseInfo, dialog = dialog)
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+      if isLastRow():
+        break
