@@ -118,6 +118,25 @@ type
     waitMinutes*: Positive
     autoDestination*: bool
 
+proc initGameSettingsRecord*(autoRest: bool = true;
+    undockSpeed: ShipSpeed = fullSpeed; autoCenter: bool = true;
+    autoReturn: bool = true): GameSettingsRecord {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for the game's configuration
+  ##
+  ## * autoRest              - If true, auto rest when pilot or engineer need a rest
+  ## * undockSpeed           - The default speed of the player's ship after undock from a base
+  ## * autoCenter            - If true, back to the player's ship after setting destination for it
+  ## * autoReturn            - If true, set the destination for the player's ship to the base after
+  ##                           finishing a mission
+  ##
+  ## Returns the new structure with information about the game's configuration
+  return GameSettingsRecord(autoRest: autoRest, undockSpeed: undockSpeed,
+      autoCenter: autoCenter, autoReturn: autoReturn, windowWidth: 800,
+      windowHeight: 600, helpFontSize: 15, mapFontSize: 15,
+      interfaceFontSize: 15, listsLimit: 10, waitMinutes: 1)
+
+type
   BonusType* = range[0.0..5.0]
     ## Points' multiplier from various game's settings
 
@@ -353,7 +372,7 @@ proc saveConfig*() {.raises: [KeyError, IOError, OSError], tags: [
   ## Save the new game and the game itself configuration to the file
   var config: Config = newConfig()
 
-  proc saveAdaBoolean(value: bool, name: string) {.raises: [
+  proc saveAdaBoolean(value: bool; name: string) {.raises: [
       KeyError], tags: [], contractual.} =
     ## Temporary function, for backward compatibility with Ada code
     require:
