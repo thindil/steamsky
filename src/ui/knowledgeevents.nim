@@ -192,7 +192,7 @@ proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             sortDesc: coordDesc),
         HeaderData[EventsSortOrders](label: "Details",
             sortAsc: detailsAsc, sortDesc: detailsDesc)]
-      ratio: array[4, cfloat] = [200.cfloat, 100, 150, 250]
+      ratio: array[4, cfloat] = [200.cfloat, 100, 150, 350]
 
     addHeader(headers = headers, ratio = ratio, tooltip = "events",
         code = sortEvents, dialog = dialog)
