@@ -31,8 +31,8 @@ task releasewindows, "builds the project in release mode for Windows 64-bit on L
       srcDir & DirSep & "steamsky.nim"
 
 task fullrelease, "builds the project in release mode for Linux and Windows":
-  exec "others/build.nims x86_64-linux-gnu"
-  exec "others/build.nims x86_64-windows"
+  exec "others/build.nims linux"
+  exec "others/build.nims windows"
 
 task analyze, "builds the project in analyze mode (release with nimprofiler support)":
   exec "nim c -d:release --profiler:on --stackTrace:on --passC:-flto --passL:-Wl,-s --outdir:" &
