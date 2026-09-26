@@ -361,7 +361,7 @@ proc showBasesInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
           sortAsc: typeAsc, sortDesc: typeDesc),
       HeaderData[BasesSortOrders](label: "Reputation",
           sortAsc: reputationAsc, sortDesc: reputationDesc)]
-    ratio: array[8, cfloat] = [200.cfloat, 100, 100, 100, 100, 100, 100, 100]
+    ratio: array[8, cfloat] = [200.cfloat, 120, 150, 120, 120, 120, 120, 120]
 
   table(name = "BasesTable", xScroll = xOffset, headers = headers,
       ratio = ratio, tableTooltip = "bases", tableHeight = tableHeight,
