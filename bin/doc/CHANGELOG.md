@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Better looking general information about the player's ship
 - Better looking the list of known crafting recipes
 - Better looking the list of workshops in the crafting screen
+- Better looking the list of known bases
 
 ### Removed
 - Old icon used to manage the player's ship's engines' power
