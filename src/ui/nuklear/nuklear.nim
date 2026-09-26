@@ -26,7 +26,7 @@
 import std/[colors, hashes, macros, math, unicode]
 import contracts, nimalyzer
 import nk_button, nk_colors, nk_context, nk_draw, nk_font, nk_input, nk_layout,
-    nk_math, nk_panel, nk_style, nk_tooltip, nk_types, nk_utf, nk_utils, nk_widget
+    nk_math, nk_panel, nk_style, nk_tooltip, nk_types, nk_utf, nk_widget
 export nk_button, nk_colors, nk_context, nk_draw, nk_input, nk_layout, nk_style,
     nk_tooltip, nk_types, nk_widget
 
@@ -471,24 +471,6 @@ proc createWindow*(context): Window {.raises: [],
 # ----
 # Misc
 # ----
-proc nkPushScissor(b: var CommandBuffer; r: Rect) {.raises: [], tags: [
-    RootEffect], contractual.} =
-  ## Clear the rectangle. Internal use only
-  ##
-  ## b - the command buffer in which scissor will be used
-  ## r - the rectangle of the scissor
-  ##
-  ## Returns the modified parameter b
-  body:
-    b.clip = r
-    var cmd: CommandScissor = cast[CommandScissor](
-      nkCommandBufferPush(b = b, t = commandScissor,
-      size = CommandScissor.sizeof.nk_size))
-    cmd.x = r.x.int16
-    cmd.y = r.y.int16
-    cmd.w = max(x = 0.uint16, y = r.w.uint16)
-    cmd.h = max(x = 0.uint16, y = r.h.uint16)
-
 proc nkStrokeRect(b: var CommandBuffer; rect: Rect; rounding,
   lineThickness: float; c: NkColor) {.raises: [], tags: [RootEffect],
   contractual.} =
@@ -1355,249 +1337,9 @@ proc panelHeader(win: ref Window; title: string; style: Style; font: UserFont;
       t = text, a = TextAlignment.left, f = font)
   return true
 
-proc nkPanelBegin(context; title: string;
-    panelType: PanelType): bool {.raises: [
-
-], tags: [RootEffect], contractual.} =
-  ## Start drawing a Nuklear panel. Internal use only
-  ##
-  ## * ctx       - the Nuklear context
-  ## * title     - the panel's title
-  ## * panelType - the type of the panel to draw
-  ##
-  ## Returns true if the panel was drawn, otherwise false
-  body:
-    zeroMem(p = context.current.layout.addr, size = Panel.sizeof)
-    if (context.current.flags and windowHidden.cint) == 1 or (
-        context.current.flags and windowClosed.cint) == 1:
-      zeroMem(p = context.current.layout.addr, size = Panel.sizeof)
-      context.current.layout.pType = panelType
-      return false;
-    # pull state into local stack
-    let
-      style: Style = context.style
-      font: UserFont = style.font
-    var
-      win: ref Window = context.current
-      layout: ref Panel = win.layout
-    {.ruleOff: "varUplevel".}
-    var `out`: CommandBuffer = win.buffer
-    {.ruleOn: "varUplevel".}
-    var `in`: Input = (if (win.flags and windowNoInput.cint) ==
-          1: Input() else: context.input)
-    when defined(nkIncludeCommandUserdata):
-      win.buffer.userdata = context.userdata
-    # pull style configuration into local stack
-    let
-      scrollbarSize: Vec2 = style.window.scrollbar_size
-      panelPadding: Vec2 = nkPanelGetPadding(style = style,
-          pType = panelType)
-
-    # window movement
-    if (win.flags and windowMovable.cint) == 1 and (win.flags and
-        windowRom.cint) != 1:
-      # calculate draggable window space
-      var header: Rect = Rect(x: win.bounds.x, y: win.bounds.y,
-          w: win.bounds.w, h: 0)
-      if nkPanelHasHeader(flags = win.flags, title = title):
-        header.h = font.height + 2.0 * style.window.header.padding.y
-        header.h += 2.0 * style.window.header.label_padding.y
-      else:
-        header.h = panelPadding.y
-      # window movement by dragging
-      var buttons: array[Buttons.max, MouseButton] = `in`.mouse.buttons
-      let
-        leftMouseDown: bool = buttons[Buttons.left].down
-        leftMouseClicked: bool = buttons[Buttons.left].clicked == 1
-        leftMouseClickInCursor: bool = hasMouseClickDownInRect2(id = left,
-            rect = header, down = nkTrue)
-        cursors: CursorsArray = cast[CursorsArray](ctx.style.cursors)
-      if leftMouseDown and leftMouseClickInCursor and not leftMouseClicked:
-        win.bounds.x += `in`.mouse.delta.x
-        win.bounds.y += `in`.mouse.delta.y
-        buttons[Buttons.left].clicked_pos.x += `in`.mouse.delta.x
-        buttons[Buttons.left].clicked_pos.y += `in`.mouse.delta.y
-        ctx.style.cursor_active = cursors[cursorMove].addr
-      `in`.mouse.buttons = buttons
-
-    # setup panel
-    layout.pType = panelType
-    layout.flags = win.flags
-    layout.bounds = win.bounds
-    layout.bounds.x += panelPadding.x
-    layout.bounds.w -= (2 * panelPadding.x)
-    if (win.flags and windowBorder.cint).nk_bool:
-      layout.border = nkPanelGetBorder(style = style, flags = win.flags,
-          pType = panelType)
-      var shrinked: Rect = Rect(x: layout.bounds.x, y: layout.bounds.y,
-        w: layout.bounds.w, h: layout.bounds.h)
-      shrinked = nkShrinkRect(r = shrinked, amount = layout.border)
-      layout.bounds = shrinked
-    else:
-      layout.border = 0
-    layout.at_y = layout.bounds.y
-    layout.at_x = layout.bounds.x
-    layout.max_x = 0
-    layout.header_height = 0
-    layout.footer_height = 0
-    layoutResetMinRowHeight()
-    layout.row.index = 0
-    layout.row.columns = 0
-    layout.row.ratio = 0
-    layout.row.item_width = 0
-    layout.row.tree_depth = 0
-    layout.row.height = panelPadding.y
-    layout.has_scrolling = nkTrue
-    if not(win.flags and windowNoScrollbar.cint).nk_bool:
-      layout.bounds.w -= scrollbarSize.x
-    if nkPanelIsNonblock(`type` = panelType):
-      layout.footer_height = 0
-      if not(win.flags and windowNoScrollbar.cint).nk_bool or (win.flags and
-        windowScalable.cint).nk_bool:
-        layout.footer_height = scrollbarSize.y
-      layout.bounds.h -= layout.footer_height
-
-    # panel header
-    if not panelHeader(win = win, title = title, style = style, font = font,
-      layout = layout, `out` = `out`, `in` = `in`):
-      return false
-
-    # draw window background
-    if not (layout.flags and windowMinimized.cint).nk_bool and not
-      (layout.flags and windowDynamic.cint).nk_bool:
-      var body: Rect = Rect()
-      body.x = win.bounds.x
-      body.w = win.bounds.w
-      body.y = (win.bounds.y + layout.header_height)
-      body.h = (win.bounds.h - layout.header_height)
-
-      let bg: StyleItemData = style.window.fixedBackground.data
-      case style.window.fixedBackground.iType
-      of itemImage:
-        nkDrawImage(b = `out`, r = body, img = bg.image,
-          col = NkColor(r: 255, g: 255, b: 255, a: 255))
-      of itemNineSlice:
-        nkDrawNineSlice(b = `out`, r = body, slc = bg.slice,
-          col = NkColor(r: 255, g: 255, b: 255, a: 255))
-      of itemColor:
-        nkFillRect(b = `out`, rect = body,
-          rounding = style.window.rounding, c = bg.color)
-
-    # set clipping rectangle
-    var clip: Rect = Rect(x: 0, y: 0, w: 0, h: 0)
-    layout.clip = layout.bounds
-    let aClip: Rect = Rect(x: win.buffer.clip.x, y: win.buffer.clip.y,
-      w: win.buffer.clip.w, h: win.buffer.clip.h)
-    nkUnify(clip = clip, a = aClip, x0 = layout.clip.x,
-      y0 = layout.clip.y, x1 = layout.clip.x + layout.clip.w,
-      y1 = layout.clip.y + layout.clip.h)
-    nkPushScissor(b = `out`, r = clip)
-    layout.clip = clip
-    return not (layout.flags and windowHidden.cint).nk_bool and not
-      (layout.flags and windowMinimized.cint).nk_bool
-
 # ------
 # Popups
 # ------
-proc nkStartPopup(win: ref Window) {.raises: [], tags: [],
-    contractual.} =
-  ## Start setting a popup window. Internal use only
-  ##
-  ## * win     - the window of a popup
-  body:
-    var buf: PopupBuffer = win.popup.buf
-    buf.begin = win.buffer.cmdEnd
-    buf.buffEnd = win.buffer.cmdEnd
-    buf.parent = win.buffer.last
-    buf.last = buf.begin
-    buf.active = nkTrue
-    win.popup.buf = buf
-
-proc nkPopupBegin(context; pType: PopupType; title: string; flags: set[
-    PanelFlags]; x, y, w, h: float): bool {.raises: [NuklearException], tags: [
-        RootEffect], contractual.} =
-  ## Try to create a new popup window. Internal use only.
-  ##
-  ## * context - the Nuklear context
-  ## * pType   - the type of the popup
-  ## * title   - the title of the popup
-  ## * flags   - the flags for the popup
-  ## * x       - the X position of the top left corner of the popup
-  ## * y       - the Y position of the top left corner of the popup
-  ## * w       - the width of the popup
-  ## * h       - the height of the popup
-  require:
-    title.len > 0
-  body:
-    var win: ref Window = context.current
-    let panel: ref Panel = win.layout
-    if panel.pType.cint != panelSetPopup.cint:
-      raise newException(exceptn = NuklearException,
-          message = "Popups are not allowed to have popups.")
-    var popup: ref Window = win.popup.win
-    if popup == nil:
-      popup[] = createWindow(context = context)
-      popup.parent = win
-      win.popup.win = popup
-      win.popup.active = nkFalse
-      win.popup.pType = panelPopup
-    let titleHash: Hash = hash(x = title)
-    # make sure we have correct popup
-    if win.popup.name != titleHash.nk_hash:
-      if win.popup.active:
-        return false
-      {.ruleOff: "namedParams".}
-      nkZero(pData = popup.addr, size = Window.sizeof.nk_size)
-      {.ruleOn: "namedParams".}
-      win.popup.name = titleHash.nk_hash
-      win.popup.active = nkTrue
-      win.popup.pType = panelPopup
-    # popup position is local to window
-    context.current = popup
-    var
-      localX: float = x + win.layout.clip.x
-      localY: float = y + win.layout.clip.y
-
-    # setup popup data
-    popup.parent = win
-    popup.bounds = Rect(x: localX, y: localY, w: w, h: h)
-    popup.seq = ctx.seq
-    popup.layout[] = Panel()
-    popup.flags = winSetToInt(nimFlags = flags)
-    {.ruleOff: "assignments".}
-    popup.flags = popup.flags or windowBorder.cint
-    if (pType == dynamicPopup):
-      popup.flags = popup.flags or windowDynamic.cint
-    {.ruleOn: "assignments".}
-
-    popup.buffer = win.buffer
-    nkStartPopup(win = win)
-    nkPushScissor(b = popup.buffer, r = nkNullRect)
-
-    # popup is running therefore invalidate parent panels
-    if nkPanelBegin(context = context, title = title, panelType = panelPopup):
-      var root: ref Panel = win.layout
-      while root != nil:
-        root.flags = root.flags or windowRom.cint
-        root.flags = root.flags and not windowRemoveRom.cint
-        root = root.parent
-      win.popup.active = nkTrue
-      popup.layout.offset_x = popup.scrollbar.x
-      popup.layout.offset_y = popup.scrollbar.y
-      popup.layout.parent = win.layout
-      return true
-
-    # popup was closed/is invalid so cleanup
-    var root: ref Panel = win.layout
-    while root != nil:
-      root.flags = root.flags or windowRemoveRom.cint
-      root = root.parent
-    win.popup.buf.active = nkFalse
-    win.popup.active = nkFalse
-    context.current = win
-    popup.layout = nil
-    return false
-
 proc createPopup(pType2: PopupType; title2: cstring;
     flags2: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises: [], tags: [],
         contractual.} =
@@ -1610,17 +1352,6 @@ proc createPopup(pType2: PopupType; title2: cstring;
     ## A binding to Nuklear's function. Internal use only
   return nk_popup_begin(ctx = ctx, pType = pType2, title = title2,
       flags = flags2, rect = new_nk_rect(x = x2, y = y2, w = w2, h = h2))
-
-proc createPopup(pType2: PopupType; title2: string; flags2: set[PanelFlags];
-  x2, y2, w2, h2: float): bool {.raises: [NuklearException],
-  tags: [RootEffect], contractual.} =
-  ## Create a new Nuklear popup window, internal use only, temporary code
-  ##
-  ## Returns true if the popup was successfully created, otherwise false.
-  var con: ref Context = nil
-  con[] = context
-  return nkPopupBegin(context = con, pType = pType2, title = title2,
-    flags = flags2, x = x2, y = y2, w = w2, h = h2)
 
 proc createNonBlocking(flags2: nk_flags; x2, y2, w2,
     h2: cfloat): bool {.raises: [], tags: [], contractual, discardable.} =
