@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Showing information about the player's ship's destination
 - Starting position of the player's ship's orders menu
 - Giving orders to crew members
+- Issues with progress bars and scroll bars on Windows (GitHub issue #105)
 
 ## [12.7] - 2026-09-06
 
