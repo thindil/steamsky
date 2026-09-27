@@ -169,11 +169,12 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
 
   knownEventsList.sort(cmp = sortEvents)
 
-proc showEventsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc showEventsInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the list of the known events
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * height - the height of the known bases table
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
