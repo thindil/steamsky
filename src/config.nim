@@ -120,7 +120,9 @@ type
 
 proc initGameSettingsRecord*(autoRest: bool = true;
     undockSpeed: ShipSpeed = fullSpeed; autoCenter: bool = true;
-    autoReturn: bool = true): GameSettingsRecord {.raises: [], tags: [],
+    autoReturn: bool = true; autoFinish: bool = true; lowFuel: Natural = 100;
+    lowDrinks: Natural = 50;
+    lowFood: Natural = 25): GameSettingsRecord {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for the game's configuration
   ##
@@ -129,11 +131,20 @@ proc initGameSettingsRecord*(autoRest: bool = true;
   ## * autoCenter            - If true, back to the player's ship after setting destination for it
   ## * autoReturn            - If true, set the destination for the player's ship to the base after
   ##                           finishing a mission
+  ## * autoFinish            - If true, automatically finish the mission if the player's ships is in
+  ##                           the proper base
+  ## * lowFuel               - The amount of fuel at which the game will show the warning
+  ##                           about it
+  ## * lowDrinks             - The amount of drinks at which the game will show the warning
+  ##                           about it
+  ## * lowFood               - The amount of food at which the game will show the warning
+  ##                           about it
   ##
   ## Returns the new structure with information about the game's configuration
   return GameSettingsRecord(autoRest: autoRest, undockSpeed: undockSpeed,
-      autoCenter: autoCenter, autoReturn: autoReturn, windowWidth: 800,
-      windowHeight: 600, helpFontSize: 15, mapFontSize: 15,
+      autoCenter: autoCenter, autoReturn: autoReturn, autoFinish: autoFinish,
+      lowFuel: lowFuel, lowDrinks: lowDrinks, lowFood: lowFood,
+      windowWidth: 800, windowHeight: 600, helpFontSize: 15, mapFontSize: 15,
       interfaceFontSize: 15, listsLimit: 10, waitMinutes: 1)
 
 type
