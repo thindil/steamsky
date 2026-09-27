@@ -64,11 +64,7 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
     showBasesInfo(dialog = dialog, height = height)
   # The list of known events
   of 1:
-    setLayoutRowDynamic(height = height, cols = 1)
-    group(title = "Knowledge", flags = {windowNoFlags}):
-      if dialog != none:
-        windowDisable()
-      showEventsInfo(dialog = dialog)
+    showEventsInfo(dialog = dialog, height = height)
   # The list of accepted missions
   of 2:
     setLayoutRowDynamic(height = height, cols = 1)
