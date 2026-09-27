@@ -169,6 +169,8 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
 
   knownEventsList.sort(cmp = sortEvents)
 
+var xOffset: Natural = 0
+
 proc showEventsInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the list of the known events
@@ -195,38 +197,22 @@ proc showEventsInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: 
             sortAsc: detailsAsc, sortDesc: detailsDesc)]
       ratio: array[4, cfloat] = [200.cfloat, 100, 150, 350]
 
-    addHeader(headers = headers, ratio = ratio, tooltip = "events",
-        code = sortEvents, dialog = dialog)
-    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-    saveButtonStyle()
-    setButtonStyle(field = borderColor, a = 0)
-    try:
-      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    except:
-      dialog = setError(message = "Can't set table color")
-      return
-    setButtonStyle(field = rounding, value = 0)
-    setButtonStyle(field = border, value = 0)
-    var
-      row, currentRow: Positive = 1
-    # Show the list of known events
-    for event in knownEventsList:
-      if currentRow < startRow:
-        currentRow.inc
-        continue
-      setButtonStyle(field = textNormal, color = theme.colors[event.color])
-      addButton(label = event.name, tooltip = "Show the event's details",
-          data = event.index, code = showEventInfo, dialog = dialog)
-      addButton(label = $event.distance, tooltip = "The distance to the event",
-          data = event.index, code = showEventInfo, dialog = dialog)
-      addButton(label = event.coords, tooltip = "The coordinates of the event",
-          data = event.index, code = showEventInfo, dialog = dialog)
-      addButton(label = event.details, tooltip = "Show the event's details",
-          data = event.index, code = showEventInfo, dialog = dialog)
-      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-      row.inc
-      if row == gameSettings.listsLimit + 1:
-        break
-    restoreButtonStyle()
-    addPagination(page = currentPage, row = row)
+    table(name = "EventsTable", xScroll = xOffset, headers = headers,
+        ratio = ratio, tableTooltip = "events", tableHeight = height,
+        headerCode = sortEvents):
+      # Show the list of known events
+      for event in knownEventsList:
+        if not isStartingRow():
+          continue
+        setButtonStyle(field = textNormal, color = theme.colors[event.color])
+        addButton(label = event.name, tooltip = "Show the event's details",
+            data = event.index, code = showEventInfo, dialog = dialog)
+        addButton(label = $event.distance, tooltip = "The distance to the event",
+            data = event.index, code = showEventInfo, dialog = dialog)
+        addButton(label = event.coords, tooltip = "The coordinates of the event",
+            data = event.index, code = showEventInfo, dialog = dialog)
+        addButton(label = event.details, tooltip = "Show the event's details",
+            data = event.index, code = showEventInfo, dialog = dialog)
+        setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+        if isLastRow():
+          break
