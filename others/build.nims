@@ -29,7 +29,7 @@ rmDir(nimCacheDir().parentDir() & DirSep & "build_r")
 if target in ["linux", "freebsd"]:
   exec "nimble release -y"
 else:
-  exec "nimble releasewindows -y"
+  exec "nimble debugwindows -y"
 let dirName = case target
   of "linux":
     "release" & DirSep & "steamsky-linux" & DirSep
