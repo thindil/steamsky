@@ -170,11 +170,12 @@ proc sortMissions(sortAsc, sortDesc: MissionsSortOrders;
 
   missionsUIList.sort(cmp = sortMissions)
 
-proc showMissionsInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showMissionsInfo*(dialog: var GameDialog; height: float) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show the list of the accepted missions
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * height - the height of the accepted missions table
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
