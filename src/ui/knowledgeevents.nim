@@ -171,8 +171,8 @@ proc sortEvents(sortAsc, sortDesc: EventsSortOrders;
 
 var xOffset: Natural = 0
 
-proc showEventsInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showEventsInfo*(dialog: var GameDialog; height: float) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show the list of the known events
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -207,8 +207,10 @@ proc showEventsInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: 
         setButtonStyle(field = textNormal, color = theme.colors[event.color])
         addButton(label = event.name, tooltip = "Show the event's details",
             data = event.index, code = showEventInfo, dialog = dialog)
-        addButton(label = $event.distance, tooltip = "The distance to the event",
-            data = event.index, code = showEventInfo, dialog = dialog)
+        addButton(label = $event.distance,
+            tooltip = "The distance to the event",
+
+data = event.index, code = showEventInfo, dialog = dialog)
         addButton(label = event.coords, tooltip = "The coordinates of the event",
             data = event.index, code = showEventInfo, dialog = dialog)
         addButton(label = event.details, tooltip = "Show the event's details",
