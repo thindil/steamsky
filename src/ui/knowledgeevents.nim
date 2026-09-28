@@ -182,8 +182,12 @@ proc showEventsInfo*(dialog: var GameDialog; height: float) {.raises: [],
   ## happened.
   # No events
   if knownEventsList.len == 0:
-    setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
-    wrapLabel(str = "You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.")
+    setLayoutRowDynamic(height = height, cols = 1)
+    group(title = "Knowledge", flags = {windowNoFlags}):
+      if dialog != none:
+        windowDisable()
+      setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
+      wrapLabel(str = "You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.")
   else:
     const
       headers: array[4, HeaderData[EventsSortOrders]] = [
