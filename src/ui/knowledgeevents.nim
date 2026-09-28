@@ -208,9 +208,8 @@ proc showEventsInfo*(dialog: var GameDialog; height: float) {.raises: [],
         addButton(label = event.name, tooltip = "Show the event's details",
             data = event.index, code = showEventInfo, dialog = dialog)
         addButton(label = $event.distance,
-            tooltip = "The distance to the event",
-
-data = event.index, code = showEventInfo, dialog = dialog)
+            tooltip = "The distance to the event", data = event.index,
+            code = showEventInfo, dialog = dialog)
         addButton(label = event.coords, tooltip = "The coordinates of the event",
             data = event.index, code = showEventInfo, dialog = dialog)
         addButton(label = event.details, tooltip = "Show the event's details",
