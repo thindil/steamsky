@@ -121,8 +121,10 @@ type
 proc initGameSettingsRecord*(autoRest: bool = true;
     undockSpeed: ShipSpeed = fullSpeed; autoCenter: bool = true;
     autoReturn: bool = true; autoFinish: bool = true; lowFuel: Natural = 100;
-    lowDrinks: Natural = 50;
-    lowFood: Natural = 25): GameSettingsRecord {.raises: [], tags: [],
+    lowDrinks: Natural = 50; lowFood: Natural = 25;
+    autoMoveStop: AutoMoveBreak = never; windowWidth: Positive = 800;
+    windowHeight: Positive = 600;
+    messagesLimit: Natural = 500): GameSettingsRecord {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for the game's configuration
   ##
@@ -139,13 +141,19 @@ proc initGameSettingsRecord*(autoRest: bool = true;
   ##                           about it
   ## * lowFood               - The amount of food at which the game will show the warning
   ##                           about it
+  ## * autoMoveStop          - When stop the player's ship's auto movement
+  ## * windowWidth           - The game window default width
+  ## * windowHeight          - The game window default height
+  ## * messagesLimit         - The max amount of messages to show in the game
   ##
   ## Returns the new structure with information about the game's configuration
   return GameSettingsRecord(autoRest: autoRest, undockSpeed: undockSpeed,
       autoCenter: autoCenter, autoReturn: autoReturn, autoFinish: autoFinish,
       lowFuel: lowFuel, lowDrinks: lowDrinks, lowFood: lowFood,
-      windowWidth: 800, windowHeight: 600, helpFontSize: 15, mapFontSize: 15,
-      interfaceFontSize: 15, listsLimit: 10, waitMinutes: 1)
+      autoMoveStop: autoMoveStop, windowWidth: windowWidth,
+      windowHeight: windowHeight, messagesLimit: messagesLimit,
+      helpFontSize: 15, mapFontSize: 15, interfaceFontSize: 15, listsLimit: 10,
+      waitMinutes: 1)
 
 type
   BonusType* = range[0.0..5.0]
