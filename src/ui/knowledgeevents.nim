@@ -176,7 +176,7 @@ proc showEventsInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: 
   ## Show the list of the known events
   ##
   ## * dialog - the current in-game dialog displayed on the screen
-  ## * height - the height of the known bases table
+  ## * height - the height of the known events table
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
