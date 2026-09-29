@@ -202,7 +202,7 @@ proc showEventsInfo*(dialog: var GameDialog; height: float) {.raises: [],
     ratio: array[4, cfloat] = [200.cfloat, 100, 150, 350]
 
   table(name = "EventsTable", xScroll = xOffset, headers = headers,
-      ratio = ratio, tableTooltip = "events", tableHeight = height,
+      ratio = ratio, tableTooltip = "events", tableHeight = height - 10,
       headerCode = sortEvents):
     # Show the list of known events
     for event in knownEventsList:
