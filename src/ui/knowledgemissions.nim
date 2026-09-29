@@ -181,8 +181,12 @@ proc showMissionsInfo*(dialog: var GameDialog; height: float) {.raises: [],
   ## happened.
   # No missions
   if missionsUIList.len == 0:
-    setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
-    wrapLabel(str = "You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.")
+    setLayoutRowDynamic(height = height, cols = 1)
+    group(title = "KnowledgeMissions", flags = {windowNoFlags}):
+      if dialog != none:
+        windowDisable()
+      setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
+      wrapLabel(str = "You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.")
   else:
     const
       headers: array[5, HeaderData[MissionsSortOrders]] = [
