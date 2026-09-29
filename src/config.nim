@@ -123,9 +123,11 @@ proc initGameSettingsRecord*(autoRest: bool = true;
     autoReturn: bool = true; autoFinish: bool = true; lowFuel: Natural = 100;
     lowDrinks: Natural = 50; lowFood: Natural = 25;
     autoMoveStop: AutoMoveBreak = never; windowWidth: Positive = 800;
-    windowHeight: Positive = 600;
-    messagesLimit: Natural = 500): GameSettingsRecord {.raises: [], tags: [],
-    contractual.} =
+    windowHeight: Positive = 600; messagesLimit: Natural = 500;
+    savedMessages: Natural = 10; helpFontSize: Positive = 14;
+    mapFontSize: Positive = 16;
+    interfaceFontSize: Positive = 14): GameSettingsRecord {.raises: [], tags: [],
+     contractual.} =
   ## Create a new data structure for the game's configuration
   ##
   ## * autoRest              - If true, auto rest when pilot or engineer need a rest
@@ -145,6 +147,10 @@ proc initGameSettingsRecord*(autoRest: bool = true;
   ## * windowWidth           - The game window default width
   ## * windowHeight          - The game window default height
   ## * messagesLimit         - The max amount of messages to show in the game
+  ## * savedMessages         - The max amount of messages to save to a file
+  ## * helpFontSize          - The size of a font used in help
+  ## * mapFontSize           - The size of a font used on the map
+  ## * interfaceFontSize     - The size of a font used in the game interface
   ##
   ## Returns the new structure with information about the game's configuration
   return GameSettingsRecord(autoRest: autoRest, undockSpeed: undockSpeed,
@@ -152,8 +158,9 @@ proc initGameSettingsRecord*(autoRest: bool = true;
       lowFuel: lowFuel, lowDrinks: lowDrinks, lowFood: lowFood,
       autoMoveStop: autoMoveStop, windowWidth: windowWidth,
       windowHeight: windowHeight, messagesLimit: messagesLimit,
-      helpFontSize: 15, mapFontSize: 15, interfaceFontSize: 15, listsLimit: 10,
-      waitMinutes: 1)
+      savedMessages: savedMessages, helpFontSize: helpFontSize,
+      mapFontSize: mapFontSize, interfaceFontSize: interfaceFontSize,
+      listsLimit: 10, waitMinutes: 1)
 
 type
   BonusType* = range[0.0..5.0]
