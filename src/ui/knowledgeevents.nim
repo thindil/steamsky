@@ -182,7 +182,7 @@ proc showEventsInfo*(dialog: var GameDialog; height: float) {.raises: [],
   ## happened.
   # No events
   if knownEventsList.len == 0:
-    setLayoutRowDynamic(height = height, cols = 1)
+    setLayoutRowDynamic(height = height + 5, cols = 1)
     group(title = "KnowledgeEvents", flags = {windowNoFlags}):
       if dialog != none:
         windowDisable()
