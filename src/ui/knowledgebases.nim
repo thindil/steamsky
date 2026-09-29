@@ -322,7 +322,7 @@ proc showBasesInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   # Show options related to managing the list
-  var tableHeight: float = height - 18
+  var tableHeight: float = height - 10
   if showOptions:
     tableHeight -= ((editHeight * 2) + 17)
     setLayoutRowStatic(height = editHeight, cols = 6, ratio = [50.cfloat, 150,
