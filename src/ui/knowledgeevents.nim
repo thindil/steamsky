@@ -183,41 +183,41 @@ proc showEventsInfo*(dialog: var GameDialog; height: float) {.raises: [],
   # No events
   if knownEventsList.len == 0:
     setLayoutRowDynamic(height = height, cols = 1)
-    group(title = "Knowledge", flags = {windowNoFlags}):
+    group(title = "KnowledgeEvents", flags = {windowNoFlags}):
       if dialog != none:
         windowDisable()
       setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
       wrapLabel(str = "You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.")
-  else:
-    const
-      headers: array[4, HeaderData[EventsSortOrders]] = [
-        HeaderData[EventsSortOrders](label: "Name", sortAsc: typeAsc,
-            sortDesc: typeDesc),
-        HeaderData[EventsSortOrders](label: "Distance",
-            sortAsc: distanceAsc, sortDesc: distanceDesc),
-        HeaderData[EventsSortOrders](label: "Coordinates", sortAsc: coordAsc,
-            sortDesc: coordDesc),
-        HeaderData[EventsSortOrders](label: "Details",
-            sortAsc: detailsAsc, sortDesc: detailsDesc)]
-      ratio: array[4, cfloat] = [200.cfloat, 100, 150, 350]
+    return
+  const
+    headers: array[4, HeaderData[EventsSortOrders]] = [
+      HeaderData[EventsSortOrders](label: "Name", sortAsc: typeAsc,
+          sortDesc: typeDesc),
+      HeaderData[EventsSortOrders](label: "Distance",
+          sortAsc: distanceAsc, sortDesc: distanceDesc),
+      HeaderData[EventsSortOrders](label: "Coordinates", sortAsc: coordAsc,
+          sortDesc: coordDesc),
+      HeaderData[EventsSortOrders](label: "Details",
+          sortAsc: detailsAsc, sortDesc: detailsDesc)]
+    ratio: array[4, cfloat] = [200.cfloat, 100, 150, 350]
 
-    table(name = "EventsTable", xScroll = xOffset, headers = headers,
-        ratio = ratio, tableTooltip = "events", tableHeight = height,
-        headerCode = sortEvents):
-      # Show the list of known events
-      for event in knownEventsList:
-        if not isStartingRow():
-          continue
-        setButtonStyle(field = textNormal, color = theme.colors[event.color])
-        addButton(label = event.name, tooltip = "Show the event's details",
-            data = event.index, code = showEventInfo, dialog = dialog)
-        addButton(label = $event.distance,
-            tooltip = "The distance to the event", data = event.index,
-            code = showEventInfo, dialog = dialog)
-        addButton(label = event.coords, tooltip = "The coordinates of the event",
-            data = event.index, code = showEventInfo, dialog = dialog)
-        addButton(label = event.details, tooltip = "Show the event's details",
-            data = event.index, code = showEventInfo, dialog = dialog)
-        setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-        if isLastRow():
-          break
+  table(name = "EventsTable", xScroll = xOffset, headers = headers,
+      ratio = ratio, tableTooltip = "events", tableHeight = height,
+      headerCode = sortEvents):
+    # Show the list of known events
+    for event in knownEventsList:
+      if not isStartingRow():
+        continue
+      setButtonStyle(field = textNormal, color = theme.colors[event.color])
+      addButton(label = event.name, tooltip = "Show the event's details",
+          data = event.index, code = showEventInfo, dialog = dialog)
+      addButton(label = $event.distance,
+          tooltip = "The distance to the event", data = event.index,
+          code = showEventInfo, dialog = dialog)
+      addButton(label = event.coords, tooltip = "The coordinates of the event",
+          data = event.index, code = showEventInfo, dialog = dialog)
+      addButton(label = event.details, tooltip = "Show the event's details",
+          data = event.index, code = showEventInfo, dialog = dialog)
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+      if isLastRow():
+        break
