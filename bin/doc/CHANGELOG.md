@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Better looking the list of workshops in the crafting screen
 - Better looking the list of known bases
 - Better looking the list of known events
+- Better looking the list of accepted missions
 
 ### Removed
 - Old icon used to manage the player's ship's engines' power
