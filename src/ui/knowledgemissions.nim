@@ -170,6 +170,8 @@ proc sortMissions(sortAsc, sortDesc: MissionsSortOrders;
 
   missionsUIList.sort(cmp = sortMissions)
 
+var xOffset: Natural = 0
+
 proc showMissionsInfo*(dialog: var GameDialog; height: float) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the list of the accepted missions
@@ -202,40 +204,23 @@ proc showMissionsInfo*(dialog: var GameDialog; height: float) {.raises: [],
           sortAsc: rewardAsc, sortDesc: rewardDesc)]
     ratio: array[5, cfloat] = [200.cfloat, 100, 150, 250, 150]
 
-  addHeader(headers = headers, ratio = ratio, tooltip = "missions",
-      code = sortMissions, dialog = dialog)
-  let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-  saveButtonStyle()
-  setButtonStyle(field = borderColor, a = 0)
-  try:
-    setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-  except:
-    dialog = setError(message = "Can't set table color")
-    return
-  setButtonStyle(field = rounding, value = 0)
-  setButtonStyle(field = border, value = 0)
-  var
-    row, currentRow: Positive = 1
-  # Show the list of accepted missions
-  for mission in missionsUIList:
-    if currentRow < startRow:
-      currentRow.inc
-      continue
-    setButtonStyle(field = textNormal, color = theme.colors[mission.color])
-    addButton(label = mission.name, tooltip = "Show the mission's menu",
-        data = mission.index, code = setMissionInfo, dialog = dialog)
-    addButton(label = $mission.distance, tooltip = "Show the mission's menu",
-        data = mission.index, code = setMissionInfo, dialog = dialog)
-    addButton(label = mission.coords, tooltip = "Show the mission's menu",
-        data = mission.index, code = setMissionInfo, dialog = dialog)
-    addButton(label = mission.timeLimit, tooltip = "Show the mission's menu",
-        data = mission.index, code = setMissionInfo, dialog = dialog)
-    addButton(label = mission.baseReward, tooltip = "Show the mission's menu",
-        data = mission.index, code = setMissionInfo, dialog = dialog)
-    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    row.inc
-    if row == gameSettings.listsLimit + 1:
-      break
-  restoreButtonStyle()
-  addPagination(page = currentPage, row = row)
+  table(name = "MissionsTable", xScroll = xOffset, headers = headers,
+      ratio = ratio, tableTooltip = "missions", tableHeight = height - 10,
+      headerCode = sortMissions):
+    # Show the list of accepted missions
+    for mission in missionsUIList:
+      if not isStartingRow():
+        continue
+      setButtonStyle(field = textNormal, color = theme.colors[mission.color])
+      addButton(label = mission.name, tooltip = "Show the mission's menu",
+          data = mission.index, code = setMissionInfo, dialog = dialog)
+      addButton(label = $mission.distance, tooltip = "Show the mission's menu",
+          data = mission.index, code = setMissionInfo, dialog = dialog)
+      addButton(label = mission.coords, tooltip = "Show the mission's menu",
+          data = mission.index, code = setMissionInfo, dialog = dialog)
+      addButton(label = mission.timeLimit, tooltip = "Show the mission's menu",
+          data = mission.index, code = setMissionInfo, dialog = dialog)
+      addButton(label = mission.baseReward, tooltip = "Show the mission's menu",
+          data = mission.index, code = setMissionInfo, dialog = dialog)
+      if isLastRow():
+        break
