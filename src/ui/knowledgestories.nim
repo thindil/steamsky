@@ -39,107 +39,107 @@ proc showStoriesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if knownStoriesList.len == 0:
     setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
     wrapLabel(str = "You didn't discover any story yet.")
-  else:
-    setLayoutRowStatic(height = editHeight, cols = 3, ratio = [200.cfloat, 150, 250])
-    let newStoryIndex = comboList(items = knownStoriesList,
-        selected = storyIndex, itemHeight = labelHeight.int, x = 150, y = 200)
-    if newStoryIndex != storyIndex or storyText.len == 0:
-      storyIndex = newStoryIndex
-      storyText = ""
-      let story: FinishedStoryData = finishedStories[storyIndex]
-      for stepText in story.stepsTexts:
-        storyText.add(y = stepText & '\n')
-      if story.stepsTexts.len < story.stepsAmount:
-        try:
-          storyText.add(y = getCurrentStoryText() & '\n')
-        except:
-          dialog = setError(message = "Can't get current story text.")
-          return
-        if currentStory.data.len > 0:
-          let
-            step: StepData = try:
-                (if currentStory.currentStep == -1: storiesList[
-                  currentStory.index].startingStep elif currentStory.currentStep >
-                  -1: storiesList[currentStory.index].steps[
-                  currentStory.currentStep] else: storiesList[
-                  currentStory.index].finalStep)
+    return
+  setLayoutRowStatic(height = editHeight, cols = 3, ratio = [200.cfloat, 150, 250])
+  let newStoryIndex = comboList(items = knownStoriesList,
+      selected = storyIndex, itemHeight = labelHeight.int, x = 150, y = 200)
+  if newStoryIndex != storyIndex or storyText.len == 0:
+    storyIndex = newStoryIndex
+    storyText = ""
+    let story: FinishedStoryData = finishedStories[storyIndex]
+    for stepText in story.stepsTexts:
+      storyText.add(y = stepText & '\n')
+    if story.stepsTexts.len < story.stepsAmount:
+      try:
+        storyText.add(y = getCurrentStoryText() & '\n')
+      except:
+        dialog = setError(message = "Can't get current story text.")
+        return
+      if currentStory.data.len > 0:
+        let
+          step: StepData = try:
+              (if currentStory.currentStep == -1: storiesList[
+                currentStory.index].startingStep elif currentStory.currentStep >
+                -1: storiesList[currentStory.index].steps[
+                currentStory.currentStep] else: storiesList[
+                currentStory.index].finalStep)
+            except:
+              dialog = setError(message = "Can't get the step.")
+              return
+          storyData: seq[string] = currentStory.data.split(sep = ';')
+        case step.finishCondition
+        of askInBase:
+          if storyData.len < 2:
+            storyText.add(y = "You must travel to base " & currentStory.data & " at X: ")
+            for base in skyBases:
+              if base.name == currentStory.data:
+                storyText.add(y = $base.skyX & " Y: " & $base.skyY)
+                break
+          else:
+            storyText.add(y = "You can ask in any base.")
+        of destroyShip:
+          try:
+            storyText.add(y = "You must find " & protoShipsList[storyData[
+                2].parseInt].name & " at X: " & storyData[0] & " Y: " &
+                    storyData[1])
+          except:
+            dialog = setError(message = "Can't get the destroy ship step.")
+            return
+        of explore:
+          storyText.add(y = "You must travel to X: " & storyData[0] & " Y: " &
+              storyData[1])
+        of loot:
+          try:
+            storyText.add(y = "You must loot: " & itemsList[storyData[
+                0].parseInt].name & " from ")
+          except:
+            dialog = setError(message = "Can't get the loot data.")
+            return
+          if storyData[1] == "any":
+            storyText.add(y = "any ")
+            let faction: FactionData = try:
+                factionsList[getStepData(finishData = step.finishData,
+                  name = "faction")]
               except:
-                dialog = setError(message = "Can't get the step.")
+                dialog = setError(message = "Can't get the faction")
                 return
-            storyData: seq[string] = currentStory.data.split(sep = ';')
-          case step.finishCondition
-          of askInBase:
-            if storyData.len < 2:
-              storyText.add(y = "You must travel to base " & currentStory.data & " at X: ")
-              for base in skyBases:
-                if base.name == currentStory.data:
-                  storyText.add(y = $base.skyX & " Y: " & $base.skyY)
+            if faction.name.len > 0:
+              storyText.add(y = faction.name)
+            storyText.add(y = " ship.")
+          else:
+            for index, ship in protoShipsList:
+              try:
+                if index == storyData[1].parseInt:
+                  storyText.add(y = ship.name & ".")
                   break
-            else:
-              storyText.add(y = "You can ask in any base.")
-          of destroyShip:
-            try:
-              storyText.add(y = "You must find " & protoShipsList[storyData[
-                  2].parseInt].name & " at X: " & storyData[0] & " Y: " &
-                      storyData[1])
-            except:
-              dialog = setError(message = "Can't get the destroy ship step.")
-              return
-          of explore:
-            storyText.add(y = "You must travel to X: " & storyData[0] & " Y: " &
-                storyData[1])
-          of loot:
-            try:
-              storyText.add(y = "You must loot: " & itemsList[storyData[
-                  0].parseInt].name & " from ")
-            except:
-              dialog = setError(message = "Can't get the loot data.")
-              return
-            if storyData[1] == "any":
-              storyText.add(y = "any ")
-              let faction: FactionData = try:
-                  factionsList[getStepData(finishData = step.finishData,
-                    name = "faction")]
-                except:
-                  dialog = setError(message = "Can't get the faction")
-                  return
-              if faction.name.len > 0:
-                storyText.add(y = faction.name)
-              storyText.add(y = " ship.")
-            else:
-              for index, ship in protoShipsList:
-                try:
-                  if index == storyData[1].parseInt:
-                    storyText.add(y = ship.name & ".")
-                    break
-                except:
-                  dialog = setError(message = "Can't get the ship name.")
-          of any:
-            discard
-    if currentStory.index.len > 0:
-      labelButton(title = "Show on map"):
-        var (newX, newY) = try:
-            getStoryLocation()
-          except:
-            dialog = setError(message = "Can't get the story location.")
-            return
-        centerX = newX
-        centerY = newY
-        mapPreview = true
-      labelButton(title = "Set as destination for ship"):
-        var (newX, newY) = try:
-            getStoryLocation()
-          except:
-            dialog = setError(message = "Can't get the story location.")
-            return
-        if newX == playerShip.skyX and newY == playerShip.skyY:
-          dialog = setMessage(message = "You are at this location now.",
-              title = "Can't set destination")
+              except:
+                dialog = setError(message = "Can't get the ship name.")
+        of any:
+          discard
+  if currentStory.index.len > 0:
+    labelButton(title = "Show on map"):
+      var (newX, newY) = try:
+          getStoryLocation()
+        except:
+          dialog = setError(message = "Can't get the story location.")
           return
-        playerShip.destinationX = newX
-        playerShip.destinationY = newY
-        addMessage(message = "You set the travel destination for your ship.",
-            mType = orderMessage)
-    if storyText.len > 0:
-      setLayoutRowDynamic(height = labelHeight * 8, cols = 1)
-      wrapLabel(str = storyText)
+      centerX = newX
+      centerY = newY
+      mapPreview = true
+    labelButton(title = "Set as destination for ship"):
+      var (newX, newY) = try:
+          getStoryLocation()
+        except:
+          dialog = setError(message = "Can't get the story location.")
+          return
+      if newX == playerShip.skyX and newY == playerShip.skyY:
+        dialog = setMessage(message = "You are at this location now.",
+            title = "Can't set destination")
+        return
+      playerShip.destinationX = newX
+      playerShip.destinationY = newY
+      addMessage(message = "You set the travel destination for your ship.",
+          mType = orderMessage)
+  if storyText.len > 0:
+    setLayoutRowDynamic(height = labelHeight * 8, cols = 1)
+    wrapLabel(str = storyText)
