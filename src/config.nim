@@ -125,9 +125,11 @@ proc initGameSettingsRecord*(autoRest: bool = true;
     autoMoveStop: AutoMoveBreak = never; windowWidth: Positive = 800;
     windowHeight: Positive = 600; messagesLimit: Natural = 500;
     savedMessages: Natural = 10; helpFontSize: Positive = 14;
-    mapFontSize: Positive = 16;
-    interfaceFontSize: Positive = 14): GameSettingsRecord {.raises: [], tags: [],
-     contractual.} =
+    mapFontSize: Positive = 16; interfaceFontSize: Positive = 14;
+    interfaceTheme: ThemeName = "steamsky";
+    messagesOrder: MessagesOrder = olderFirst; autoAskForBases: bool = false;
+    autoAskForEvents: bool = false): GameSettingsRecord {.raises: [], tags: [],
+    contractual.} =
   ## Create a new data structure for the game's configuration
   ##
   ## * autoRest              - If true, auto rest when pilot or engineer need a rest
@@ -151,6 +153,12 @@ proc initGameSettingsRecord*(autoRest: bool = true;
   ## * helpFontSize          - The size of a font used in help
   ## * mapFontSize           - The size of a font used on the map
   ## * interfaceFontSize     - The size of a font used in the game interface
+  ## * interfaceTheme        - The name of the current theme of the game interface
+  ## * messagesOrder         - In what order the messages should be shown
+  ## * autoAskForBases       - If true, auto ask for new bases when the player's ship is
+  ##                           docked to a base
+  ## * autoAskForEvents      - If true, auto ask for new events when the player's ship is
+  ##                           docked to a base
   ##
   ## Returns the new structure with information about the game's configuration
   return GameSettingsRecord(autoRest: autoRest, undockSpeed: undockSpeed,
@@ -160,6 +168,8 @@ proc initGameSettingsRecord*(autoRest: bool = true;
       windowHeight: windowHeight, messagesLimit: messagesLimit,
       savedMessages: savedMessages, helpFontSize: helpFontSize,
       mapFontSize: mapFontSize, interfaceFontSize: interfaceFontSize,
+      interfaceTheme: interfaceTheme, messagesOrder: messagesOrder,
+      autoAskForBases: autoAskForBases, autoAskForEvents: autoAskForEvents,
       listsLimit: 10, waitMinutes: 1)
 
 type
