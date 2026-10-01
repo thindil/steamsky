@@ -310,23 +310,27 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
+  if showHeader(dialog = dialog, close = CloseDestination.map, state = state,
+      options = true):
     return
   if updateData:
     refreshLootList(dialog = dialog)
     baseCargo = skyBases[baseIndex].cargo
-  setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.1.cfloat, 0.3])
-  label(str = "Type:")
-  typeIndex = comboList(items = typesList, selected = typeIndex,
-      itemHeight = labelHeight.int, x = 200, y = 150,
-      tooltip = "Show only items of the selected type")
+  # Show advanced options if needed
+  if showOptions:
+    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.1.cfloat, 0.3])
+    label(str = "Type:")
+    typeIndex = comboList(items = typesList, selected = typeIndex,
+        itemHeight = labelHeight.int, x = 200, y = 150,
+        tooltip = "Show only items of the selected type")
   # Show information about free cargo space in the player's ship
   setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [cargoWidth[0],
       cargoWidth[1]])
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   # Show the list of items to loot
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 65
+  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
+      (if showOptions: 45 else: 0) - 20
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "LootGroup", flags = {windowNoFlags}):
     if dialog != none:
