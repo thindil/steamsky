@@ -616,4 +616,4 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if isLastRow():
         break
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      tableHeight - 170, state = state)
+      tableHeight - (if showOptions: 225 else: 180), state = state)
