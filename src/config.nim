@@ -128,7 +128,9 @@ proc initGameSettingsRecord*(autoRest: bool = true;
     mapFontSize: Positive = 16; interfaceFontSize: Positive = 14;
     interfaceTheme: ThemeName = "steamsky";
     messagesOrder: MessagesOrder = olderFirst; autoAskForBases: bool = false;
-    autoAskForEvents: bool = false): GameSettingsRecord {.raises: [], tags: [],
+    autoAskForEvents: bool = false; showTooltips: bool = true;
+    showLastMessages: bool = true; messagesPosition: Natural = 256;
+    fullScreen: bool = false): GameSettingsRecord {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for the game's configuration
   ##
@@ -159,6 +161,10 @@ proc initGameSettingsRecord*(autoRest: bool = true;
   ##                           docked to a base
   ## * autoAskForEvents      - If true, auto ask for new events when the player's ship is
   ##                           docked to a base
+  ## * showTooltips          - Show the in-game tooltips with help information
+  ## * showLastMessages      - Show the last messages window below the map
+  ## * messagesPosition      - The height of the last messages window
+  ## * fullScreen            - Run the game in full screen mode
   ##
   ## Returns the new structure with information about the game's configuration
   return GameSettingsRecord(autoRest: autoRest, undockSpeed: undockSpeed,
@@ -170,6 +176,8 @@ proc initGameSettingsRecord*(autoRest: bool = true;
       mapFontSize: mapFontSize, interfaceFontSize: interfaceFontSize,
       interfaceTheme: interfaceTheme, messagesOrder: messagesOrder,
       autoAskForBases: autoAskForBases, autoAskForEvents: autoAskForEvents,
+      showTooltips: showTooltips, showLastMessages: showLastMessages,
+      messagesPosition: messagesPosition, fullScreen: fullScreen,
       listsLimit: 10, waitMinutes: 1)
 
 type
