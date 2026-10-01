@@ -35,7 +35,7 @@ All notable changes to this project will be documented in this file.
 - Starting position of the player's ship's orders menu
 - Giving orders to crew members
 - Issues with progress bars and scroll bars on Windows (GitHub issue #105)
-- Size of last messages window in the trading screen
+- Size of last messages window in the trading and looting screens
 
 ## [12.7] - 2026-09-06
 
