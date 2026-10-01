@@ -330,7 +330,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   # Show the list of items to loot
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
-      (if showOptions: 45 else: 0) - 20
+      (if showOptions: 45 else: 0) - 70
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "LootGroup", flags = {windowNoFlags}):
     if dialog != none:
