@@ -348,16 +348,11 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show the item's info.")
 
-proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
-    currentRow, row: var Positive; startRow: Positive) {.raises: [], tags: [
-    RootEffect], contractual.} =
+proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural]) {.raises: [], tags: [ RootEffect], contractual.} =
   ## Show the list of items in the player's ship's cargo
   ##
   ## * dialog      - the current in-game dialog displayed on the screen
   ## * indexesList - the list of indexes of added items from the trader's cargo
-  ## * currentRow  - the current row in the list
-  ## * row         - the amount of rows in the list, used for pagination
-  ## * startRow    - the row from which the list will start
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
@@ -396,8 +391,7 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
     if nameSearch.len > 0 and itemName.toLowerAscii.find(
         sub = nameSearch.toLowerAscii) == -1:
       continue
-    if currentRow < startRow:
-      currentRow.inc
+    if not isStartingRow():
       continue
     var price: int = 0
     if baseCargoIndex == -1:
@@ -461,9 +455,10 @@ proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural];
       return
     addButton(label = itemType, tooltip = "Show available options of item.",
       data = index, code = showItemInfo, dialog = dialog)
-    row.inc
-    if row == gameSettings.listsLimit + 1:
+    if isLastRow():
       break
+
+var xOffset: Natural = 0
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -531,114 +526,94 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
           sortDesc: typeDesc)]
     ratio: array[9, cfloat] = [300.cfloat, 150, 150, 100, 100, 200, 150, 150,
         200]
-
-  addHeader(headers = headers, ratio = ratio, tooltip = "items",
-    code = sortTrades, dialog = dialog)
   var
-    currentItemIndex: Natural = 0
-    indexesList: seq[Natural] = @[]
-    currentRow: Positive = 1
-  let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-  saveButtonStyle()
-  setButtonStyle(field = borderColor, a = 0)
-  try:
-    setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-  except:
-    dialog = setError(message = "Can't set table color")
-    return
-  setButtonStyle(field = rounding, value = 0)
-  setButtonStyle(field = border, value = 0)
-  var row: Positive = 1
-  # Show the list of items in the player's ship's cargo
-  showPlayerItems(dialog = dialog, indexesList = indexesList,
-      currentRow = currentRow, row = row, startRow = startRow)
-  currentItemIndex = playerShip.cargo.len + 1
-  # Show the list of items in the base's cargo
-  for i in playerShip.cargo.len + 1..itemsIndexes.high:
-    if row == gameSettings.listsLimit + 1:
-      break
-    try:
-      if itemsIndexes[i] in indexesList or not isBuyable(baseType = baseType,
-          itemIndex = baseCargo[itemsIndexes[i]].protoIndex,
-          baseIndex = baseIndex) or baseCargo[itemsIndexes[i]].amount == 0:
+      currentItemIndex: Natural = 0
+      indexesList: seq[Natural] = @[]
+  table(name = "TradeTable", xScroll = xOffset, headers = headers,
+      ratio = ratio, tableTooltip = "items", tableHeight = tableHeight,
+      headerCode = sortTrades):
+    # Show the list of items in the player's ship's cargo
+    showPlayerItems(dialog = dialog, indexesList = indexesList)
+    currentItemIndex = playerShip.cargo.len + 1
+    # Show the list of items in the base's cargo
+    for i in playerShip.cargo.len + 1..itemsIndexes.high:
+      try:
+        if itemsIndexes[i] in indexesList or not isBuyable(baseType = baseType,
+            itemIndex = baseCargo[itemsIndexes[i]].protoIndex,
+            baseIndex = baseIndex) or baseCargo[itemsIndexes[i]].amount == 0:
+          continue
+      except:
+        dialog = setError(message = "Can't check if item is buyable2.")
+        return
+      let
+        protoIndex: Natural = baseCargo[itemsIndexes[i]].protoIndex
+        itemType: string = try:
+            if itemsList[protoIndex].showType.len == 0:
+              itemsList[protoIndex].itemType
+            else:
+              itemsList[protoIndex].showType
+          except:
+            dialog = setError(message = "Can't get item type4.")
+            return
+      if typeIndex > 0 and itemType != typesList[typeIndex]:
         continue
-    except:
-      dialog = setError(message = "Can't check if item is buyable2.")
-      return
-    let
-      protoIndex: Natural = baseCargo[itemsIndexes[i]].protoIndex
-      itemType: string = try:
-          if itemsList[protoIndex].showType.len == 0:
-            itemsList[protoIndex].itemType
-          else:
-            itemsList[protoIndex].showType
-        except:
-          dialog = setError(message = "Can't get item type4.")
-          return
-    if typeIndex > 0 and itemType != typesList[typeIndex]:
-      continue
-    let itemName: string = try:
-          itemsList[protoIndex].name
-        except:
-          dialog = setError(message = "Can't get item name2.")
-          return
-    if nameSearch.len > 0 and itemName.toLowerAscii.find(
-        sub = nameSearch.toLowerAscii) == -1:
-      continue
-    if currentRow < startRow:
-      currentRow.inc
-      continue
-    var price: Natural = if baseIndex > 0:
-        skyBases[baseIndex].cargo[itemsIndexes[i]].price
-      else:
-        traderCargo[itemsIndexes[i]].price
-    if eventIndex > -1:
-      if eventsList[eventIndex].eType == doublePrice and eventsList[
-          eventIndex].itemIndex == protoIndex:
-        price *= 2
-    let baseAmount: Natural = (if baseIndex == 0: traderCargo[itemsIndexes[
-        i]].amount else: skyBases[baseIndex].cargo[itemsIndexes[i]].amount)
-    addButton(label = itemName, tooltip = "Show available options of item.",
-      data = i, code = showItemInfo, dialog = dialog)
-    addButton(label = "0", tooltip = "Show available options of item.",
-      data = i, code = showItemInfo, dialog = dialog)
-    addButton(label = $baseAmount, tooltip = "Show available options of item.",
-      data = i, code = showItemInfo, dialog = dialog)
-    addButton(label = $price, tooltip = "Show available options of item.",
-      data = i, code = showItemInfo, dialog = dialog)
-    setButtonStyle(field = textNormal, color = theme.colors[redColor])
-    addButton(label = $(-price), tooltip = "Show available options of item.",
-      data = i, code = showItemInfo, dialog = dialog)
-    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    var durability: int = (if baseIndex == 0: traderCargo[itemsIndexes[
-        i]].durability else: skyBases[baseIndex].cargo[itemsIndexes[i]].durability)
-    var maxDurability: int = (if baseIndex == 0: getItemMaxDurability(
-        item = traderCargo[itemsIndexes[i]]) else: getItemMaxDurability(
-            item = skyBases[baseIndex].cargo[itemsIndexes[i]]))
-    addProgressBar(tooltip = (if baseCargo[itemsIndexes[i]].durability < 100:
-      getItemDamage(item = baseCargo[itemsIndexes[i]])
-      else: "Unused"), value = durability,
-      maxValue = maxDurability, data = i, code = showItemInfo,
-      dialog = dialog)
-    addButton(label = ($skyBases[baseIndex].cargo[itemsIndexes[
-        i]].quality).capitalizeAscii,
-        tooltip = "Show available options of item.", data = i,
-        code = showItemInfo, dialog = dialog)
-    try:
-      addButton(label = $getItemWeight(item = baseCargo[itemsIndexes[i]]) &
-          " kg",
-        tooltip = "Show available options of item.", data = i,
-        code = showItemInfo, dialog = dialog)
-    except:
-      dialog = setError(message = "Can't show weight")
-      return
-    addButton(label = itemType, tooltip = "Show available options of item.",
-      data = i, code = showItemInfo, dialog = dialog)
-    row.inc
-    if row == gameSettings.listsLimit + 1:
-      break
-  restoreButtonStyle()
-  addPagination(page = currentPage, row = row)
+      let itemName: string = try:
+            itemsList[protoIndex].name
+          except:
+            dialog = setError(message = "Can't get item name2.")
+            return
+      if nameSearch.len > 0 and itemName.toLowerAscii.find(
+          sub = nameSearch.toLowerAscii) == -1:
+        continue
+      if not isStartingRow():
+        continue
+      var price: Natural = if baseIndex > 0:
+          skyBases[baseIndex].cargo[itemsIndexes[i]].price
+        else:
+          traderCargo[itemsIndexes[i]].price
+      if eventIndex > -1:
+        if eventsList[eventIndex].eType == doublePrice and eventsList[
+            eventIndex].itemIndex == protoIndex:
+          price *= 2
+      let baseAmount: Natural = (if baseIndex == 0: traderCargo[itemsIndexes[
+          i]].amount else: skyBases[baseIndex].cargo[itemsIndexes[i]].amount)
+      addButton(label = itemName, tooltip = "Show available options of item.",
+        data = i, code = showItemInfo, dialog = dialog)
+      addButton(label = "0", tooltip = "Show available options of item.",
+        data = i, code = showItemInfo, dialog = dialog)
+      addButton(label = $baseAmount, tooltip = "Show available options of item.",
+        data = i, code = showItemInfo, dialog = dialog)
+      addButton(label = $price, tooltip = "Show available options of item.",
+        data = i, code = showItemInfo, dialog = dialog)
+      setButtonStyle(field = textNormal, color = theme.colors[redColor])
+      addButton(label = $(-price), tooltip = "Show available options of item.",
+        data = i, code = showItemInfo, dialog = dialog)
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
+      var durability: int = (if baseIndex == 0: traderCargo[itemsIndexes[
+          i]].durability else: skyBases[baseIndex].cargo[itemsIndexes[i]].durability)
+      var maxDurability: int = (if baseIndex == 0: getItemMaxDurability(
+          item = traderCargo[itemsIndexes[i]]) else: getItemMaxDurability(
+              item = skyBases[baseIndex].cargo[itemsIndexes[i]]))
+      addProgressBar(tooltip = (if baseCargo[itemsIndexes[i]].durability < 100:
+        getItemDamage(item = baseCargo[itemsIndexes[i]])
+        else: "Unused"), value = durability,
+        maxValue = maxDurability, data = i, code = showItemInfo,
+        dialog = dialog)
+      addButton(label = ($skyBases[baseIndex].cargo[itemsIndexes[
+          i]].quality).capitalizeAscii,
+          tooltip = "Show available options of item.", data = i,
+          code = showItemInfo, dialog = dialog)
+      try:
+        addButton(label = $getItemWeight(item = baseCargo[itemsIndexes[i]]) &
+            " kg",
+          tooltip = "Show available options of item.", data = i,
+          code = showItemInfo, dialog = dialog)
+      except:
+        dialog = setError(message = "Can't show weight")
+        return
+      addButton(label = itemType, tooltip = "Show available options of item.",
+        data = i, code = showItemInfo, dialog = dialog)
+      if isLastRow():
+        break
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - 170, state = state)
