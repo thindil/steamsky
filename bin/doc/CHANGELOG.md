@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Better looking the list of known bases
 - Better looking the list of known events
 - Better looking the list of accepted missions
+- Better looking the trades screen
 
 ### Removed
 - Old icon used to manage the player's ship's engines' power
