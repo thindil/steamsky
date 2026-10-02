@@ -168,22 +168,7 @@ proc sortRecruits(sortAsc, sortDesc: RecruitsSortOrders;
   for recruit in localRecruits:
     recruitsIndexes.add(y = recruit.id)
 
-const
-  headers: array[6, HeaderData[RecruitsSortOrders]] = [
-    HeaderData[RecruitsSortOrders](label: "Name", sortAsc: nameAsc,
-        sortDesc: nameDesc),
-    HeaderData[RecruitsSortOrders](label: "Gender", sortAsc: genderAsc,
-        sortDesc: genderDesc),
-    HeaderData[RecruitsSortOrders](label: "Faction", sortAsc: factionAsc,
-        sortDesc: factionDesc),
-    HeaderData[RecruitsSortOrders](label: "Base cost", sortAsc: priceAsc,
-        sortDesc: priceDesc),
-    HeaderData[RecruitsSortOrders](label: "Highest stat", sortAsc: attributeAsc,
-        sortDesc: attributeDesc),
-    HeaderData[RecruitsSortOrders](label: "Highest skill", sortAsc: skillAsc,
-        sortDesc: skillDesc)]
-  ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
-  contractLength: array[5, string] = ["Pernament", "100 days", "30 days",
+const contractLength: array[5, string] = ["Pernament", "100 days", "30 days",
       "20 days", "10 days"]
 
 var
@@ -485,6 +470,21 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "RecruitsGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
+    const
+      headers: array[6, HeaderData[RecruitsSortOrders]] = [
+        HeaderData[RecruitsSortOrders](label: "Name", sortAsc: nameAsc,
+            sortDesc: nameDesc),
+        HeaderData[RecruitsSortOrders](label: "Gender", sortAsc: genderAsc,
+            sortDesc: genderDesc),
+        HeaderData[RecruitsSortOrders](label: "Faction", sortAsc: factionAsc,
+            sortDesc: factionDesc),
+        HeaderData[RecruitsSortOrders](label: "Base cost", sortAsc: priceAsc,
+            sortDesc: priceDesc),
+        HeaderData[RecruitsSortOrders](label: "Highest stat", sortAsc: attributeAsc,
+            sortDesc: attributeDesc),
+        HeaderData[RecruitsSortOrders](label: "Highest skill", sortAsc: skillAsc,
+            sortDesc: skillDesc)]
+      ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
     addHeader(headers = headers, ratio = ratio, tooltip = "recruits",
       code = sortRecruits, dialog = dialog)
     var currentRow: Positive = 1
