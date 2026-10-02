@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Giving orders to crew members
 - Issues with progress bars and scroll bars on Windows (GitHub issue #105)
 - Size of last messages window in the trading and looting screens
+- Showing last messages in the bases looting screen
 
 ## [12.7] - 2026-09-06
 
