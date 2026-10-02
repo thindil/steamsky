@@ -301,6 +301,8 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show the item's info.")
 
+var xOffset: Natural = 0
+
 proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the loot UI
@@ -331,45 +333,27 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # Show the list of items to loot
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
       (if showOptions: 45 else: 0) - 70
-  setLayoutRowDynamic(height = tableHeight, cols = 1)
-  group(title = "LootGroup", flags = {windowNoFlags}):
-    if dialog != none:
-      windowDisable()
-
-    const
-      headers: array[6, HeaderData[ItemsSortOrders]] = [
-        HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
-            sortDesc: nameDesc),
-        HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc,
-            sortDesc: typeDesc),
-        HeaderData[ItemsSortOrders](label: "Durability", sortAsc: durabilityAsc,
-            sortDesc: durabilityDesc),
-        HeaderData[ItemsSortOrders](label: "Quality", sortAsc: qualityAsc,
-            sortDesc: qualityDesc),
-        HeaderData[ItemsSortOrders](label: "Owned", sortAsc: ownedAsc,
-            sortDesc: ownedDesc),
-        HeaderData[ItemsSortOrders](label: "Available", sortAsc: availableAsc,
-            sortDesc: availableDesc)]
-      ratio: array[5, cfloat] = [300.cfloat, 200, 200, 200, 200]
-
-    addHeader(headers = headers, ratio = ratio, tooltip = "items",
-      code = sortLoot, dialog = dialog)
-    var
+  const
+    headers: array[6, HeaderData[ItemsSortOrders]] = [
+      HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
+          sortDesc: nameDesc),
+      HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc,
+          sortDesc: typeDesc),
+      HeaderData[ItemsSortOrders](label: "Durability", sortAsc: durabilityAsc,
+          sortDesc: durabilityDesc),
+      HeaderData[ItemsSortOrders](label: "Quality", sortAsc: qualityAsc,
+          sortDesc: qualityDesc),
+      HeaderData[ItemsSortOrders](label: "Owned", sortAsc: ownedAsc,
+          sortDesc: ownedDesc),
+      HeaderData[ItemsSortOrders](label: "Available", sortAsc: availableAsc,
+          sortDesc: availableDesc)]
+    ratio: array[5, cfloat] = [300.cfloat, 200, 200, 200, 200]
+  var
       currentItemIndex: Natural = 0
       indexesList: seq[Natural] = @[]
-      currentRow: Positive = 1
-    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-    saveButtonStyle()
-    setButtonStyle(field = borderColor, a = 0)
-    try:
-      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    except:
-      dialog = setError(message = "Can't set table color")
-      return
-    setButtonStyle(field = rounding, value = 0)
-    setButtonStyle(field = border, value = 0)
-    var row: Positive = 1
+  table(name = "LootTable", xScroll = xOffset, headers = headers,
+      ratio = ratio, tableTooltip = "items", tableHeight = tableHeight,
+      headerCode = sortLoot):
     # Show the list of items in the player's ship's cargo
     for index, i in itemsIndexes:
       currentItemIndex.inc
@@ -396,8 +380,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
         continue
       let itemName: string = getItemName(item = playerShip.cargo[i],
           damageInfo = false, toLower = false, moreInfo = false)
-      if currentRow < startRow:
-        currentRow.inc
+      if not isStartingRow():
         continue
       var baseAmount: Natural = 0
       try:
@@ -424,14 +407,11 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
         code = showItemInfo, dialog = dialog)
       addButton(label = $baseAmount, tooltip = "Show available options of item.",
         data = index, code = showItemInfo, dialog = dialog)
-      row.inc
-      if row == gameSettings.listsLimit + 1:
+      if isLastRow():
         break
     currentItemIndex = playerShip.cargo.len + 1
     # Show the list of items in the base's cargo
     for i in playerShip.cargo.len + 1..itemsIndexes.high:
-      if row == gameSettings.listsLimit + 1:
-        break
       if itemsIndexes[i] in indexesList:
         continue
       let
@@ -451,8 +431,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
           except:
             dialog = setError(message = "Can't get item name2.")
             return
-      if currentRow < startRow:
-        currentRow.inc
+      if not isStartingRow():
         continue
       let baseAmount: Natural = (if baseIndex == 0: traderCargo[itemsIndexes[
           i]].amount else: skyBases[baseIndex].cargo[itemsIndexes[i]].amount)
@@ -476,9 +455,8 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
         data = i, code = showItemInfo, dialog = dialog)
       addButton(label = $baseAmount, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
-      row.inc
-    restoreButtonStyle()
-    addPagination(page = currentPage, row = row)
+      if isLastRow():
+        break
   # Show the last in-game messages
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - (if showOptions: 45 else: 0) - 125, state = state)
