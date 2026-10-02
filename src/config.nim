@@ -130,7 +130,9 @@ proc initGameSettingsRecord*(autoRest: bool = true;
     messagesOrder: MessagesOrder = olderFirst; autoAskForBases: bool = false;
     autoAskForEvents: bool = false; showTooltips: bool = true;
     showLastMessages: bool = true; messagesPosition: Natural = 256;
-    fullScreen: bool = false): GameSettingsRecord {.raises: [], tags: [],
+    fullScreen: bool = false; autoCloseMessagesTime: Natural = 6;
+    autoSave: AutoSaveTime = none; topicsPosition: Natural = 200;
+    showNumbers: bool = false): GameSettingsRecord {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for the game's configuration
   ##
@@ -165,6 +167,11 @@ proc initGameSettingsRecord*(autoRest: bool = true;
   ## * showLastMessages      - Show the last messages window below the map
   ## * messagesPosition      - The height of the last messages window
   ## * fullScreen            - Run the game in full screen mode
+  ## * autoCloseMessagesTime - The amount of seconds after which messages' dialogs
+  ##                           will be closed
+  ## * autoSave              - How often the game should save itself automatically
+  ## * topicsPosition        - The height of the topics' window position in help window
+  ## * showNumbers           - If true, show numbers for speed, skills, attributes, etc.
   ##
   ## Returns the new structure with information about the game's configuration
   return GameSettingsRecord(autoRest: autoRest, undockSpeed: undockSpeed,
@@ -178,7 +185,9 @@ proc initGameSettingsRecord*(autoRest: bool = true;
       autoAskForBases: autoAskForBases, autoAskForEvents: autoAskForEvents,
       showTooltips: showTooltips, showLastMessages: showLastMessages,
       messagesPosition: messagesPosition, fullScreen: fullScreen,
-      listsLimit: 10, waitMinutes: 1)
+      autoCloseMessagesTime: autoCloseMessagesTime, autoSave: autoSave,
+      topicsPosition: topicsPosition, showNumbers: showNumbers, listsLimit: 10,
+      waitMinutes: 1)
 
 type
   BonusType* = range[0.0..5.0]
