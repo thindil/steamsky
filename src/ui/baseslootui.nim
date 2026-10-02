@@ -481,4 +481,4 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
     addPagination(page = currentPage, row = row)
   # Show the last in-game messages
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      tableHeight - 170, state = state)
+      tableHeight - (if showOptions: 45 else: 0) - 125, state = state)
