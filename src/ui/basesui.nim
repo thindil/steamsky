@@ -326,14 +326,6 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if dialog == baseActionDialog:
     showRepairMenu(dialog = dialog, state = state)
 
-const
-  recipesHeaders: array[2, HeaderData[BaseSortOrders]] = [
-    HeaderData[BaseSortOrders](label: "Action", sortAsc: nameAsc,
-        sortDesc: nameDesc),
-    HeaderData[BaseSortOrders](label: "Cost", sortAsc: costAsc,
-        sortDesc: costDesc)]
-  recipesRatio: array[2, cfloat] = [400.cfloat, 200]
-
 proc showRecipeMenu(dialog: var GameDialog;
     state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the menu for the selected crafting recipe
@@ -383,12 +375,19 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
       colorLabel(str = text, color = theme.colors[goldenColor])
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
       20 - labelHeight - (if showOptions: editHeight else: 0)
+  const
+    headers: array[2, HeaderData[BaseSortOrders]] = [
+      HeaderData[BaseSortOrders](label: "Action", sortAsc: nameAsc,
+          sortDesc: nameDesc),
+      HeaderData[BaseSortOrders](label: "Cost", sortAsc: costAsc,
+          sortDesc: costDesc)]
+    ratio: array[2, cfloat] = [400.cfloat, 200]
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "RecipeGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
-    addHeader(headers = recipesHeaders, ratio = recipesRatio,
-        tooltip = "actions", code = sortItems, dialog = dialog)
+    addHeader(headers = headers, ratio = ratio, tooltip = "actions",
+        code = sortItems, dialog = dialog)
     let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
     var currentRow, row: Positive = 1
     saveButtonStyle()
