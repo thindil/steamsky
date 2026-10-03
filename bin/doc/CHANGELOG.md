@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Issues with progress bars and scroll bars on Windows (GitHub issue #105)
 - Size of last messages window in the trading and looting screens
 - Showing last messages in the bases looting screen
+- Showing last messages in the list of recruits in bases
 
 ## [12.7] - 2026-09-06
 
