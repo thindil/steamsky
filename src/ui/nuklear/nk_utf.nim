@@ -68,29 +68,3 @@ proc nkUtfDecode*(c: string; u: var nk_rune): Natural {.raises: [],
   var len: int = 0
   u = nkUtfDecodeByte(c = c.toRunes[0], i = len)
   return nkUtfValidate(u = u, i = len)
-
-# --------------------------------
-# Temporary exports for old C code
-# --------------------------------
-
-proc nk_utf_validate(u: var nk_rune; i: cint): cint {.raises: [], tags: [],
-    contractual, exportc.} =
-  ## Temporary C binding. Internal use only
-  ##
-  ## * u - the rune to validate
-  ## * i - the index of the rune
-  ##
-  ## Returns i
-  return nkUtfValidate(u = u, i = i.int).cint
-
-proc nk_utf_decode(c: pointer; u: var nk_rune; clen: cint): cint {.raises: [],
-  tags: [], contractual, exportc, ruleOff: "params".} =
-  ## Temporary C binding. Internal use only
-  ##
-  ## * c    - the text to decode
-  ## * u    - the UTF code
-  ## * clen - the lenght of the text
-  ##
-  ## Returns the length of the rune in bytes
-  let text: cstring = cast[cstring](c)
-  return nkUtfDecode(c = $text, u = u).cint
