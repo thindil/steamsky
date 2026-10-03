@@ -514,4 +514,4 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
         break
   # Show the last in-game messages
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      tableHeight - 80, state = state)
+      tableHeight - 95, state = state)
