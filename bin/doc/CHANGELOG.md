@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Better looking the list of accepted missions
 - Better looking the trades screen
 - Better looking the looting bases screen
+- Better looking the list of recruits in bases
 
 ### Removed
 - Old icon used to manage the player's ship's engines' power
