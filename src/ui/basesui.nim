@@ -367,25 +367,26 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
       options = true):
     return
   baseState = state
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
+  # Show advanced options if needed
+  if showOptions:
+    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.1.cfloat, 0.3])
+    label(str = "Name:")
+    editString(text = nameSearch, maxLen = 64,
+        tooltip = "Search for the selected recipe.")
+  # Show information about money owned by the player
+  setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len,
+      ratio = moneyWidth)
+  for index, text in moneyText:
+    if index mod 2 == 0:
+      label(str = text)
+    else:
+      colorLabel(str = text, color = theme.colors[goldenColor])
+  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
+      20 - labelHeight - (if showOptions: editHeight else: 0)
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "RecipeGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
-    # Show advanced options if needed
-    if showOptions:
-      setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.1.cfloat, 0.3])
-      label(str = "Name:")
-      editString(text = nameSearch, maxLen = 64,
-          tooltip = "Search for the selected recipe.")
-    # Show information about money owned by the player
-    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len,
-        ratio = moneyWidth)
-    for index, text in moneyText:
-      if index mod 2 == 0:
-        label(str = text)
-      else:
-        colorLabel(str = text, color = theme.colors[goldenColor])
     addHeader(headers = recipesHeaders, ratio = recipesRatio,
         tooltip = "actions", code = sortItems, dialog = dialog)
     let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
