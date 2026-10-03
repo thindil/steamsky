@@ -453,6 +453,8 @@ proc setRecruitInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [],
   recruitIndex = data
   dialog = recruitDialog
 
+var xOffset: Natural = 0
+
 proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the recruits UI
@@ -466,43 +468,26 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   # Show the list of recruits to hire
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
-  setLayoutRowDynamic(height = tableHeight, cols = 1)
-  group(title = "RecruitsGroup", flags = {windowNoFlags}):
-    if dialog != none:
-      windowDisable()
-    const
-      headers: array[6, HeaderData[RecruitsSortOrders]] = [
-        HeaderData[RecruitsSortOrders](label: "Name", sortAsc: nameAsc,
-            sortDesc: nameDesc),
-        HeaderData[RecruitsSortOrders](label: "Gender", sortAsc: genderAsc,
-            sortDesc: genderDesc),
-        HeaderData[RecruitsSortOrders](label: "Faction", sortAsc: factionAsc,
-            sortDesc: factionDesc),
-        HeaderData[RecruitsSortOrders](label: "Base cost", sortAsc: priceAsc,
-            sortDesc: priceDesc),
-        HeaderData[RecruitsSortOrders](label: "Highest stat", sortAsc: attributeAsc,
-            sortDesc: attributeDesc),
-        HeaderData[RecruitsSortOrders](label: "Highest skill", sortAsc: skillAsc,
-            sortDesc: skillDesc)]
-      ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
-    addHeader(headers = headers, ratio = ratio, tooltip = "recruits",
-      code = sortRecruits, dialog = dialog)
-    var currentRow: Positive = 1
-    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-    saveButtonStyle()
-    setButtonStyle(field = borderColor, a = 0)
-    try:
-      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    except:
-      dialog = setError(message = "Can't set table color")
-      return
-    setButtonStyle(field = rounding, value = 0)
-    setButtonStyle(field = border, value = 0)
-    var row: Positive = 1
+  const
+    headers: array[6, HeaderData[RecruitsSortOrders]] = [
+      HeaderData[RecruitsSortOrders](label: "Name", sortAsc: nameAsc,
+          sortDesc: nameDesc),
+      HeaderData[RecruitsSortOrders](label: "Gender", sortAsc: genderAsc,
+          sortDesc: genderDesc),
+      HeaderData[RecruitsSortOrders](label: "Faction", sortAsc: factionAsc,
+          sortDesc: factionDesc),
+      HeaderData[RecruitsSortOrders](label: "Base cost", sortAsc: priceAsc,
+          sortDesc: priceDesc),
+      HeaderData[RecruitsSortOrders](label: "Highest stat", sortAsc: attributeAsc,
+          sortDesc: attributeDesc),
+      HeaderData[RecruitsSortOrders](label: "Highest skill", sortAsc: skillAsc,
+          sortDesc: skillDesc)]
+    ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
+  table(name = "RecruitsTable", xScroll = xOffset, headers = headers,
+      ratio = ratio, tableTooltip = "recruits", tableHeight = tableHeight,
+      headerCode = sortRecruits):
     for index in recruitsIndexes:
-      if currentRow < startRow:
-        currentRow.inc
+      if not isStartingRow():
         continue
       addButton(label = skyBases[setui.baseIndex].recruits[index].name,
           tooltip = "Show the recruit's details.", data = index,
@@ -525,8 +510,8 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = getHighestSkill(baseIndex = baseIndex,
           memberIndex = index), tooltip = "Show recruit's details",
           data = index, code = setRecruitInfo, dialog = dialog)
-    restoreButtonStyle()
-    addPagination(page = currentPage, row = row)
+      if isLastRow():
+        break
   # Show the last in-game messages
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - 80, state = state)
