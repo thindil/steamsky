@@ -132,7 +132,9 @@ proc initGameSettingsRecord*(autoRest: bool = true;
     showLastMessages: bool = true; messagesPosition: Natural = 256;
     fullScreen: bool = false; autoCloseMessagesTime: Natural = 6;
     autoSave: AutoSaveTime = none; topicsPosition: Natural = 200;
-    showNumbers: bool = false): GameSettingsRecord {.raises: [], tags: [],
+    showNumbers: bool = false; rightButton: bool = false;
+    listsLimit: Positive = 25; waitMinutes: Positive = 1;
+    autoDestination: bool = true): GameSettingsRecord {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for the game's configuration
   ##
@@ -172,6 +174,11 @@ proc initGameSettingsRecord*(autoRest: bool = true;
   ## * autoSave              - How often the game should save itself automatically
   ## * topicsPosition        - The height of the topics' window position in help window
   ## * showNumbers           - If true, show numbers for speed, skills, attributes, etc.
+  ## * rightButton           - If true, use the right mouse button for show menus in various lists
+  ## * listsLimit            - The amount of items displayed in various lists
+  ## * waitMinutes           - The amount of in-game minutes which pass when the player press Wait button
+  ## * autoDestination       - If true, automatically set the player's ship destination
+  ##                           after accepting a mission in a base
   ##
   ## Returns the new structure with information about the game's configuration
   return GameSettingsRecord(autoRest: autoRest, undockSpeed: undockSpeed,
@@ -186,8 +193,9 @@ proc initGameSettingsRecord*(autoRest: bool = true;
       showTooltips: showTooltips, showLastMessages: showLastMessages,
       messagesPosition: messagesPosition, fullScreen: fullScreen,
       autoCloseMessagesTime: autoCloseMessagesTime, autoSave: autoSave,
-      topicsPosition: topicsPosition, showNumbers: showNumbers, listsLimit: 10,
-      waitMinutes: 1)
+      topicsPosition: topicsPosition, showNumbers: showNumbers,
+      rightButton: rightButton, listsLimit: listsLimit,
+      waitMinutes: waitMinutes, autoDestination: autoDestination)
 
 type
   BonusType* = range[0.0..5.0]
