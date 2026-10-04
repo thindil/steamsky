@@ -377,13 +377,12 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
       colorLabel(str = text, color = theme.colors[goldenColor])
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
       20 - labelHeight - (if showOptions: editHeight else: 0)
-  const
-    headers: array[2, HeaderData[BaseSortOrders]] = [
+  const headers: array[2, HeaderData[BaseSortOrders]] = [
       HeaderData[BaseSortOrders](label: "Action", sortAsc: nameAsc,
           sortDesc: nameDesc),
       HeaderData[BaseSortOrders](label: "Cost", sortAsc: costAsc,
           sortDesc: costDesc)]
-    ratio: array[2, cfloat] = [400.cfloat, 200]
+  let ratio: array[2, cfloat] = [(windowWidth * 0.6).cfloat, (windowWidth * 0.3)]
   table(name = "RecipesTable", xScroll = xOffset, headers = headers,
       ratio = ratio, tableTooltip = "recipes", tableHeight = tableHeight,
       headerCode = sortItems):
