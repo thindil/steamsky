@@ -163,6 +163,8 @@ const
         sortDesc: timeDesc)]
   ratio: array[3, cfloat] = [400.cfloat, 200, 200]
 
+var xOffset: Natural = 0
+
 proc formatTime(time: Natural): string {.raises: [], tags: [], contractual.} =
   ## Format the amount of time needed for the action
   ##
@@ -382,24 +384,9 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
       HeaderData[BaseSortOrders](label: "Cost", sortAsc: costAsc,
           sortDesc: costDesc)]
     ratio: array[2, cfloat] = [400.cfloat, 200]
-  setLayoutRowDynamic(height = tableHeight, cols = 1)
-  group(title = "RecipeGroup", flags = {windowNoFlags}):
-    if dialog != none:
-      windowDisable()
-    addHeader(headers = headers, ratio = ratio, tooltip = "actions",
-        code = sortItems, dialog = dialog)
-    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-    var currentRow, row: Positive = 1
-    saveButtonStyle()
-    setButtonStyle(field = borderColor, a = 0)
-    try:
-      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    except:
-      dialog = setError(message = "Can't set table color")
-      return
-    setButtonStyle(field = rounding, value = 0)
-    setButtonStyle(field = border, value = 0)
+  table(name = "RecipesTable", xScroll = xOffset, headers = headers,
+      ratio = ratio, tableTooltip = "recipes", tableHeight = tableHeight,
+      headerCode = sortItems):
     for action in actionsList:
       try:
         if nameSearch.len > 0 and not itemsList[recipesList[
@@ -409,20 +396,15 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't check name of the recipe")
         return
-      if currentRow < startRow:
-        currentRow.inc
+      if not isStartingRow():
         continue
       addButton(label = action.name, tooltip = "Show available options",
           data = action.id, code = setActionMenu, dialog = dialog)
       addButton(label = $action.cost & " " & moneyName,
           tooltip = "Show available options", data = action.id,
           code = setActionMenu, dialog = dialog)
-      row.inc
-      if row == gameSettings.listsLimit + 1:
+      if isLastRow():
         break
-    restoreButtonStyle()
-    restoreButtonStyle()
-    addPagination(page = currentPage, row = row)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - 80, state = state)
   if dialog == baseActionDialog:
