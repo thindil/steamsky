@@ -247,18 +247,7 @@ type
     helpFont, interfaceFont, mapFont
 
 const
-  defaultGameSettings*: GameSettingsRecord = GameSettingsRecord(autoRest: true,
-    undockSpeed: fullSpeed, autoCenter: true, autoReturn: true,
-    autoFinish: true, lowFuel: 100, lowDrinks: 50, lowFood: 25,
-    autoMoveStop: never, windowWidth: 800, windowHeight: 600,
-    messagesLimit: 500, savedMessages: 10, helpFontSize: 14, mapFontSize: 16,
-    interfaceFontSize: 14, interfaceTheme: "steamsky",
-    messagesOrder: olderFirst, autoAskForBases: false,
-    autoAskForEvents: false,
-    showTooltips: true, showLastMessages: true, messagesPosition: 256,
-    fullScreen: false, autoCloseMessagesTime: 6, autoSave: none,
-    topicsPosition: 200, showNumbers: false, rightButton: false, listsLimit: 25,
-    waitMinutes: 1, autoDestination: true)
+  defaultGameSettings*: GameSettingsRecord = initGameSettingsRecord()
     ## The default setting for the game
 
   defaultNewGameSettings*: NewGameRecord = NewGameRecord(playerName: "Laeran",
