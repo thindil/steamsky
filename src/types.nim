@@ -201,7 +201,7 @@ type
   GoalTargetIndex* = string
     ## Used to store prototypes of goals' targets indexes
 
-template typeGetterSetter(baseType: typedesc; varName, name: untyped;
+template typeGetterSetter*(baseType: typedesc; varName, name: untyped;
     typ: typedesc) =
   ## Set the getter for a field of ModuleData type
   ##
