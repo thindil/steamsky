@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [12.8] - 2026-10-04
 
 ### Changed
 - Icon used for showing more options in various places. Author: Lorc
