@@ -161,7 +161,7 @@ const
         sortDesc: costDesc),
     HeaderData[BaseSortOrders](label: "Time", sortAsc: timeAsc,
         sortDesc: timeDesc)]
-  ratio: array[3, cfloat] = [400.cfloat, 200, 200]
+  ratio: array[3, cfloat] = [400.cfloat, 200, 150]
 
 var xOffset: Natural = 0
 
