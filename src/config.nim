@@ -85,10 +85,10 @@ type
     ## * waitMinutes           - The amount of in-game minutes which pass when the player press Wait button
     ## * autoDestination       - If true, automatically set the player's ship destination
     ##                           after accepting a mission in a base
-    autoRest*: bool
-    undockSpeed*: ShipSpeed
-    autoCenter*: bool
-    autoReturn*: bool
+    autoRest: bool
+    undockSpeed: ShipSpeed
+    autoCenter: bool
+    autoReturn: bool
     autoFinish*: bool
     lowFuel*: Natural
     lowDrinks*: Natural
@@ -196,6 +196,15 @@ proc initGameSettingsRecord*(autoRest: bool = true;
       topicsPosition: topicsPosition, showNumbers: showNumbers,
       rightButton: rightButton, listsLimit: listsLimit,
       waitMinutes: waitMinutes, autoDestination: autoDestination)
+
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = autoRest, typ = bool)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = undockSpeed, typ = ShipSpeed)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = autoCenter, typ = bool)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = autoReturn, typ = bool)
 
 type
   BonusType* = range[0.0..5.0]
