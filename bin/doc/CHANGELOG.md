@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Better looking list of the player's ship's repair's actions in bases
 
+### Fixed
+- Typo in changelog
+
 ## [12.8] - 2026-10-04
 
 ### Changed
