@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Better looking list of the player's ship's repair's actions in bases
+- Better looking list of the wounded crew members in bases
 
 ### Fixed
 - Typo in changelog
