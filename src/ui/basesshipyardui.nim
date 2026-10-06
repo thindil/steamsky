@@ -1047,6 +1047,7 @@ var
     HeaderData[ModulesSortOrders](label: "Cost", sortAsc: priceAsc,
         sortDesc: priceDesc)]
   hasOptions: bool = true
+  xOffset: Natural = 0
 
 proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -1113,29 +1114,13 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
         tooltip = "Enter a name of a module which you looking for")
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
       80 - (2 * labelHeight) - tabHeight - (if showOptions: 45 else: 0)
-  setLayoutRowDynamic(height = tableHeight, cols = 1)
-  group(title = "ShipyardGroup", flags = {windowNoFlags}):
-    if dialog != none:
-      windowDisable()
+  const ratio: array[5, cfloat] = [300.cfloat, 200, 200, 200, 200]
+  table(name = "ShipyardTable", xScroll = xOffset, headers = headers,
+      ratio = ratio, tableTooltip = "modules", tableHeight = tableHeight,
+      headerCode = sortModules):
     # Show the list of modules
-    const ratio: array[5, cfloat] = [300.cfloat, 200, 200, 200, 200]
-    addHeader(headers = headers, ratio = ratio, tooltip = "items",
-      code = sortModules, dialog = dialog)
-    saveButtonStyle()
-    setButtonStyle(field = borderColor, a = 0)
-    try:
-      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    except:
-      dialog = setError(message = "Can't set table color")
-      return
-    setButtonStyle(field = rounding, value = 0)
-    setButtonStyle(field = border, value = 0)
-    var currentRow, row: Positive = 1
-    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
     for index in modulesIndexes:
-      if currentRow < startRow:
-        currentRow.inc
+      if not isStartingRow():
         continue
       # Show modules to install
       if currentTab == 0:
@@ -1200,8 +1185,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
             continue
         except:
           dialog = setError(message = "Can't check module type.")
-        if currentRow < startRow:
-          currentRow.inc
+        if not isStartingRow():
           continue
         addButton(label = playerShip.modules[index].name,
             tooltip = "Show the module's info", data = index,
@@ -1243,10 +1227,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
           dialog = setError(message = "Can't count cost of player's ship module.")
         addButton(label = $cost, tooltip = "Show the module's info",
             data = index, code = setRemoveInfo, dialog = dialog)
-      row.inc
-      if row == gameSettings.listsLimit + 1:
+      if isLastRow():
         break
-    restoreButtonStyle()
-    addPagination(page = currentPage, row = row)
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - 200, state = state)
