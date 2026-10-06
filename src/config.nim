@@ -89,10 +89,10 @@ type
     undockSpeed: ShipSpeed
     autoCenter: bool
     autoReturn: bool
-    autoFinish*: bool
-    lowFuel*: Natural
-    lowDrinks*: Natural
-    lowFood*: Natural
+    autoFinish: bool
+    lowFuel: Natural
+    lowDrinks: Natural
+    lowFood: Natural
     autoMoveStop*: AutoMoveBreak
     windowWidth*: Positive
     windowHeight*: Positive
@@ -205,6 +205,14 @@ typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
     name = autoCenter, typ = bool)
 typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
     name = autoReturn, typ = bool)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = autoFinish, typ = bool)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = lowFuel, typ = Natural)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = lowDrinks, typ = Natural)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = lowFood, typ = Natural)
 
 type
   BonusType* = range[0.0..5.0]
