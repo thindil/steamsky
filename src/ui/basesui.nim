@@ -197,19 +197,20 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
   baseState = state
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
+  # Show information about money owned by the player
+  setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len,
+      ratio = moneyWidth)
+  for index, text in moneyText:
+    if index mod 2 == 0:
+      label(str = text)
+    else:
+      colorLabel(str = text, color = theme.colors[goldenColor])
+  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
+      20 - labelHeight
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "HealGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
-    # Show information about money owned by the player
-    setLayoutRowStatic(height = labelHeight, cols = moneyWidth.len,
-        ratio = moneyWidth)
-    for index, text in moneyText:
-      if index mod 2 == 0:
-        label(str = text)
-      else:
-        colorLabel(str = text, color = theme.colors[goldenColor])
     addHeader(headers = headers, ratio = ratio, tooltip = "actions",
       code = sortItems, dialog = dialog)
     let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
