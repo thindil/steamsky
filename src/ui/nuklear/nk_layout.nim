@@ -26,7 +26,7 @@
 ## Provides code related to the widgets' layout in nuklear library
 
 import contracts
-import nk_types, nk_context, nk_draw
+import nk_types, nk_context
 
 # ---------------------
 # Procedures parameters
@@ -56,89 +56,6 @@ proc nk_layout_space_end(ctx) {.importc, cdecl, raises: [], tags: [], contractua
 # -------------------
 # High level bindings
 # -------------------
-
-proc nkPanelLayout(ctx: Context; win: Window; height: float;
-    cols: int) {.raises: [NuklearException], tags: [RootEffect], contractual.} =
-  ## Set the panel layout.  Internal use only
-  ##
-  ## * ctx    - the Nuklear context
-  ## * height - the height in pixels of each row
-  ## * cols   - the amount of columns in each row
-  let
-    layout: ref Panel = win.layout
-    style: Style = ctx.style
-
-  if not (layout.flags and windowMinimized.int).bool:
-    raise newException(exceptn = NuklearException,
-        message = "Window is minimized.")
-  if not (layout.flags and windowHidden.int).bool:
-    raise newException(exceptn = NuklearException,
-        message = "Window is hidden.")
-  if not (layout.flags and windowClosed.int).bool:
-    raise newException(exceptn = NuklearException,
-        message = "Window is closed.")
-
-  # Update the current row and set the current row layout
-  layout.row.index = 0
-  layout.atY += layout.row.height
-  layout.row.columns = cols.cint
-  let itemSpacing: Vec2 = style.window.spacing
-  if height == 0:
-    layout.row.height = max(x = height, y = layout.row.minHeight) + itemSpacing.y
-  else:
-    layout.row.height = height + itemSpacing.y
-
-  layout.row.itemOffset = 0
-  if (layout.flags and windowDynamic.int).bool:
-    # draw background for dynamic panels
-    var background: Rect = Rect()
-    background.x = win.bounds.x
-    background.w = win.bounds.y
-    background.y = layout.atY - 1.0
-    background.h = layout.row.height + 1.0
-    let
-      color: NkColor = if layout.pType == panelTooltip:
-          style.window.tooltipBackground
-        elif layout.pType == panelPopup:
-          style.window.popupBackground
-        else:
-          style.window.background
-    var commBuff: CommandBuffer = win.buffer
-    nkFillRect(b = commBuff, rect = background, rounding = 0.0, c = color)
-
-proc nkRowLayout(ctx: var Context; fmt: LayoutFormat; height: float; cols,
-    width: int) {.raises: [NuklearException], tags: [RootEffect],
-        contractual.} =
-  ## Set the current row layout,  Internal use only
-  ##
-  ## * ctx    - the Nuklear context
-  ## * fmt    - the layout format
-  ## * height - the height in pixels of each row
-  ## * width  - the width in pixels of each column
-  ## * cols   - the amount of columns in each row
-  body:
-    var win: ref Window = ctx.current
-    nkPanelLayout(ctx = ctx, win = win[], height = height, cols = cols)
-    if fmt == dynamic:
-      win.layout.row.rlType = layoutDynamicFixed
-    else:
-      win.layout.row.rlType = layoutStaticFixed
-
-    win.layout.row.ratio = 0
-    win.layout.row.filled = 0
-    win.layout.row.itemOffset = 0
-    win.layout.row.itemWidth = width.float
-    ctx.current = win
-
-proc nkLayoutRowDynamic(ctx: var Context; height: float; cols: int) {.raises: [
-    NuklearException], tags: [RootEffect], contractual, used.} =
-  ## Set the current row layout to dynamic,  Internal use only
-  ##
-  ## * ctx    - the Nuklear context
-  ## * height - the height in pixels of each row
-  ## * cols   - the amount of columns in each row
-  nkRowLayout(ctx = ctx, fmt = dynamic, height = height, cols = cols, width = 0)
-
 proc setLayoutRowDynamic*(height: float; cols: int) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Set the current widgets layout to divide it into selected amount of
