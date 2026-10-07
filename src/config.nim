@@ -93,10 +93,10 @@ type
     lowFuel: Natural
     lowDrinks: Natural
     lowFood: Natural
-    autoMoveStop*: AutoMoveBreak
-    windowWidth*: Positive
-    windowHeight*: Positive
-    messagesLimit*: Natural
+    autoMoveStop: AutoMoveBreak
+    windowWidth: Positive
+    windowHeight: Positive
+    messagesLimit: Natural
     savedMessages*: Natural
     helpFontSize*: Positive
     mapFontSize*: Positive
@@ -213,6 +213,14 @@ typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
     name = lowDrinks, typ = Natural)
 typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
     name = lowFood, typ = Natural)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = autoMoveStop, typ = AutoMoveBreak)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = windowWidth, typ = Positive)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = windowHeight, typ = Positive)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = messagesLimit, typ = Natural)
 
 type
   BonusType* = range[0.0..5.0]
