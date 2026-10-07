@@ -336,6 +336,8 @@ proc setMissionInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [],
   dialog = missionDialog
   setDialog(x = windowWidth / 4)
 
+var xOffset: Natural = 0
+
 proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the UI with the list of available missions in the base
@@ -371,29 +373,11 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
           sortDesc: rewardDesc)]
     ratio: array[6, cfloat] = [300.cfloat, 200, 200, 300, 200, 200]
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 50
-  setLayoutRowDynamic(height = tableHeight, cols = 1)
-  group(title = "MissionsGroup", flags = {windowNoFlags}):
-    if dialog != none:
-      windowDisable()
-    # Show the list of missions
-    addHeader(headers = headers, ratio = ratio, tooltip = "missions",
-      code = sortMissions, dialog = dialog)
-    var currentRow: Positive = 1
-    let startRow: Positive = ((currentPage - 1) * gameSettings.listsLimit) + 1
-    saveButtonStyle()
-    setButtonStyle(field = borderColor, a = 0)
-    try:
-      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
-      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
-    except:
-      dialog = setError(message = "Can't set table color")
-      return
-    setButtonStyle(field = rounding, value = 0)
-    setButtonStyle(field = border, value = 0)
-    var row: Positive = 1
+  table(name = "MissionsTable", xScroll = xOffset, headers = headers,
+      ratio = ratio, tableTooltip = "missions", tableHeight = tableHeight,
+      headerCode = sortMissions):
     for index in missionsIndexes:
-      if currentRow < startRow:
-        currentRow.inc
+      if not isStartingRow():
         continue
       var
         canAccept: bool = true
@@ -472,8 +456,8 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = $((mission.reward.float * mission.multiplier).Natural) &
           " " & moneyName, tooltip = "The base money reward for the mission",
           data = index, code = setMissionInfo, dialog = dialog)
-    restoreButtonStyle()
-    addPagination(page = currentPage, row = row)
+      if isLastRow():
+        break
   # Show the last in-game messages
   showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
       tableHeight - 120, state = state)
