@@ -138,22 +138,6 @@ proc sortMissions(sortAsc, sortDesc: MissionsSortOrders;
   for mission in localMissions:
     missionsIndexes.add(y = mission.id)
 
-const
-  headers: array[6, HeaderData[MissionsSortOrders]] = [
-    HeaderData[MissionsSortOrders](label: "Name", sortAsc: typeAsc,
-        sortDesc: typeDesc),
-    HeaderData[MissionsSortOrders](label: "Distance", sortAsc: distanceAsc,
-        sortDesc: distanceDesc),
-    HeaderData[MissionsSortOrders](label: "Coordinates", sortAsc: coordAsc,
-        sortDesc: coordDesc),
-    HeaderData[MissionsSortOrders](label: "Details", sortAsc: detailsAsc,
-        sortDesc: detailsDesc),
-    HeaderData[MissionsSortOrders](label: "Time limit", sortAsc: timeAsc,
-        sortDesc: timeDesc),
-    HeaderData[MissionsSortOrders](label: "Base reward", sortAsc: rewardAsc,
-        sortDesc: rewardDesc)]
-  ratio: array[6, cfloat] = [300.cfloat, 200, 200, 300, 200, 200]
-
 var
   missionIndex: int = -1
   missionReward, missionPercent: Natural = 0
@@ -371,6 +355,21 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
   label(str = missionsText[0])
   colorLabel(str = missionsText[1], color = theme.colors[goldenColor])
   label(str = missionsText[2])
+  const
+    headers: array[6, HeaderData[MissionsSortOrders]] = [
+      HeaderData[MissionsSortOrders](label: "Name", sortAsc: typeAsc,
+          sortDesc: typeDesc),
+      HeaderData[MissionsSortOrders](label: "Distance", sortAsc: distanceAsc,
+          sortDesc: distanceDesc),
+      HeaderData[MissionsSortOrders](label: "Coordinates", sortAsc: coordAsc,
+          sortDesc: coordDesc),
+      HeaderData[MissionsSortOrders](label: "Details", sortAsc: detailsAsc,
+          sortDesc: detailsDesc),
+      HeaderData[MissionsSortOrders](label: "Time limit", sortAsc: timeAsc,
+          sortDesc: timeDesc),
+      HeaderData[MissionsSortOrders](label: "Base reward", sortAsc: rewardAsc,
+          sortDesc: rewardDesc)]
+    ratio: array[6, cfloat] = [300.cfloat, 200, 200, 300, 200, 200]
   let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 50
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "MissionsGroup", flags = {windowNoFlags}):
