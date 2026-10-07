@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typo in changelog
+- Starting position of an available mission's info dialog
 
 ## [12.8] - 2026-10-04
 
