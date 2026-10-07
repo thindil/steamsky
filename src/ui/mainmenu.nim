@@ -519,8 +519,8 @@ proc setGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   nuklearResizeWin(width = gameSettings.windowWidth,
       height = gameSettings.windowHeight)
   nuklearSetWindowPos(x = windowCentered, y = windowCentered)
-  windowWidth = gameSettings.windowWidth.float
-  windowHeight = gameSettings.windowHeight.float
+  coreui.windowWidth = gameSettings.windowWidth.float
+  coreui.windowHeight = gameSettings.windowHeight.float
   nuklearSetWindowResizable()
   createGameUi(dialog = dialog)
 

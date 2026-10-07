@@ -175,8 +175,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         setRecipeDialog: showSetRecipe, baseDialog: showBaseInfo,
         missionActionDialog: showMissionMenu, mapMenuDialog: showMapMenu,
         setKeyDialog: showKeyDialog]
-  windowWidth = menuWidth.float
-  windowHeight = menuHeight.float
+  coreui.windowWidth = menuWidth.float
+  coreui.windowHeight = menuHeight.float
   var
     redrawTime: float = 1_000.0
   ## The main UI loop
@@ -236,7 +236,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     of quitEvent:
       break
     of sizeChangedEvent:
-      (windowWidth, windowHeight) = nuklearGetWindowSize()
+      (coreui.windowWidth, coreui.windowHeight) = nuklearGetWindowSize()
       redraw = true
     of noEvent:
       redraw = state == loadingGame
