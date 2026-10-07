@@ -350,6 +350,7 @@ proc setMissionInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [],
   ## Returns the modified parameter dialog.
   missionIndex = data
   dialog = missionDialog
+  setDialog(x = windowWidth / 4)
 
 proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
