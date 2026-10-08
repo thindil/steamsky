@@ -19,7 +19,7 @@
 ## etc.
 
 import std/[colors, math, parsecfg, streams, strutils, tables, unicode]
-import contracts, nuklear/nuklear_sdl_renderer
+import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[bases, basestypes, config, crew2, events2, game, game2, maps,
     messages, missions, missions2, shipscrew, shipscargo, shipsmovement,
     stories, types]
@@ -851,14 +851,16 @@ proc zoomMap(dialog: var GameDialog; zoomIn: bool = true) {.raises: [], tags: [
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns parameter dialog, modified if any error happened.
+  {.ruleOff: "assignments".}
   if zoomIn:
-    gameSettings.mapFontSize.inc
+    gameSettings.mapFontSize = gameSettings.mapFontSize + 1
     if gameSettings.mapFontSize > 50:
       gameSettings.mapFontSize = 50
   else:
-    gameSettings.mapFontSize.dec
+    gameSettings.mapFontSize = gameSettings.mapFontSize - 1
     if gameSettings.mapFontSize < 3:
       gameSettings.mapFontSize = 3
+  {.ruleOn: "assignments".}
   try:
     fonts[FontsNames.mapFont] = nuklearLoadFont(font = FontData(
         path: themesList[gameSettings.interfaceTheme].fonts[FontsNames.mapFont],
