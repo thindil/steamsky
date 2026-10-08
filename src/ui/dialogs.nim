@@ -142,9 +142,6 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
       ##
       ## Returns the parameter dialog and state.
       state = endGame
-      nuklearResizeWin(width = menuWidth, height = menuHeight)
-      nuklearSetWindowPos(x = windowCentered, y = windowCentered)
-      nuklearSetWindowResizable(resizable = false)
       closePopup()
       dialog = none
 
