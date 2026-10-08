@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Better looking list of the wounded crew members in bases
 - Better looking list of the modules in bases' shipyards
 - Better looking list of the available missions in bases
+- Better looking pagination buttons in various lists
 
 ### Fixed
 - Typo in changelog
