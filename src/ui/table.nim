@@ -22,37 +22,6 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../config
 import coreui, themes
 
-proc addPagination*(page: var Positive; row: Positive) {.raises: [], tags: [
-    RootEffect], contractual.} =
-  ## Add the buttons previous and next to a table
-  ##
-  ## * page - the current page in the table
-  ## * row  - the number of the last row in the table
-  ##
-  ## Returns modified parameter page
-  var cols: Natural = 0
-  if page > 1:
-    if row < gameSettings.listsLimit + 1:
-      cols = 1
-    else:
-      cols = 2
-  elif row == gameSettings.listsLimit + 1:
-    cols = 1
-  if cols > 0:
-    setLayoutRowDynamic(height = buttonHeight, cols = cols)
-    if page > 1:
-      if row < gameSettings.listsLimit + 1:
-        labelButton(title = "Previous", tooltip = "Previous page"):
-          page.dec
-      else:
-        labelButton(title = "Previous", tooltip = "Previous page"):
-          page.dec
-        labelButton(title = "Next", tooltip = "Next page"):
-          page.inc
-    elif row == gameSettings.listsLimit + 1:
-      labelButton(title = "Next", tooltip = "Next page"):
-        page.inc
-
 type
   HeaderCode*[T] = proc (sortAsc, sortDesc: T;
       dialog: var GameDialog) {.raises: [], contractual.}
@@ -179,6 +148,37 @@ proc isLastRow*(): bool {.raises: [], tags: [], contractual.} =
   if row == gameSettings.listsLimit + 1:
     return true
   return false
+
+proc addPagination(page: var Positive; row: Positive) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Add the buttons previous and next to a table
+  ##
+  ## * page - the current page in the table
+  ## * row  - the number of the last row in the table
+  ##
+  ## Returns modified parameter page
+  var cols: Natural = 0
+  if page > 1:
+    if row < gameSettings.listsLimit + 1:
+      cols = 1
+    else:
+      cols = 2
+  elif row == gameSettings.listsLimit + 1:
+    cols = 1
+  if cols > 0:
+    setLayoutRowDynamic(height = buttonHeight, cols = cols)
+    if page > 1:
+      if row < gameSettings.listsLimit + 1:
+        labelButton(title = "Previous", tooltip = "Previous page"):
+          page.dec
+      else:
+        labelButton(title = "Previous", tooltip = "Previous page"):
+          page.dec
+        labelButton(title = "Next", tooltip = "Next page"):
+          page.inc
+    elif row == gameSettings.listsLimit + 1:
+      labelButton(title = "Next", tooltip = "Next page"):
+        page.inc
 
 template table*(name: string; xScroll: Natural; headers: openArray[
     HeaderData]; ratio: openArray[cfloat]; tableTooltip: string; tableHeight: float;
