@@ -97,10 +97,10 @@ type
     windowWidth: Positive
     windowHeight: Positive
     messagesLimit: Natural
-    savedMessages*: Natural
-    helpFontSize*: Positive
-    mapFontSize*: Positive
-    interfaceFontSize*: Positive
+    savedMessages: Natural
+    helpFontSize: Positive
+    mapFontSize: Positive
+    interfaceFontSize: Positive
     interfaceTheme*: ThemeName
     messagesOrder*: MessagesOrder
     autoAskForBases*: bool
@@ -221,6 +221,14 @@ typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
     name = windowHeight, typ = Positive)
 typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
     name = messagesLimit, typ = Natural)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = savedMessages, typ = Natural)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = helpFontSize, typ = Positive)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = mapFontSize, typ = Positive)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = interfaceFontSize, typ = Positive)
 
 type
   BonusType* = range[0.0..5.0]
