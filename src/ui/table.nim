@@ -157,16 +157,21 @@ proc addPagination(page: var Positive; row: Positive) {.raises: [], tags: [
   ## * row  - the number of the last row in the table
   ##
   ## Returns modified parameter page
-  var cols: Natural = 0
+  var
+    cols: Natural = 0
+    ratio: seq[cfloat] = @[]
   if page > 1:
     if row < gameSettings.listsLimit + 1:
       cols = 1
+      ratio = @[150.cfloat]
     else:
       cols = 2
+      ratio = @[150.cfloat, 150]
   elif row == gameSettings.listsLimit + 1:
     cols = 1
+    ratio = @[150.cfloat]
   if cols > 0:
-    setLayoutRowDynamic(height = buttonHeight, cols = cols)
+    setLayoutRowStatic(height = buttonHeight, cols = cols, ratio = ratio)
     if page > 1:
       if row < gameSettings.listsLimit + 1:
         labelButton(title = "Previous", tooltip = "Previous page"):
