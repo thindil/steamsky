@@ -348,7 +348,8 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show the item's info.")
 
-proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[Natural]) {.raises: [], tags: [ RootEffect], contractual.} =
+proc showPlayerItems(dialog: var GameDialog; indexesList: var seq[
+    Natural]) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the list of items in the player's ship's cargo
   ##
   ## * dialog      - the current in-game dialog displayed on the screen
@@ -502,8 +503,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
   # Show the list of items for trade
-  let tableHeight: float = windowHeight - 140 - (if showOptions: 45 else: 0) -
-      gameSettings.messagesPosition.float
+  let tableHeight: float = gameSettings.windowHeight.float - 140 - (
+      if showOptions: 45 else: 0) - gameSettings.messagesPosition.float
   const
     headers: array[9, HeaderData[ItemsSortOrders]] = [
       HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
@@ -527,8 +528,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     ratio: array[9, cfloat] = [300.cfloat, 150, 150, 100, 100, 200, 150, 150,
         200]
   var
-      currentItemIndex: Natural = 0
-      indexesList: seq[Natural] = @[]
+    currentItemIndex: Natural = 0
+    indexesList: seq[Natural] = @[]
   table(name = "TradeTable", xScroll = xOffset, headers = headers,
       ratio = ratio, tableTooltip = "items", tableHeight = tableHeight,
       headerCode = sortTrades):
@@ -615,5 +616,6 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         data = i, code = showItemInfo, dialog = dialog)
       if isLastRow():
         break
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      tableHeight - (if showOptions: 225 else: 180), state = state)
+  showLastMessages(theme = theme, dialog = dialog,
+      height = gameSettings.windowHeight.float - tableHeight - (
+      if showOptions: 225 else: 180), state = state)
