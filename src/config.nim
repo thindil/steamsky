@@ -101,10 +101,10 @@ type
     helpFontSize: Positive
     mapFontSize: Positive
     interfaceFontSize: Positive
-    interfaceTheme*: ThemeName
-    messagesOrder*: MessagesOrder
-    autoAskForBases*: bool
-    autoAskForEvents*: bool
+    interfaceTheme: ThemeName
+    messagesOrder: MessagesOrder
+    autoAskForBases: bool
+    autoAskForEvents: bool
     showTooltips*: bool
     showLastMessages*: bool
     messagesPosition*: Natural
@@ -229,6 +229,14 @@ typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
     name = mapFontSize, typ = Positive)
 typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
     name = interfaceFontSize, typ = Positive)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = interfaceTheme, typ = ThemeName)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = messagesOrder, typ = MessagesOrder)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = autoAskForBases, typ = bool)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = autoAskForEvents, typ = bool)
 
 type
   BonusType* = range[0.0..5.0]
