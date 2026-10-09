@@ -92,6 +92,12 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   tabHeight = gameSettings.interfaceFontSize.float + 16
   dialogButtonHeight = gameSettings.interfaceFontSize.float + 21
   mapButtonHeight = gameSettings.interfaceFontSize.float + 6
+  nuklearResizeWin(width = gameSettings.windowWidth,
+      height = gameSettings.windowHeight)
+  nuklearSetWindowPos(x = windowCentered, y = windowCentered)
+  coreui.windowWidth = gameSettings.windowWidth.float
+  coreui.windowHeight = gameSettings.windowHeight.float
+  nuklearSetWindowResizable()
 
 proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -516,12 +522,6 @@ proc setGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  nuklearResizeWin(width = gameSettings.windowWidth,
-      height = gameSettings.windowHeight)
-  nuklearSetWindowPos(x = windowCentered, y = windowCentered)
-  coreui.windowWidth = gameSettings.windowWidth.float
-  coreui.windowHeight = gameSettings.windowHeight.float
-  nuklearSetWindowResizable()
   createGameUi(dialog = dialog)
 
 proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
