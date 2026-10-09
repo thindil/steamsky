@@ -33,7 +33,8 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = previous, state = state):
     return
-  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+  let height: float = (gameSettings.windowHeight.float - 35 -
+      gameSettings.messagesPosition.float)
   setLayoutRowDynamic(height = height, cols = 2)
 
   proc addStatistic(title, value, tooltip: string) {.raises: [], tags: [],
@@ -132,5 +133,5 @@ proc showStatistics*(state: var GameState; dialog: var GameDialog) {.raises: [],
       for mob in killedMobs:
         label(str = mob.name)
         label(str = $mob.amount)
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      height - 80, state = state)
+  showLastMessages(theme = theme, dialog = dialog,
+      height = gameSettings.windowHeight.float - height - 80, state = state)
