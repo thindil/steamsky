@@ -108,8 +108,9 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
-  setLayoutRowDynamic(height = 90, cols = 1)
-  image(image = menuImages[0])
+  layoutSpaceStatic(height = 90, widgetsCount = 1):
+    row(x = 50, y = 0, w = 500, h = 90):
+      image(image = menuImages[0])
   setLayoutRowDynamic(height = buttonHeight, cols = 1)
   label(str = gameVersion & " development", alignment = centered)
   var menuHeight: float = 4.0 * buttonHeight
