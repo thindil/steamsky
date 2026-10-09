@@ -175,8 +175,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         setRecipeDialog: showSetRecipe, baseDialog: showBaseInfo,
         missionActionDialog: showMissionMenu, mapMenuDialog: showMapMenu,
         setKeyDialog: showKeyDialog]
-  coreui.windowWidth = menuWidth.float
-  coreui.windowHeight = menuHeight.float
+  coreui.windowWidth = gameSettings.windowWidth.float
+  coreui.windowHeight = gameSettings.windowHeight.float
   var
     redrawTime: float = 1_000.0
   ## The main UI loop
