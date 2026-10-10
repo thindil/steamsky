@@ -105,10 +105,10 @@ type
     messagesOrder: MessagesOrder
     autoAskForBases: bool
     autoAskForEvents: bool
-    showTooltips*: bool
-    showLastMessages*: bool
-    messagesPosition*: Natural
-    fullScreen*: bool
+    showTooltips: bool
+    showLastMessages: bool
+    messagesPosition: Natural
+    fullScreen: bool
     autoCloseMessagesTime*: Natural
     autoSave*: AutoSaveTime
     topicsPosition*: Natural
@@ -237,6 +237,14 @@ typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
     name = autoAskForBases, typ = bool)
 typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
     name = autoAskForEvents, typ = bool)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = showTooltips, typ = bool)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = showLastMessages, typ = bool)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = messagesPosition, typ = Natural)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = fullScreen, typ = bool)
 
 type
   BonusType* = range[0.0..5.0]
