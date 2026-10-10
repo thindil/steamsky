@@ -95,8 +95,6 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   nuklearResizeWin(width = gameSettings.windowWidth,
       height = gameSettings.windowHeight)
   nuklearSetWindowPos(x = windowCentered, y = windowCentered)
-  coreui.windowWidth = gameSettings.windowWidth.float
-  coreui.windowHeight = gameSettings.windowHeight.float
   nuklearSetWindowResizable()
 
 proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],

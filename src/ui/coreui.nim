@@ -59,6 +59,8 @@ const
 var
   fonts*: array[FontsNames, ptr nk_font] = [nil, nil, nil, nil,
       nil]                         ## The list of fonts used by the game
+  windowWidth*: float = 800.0      ## The width of the main game window
+  windowHeight*: float = 600.0     ## The height of the main game window
   dialogX*: float = 250.0          ## The X position of a dialog
   dialogY*: float = 200.0          ## The Y position of a dialog
   redraw*: bool = true             ## If true, redraw the game
@@ -105,9 +107,8 @@ var images*: array[menuIcon..IconsNames.high,
     PImage] ## The images used in the game
 {.pop ruleOn: "varDeclared".}
 
-proc setDialog*(x: float = gameSettings.windowWidth / 3;
-    y: float = gameSettings.windowHeight / 4) {.raises: [], tags: [],
-    contractual.} =
+proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
+        4) {.raises: [], tags: [], contractual.} =
   ## Set the starting position of a dialog
   ##
   ## * x - the X position of a dialog, can be empty, default to 1/3 of window's
