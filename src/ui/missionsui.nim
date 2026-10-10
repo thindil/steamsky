@@ -334,7 +334,7 @@ proc setMissionInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [],
   ## Returns the modified parameter dialog.
   missionIndex = data
   dialog = missionDialog
-  setDialog(x = windowWidth / 4)
+  setDialog(x = gameSettings.windowWidth.float / 4)
 
 var xOffset: Natural = 0
 
@@ -372,7 +372,7 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       HeaderData[MissionsSortOrders](label: "Base reward", sortAsc: rewardAsc,
           sortDesc: rewardDesc)]
     ratio: array[6, cfloat] = [300.cfloat, 200, 200, 300, 200, 200]
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 50
+  let tableHeight: float = gameSettings.windowHeight.float - gameSettings.messagesPosition.float - 50
   table(name = "MissionsTable", xScroll = xOffset, headers = headers,
       ratio = ratio, tableTooltip = "missions", tableHeight = tableHeight,
       headerCode = sortMissions):
@@ -459,5 +459,5 @@ proc showMissions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if isLastRow():
         break
   # Show the last in-game messages
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+  showLastMessages(theme = theme, dialog = dialog, height = gameSettings.windowHeight.float -
       tableHeight - 120, state = state)
