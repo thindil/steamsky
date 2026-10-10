@@ -176,7 +176,7 @@ proc sortModules(sortAsc, sortDesc: ModulesSortOrders;
 
 var
   moduleIndex*: Natural = 0 ## The index of currently selected module
-  dialogWidth: float = windowWidth - 20
+  dialogWidth: float = gameSettings.windowWidth.float - 20
   viewWidth: float = dialogWidth - buttonHeight - 5
   col1: float = viewWidth * 0.3
   col2a: float = viewWidth - col1
@@ -195,14 +195,14 @@ proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   moduleIndex = data
   dialog = moduleInfoDialog
-  dialogWidth = windowWidth - 20
+  dialogWidth = gameSettings.windowWidth.float - 20
   viewWidth = dialogWidth - buttonHeight - 5
   col1 = viewWidth * 0.3
   col2a = viewWidth - col1
   col2b = viewWidth - col1 - 100
   col2c = viewWidth - col1 - 200
   col3 = col2a / 3
-  setDialog(x = 10, y = windowHeight / 10)
+  setDialog(x = 10, y = gameSettings.windowHeight.float / 10)
 
 proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip: string;
     module: ModuleData; dialog: var GameDialog) {.raises: [], tags: [
@@ -521,7 +521,7 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
   if addButton:
     imageLabelButton(image = images[assignCrewIcon],
         tooltip = "Assign crew members to the module.", label = "     Assign"):
-      setDialog(y = windowHeight / 10)
+      setDialog(y = gameSettings.windowHeight.float / 10)
       dialog = assignCrewDialog
 
 proc assignModule(assignAction: AssignType; assignIndex: Natural;
@@ -658,7 +658,7 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
     addCloseButton(dialog = dialog, isPopup = false)
     if dialog == none:
       dialog = moduleInfoDialog
-      setDialog(x = 10, y = windowHeight / 10)
+      setDialog(x = 10, y = gameSettings.windowHeight.float / 10)
 
   windowSetFocus(name = windowName)
 
@@ -693,7 +693,7 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
                   index != ammoIndex:
             labelButton(title = itemsList[item.protoIndex].name):
               dialog = moduleInfoDialog
-              setDialog(x = 10, y = windowHeight / 10)
+              setDialog(x = 10, y = gameSettings.windowHeight.float / 10)
               assignModule(assignAction = ammo, assignIndex = index,
                   dialog = dialog)
         except:
@@ -703,7 +703,7 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
     addCloseButton(dialog = dialog, isPopup = false)
     if dialog == none:
       dialog = moduleInfoDialog
-      setDialog(x = 10, y = windowHeight / 10)
+      setDialog(x = 10, y = gameSettings.windowHeight.float / 10)
 
   windowSetFocus(name = windowName)
 
@@ -805,7 +805,7 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
     addCloseButton(dialog = dialog, isPopup = false)
     if dialog == none:
       dialog = moduleInfoDialog
-      setDialog(x = 10, y = windowHeight / 10)
+      setDialog(x = 10, y = gameSettings.windowHeight.float / 10)
 
   windowSetFocus(name = windowName)
 
@@ -904,7 +904,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       imageLabelButton(image = images[editIcon],
           tooltip = "Set a new name for the module", label = "    Rename"):
         dialog = renameModuleDialog
-        setDialog(x = windowWidth / 4)
+        setDialog(x = gameSettings.windowWidth.float / 4)
       # Show the module's status
       showModuleDamage(module = module, dialog = dialog)
       setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
@@ -1070,7 +1070,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
                 modulesList[module.protoIndex].value - 1] and index != ammoIndex:
               imageLabelButton(image = images[assignAmmoIcon],
                   label = "     Assign"):
-                setDialog(y = windowHeight / 10)
+                setDialog(y = gameSettings.windowHeight.float / 10)
                 dialog = assignAmmoDialog
               break
           except:
@@ -1168,7 +1168,8 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         imageLabelButton(image = images[assignCrewIcon],
             tooltip = "Assign a skill which will be trained in the training room.",
                 label = "     Assign"):
-          setDialog(y = windowHeight / 10, x = windowWidth / 10)
+          setDialog(y = gameSettings.windowHeight / 10,
+              x = gameSettings.windowWidth / 10)
           dialog = assignSkillDialog
       # Show information about battering rams
       of batteringRam:
