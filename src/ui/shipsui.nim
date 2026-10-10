@@ -133,7 +133,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   ##
   ## Returns the modified parameters dialog and state.
   let
-    groupWidth: float = (windowWidth - buttonHeight)
+    groupWidth: float = (gameSettings.windowWidth.float - buttonHeight)
     col1: float = groupWidth * 0.3
     col2: float = groupWidth - col1 - 110
   setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
@@ -144,7 +144,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   imageLabelButton(image = images[editIcon],
       tooltip = "Set a new name for the ship", label = "    Rename"):
     dialog = renameDialog
-    setDialog(x = windowWidth / 4)
+    setDialog(x = gameSettings.windowWidth.float / 4)
   if playerShip.upgradeModule > -1:
     setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat, col2])
     label(str = "Upgrade:")
@@ -326,7 +326,7 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 hasOptions = true
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
-  var height: float = (windowHeight - 35 -
+  var height: float = (gameSettings.windowHeight.float - 35 -
       gameSettings.messagesPosition.float - tabHeight)
   case shipInfoTab
   # General info about the player's ship
@@ -347,5 +347,5 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
     showCargoInfo(dialog = dialog, height = height)
   else:
     dialog = setError(message = "Wrong number of tab")
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      height - 110, state = state)
+  showLastMessages(theme = theme, dialog = dialog,
+      height = gameSettings.windowHeight.float - height - 110, state = state)
