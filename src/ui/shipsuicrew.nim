@@ -261,7 +261,8 @@ proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog)
         of gun, harpoonGun:
           if module.owner[0] != memberIndex:
             availableOrdersText.add(y = "Operate " & module.name)
-            availableOrders.add(y = AvailableOrder(order: gunner, module: index))
+            availableOrders.add(y = AvailableOrder(order: gunner,
+                module: index))
         of workshop:
           if not isWorking(owners = module.owner, mIndex = memberIndex) and
               module.craftingIndex.len > 0:
@@ -276,7 +277,8 @@ proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog)
                   12..^1].strip.parseInt].name else: "Manufacture " &
                   $module.craftingAmount & "x " & itemsList[recipesList[
                   module.craftingIndex].resultIndex].name))
-              availableOrders.add(y = AvailableOrder(order: craft, module: index))
+              availableOrders.add(y = AvailableOrder(order: craft,
+                  module: index))
             except:
               dialog = setError(message = "Can't add an available order.")
               return
@@ -302,7 +304,8 @@ proc setAvailableOrders*(memberIndex: Natural; dialog: var GameDialog)
         break
     if playerShip.upgradeModule > -1 and member.order != upgrading:
       availableOrdersText.add(y = "Upgrade module")
-      availableOrders.add(y = AvailableOrder(order: upgrading, module: playerShip.upgradeModule))
+      availableOrders.add(y = AvailableOrder(order: upgrading,
+          module: playerShip.upgradeModule))
     if member.order != talk:
       availableOrdersText.add(y = "Talk with others")
       availableOrders.add(y = AvailableOrder(order: talk, module: -1))
@@ -323,7 +326,7 @@ proc setGiveOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
   dialog = giveOrderDialog
   currentOrder = 0
   setAvailableOrders(memberIndex = crewIndex, dialog = dialog)
-  setDialog(x = windowWidth / 4)
+  setDialog(x = gameSettings.windowWidth.float / 4)
 
 proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -419,7 +422,8 @@ proc setMemberInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
     tiredPoints = 0
   setPriorites = member.orders
   setInventoryInfo(dialog = dialog)
-  setDialog(x = windowWidth / 7, y = windowHeight / 11)
+  setDialog(x = gameSettings.windowWidth.float / 7,
+      y = gameSettings.windowHeight.float / 11)
 
 proc showAttributes(member: MemberData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -502,7 +506,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         imageLabelButton(image = images[editIcon],
             tooltip = "Set a new name for the crew member", label = "Rename"):
           dialog = renameMemberDialog
-          setDialog(x = windowWidth / 4)
+          setDialog(x = gameSettings.windowWidth.float / 4)
         if member.health < 100:
           setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
               col1.cfloat, col2])
@@ -721,7 +725,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
     imageLabelButton(image = images[inventoryIcon], label = "Inventory",
         tooltip = "Show the crew member inventory"):
       dialog = inventoryDialog
-      setDialog(x = windowWidth / 12, y = windowHeight / 10)
+      setDialog(x = gameSettings.windowWidth.float / 12,
+          y = gameSettings.windowHeight.float / 10)
     if playerShip.speed == docked and crewIndex > 0:
       imageLabelButton(image = images[dismissIcon], label = "Dismiss",
           tooltip = "Remove the crew member from the ship's crew."):
@@ -747,7 +752,7 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   if showOptions:
     var
       cols: Positive = 2
-      ratio2: seq[cfloat] = @[(windowWidth * 0.4).cfloat, 150]
+      ratio2: seq[cfloat] = @[(gameSettings.windowWidth.float * 0.4).cfloat, 150]
     tableHeight -= (buttonHeight + editHeight + buttonHeight) + 17
     if needClean:
       cols.inc
