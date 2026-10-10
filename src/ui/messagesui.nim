@@ -18,7 +18,7 @@
 ## Provides code related to showing in-game messages
 
 import std/[colors, math, strutils]
-import contracts, nuklear/nuklear_sdl_renderer
+import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[config, messages, types]
 import coreui, dialogs, errordialog, header, themes
 
@@ -42,11 +42,17 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
     setLayoutRowDynamic(height = mapButtonHeight, cols = 2)
     imageButtonCentered(image = images[contract2Icon],
         tooltip = "Make the list of messages bigger."):
-      gameSettings.messagesPosition += gameSettings.interfaceFontSize + 10
+      {.ruleOff: "assignments".}
+      gameSettings.messagesPosition = gameSettings.messagesPosition + (
+          gameSettings.interfaceFontSize + 10)
+      {.ruleOn: "assignments".}
       messageAdded = true
     imageButtonCentered(image = images[expand2Icon],
         tooltip = "Make the list of messages smaller."):
-      gameSettings.messagesPosition -= gameSettings.interfaceFontSize + 10
+      {.ruleOff: "assignments".}
+      gameSettings.messagesPosition = gameSettings.messagesPosition - (
+          gameSettings.interfaceFontSize + 10)
+      {.ruleOn: "assignments".}
       messageAdded = true
   var loopStart: int = 0 - messagesAmount()
   if loopStart == 0:

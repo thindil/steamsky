@@ -1058,11 +1058,15 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     dialog = mapMenuDialog
   imageButtonCentered(image = images[contract2Icon],
       tooltip = "Make the map smaller by one row."):
-    gameSettings.messagesPosition += height
+    {.ruleOff: "assignments".}
+    gameSettings.messagesPosition = gameSettings.messagesPosition + height
+    {.ruleOn: "assignments".}
     messageAdded = true
   imageButtonCentered(image = images[expand2Icon],
       tooltip = "Make the map bigger by one row."):
-    gameSettings.messagesPosition -= height
+    {.ruleOff: "assignments".}
+    gameSettings.messagesPosition = gameSettings.messagesPosition - height
+    {.ruleOn: "assignments".}
     messageAdded = true
   labelButton(title = "+", tooltip = "Zoom in the map."):
     zoomMap(dialog = dialog)
