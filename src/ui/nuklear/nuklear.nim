@@ -26,7 +26,7 @@
 import std/[colors, hashes, macros, math, unicode]
 import contracts, nimalyzer
 import nk_button, nk_colors, nk_context, nk_font, nk_input, nk_layout,
-    nk_math, nk_style, nk_tooltip, nk_types, nk_widget
+    nk_style, nk_tooltip, nk_types, nk_widget
 export nk_button, nk_colors, nk_context, nk_input, nk_layout, nk_style,
     nk_tooltip, nk_types, nk_widget
 
