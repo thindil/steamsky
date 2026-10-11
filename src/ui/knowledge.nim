@@ -56,7 +56,8 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
               knowledgeTab = index.cint
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
-  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float -
+  let height: float = (gameSettings.windowHeight.float - 35 -
+      gameSettings.messagesPosition.float -
       tabHeight)
   case knowledgeTab
   # The list of known bases
@@ -77,5 +78,5 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
       showStoriesInfo(dialog = dialog)
   else:
     discard
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      height - 115, state = state)
+  showLastMessages(theme = theme, dialog = dialog,
+      height = gameSettings.windowHeight.float - height - 115, state = state)
