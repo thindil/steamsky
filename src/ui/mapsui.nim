@@ -89,7 +89,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   except OSError, IOError, Exception:
     dialog = setError(message = "Can't close configuration file parser.")
 
-var mapInfoX: float = (windowWidth - 255.0)
+var mapInfoX: float = (gameSettings.windowWidth.float - 255.0)
 
 proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
     {.raises: [ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect],
@@ -104,7 +104,7 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
   tooltip(x = mapInfoX, y = 55, width = 250):
     if windowIsHovered():
       if mapInfoX == 10:
-        mapInfoX = (windowWidth - 255.0)
+        mapInfoX = (gameSettings.windowWidth.float - 255.0)
       else:
         mapInfoX = 10
     layoutStatic(height = labelHeight, cols = 4):
@@ -710,7 +710,7 @@ proc showButtons(dialog: var GameDialog; state: var GameState) {.raises: [], tag
     else:
       setLayoutRowDynamic(height = dialogButtonHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
     labelButton(title = "Ship orders", tooltip = "Show available orders for your ship."):
-      setDialog(y = windowHeight / 7)
+      setDialog(y = gameSettings.windowHeight.float / 7)
       dialog = ordersDialog
     if playerShip.speed != docked and playerShip.destinationX > 0:
       imageButton(image = images[moveToIcon], tooltip = "Auto move your ship to its destination."):
@@ -889,14 +889,14 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
   let height: Positive = gameSettings.mapFontSize + 10
-  rows = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
+  rows = ((gameSettings.windowHeight.float - 35 - gameSettings.messagesPosition.float) /
         height.float).ceil.Natural
   let colWidth: Positive = try:
       getTextWidth(text = theme.mapIcons[emptyMapIcon]).Positive + 6
     except:
       dialog = setError(message = "Can't count map column's width.")
       return
-  cols = (windowWidth / colWidth.float).ceil.Positive + 3
+  cols = (gameSettings.windowWidth.float / colWidth.float).ceil.Positive + 3
   let mapHeight: float = (height * rows).float - 15.0
   setLayoutRowDynamic(height = mapHeight, cols = 1)
   group(title = "MapGroup", flags = {windowNoScrollbar}):
@@ -1040,7 +1040,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               windowDisable()
             labelButton(title = mapChar):
               if x == playerShip.skyX and y == playerShip.skyY:
-                setDialog(y = windowHeight / 7)
+                setDialog(y = gameSettings.windowHeight.float / 7)
                 dialog = ordersDialog
               else:
                 setDialog()
@@ -1054,7 +1054,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = mapButtonHeight, cols = 5)
   imageButtonCentered(image = images[mapMenuIcon],
       tooltip = "Show the map movement menu."):
-    setDialog(x = windowWidth / 5)
+    setDialog(x = gameSettings.windowWidth.float / 5)
     dialog = mapMenuDialog
   imageButtonCentered(image = images[contract2Icon],
       tooltip = "Make the map smaller by one row."):
@@ -1072,7 +1072,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     zoomMap(dialog = dialog)
   labelButton(title = "-", tooltip = "Zoom out the map."):
     zoomMap(dialog = dialog, zoomIn = false)
-  layoutDynamic(height = windowHeight - mapHeight - 80, cols = 2):
+  layoutDynamic(height = gameSettings.windowHeight.float - mapHeight - 80, cols = 2):
     # Draw last messages
     row(width = 0.75):
       showLastMessages(theme = theme, dialog = dialog, withButtons = false,
@@ -1101,7 +1101,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     elif keyPressed notin {keyEscape, keyTab, keyAlt}:
       key &= $keyPressed
     if key == mapAccelerators[2]:
-      setDialog(x = windowWidth / 5)
+      setDialog(x = gameSettings.windowWidth.float / 5)
       dialog = mapMenuDialog
     elif key == mapAccelerators[3]:
       zoomMap(dialog = dialog)
