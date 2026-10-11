@@ -26,7 +26,7 @@
 ## Provides code related to the user's input in nuklear library
 
 import contracts
-import nk_context, nk_math, nk_types
+import nk_context, nk_types
 
 # ---------------------
 # Procedures parameters
@@ -59,6 +59,21 @@ proc nk_input_glyph*(ctx; glyph: nk_glyph) {.importc, nodecl, raises: [],
 # ------------------
 # Low level bindings
 # ------------------
+
+proc nkInbox(px, py, x, y, w, h: cfloat): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Check if the selected point is in the box
+  ##
+  ## * px - the X coordinate of the point
+  ## * py - the Y coordinate of the point
+  ## * x - the X coordinate of the top left corner of the box
+  ## * y - the Y coordinate of the top left corner of the box
+  ## * w - the width of the box
+  ## * h - the height of the box
+  ##
+  ## Returns true if the point is in the box, otherwise false
+  return ((px >= x and px < x + w) and (py >= y and py < y + h))
+
 proc hasMouseClickInRect*(id: Buttons; rect: Rect): bool {.raises: [],
   tags: [], contractual.} =
   ## Check if the mouse button was clicked in the selected rectangle
