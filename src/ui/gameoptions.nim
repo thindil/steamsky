@@ -110,7 +110,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
               currentTab = index.cint
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
-  setLayoutRowDynamic(height = windowHeight - 75, cols = 1)
+  setLayoutRowDynamic(height = gameSettings.windowHeight.float - 75, cols = 1)
   group(title = "OptionsGroup", flags = {windowNoFlags}):
 
     proc addCheckbox(label: string; option: var Natural;

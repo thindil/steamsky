@@ -423,7 +423,7 @@ proc setRecipeInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  setDialog(x = windowWidth / 4, y = windowHeight / 10)
+  setDialog(x = gameSettings.windowWidth.float / 4, y = gameSettings.windowHeight.float / 10)
   recipe = availableRecipes[data]
   craft = try:
       setRecipeData(recipeIndex = recipe.index)
@@ -639,7 +639,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
     workshopType = comboList(items = workshopsList, selected = workshopType,
         itemHeight = labelHeight.int, x = 400, y = 150,
         tooltip = "Show only recipes craftable in the selected workshop.")
-  let tableHeight: float = windowHeight - 50 - (if showOptions: 135 else: 0) -
+  let tableHeight: float = gameSettings.windowHeight.float - 50 - (if showOptions: 135 else: 0) -
       gameSettings.messagesPosition.float
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "CraftingGroup", flags = {windowNoScrollbar}):
@@ -717,5 +717,5 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
               data = module.index, code = setChangeOrder, dialog = dialog)
           if isLastRow():
             break
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+  showLastMessages(theme = theme, dialog = dialog, height = gameSettings.windowHeight.float -
       tableHeight - 110, state = state)
