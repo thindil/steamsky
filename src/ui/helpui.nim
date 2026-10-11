@@ -18,7 +18,7 @@
 ## Provides code related to the game's help, like showing it, etc.
 
 import std/tables
-import contracts, nuklear/nuklear_sdl_renderer
+import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[config, help]
 import coreui, header, setui, themes
 
@@ -47,12 +47,16 @@ proc showHelp*(state: var GameState; dialog: var GameDialog) {.raises: [],
           setHelpContent(content = entry.text, dialog = dialog)
       index.inc
   setLayoutRowDynamic(height = mapButtonHeight, cols = 2)
+  {.ruleOff: "assignments".}
   imageButtonCentered(image = images[contract2Icon],
       tooltip = "Make the list of topics smaller."):
-    gameSettings.topicsPosition -= gameSettings.interfaceFontSize + 10
+    gameSettings.topicsPosition = gameSettings.topicsPosition -
+        gameSettings.interfaceFontSize + 10
   imageButtonCentered(image = images[expand2Icon],
       tooltip = "Make the list of topics bigger."):
-    gameSettings.topicsPosition += gameSettings.interfaceFontSize + 10
+    gameSettings.topicsPosition = gameSettings.topicsPosition +
+        gameSettings.interfaceFontSize + 10
+  {.ruleOn: "assignments".}
   setLayoutRowDynamic(height = windowHeight -
       gameSettings.topicsPosition.float - 75, cols = 1)
   group(title = "ContentGroup", flags = {windowNoFlags}):
