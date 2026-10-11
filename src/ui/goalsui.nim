@@ -55,7 +55,8 @@ proc setSelectedGoal*(state: GameState) {.raises: [], tags: [], contractual.} =
   if state == newGame:
     setDialog(x = 20, y = 20)
   else:
-    setDialog(x = windowWidth / 6, y = windowHeight / 6)
+    setDialog(x = gameSettings.windowWidth.float / 6,
+        y = gameSettings.windowHeight.float / 6)
 
 proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
