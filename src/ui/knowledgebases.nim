@@ -180,7 +180,8 @@ proc setBaseInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog.
   baseIndex = data
   dialog = baseDialog
-  setDialog(x = windowWidth / 4, y = windowHeight / 5)
+  setDialog(x = gameSettings.windowWidth.float / 4,
+      y = gameSettings.windowHeight.float / 5)
 
 proc sortBases(sortAsc, sortDesc: BasesSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
