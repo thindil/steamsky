@@ -113,10 +113,10 @@ type
     autoSave: AutoSaveTime
     topicsPosition: Natural
     showNumbers: bool
-    rightButton*: bool
-    listsLimit*: Positive
-    waitMinutes*: Positive
-    autoDestination*: bool
+    rightButton: bool
+    listsLimit: Positive
+    waitMinutes: Positive
+    autoDestination: bool
 
 proc initGameSettingsRecord*(autoRest: bool = true;
     undockSpeed: ShipSpeed = fullSpeed; autoCenter: bool = true;
@@ -253,6 +253,14 @@ typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
     name = topicsPosition, typ = Natural)
 typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
     name = showNumbers, typ = bool)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = rightButton, typ = bool)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = listsLimit, typ = Positive)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = waitMinutes, typ = Positive)
+typeGetterSetter(baseType = GameSettingsRecord, varName = setting,
+    name = autoDestination, typ = bool)
 
 type
   BonusType* = range[0.0..5.0]
