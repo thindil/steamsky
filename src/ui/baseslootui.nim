@@ -331,7 +331,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   # Show the list of items to loot
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
+  let tableHeight: float = gameSettings.windowHeight.float - gameSettings.messagesPosition.float -
       (if showOptions: 45 else: 0) - 70
   const
     headers: array[6, HeaderData[ItemsSortOrders]] = [
@@ -458,5 +458,5 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if isLastRow():
         break
   # Show the last in-game messages
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+  showLastMessages(theme = theme, dialog = dialog, height = gameSettings.windowHeight.float -
       tableHeight - (if showOptions: 45 else: 0) - 125, state = state)
