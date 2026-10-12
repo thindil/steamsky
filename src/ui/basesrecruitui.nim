@@ -196,7 +196,8 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
     recruit: RecruitData = skyBases[setui.baseIndex].recruits[recruitIndex]
     windowName: string = recruit.name
     height: float = labelHeight * 17
-  setDialog(x = windowWidth / 4, y = windowHeight / 5)
+  setDialog(x = gameSettings.windowWidth.float / 4,
+      y = gameSettings.windowHeight.float / 5)
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
@@ -467,7 +468,8 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
   # Show the list of recruits to hire
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
+  let tableHeight: float = gameSettings.windowHeight.float -
+      gameSettings.messagesPosition.float - 20
   const
     headers: array[6, HeaderData[RecruitsSortOrders]] = [
       HeaderData[RecruitsSortOrders](label: "Name", sortAsc: nameAsc,
@@ -478,8 +480,8 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
           sortDesc: factionDesc),
       HeaderData[RecruitsSortOrders](label: "Base cost", sortAsc: priceAsc,
           sortDesc: priceDesc),
-      HeaderData[RecruitsSortOrders](label: "Highest stat", sortAsc: attributeAsc,
-          sortDesc: attributeDesc),
+      HeaderData[RecruitsSortOrders](label: "Highest stat",
+          sortAsc: attributeAsc, sortDesc: attributeDesc),
       HeaderData[RecruitsSortOrders](label: "Highest skill", sortAsc: skillAsc,
           sortDesc: skillDesc)]
     ratio: array[6, cfloat] = [300.cfloat, 200, 200, 200, 200, 200]
@@ -513,5 +515,5 @@ proc showRecruits*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if isLastRow():
         break
   # Show the last in-game messages
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      tableHeight - 95, state = state)
+  showLastMessages(theme = theme, dialog = dialog,
+      height = gameSettings.windowHeight.float - tableHeight - 95, state = state)
