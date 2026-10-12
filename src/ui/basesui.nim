@@ -205,7 +205,7 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = text)
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
+  let tableHeight: float = gameSettings.windowHeight.float - gameSettings.messagesPosition.float -
       20 - labelHeight
   table(name = "WoundedTable", xScroll = xOffset, headers = headers,
       ratio = ratio, tableTooltip = "actions", tableHeight = tableHeight,
@@ -223,7 +223,7 @@ proc showWounded*(state: var GameState; dialog: var GameDialog) {.raises: [],
           code = setActionMenu, dialog = dialog)
       if isLastRow():
         break
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+  showLastMessages(theme = theme, dialog = dialog, height = gameSettings.windowHeight.float -
       tableHeight, state = state)
   if dialog == baseActionDialog:
     showWoundedMenu(dialog = dialog, state = state)
@@ -267,7 +267,7 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = text)
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
+  let tableHeight: float = gameSettings.windowHeight.float - gameSettings.messagesPosition.float -
       20 - labelHeight
   table(name = "RepairsTable", xScroll = xOffset, headers = headers,
       ratio = ratio, tableTooltip = "actions", tableHeight = tableHeight,
@@ -285,7 +285,7 @@ proc showRepairs*(state: var GameState; dialog: var GameDialog) {.raises: [],
           code = setActionMenu, dialog = dialog)
       if isLastRow():
         break
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+  showLastMessages(theme = theme, dialog = dialog, height = gameSettings.windowHeight.float -
       tableHeight, state = state)
   if dialog == baseActionDialog:
     showRepairMenu(dialog = dialog, state = state)
@@ -337,14 +337,14 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = text)
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
+  let tableHeight: float = gameSettings.windowHeight.float - gameSettings.messagesPosition.float -
       20 - labelHeight - (if showOptions: editHeight else: 0)
   const headers: array[2, HeaderData[BaseSortOrders]] = [
       HeaderData[BaseSortOrders](label: "Action", sortAsc: nameAsc,
           sortDesc: nameDesc),
       HeaderData[BaseSortOrders](label: "Cost", sortAsc: costAsc,
           sortDesc: costDesc)]
-  let ratio: array[2, cfloat] = [(windowWidth * 0.6).cfloat, (windowWidth * 0.3)]
+  let ratio: array[2, cfloat] = [(gameSettings.windowWidth.float * 0.6).cfloat, (gameSettings.windowWidth.float * 0.3)]
   table(name = "RecipesTable", xScroll = xOffset, headers = headers,
       ratio = ratio, tableTooltip = "recipes", tableHeight = tableHeight,
       headerCode = sortItems):
@@ -366,7 +366,7 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
           code = setActionMenu, dialog = dialog)
       if isLastRow():
         break
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+  showLastMessages(theme = theme, dialog = dialog, height = gameSettings.windowHeight.float -
       tableHeight - 80, state = state)
   if dialog == baseActionDialog:
     showRecipeMenu(dialog = dialog, state = state)
