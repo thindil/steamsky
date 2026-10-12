@@ -336,17 +336,17 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
           labelButton(title = "Boarding party:",
             tooltip = "Set your boarding party. If you join it, you will be able to give orders them, but not your gunners or engineer."):
             dialog = boardingDialog
-            setDialog(x = windowWidth / 4, y = windowHeight / 5)
+            setDialog(x = gameSettings.windowWidth.float / 4, y = gameSettings.windowHeight.float / 5)
           var labelHeight2: float = ceil(x = getTextWidth(text = boardingParty) /
-              (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
+              (if expandedSection == 1: gameSettings.windowWidth.float else: (gameSettings.windowWidth.float / 2.0))) * 35.0
           setLayoutRowDynamic(height = labelHeight2, cols = 1)
           wrapLabel(str = boardingParty)
           setLayoutRowDynamic(height = buttonHeight, cols = 1)
           labelButton(title = "Defenders:", tooltip = "Set your ship's defenders against the enemy party."):
             dialog = defendingDialog
-            setDialog(x = windowWidth / 4, y = windowHeight / 5)
+            setDialog(x = gameSettings.windowWidth.float / 4, y = gameSettings.windowHeight.float / 5)
           labelHeight2 = ceil(x = getTextWidth(text = defenders) /
-              (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
+              (if expandedSection == 1: gameSettings.windowWidth.float else: (gameSettings.windowWidth.float / 2.0))) * 35.0
           setLayoutRowDynamic(height = labelHeight2, cols = 1)
           wrapLabel(str = defenders)
       except:
@@ -382,7 +382,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if pilotList.len != playerShip.crew.len + 1:
     updateCrewLists()
   let
-    height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+    height: float = (gameSettings.windowHeight.float - 35 - gameSettings.messagesPosition.float)
     faction: FactionData = try:
         factionsList[playerShip.crew[0].faction]
       except:
@@ -537,7 +537,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = boarding
   let heightDiff: float = (if endCombat: 70 else: 105)
   showLastMessages(theme = theme, dialog = dialog, inCombat = true,
-    height = windowHeight - heightDiff - height - 20, state = state)
+    height = gameSettings.windowHeight.float - heightDiff - height - 20, state = state)
 
 proc showBoardingInfo(index: Natural; inCrew: bool = true; dialog: var GameDialog)
   {.raises: [], tags: [RootEffect], contractual.} =
@@ -573,7 +573,7 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showHeader(dialog = dialog, close = (if endCombat: CloseDestination.map else:
     CloseDestination.combat), state = state):
     return
-  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+  let height: float = (gameSettings.windowHeight.float - 35 - gameSettings.messagesPosition.float)
   setLayoutRowDynamic(height = height, cols = (if expandedSection == 0: 2 else: 1))
   var ordersList: seq[string] = @[]
   for member in game.enemy.ship.crew:
@@ -645,4 +645,4 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
         updateParties()
   let heightDiff: float = (if endCombat: 70 else: 105)
   showLastMessages(theme = theme, dialog = dialog, inCombat = true,
-      height = windowHeight - heightDiff - height, state = state)
+      height = gameSettings.windowHeight.float - heightDiff - height, state = state)
