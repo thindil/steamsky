@@ -761,7 +761,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't get module data.")
         return
     windowName: string = module.name
-  setDialog(x = windowWidth / 7, y = windowHeight / 9)
+  setDialog(x = gameSettings.windowWidth.float / 7, y = gameSettings.windowHeight.float / 9)
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
@@ -962,7 +962,7 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
   ## happened.
   const width: float = 600
   let windowName: string = playerShip.modules[moduleIndex].name
-  setDialog(x = windowWidth / 5, y = windowHeight / 9)
+  setDialog(x = gameSettings.windowWidth.float / 5, y = gameSettings.windowHeight.float / 9)
   updateDialog(width = width, height = dialogHeight)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = dialogHeight,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
@@ -1112,7 +1112,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
       setModulesList(dialog = dialog)
     editString(text = nameSearch, maxLen = 64,
         tooltip = "Enter a name of a module which you looking for")
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float -
+  let tableHeight: float = gameSettings.windowHeight.float - gameSettings.messagesPosition.float -
       80 - (2 * labelHeight) - tabHeight - (if showOptions: 45 else: 0)
   const ratio: array[5, cfloat] = [300.cfloat, 200, 200, 200, 200]
   table(name = "ShipyardTable", xScroll = xOffset, headers = headers,
@@ -1229,5 +1229,5 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
             data = index, code = setRemoveInfo, dialog = dialog)
       if isLastRow():
         break
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
+  showLastMessages(theme = theme, dialog = dialog, height = gameSettings.windowHeight.float -
       tableHeight - 200, state = state)
