@@ -39,7 +39,8 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
     return
-  let tableHeight: float = windowHeight - gameSettings.messagesPosition.float - 20
+  let tableHeight: float = gameSettings.windowHeight.float -
+      gameSettings.messagesPosition.float - 20
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "SchoolGroup", flags = {windowNoFlags}):
     if dialog != none:
@@ -109,5 +110,5 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
         tooltip = "Enter amount of money which you want to spend")
     if newCost != minCost:
       minCost = newCost
-  showLastMessages(theme = theme, dialog = dialog, height = windowHeight -
-      tableHeight - 80, state = state)
+  showLastMessages(theme = theme, dialog = dialog,
+      height = gameSettings.windowHeight.float - tableHeight - 80, state = state)
