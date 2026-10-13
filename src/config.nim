@@ -291,12 +291,12 @@ type
     ## * upgradeCostBonus       - The bonus to costs of upgrades the player's ship
     ## * pricesBonus            - The bonus to prices in bases
     ## * difficultyLevel        - The preset level of difficulty for the game
-    playerName*: string
+    playerName*: MobName
     playerGender*: char
-    shipName*: string
-    playerFaction*: string
-    playerCareer*: string
-    startingBase*: string
+    shipName*: ShipName
+    playerFaction*: FactionIndex
+    playerCareer*: CareerName
+    startingBase*: BaseType
     enemyDamageBonus*: BonusType
     playerDamageBonus*: BonusType
     enemyMeleeDamageBonus*: BonusType
