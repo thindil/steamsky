@@ -1628,7 +1628,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     oldIndex = endIndex + 2
   helpContent = @[]
   var
-    width: float = windowWidth - 35
+    width: float = gameSettings.windowWidth.float - 35
     row: TextsSeq = @[]
     index: Natural = 0
   while index < texts.high:
@@ -1684,7 +1684,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
         row.add(y = HelpUIText())
       helpContent.add(y = row)
       row = @[]
-      width = windowWidth - 35
+      width = gameSettings.windowWidth.float - 35
       index.inc
       continue
     if texts[index].width <= width:
@@ -1726,7 +1726,7 @@ proc setHelpContent*(content: string; dialog: var GameDialog) {.raises: [],
     if width == 0:
       helpContent.add(y = row)
       row = @[]
-      width = windowWidth - 35
+      width = gameSettings.windowWidth.float - 35
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
 
