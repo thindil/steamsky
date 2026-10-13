@@ -338,9 +338,9 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
   ##             button will not show
   ##
   ## Returns the infoDialog if the info was set, otherwise errorDialog
-  setDialog(x = windowWidth / 5.0)
+  setDialog(x = gameSettings.windowWidth.float / 5.0)
   try:
-    infoWidth = windowWidth / 1.5
+    infoWidth = gameSettings.windowWidth.float / 1.5
     var
       startIndex: int = 0
       tagIndex: int = text.find(sub = '{')
@@ -516,7 +516,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int;
   ##            cargo
   ##
   ## Returns the type of dialog if the dialog was set, otherwise errorDialog
-  setDialog(x = windowWidth / 5.0)
+  setDialog(x = gameSettings.windowWidth.float / 5.0)
   case action
   of buyAction, sellAction:
     let (protoIndex, maxSellAmount, maxBuyAmount, price, _, _, _) = try:
@@ -627,7 +627,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
   ## the dialog. Returns true if an item was sold or bought, otherwise false
   result = false
   try:
-    let width: float = windowWidth / 1.5
+    let width: float = gameSettings.windowWidth.float / 1.5
     var height: float = editHeight + (dialogButtonHeight * 2) + labelHeight + 70
     if dialog == giveDialog:
       height += editHeight
