@@ -175,8 +175,6 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         setRecipeDialog: showSetRecipe, baseDialog: showBaseInfo,
         missionActionDialog: showMissionMenu, mapMenuDialog: showMapMenu,
         setKeyDialog: showKeyDialog]
-  coreui.windowWidth = gameSettings.windowWidth.float
-  coreui.windowHeight = gameSettings.windowHeight.float
   var
     redrawTime: float = 1_000.0
   ## The main UI loop
@@ -199,8 +197,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         showGameMenu(dialog = dialog, state = state)
 
       # The main window
-      window(name = "Main", x = 0, y = 0, w = windowWidth,
-          h = windowHeight, flags = {windowNoScrollbar}):
+      window(name = "Main", x = 0, y = 0, w = gameSettings.windowWidth.float,
+          h = gameSettings.windowHeight.float, flags = {windowNoScrollbar}):
         # Disable the window if there is any dialog to show
         if dialog != none:
           windowDisable()
@@ -236,7 +234,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     of quitEvent:
       break
     of sizeChangedEvent:
-      (coreui.windowWidth, coreui.windowHeight) = nuklearGetWindowSize()
+      let (windowWidth, windowHeight) = nuklearGetWindowSize()
+      gameSettings.windowWidth = windowWidth.int
+      gameSettings.windowHeight = windowHeight.int
       redraw = true
     of noEvent:
       redraw = state == loadingGame
