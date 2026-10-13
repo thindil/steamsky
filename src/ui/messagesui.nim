@@ -70,7 +70,8 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
           greenColor], theme.colors[redColor], theme.colors[blueColor],
           theme.colors[cyanColor]]
       currentTurnTime: string = "[" & formattedTime() & "]"
-      width: float = (if state == map: windowWidth * 0.75 else: windowWidth)
+      width: float = (if state == map: gameSettings.windowWidth.float *
+          0.75 else: gameSettings.windowWidth.float)
     var needLines: float = try:
           ceil(x = getTextWidth(text = message.message) / width.float)
         except:
@@ -133,7 +134,7 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
   labelButton(title = "Delete all messages"):
     dialog = setQuestion(question = "Are you sure you want to clear all messages?",
         qType = deleteMessages)
-  setLayoutRowDynamic(height = windowHeight - 55, cols = 1)
+  setLayoutRowDynamic(height = gameSettings.windowHeight.float - 55, cols = 1)
   group(title = "MessagesGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
@@ -154,7 +155,8 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if message.kind != messagesType and messagesType != default:
           return
         var needLines: float = try:
-              ceil(x = getTextWidth(text = message.message) / windowWidth.float)
+              ceil(x = getTextWidth(text = message.message) /
+                  gameSettings.windowWidth.float)
             except:
               dialog = setError(message = "Can't count the message lenght.")
               return
