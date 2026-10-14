@@ -117,9 +117,8 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if showHoFButton:
     menuHeight += buttonHeight
   layoutSpaceStatic(height = menuHeight, widgetsCount = 6):
-    const
-      x: float = 225
-      w: float = 150
+    let x: float = gameSettings.windowWidth.float / 2.5
+    const w: float = 150
     row(x = x, y = 0, w = w, h = buttonHeight):
       labelButton(title = "New game", tooltip = "Set and start a new game"):
         state = newGame
