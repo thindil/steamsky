@@ -91,9 +91,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   const windowName: string = "Steam Sky"
 
   # Initialize SDL and create the main window of the game
-  nuklearInit(windowWidth = menuWidth, windowHeight = menuHeight,
-      name = windowName, iconPath = $dataDirectory & "ui" & DirSep & "images" &
-      DirSep & "icon.png")
+  nuklearInit(windowWidth = gameSettings.windowWidth,
+      windowHeight = gameSettings.windowHeight, name = windowName,
+      iconPath = $dataDirectory & "ui" & DirSep & "images" & DirSep & "icon.png")
   # Load the game's theme
   loadThemes()
   # Load the game's fonts
