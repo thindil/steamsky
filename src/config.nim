@@ -307,6 +307,22 @@ type
     pricesBonus*: BonusType
     difficultyLevel*: DifficultyType
 
+proc initNewGameRecord*(playerName: MobName = "Laeran";
+    playerGender: char = 'M'; shipName: ShipName = "Anaria";
+    playerFaction: FactionIndex = "POLEIS"): NewGameRecord {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for starting a new game
+  ##
+  ## * playerName             - The player's character name
+  ## * playerGender           - The player's character gender
+  ## * shipName               - The player's ship name
+  ## * playerFaction          - The player's character faction
+  ##
+  ## Returns the new structure with information about the new game settings
+  return NewGameRecord(playerName: playerName, playerGender: playerGender,
+      shipName: shipName, playerFaction: playerFaction)
+
+type
   FontTypes* = enum
     ## The types of in-game fonts, used to set their size
     helpFont, interfaceFont, mapFont
