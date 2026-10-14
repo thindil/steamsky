@@ -184,7 +184,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileLines *= labelHeight.int
       except:
         dialog = setError(message = "Can't read ChangeLog file.")
-  setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
+  setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight - 10.0), cols = 1)
   if fileContent.len > 0:
     group(title = "NewsGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = fileLines.float, cols = 1)
@@ -299,7 +299,7 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileLines *= labelHeight.int
       except:
         dialog = setError(message = "Can't read '" & fileName & "' file.")
-  setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
+  setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight - 10.0), cols = 1)
   if fileContent.len > 0:
     group(title = "FileGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = fileLines.float, cols = 1)
@@ -327,7 +327,7 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
   dialog = none
-  setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
+  setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight - 10.0), cols = 1)
   group(title = "HofGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = labelHeight, cols = 4)
     colorLabel(str = "Position", color = colYellow, align = centered)
@@ -390,7 +390,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
-  setLayoutRowDynamic(height = (menuHeight.float - buttonHeight - 10.0), cols = 1)
+  setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight - 10.0), cols = 1)
   group(title = "LoadGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = tableRowHeight, cols = 3)
     labelButton(title = "Player name", tooltip = "Press mouse button to sort the saved games."):
@@ -927,8 +927,8 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             x += widgetWidth
           except:
             dialog = setError(message = "Can't set the tabs buttons.")
-  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 2):
-    row(x = 0, y = 0, w = (gameSettings.windowWidth.float * 0.65), h = (menuHeight - 90).float):
+  layoutSpaceStatic(height = (gameSettings.windowHeight - 90).float, widgetsCount = 2):
+    row(x = 0, y = 0, w = (gameSettings.windowWidth.float * 0.65), h = (gameSettings.windowHeight - 90).float):
       # Player settings
       if currentTab == 0:
         newGamePlayer(dialog = dialog, state = state)
@@ -936,7 +936,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       else:
         newGameDifficulty()
     let infoWidth: float = (gameSettings.windowWidth.float * 0.35)
-    row(x = (gameSettings.windowWidth.float * 0.65), y = 0, w = infoWidth, h = (menuHeight - 90).float):
+    row(x = (gameSettings.windowWidth.float * 0.65), y = 0, w = infoWidth, h = (gameSettings.windowHeight - 90).float):
       fileLines = 3
       for line in infoText.split(sep = "\n\n"):
         var needLines: float = try:
