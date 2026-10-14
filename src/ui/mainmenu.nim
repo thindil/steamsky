@@ -177,7 +177,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
             break
           fileContent.add(y = line & "\n")
           var needLines: float = ceil(x = getTextWidth(text = line) /
-              menuWidth.float)
+              gameSettings.windowWidth.float)
           if needLines < 1.0:
             needLines = 1.0
           fileLines += needLines.int
@@ -194,20 +194,20 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
         docDirectory.string & "' directory?")
   layoutSpaceStatic(height = buttonHeight - 10.0, widgetsCount = 2):
     if state == news:
-      row(x = (menuWidth - 310).float, y = 0, w = 155, h = buttonHeight):
+      row(x = (gameSettings.windowWidth - 310).float, y = 0, w = 155, h = buttonHeight):
         labelButton(title = "Show all changes",
             tooltip = "Show all changes to the game since previous big stable version"):
           state = allNews
           fileContent = ""
           return
     else:
-      row(x = (menuWidth - 405).float, y = 0, w = 250, h = buttonHeight):
+      row(x = (gameSettings.windowWidth - 405).float, y = 0, w = 250, h = buttonHeight):
         labelButton(title = "Show only newest changes",
             tooltip = "Show only changes to the game since previous release"):
           state = news
           fileContent = ""
           return
-    row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
+    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140, h = buttonHeight):
       labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
         fileContent = ""
@@ -262,12 +262,12 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = labelHeight * 7, cols = 1)
   wrapLabel(str = "Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\nSteam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.")
   layoutSpaceStatic(height = buttonHeight, widgetsCount = 2):
-    row(x = (menuWidth - 310).float, y = 0, w = 155, h = buttonHeight):
+    row(x = (gameSettings.windowWidth - 310).float, y = 0, w = 155, h = buttonHeight):
       labelButton(title = "Show full license",
           tooltip = "Show full legal text of GNU GPLv3 license"):
         fileName = "COPYING"
         state = showFile
-    row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
+    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140, h = buttonHeight):
       labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
   if isKeyPressed(key = keyEscape):
@@ -292,7 +292,7 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
         for line in lines(filename = docDirectory.string & fileName):
           fileContent.add(y = line & "\n")
           var needLines: float = ceil(x = getTextWidth(text = line) /
-              menuWidth.float)
+              gameSettings.windowWidth.float)
           if needLines < 1.0:
             needLines = 1.0
           fileLines += needLines.int
@@ -308,7 +308,7 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
     wrapLabel(str = "Can't find file to load. Did '" & fileName &
         "' file is in '" & docDirectory.string & "' directory?")
   layoutSpaceStatic(height = buttonHeight + 10, widgetsCount = 1):
-    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
+    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140, h = 40):
       labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
         fileContent = ""
@@ -342,7 +342,7 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = $entry.points, alignment = centered)
       label(str = entry.deathReason, alignment = centered)
   layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
-    row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
+    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140, h = buttonHeight):
       labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
   if isKeyPressed(key = keyEscape):
@@ -499,7 +499,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       (tableRowHeight + 5.0)))
   showLoadMenu(dialog = dialog, bounds = bounds)
   layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
-    row(x = (menuWidth - 150).float, y = 0, w = 140, h = buttonHeight):
+    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140, h = buttonHeight):
       labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
         saveClicked = ""
@@ -928,15 +928,15 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           except:
             dialog = setError(message = "Can't set the tabs buttons.")
   layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 2):
-    row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
+    row(x = 0, y = 0, w = (gameSettings.windowWidth.float * 0.65), h = (menuHeight - 90).float):
       # Player settings
       if currentTab == 0:
         newGamePlayer(dialog = dialog, state = state)
       # Difficulty settings
       else:
         newGameDifficulty()
-    let infoWidth: float = (menuWidth.float * 0.35)
-    row(x = (menuWidth.float * 0.65), y = 0, w = infoWidth, h = (menuHeight - 90).float):
+    let infoWidth: float = (gameSettings.windowWidth.float * 0.35)
+    row(x = (gameSettings.windowWidth.float * 0.65), y = 0, w = infoWidth, h = (menuHeight - 90).float):
       fileLines = 3
       for line in infoText.split(sep = "\n\n"):
         var needLines: float = try:
