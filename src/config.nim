@@ -309,7 +309,10 @@ type
 
 proc initNewGameRecord*(playerName: MobName = "Laeran";
     playerGender: char = 'M'; shipName: ShipName = "Anaria";
-    playerFaction: FactionIndex = "POLEIS"): NewGameRecord {.raises: [], tags: [],
+    playerFaction: FactionIndex = "POLEIS";
+    playerCareer: CareerName = "general"; startingBase: BaseType = "Any";
+    enemyDamageBonus: BonusType = 1.0;
+    playerDamageBonus: BonusType = 1.0): NewGameRecord {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for starting a new game
   ##
@@ -320,7 +323,9 @@ proc initNewGameRecord*(playerName: MobName = "Laeran";
   ##
   ## Returns the new structure with information about the new game settings
   return NewGameRecord(playerName: playerName, playerGender: playerGender,
-      shipName: shipName, playerFaction: playerFaction)
+      shipName: shipName, playerFaction: playerFaction,
+      playerCareer: playerCareer, startingBase: startingBase,
+      enemyDamageBonus: enemyDamageBonus, playerDamageBonus: playerDamageBonus)
 
 type
   FontTypes* = enum
