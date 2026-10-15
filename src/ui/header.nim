@@ -160,8 +160,10 @@ type
     ## Destination for the close button in the header
     none, combat, map, previous
 
-var expandedSection*: Natural = 0
-  ## Expanded section in some screens, like ship info or knowledge screens
+var
+  expandedSection*: Natural = 0
+    ## Expanded section in some screens, like ship info or knowledge screens
+  playerDead: bool = false
 
 proc showDialogs(dialog: var GameDialog; state: var GameState;
     oldState: GameState): bool {.raises: [], tags: [RootEffect], contractual.} =
@@ -174,12 +176,14 @@ proc showDialogs(dialog: var GameDialog; state: var GameState;
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened or the game's menu is to show. Additionally, it returns true if
   ## the game's state changed, otherwise false.
-  if playerShip.crew[0].health == 0 and dialog == none and state != gameStatistics:
+  if playerShip.crew[0].health == 0 and dialog == none and not playerDead:
     dialog = setQuestion(question = "You are dead. Would you like to see your game statistics?",
         qType = showDeadStats)
   # Draw dialogs
   showQuestion(dialog = dialog, state = state)
   if state != oldState:
+    if playerShip.crew[0].health == 0 and state == gameStatistics:
+      playerDead = true
     return true
   showShipOrders(dialog = dialog, state = state)
   if state != oldState:
