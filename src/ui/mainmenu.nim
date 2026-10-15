@@ -184,7 +184,8 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileLines *= labelHeight.int
       except:
         dialog = setError(message = "Can't read ChangeLog file.")
-  setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight - 10.0), cols = 1)
+  setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight -
+      10.0), cols = 1)
   if fileContent.len > 0:
     group(title = "NewsGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = fileLines.float, cols = 1)
@@ -194,20 +195,23 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
         docDirectory.string & "' directory?")
   layoutSpaceStatic(height = buttonHeight - 10.0, widgetsCount = 2):
     if state == news:
-      row(x = (gameSettings.windowWidth - 310).float, y = 0, w = 155, h = buttonHeight):
+      row(x = (gameSettings.windowWidth - 310).float, y = 0, w = 155,
+          h = buttonHeight):
         labelButton(title = "Show all changes",
             tooltip = "Show all changes to the game since previous big stable version"):
           state = allNews
           fileContent = ""
           return
     else:
-      row(x = (gameSettings.windowWidth - 405).float, y = 0, w = 250, h = buttonHeight):
+      row(x = (gameSettings.windowWidth - 405).float, y = 0, w = 250,
+          h = buttonHeight):
         labelButton(title = "Show only newest changes",
             tooltip = "Show only changes to the game since previous release"):
           state = news
           fileContent = ""
           return
-    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140, h = buttonHeight):
+    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140,
+        h = buttonHeight):
       labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
         fileContent = ""
@@ -262,12 +266,14 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = labelHeight * 7, cols = 1)
   wrapLabel(str = "Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\nSteam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.")
   layoutSpaceStatic(height = buttonHeight, widgetsCount = 2):
-    row(x = (gameSettings.windowWidth - 310).float, y = 0, w = 155, h = buttonHeight):
+    row(x = (gameSettings.windowWidth - 310).float, y = 0, w = 155,
+        h = buttonHeight):
       labelButton(title = "Show full license",
           tooltip = "Show full legal text of GNU GPLv3 license"):
         fileName = "COPYING"
         state = showFile
-    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140, h = buttonHeight):
+    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140,
+        h = buttonHeight):
       labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
   if isKeyPressed(key = keyEscape):
@@ -299,7 +305,8 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileLines *= labelHeight.int
       except:
         dialog = setError(message = "Can't read '" & fileName & "' file.")
-  setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight - 10.0), cols = 1)
+  setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight -
+      10.0), cols = 1)
   if fileContent.len > 0:
     group(title = "FileGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = fileLines.float, cols = 1)
@@ -327,7 +334,8 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
   dialog = none
-  setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight - 10.0), cols = 1)
+  setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight -
+      10.0), cols = 1)
   group(title = "HofGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = labelHeight, cols = 4)
     colorLabel(str = "Position", color = colYellow, align = centered)
@@ -342,7 +350,8 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = $entry.points, alignment = centered)
       label(str = entry.deathReason, alignment = centered)
   layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
-    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140, h = buttonHeight):
+    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140,
+        h = buttonHeight):
       labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
   if isKeyPressed(key = keyEscape):
@@ -390,7 +399,8 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
-  setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight - 10.0), cols = 1)
+  setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight -
+      10.0), cols = 1)
   group(title = "LoadGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = tableRowHeight, cols = 3)
     labelButton(title = "Player name", tooltip = "Press mouse button to sort the saved games."):
@@ -474,32 +484,27 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       return
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
-    layoutSpaceStatic(height = (saves.len.float * tableRowHeight),
-        widgetsCount = (saves.len * 3)):
-      for index, save in saves:
-        let
-          y: float = (index.float * tableRowHeight)
-        row(x = 0, y = y, w = 190, h = tableRowHeight):
-          labelButton(title = save.playerName, tooltip = "Press mouse " & (
-              if gameSettings.rightButton: "right" else: "left") &
-              " button to show available option"):
-            saveClicked = save.path
-        row(x = 190, y = y, w = 190, h = tableRowHeight):
-          labelButton(title = save.shipName, tooltip = "Press mouse " & (
-              if gameSettings.rightButton: "right" else: "left") &
-              " button to show available option"):
-            saveClicked = save.path
-        row(x = 380, y = y, w = 190, h = tableRowHeight):
-          labelButton(title = save.saveTime, tooltip = "Press mouse " & (
-              if gameSettings.rightButton: "right" else: "left") &
-              " button to show available option"):
-            saveClicked = save.path
+    for index, save in saves:
+      labelButton(title = save.playerName, tooltip = "Press mouse " & (
+          if gameSettings.rightButton: "right" else: "left") &
+          " button to show available option"):
+        saveClicked = save.path
+      labelButton(title = save.shipName, tooltip = "Press mouse " & (
+          if gameSettings.rightButton: "right" else: "left") &
+          " button to show available option"):
+        saveClicked = save.path
+      labelButton(title = save.saveTime, tooltip = "Press mouse " & (
+          if gameSettings.rightButton: "right" else: "left") &
+          " button to show available option"):
+        saveClicked = save.path
   restoreButtonStyle()
-  let bounds: Rect = Rect(x: 0, y: tableRowHeight, w: 580, h: (saves.len.float *
-      (tableRowHeight + 5.0)))
+  let bounds: Rect = Rect(x: 0, y: tableRowHeight,
+      w: gameSettings.windowWidth.float - 10, h: (saves.len.float * (
+      tableRowHeight + 5.0)))
   showLoadMenu(dialog = dialog, bounds = bounds)
   layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
-    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140, h = buttonHeight):
+    row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140,
+        h = buttonHeight):
       labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
         saveClicked = ""
@@ -927,8 +932,10 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             x += widgetWidth
           except:
             dialog = setError(message = "Can't set the tabs buttons.")
-  layoutSpaceStatic(height = (gameSettings.windowHeight - 90).float, widgetsCount = 2):
-    row(x = 0, y = 0, w = (gameSettings.windowWidth.float * 0.65), h = (gameSettings.windowHeight - 90).float):
+  layoutSpaceStatic(height = (gameSettings.windowHeight - 90).float,
+      widgetsCount = 2):
+    row(x = 0, y = 0, w = (gameSettings.windowWidth.float * 0.65), h = (
+        gameSettings.windowHeight - 90).float):
       # Player settings
       if currentTab == 0:
         newGamePlayer(dialog = dialog, state = state)
@@ -936,7 +943,8 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       else:
         newGameDifficulty()
     let infoWidth: float = (gameSettings.windowWidth.float * 0.35)
-    row(x = (gameSettings.windowWidth.float * 0.65), y = 0, w = infoWidth, h = (gameSettings.windowHeight - 90).float):
+    row(x = (gameSettings.windowWidth.float * 0.65), y = 0, w = infoWidth, h = (
+        gameSettings.windowHeight - 90).float):
       fileLines = 3
       for line in infoText.split(sep = "\n\n"):
         var needLines: float = try:
