@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Typo in changelog
 - Starting position of an available mission's info dialog
+- Crash when viewing information about finished game, like statistics,
+  messages, etc
 
 ## [12.8] - 2026-10-04
 
