@@ -909,7 +909,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   changeStyle(field = spacing, x = 0, y = 0):
     changeStyle(field = buttonRounding, value = 0):
       layoutSpaceStatic(height = tabHeight, widgetsCount = 2):
-        var x: float = 200
+        var x: float = gameSettings.windowWidth.float / 2.5
         const
           tabs: array[2, string] = ["Player", "Difficulty"]
           tabTooltips: array[2, string] = ["Show settings for your character.", "Show settings for the game difficulty."]
