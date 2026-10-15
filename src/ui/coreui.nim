@@ -47,10 +47,6 @@ type
 const
   dtime*: float = 20.0
     ## The length in miliseconds of one game's frame
-  menuWidth*: Positive = 600
-    ## The width of the game's main window
-  menuHeight*: Positive = 400
-    ## The height of the game's main window
   shipSpeeds*: array[4, string] = ["Full stop", "Quarter speed",
     "Half speed", "Full speed"]
     ## The list of player's ship's speed
