@@ -20,7 +20,7 @@
 
 import std/[colors, math, parsecfg, tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, maps, messages, shipscargo, shipsmovement, types]
+import ../[config, game, game2, maps, messages, shipscargo, shipsmovement, types]
 import coreui, dialogs, errordialog, ordersmenu, setui, themes, waitmenu
 
 proc showResourcesInfo(fuelAmount, foodAmount,
@@ -243,6 +243,14 @@ proc closeScreen(close: CloseDestination; state: var GameState;
   showOptions = false
   expandedSection = 0
   messageAdded = true
+  if playerDead:
+    try:
+      endGame(save = false)
+      state = endGame
+      playerDead = false
+    except OSError, IOError, KeyError:
+      dialog = setError(message = "Can't end the game")
+    return
   if state == options:
     updateOptions(dialog = dialog)
     var config: Config = newConfig()
