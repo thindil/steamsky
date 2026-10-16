@@ -24898,10 +24898,6 @@ NK_API nk_bool nk_button_label_styled(struct nk_context *ctx,
 {
     return nk_button_text_styled(ctx, style, title, nk_strlen(title));
 }
-NK_API nk_bool nk_button_label(struct nk_context *ctx, const char *title)
-{
-    return nk_button_text(ctx, title, nk_strlen(title));
-}
 NK_API nk_bool
 nk_button_color(struct nk_context *ctx, struct nk_color color)
 {

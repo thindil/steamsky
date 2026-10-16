@@ -39,9 +39,10 @@ using ctx: PContext
 proc nk_button_text(ctx; ctitle: cstring; clen: cint): nk_bool {.importc, cdecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_button_label(ctx; ctitle: cstring): nk_bool {.importc, cdecl, raises: [
-    ], tags: [], contractual.}
+proc nkButtonLabel(ctx; ctitle: cstring): nk_bool {.raises: [], tags: [],
+    contractual.} =
   ## A binding to Nuklear's function. Internal use only
+  return nk_button_text(ctx = ctx, ctitle = ctitle, clen = ctitle.len.cint)
 proc nk_button_symbol(ctx; csymbol: SymbolType): nk_bool {.importc, cdecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
@@ -68,7 +69,7 @@ template labelButton*(title: string; onPressCode: untyped) =
   ##
   ## * title       - the text to shown on the button
   ## * onPressCode - the Nim code to execute when the button was pressed
-  if nk_button_label(ctx = ctx, ctitle = title.cstring):
+  if nkButtonLabel(ctx = ctx, ctitle = title.cstring):
     onPressCode
 
 template labelButton*(title, tooltip: string; onPressCode: untyped) =
@@ -80,7 +81,7 @@ template labelButton*(title, tooltip: string; onPressCode: untyped) =
   ##                 button
   ## * onPressCode - the Nim code to execute when the button was pressed
   let showTips: bool = widgetIsHovered()
-  if nk_button_label(ctx = ctx, ctitle = title.cstring):
+  if nkButtonLabel(ctx = ctx, ctitle = title.cstring):
     onPressCode
   if showTips:
     showTooltip2(text = tooltip)
@@ -104,7 +105,8 @@ template symbolButton*(symbol: SymbolType; onPressCode: untyped) =
   if nk_button_symbol(ctx = ctx, csymbol = symbol):
     onPressCode
 
-template symbolButton*(symbol: SymbolType; tooltip: string; onPressCode: untyped) =
+template symbolButton*(symbol: SymbolType; tooltip: string;
+    onPressCode: untyped) =
   ## Draw the button with the selected symbol. Execute the selected code
   ## on pressing it.
   ##
