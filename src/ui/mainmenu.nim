@@ -698,8 +698,8 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
     setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Character faction:")
     newFaction = comboList(items = playerFactions, selected = currentFaction,
-        itemHeight = labelHeight.int, x = 200, y = (labelHeight * 5.0),
-        tooltip = playerTooltips[5])
+        itemHeight = labelHeight.int, x = gameSettings.windowWidth.float * 0.35,
+        y = (labelHeight * 5.0), tooltip = playerTooltips[5])
     if newFaction != currentFaction or mouseClicked(id = left,
         rect = getWidgetBounds()):
       currentFaction = -1
