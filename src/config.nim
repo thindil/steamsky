@@ -311,8 +311,10 @@ proc initNewGameRecord*(playerName: MobName = "Laeran";
     playerGender: char = 'M'; shipName: ShipName = "Anaria";
     playerFaction: FactionIndex = "POLEIS";
     playerCareer: CareerName = "general"; startingBase: BaseType = "Any";
-    enemyDamageBonus: BonusType = 1.0;
-    playerDamageBonus: BonusType = 1.0): NewGameRecord {.raises: [], tags: [],
+    enemyDamageBonus: BonusType = 1.0; playerDamageBonus: BonusType = 1.0;
+    enemyMeleeDamageBonus: BonusType = 1.0;
+    playerMeleeDamageBonus: BonusType = 1.0; experienceBonus: BonusType = 1.0;
+    reputationBonus: BonusType = 1.0): NewGameRecord {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for starting a new game
   ##
@@ -320,12 +322,25 @@ proc initNewGameRecord*(playerName: MobName = "Laeran";
   ## * playerGender           - The player's character gender
   ## * shipName               - The player's ship name
   ## * playerFaction          - The player's character faction
+  ## * playerCareer           - The player's character career
+  ## * startingBase           - The type of the starting base
+  ## * enemyDamageBonus       - The bonus to damage for enemies in ship to ship combat
+  ## * playerDamageBonus      - The bonus to damage for the player's character and crew in
+  ##                            ship to ship combat
+  ## * enemyMeleeDamageBonus  - The bonus to damage for enemies in melee combat
+  ## * playerMeleeDamageBonus - The bonus to damage for the player's character and crew
+  ##                            in melee combat
+  ## * experienceBonus        - The bonus to the gained by player's character and crew experience
+  ## * reputationBonus        - The bonus to the gained the player's character reputation in bases
   ##
   ## Returns the new structure with information about the new game settings
   return NewGameRecord(playerName: playerName, playerGender: playerGender,
       shipName: shipName, playerFaction: playerFaction,
       playerCareer: playerCareer, startingBase: startingBase,
-      enemyDamageBonus: enemyDamageBonus, playerDamageBonus: playerDamageBonus)
+      enemyDamageBonus: enemyDamageBonus, playerDamageBonus: playerDamageBonus,
+      enemyMeleeDamageBonus: enemyMeleeDamageBonus,
+      playerMeleeDamageBonus: playerMeleeDamageBonus,
+      experienceBonus: experienceBonus, reputationBonus: reputationBonus)
 
 type
   FontTypes* = enum
