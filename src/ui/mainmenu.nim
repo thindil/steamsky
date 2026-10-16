@@ -961,14 +961,16 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         setLayoutRowDynamic(height = fileLines.float, cols = 1)
         wrapLabel(str = infoText)
   layoutSpaceStatic(height = buttonHeight, widgetsCount = 2):
-    row(x = 140, y = 0, w = 155, h = buttonHeight):
+    var x: float = gameSettings.windowWidth.float / 3.5
+    row(x = x, y = 0, w = 155, h = buttonHeight):
       labelButton(title = "Start game", tooltip = "Start the game"):
         startGame(dialog = dialog)
         if dialog == none:
           setGame(dialog = dialog)
           if dialog == none:
             state = map
-    row(x = 300.float, y = 0, w = 140, h = buttonHeight):
+    x += 160
+    row(x = x, y = 0, w = 140, h = buttonHeight):
       labelButton(title = "Back to menu", tooltip = "Back to the main menu"):
         state = mainMenu
         return
