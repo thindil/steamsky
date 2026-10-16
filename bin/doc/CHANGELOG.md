@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 - Better looking list of the modules in bases' shipyards
 - Better looking list of the available missions in bases
 - Better looking pagination buttons in various lists
+- Redesigned the main menu of the game, now it is bigger and resizeable
+  (GitHub issue #101)
 
 ### Fixed
 - Typo in changelog
