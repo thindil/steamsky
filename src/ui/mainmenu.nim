@@ -726,8 +726,8 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
     if playerCareers.len > 0:
       label(str = "Character career:")
       newCareer = comboList(items = playerCareers, selected = currentCareer,
-          itemHeight = labelHeight.int, x = 200, y = (labelHeight * 3.2),
-          tooltip = playerTooltips[6])
+          itemHeight = labelHeight.int, x = gameSettings.windowWidth.float *
+          0.35, y = (labelHeight * 5), tooltip = playerTooltips[6])
       if newCareer != currentCareer or mouseClicked(id = left,
           rect = getWidgetBounds()):
         currentCareer = -1
@@ -735,8 +735,8 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
     if playerBases.len > 0:
       label(str = "Starting base type:")
       newBase = comboList(items = playerBases, selected = currentBase,
-          itemHeight = labelHeight.int, x = 200, y = (labelHeight * 2.1),
-          tooltip = playerTooltips[7])
+          itemHeight = labelHeight.int, x = gameSettings.windowWidth.float *
+          0.35, y = (labelHeight * 5), tooltip = playerTooltips[7])
       if newBase != currentBase or mouseClicked(id = left,
           rect = getWidgetBounds()):
         currentBase = -1
