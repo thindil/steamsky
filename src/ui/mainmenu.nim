@@ -669,8 +669,8 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
     restoreButtonStyle()
     if showGender:
       # Character's gender
-      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat,
-          0.1, 0.1])
+      setLayoutRowStatic(height = editHeight, cols = 3, ratio = [textLen,
+          buttonHeight, buttonHeight])
       label(str = "Character gender:")
       const genders: array[2..3, string] = [2: "Male", 3: "Female"]
       for i in 2..3:
