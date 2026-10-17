@@ -652,7 +652,8 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
         except Exception:
           dialog = setError(message = "Can't count the text length.")
           200
-    var fieldLen: cfloat = (gameSettings.windowWidth.cfloat * 0.60) - textLen - buttonHeight
+    var fieldLen: cfloat = (gameSettings.windowWidth.cfloat * 0.60) - textLen -
+        buttonHeight
     if fieldLen < 100:
       fieldLen = 100
     # Character's name
