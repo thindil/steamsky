@@ -647,8 +647,17 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   group(title = "groupSetting", flags = {windowNoFlags}):
+    let textLen: cfloat = try:
+          getTextWidth(text = "Starting base type:") + 20
+        except Exception:
+          dialog = setError(message = "Can't count the text length.")
+          200
+    var fieldLen: cfloat = (gameSettings.windowWidth.cfloat * 0.60) - textLen - buttonHeight
+    if fieldLen < 100:
+      fieldLen = 100
     # Character's name
-    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    setLayoutRowStatic(height = editHeight, cols = 3, ratio = [textLen,
+        fieldLen, buttonHeight])
     label(str = "Character name:")
     if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = playerTooltips[0]
