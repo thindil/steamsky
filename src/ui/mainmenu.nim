@@ -653,7 +653,7 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
           dialog = setError(message = "Can't count the text length.")
           200
     var fieldLen: cfloat = (gameSettings.windowWidth.cfloat * 0.60) - textLen -
-        buttonHeight
+        buttonHeight + 10
     if fieldLen < 100:
       fieldLen = 100
     # Character's name
@@ -712,8 +712,8 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
         fieldLen2])
     label(str = "Character faction:")
     newFaction = comboList(items = playerFactions, selected = currentFaction,
-        itemHeight = labelHeight.int, x = gameSettings.windowWidth.float * 0.35,
-        y = (labelHeight * 5.0), tooltip = playerTooltips[5])
+        itemHeight = labelHeight.int, x = fieldLen2, y = (labelHeight * 5.0),
+        tooltip = playerTooltips[5])
     if newFaction != currentFaction or mouseClicked(id = left,
         rect = getWidgetBounds()):
       currentFaction = -1
@@ -740,8 +740,8 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
     if playerCareers.len > 0:
       label(str = "Character career:")
       newCareer = comboList(items = playerCareers, selected = currentCareer,
-          itemHeight = labelHeight.int, x = gameSettings.windowWidth.float *
-          0.35, y = (labelHeight * 5), tooltip = playerTooltips[6])
+          itemHeight = labelHeight.int, x = fieldLen2, y = (labelHeight * 5),
+          tooltip = playerTooltips[6])
       if newCareer != currentCareer or mouseClicked(id = left,
           rect = getWidgetBounds()):
         currentCareer = -1
@@ -749,8 +749,8 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
     if playerBases.len > 0:
       label(str = "Starting base type:")
       newBase = comboList(items = playerBases, selected = currentBase,
-          itemHeight = labelHeight.int, x = gameSettings.windowWidth.float *
-          0.35, y = (labelHeight * 5), tooltip = playerTooltips[7])
+          itemHeight = labelHeight.int, x = fieldLen2, y = (labelHeight * 5),
+          tooltip = playerTooltips[7])
       if newBase != currentBase or mouseClicked(id = left,
           rect = getWidgetBounds()):
         currentBase = -1
