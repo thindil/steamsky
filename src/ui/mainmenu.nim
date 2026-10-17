@@ -686,7 +686,8 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
             playerGender = i.cint
         restoreButtonStyle()
     # Player's ship's name
-    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    setLayoutRowStatic(height = editHeight, cols = 3, ratio = [textLen,
+        fieldLen, buttonHeight])
     label(str = "Ship name:")
     if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = playerTooltips[2]
@@ -696,8 +697,10 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
     imageButton(image = menuImages[1], tooltip = playerTooltips[3]):
       randomName(forPlayer = false)
     restoreButtonStyle()
+    var fieldLen2: cfloat = fieldLen + buttonHeight + 5
     # Character's goal
-    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
+    setLayoutRowStatic(height = editHeight, cols = 2, ratio = [textLen,
+        fieldLen2])
     label(str = "Character goal:")
     if mouseClicked(id = left, rect = getWidgetBounds()):
       infoText = playerTooltips[4]
@@ -705,7 +708,8 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
       dialog = newGoalDialog
       setSelectedGoal(state = state)
     # Character's faction
-    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
+    setLayoutRowStatic(height = editHeight, cols = 2, ratio = [textLen,
+        fieldLen2])
     label(str = "Character faction:")
     newFaction = comboList(items = playerFactions, selected = currentFaction,
         itemHeight = labelHeight.int, x = gameSettings.windowWidth.float * 0.35,
