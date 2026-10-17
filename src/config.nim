@@ -314,8 +314,10 @@ proc initNewGameRecord*(playerName: MobName = "Laeran";
     enemyDamageBonus: BonusType = 1.0; playerDamageBonus: BonusType = 1.0;
     enemyMeleeDamageBonus: BonusType = 1.0;
     playerMeleeDamageBonus: BonusType = 1.0; experienceBonus: BonusType = 1.0;
-    reputationBonus: BonusType = 1.0): NewGameRecord {.raises: [], tags: [],
-    contractual.} =
+    reputationBonus: BonusType = 1.0; upgradeCostBonus: BonusType = 1.0;
+    pricesBonus: BonusType = 1.0;
+    difficultyLevel: DifficultyType = normal): NewGameRecord {.raises: [],
+    tags: [], contractual.} =
   ## Create a new data structure for starting a new game
   ##
   ## * playerName             - The player's character name
@@ -332,6 +334,9 @@ proc initNewGameRecord*(playerName: MobName = "Laeran";
   ##                            in melee combat
   ## * experienceBonus        - The bonus to the gained by player's character and crew experience
   ## * reputationBonus        - The bonus to the gained the player's character reputation in bases
+  ## * upgradeCostBonus       - The bonus to costs of upgrades the player's ship
+  ## * pricesBonus            - The bonus to prices in bases
+  ## * difficultyLevel        - The preset level of difficulty for the game
   ##
   ## Returns the new structure with information about the new game settings
   return NewGameRecord(playerName: playerName, playerGender: playerGender,
@@ -340,7 +345,9 @@ proc initNewGameRecord*(playerName: MobName = "Laeran";
       enemyDamageBonus: enemyDamageBonus, playerDamageBonus: playerDamageBonus,
       enemyMeleeDamageBonus: enemyMeleeDamageBonus,
       playerMeleeDamageBonus: playerMeleeDamageBonus,
-      experienceBonus: experienceBonus, reputationBonus: reputationBonus)
+      experienceBonus: experienceBonus, reputationBonus: reputationBonus,
+      upgradeCostBonus: upgradeCostBonus, pricesBonus: pricesBonus,
+      difficultyLevel: difficultyLevel)
 
 type
   FontTypes* = enum
