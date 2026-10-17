@@ -39,10 +39,6 @@ using ctx: PContext
 proc nk_button_text(ctx; ctitle: cstring; clen: cint): nk_bool {.importc, cdecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nkButtonLabel(ctx; ctitle: cstring): nk_bool {.raises: [], tags: [],
-    contractual.} =
-  ## A binding to Nuklear's function. Internal use only
-  return nk_button_text(ctx = ctx, ctitle = ctitle, clen = ctitle.len.cint)
 proc nk_button_symbol(ctx; csymbol: SymbolType): nk_bool {.importc, cdecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
@@ -69,7 +65,7 @@ template labelButton*(title: string; onPressCode: untyped) =
   ##
   ## * title       - the text to shown on the button
   ## * onPressCode - the Nim code to execute when the button was pressed
-  if nkButtonLabel(ctx = ctx, ctitle = title.cstring):
+  if nk_button_text(ctx = ctx, ctitle = title.cstring, clen = title.len.cint):
     onPressCode
 
 template labelButton*(title, tooltip: string; onPressCode: untyped) =
@@ -81,7 +77,7 @@ template labelButton*(title, tooltip: string; onPressCode: untyped) =
   ##                 button
   ## * onPressCode - the Nim code to execute when the button was pressed
   let showTips: bool = widgetIsHovered()
-  if nkButtonLabel(ctx = ctx, ctitle = title.cstring):
+  if nk_button_text(ctx = ctx, ctitle = title.cstring, clen = title.len.cint):
     onPressCode
   if showTips:
     showTooltip2(text = tooltip)
