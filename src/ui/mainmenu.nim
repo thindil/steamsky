@@ -957,7 +957,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       # Difficulty settings
       else:
         newGameDifficulty()
-    let infoWidth: float = (gameSettings.windowWidth.float * 0.34)
+    let infoWidth: float = (gameSettings.windowWidth.float * 0.333)
     row(x = (gameSettings.windowWidth.float * 0.65), y = 0, w = infoWidth, h = (
         gameSettings.windowHeight - 90).float):
       fileLines = 3
