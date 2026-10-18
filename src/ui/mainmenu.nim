@@ -803,8 +803,8 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
           200
     var fieldLen: cfloat = (gameSettings.windowWidth.cfloat * 0.60) - textLen +
         15
-    if fieldLen < 100:
-      fieldLen = 100
+    if fieldLen < 125:
+      fieldLen = 125
     # Difficulty level
     setLayoutRowStatic(height = editHeight, cols = 2, ratio = [textLen, fieldLen])
     label(str = "Difficulty level:")
@@ -829,13 +829,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
         discard
       setPoints()
     for index, diffLabel in diffLabels:
-      if index in {2, 3}:
-        setLayoutRowDynamic(height = (editHeight * 2), cols = 2, ratio = [
-            0.5.cfloat, 0.5])
-        wrapLabel(str = diffLabel)
-      else:
-        setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.5.cfloat, 0.5])
-        label(str = diffLabel)
+      label(str = diffLabel)
       if mouseClicked(id = left, rect = getWidgetBounds()):
         infoText = diffTooltips[index + 1]
       let newValue: int = property2(name = "#", min = 1, val = diffSettings[
