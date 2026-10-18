@@ -291,10 +291,10 @@ type
     ## * upgradeCostBonus       - The bonus to costs of upgrades the player's ship
     ## * pricesBonus            - The bonus to prices in bases
     ## * difficultyLevel        - The preset level of difficulty for the game
-    playerName*: MobName
-    playerGender*: char
-    shipName*: ShipName
-    playerFaction*: FactionIndex
+    playerName: MobName
+    playerGender: char
+    shipName: ShipName
+    playerFaction: FactionIndex
     playerCareer*: CareerName
     startingBase*: BaseType
     enemyDamageBonus*: BonusType
@@ -348,6 +348,15 @@ proc initNewGameRecord*(playerName: MobName = "Laeran";
       experienceBonus: experienceBonus, reputationBonus: reputationBonus,
       upgradeCostBonus: upgradeCostBonus, pricesBonus: pricesBonus,
       difficultyLevel: difficultyLevel)
+
+typeGetterSetter(baseType = NewGameRecord, varName = setting, name = playerName,
+    typ = MobName)
+typeGetterSetter(baseType = NewGameRecord, varName = setting,
+    name = playerGender, typ = char)
+typeGetterSetter(baseType = NewGameRecord, varName = setting, name = shipName,
+    typ = ShipName)
+typeGetterSetter(baseType = NewGameRecord, varName = setting,
+    name = playerFaction, typ = FactionIndex)
 
 type
   FontTypes* = enum
