@@ -793,12 +793,24 @@ const diffTooltips: array[12, string] = ["Select game difficulty preset level.",
 proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the difficulty settings for starting a new game
   group(title = "groupSetting", flags = {windowNoFlags}):
+    const diffLabels: array[8, string] = ["Enemy ship damage:",
+        "Player ship damage:", "Enemy damage in melee combat:",
+        "Player crew damage in melee combat:", "Experience gained:",
+        "Reputation gained:", "Upgrade cost:", "Prices in bases:"]
+    let textLen: cfloat = try:
+          getTextWidth(text = diffLabels[3]) + 10
+        except Exception:
+          200
+    var fieldLen: cfloat = (gameSettings.windowWidth.cfloat * 0.60) - textLen +
+        15
+    if fieldLen < 100:
+      fieldLen = 100
     # Difficulty level
-    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.5.cfloat, 0.5])
+    setLayoutRowStatic(height = editHeight, cols = 2, ratio = [textLen, fieldLen])
     label(str = "Difficulty level:")
     var newLevel: Natural = comboList(items = ["Very Easy", "Easy", "Normal",
         "Hard", "Very Hard", "Custom"], selected = currentLevel,
-        itemHeight = labelHeight.int, x = 200, y = (labelHeight * 5.0),
+        itemHeight = labelHeight.int, x = fieldLen, y = (labelHeight * 5.0),
         tooltip = diffTooltips[0])
     if newLevel != currentLevel:
       currentLevel = newLevel
@@ -816,10 +828,6 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
       else:
         discard
       setPoints()
-    const diffLabels: array[8, string] = ["Enemy ship damage:",
-        "Player ship damage:", "Enemy damage in melee combat:",
-        "Player crew damage in melee combat:", "Experience gained:",
-        "Reputation gained:", "Upgrade cost:", "Prices in bases:"]
     for index, diffLabel in diffLabels:
       if index in {2, 3}:
         setLayoutRowDynamic(height = (editHeight * 2), cols = 2, ratio = [
