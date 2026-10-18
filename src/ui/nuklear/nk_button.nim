@@ -36,6 +36,9 @@ using ctx: PContext
 # ------------------
 # Low level bindings
 # ------------------
+proc nk_button_text_styled(ctx; style: var nk_style_button; ctitle: cstring;
+    clen: cint): nk_bool {.importc, cdecl, raises: [], tags: [], contractual, used.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_button_text(ctx; ctitle: cstring; clen: cint): nk_bool {.importc, cdecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
