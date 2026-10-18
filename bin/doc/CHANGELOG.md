@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Better looking pagination buttons in various lists
 - Redesigned the main menu of the game, now it is bigger and resizeable
   (GitHub issue #101)
+- Better looking the starting a new game screen
 
 ### Fixed
 - Typo in changelog
