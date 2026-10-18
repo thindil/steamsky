@@ -74,12 +74,12 @@ proc tooltip*(text: string; x, y: float; w: int) {.raises: [], tags: [],
       width = w.cint)
 
 var
-  tooltipDelay*: float = 1000.0
+  tooltipDelay: float = 1000.0
     ## For how long the player hovers the mouse over UI element before a
     ## tooltip will be shown
-  frameDelay*: float = 0.0
+  frameDelay: float = 0.0
     ## The length of UI frames. Used to count when to show a tooltip
-  delay*: float = tooltipDelay
+  delay: float = tooltipDelay
     ## The current delay before show a tooltip, when reached 0, show a tooltip
   tooltipEnabled: bool = true
     ## If true, tooltips are enabled (default true)
