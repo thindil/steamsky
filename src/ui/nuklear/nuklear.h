@@ -30846,8 +30846,9 @@ nk_tooltip3(struct nk_context *ctx, const char *text, float startx, float starty
     text_width = style->font->width(style->font->userdata,
                     style->font->height, text, text_len);
     text_width += (4 * padding.x);
-    int lines = text_width / width;
-    if ((int)text_width % width != 0)  {
+    int real_width = (width + (4 * padding.x));
+    int lines = text_width / real_width;
+    if ((int)text_width % real_width != 0)  {
       lines++;
     }
     text_height = ((style->font->height * lines) + 2 * padding.y);
