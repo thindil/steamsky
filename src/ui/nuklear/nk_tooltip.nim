@@ -70,8 +70,8 @@ proc tooltip*(text: string; x, y: float; w: Natural) {.raises: [], tags: [],
   proc nk_tooltip3(ctx; text: cstring; startx, starty: cfloat;
       width: cint) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## Internal Nuklear C binding
-  nk_tooltip3(ctx = ctx, text = text.cstring, startx = x, starty = y,
-      width = w.cint)
+  nk_tooltip3(ctx = ctx, text = text.cstring, startx = x.cfloat,
+      starty = y.cfloat, width = w.cint)
 
 var
   tooltipDelay: float = 1000.0
@@ -130,7 +130,10 @@ proc showTooltip2*(text: string) {.raises: [], tags: [], contractual.} =
     return
   hoveredTooltip = true
   if delay <= 0:
-    tooltip(text = text)
+    if startX == 0:
+      tooltip(text = text)
+    else:
+      tooltip(text = text, x = startX, y = startY, w = tooltipWidth)
 
 proc updateTooltips*() {.raises: [], tags: [], contractual.} =
   ## Update tooltips timer
