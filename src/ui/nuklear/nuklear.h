@@ -30853,6 +30853,9 @@ nk_tooltip3(struct nk_context *ctx, const char *text, int width)
     }
     text_height = ((style->font->height * lines) + 2 * padding.y);
 
+    int startx = 10;
+    int starty = 10;
+
     /* execute tooltip and fill with text */
     if (nk_tooltip_begin2(ctx, (float)width, startx, starty)) {
         nk_layout_row_dynamic(ctx, (float)text_height, 1);

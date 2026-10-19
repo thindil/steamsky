@@ -127,7 +127,7 @@ proc showTooltip2*(text: string) {.raises: [], tags: [], contractual.} =
     return
   hoveredTooltip = true
   if delay <= 0:
-    if startX == 0:
+    if tooltipWidth == 0:
       tooltip(text = text)
     else:
       tooltip(text = text, w = tooltipWidth)
