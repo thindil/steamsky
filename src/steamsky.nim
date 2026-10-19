@@ -139,7 +139,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     return
 
   # The main game loop
-  setTooltips(tDelay = 1_000, fDelay = 200)
+  setTooltips(tDelay = 1_000, fDelay = 200, x = gameSettings.windowWidth.float /
+      5, y = gameSettings.windowHeight.float / 2, width = 200)
   const
     showGame: array[GameState.mainMenu..GameState.options, proc (
         state: var GameState; dialog: var GameDialog){.nimcall, raises: [
