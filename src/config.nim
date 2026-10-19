@@ -295,10 +295,10 @@ type
     playerGender: char
     shipName: ShipName
     playerFaction: FactionIndex
-    playerCareer*: CareerName
-    startingBase*: BaseType
-    enemyDamageBonus*: BonusType
-    playerDamageBonus*: BonusType
+    playerCareer: CareerName
+    startingBase: BaseType
+    enemyDamageBonus: BonusType
+    playerDamageBonus: BonusType
     enemyMeleeDamageBonus*: BonusType
     playerMeleeDamageBonus*: BonusType
     experienceBonus*: BonusType
@@ -357,6 +357,14 @@ typeGetterSetter(baseType = NewGameRecord, varName = setting, name = shipName,
     typ = ShipName)
 typeGetterSetter(baseType = NewGameRecord, varName = setting,
     name = playerFaction, typ = FactionIndex)
+typeGetterSetter(baseType = NewGameRecord, varName = setting,
+    name = playerCareer, typ = CareerName)
+typeGetterSetter(baseType = NewGameRecord, varName = setting,
+    name = startingBase, typ = BaseType)
+typeGetterSetter(baseType = NewGameRecord, varName = setting,
+    name = enemyDamageBonus, typ = BonusType)
+typeGetterSetter(baseType = NewGameRecord, varName = setting,
+    name = playerDamageBonus, typ = BonusType)
 
 type
   FontTypes* = enum
