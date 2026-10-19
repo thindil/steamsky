@@ -30821,7 +30821,7 @@ nk_tooltip2(struct nk_context *ctx, const char *text, float startx, float starty
     }
 }
 NK_API void
-nk_tooltip3(struct nk_context *ctx, const char *text, float startx, float starty, int width)
+nk_tooltip3(struct nk_context *ctx, const char *text, int width)
 {
     const struct nk_style *style;
     struct nk_vec2 padding;
