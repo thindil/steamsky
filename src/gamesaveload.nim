@@ -225,7 +225,7 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
   logMessage(message = "done", messageLevel = lvlInfo)
   logMessage(message = "Saving player career...", messageLevel = lvlInfo)
   var careerElement: XmlNode = newElement(tag = "playercareer")
-  careerElement.attrs = {"index": playerCareer}.toXmlAttributes()
+  careerElement.attrs = {"index": game.playerCareer}.toXmlAttributes()
   saveTree.add(son = careerElement)
   logMessage(message = "done", messageLevel = lvlInfo)
   logMessage(message = "Saving player reputation...", messageLevel = lvlInfo)
@@ -433,7 +433,7 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
   # Load the player's career
   logMessage(message = "Loading the player's career...", messageLevel = lvlInfo)
   let careerNode: XmlNode = savedGame.child(name = "playercareer")
-  playerCareer = careerNode.attr(name = "index")
+  game.playerCareer = careerNode.attr(name = "index")
   logMessage(message = "done", messageLevel = lvlInfo)
   # Load the factions' reputation
   logMessage(message = "Loading the player's reputation...",

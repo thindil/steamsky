@@ -539,7 +539,7 @@ proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
     # Set the name of the savegame file
     generateSaveName()
     # Set the player's career
-    playerCareer = newGameSettings.playerCareer
+    game.playerCareer = newGameSettings.playerCareer
     # Set the player's reputations
     resetReputations()
     # Add the welcoming message
