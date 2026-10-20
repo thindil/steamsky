@@ -1670,6 +1670,13 @@ template changeStyle*(src, dest: ButtonStyleTypes; code: untyped) =
   code
   restoreButtonStyle(destination = dest)
 
+proc nkStyleDefault*() {.raises: [], tags: [], contractual.} =
+  ## Set the default style for Nuklear
+  proc nk_style_default(ctx) {.importc, nodecl, raises: [], tags: [],
+      contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  nk_style_default(ctx = ctx)
+
 # ------
 # Combos
 # ------
