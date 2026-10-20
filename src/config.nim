@@ -299,10 +299,10 @@ type
     startingBase: BaseType
     enemyDamageBonus: BonusType
     playerDamageBonus: BonusType
-    enemyMeleeDamageBonus*: BonusType
-    playerMeleeDamageBonus*: BonusType
-    experienceBonus*: BonusType
-    reputationBonus*: BonusType
+    enemyMeleeDamageBonus: BonusType
+    playerMeleeDamageBonus: BonusType
+    experienceBonus: BonusType
+    reputationBonus: BonusType
     upgradeCostBonus*: BonusType
     pricesBonus*: BonusType
     difficultyLevel*: DifficultyType
@@ -365,6 +365,14 @@ typeGetterSetter(baseType = NewGameRecord, varName = setting,
     name = enemyDamageBonus, typ = BonusType)
 typeGetterSetter(baseType = NewGameRecord, varName = setting,
     name = playerDamageBonus, typ = BonusType)
+typeGetterSetter(baseType = NewGameRecord, varName = setting,
+    name = enemyMeleeDamageBonus, typ = BonusType)
+typeGetterSetter(baseType = NewGameRecord, varName = setting,
+    name = playerMeleeDamageBonus, typ = BonusType)
+typeGetterSetter(baseType = NewGameRecord, varName = setting,
+    name = experienceBonus, typ = BonusType)
+typeGetterSetter(baseType = NewGameRecord, varName = setting,
+    name = reputationBonus, typ = BonusType)
 
 type
   FontTypes* = enum
