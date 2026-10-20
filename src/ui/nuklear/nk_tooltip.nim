@@ -71,18 +71,8 @@ var
     ## If true, tooltips are enabled (default true)
   hoveredTooltip: bool = false
     ## If true, a tooltip is hovered, used to advance the timer
-  startX: float = 0.0
-    ## Starting X position of tooltip window. If 0, the window will be shown
-    ## at the mouse cursor
-  startY: float = 0.0
-    ## Starting Y position of tooltip window. If 0, the window will be shown
-    ## at the mouse cursor
-  tooltipWidth: Natural = 0
-    ## The width of the tooltip's window. If 0, the whole tooltip will be shown
-    ## in one line
 
-proc setTooltips*(tDelay, fDelay: float; x: float = 0.0; y: float = 0.0;
-    width: Natural = 0) {.raises: [], tags: [], contractual.} =
+proc setTooltips*(tDelay, fDelay: float) {.raises: [], tags: [], contractual.} =
   ## Set the tooltips configuration
   ##
   ## * tDelay - the delay before show a tooltip to the user
@@ -95,9 +85,6 @@ proc setTooltips*(tDelay, fDelay: float; x: float = 0.0; y: float = 0.0;
   ##            line
   tooltipDelay = tDelay
   frameDelay = fDelay
-  startX = x
-  startY = y
-  tooltipWidth = width
 
 proc enableTooltips*() {.raises: [], tags: [], contractual.} =
   ## Enable showing tooltips
