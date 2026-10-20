@@ -59,17 +59,6 @@ proc tooltip*(text: string; x, y: float) {.raises: [], tags: [], contractual.} =
     ## Internal Nuklear C binding
   nk_tooltip2(ctx = ctx, text = text.cstring, startx = x, starty = y)
 
-proc tooltip*(text: string; w: Natural) {.raises: [], tags: [], contractual.} =
-  ## Create a tooltip with the selected text at the selected position with the selected width.
-  ##
-  ## * text - the text to show on the tooltip window
-  ## * x    - the X coordinate of the tooltip window
-  ## * y    - the Y coordinate of the tooltip window
-  ## * w    - the width of the window
-  proc nk_tooltip3(ctx; text: cstring; width: cint) {.importc, nodecl, raises: [], tags: [], contractual.}
-    ## Internal Nuklear C binding
-  nk_tooltip3(ctx = ctx, text = text.cstring, width = w.cint)
-
 var
   tooltipDelay: float = 1000.0
     ## For how long the player hovers the mouse over UI element before a
@@ -127,10 +116,7 @@ proc showTooltip2*(text: string) {.raises: [], tags: [], contractual.} =
     return
   hoveredTooltip = true
   if delay <= 0:
-    if tooltipWidth == 0:
-      tooltip(text = text)
-    else:
-      tooltip(text = text, w = tooltipWidth)
+    tooltip(text = text)
 
 proc updateTooltips*() {.raises: [], tags: [], contractual.} =
   ## Update tooltips timer
