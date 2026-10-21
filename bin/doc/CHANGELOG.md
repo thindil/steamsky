@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Crash when viewing information about finished game, like statistics,
   messages, etc
 - Displaying in-game tooltips (GitHub issue #100)
+- Info about randomly selected base during starting the game
 
 ## [12.8] - 2026-10-04
 
