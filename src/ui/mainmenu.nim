@@ -249,18 +249,18 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = "__________________________")
   restoreButtonStyle()
   layoutSpaceStatic(height = buttonHeight, widgetsCount = 3):
-    row(x = 75, y = 0, w = 150, h = buttonHeight - 10):
+    row(x = x - 170, y = 0, w = 150, h = buttonHeight - 10):
       labelButton(title = "Get involved",
           tooltip = "Guide how to help with creating the game, report bugs, etc."):
         fileName = "CONTRIBUTING.md"
         state = showFile
         dialog = none
-    row(x = 230, y = 0, w = 150, h = buttonHeight - 10):
+    row(x = x - 20, y = 0, w = 150, h = buttonHeight - 10):
       labelButton(title = "Modify game",
           tooltip = "Guide how to modify the game"):
         fileName = "MODDING.md"
         state = showFile
-    row(x = 385, y = 0, w = 150, h = buttonHeight - 10):
+    row(x = x + 130, y = 0, w = 150, h = buttonHeight - 10):
       labelButton(title = "README", tooltip = "Some technical information about the game"):
         fileName = "README.md"
         state = showFile
