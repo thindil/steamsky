@@ -786,7 +786,7 @@ const diffTooltips: array[12, string] = ["Select game difficulty preset level.",
     "Percentage of experience gained by player and their crew from actions. Raising it makes the game easier but lowers the amount of score gained as well.",
     "Percentage of reputation in bases gained or lost by player in sky bases due to player actions. Raising it makes the game easier but lowers the amount of score gained as well.",
     "Percentage of the standard material cost and time needed for upgrading ship modules. Lowering it makes the game easier but lowers the amount of score gained as well.",
-    "Percentage of the standard prices for services in bases (docking, repairing ship,\nrecruiting new crew members, etc). Lowering it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of the standard prices for services in bases (docking, repairing ship, recruiting new crew members, etc). Lowering it makes the game easier but lowers the amount of score gained as well.",
     "Select random values for all settings.",
     "If you select this option, all difficulty settings will be randomized during start new game. Not recommended for new players.", "Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it."]
 
