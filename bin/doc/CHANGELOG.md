@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Starting position of an available mission's info dialog
 - Crash when viewing information about finished game, like statistics,
   messages, etc
+- Displaying in-game tooltips (GitHub issue #100)
 
 ## [12.8] - 2026-10-04
 
