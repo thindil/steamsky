@@ -608,7 +608,7 @@ proc setInfoText(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if currentBase == -1:
     currentBase = newBase
     if currentBase == 0:
-      infoText = playerTooltips[5] & "\n\n" & playerTooltips[11]
+      infoText = playerTooltips[7] & "\n\n" & playerTooltips[11]
       return
     for faction in factionsList.values:
       if faction.name == playerFactions[newFaction]:
