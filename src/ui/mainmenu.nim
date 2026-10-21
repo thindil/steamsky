@@ -234,17 +234,18 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
       alignment = centered)
   saveButtonStyle()
   setButtonStyle(field = borderColor, a = 0)
+  let x: float = gameSettings.windowWidth.float / 2.5
   layoutSpaceStatic(height = buttonHeight * 2, widgetsCount = 4):
-    row(x = 255, y = 0, w = 100, h = buttonHeight - 10):
+    row(x = x, y = 0, w = 100, h = buttonHeight - 10):
       labelButton(title = "Website", tooltip = "Visit the game website: https://thindil.itch.io/steam-sky"):
         openLink(link = "https://thindil.itch.io/steam-sky")
-    row(x = 270, y = 0, w = 85, h = buttonHeight - 10):
+    row(x = x + 15, y = 0, w = 85, h = buttonHeight - 10):
       label(str = "______")
-    row(x = 145, y = buttonHeight, w = 330, h = buttonHeight - 10):
+    row(x = x - 100, y = buttonHeight, w = 330, h = buttonHeight - 10):
       labelButton(title = "(c)2016-2026 Bartek thindil Jasicki",
           tooltip = "Send a mail to the game creator"):
         openLink(link = "mailto:thindil@laeran.pl.eu.org")
-    row(x = 160, y = buttonHeight, w = 315, h = 30):
+    row(x = x - 80, y = buttonHeight, w = 315, h = 30):
       label(str = "__________________________")
   restoreButtonStyle()
   layoutSpaceStatic(height = buttonHeight, widgetsCount = 3):
