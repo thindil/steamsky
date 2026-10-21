@@ -303,9 +303,9 @@ type
     playerMeleeDamageBonus: BonusType
     experienceBonus: BonusType
     reputationBonus: BonusType
-    upgradeCostBonus*: BonusType
-    pricesBonus*: BonusType
-    difficultyLevel*: DifficultyType
+    upgradeCostBonus: BonusType
+    pricesBonus: BonusType
+    difficultyLevel: DifficultyType
 
 proc initNewGameRecord*(playerName: MobName = "Laeran";
     playerGender: char = 'M'; shipName: ShipName = "Anaria";
@@ -373,6 +373,12 @@ typeGetterSetter(baseType = NewGameRecord, varName = setting,
     name = experienceBonus, typ = BonusType)
 typeGetterSetter(baseType = NewGameRecord, varName = setting,
     name = reputationBonus, typ = BonusType)
+typeGetterSetter(baseType = NewGameRecord, varName = setting,
+    name = upgradeCostBonus, typ = BonusType)
+typeGetterSetter(baseType = NewGameRecord, varName = setting, name = pricesBonus,
+    typ = BonusType)
+typeGetterSetter(baseType = NewGameRecord, varName = setting,
+    name = difficultyLevel, typ = DifficultyType)
 
 type
   FontTypes* = enum
