@@ -30812,7 +30812,7 @@ nk_tooltip(struct nk_context *ctx, const char *text)
     text_len = nk_strlen(text);
     text_width = style->font->width(style->font->userdata,
                     style->font->height, text, text_len);
-    text_width += (5 * padding.x);
+    text_width += (4 * padding.x);
     int tooltip_width = nk_window_get_width(ctx) / 2.5;
     if (text_width < tooltip_width) {
       tooltip_width = text_width;
