@@ -612,6 +612,8 @@ proc nuklearInput*(): UserEvents {.raises: [], tags: [], contractual.} =
       result = anyEvent
   nk_input_end(ctx = ctx)
 
+echo "here2"
+
 proc nuklearDraw*() {.raises: [], tags: [], contractual.} =
   ## Draw the main window content
   discard SDL_SetRenderDrawColor(renderer = sdl.renderer, r = (0.10 *
