@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Displaying in-game tooltips (GitHub issue #100)
 - Info about randomly selected base during starting a new game
 - Info about randomly selected career during starting a new game
+- Missing tooltips for some buttons in dialogs
 
 ## [12.8] - 2026-10-04
 
