@@ -18,7 +18,7 @@
 ## Provides code related to the game's configuration, like load and save it to
 ## the file.
 
-import std/[parsecfg, streams, strutils]
+import std/[parsecfg, paths, streams, strutils]
 import contracts
 import game, types
 
@@ -403,13 +403,13 @@ var
 
 proc loadConfig*() {.raises: [], tags: [RootEffect], contractual.} =
   ## Load the game and new game settings from the file
-  let fileName: string = saveDirectory.string & "game.cfg"
-  var configFile: FileStream = newFileStream(filename = fileName, mode = fmRead)
+  let fileName: Path = ($saveDirectory & "game.cfg").Path
+  var configFile: FileStream = newFileStream(filename = $fileName, mode = fmRead)
   if configFile == nil:
     return
   var parser: CfgParser = CfgParser()
   try:
-    parser.open(input = configFile, filename = fileName)
+    parser.open(input = configFile, filename = $fileName)
   except OSError, IOError, Exception:
     echo "Can't initialize configuration file parser. Reason: " &
         getCurrentExceptionMsg()
