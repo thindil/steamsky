@@ -597,7 +597,7 @@ proc setInfoText(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if currentCareer == -1:
     currentCareer = newCareer
     if currentCareer == playerCareers.high:
-      infoText = playerTooltips[5] & "\n\n" & playerTooltips[10]
+      infoText = playerTooltips[6] & "\n\n" & playerTooltips[10]
       return
     for faction in factionsList.values:
       if faction.name == playerFactions[newFaction]:
