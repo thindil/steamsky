@@ -30817,6 +30817,14 @@ nk_tooltip(struct nk_context *ctx, const char *text)
     if (text_width < tooltip_width) {
       tooltip_width = text_width;
     }
+    /*int lines, done = 0;
+    int fitting = nk_text_clamp(style->font, text, len, line.w, &glyphs, &width, seperator,NK_LEN(seperator));
+    while (done < len) {
+        if (!fitting || line.y + line.h >= (b.y + b.h)) break;
+        done += fitting;
+        lines ++;
+        fitting = nk_text_clamp(f, &string[done], len - done, line.w, &glyphs, &width, seperator,NK_LEN(seperator));
+    }*/
     int lines = text_width / tooltip_width;
     if ((int)text_width % tooltip_width != 0)  {
       lines++;
