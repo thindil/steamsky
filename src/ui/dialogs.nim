@@ -455,10 +455,10 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
               button.code(dialog = dialog)
           else:
             imageLabelButton(image = images[button.icon.IconsNames],
-                label = button.text):
+                label = button.text, tooltip = button.tooltip):
               button.code(dialog = dialog)
         else:
-          labelButton(title = button.text):
+          labelButton(title = button.text, tooltip = button.tooltip):
             button.code(dialog = dialog)
         restoreButtonStyle()
       # Draw close button
@@ -474,10 +474,10 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
               button.code(dialog = dialog)
           else:
             imageLabelButton(image = images[button.icon.IconsNames],
-                label = button.text):
+                label = button.text, tooltip = button.tooltip):
               button.code(dialog = dialog)
         else:
-          labelButton(title = button.text):
+          labelButton(title = button.text, tooltip = button.tooltip):
             button.code(dialog = dialog)
         restoreButtonStyle()
   except:
