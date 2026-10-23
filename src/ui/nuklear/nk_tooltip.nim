@@ -40,13 +40,15 @@ macro fmtTooltip*(args: varargs[untyped]): untyped =
   result = quote do:
     nk_tooltipf(ctx = ctx, fmt = `args`)
 
-proc tooltip*(text: string) {.raises: [], tags: [], contractual.} =
+proc tooltip*(text: string; width, height: Natural) {.raises: [], tags: [], contractual.} =
   ## Draw a tooltip with the selected text
   ##
-  ## * text - the text to show on the tooltip window
-  proc nk_tooltip(ctx; text: cstring) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## * text   - the text to show on the tooltip window
+  ## * width  - the width of the main window
+  ## * height - the height of the main window
+  proc nk_tooltip3(ctx; text: cstring; windowWidth, windowHeight: cint) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## Internal Nuklear C binding
-  nk_tooltip(ctx = ctx, text = text.cstring)
+  nk_tooltip3(ctx = ctx, text = text.cstring, windowWidth = width.cint, windowHeight = height.cint)
 
 proc tooltip*(text: string; x, y: float) {.raises: [], tags: [], contractual.} =
   ## Create a tooltip with the selected text at the selected position.
@@ -71,20 +73,22 @@ var
     ## If true, tooltips are enabled (default true)
   hoveredTooltip: bool = false
     ## If true, a tooltip is hovered, used to advance the timer
+  windowWidth: Natural = 800
+    ## The width of the main window
+  windowHeight: Natural = 600
+    ## The height of the main window
 
-proc setTooltips*(tDelay, fDelay: float) {.raises: [], tags: [], contractual.} =
+proc setTooltips*(tDelay, fDelay: float; width, height: Natural) {.raises: [], tags: [], contractual.} =
   ## Set the tooltips configuration
   ##
   ## * tDelay - the delay before show a tooltip to the user
   ## * fDelay - the length of UI frame.
-  ## * x      - the starting X position of tooltip window. If 0, the window
-  ##            will be shown at the mouse cursor
-  ## * y      - the starting Y position of tooltip window. If 0, the window
-  ##            will be shown at the mouse cursor
-  ## * width  - the width of tooltip window. If 0, all tooltip will be in one
-  ##            line
+  ## * width  - the width of the main window
+  ## * height - the height of the main window
   tooltipDelay = tDelay
   frameDelay = fDelay
+  windowWidth = width
+  windowHeight = height
 
 proc enableTooltips*() {.raises: [], tags: [], contractual.} =
   ## Enable showing tooltips
@@ -103,7 +107,7 @@ proc showTooltip2*(text: string) {.raises: [], tags: [], contractual.} =
     return
   hoveredTooltip = true
   if delay <= 0:
-    tooltip(text = text)
+    tooltip(text = text, width = windowWidth, height = windowHeight)
 
 proc updateTooltips*() {.raises: [], tags: [], contractual.} =
   ## Update tooltips timer
