@@ -415,16 +415,6 @@ proc loadConfig*() {.raises: [], tags: [RootEffect], contractual.} =
         getCurrentExceptionMsg()
     return
 
-  proc parseAdaFloat(value: string): cfloat {.raises: [ValueError],
-      tags: [], contractual.} =
-    ## Temporary function, for backward compatibility with Ada code
-    require:
-      value.len > 0
-    body:
-      var newValue: string = value
-      newValue.removeSuffix(c = 'E')
-      return newValue.parseFloat().cfloat
-
   proc parseAdaBool(value: string): bool {.raises: [], tags: [],
       contractual.} =
     ## Temporary function, for backward compatibility with Ada code
@@ -454,21 +444,21 @@ proc loadConfig*() {.raises: [], tags: [RootEffect], contractual.} =
         of "StartingBase":
           newGameSettings.startingBase = entry.value
         of "EnemyDamageBonus":
-          newGameSettings.enemyDamageBonus = entry.value.parseAdaFloat()
+          newGameSettings.enemyDamageBonus = entry.value.parseFloat()
         of "PlayerDamageBonus":
-          newGameSettings.playerDamageBonus = entry.value.parseAdaFloat()
+          newGameSettings.playerDamageBonus = entry.value.parseFloat()
         of "EnemyMeleeDamageBonus":
-          newGameSettings.enemyMeleeDamageBonus = entry.value.parseAdaFloat()
+          newGameSettings.enemyMeleeDamageBonus = entry.value.parseFloat()
         of "PlayerMeleeDamageBonus":
-          newGameSettings.playerMeleeDamageBonus = entry.value.parseAdaFloat()
+          newGameSettings.playerMeleeDamageBonus = entry.value.parseFloat()
         of "ExperienceBonus":
-          newGameSettings.experienceBonus = entry.value.parseAdaFloat()
+          newGameSettings.experienceBonus = entry.value.parseFloat()
         of "ReputationBonus":
-          newGameSettings.reputationBonus = entry.value.parseAdaFloat()
+          newGameSettings.reputationBonus = entry.value.parseFloat()
         of "UpgradeCostBonus":
-          newGameSettings.upgradeCostBonus = entry.value.parseAdaFloat()
+          newGameSettings.upgradeCostBonus = entry.value.parseFloat()
         of "PricesBonus":
-          newGameSettings.pricesBonus = entry.value.parseAdaFloat()
+          newGameSettings.pricesBonus = entry.value.parseFloat()
         of "DifficultyLevel":
           newGameSettings.difficultyLevel = parseEnum[DifficultyType](s =
             entry.value.toLowerAscii)
