@@ -30848,6 +30848,69 @@ nk_tooltip(struct nk_context *ctx, const char *text)
         nk_tooltip_end(ctx);
     }
 }
+NK_API void
+nk_tooltip3(struct nk_context *ctx, const char *text, int window_width, int window_height)
+{
+    const struct nk_style *style;
+    struct nk_vec2 padding;
+
+    int text_len;
+    float text_width;
+    float text_height;
+    struct nk_window *win;
+    const struct nk_input *in;
+
+    NK_ASSERT(ctx);
+    NK_ASSERT(ctx->current);
+    NK_ASSERT(ctx->current->layout);
+    NK_ASSERT(text);
+    if (!ctx || !ctx->current || !ctx->current->layout || !text)
+        return;
+
+    /* fetch configuration data */
+    style = &ctx->style;
+    padding = style->window.padding;
+
+    /* calculate size of the text and tooltip */
+    text_len = nk_strlen(text);
+    text_width = style->font->width(style->font->userdata,
+                    style->font->height, text, text_len);
+    text_width += (4 * padding.x);
+    int tooltip_width = window_width / 2.5;
+    if (text_width < tooltip_width) {
+      tooltip_width = text_width;
+    }
+    int lines = 0;
+    int done = 0;
+    int glyphs = 0;
+    NK_INTERN nk_rune seperator[] = {' '};
+    int fitting = nk_text_clamp(style->font, text, text_len, tooltip_width, &glyphs, &text_width, seperator, NK_LEN(seperator));
+    while (done < text_len) {
+        if (!fitting) break;
+        done += fitting;
+        lines ++;
+        fitting = nk_text_clamp(style->font, &text[done], text_len - done, tooltip_width, &glyphs, &text_width, seperator, NK_LEN(seperator));
+    }
+    text_height = ((style->font->height * lines) + 2 * padding.y);
+
+    win = ctx->current;
+    in = &ctx->input;
+    int x = (nk_ifloorf(in->mouse.pos.x + 1) - (int)win->layout->clip.x);
+    if (x + tooltip_width > window_width) {
+      x -= tooltip_width;
+    }
+    int y = (nk_ifloorf(in->mouse.pos.y + 1) - (int)win->layout->clip.y);
+    if (y + text_height > window_height) {
+      y -= text_height;
+    }
+
+    /* execute tooltip and fill with text */
+    if (nk_tooltip_begin2(ctx, (float)tooltip_width, x, y)) {
+        nk_layout_row_dynamic(ctx, (float)text_height, 1);
+        nk_label_wrap(ctx, text);
+        nk_tooltip_end(ctx);
+    }
+}
 #ifdef NK_INCLUDE_STANDARD_VARARGS
 NK_API void
 nk_tooltipf(struct nk_context *ctx, const char *fmt, ...)
