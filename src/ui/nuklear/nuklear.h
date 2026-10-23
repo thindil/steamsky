@@ -30895,11 +30895,11 @@ nk_tooltip3(struct nk_context *ctx, const char *text, int window_width, int wind
 
     win = ctx->current;
     in = &ctx->input;
-    int x = (nk_ifloorf(in->mouse.pos.x + 1) - (int)win->layout->clip.x);
+    int x = nk_ifloorf(in->mouse.pos.x + 10);
     if (x + tooltip_width > window_width) {
       x -= tooltip_width;
     }
-    int y = (nk_ifloorf(in->mouse.pos.y + 1) - (int)win->layout->clip.y);
+    int y = nk_ifloorf(in->mouse.pos.y + 10);
     if (y + text_height > window_height) {
       y -= text_height;
     }
