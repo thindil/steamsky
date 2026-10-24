@@ -504,7 +504,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         label(str = "Name:")
         colorLabel(str = member.name, color = theme.colors[goldenColor])
         imageLabelButton(image = images[editIcon],
-            tooltip = "Set a new name for the crew member", label = "Rename"):
+            tooltip = "Set a new name for the crew's member.", label = "Rename"):
           dialog = renameMemberDialog
           setDialog(x = gameSettings.windowWidth.float / 4)
         if member.health < 100:
@@ -606,7 +606,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setError(message = "Can't show the order info.")
             return
           imageLabelButton(image = images[giveOrderIcon],
-              tooltip = "Set a new order for the crew member",
+              tooltip = "Set a new order for the crew's member.",
               label = "Change"):
             dialog = giveOrderDialog
             setGiveOrder(data = crewIndex, dialog = dialog)
