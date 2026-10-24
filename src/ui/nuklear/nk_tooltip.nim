@@ -40,15 +40,18 @@ macro fmtTooltip*(args: varargs[untyped]): untyped =
   result = quote do:
     nk_tooltipf(ctx = ctx, fmt = `args`)
 
-proc tooltip*(text: string; width, height: Natural) {.raises: [], tags: [], contractual.} =
+proc tooltip*(text: string; width, height: Natural) {.raises: [], tags: [],
+    contractual.} =
   ## Draw a tooltip with the selected text
   ##
   ## * text   - the text to show on the tooltip window
   ## * width  - the width of the main window
   ## * height - the height of the main window
-  proc nk_tooltip3(ctx; text: cstring; windowWidth, windowHeight: cint) {.importc, nodecl, raises: [], tags: [], contractual.}
+  proc nk_tooltip3(ctx; text: cstring; windowWidth,
+      windowHeight: cint) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## Internal Nuklear C binding
-  nk_tooltip3(ctx = ctx, text = text.cstring, windowWidth = width.cint, windowHeight = height.cint)
+  nk_tooltip3(ctx = ctx, text = text.cstring, windowWidth = width.cint,
+      windowHeight = height.cint)
 
 proc tooltip*(text: string; x, y: float) {.raises: [], tags: [], contractual.} =
   ## Create a tooltip with the selected text at the selected position.
@@ -78,7 +81,8 @@ var
   windowHeight: Natural = 600
     ## The height of the main window
 
-proc setTooltips*(tDelay, fDelay: float; width, height: Natural) {.raises: [], tags: [], contractual.} =
+proc setTooltips*(tDelay, fDelay: float; width, height: Natural) {.raises: [],
+    tags: [], contractual.} =
   ## Set the tooltips configuration
   ##
   ## * tDelay - the delay before show a tooltip to the user
