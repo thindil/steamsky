@@ -424,9 +424,9 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
       if amount > 1:
         height -= (labelHeight * (amount.float - 1))
     updateDialog(width = infoWidth, height = height)
-    popup(pType = staticPopup, title = infoData.title, x = dialogX,
-        y = dialogY, w = infoWidth, h = height, flags = {windowBorder,
-        windowTitle, windowNoScrollbar, windowMovable}):
+    window(name = infoData.title, x = dialogX, y = dialogY, w = infoWidth,
+        h = height, flags = {windowBorder, windowTitle, windowNoScrollbar,
+        windowMovable}):
       var index: Natural = 0
       for wAmount in infoData.widgetsAmount:
         if wAmount == 1:
@@ -462,7 +462,7 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
             button.code(dialog = dialog)
         restoreButtonStyle()
       # Draw close button
-      addCloseButton(dialog = dialog)
+      addCloseButton(dialog = dialog, isPopup = false)
       # Draw the second optional button
       if infoData.button2 != emptyButtonSettings:
         let button: ButtonSettings = infoData.button2
