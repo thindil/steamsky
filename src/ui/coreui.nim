@@ -39,9 +39,9 @@ type
       renameDialog, giveOrderDialog, memberDialog, renameMemberDialog,
       inventoryDialog, moduleInfoDialog, renameModuleDialog, assignCrewDialog,
       assignAmmoDialog, assignSkillDialog, recipeDialog, setRecipeDialog,
-      baseDialog, missionActionDialog, mapMenuDialog, setKeyDialog,
+      baseDialog, missionActionDialog, mapMenuDialog, setKeyDialog, infoDialog,
       baseActionDialog, ordersDialog, destinationDialog, messageDialog,
-      infoDialog, buyDialog, sellDialog, takeDialog, dropDialog, moveDialog,
+      buyDialog, sellDialog, takeDialog, dropDialog, moveDialog,
       giveDialog, dropCargoDialog
 
 const
