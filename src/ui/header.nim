@@ -189,7 +189,6 @@ proc showDialogs(dialog: var GameDialog; state: var GameState;
   if state != oldState:
     return true
   showMessage(dialog = dialog)
-  showInfo(dialog = dialog)
   return false
 
 proc showInfo(dialog: var GameDialog): bool {.raises: [], tags: [RootEffect],

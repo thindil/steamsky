@@ -157,7 +157,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         crafting: showCrafting, lastMessages: showMessages,
         knowledgeLists: showKnowledge, gameStatistics: showStatistics,
         help: showHelp, options: showOptions]
-    showDialog: array[GameDialog.errorDialog..GameDialog.setKeyDialog,
+    showDialog: array[GameDialog.errorDialog..GameDialog.infoDialog,
         proc(dialog: var GameDialog){.nimcall, raises: [].}] = [
       GameDialog.errorDialog: showError, waitDialog: showWaitMenu,
         newGoalDialog: showGoals, boardingDialog: showPartyMenu,
@@ -175,7 +175,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         assignSkillDialog: showAssignSkillDialog, recipeDialog: showRecipeInfo,
         setRecipeDialog: showSetRecipe, baseDialog: showBaseInfo,
         missionActionDialog: showMissionMenu, mapMenuDialog: showMapMenu,
-        setKeyDialog: showKeyDialog]
+        setKeyDialog: showKeyDialog, infoDialog: showInfo]
   var
     redrawTime: float = 1_000.0
   ## The main UI loop
@@ -190,7 +190,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         disableTooltips()
 
       # Show dialogs if needed
-      if dialog in GameDialog.errorDialog..GameDialog.setKeyDialog:
+      if dialog in GameDialog.errorDialog..GameDialog.infoDialog:
         showDialog[dialog](dialog = dialog)
       elif dialog in buyDialog..dropCargoDialog:
         updateData = showManipulateItem(dialog = dialog)
