@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Redesigned the main menu of the game, now it is bigger and resizeable
   (GitHub issue #101)
 - Better looking the starting a new game screen
+- Updated several tooltips
 
 ### Fixed
 - Typo in changelog
