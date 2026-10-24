@@ -415,14 +415,6 @@ proc loadConfig*() {.raises: [], tags: [RootEffect], contractual.} =
         getCurrentExceptionMsg()
     return
 
-  proc parseAdaBool(value: string): bool {.raises: [], tags: [],
-      contractual.} =
-    ## Temporary function, for backward compatibility with Ada code
-    require:
-      value.len > 0
-    body:
-      return value == "Yes"
-
   while true:
     try:
       let entry: CfgEvent = parser.next()
@@ -463,16 +455,16 @@ proc loadConfig*() {.raises: [], tags: [RootEffect], contractual.} =
           newGameSettings.difficultyLevel = parseEnum[DifficultyType](s =
             entry.value.toLowerAscii)
         of "AutoRest":
-          gameSettings.autoRest = entry.value.parseAdaBool()
+          gameSettings.autoRest = entry.value == "Yes"
         of "UndockSpeed":
           gameSettings.undockSpeed = parseEnum[ShipSpeed](s =
             entry.value.toLowerAscii)
         of "AutoCenter":
-          gameSettings.autoCenter = entry.value.parseAdaBool()
+          gameSettings.autoCenter = entry.value == "Yes"
         of "AutoReturn":
-          gameSettings.autoReturn = entry.value.parseAdaBool()
+          gameSettings.autoReturn = entry.value == "Yes"
         of "AutoFinish":
-          gameSettings.autoFinish = entry.value.parseAdaBool()
+          gameSettings.autoFinish = entry.value == "Yes"
         of "LowFuel":
           gameSettings.lowFuel = entry.value.parseInt()
         of "LowDrinks":
@@ -502,17 +494,17 @@ proc loadConfig*() {.raises: [], tags: [RootEffect], contractual.} =
           gameSettings.messagesOrder = parseEnum[MessagesOrder](s =
             entry.value.toLowerAscii)
         of "AutoAskForBases":
-          gameSettings.autoAskForBases = entry.value.parseAdaBool()
+          gameSettings.autoAskForBases = entry.value == "Yes"
         of "AutoAskForEvents":
-          gameSettings.autoAskForEvents = entry.value.parseAdaBool()
+          gameSettings.autoAskForEvents = entry.value == "Yes"
         of "ShowTooltips":
-          gameSettings.showTooltips = entry.value.parseAdaBool()
+          gameSettings.showTooltips = entry.value == "Yes"
         of "ShowLastMessages":
-          gameSettings.showLastMessages = entry.value.parseAdaBool()
+          gameSettings.showLastMessages = entry.value == "Yes"
         of "MessagesPosition":
           gameSettings.messagesPosition = entry.value.parseInt()
         of "FullScreen":
-          gameSettings.fullScreen = entry.value.parseAdaBool()
+          gameSettings.fullScreen = entry.value == "Yes"
         of "AutoCloseMessagesTime":
           gameSettings.autoCloseMessagesTime = entry.value.parseInt()
         of "AutoSave":
@@ -521,15 +513,15 @@ proc loadConfig*() {.raises: [], tags: [RootEffect], contractual.} =
         of "TopicsPosition":
           gameSettings.topicsPosition = entry.value.parseInt()
         of "ShowNumbers":
-          gameSettings.showNumbers = entry.value.parseAdaBool()
+          gameSettings.showNumbers = entry.value == "Yes"
         of "RightButton":
-          gameSettings.rightButton = entry.value.parseAdaBool()
+          gameSettings.rightButton = entry.value == "Yes"
         of "ListsLimit":
           gameSettings.listsLimit = entry.value.parseInt()
         of "WaitMinutes":
           gameSettings.waitMinutes = entry.value.parseInt()
         of "AutoDestination":
-          gameSettings.autoDestination = entry.value.parseAdaBool()
+          gameSettings.autoDestination = entry.value == "Yes"
         else:
           discard
       of cfgError:
