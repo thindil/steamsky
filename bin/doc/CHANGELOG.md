@@ -24,6 +24,8 @@ All notable changes to this project will be documented in this file.
 - Info about randomly selected base during starting a new game
 - Info about randomly selected career during starting a new game
 - Missing tooltips for some buttons in dialogs
+- Starting the game in full screen mode if a player set it in the game's
+  settings
 
 ## [12.8] - 2026-10-04
 
