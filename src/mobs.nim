@@ -35,8 +35,8 @@ proc loadSkills(mobNode: XmlNode; mob: var ProtoMobRecord;
   ## Returns modified parameter mob
   body:
     for skill in mobNode.findAll(tag = "skill"):
-      let skillName: string = skill.attr(name = "name")
-      var skillIndex: int = if skillName == "WeaponSkill":
+      let skillName: XmlAttribute = skill.attr(name = "name")
+      var skillIndex: Natural = if skillName == "WeaponSkill":
           skillsList.len + 1
         else:
           findSkillIndex(skillName = skillName)
@@ -186,7 +186,7 @@ proc loadMobs*(fileName: Path) {.raises: [DataLoadingError],
               else:
                 2
             break
-      var mobOrder: string = mobNode.attr(name = "order")
+      var mobOrder: XmlAttribute = mobNode.attr(name = "order")
       if mobOrder.len > 0:
         mob.order = try:
             parseEnum[CrewOrders](s = mobOrder.toLowerAscii)
