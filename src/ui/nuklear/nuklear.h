@@ -30890,7 +30890,7 @@ nk_tooltip3(struct nk_context *ctx, const char *text, int window_width, int wind
         lines ++;
         fitting = nk_text_clamp(style->font, &text[done], text_len - done, tooltip_width, &glyphs, &text_width, seperator, NK_LEN(seperator));
     }
-    text_height = ((style->font->height * lines) + 2 * padding.y);
+    text_height = (style->font->height + padding.y) * lines;
 
     in = &ctx->input;
     int x = nk_ifloorf(in->mouse.pos.x + 10);
