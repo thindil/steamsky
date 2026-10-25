@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
   (GitHub issue #101)
 - Better looking the starting a new game screen
 - Updated several tooltips
+- Updated modding guide
 
 ### Fixed
 - Typo in changelog
