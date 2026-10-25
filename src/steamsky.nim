@@ -126,6 +126,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   except:
     dialog = setError(message = "Can't load the game's data.")
 
+  if gameSettings.fullScreen:
+    nuklearSetWindowFullScreen()
+
   # Set the main menu
   setMainMenu(dialog = dialog)
   if dialog != none:
