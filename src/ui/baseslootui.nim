@@ -158,7 +158,6 @@ proc setTakeDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  closePopup()
   var baseCargoIndex: int = -1
   if itemIndex - 1 > -1:
     let protoIndex: Natural = playerShip.cargo[itemIndex - 1].protoIndex
@@ -179,7 +178,6 @@ proc setDropDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  closePopup()
   dialog = setManipulate(action = dropAction, iIndex = itemIndex)
 
 proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [

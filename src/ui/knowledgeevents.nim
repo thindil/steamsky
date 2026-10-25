@@ -59,7 +59,6 @@ proc showEvent(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  closePopup()
   let event = eventsList[setui.eventIndex]
   centerX = event.skyX
   centerY = event.skyY

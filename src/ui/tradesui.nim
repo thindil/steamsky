@@ -206,7 +206,6 @@ proc setBuyDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  closePopup()
   var baseCargoIndex: int = -1
   if itemIndex > -1:
     let
@@ -228,7 +227,6 @@ proc setSellDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  closePopup()
   dialog = setManipulate(action = sellAction, iIndex = itemIndex)
 
 proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
