@@ -601,15 +601,13 @@ Value must be an existing skill name.
   Upgrading ship, Talking in bases, Healing wounded, Cleaning ship, Defend ship,
   Board enemy ship. Attribute `value` can have value Normal or High (only
   one High per mobile).
-* Tag `item` define item in mobile inventory. Each mobile can have max 32
-  different items.
+* Tag `item` define item in mobile inventory.
     * Attribute `index` is index of item from files (from *items.dat* file from
       *data* directory).
     * If mobile should have constant amount of item, add attribute `amount`
       with amount of item. If mobile should have random amount of item, add
       attribute `minamount` with minimum amount of item and attribute
-      `maxamount` with maximum amount of item. The maximum value for each
-      amount parameter is 100_000.
+      `maxamount` with maximum amount of item.
     * Optional attribute `action`: What to do with this item. Possible values
       are: "add" (add this item, default option), "remove" (remove this item)
       or "update" (update selected item).
