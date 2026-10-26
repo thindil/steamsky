@@ -1111,10 +1111,6 @@ type
     spacing*: nk_vec2
     font*: ptr nk_baked_font
     fallback_glyph*: nk_rune
-  nk_text* {.importc: "struct nk_text", nodecl.} = object
-    ## Internal Nuklear type
-    padding*: nk_vec2
-    background*, text*: nk_color
   CursorsArray* = array[cursorCount, nk_cursor]
     ## The array of mouse buttons
   nk_glyph* = array[nkUtfSize, char]
