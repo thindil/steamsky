@@ -30794,8 +30794,6 @@ nk_tooltip(struct nk_context *ctx, const char *text)
     int text_len;
     float text_width;
     float text_height;
-    struct nk_window *win;
-    const struct nk_input *in;
 
     NK_ASSERT(ctx);
     NK_ASSERT(ctx->current);
@@ -30830,19 +30828,8 @@ nk_tooltip(struct nk_context *ctx, const char *text)
     }
     text_height = ((style->font->height * lines) + 2 * padding.y);
 
-    win = ctx->current;
-    in = &ctx->input;
-    int x = (nk_ifloorf(in->mouse.pos.x + 1) - (int)win->layout->clip.x);
-    if (x + tooltip_width > nk_window_get_width(ctx)) {
-      x -= tooltip_width;
-    }
-    int y = (nk_ifloorf(in->mouse.pos.y + 1) - (int)win->layout->clip.y);
-    if (y + text_height > nk_window_get_height(ctx)) {
-      y -= text_height;
-    }
-
     /* execute tooltip and fill with text */
-    if (nk_tooltip_begin2(ctx, (float)tooltip_width, x, y)) {
+    if (nk_tooltip_begin(ctx, (float)tooltip_width)) {
         nk_layout_row_dynamic(ctx, (float)text_height, 1);
         nk_label_wrap(ctx, text);
         nk_tooltip_end(ctx);

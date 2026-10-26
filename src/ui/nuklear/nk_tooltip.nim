@@ -40,6 +40,15 @@ macro fmtTooltip*(args: varargs[untyped]): untyped =
   result = quote do:
     nk_tooltipf(ctx = ctx, fmt = `args`)
 
+proc tooltip*(text: string) {.raises: [], tags: [], contractual.} =
+  ## Draw a tooltip with the selected text
+  ##
+  ## * text   - the text to show on the tooltip window
+  proc nk_tooltip(ctx; text: cstring) {.importc, nodecl, raises: [], tags: [],
+      contractual.}
+    ## Internal Nuklear C binding
+  nk_tooltip(ctx = ctx, text = text.cstring)
+
 proc tooltip*(text: string; width, height: Natural) {.raises: [], tags: [],
     contractual.} =
   ## Draw a tooltip with the selected text
