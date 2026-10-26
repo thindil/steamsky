@@ -268,6 +268,7 @@ proc closeScreen(close: CloseDestination; state: var GameState;
     except OSError, IOError:
       dialog = setError(message = "Can't save file with keyboard accelerators.")
       return
+    nuklearSetWindowFullScreen(fullScreen = gameSettings.fullScreen)
   case close
   of combat:
     state = combat
