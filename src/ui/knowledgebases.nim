@@ -151,12 +151,12 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
       if base.skyX == playerShip.skyX and base.skyY == playerShip.skyY:
         dialog = setMessage(message = "You are at this location now.",
             title = "Can't set destination")
-        return
-      playerShip.destinationX = base.skyX
-      playerShip.destinationY = base.skyY
-      addMessage(message = "You set the travel destination for your ship.",
-          mType = orderMessage)
-      dialog = none
+      else:
+        playerShip.destinationX = base.skyX
+        playerShip.destinationY = base.skyY
+        addMessage(message = "You set the travel destination for your ship.",
+            mType = orderMessage)
+        dialog = none
     restoreButtonStyle()
     addCloseButton(dialog = dialog, isPopup = false)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
