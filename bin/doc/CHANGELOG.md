@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Missing tooltips for some buttons in dialogs
 - Starting the game in full screen mode if a player set it in the game's
   settings
+- Setting the game's full screen mode in the game's options
 
 ## [12.8] - 2026-10-04
 
