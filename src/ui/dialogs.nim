@@ -483,6 +483,8 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
   except:
     dialog = setError(message = "Can't show the info")
 
+  windowSetFocus(name = infoData.title)
+
 proc updateMaxAmount(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Update max allowed amount of items to give
