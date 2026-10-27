@@ -27,8 +27,8 @@ All notable changes to this project will be documented in this file.
 - Starting the game in full screen mode if a player set it in the game's
   settings
 - Setting the game's full screen mode in the game's options
-- Crash when setting a base as the target to the player's ship's when the ship
-  is at the same position
+- Crash when setting a base or a mission as the target to the player's ship's
+  when the ship is at the same position
 
 ## [12.8] - 2026-10-04
 
