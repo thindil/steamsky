@@ -85,7 +85,7 @@ proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.
   result = initMessageData()
   if messageIndex - 1 > messagesList.len:
     return
-  var index: int = -1
+  var index: ExtendedNatural = -1
   if messageIndex < 1:
     if messagesList.len + messageIndex > 0:
       if kind == default:
