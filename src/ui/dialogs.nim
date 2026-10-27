@@ -803,6 +803,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
               moveItem(itemIndex = manipulateData.itemIndex,
                   amount = manipulateData.amount,
                   memberIndex = manipulateData.data)
+              itemsIndexes = @[]
+              refreshCargoList(dialog = dialog)
             except NoFreeCargoError:
               dialog = setMessage(message = getCurrentExceptionMsg(),
                   title = "No free space in cargo")
