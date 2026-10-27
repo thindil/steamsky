@@ -404,7 +404,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addCheckbox(label = "Full screen mode:",
           option = interfaceOptions[4],
           tooltip = "Run the game in full screen mode.")
-      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat,
+      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.5.cfloat,
           0.25, 0.05])
       addAccelerator(label = "Full screen shortcut:",
           tooltip = "Key used to switch full screen mode.",
