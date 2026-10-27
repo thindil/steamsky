@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Setting the game's full screen mode in the game's options
 - Crash when setting a base or a mission as the target to the player's ship's
   when the ship is at the same position
+- Position of the full screen keyboard shortcut in the game's settings screen
 
 ## [12.8] - 2026-10-04
 
