@@ -30861,7 +30861,7 @@ nk_tooltip3(struct nk_context *ctx, const char *text, int window_width, int wind
     text_len = nk_strlen(text);
     text_width = style->font->width(style->font->userdata,
                     style->font->height, text, text_len);
-    text_width += (4 * padding.x);
+    text_width += (8 * padding.x);
     int tooltip_width = window_width / 2.5;
     if (text_width < tooltip_width) {
       tooltip_width = text_width;
