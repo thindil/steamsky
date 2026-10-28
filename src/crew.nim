@@ -152,7 +152,7 @@ proc getSkillLevelName*(skillLevel: SkillRange): string {.raises: [
 
 proc findCabin*(memberIndex: Natural): ExtendedNatural {.raises: [], tags: [],
     contractual.} =
-  ## Find index of cabin which belongs to the selected crew member
+  ## Find index of the cabin which belongs to the selected crew member
   ##
   ## * memberIndex - the index of the player's ship crew member which will be
   ##                 checked
