@@ -68,7 +68,8 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
         imageLabelButton(image = images[editColoredIcon], label = "Rename"):
           dialog = setError(message = "Disabled button clicked")
     else:
-      imageLabelButton(image = images[editColoredIcon], label = "Rename"):
+      imageLabelButton(image = images[editColoredIcon], label = "Rename",
+          tooltip = windowName):
         dialog = none
         case dialog
         of renameDialog:
