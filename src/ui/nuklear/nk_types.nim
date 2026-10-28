@@ -1100,17 +1100,7 @@ type
     ranges*: pointer
   nk_font_config* {.importc: "struct nk_font_config".} = object
     ## Internal Nuklear type
-    `range`*, ttf_blob: pointer
-    next*, n*, p*: ptr nk_font_config
-    ttf_size*: nk_size
-    ttf_data_owned_by_atlas*, merge_mode*, pixel_snap*, oversample_v*,
-      oversample_h*: uint8
-    padding*: array[3, uint8]
-    size*: cfloat
-    coord_type*: FontCoordType
-    spacing*: nk_vec2
-    font*: ptr nk_baked_font
-    fallback_glyph*: nk_rune
+    `range`*: pointer
   CursorsArray* = array[cursorCount, nk_cursor]
     ## The array of mouse buttons
   nk_glyph* = array[nkUtfSize, char]
