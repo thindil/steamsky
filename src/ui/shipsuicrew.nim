@@ -820,7 +820,7 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
       addCheckButton(tooltip = "Select the crew member to give orders to them.",
           checked = data.checked)
       addButton(label = playerShip.crew[data.index].name,
-          tooltip = "Show available crew member's options", data = data.index,
+          tooltip = "Show available the crew member's options", data = data.index,
           code = setMemberInfo, dialog = dialog)
       addButton(label = ($playerShip.crew[data.index].order).capitalizeAscii,
           tooltip = "The current order for the selected crew member. Press the mouse button to change it.",
