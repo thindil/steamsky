@@ -148,7 +148,6 @@ proc setGiveDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  closePopup()
   dialog = setManipulate(action = giveAction, iIndex = itemIndex)
 
 proc setDropDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
