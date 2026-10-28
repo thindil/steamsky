@@ -356,7 +356,8 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
         selected = currentOrder, itemHeight = labelHeight.int, x = 285, y = 150)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-    imageLabelButton(image = images[giveOrderColoredIcon], label = "Assign"):
+    imageLabelButton(image = images[giveOrderColoredIcon], label = "Assign",
+        tooltip = "Assing the selected new order"):
       dialog = none
       try:
         giveOrders(ship = playerShip, memberIndex = crewIndex,
@@ -504,7 +505,8 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
         label(str = "Name:")
         colorLabel(str = member.name, color = theme.colors[goldenColor])
         imageLabelButton(image = images[editIcon],
-            tooltip = "Set a new name for the crew's member.", label = "Rename"):
+            tooltip = "Set a new name for the crew's member.",
+                label = "Rename"):
           dialog = renameMemberDialog
           setDialog(x = gameSettings.windowWidth.float / 4)
         if member.health < 100:
@@ -820,7 +822,8 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
       addCheckButton(tooltip = "Select the crew member to give orders to them.",
           checked = data.checked)
       addButton(label = playerShip.crew[data.index].name,
-          tooltip = "Show available the crew member's options", data = data.index,
+          tooltip = "Show available the crew member's options",
+              data = data.index,
           code = setMemberInfo, dialog = dialog)
       addButton(label = ($playerShip.crew[data.index].order).capitalizeAscii,
           tooltip = "The current order for the selected crew member. Press the mouse button to change it.",
