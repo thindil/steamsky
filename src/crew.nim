@@ -45,7 +45,7 @@ proc dailyPayment*() {.raises: [KeyError, Exception], tags: [
           haveMoney = false
         if haveMoney:
           updateMoney(memberIndex = -1, amount = -(member.payment[1]), quality = any)
-          var payMessage: string = "You pay " & member.name
+          var payMessage: MessageText = "You pay " & member.name
           if member.gender == 'M':
             payMessage.add(y = " his ")
           else:
@@ -58,7 +58,7 @@ proc dailyPayment*() {.raises: [KeyError, Exception], tags: [
       if not haveMoney:
         updateMorale(ship = playerShip, memberIndex = index,
             value = getRandom(min = -50, max = -10))
-  var memberIndex: int = 1
+  var memberIndex: Positive = 1
   while memberIndex <= playerShip.crew.high:
     if playerShip.crew[memberIndex].contractLength > 0:
       playerShip.crew[memberIndex].contractLength.dec
@@ -150,7 +150,7 @@ proc getSkillLevelName*(skillLevel: SkillRange): string {.raises: [
     else:
       return "Ultimate"
 
-proc findCabin*(memberIndex: Natural): int {.raises: [], tags: [],
+proc findCabin*(memberIndex: Natural): ExtendedNatural {.raises: [], tags: [],
     contractual.} =
   ## Find index of cabin which belongs to the selected crew member
   ##
