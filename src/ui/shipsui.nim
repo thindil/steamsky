@@ -125,6 +125,15 @@ proc setRepair(moduleIndex: int = -1) {.raises: [], tags: [], contractual.} =
         playerShip.repairModule].name & " as the repair's priority.",
         mType = orderMessage)
 
+proc showFactionInfo*(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the dialog with information about the selected faction
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  return
+
 proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the general info about the player's ship
