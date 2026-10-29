@@ -183,8 +183,8 @@ proc memberRest(memberIndex: Natural; tiredLevel, healthLevel: var int;
     memberIndex < playerShip.crew.len
     times > 0
   body:
-    let cabinIndex: int = findCabin(memberIndex = memberIndex)
-    var restAmount: int = 0
+    let cabinIndex: ExtendedNatural = findCabin(memberIndex = memberIndex)
+    var restAmount: Natural = 0
     if playerShip.crew[memberIndex].tired > 0:
       if cabinIndex > -1:
         var damage: float = 1.0 - (playerShip.modules[
