@@ -194,7 +194,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         disableTooltips()
 
       # Show dialogs if needed
-      if dialog in GameDialog.errorDialog..GameDialog.infoDialog:
+      if dialog in GameDialog.errorDialog..GameDialog.factionInfoDialog:
         showDialog[dialog](dialog = dialog)
       elif dialog in buyDialog..dropCargoDialog:
         updateData = showManipulateItem(dialog = dialog)
