@@ -40,8 +40,8 @@ type
       inventoryDialog, moduleInfoDialog, renameModuleDialog, assignCrewDialog,
       assignAmmoDialog, assignSkillDialog, recipeDialog, setRecipeDialog,
       baseDialog, missionActionDialog, mapMenuDialog, setKeyDialog, infoDialog,
-      baseActionDialog, ordersDialog, destinationDialog, messageDialog,
-      buyDialog, sellDialog, takeDialog, dropDialog, moveDialog,
+      factionInfoDialog, baseActionDialog, ordersDialog, destinationDialog,
+      messageDialog, buyDialog, sellDialog, takeDialog, dropDialog, moveDialog,
       giveDialog, dropCargoDialog
 
 const
