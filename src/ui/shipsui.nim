@@ -136,8 +136,8 @@ proc showFactionInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   let
-    height: float = gameSettings.windowHeight.float / 2.0
-    dialogWidth: float = gameSettings.windowWidth.float - 20
+    height: float = gameSettings.windowHeight.float * 0.6
+    dialogWidth: float = gameSettings.windowWidth.float * 0.7
     viewWidth: float = dialogWidth - buttonHeight - 5
   updateDialog(width = dialogWidth, height = height)
   window(name = factionName, x = dialogX, y = dialogY, w = dialogWidth,
@@ -307,6 +307,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
             sub = '\n') - 1]
         factionName = faction.name
         dialog = factionInfoDialog
+        setDialog(x = gameSettings.windowWidth / 6,
+            y = gameSettings.windowHeight / 6)
       except:
         dialog = setError(message = "Can't show information about the faction.")
         return
