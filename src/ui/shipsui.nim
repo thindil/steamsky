@@ -125,6 +125,9 @@ proc setRepair(moduleIndex: int = -1) {.raises: [], tags: [], contractual.} =
         playerShip.repairModule].name & " as the repair's priority.",
         mType = orderMessage)
 
+var
+  factionName, factionDescription: string = ""
+
 proc showFactionInfo*(dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Show the dialog with information about the selected faction
@@ -132,7 +135,18 @@ proc showFactionInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  return
+  let
+    height: float = gameSettings.windowHeight.float / 2.0
+    dialogWidth: float = gameSettings.windowWidth.float - 20
+    viewWidth: float = dialogWidth - buttonHeight - 5
+  updateDialog(width = dialogWidth, height = height)
+  window(name = factionName, x = dialogX, y = dialogY, w = dialogWidth,
+      h = height, flags = {windowBorder, windowTitle, windowMovable,
+          windowNoScrollbar}):
+    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+    addCloseButton(dialog = dialog, isPopup = false)
+
+  windowSetFocus(name = factionName)
 
 proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -289,8 +303,10 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   for index, faction in factionsList:
     labelButton(title = faction.name, tooltip = "Show information about the faction"):
       try:
-        dialog = setInfo(text = faction.description[
-            0..faction.description.rfind(sub = '\n') - 1], title = faction.name)
+        factionDescription = faction.description[0..faction.description.rfind(
+            sub = '\n') - 1]
+        factionName = faction.name
+        dialog = factionInfoDialog
       except:
         dialog = setError(message = "Can't show information about the faction.")
         return
