@@ -1093,11 +1093,6 @@ type
     pixel: pointer
     tex_width, tex_height: cint
     pernament, temporary: nk_allocator
-  nk_baked_font* {.importc: "struct nk_baked_font", completeStruct.} = object
-    ## Internal Nuklear type
-    height*: cfloat
-    glyph_offset*, glyph_count*: nk_rune
-    ranges*: pointer
   nk_font_config* {.importc: "struct nk_font_config".} = object
     ## Internal Nuklear type
     `range`*: pointer
