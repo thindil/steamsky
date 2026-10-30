@@ -2311,3 +2311,17 @@ template tooltip*(x, y, width: float; content: untyped) =
   if createTooltip(width2 = width, x2 = x, y2 = y):
     content
     ctx.nk_tooltip_end
+
+# ----
+# Text
+# ----
+proc countLines*(text: string; maxWidth: Positive): Positive {.raises: [], tags: [], contractual.} =
+  ## Count amount of lines needed to display the selected text
+  ##
+  ## * text     - the text which will be displayed
+  ## * maxWidth - the maximum width of the one line of the text
+  ##
+  ## Returns the amount of lines needed to displya the selected text
+  proc nk_text_count_lines(ctx; text: cstring; text_len: cint; text_width: cfloat; max_len: cint): cint {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return 1
