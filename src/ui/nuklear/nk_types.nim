@@ -1079,15 +1079,9 @@ type
     ## Internal Nuklear type
     codepoint*: nk_rune
     xadvance, x0, y0, x1, y1, w, h, u0, v0, u1, v1: cfloat
-  nk_font* {.importc: "struct nk_font", completeStruct.} = object
+  nk_font* {.importc: "struct nk_font".} = object
     ## Internal Nuklear type
     handle*: PNkUserFont
-    next*: ptr nk_font
-    scale*: cfloat
-    config*: ptr nk_font_config
-    glyphs*, fallback*: ptr nk_font_glyph
-    fallback_codepoint*: nk_rune
-    texture*: nk_handle
   nk_font_atlas* {.importc: "struct nk_font_atlas", completeStruct.} = object
     ## Internal Nuklear type
     pixel: pointer
