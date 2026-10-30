@@ -227,9 +227,10 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
           ModuleType.medicalRoom and module.durability > 0 and memberIndex in module.owner:
         haveMedicalRoom = true
         break
-    var
-      healAmount: int = 1
-      toolIndex: int = 0
+    {.ruleOff: "varDeclared".}
+    var healAmount: int = 1
+    {.ruleOn: "varDeclared".}
+    var toolIndex: int = 0
     for member in playerShip.crew:
       let faction: FactionData = factionsList[member.faction]
       if member.name != playerShip.crew[memberIndex].name and member.health < 100:
