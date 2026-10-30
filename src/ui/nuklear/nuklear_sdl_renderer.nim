@@ -66,6 +66,8 @@ nk_sdl_font_stash_begin(struct nk_font_atlas **atlas)
 }
 """.}
 
+echo "here"
+
 include nuklear
 
 # SDL2 bindings

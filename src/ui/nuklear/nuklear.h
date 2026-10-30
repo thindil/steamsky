@@ -7804,7 +7804,27 @@ nk_text_calculate_text_bounds(const struct nk_user_font *font,
         *remaining = begin+text_len;
     return text_size;
 }
+NK_API int
+nk_text_count_lines(struct nk_context *ctx, const char *text, int text_len, float text_width, int max_len) {
+    const struct nk_style *style;
+    struct nk_vec2 padding;
+    /* fetch configuration data */
+    style = &ctx->style;
+    padding = style->window.padding;
 
+    int lines = 0;
+    int done = 0;
+    int glyphs = 0;
+    NK_INTERN nk_rune seperator[] = {' '};
+    int fitting = nk_text_clamp(style->font, text, text_len, max_len, &glyphs, &text_width, seperator, NK_LEN(seperator));
+    while (done < text_len) {
+        if (!fitting) break;
+        done += fitting;
+        lines ++;
+        fitting = nk_text_clamp(style->font, &text[done], text_len - done, max_len, &glyphs, &text_width, seperator, NK_LEN(seperator));
+    }
+    return lines;
+}
 
 
 
