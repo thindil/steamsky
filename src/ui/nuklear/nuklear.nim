@@ -2315,8 +2315,8 @@ template tooltip*(x, y, width: float; content: untyped) =
 # ----
 # Text
 # ----
-proc countLines*(text: string; maxWidth: Positive): Positive {.raises: [],
-    tags: [], contractual.} =
+proc countLines*(text: string; maxWidth: Positive): Positive {.raises: [Exception],
+    tags: [RootEffect], contractual.} =
   ## Count amount of lines needed to display the selected text
   ##
   ## * text     - the text which will be displayed
@@ -2327,4 +2327,6 @@ proc countLines*(text: string; maxWidth: Positive): Positive {.raises: [],
       text_width: cfloat; max_len: cint): cint {.importc, nodecl, raises: [],
       tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  return 1
+  return nk_text_count_lines(ctx = ctx, text = text.cstring,
+      text_len = text.len.cint, text_width = getTextWidth(text = text).cfloat,
+      max_len = maxWidth.cint)
