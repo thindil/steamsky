@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 - Better looking the starting a new game screen
 - Updated several tooltips
 - Updated modding guide
+- Better looking the dialog with information about factions in the ship info
+  screen
 
 ### Fixed
 - Typo in changelog
