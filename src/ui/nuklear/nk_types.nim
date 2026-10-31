@@ -1075,10 +1075,6 @@ type
     overlay*: nk_command_buffer
     build*: cint
     pool*: nk_pool
-  nk_font_glyph* {.importc: "struct nk_font_glyph", completeStruct.} = object
-    ## Internal Nuklear type
-    codepoint*: nk_rune
-    xadvance, x0, y0, x1, y1, w, h, u0, v0, u1, v1: cfloat
   nk_font* {.importc: "struct nk_font".} = object
     ## Internal Nuklear type
     handle*: PNkUserFont
