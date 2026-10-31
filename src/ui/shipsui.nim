@@ -138,13 +138,20 @@ proc showFactionInfo*(dialog: var GameDialog) {.raises: [], tags: [
   let
     height: float = gameSettings.windowHeight.float * 0.6
     dialogWidth: float = gameSettings.windowWidth.float * 0.7
+    textLines: float = try:
+        countLines(factionDescription, (dialogWidth - 30).Positive).float
+      except Exception:
+        0.0
+  if textLines == 0.0:
+    dialog = setError(message = "Can't count lines of faction description.")
+    return
   updateDialog(width = dialogWidth, height = height)
   window(name = factionName, x = dialogX, y = dialogY, w = dialogWidth,
       h = height, flags = {windowBorder, windowTitle, windowMovable,
           windowNoScrollbar}):
     setLayoutRowDynamic(height = height - dialogButtonHeight - 60, 1)
     group(title = "DescriptionGroup", flags = {windowNoFlags}):
-      setLayoutRowDynamic(height = height - dialogButtonHeight - 60, 1)
+      setLayoutRowDynamic(height = labelHeight * textLines, 1)
       wrapLabel(str = factionDescription)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
