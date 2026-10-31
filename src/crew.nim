@@ -230,7 +230,7 @@ proc memberHeal(memberIndex: Natural; times: int) {.raises: [
     {.ruleOff: "varDeclared".}
     var healAmount: int = 1
     {.ruleOn: "varDeclared".}
-    var toolIndex: int = 0
+    var toolIndex: ExtendedNatural = 0
     for member in playerShip.crew:
       let faction: FactionData = factionsList[member.faction]
       if member.name != playerShip.crew[memberIndex].name and member.health < 100:
@@ -337,7 +337,7 @@ proc memberClean(memberIndex: Natural; times: int) {.raises: [
     times > 0
   body:
     var
-      toolIndex: int = findTools(memberIndex = memberIndex,
+      toolIndex: ExtendedNatural = findTools(memberIndex = memberIndex,
           itemType = cleaningTools, order = clean)
       needCleaning: bool = false
     if toolIndex > -1:
@@ -395,7 +395,7 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
   ##
   ## Returns amount of bonus from the used consumable or 0 if nothing was
   ## consumed
-  var itemIndex: int = findItem(inventory = playerShip.cargo,
+  var itemIndex: ExtendedNatural = findItem(inventory = playerShip.cargo,
       itemType = itemType, itemQuality = any, craftBonus = any,
       craftMalus = any)
   if itemIndex > -1:
@@ -538,7 +538,7 @@ proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
   normalizeStat(stat = tiredLevel, maxValue = 150)
   member.tired = tiredLevel
   if hungerLevel > 80:
-    var consumeResult: int = 0
+    var consumeResult: Natural = 0
     for foodType in factionsList[member.faction].foodTypes:
       consumeResult = consume(itemType = foodType, memberIndex = memberIndex)
       if consumeResult > 0:
@@ -556,7 +556,7 @@ proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
   normalizeStat(stat = hungerLevel)
   member.hunger = hungerLevel
   if thirstLevel > 40:
-    var consumeResult: int = 0
+    var consumeResult: Natural = 0
     for drinksType in factionsList[member.faction].drinksTypes:
       consumeResult = consume(itemType = drinksType, memberIndex = memberIndex)
       if consumeResult > 0:
@@ -591,8 +591,8 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
   ## * tiredPoints - the amount of tired points which each crew member will get
   ## * inCombat    - if true, the player is in combat.
   var
-    i: int = 0
-    tiredLevel, hungerLevel, thirstLevel, healthLevel, orderTime: int = 0
+    i: Natural = 0
+    tiredLevel, hungerLevel, thirstLevel, healthLevel, orderTime: Natural = 0
 
   while i < playerShip.crew.len:
     var currentMinutes: int = minutes
