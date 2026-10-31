@@ -673,7 +673,7 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
   const
     width: float = 300
     height: float = 200
-    windowName: string = "Available ammo"
+    windowName: string = "Assign an ammo"
 
   let
     ammoIndex: int = (if playerShip.modules[moduleIndex].mType ==
