@@ -693,7 +693,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           manipulateData.amount = amounts[i]
           updateCost(amount = amounts[i], cargoIndex = (if cargoIndex >
               -1: cargoIndex else: 0), dialog = dialog)
-      labelButton(title = "Max"):
+      labelButton(title = "Max", tooltip = "Set maximum allowed amount"):
         manipulateData.amount = manipulateData.maxAmount
         updateCost(amount = manipulateData.amount, cargoIndex = (if cargoIndex >
             -1: cargoIndex else: 0), dialog = dialog)
@@ -729,7 +729,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       imageLabelButton(image = images[actionButton.icon],
-          label = actionButton.label):
+          label = actionButton.label, tooltip = manipulateData.title):
         let
           baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
               playerShip.skyY].baseIndex
