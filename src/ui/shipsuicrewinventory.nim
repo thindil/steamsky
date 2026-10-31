@@ -376,7 +376,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
             itemIndex = data.index)
         if used:
           checked = true
-          tooltip = "The item is used by the crew member"
+          tooltip = "The item is used by the crew member.  "
         else:
           checked = false
           tooltip = "The item isn't used by the crew member"
