@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [12.9] - 2026-11-01
 
 ### Changed
 - Better looking list of the player's ship's repair's actions in bases
