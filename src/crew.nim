@@ -595,9 +595,9 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     tiredLevel, hungerLevel, thirstLevel, healthLevel, orderTime: Natural = 0
 
   while i < playerShip.crew.len:
-    var currentMinutes: int = minutes
+    var currentMinutes: Natural = minutes
     orderTime = playerShip.crew[i].orderTime
-    var times: int = 0
+    var times: Natural = 0
     while currentMinutes > 0:
       if currentMinutes >= orderTime:
         currentMinutes -= orderTime
@@ -646,7 +646,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
           if skyMap[playerShip.skyX][playerShip.skyY].baseIndex == 0:
             giveOrders(ship = playerShip, memberIndex = i, givenOrder = rest)
         of train:
-          var skillIndex: int = 0
+          var skillIndex: Natural = 0
           block findSkillIndex:
             for module in playerShip.modules:
               if module.mType == ModuleType2.trainingRoom:
@@ -655,7 +655,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
                     skillIndex = module.trainedSkill
                     break findSkillIndex
           if skillsList[skillIndex].tool.len > 0:
-            var toolIndex: int = findTools(memberIndex = i,
+            var toolIndex: ExtendedNatural = findTools(memberIndex = i,
                 itemType = skillsList[skillIndex].tool, order = train,
                 toolQuality = getTrainingToolQuality(memberIndex = i,
                 skillIndex = skillIndex))
