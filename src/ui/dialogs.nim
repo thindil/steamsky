@@ -668,7 +668,8 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
         label(str = "To:")
         let newMember: Natural = comboList(items = crewList,
             selected = manipulateData.data, itemHeight = labelHeight.int,
-            x = 200, y = 150)
+            x = 200, y = 150,
+            tooltip = "The crew member which will receive the item.")
         if newMember != manipulateData.data:
           manipulateData.data = newMember
           updateMaxAmount(dialog = dialog)
