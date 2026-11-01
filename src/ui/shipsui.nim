@@ -309,7 +309,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     dialog = setError(message = "Can't show the ship's weight")
     return
   setLayoutRowDynamic(height = labelHeight, cols = 1)
-  label(str = "Reputation:", tooltip = "Your reputation among factions")
+  label(str = "Your reputation among factions", alignment = centered)
   setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2])
   for index, faction in factionsList:
     labelButton(title = faction.name, tooltip = "Show information about the faction"):
