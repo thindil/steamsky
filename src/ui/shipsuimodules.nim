@@ -1069,7 +1069,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             if itemsList[item.protoIndex].itemType == itemsTypesList[
                 modulesList[module.protoIndex].value - 1] and index != ammoIndex:
               imageLabelButton(image = images[assignAmmoIcon],
-                  label = "     Assign"):
+                  label = "     Assign", tooltip = "Assing an ammo to the gun."):
                 setDialog(y = gameSettings.windowHeight.float / 10)
                 dialog = assignAmmoDialog
               break
