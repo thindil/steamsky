@@ -282,7 +282,8 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
           tooltip = "The current travel destination of your ship",
           align = centered)
     setButtonStyle(field = textNormal, color = theme.colors[redColor])
-    imageLabelButton(image = images[cancelIcon], label = "     Cancel"):
+    imageLabelButton(image = images[cancelIcon], label = "     Cancel",
+        tooltip = "Remove the ship destination"):
       playerShip.destinationX = 0
       playerShip.destinationY = 0
     restoreButtonStyle()
