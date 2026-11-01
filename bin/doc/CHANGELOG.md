@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 - Better looking the dialog with information about factions in the ship info
   screen
+- Better looking the list of the player's reputation among factions
 
 ### Fixed
 - Typo in changelog
