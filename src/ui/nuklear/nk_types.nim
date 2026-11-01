@@ -1052,29 +1052,14 @@ type
     pages*: ptr nk_page
     freelist*: pointer
     size*, cap*: nk_size
-  nk_context* {.importc: "struct nk_context", completeStruct.} = object
+  nk_context* {.importc: "struct nk_context".} = object
     ## Internal Nuklear type
     style*: nk_style
     input*: nk_input
     begin*, `end`*, current*, active*: PNkWindow
     seq*, count*: cuint
     memory*: nk_buffer
-    use_pool*: bool
-    freelist*: pointer
     clip*: nk_clipboard
-    last_widget_state*: nk_flags
-    button_behavior*: ButtonBehavior
-    stacks*: nk_configuration_stacks
-    when defined(nkIncludeCommandUserData):
-      userdata*: nk_handle
-        ## Interna Nuklear data
-    when defined(nkIncludeVertexBufferOutput):
-      draw_list*: nk_draw_list
-        ## Internal Nuklear type
-    text_edit*: nk_text_edit
-    overlay*: nk_command_buffer
-    build*: cint
-    pool*: nk_pool
   nk_font* {.importc: "struct nk_font".} = object
     ## Internal Nuklear type
     handle*: PNkUserFont
