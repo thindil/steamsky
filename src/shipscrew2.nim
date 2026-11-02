@@ -59,7 +59,7 @@ proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.raises: [
         elif owner > memberIndex:
           owner.dec
 
-proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
+proc death*(memberIndex: Natural; reason: MessageText; ship: var ShipRecord;
     createBody: bool = true) {.raises: [KeyError, IOError, ReputationError],
         tags: [
     WriteIOEffect], contractual.} =
