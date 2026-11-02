@@ -349,15 +349,19 @@ proc showShipInfo*(state: var GameState; dialog: var GameDialog) {.raises: [],
   changeStyle(field = spacing, x = 0, y = 0):
     changeStyle(field = buttonRounding, value = 0):
       setLayoutRowDynamic(height = tabHeight, cols = 4)
-      const tabs: array[4, string] = ["General", "Crew", "Modules", "Cargo"]
+      const
+        tabs: array[4, string] = ["General", "Crew", "Modules", "Cargo"]
+        tabsTooltips: array[4, string] = ["General information about your ship",
+            "The list of crew members and passengers on your ship",
+            "The list of modules installed on your ship", "The list of items in your ship"]
       for index, tab in tabs:
         try:
           if shipInfoTab == index:
             changeStyle(src = active, dest = normal):
-              labelButton(title = tab):
+              labelButton(title = tab, tooltip = tabsTooltips[index]):
                 discard
           else:
-            labelButton(title = tab):
+            labelButton(title = tab, tooltip = tabsTooltips[index]):
               shipInfoTab = index.cint
               if index == 0:
                 hasOptions = false
