@@ -447,7 +447,7 @@ proc setChangeOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Set the selected workshop to change its crafting order or to show recipes
   ## for it
   ##
-  ## * data   - the index of the selected recipe
+  ## * data   - the index of the selected workshop
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
