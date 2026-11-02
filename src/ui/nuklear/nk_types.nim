@@ -1057,8 +1057,6 @@ type
     style*: nk_style
     input*: nk_input
     begin*, `end`*, current*, active*: PNkWindow
-    seq*, count*: cuint
-    memory*: nk_buffer
     clip*: nk_clipboard
   nk_font* {.importc: "struct nk_font".} = object
     ## Internal Nuklear type
