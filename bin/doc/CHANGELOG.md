@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Missing tooltips for tabs in the ship info screen
+- Selecting the proper workshop from their list when showing crafting recipes
+  for them
 
 ## [12.9] - 2026-11-01
 
