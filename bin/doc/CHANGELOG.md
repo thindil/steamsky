@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Missing tooltips for tabs in the ship info screen
+
 ## [12.9] - 2026-11-01
 
 ### Changed
