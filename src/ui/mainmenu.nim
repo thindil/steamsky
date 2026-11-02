@@ -110,7 +110,7 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
     row(x = gameSettings.windowWidth.float / 5, y = 10, w = 500, h = 90):
       image(image = menuImages[0])
   setLayoutRowDynamic(height = buttonHeight, cols = 1)
-  label(str = gameVersion & " development", alignment = centered)
+  label(str = gameVersion, alignment = centered)
   var menuHeight: float = 4.0 * buttonHeight
   if showLoadButton:
     menuHeight += buttonHeight
