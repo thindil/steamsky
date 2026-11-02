@@ -451,18 +451,21 @@ proc setChangeOrder(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  let recipeName2: string = try:
-        getWorkshopRecipeName(workshop = data)
+  let
+    index: Natural = workshopsList2[data].index
+    recipeName2: string = try:
+        getWorkshopRecipeName(workshop = index)
       except:
         dialog = setError(message = "Can't get the recipe name.")
         return
   if recipeName2.len == 0:
-    workshopIndex = data
+    workshopIndex = index
+    workshopType = data + 1
     currentTab = 0
     hasOptions = true
   else:
     try:
-      cancelCraftOrder(moduleIndex = data)
+      cancelCraftOrder(moduleIndex = index)
     except CrewOrderError, CrewNoSpaceError:
       dialog = setMessage(message = getCurrentExceptionMsg(),
           title = "Can't cancel the order")
@@ -706,15 +709,15 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
       table(name = "WorkshopsTable", xScroll = xOffset2, headers = headers,
           ratio = ratio, tableTooltip = "workshops", tableHeight = tableHeight,
           headerCode = sortWorkshops):
-        for module in workshopsList2:
+        for index, module in workshopsList2:
           if not isStartingRow():
             continue
           addButton(label = module.name, tooltip = module.tooltip,
-              data = module.index, code = setChangeOrder, dialog = dialog)
+              data = index, code = setChangeOrder, dialog = dialog)
           addButton(label = module.order, tooltip = module.tooltip,
-              data = module.index, code = setChangeOrder, dialog = dialog)
+              data = index, code = setChangeOrder, dialog = dialog)
           addButton(label = module.workers, tooltip = module.tooltip,
-              data = module.index, code = setChangeOrder, dialog = dialog)
+              data = index, code = setChangeOrder, dialog = dialog)
           if isLastRow():
             break
   showLastMessages(theme = theme, dialog = dialog, height = gameSettings.windowHeight.float -
