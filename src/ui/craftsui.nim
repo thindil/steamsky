@@ -611,15 +611,18 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
   changeStyle(field = spacing, x = 0, y = 0):
     changeStyle(field = buttonRounding, value = 0):
       setLayoutRowDynamic(height = tabHeight, cols = 2)
-      const tabs: array[2, string] = ["Recipes", "Workshops"]
+      const
+        tabs: array[2, string] = ["Recipes", "Workshops"]
+        tabsTooltips: array[2, string] = ["The list of known crafting recipes",
+            "The list of workshops installed on the ship"]
       for index, tab in tabs:
         try:
           if currentTab == index:
             changeStyle(src = active, dest = normal):
-              labelButton(title = tab):
+              labelButton(title = tab, tooltip = tabsTooltips[index]):
                 discard
           else:
-            labelButton(title = tab):
+            labelButton(title = tab, tooltip = tabsTooltips[index]):
               currentTab = index.cint
               if index == 0:
                 hasOptions = true
