@@ -70,7 +70,6 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
     else:
       imageLabelButton(image = images[editColoredIcon], label = "Rename",
           tooltip = windowName):
-        dialog = none
         case dialog
         of renameDialog:
           playerShip.name = newName
@@ -81,6 +80,7 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
         else:
           dialog = setError(message = "Unknown rename option")
         newName = ""
+        dialog = none
     restoreButtonStyle()
     addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor,
         isPopup = false, label = "Cancel")
