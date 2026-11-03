@@ -688,12 +688,19 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
             continue
           addButton(label = rec.name, tooltip = "Show recipe's details.",
             data = index, code = setRecipeInfo, dialog = dialog)
-          var checked: bool = rec.workplace
-          addCheckButton(tooltip = "", checked = checked)
+          var
+            checked: bool = rec.workplace
+            tooltip: string = (if checked: "You have installed the needed workshop."
+                else: "You don't have installed the needed workshop.")
+          addCheckButton(tooltip = tooltip, checked = checked)
           checked = rec.tools
-          addCheckButton(tooltip = "", checked = checked)
+          tooltip = (if checked: "You have the needed tools."
+                else: "You don't have the needed tools.")
+          addCheckButton(tooltip = tooltip, checked = checked)
           checked = rec.materials
-          addCheckButton(tooltip = "", checked = checked)
+          tooltip = (if checked: "You have the needed materials."
+                else: "You don't have the needed materials.")
+          addCheckButton(tooltip = tooltip, checked = checked)
           if isLastRow():
             break
     # Show the list of installed workshops
