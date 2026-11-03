@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Tooltips to the list of crafting recipes
+
 ### Fixed
 - Missing tooltips for tabs in the ship info and crafting screens
 - Selecting the proper workshop from their list when showing crafting recipes
