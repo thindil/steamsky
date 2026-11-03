@@ -681,7 +681,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
           discard
     if tiredPoints > 0:
       let faction: FactionData = factionsList[playerShip.crew[i].faction]
-      var deathReason: string = ""
+      var deathReason: MessageText = ""
       if faction.foodTypes.len > 0:
         if hungerLevel + tiredPoints > SkillRange.high:
           hungerLevel = SkillRange.high
