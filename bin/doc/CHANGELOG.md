@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
-- Missing tooltips for tabs in the ship info screen
+- Missing tooltips for tabs in the ship info and crafting screens
 - Selecting the proper workshop from their list when showing crafting recipes
   for them
 - Renaming the player's ship, its crew members and modules
