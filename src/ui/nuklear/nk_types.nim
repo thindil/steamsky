@@ -1044,14 +1044,6 @@ type
     size*: cuint
     next*: ptr nk_page
     win*: pointer
-  nk_pool* {.importc: "struct nk_pool", completeStruct.} = object
-    ## Internal Nuklear type
-    alloc: nk_allocator
-    `type`: AllocationType
-    page_count*, capacity*: cuint
-    pages*: ptr nk_page
-    freelist*: pointer
-    size*, cap*: nk_size
   nk_context* {.importc: "struct nk_context".} = object
     ## Internal Nuklear type
     style*: nk_style
