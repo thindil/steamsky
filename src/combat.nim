@@ -100,10 +100,10 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
           protoIndex = newItemIndex, itemQuality = normal, craftBonus = none,
           craftMalus = none)
     if cargoItemIndex > -1:
-      {.ruleOff: "assigments".}
+      {.ruleOff: "assignments".}
       enemyShip.cargo[cargoItemIndex].amount = enemyShip.cargo[
           cargoItemIndex].amount + itemAmount
-      {.ruleOn: "assigments".}
+      {.ruleOn: "assignments".}
     else:
       if freeCargo(amount = 0 - (itemsList[newItemIndex].weight * itemAmount)) > -1:
         enemyShip.cargo.add(y = initInventoryData(protoIndex = newItemIndex,
@@ -1356,7 +1356,9 @@ proc combatTurn*() {.raises: [KeyError, IOError, ValueError,
             defenders = playerShip.crew, playerAttack = false)
   if not endCombat:
     if game.enemy.harpoonDuration > 0:
+      {.ruleOff: "assignments".}
       game.enemy.harpoonDuration = game.enemy.harpoonDuration - 1
+      {.ruleOn: "assignments".}
     if harpoonDuration > 0:
       game.harpoonDuration.dec
     if game.enemy.harpoonDuration > 0 or harpoonDuration > 0:
