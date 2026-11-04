@@ -148,13 +148,16 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
     else:
 
       proc showOneMessage(message: MessageData; messagesType: MessageType;
-          dialog: var GameDialog) {.raises: [], tags: [RootEffect], cdecl,
-          contractual.} =
+          dialog: var GameDialog; messageSearch = messageSearch) {.raises: [],
+          tags: [RootEffect], cdecl, contractual.} =
         ## Show the selected message to a player
         ##
         ## * message      - the message to show
         ## * messagesType - the selected type of messages to show
         if message.kind != messagesType and messagesType != default:
+          return
+        if messageSearch.len > 0 and not message.message.toLowerAscii.contains(
+            sub = messageSearch.toLowerAscii):
           return
         var needLines: float = try:
               ceil(x = getTextWidth(text = message.message) /
