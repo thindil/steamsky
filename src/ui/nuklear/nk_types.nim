@@ -1039,11 +1039,6 @@ type
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle
         ## Internal Nuklear type
-  nk_page* {.importc: "struct nk_pool", completeStruct.} = object
-    ## Internal Nuklear type
-    size*: cuint
-    next*: ptr nk_page
-    win*: pointer
   nk_context* {.importc: "struct nk_context".} = object
     ## Internal Nuklear type
     style*: nk_style
