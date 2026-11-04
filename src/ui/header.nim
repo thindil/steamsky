@@ -574,7 +574,8 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
   if close != none:
     imageButton(image = images[exitIcon], tooltip = "Back to the " & $close & " screen"):
       closeScreen(close = close, state = state, dialog = dialog)
-    if isKeyPressed(key = keyEscape) and dialog == none and shortcutsEnabled:
+    if isKeyPressed(key = keyEscape) and dialog == none and shortcutsEnabled and
+        not editIsActive():
       closeScreen(close = close, state = state, dialog = dialog)
   if options:
     imageButton(image = images[moreOptionsIcon], tooltip = (
@@ -605,7 +606,8 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     key = ""
     keyPressed = keyNone
     dialog = none
-  if (getInputTextLen() > 0 or keyPressed != keyNone) and shortcutsEnabled:
+  if (getInputTextLen() > 0 or keyPressed != keyNone) and shortcutsEnabled and
+      not editIsActive():
     redraw = true
     if getInputTextLen() > 0:
       key &= getInputText().toLowerAscii
