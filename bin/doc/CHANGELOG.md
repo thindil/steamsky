@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
 - Selecting the proper workshop from their list when showing crafting recipes
   for them
 - Renaming the player's ship, its crew members and modules
+- Keyboard shortcuts work when entering text (like searching for messages,
+  items, etc)
 
 ## [12.9] - 2026-11-01
 
