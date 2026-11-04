@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Renaming the player's ship, its crew members and modules
 - Keyboard shortcuts work when entering text (like searching for messages,
   items, etc)
+- Searching messages in the last messages screen
 
 ## [12.9] - 2026-11-01
 
