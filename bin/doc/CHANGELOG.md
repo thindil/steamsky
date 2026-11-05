@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Keyboard shortcuts work when entering text (like searching for messages,
   items, etc)
 - Searching messages in the last messages screen
+- Typo in docking to bases messages
 
 ## [12.9] - 2026-11-01
 
