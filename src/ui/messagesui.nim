@@ -152,8 +152,11 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
           tags: [RootEffect], contractual.} =
         ## Show the selected message to a player
         ##
-        ## * message      - the message to show
-        ## * messagesType - the selected type of messages to show
+        ## * message       - the message to show
+        ## * messagesType  - the selected type of messages to show
+        ## * dialog        - the current in-game dialog displayed on the screen
+        ## * messageSearch - the string to look for in the message. If empty,
+        ##                   ignored
         if message.kind != messagesType and messagesType != default:
           return
         if messageSearch.len > 0 and not message.message.toLowerAscii.contains(
