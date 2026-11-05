@@ -148,8 +148,9 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
     else:
 
       proc showOneMessage(message: MessageData; messagesType: MessageType;
-          dialog: var GameDialog; messageSearch = messageSearch) {.raises: [],
-          tags: [RootEffect], contractual.} =
+          dialog: var GameDialog;
+          messageSearch: string = messageSearch) {.raises: [], tags: [
+          RootEffect], contractual.} =
         ## Show the selected message to a player
         ##
         ## * message       - the message to show
