@@ -27,7 +27,7 @@ import bases, crewinventory, config, game, game2, goals, events, items, log,
 var
   enemyShipIndex*: Natural = 0
     ## The index of the enemy's ship's prototype
-  factionName: string = ""
+  factionName: FactionName = ""
     ## The name of the enemy's faction (ship and its crew)
   boardingOrders*: seq[int] = @[]
     ## The list of orders for the boarding party
@@ -37,7 +37,7 @@ var
     ## The player's ship engineer order
   endCombat*: bool = false
     ## If true, the combat ends
-  enemyName*: string = ""
+  enemyName*: ShipName = ""
     ## The name of the enemy's ship
   messagesStarts*: int = -1
     ## The starting index of messages to show
