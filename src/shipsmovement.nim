@@ -165,8 +165,8 @@ proc dockShip*(docking: bool; escape: bool = false): ErrorMessage {.raises: [
       addMessage(message = "Ship docked to base " & skyBases[baseIndex].name &
           ".", mType = orderMessage)
     else:
-      addMessage(message = "Ship docked to base " & skyBases[baseIndex].name,
-          mType = orderMessage)
+      addMessage(message = "Ship docked to base " & skyBases[baseIndex].name &
+          ".", mType = orderMessage)
       if $gameSettings.autoSave == $dock:
         saveGame()
       var memberIndex: Natural = 0
