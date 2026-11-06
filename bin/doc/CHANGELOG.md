@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Tooltips to the list of crafting recipes
 
+### Changed
+- Better looking dialog with information about a known base
+
 ### Fixed
 - Missing tooltips for tabs in the ship info, crafting and last messages screens
 - Selecting the proper workshop from their list when showing crafting recipes
