@@ -43,20 +43,20 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  const width: float = 400
-
   let
     base: BaseRecord = skyBases[baseIndex]
     windowName: string = base.name
+    width: float = gameSettings.windowWidth.float * 0.6
   var height: float = (labelHeight * 2) + dialogButtonHeight + 80
   if base.visited.year > 0:
     height += (labelHeight * 7) + editHeight
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = labelHeight, cols = 4, ratio = [0.4.cfloat,
-        0.1, 0.1, 0.1])
-    label(str = "Coordinates X:")
+    setLayoutRowDynamic(height = labelHeight, cols = 5, ratio = [0.5.cfloat,
+        0.1, 0.1, 0.1, 0.1])
+    label(str = "Coordinates")
+    label(str = "X:")
     colorLabel(str = $base.skyX, color = theme.colors[goldenColor])
     label(str = "Y:")
     colorLabel(str = $base.skyY, color = theme.colors[goldenColor])
