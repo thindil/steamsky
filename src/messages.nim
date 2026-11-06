@@ -65,7 +65,8 @@ proc addMessage*(message: MessageText; mType: MessageType;
         time = gameDate) & "] " & message, kind = mType, color = color))
     messageAdded = true
 
-proc getLastMessageIndex*(): int {.raises: [], tags: [], contractual.} =
+proc getLastMessageIndex*(): ExtendedNatural {.raises: [], tags: [],
+    contractual.} =
   ## Get the index of the last message in the messagesList
   ##
   ## Returns the index of the last message in the messagesList
