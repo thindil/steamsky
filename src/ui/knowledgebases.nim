@@ -365,7 +365,7 @@ proc showBasesInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     ratio: array[8, cfloat] = [200.cfloat, 120, 150, 120, 120, 120, 120, 120]
 
   table(name = "BasesTable", xScroll = xOffset, headers = headers,
-      ratio = ratio, tableTooltip = "bases", tableHeight = tableHeight,
+      ratio = ratio, tableTooltip = "known bases", tableHeight = tableHeight,
       headerCode = sortBases):
     # Show the list of known bases
     for base in knownBasesList:
