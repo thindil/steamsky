@@ -1018,15 +1018,8 @@ type
     attribute*: DrawVertexLayoutAttribute
     format*: DrawVertexLayoutFormat
     offset*: nk_size
-  nk_convert_config* {.importc: "struct nk_convert_config",
-      completeStruct.} = object
+  nk_convert_config* {.importc: "struct nk_convert_config".} = object
     ## Internal Nuklear type
-    global_alpha*: cfloat
-    line_AA*, shape_AA*: AntiAliasing
-    circle_segment_count*, arc_segment_count*, curve_segment_count*: cuint
-    tex_null*: nk_draw_null_texture
-    vertex_layout*: pointer
-    vertex_size*, vertex_alignment*: nk_size
   nk_context* {.importc: "struct nk_context".} = object
     ## Internal Nuklear type
     style*: nk_style
