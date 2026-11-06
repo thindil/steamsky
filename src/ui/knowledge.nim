@@ -43,16 +43,22 @@ proc showKnowledge*(state: var GameState; dialog: var GameDialog) {.raises: [],
   changeStyle(field = spacing, x = 0, y = 0):
     changeStyle(field = buttonRounding, value = 0):
       setLayoutRowDynamic(height = tabHeight, cols = 4)
-      const tabs: array[4, string] = ["Known bases", "Known events",
+      const
+        tabs: array[4, string] = ["Known bases", "Known events",
           "Accepted missions", "Known stories"]
+        tabsTooltips: array[4, string] = [
+          "The list of known (visited or not) bases.",
+            "The list of known currently active events.",
+            "The list of missions accepted in bases. ",
+            "The list of active or finished stories."]
       for index, tab in tabs:
         try:
           if knowledgeTab == index:
             changeStyle(src = active, dest = normal):
-              labelButton(title = tab):
+              labelButton(title = tab, tooltip = tabsTooltips[index]):
                 discard
           else:
-            labelButton(title = tab):
+            labelButton(title = tab, tooltip = tabsTooltips[index]):
               knowledgeTab = index.cint
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
