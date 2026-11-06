@@ -69,7 +69,8 @@ proc getLastMessageIndex*(): ExtendedNatural {.raises: [], tags: [],
     contractual.} =
   ## Get the index of the last message in the messagesList
   ##
-  ## Returns the index of the last message in the messagesList
+  ## Returns the index of the last message in the messagesList or -1 if the
+  ## list of messages is empty
   return (messagesList.len() - 1)
 
 proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.raises: [
