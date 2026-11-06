@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
 - Better looking dialog with information about a known base
 
 ### Fixed
-- Missing tooltips for tabs in the ship info, crafting and last messages screens
+- Missing tooltips for tabs in the ship info, crafting, last messages and
+  knowledge screens
 - Selecting the proper workshop from their list when showing crafting recipes
   for them
 - Renaming the player's ship, its crew members and modules
