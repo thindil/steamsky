@@ -124,7 +124,7 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = wait(minutes = 60)
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 3)
     labelButton(title = "Wait",
-        tooltip = "Wait in place for the selected amount of minutes: from 1 to 1440 (the whole day)"):
+        tooltip = "Wait in place for the selected amount of time"):
       case waitInterval
       of 0:
         dialog = wait(minutes = waitAmount)
@@ -150,7 +150,7 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       labelButton(title = "Wait until crew is healed",
           tooltip = "Wait in place until the whole ship's crew is healed. Can take a large amount of time"):
         dialog = waitReason(reason = heal)
-    labelButton(title = "Close", tooltip = "Close dialog"):
+    labelButton(title = "Close", tooltip = "Close dialog [Escape key]"):
       dialog = none
 
   windowSetFocus(name = windowName)
