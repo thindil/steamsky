@@ -102,8 +102,9 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if needHealing:
     height += dialogButtonHeight + 5
   window(name = windowName, x = gameSettings.windowWidth.float / 4,
-      y = gameSettings.windowHeight.float / 4, w = 320, h = height, flags = {
-      windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
+      y = gameSettings.windowHeight.float / 4, w = gameSettings.windowWidth / 2,
+      h = height, flags = {windowBorder, windowTitle, windowNoScrollbar,
+      windowMovable}):
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     labelButton(title = "Wait 1 minute",
         tooltip = "Wait in place for 1 minute"):
