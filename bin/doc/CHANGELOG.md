@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Searching messages in the last messages screen
 - Typo in docking to bases messages
 - Look of tooltips for the list of known bases
+- Tooltips in the wait menu
 
 ## [12.9] - 2026-11-01
 
