@@ -39,7 +39,7 @@ var
     ## If true, the combat ends
   enemyName*: ShipName = ""
     ## The name of the enemy's ship
-  messagesStarts*: int = -1
+  messagesStarts*: ExtendedNatural = -1
     ## The starting index of messages to show
   guns*: seq[array[1..3, int]] = @[]
     ## The list of guns installed on the player's ship
@@ -74,7 +74,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
           amount = item.amount, quality = item.quality,
           craftBonus = item.craftBonus, craftMalus = item.craftMalus)
     traderCargo = @[]
-  var minFreeSpace: int = 0
+  var minFreeSpace: Natural = 0
   for module in enemyShip.modules:
     if module.mType == ModuleType2.cargoRoom and module.durability > 0:
       minFreeSpace += modulesList[module.protoIndex].maxValue
@@ -96,7 +96,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
           getRandom(min = 1, max = 500)
         else:
           getRandom(min = 1, max = 1000)
-      cargoItemIndex: int = findItem(inventory = enemyShip.cargo,
+      cargoItemIndex: ExtendedNatural = findItem(inventory = enemyShip.cargo,
           protoIndex = newItemIndex, itemQuality = normal, craftBonus = none,
           craftMalus = none)
     if cargoItemIndex > -1:
