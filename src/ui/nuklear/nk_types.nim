@@ -1012,12 +1012,6 @@ type
     ## Internal Nuklear type
     texture*: nk_handle
     uv*: nk_vec2
-  nk_draw_vertex_layout_element* {.importc: "struct nk_draw_vertex_layout_element",
-      completeStruct.} = object
-    ## Internal Nuklear type
-    attribute*: DrawVertexLayoutAttribute
-    format*: DrawVertexLayoutFormat
-    offset*: nk_size
   nk_convert_config* {.importc: "struct nk_convert_config".} = object
     ## Internal Nuklear type
   nk_context* {.importc: "struct nk_context".} = object
