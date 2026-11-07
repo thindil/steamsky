@@ -28,6 +28,13 @@ import ui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
     shipsuicrew, shipsuicrewinventory, shipsuimodules, statisticsui, themes,
     tradesui, waitmenu]
 
+var dialog: GameDialog = none
+
+proc catchError(errorMsg: string) {.nimcall, gcsafe, tags: [TimeEffect,
+    WriteIOEffect, RootEffect], contractual.} =
+  ## Catch all unhandled exceptions, set the error dialog
+  dialog = setError(message = errorMsg)
+
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
 
@@ -36,6 +43,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   except:
     echo "Can't set the current directory for the game."
     return
+  saveDirectory = ("data" & DirSep & "saves" & DirSep).Path
   # Get the command line params if any
   var gameParams: OptParser = initOptParser()
   for kind, key, val in gameParams.getopt():
@@ -118,14 +126,13 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     quit "Can't load the game's fonts."
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
-  var
-    state: GameState = mainMenu
-    dialog: GameDialog = none
+  var state: GameState = mainMenu
   try:
     discard loadGameData()
   except:
     dialog = setError(message = "Can't load the game's data.")
 
+  #onUnhandledException(catchError)
   if gameSettings.fullScreen:
     nuklearSetWindowFullScreen()
 
