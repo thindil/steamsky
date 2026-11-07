@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Better looking dialog with information about a known base
+- Better looking the wait menu
 
 ### Fixed
 - Missing tooltips for tabs in the ship info, crafting, last messages and
