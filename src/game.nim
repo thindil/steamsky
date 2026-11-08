@@ -208,8 +208,7 @@ const
 {.warning[UnsafeSetLen]: off.}
 {.warning[UnsafeDefault]: off.}
 var
-  saveDirectory*: Path = ("data" & DirSep & "saves" &
-      DirSep).Path
+  saveDirectory* {.threadvar.}: Path
     ## The directory where the saved games and logs are stored
   modsDirectory*: Path = ("data" & DirSep & "mods" &
       DirSep).Path ## The directory where the game's modifications are stored
