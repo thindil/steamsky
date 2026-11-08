@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Tooltips to the list of crafting recipes
+- Better handling the game's crashes
 
 ### Changed
 - Better looking dialog with information about a known base
