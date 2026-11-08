@@ -1007,11 +1007,8 @@ type
     colors*: nk_config_stack_color
     fonts*: nk_config_stack_user_font
     button_behaviors*: nk_config_stack_button_behavior
-  nk_draw_null_texture* {.importc: "struct nk_draw_null_texture",
-      completeStruct.} = object
+  nk_draw_null_texture* {.importc: "struct nk_draw_null_texture".} = object
     ## Internal Nuklear type
-    texture*: nk_handle
-    uv*: nk_vec2
   nk_convert_config* {.importc: "struct nk_convert_config".} = object
     ## Internal Nuklear type
   nk_context* {.importc: "struct nk_context".} = object
