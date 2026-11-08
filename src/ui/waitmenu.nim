@@ -151,8 +151,11 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           $maxWaitAmount)
     if newValue != waitAmount:
       waitAmount = newValue
-    waitInterval = comboList(items = ["minutes", "hours", "days"],
+    let newWaitInterval = comboList(items = ["minutes", "hours", "days"],
         selected = waitInterval, itemHeight = labelHeight.int, x = 100, y = 180)
+    if newWaitInterval != waitInterval:
+      waitInterval = newWaitInterval
+      waitAmount = 1
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
     if needRest:
       labelButton(title = "Wait until crew is rested",
