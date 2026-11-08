@@ -24,7 +24,8 @@ import ../[game, log]
 import coreui
 
 var
-  debugInfo, message: string = ""
+  debugInfo {.threadvar.}: string
+  message: string = ""
 
 proc setError*(message: string; e: ref Exception = getCurrentException(
     )): GameDialog {.raises: [], tags: [TimeEffect, WriteIOEffect, RootEffect],
