@@ -28,13 +28,6 @@ import ui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
     shipsuicrew, shipsuicrewinventory, shipsuimodules, statisticsui, themes,
     tradesui, waitmenu]
 
-var dialog: GameDialog = none
-
-proc catchError(errorMsg: string) {.nimcall, gcsafe, tags: [TimeEffect,
-    WriteIOEffect, RootEffect], contractual.} =
-  ## Catch all unhandled exceptions, set the error dialog
-  dialog = setError(message = errorMsg)
-
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
 
@@ -126,13 +119,22 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     quit "Can't load the game's fonts."
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
-  var state: GameState = mainMenu
+  var
+    state: GameState = mainMenu
+    dialog: GameDialog = none
   try:
     discard loadGameData()
   except:
     dialog = setError(message = "Can't load the game's data.")
 
-  #onUnhandledException(catchError)
+  proc catchError(errorMsg: string) {.nimcall, gcsafe, tags: [TimeEffect,
+      WriteIOEffect, RootEffect], contractual.} =
+    ## Catch all unhandled exceptions, save error info to the file
+    discard setError(message = errorMsg)
+    when defined(debug):
+      echo errorMsg
+
+  onUnhandledException = catchError
   if gameSettings.fullScreen:
     nuklearSetWindowFullScreen()
 
