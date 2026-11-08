@@ -207,9 +207,15 @@ const
 
 {.warning[UnsafeSetLen]: off.}
 {.warning[UnsafeDefault]: off.}
+{.push ruleOff: "varDeclared".}
+{.push ruleOff: "hasDoc".}
 var
   saveDirectory* {.threadvar.}: Path
     ## The directory where the saved games and logs are stored
+{.pop ruleOn: "hasDoc".}
+{.pop ruleOn: "varDeclared".}
+
+var
   modsDirectory*: Path = ("data" & DirSep & "mods" &
       DirSep).Path ## The directory where the game's modifications are stored
   dataDirectory*: Path = ("data" & DirSep).Path
