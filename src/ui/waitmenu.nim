@@ -135,9 +135,20 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         dialog = wait(minutes = waitAmount * 1440)
       else:
         discard
-    let newValue: int = property2(name = "#", min = 1, val = waitAmount,
-        max = 1440, step = 1, incPerPixel = 1,
-        tooltip = "Wait in place for the selected amount of time: from 1 to 1440")
+    let
+      maxWaitAmount: Positive = case waitInterval
+        of 0:
+          1440
+        of 1:
+          720
+        of 2:
+          30
+        else:
+          1
+      newValue: int = property2(name = "#", min = 1, val = waitAmount,
+          max = maxWaitAmount, step = 1, incPerPixel = 1,
+          tooltip = "Wait in place for the selected amount of time: from 1 to " &
+          $maxWaitAmount)
     if newValue != waitAmount:
       waitAmount = newValue
     waitInterval = comboList(items = ["minutes", "hours", "days"],
