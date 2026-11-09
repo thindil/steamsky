@@ -140,9 +140,9 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         of 0:
           1440
         of 1:
-          720
+          168
         of 2:
-          30
+          7
         else:
           1
       newValue: int = property2(name = "#", min = 1, val = waitAmount,
