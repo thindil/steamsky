@@ -152,7 +152,8 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if newValue != waitAmount:
       waitAmount = newValue
     let newWaitInterval = comboList(items = ["minutes", "hours", "days"],
-        selected = waitInterval, itemHeight = labelHeight.int, x = 100, y = 180)
+        selected = waitInterval, itemHeight = labelHeight.int, x = 100, y = 180,
+        tooltip = "Wait in place for the selected interval of time")
     if newWaitInterval != waitInterval:
       waitInterval = newWaitInterval
       waitAmount = 1
