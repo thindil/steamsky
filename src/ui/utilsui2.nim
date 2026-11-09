@@ -18,6 +18,7 @@
 ## Provides various utility procedures for the game's UI, like counting the
 ## travel information, converting minutes to in-game date, etc.
 
+import std/strutils
 import contracts
 import ../[crew, game, shipscrew, shipsmovement, types]
 
@@ -142,7 +143,9 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
   if travelTime.hour > 0:
     infoText = infoText & " " & $travelTime.hour & "h"
   if travelTime.minutes > 0:
-    infoText = infoText & " " & $travelTime.minutes & "mins"
+    infoText = infoText & " " & $travelTime.minutes &
+        (if travelTime.minutes == 1: "min" else: "mins")
+  infoText = infoText.strip()
 
 proc getSkillMarks*(skillIndex: Positive; memberIndex: Natural): string
   {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
