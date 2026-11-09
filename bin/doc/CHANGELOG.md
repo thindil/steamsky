@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Tooltips to the list of crafting recipes
 - Better handling the game's crashes
+- Missing tooltips in the wait menu
+- Missing tooltips for tabs in the ship info, crafting, last messages and
+  knowledge screens
 
 ### Changed
 - Better looking dialog with information about a known base
@@ -13,8 +16,6 @@ All notable changes to this project will be documented in this file.
 - Max wait amount for days and hours intervals in the wait menu
 
 ### Fixed
-- Missing tooltips for tabs in the ship info, crafting, last messages and
-  knowledge screens
 - Selecting the proper workshop from their list when showing crafting recipes
   for them
 - Renaming the player's ship, its crew members and modules
