@@ -113,7 +113,9 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
   var enemyGuns: seq[array[1..3, int]] = @[]
   for index, module in enemyShip.modules:
     if module.mType in {ModuleType2.gun, harpoonGun} and module.durability > 0:
+      {.ruleOff: "varDeclared".}
       var shootingSpeed: int = 0
+      {.ruleOn: "varDeclared".}
       if modulesList[module.protoIndex].speed > 0:
         shootingSpeed = if protoShipsList[enemyIndex].combatAi == disarmer:
             ((modulesList[module.protoIndex].speed.float / 2.0).ceil).Natural
@@ -224,7 +226,9 @@ proc finishCombat() {.raises: [KeyError, ValueError, CrewOrderError,
   game.enemy.ship.modules[0].durability = 0
   addMessage(message = enemyName & " is destroyed!", mType = combatMessage)
   lootAmount = game.enemy.loot
+  {.ruleOff: "varDeclared".}
   var shipFreeSpace: int = freeCargo(amount = -lootAmount)
+  {.ruleOn: "varDeclared".}
   if shipFreeSpace < 0:
     lootAmount += shipFreeSpace
   if lootAmount > 0:
