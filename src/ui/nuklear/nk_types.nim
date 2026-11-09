@@ -997,16 +997,6 @@ type
     ## Internal Nuklear type
     head*: cint
     elements*: pointer
-  nk_configuration_stacks* {.importc: "struct nk_configuration_stacks",
-      completeStruct.} = object
-    ## Internal Nuklear type
-    style_items*: nk_config_stack_style_item
-    floats*: nk_config_stack_float
-    vectors*: nk_config_stack_vec2
-    flags*: nk_config_stack_flags
-    colors*: nk_config_stack_color
-    fonts*: nk_config_stack_user_font
-    button_behaviors*: nk_config_stack_button_behavior
   nk_draw_null_texture* {.importc: "struct nk_draw_null_texture".} = object
     ## Internal Nuklear type
   nk_convert_config* {.importc: "struct nk_convert_config".} = object
