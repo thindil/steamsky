@@ -96,17 +96,23 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # Show tab buttons
   changeStyle(field = spacing, x = 0, y = 0):
     changeStyle(field = buttonRounding, value = 0):
-      const tabs: array[6, string] = ["General", "Movement keys", "Menu keys",
+      const
+        tabs: array[6, string] = ["General", "Movement keys", "Menu keys",
           "Map keys", "Interface", "Info"]
+        tabsTooltips: array[6, string] = ["Gameplay's general settings",
+            "Keyboard shortcuts for moving the ship",
+            "Keyboard shortcuts for the game's main menu",
+            "Keyboard shortcuts for moving the map",
+            "The game's interface settings", "Information about the game's data directories"]
       setLayoutRowDynamic(height = tabHeight, cols = tabs.len)
       for index, tab in tabs:
         try:
           if currentTab == index:
             changeStyle(src = active, dest = normal):
-              labelButton(title = tab):
+              labelButton(title = tab, tooltip = tabsTooltips[index]):
                 discard
           else:
-            labelButton(title = tab):
+            labelButton(title = tab, tooltip = tabsTooltips[index]):
               currentTab = index.cint
         except:
           dialog = setError(message = "Can't set the tabs buttons.")
