@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Typo in docking to bases messages
 - Look of tooltips for the list of known bases
 - Tooltips in the wait menu
+- Sorting items for trade after buying or selling something
 
 ## [12.9] - 2026-11-01
 
