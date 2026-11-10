@@ -7,8 +7,8 @@ All notable changes to this project will be documented in this file.
 - Tooltips to the list of crafting recipes
 - Better handling the game's crashes
 - Missing tooltips in the wait menu
-- Missing tooltips for tabs in the ship info, crafting, last messages and
-  knowledge screens
+- Missing tooltips for tabs in the ship info, crafting, last messages,
+  knowledge and game options screens
 
 ### Changed
 - Better looking dialog with information about a known base
