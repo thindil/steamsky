@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Look of tooltips for the list of known bases
 - Tooltips in the wait menu
 - Sorting items for trade after buying or selling something
+- Sorting items in empty bases after getting or dropping something
 
 ## [12.9] - 2026-11-01
 
