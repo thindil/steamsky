@@ -239,7 +239,7 @@ proc finishCombat() {.raises: [KeyError, ValueError, CrewOrderError,
         craftMalus = none)
   shipFreeSpace = freeCargo(amount = 0)
   if wasBoarded and shipFreeSpace > 0:
-    var message: string = "Additionally, your boarding party takes from " &
+    var message: MessageText = "Additionally, your boarding party takes from " &
         enemyName & ":"
     for item in game.enemy.ship.cargo:
       lootAmount = (item.amount / 5).int
@@ -433,7 +433,7 @@ proc characterAttack(attackerIndex2, defenderIndex2: Natural; playerAttack,
       defender = defender, playerAttack2 = playerAttack2,
       hitLocation = hitLocation)
   var
-    attackMessage: string = if playerAttack2:
+    attackMessage: MessageText = if playerAttack2:
         attacker.name & " attacks " & defender.name & " (" & factionName & ")"
       else:
         attacker.name & " (" & factionName & ") attacks " & defender.name
@@ -536,7 +536,7 @@ proc meleeCombat(attackers, defenders: var seq[MemberData];
   ## Returns modified params attackers and defenders
   var
     attackDone, riposte: bool = false
-    attackerIndex, defenderIndex, orderIndex: int = 0
+    attackerIndex, defenderIndex, orderIndex: Natural = 0
 
   attackerIndex = attackers.low
   orderIndex = 0
