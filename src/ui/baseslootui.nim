@@ -316,6 +316,7 @@ proc showLoot*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if updateData:
     refreshLootList(dialog = dialog)
     baseCargo = skyBases[baseIndex].cargo
+    updateData = false
   # Show advanced options if needed
   if showOptions:
     setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.1.cfloat, 0.3])
