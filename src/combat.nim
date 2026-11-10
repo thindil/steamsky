@@ -536,10 +536,9 @@ proc meleeCombat(attackers, defenders: var seq[MemberData];
   ## Returns modified params attackers and defenders
   var
     attackDone, riposte: bool = false
-    attackerIndex, defenderIndex, orderIndex: Natural = 0
+    attackerIndex: Natural = attackers.low
+    defenderIndex, orderIndex: Natural = 0
 
-  attackerIndex = attackers.low
-  orderIndex = 0
   while attackerIndex < attackers.len:
     riposte = true
     if attackers[attackerIndex].order != boarding:
