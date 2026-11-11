@@ -738,10 +738,12 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
   ##
   ## Returns true if attacking should be stopped due to end of combat or the
   ## module was destroyed. Otherwise returns false.
+  {.ruleOff: "varDeclared".}
   var hitChance: int = if ship.crew == playerShip.crew:
       currentAccuracyBonus - game.enemy.evasion
     else:
       game.enemy.accuracy - evadeBonus
+  {.ruleOn: "varDeclared".}
   if gunnerIndex > 0:
     hitChance += getSkillLevel(member = ship.crew[gunnerIndex],
         skillIndex = gunnerySkill)
