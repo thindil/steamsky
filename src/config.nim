@@ -389,12 +389,7 @@ const
   defaultGameSettings*: GameSettingsRecord = initGameSettingsRecord()
     ## The default setting for the game
 
-  defaultNewGameSettings*: NewGameRecord = NewGameRecord(playerName: "Laeran",
-    playerGender: 'M', shipName: "Anaria", playerFaction: "POLEIS",
-    playerCareer: "general", startingBase: "Any", enemyDamageBonus: 1.0,
-    playerDamageBonus: 1.0, enemyMeleeDamageBonus: 1.0,
-    playerMeleeDamageBonus: 1.0, experienceBonus: 1.0, reputationBonus: 1.0,
-    upgradeCostBonus: 1.0, pricesBonus: 1.0, difficultyLevel: normal)
+  defaultNewGameSettings*: NewGameRecord = initNewGameRecord()
     ## The default setting for the new game
 
 var
