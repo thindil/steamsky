@@ -310,7 +310,7 @@ type
 proc initNewGameRecord*(playerName: MobName = "Laeran";
     playerGender: char = 'M'; shipName: ShipName = "Anaria";
     playerFaction: FactionIndex = "POLEIS";
-    playerCareer: CareerName = "general"; startingBase: BaseType = "Any";
+    playerCareer: CareerName = "general"; startingBase: BaseType = "1";
     enemyDamageBonus: BonusType = 1.0; playerDamageBonus: BonusType = 1.0;
     enemyMeleeDamageBonus: BonusType = 1.0;
     playerMeleeDamageBonus: BonusType = 1.0; experienceBonus: BonusType = 1.0;
