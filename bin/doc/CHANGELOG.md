@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Better looking the wait menu
 - Max wait amount for days and hours intervals in the wait menu
 - Better looking information about passed and expected amount of time
+- Default starting base for a new game to agricultural
 
 ### Fixed
 - Selecting the proper workshop from their list when showing crafting recipes
