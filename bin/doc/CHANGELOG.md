@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Tooltips in the wait menu
 - Sorting items for trade after buying or selling something
 - Sorting items in empty bases after getting or dropping something
+- Several tooltips in the player's ship's modules' info dialog
 
 ## [12.9] - 2026-11-01
 
