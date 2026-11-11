@@ -754,9 +754,9 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
   logMessage(message = "Enemy evasion: " & $game.enemy.evasion &
       " Enemy accuracy: " & $game.enemy.accuracy, messageLevel = lvlDebug)
   logMessage(message = "Chance to hit: " & $hitChance, messageLevel = lvlDebug)
-  let enemyNameOwner: string = enemyName & " (" & factionName & ")"
+  let enemyNameOwner: MessageText = enemyName & " (" & factionName & ")"
   for shoot in 1..shoots:
-    var shootMessage: string = ""
+    var shootMessage: MessageText = ""
     if ship.crew == playerShip.crew:
       shootMessage = if module.mType in {ModuleType2.gun, harpoonGun}:
           ship.crew[gunnerIndex].name & " shoots at " & enemyNameOwner
