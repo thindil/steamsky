@@ -311,7 +311,7 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
   else:
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[repairPriorityIcon],
-        tooltip = "Repair the selected module as first when damaged",
+        tooltip = "Repair the selected module as first when damaged.",
         label = "    Focus"):
       playerShip.repairModule = moduleIndex
       addMessage(message = "You assigned " & module.name &
@@ -319,7 +319,7 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
     restoreButtonStyle()
   if module.maxDurability < moduleMaxValue:
     addUpgradeButton(upgradeType = durability,
-        buttonTooltip = "module's durability", module = module, dialog = dialog)
+        buttonTooltip = "module's durability.", module = module, dialog = dialog)
 
 proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -437,7 +437,7 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   colorLabel(str = $module.power & (if module.power ==
       moduleMaxValue2: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
   if module.power < moduleMaxValue2:
-    addUpgradeButton(upgradeType = maxValue, buttonTooltip = "engine's power",
+    addUpgradeButton(upgradeType = maxValue, buttonTooltip = "engine's power.",
         module = module, dialog = dialog)
   # Show the engine's fuel usage
   moduleMaxValue2 = try:
@@ -454,7 +454,7 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   colorLabel(str = $module.fuelUsage & (if moduleMaxValue2 ==
       module.fuelUsage: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
   if module.fuelUsage > moduleMaxValue2:
-    addUpgradeButton(upgradeType = value, buttonTooltip = "engine's fuel usage",
+    addUpgradeButton(upgradeType = value, buttonTooltip = "engine's fuel usage.",
         module = module, dialog = dialog)
   # Show engine state
   setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
