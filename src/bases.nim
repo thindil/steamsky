@@ -51,8 +51,7 @@ proc generateBaseName*(factionIndex: string): string {.raises: [],
           basesSyllablesPostList.len - 1))]
 
 proc countPrice*(price: var Natural; traderIndex: int;
-    reduce: bool = true) {.raises: [KeyError], tags: [],
-        contractual.} =
+    reduce: bool = true) {.raises: [KeyError], tags: [], contractual.} =
   ## Count the price of the action, like selling, buying, docking in a base
   ##
   ## * price       - the price which will be checked for bonuses or maluses
