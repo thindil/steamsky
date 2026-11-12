@@ -78,14 +78,13 @@ proc generateCargo*() {.raises: [KeyError], tags: [],
         for j in 1..amount:
           itemIndex.dec
           if itemIndex == 0:
-            if getPrice(baseType = skyBases[baseIndex].baseType,
-                itemIndex = j, quality = normal) > 0:
+            if countItemPrice(price = itemsList[j].price, quality = normal) > 0:
               let quality: ObjectQuality = getQuality()
               skyBases[baseIndex].cargo.add(y = initBaseCargo(protoIndex = j,
                   amount = getRandom(min = 0, max = 100) * population,
-                  durability = defaultItemDurability, price = getPrice(
-                  baseType = skyBases[baseIndex].baseType, itemIndex = j,
-                  quality = quality), quality = quality))
+                  durability = defaultItemDurability, price = countItemPrice(
+                  price = itemsList[j].price, quality = quality),
+                  quality = quality))
               break
             itemIndex.inc
     else:
