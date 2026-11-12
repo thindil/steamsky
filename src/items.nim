@@ -536,6 +536,28 @@ proc countItemBonus*(value: int; quality: ObjectQuality): int {.raises: [],
   of excellent:
     return (value.float * 0.2).floor.int
 
+proc countItemPrice*(price: Natural; quality: ObjectQuality): Natural {.raises: [],
+    tags: [], contractual.} =
+  ## Count price for an item, based on its quality
+  ##
+  ## * price   - the base price of an item
+  ## * quality - the quality of an item
+  ##
+  ## Returns the real price of an item
+  case quality
+  of poor:
+    result = (price.float * 0.5).ceil.Natural
+  of low:
+    result = (price.float * 0.75).ceil.Natural
+  of normal, any:
+    result = price
+  of good:
+    result = (price.float * 1.5).floor.Natural
+  of excellent:
+    result = (price.float * 1.75).floor.Natural
+  if result == 0:
+    result = 1
+
 proc moneyAmount*(inventory: seq[InventoryData]): Natural {.raises: [], tags: [
     ], contractual.} =
   ## Get the summarized amount of money from the selected inventory
