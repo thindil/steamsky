@@ -625,8 +625,8 @@ proc meleeCombat(attackers, defenders: var seq[MemberData];
     if findMember(order = boarding) == -1:
       updateOrders(ship = game.enemy.ship)
 
-proc findEnemyModule(mType: ModuleType; enemyShip: ShipRecord): int {.raises: [
-    KeyError], tags: [], contractual.} =
+proc findEnemyModule(mType: ModuleType; enemyShip: ShipRecord): ExtendedNatural
+  {.raises: [KeyError], tags: [], contractual.} =
   ## Find the module in the enemy's ship
   ##
   ## * mType     - the type of the module to find
