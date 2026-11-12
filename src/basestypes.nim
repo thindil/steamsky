@@ -20,7 +20,7 @@
 
 import std/[colors, logging, math, paths, strutils, tables, xmlparser, xmltree]
 import contracts
-import game, log, types
+import game, items, log, types
 
 type
   PricesArray* = array[1..2, Natural]
@@ -280,29 +280,14 @@ proc getPrice*(baseType: string; itemIndex: Positive;
     if itemsList[itemIndex].price == 0:
       return 0
 
-    proc countPrice(price: Natural): Natural {.raises: [], tags: [],
-        contractual.} =
-      ## Count price for the item, based on its quality
-      case quality
-      of poor:
-        result = (price.float * 0.5).ceil.Natural
-      of low:
-        result = (price.float * 0.75).ceil.Natural
-      of normal, any:
-        result = price
-      of good:
-        result = (price.float * 1.5).floor.Natural
-      of excellent:
-        result = (price.float * 1.75).floor.Natural
-      if result == 0:
-        result = 1
-
     if basesTypesList[baseType].trades.hasKey(key = itemIndex):
       if basesTypesList[baseType].trades[itemIndex][1] > 0:
-        return countPrice(price = basesTypesList[baseType].trades[itemIndex][1])
+        return countItemPrice(price = basesTypesList[baseType].trades[
+            itemIndex][1], quality = quality)
       elif basesTypesList[baseType].trades[itemIndex][2] > 0:
-        return countPrice(price = basesTypesList[baseType].trades[itemIndex][2])
-    return countPrice(price = itemsList[itemIndex].price)
+        return countItemPrice(price = basesTypesList[baseType].trades[
+            itemIndex][2], quality = quality)
+    return countItemPrice(price = itemsList[itemIndex].price, quality = quality)
 
 proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
     baseIndex: ExtendedBasesRange = 0): bool {.raises: [KeyError],
