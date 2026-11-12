@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Sorting items for trade after buying or selling something
 - Sorting items in empty bases after getting or dropping something
 - Several tooltips in the player's ship's modules' info dialog
+- No items for sale in Agora type bases
 
 ## [12.9] - 2026-11-01
 
