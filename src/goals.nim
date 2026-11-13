@@ -76,7 +76,7 @@ proc loadGoals*(fileName: Path) {.raises: [DataLoadingError],
         else:
           initGoalData()
       goal.index = $goalIndex
-      var attribute: string = goalNode.attr(name = "type")
+      var attribute: XmlAttribute = goalNode.attr(name = "type")
       if attribute.len() > 0:
         goal.goalType = try:
             parseEnum[GoalTypes](s = attribute.toLowerAscii)
@@ -217,7 +217,7 @@ proc goalText*(index: int): string {.raises: [KeyError], tags: [],
         return faction.pluralMemberName
 
   if goal.targetIndex.len > 0:
-    var insertPosition: int = result.len - 4
+    var insertPosition: Natural = result.len - 4
     if goal.amount > 1:
       insertPosition.dec
     case goal.goalType
@@ -227,7 +227,7 @@ proc goalText*(index: int): string {.raises: [KeyError], tags: [],
     of GoalTypes.destroy:
       var added: bool = false
       for index, ship in protoShipsList:
-        let shipIndex: int = try: goal.targetIndex.parseInt except ValueError: -1
+        let shipIndex: ExtendedNatural = try: goal.targetIndex.parseInt except ValueError: -1
         if index == shipIndex:
           result = result & ": " & ship.name
           added = true
