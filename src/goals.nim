@@ -22,7 +22,7 @@ import std/[logging, paths, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, messages, statistics, types, utils
 
-var currentGoal*: GoalData = initGoalData() ## The player's current goal
+var currentGoal*: GoalData = initGoalData()     ## The player's current goal
 
 proc loadGoals*(fileName: Path) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
