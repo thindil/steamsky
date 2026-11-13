@@ -665,8 +665,8 @@ proc removeGun(moduleIndex: Natural; enemyShip: ShipRecord) {.raises: [],
         break
 
 proc countHitLocation(armorIndex, gunnerIndex, gunnerOrder: int;
-    hitLocation: var int; ship, enemyShip: ShipRecord): bool {.raises: [
-        KeyError], tags: [], contractual.} =
+    hitLocation: var ExtendedNatural; ship,
+    enemyShip: ShipRecord): bool {.raises: [KeyError], tags: [], contractual.} =
   ## Count location in which the enemy's ship was hit.
   ##
   ## * gunnerIndex - the index of the crew member who is shooting
@@ -718,7 +718,7 @@ proc countHitLocation(armorIndex, gunnerIndex, gunnerOrder: int;
 
 proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
     gunnerIndex, shoots, gunnerOrder, speedBonus, ammoIndex: int;
-    module: ModuleData; hitLocation: var int): bool {.raises: [
+    module: ModuleData; hitLocation: var ExtendedNatural): bool {.raises: [
     KeyError, IOError, ReputationError], tags: [WriteIOEffect, RootEffect],
         contractual.} =
   ## Shoot to the enemy ship
@@ -767,8 +767,8 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
     if hitChance + getRandom(min = 1, max = 50) > getRandom(min = 1,
         max = hitChance + 50):
       shootMessage &= " and hits "
-      let armorIndex: ExtendedNatural = findEnemyModule(mType = ModuleType.armor,
-          enemyShip = enemyShip)
+      let armorIndex: ExtendedNatural = findEnemyModule(
+          mType = ModuleType.armor, enemyShip = enemyShip)
       if countHitLocation(armorIndex = armorIndex, gunnerIndex = gunnerIndex,
           gunnerOrder = gunnerOrder, hitLocation = hitLocation, ship = ship,
           enemyShip = enemyShip):
@@ -1019,7 +1019,7 @@ proc attack(ship, enemyShip: var ShipRecord; ammoIndex2: var int; accuracyBonus,
   ##
   ## Returns modified parameters ship and enemyShip
 
-  var hitLocation: int = -1
+  var hitLocation: ExtendedNatural = -1
 
   if ship.crew == playerShip.crew:
     logMessage(message = "Player's round", messageLevel = lvlDebug)
