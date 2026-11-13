@@ -767,7 +767,7 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
     if hitChance + getRandom(min = 1, max = 50) > getRandom(min = 1,
         max = hitChance + 50):
       shootMessage &= " and hits "
-      let armorIndex: int = findEnemyModule(mType = ModuleType.armor,
+      let armorIndex: ExtendedNatural = findEnemyModule(mType = ModuleType.armor,
           enemyShip = enemyShip)
       if countHitLocation(armorIndex = armorIndex, gunnerIndex = gunnerIndex,
           gunnerOrder = gunnerOrder, hitLocation = hitLocation, ship = ship,
@@ -777,7 +777,7 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
           hitLocation].name & "."
       let damage: float = 1.0 - (module.durability.float /
           module.maxDurability.float)
-      var weaponDamage: int = 0
+      var weaponDamage: Natural = 0
       if module.mType == ModuleType2.harpoonGun:
         weaponDamage = module.duration - (module.duration.float * damage).int
       elif module.mType == ModuleType2.gun:
@@ -830,7 +830,7 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
           endCombat = true
         of ModuleType.turret:
           if enemyShip.crew == playerShip.crew:
-            let weaponIndex: int = enemyShip.modules[
+            let weaponIndex: ExtendedNatural = enemyShip.modules[
                 hitLocation].gunIndex
             if weaponIndex > -1:
               enemyShip.modules[weaponIndex].durability = 0
