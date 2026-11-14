@@ -697,24 +697,29 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
         tooltip = "General information about the world, like known bases, events and accepted missions."):
       showKnowledgeScreen(dialog = dialog, state = state)
     if playerShip.crew[0].health > 0 and not inCombat:
-      labelButton(title = "Wait orders"):
+      labelButton(title = "Wait orders",
+          tooltip = "Wait in place for a selected amount of time."):
         setDialog()
         setWaitMenu()
         dialog = waitDialog
-    labelButton(title = "Game statistics"):
+    labelButton(title = "Game statistics",
+        tooltip = "General statistics of the current game, like travelled distance, destroyed ships, etc."):
       showStatsScreen(dialog = dialog, state = state)
     if playerShip.crew[0].health > 0:
-      labelButton(title = "Help"):
+      labelButton(title = "Help", tooltip = "Information about the game, its mechanics, etc."):
         showHelpScreen(dialog = dialog, state = state)
-      labelButton(title = "Game options"):
+      labelButton(title = "Game options",
+          tooltip = "Change some the game's behaviors, keyboard shortcuts, etc.'"):
         showOptionsScreen(dialog = dialog, state = state)
-      labelButton(title = "Quit from game"):
+      labelButton(title = "Quit from game",
+          tooltip = "End the current game, save the progress."):
         dialog = setQuestion(question = "Are you sure want to quit?",
             qType = quitGame)
-      labelButton(title = "Resign from game"):
+      labelButton(title = "Resign from game",
+          tooltip = "Resign from the game, delete existing save and kill your character."):
         dialog = setQuestion(question = "Are you sure want to resign from game?",
             qType = resignGame)
-    labelButton(title = "Close"):
+    labelButton(title = "Close", tooltip = "Close the menu [Escape key]"):
       dialog = none
 
   windowSetFocus(name = windowName)
