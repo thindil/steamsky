@@ -679,18 +679,22 @@ proc showGameMenu*(dialog: var GameDialog; state: var GameState) {.raises: [],
       w = width, h = height, flags = {windowBorder, windowTitle,
       windowNoScrollbar, windowMovable}):
     setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
-    labelButton(title = "Ship information"):
+    labelButton(title = "Ship information",
+        tooltip = "General information about your ship, its crew and cargo."):
       showShipInfo(dialog = dialog, state = state)
     if playerShip.crew[0].health > 0 and not inCombat:
-      labelButton(title = "Ship orders"):
+      labelButton(title = "Ship orders",
+          tooltip = "Manage your ship, like dock to bases, trade or travel."):
         setDialog(y = gameSettings.windowHeight.float / 7)
         dialog = ordersDialog
     if playerShip.crew[0].health > 0:
-      labelButton(title = "Crafting"):
+      labelButton(title = "Crafting", tooltip = "Craft items, show information about known crafting recipes."):
         showCraftScreen(dialog = dialog, state = state)
-    labelButton(title = "Last messages"):
+    labelButton(title = "Last messages",
+        tooltip = "Show the list of last in-game messages."):
       showLastMessagesScreen(dialog = dialog, state = state)
-    labelButton(title = "Knowledge lists"):
+    labelButton(title = "Knowledge lists",
+        tooltip = "General information about the world, like known bases, events and accepted missions."):
       showKnowledgeScreen(dialog = dialog, state = state)
     if playerShip.crew[0].health > 0 and not inCombat:
       labelButton(title = "Wait orders"):
