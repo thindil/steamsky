@@ -524,49 +524,49 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       return true
     if module.durability != module.maxDurability:
       needRepairs = true
-  setRowTemplate(height = buttonHeight):
-    rowTemplateStatic(width = buttonHeight)
+  setRowTemplate(height = dialogButtonHeight):
+    rowTemplateStatic(width = dialogButtonHeight)
     if close != none:
-      rowTemplateStatic(width = buttonHeight)
+      rowTemplateStatic(width = dialogButtonHeight)
     if options:
-      rowTemplateStatic(width = buttonHeight)
+      rowTemplateStatic(width = dialogButtonHeight)
     rowTemplateDynamic()
-    rowTemplateStatic(width = buttonHeight)
+    rowTemplateStatic(width = dialogButtonHeight)
     try:
       rowTemplateStatic(width = getTextWidth(text = $fuelAmount))
     except:
       dialog = setError(message = "Can't set fuel text width")
       return true
-    rowTemplateStatic(width = buttonHeight)
+    rowTemplateStatic(width = dialogButtonHeight)
     try:
       rowTemplateStatic(width = getTextWidth(text = $foodAmount))
     except:
       dialog = setError(message = "Can't set food text width")
       return true
-    rowTemplateStatic(width = buttonHeight)
+    rowTemplateStatic(width = dialogButtonHeight)
     try:
       rowTemplateStatic(width = getTextWidth(text = $drinksAmount))
     except:
       dialog = setError(message = "Can't set drinks text width")
       return true
     if speed < 0.5:
-      rowTemplateStatic(width = buttonHeight)
+      rowTemplateStatic(width = dialogButtonHeight)
     if not havePilot:
-      rowTemplateStatic(width = buttonHeight)
+      rowTemplateStatic(width = dialogButtonHeight)
     if not haveEngineer:
-      rowTemplateStatic(width = buttonHeight)
+      rowTemplateStatic(width = dialogButtonHeight)
     if not haveGunner:
-      rowTemplateStatic(width = buttonHeight)
+      rowTemplateStatic(width = dialogButtonHeight)
     if not haveTrader:
-      rowTemplateStatic(width = buttonHeight)
+      rowTemplateStatic(width = dialogButtonHeight)
     if needRepairs:
-      rowTemplateStatic(width = buttonHeight)
+      rowTemplateStatic(width = dialogButtonHeight)
     if needWorker:
-      rowTemplateStatic(width = buttonHeight)
+      rowTemplateStatic(width = dialogButtonHeight)
     if playerShip.upgradeModule > -1:
-      rowTemplateStatic(width = buttonHeight)
+      rowTemplateStatic(width = dialogButtonHeight)
     if needCleaning:
-      rowTemplateStatic(width = buttonHeight)
+      rowTemplateStatic(width = dialogButtonHeight)
   imageButton(image = images[menuIcon], tooltip = "The main game menu. Show info about the ship, its crew and allow to quit the game"):
     if dialog == none:
       setDialog(y = 20)
