@@ -262,7 +262,7 @@ proc goalText*(index: int): string {.raises: [KeyError], tags: [],
       insertPosition = result.len - 21
       if goal.amount > 1:
         insertPosition -= 2
-      var stopPosition: int = insertPosition + 6
+      var stopPosition: Positive = insertPosition + 6
       if goal.amount > 1:
         result[insertPosition..stopPosition] = getFactionName(
             factionIndex = goal.targetIndex, factionType = pluralMemberName)
