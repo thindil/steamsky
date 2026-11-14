@@ -880,7 +880,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  discard showHeader(dialog = dialog, state = state)
+  if showHeader(dialog = dialog, state = state):
+    return
   if playerShip.speed != docked and mapPreview:
     mapPreview = false
   # draw dialogs
