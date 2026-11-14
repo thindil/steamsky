@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Tooltips to the list of crafting recipes
+- Tooltips to the list of crafting recipes and the game's menu
 - Better handling the game's crashes
 - Missing tooltips in the wait menu
 - Missing tooltips for tabs in the ship info, crafting, last messages,
