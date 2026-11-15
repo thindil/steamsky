@@ -81,7 +81,7 @@ var
     ## The keyboard shortcut for switch full screen mode for the game
   shortcutsEnabled*: bool = true
     ## If true, the keyboard shortcuts are enabled
-  buttonHeight*: float = gameSettings.interfaceFontSize.float + 26
+  buttonHeight*: float = gameSettings.interfaceFontSize.float + 21
     ## The height of row in pixels for buttons
   labelHeight*: float = gameSettings.interfaceFontSize.float + 11
     ## The height of row in pixels for labels
