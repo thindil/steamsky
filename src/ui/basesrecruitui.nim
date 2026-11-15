@@ -288,7 +288,7 @@ proc showRecruitInfo*(dialog: var GameDialog) {.raises: [], tags: [
       else:
         discard
     # Buttons
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     imageLabelButton(image = images[negotiateIcon], label = "Negotiate"):
       dialog = negotiateDialog
       currentDaily = recruit.payment
@@ -341,7 +341,7 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
   let
     recruit: RecruitData = skyBases[setui.baseIndex].recruits[recruitIndex]
     windowName: string = "Negotiate with " & recruit.name
-    height: float = (editHeight * 6) + (labelHeight * 7) + dialogButtonHeight
+    height: float = (editHeight * 6) + (labelHeight * 7) + buttonHeight
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
@@ -407,7 +407,7 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
     label(str = hireText[0])
     colorLabel(str = hireText[1], color = theme.colors[goldenColor])
     label(str = hireText[2])
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     if canHire:
       imageLabelButton(image = images[negotiateColoredIcon], label = "Hire"):
