@@ -118,12 +118,12 @@ template showActionMenu(button: string; action: untyped) =
     const
       width: float = 150
       windowName: string = "Actions"
-    let height: float = (dialogButtonHeight * 2) + (labelHeight * 2) + 5
+    let height: float = (buttonHeight * 2) + (labelHeight * 2) + 5
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = windowName, x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar, windowMovable}):
-      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
       labelButton(title = button):
         dialog = none
         closePopup()
