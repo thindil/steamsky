@@ -101,7 +101,7 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
   ## * mapYInfo - the Y coordinate of the map cell to show the info
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
-  tooltip(x = mapInfoX, y = 55, width = 250):
+  tooltip(x = mapInfoX, y = dialogButtonHeight + 15, width = 250):
     if windowIsHovered():
       if mapInfoX == 10:
         mapInfoX = (gameSettings.windowWidth.float - 255.0)
@@ -890,8 +890,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
   let height: Positive = gameSettings.mapFontSize + 10
-  rows = ((gameSettings.windowHeight.float - 35 - gameSettings.messagesPosition.float) /
-        height.float).ceil.Natural
+  rows = ((gameSettings.windowHeight.float - dialogButtonHeight -
+           gameSettings.messagesPosition.float) / height.float).ceil.Natural
   let colWidth: Positive = try:
       getTextWidth(text = theme.mapIcons[emptyMapIcon]).Positive + 6
     except:
