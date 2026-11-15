@@ -967,11 +967,6 @@ type
     ## Internal Nuklear type
     head*: cint
     elements*: pointer
-  nk_config_stack_float* {.importc: "struct nk_config_stack_float",
-      completeStruct.} = object
-    ## Internal Nuklear type
-    head*: cint
-    elements*: pointer
   nk_draw_null_texture* {.importc: "struct nk_draw_null_texture".} = object
     ## Internal Nuklear type
   nk_convert_config* {.importc: "struct nk_convert_config".} = object
