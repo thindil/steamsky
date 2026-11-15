@@ -823,7 +823,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
             btnAmount = 1
       except:
         dialog = setError(message = "Can't set amount of buttons.")
-    var  groupHeight: float = height - dialogButtonHeight - 65
+    var  groupHeight: float = height - buttonHeight - 65
     if btnAmount == 1:
       groupHeight -= (labelHeight * 2)
     if compareList.len > 0:
@@ -886,7 +886,7 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
                   color = theme.colors[redColor])
         except:
           dialog = setError(message = "Can't set error label.")
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = btnAmount)
+    setLayoutRowDynamic(height = buttonHeight, cols = btnAmount)
     if btnAmount == 2:
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       imageLabelButton(image = images[buyIcon], label = "Install"):
@@ -914,7 +914,7 @@ proc setRemoveInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog.
   moduleIndex = modulesIndexes[data]
   dialog = moduleDialog
-  dialogHeight = (labelHeight * 10) + dialogButtonHeight
+  dialogHeight = (labelHeight * 10) + buttonHeight
   let mType: ModuleType = try:
         modulesList[playerShip.modules[moduleIndex].protoIndex].mType
       except:
@@ -1011,7 +1011,7 @@ proc showRemoveInfo(dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't show module's description")
       return
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[sellIcon], label = "Remove"):
       manipulateModule(dialog = dialog)
