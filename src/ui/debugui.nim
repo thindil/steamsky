@@ -246,7 +246,7 @@ proc showShipTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Upgrade progress:")
   upgradeProgress = property2(name = "#", min = 1, val = upgradeProgress,
       max = 100, step = 1, incPerPixel = 1)
-  setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+  setLayoutRowDynamic(height = buttonHeight, cols = 1)
   labelButton(title = "Change"):
     for index, module in modulesList:
       if protoModules[protoSelected] == module.name:
@@ -294,7 +294,7 @@ proc showCrewTab() {.raises: [], tags: [RootEffect], contractual.} =
           val = skill.value, max = 100, step = 1, incPerPixel = 1)
       if newVal != skill.value:
         memberSkills[index].value = newVal
-  setLayoutRowDynamic(height = dialogButtonHeight, cols = 3)
+  setLayoutRowDynamic(height = buttonHeight, cols = 3)
   labelButton(title = "Change"):
     playerShip.crew[crewSelected].health = memberProperties[0]
     playerShip.crew[crewSelected].thirst = memberProperties[1]
@@ -365,7 +365,7 @@ proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be added to the player's
   ## ship's cargo
   window(name = "Item to add", x = 300, y = 100, w = 300, h = ((editHeight *
-      2) + dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
+      2) + buttonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
     var newSearchText: string = searchItem
@@ -381,7 +381,7 @@ proc showAddItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
         itemsNames.add(y = "No items")
     itemSelected = comboList(items = itemsNames, selected = itemSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     labelButton(title = "Select"):
       if itemsNames[0] != "No items":
         itemName = itemsNames[itemSelected]
@@ -395,7 +395,7 @@ proc showUpdateItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of items which can be updated in the player's
   ## ship's cargo
   window(name = "Item to update", x = 300, y = 100, w = 300, h = ((editHeight *
-      2) + dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
+      2) + buttonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
     var newSearchText: string = searchItem2
@@ -413,7 +413,7 @@ proc showUpdateItemDialog() {.raises: [], tags: [RootEffect], contractual.} =
         cargoNames.add(y = "No items")
     cargoSelected = comboList(items = cargoNames, selected = cargoSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     labelButton(title = "Select"):
       if cargoNames[0] != "No items":
         cargoName = cargoNames[cargoSelected]
@@ -453,7 +453,7 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
   label(str = "Money:")
   money = property2(name = "#", min = 0, val = money, max = 1_000_000, step = 1,
       incPerPixel = 1)
-  setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+  setLayoutRowDynamic(height = buttonHeight, cols = 1)
   labelButton(title = "Update"):
     var baseIndex: BasesRange = 1
     baseName = basesNames[baseSelected]
@@ -483,7 +483,7 @@ proc showBasesTab() {.raises: [], tags: [RootEffect], contractual.} =
 proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases which can be set
   window(name = "Bases", x = 300, y = 100, w = 300, h = ((editHeight * 2) +
-      dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
+      buttonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
     var newSearchText: string = searchBase
@@ -499,7 +499,7 @@ proc showSetBaseDialog() {.raises: [], tags: [RootEffect], contractual.} =
         basesNames.add(y = "No bases")
     baseSelected = comboList(items = basesNames, selected = baseSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     labelButton(title = "Select"):
       if basesNames[0] != "No bases":
         baseName = basesNames[baseSelected]
@@ -549,7 +549,7 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
     label(str = "Duration:")
     shipDuration = property2(name = "#", min = 60, val = shipDuration,
         max = 1_000, step = 1, incPerPixel = 1)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     labelButton(title = "Add ship"):
       var friendlyShips: seq[Positive] = @[]
       try:
@@ -596,7 +596,7 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
     label(str = "Duration:")
     eventDuration = property2(name = "#", min = 15, val = eventDuration,
         max = 12_000, step = 1, incPerPixel = 1)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     labelButton(title = "Add event"):
       case eventSelected
       of 0:
@@ -630,7 +630,7 @@ proc showWorldTab() {.raises: [], tags: [RootEffect], contractual.} =
 proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of proto ships which can be set
   window(name = "Ships", x = 300, y = 100, w = 300, h = ((editHeight * 2) +
-      dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
+      buttonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
     var newSearchText: string = searchShip
@@ -646,7 +646,7 @@ proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
         shipsNames.add(y = "No ships")
     shipSelected = comboList(items = shipsNames, selected = shipSelected,
         itemHeight = labelHeight.int, x = 290, y = 200)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     labelButton(title = "Select"):
       if shipsNames[0] != "No ships":
         shipName = shipsNames[shipSelected]
@@ -657,7 +657,7 @@ proc showSetShipDialog() {.raises: [], tags: [RootEffect], contractual.} =
 proc showSetBaseEventDialog() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the dialog with list of bases for an event
   window(name = "Bases", x = 300, y = 100, w = 300, h = ((editHeight * 2) +
-      dialogButtonHeight + 60), flags = {windowBorder, windowTitle,
+      buttonHeight + 60), flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(height = editHeight, cols = 1)
     var newSearchText: string = searchBase2
@@ -673,7 +673,7 @@ proc showSetBaseEventDialog() {.raises: [], tags: [RootEffect], contractual.} =
         basesNames.add(y = "No bases")
     base2Selected = comboList(items = basesNames, selected = base2Selected,
         itemHeight = labelHeight.int, x = 290, y = 200)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     labelButton(title = "Select"):
       if basesNames[0] != "No bases":
         base2Name = basesNames[base2Selected]
@@ -705,7 +705,7 @@ proc showDebugUI*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     layoutSpaceStatic(height = groupHeight, widgetsCount = 2):
       row(x = 0, y = 0, w = groupOneWidth, h = groupHeight):
         group(title = "debugButtons", flags = {windowNoScrollbar}):
-          setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+          setLayoutRowDynamic(height = buttonHeight, cols = 1)
           labelButton(title = "Ship"):
             debugTab = ship
           labelButton(title = "Crew"):
