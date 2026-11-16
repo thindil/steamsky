@@ -146,14 +146,14 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
       dialog = none
 
     let height: float = (labelHeight * questionData.lines) +
-        dialogButtonHeight + 60
+        buttonHeight + 60
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Question", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar, windowMovable}):
       setLayoutRowDynamic(height = labelHeight * questionData.lines, cols = 1)
       wrapLabel(str = questionData.question)
-      setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+      setLayoutRowDynamic(height = buttonHeight, cols = 2)
       labelButton(title = "Yes"):
         closePopup()
         dialog = none
@@ -309,14 +309,14 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
     return
   try:
     const width: float = 350
-    let height: float = (labelHeight * messageData.lines) + dialogButtonHeight + 60
+    let height: float = (labelHeight * messageData.lines) + buttonHeight + 60
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = messageData.title, x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar, windowMovable}):
       setLayoutRowDynamic(height = labelHeight * messageData.lines, cols = 1)
       wrapLabel(str = messageData.text)
-      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
       addCloseButton(dialog = dialog, label = "Close " & $((timer /
           1000.0).ceil.int))
   except:
@@ -417,7 +417,7 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
   if dialog != infoDialog:
     return
   try:
-    var height: float = dialogButtonHeight + 60
+    var height: float = buttonHeight + 60
     for data in infoData.data:
       height += (labelHeight * data.lines) + (data.lines * 2)
     for amount in infoData.widgetsAmount:
@@ -443,7 +443,7 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
         cols.dec
       if infoData.button2 == emptyButtonSettings:
         cols.dec
-      setLayoutRowDynamic(height = dialogButtonHeight, cols = cols)
+      setLayoutRowDynamic(height = buttonHeight, cols = cols)
       # Draw the first optional button
       if infoData.button1 != emptyButtonSettings:
         let button: ButtonSettings = infoData.button1
@@ -630,7 +630,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
   result = false
   try:
     let width: float = gameSettings.windowWidth.float / 1.5
-    var height: float = editHeight + (dialogButtonHeight * 2) + labelHeight + 70
+    var height: float = editHeight + (buttonHeight * 2) + labelHeight + 70
     if dialog == giveDialog:
       height += editHeight
     elif dialog in buyDialog..dropDialog:
@@ -688,7 +688,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
       for amount in amounts:
         if amount < manipulateData.maxAmount:
           cols.inc
-      setLayoutRowDynamic(height = dialogButtonHeight, cols = cols)
+      setLayoutRowDynamic(height = buttonHeight, cols = cols)
       for i in 1..cols - 1:
         labelButton(title = $amounts[i]):
           manipulateData.amount = amounts[i]
@@ -727,7 +727,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
           ActionData(icon: dropColoredIcon, label: "Drop")
         else:
           ActionData(icon: buyIcon, label: "Invalid")
-      setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+      setLayoutRowDynamic(height = buttonHeight, cols = 2)
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       imageLabelButton(image = images[actionButton.icon],
           label = actionButton.label, tooltip = manipulateData.title):
