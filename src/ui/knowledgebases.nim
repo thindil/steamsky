@@ -47,7 +47,7 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
     base: BaseRecord = skyBases[baseIndex]
     windowName: string = base.name
     width: float = gameSettings.windowWidth.float * 0.6
-  var height: float = (labelHeight * 2) + dialogButtonHeight + 80
+  var height: float = (labelHeight * 2) + buttonHeight + 80
   if base.visited.year > 0:
     height += (labelHeight * 7) + editHeight
   updateDialog(width = width, height = height)
@@ -144,7 +144,7 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
           var repLevel: Natural = 0
           progressBar(value = repLevel, maxValue = 100, modifyable = false,
               tooltip = reputationText)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 3)
+    setLayoutRowDynamic(height = buttonHeight, cols = 3)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[destinationIcon], label = "Target",
         tooltip = "Set the base as the ship destination"):

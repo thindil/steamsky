@@ -56,11 +56,11 @@ proc showMissionMenu*(dialog: var GameDialog) {.raises: [], tags: [
         "Explore area"
       of passenger:
         "Transport passenger"
-    height: float = 50 + dialogButtonHeight
+    height: float = 50 + buttonHeight
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 3)
+    setLayoutRowDynamic(height = buttonHeight, cols = 3)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[destinationIcon], label = "Target",
         tooltip = "Set the mission as the ship destination"):
