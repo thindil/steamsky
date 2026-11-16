@@ -61,7 +61,9 @@ proc countPrice*(price: var Natural; traderIndex: int;
   ## Returns the updated parameter price as a new price
   if price == 0:
     return
+  {.ruleOff: "varDeclared".}
   var bonus: int = 0
+  {.ruleOn: "varDeclared".}
   if traderIndex > -1:
     bonus = (price.float * (getSkillLevel(member = playerShip.crew[traderIndex],
         skillIndex = talkingSkill).float / 200.0)).int
@@ -117,9 +119,11 @@ proc updatePopulation*() {.raises: [], tags: [], contractual.} =
   else:
     if getRandom(min = 1, max = 100) > 30:
       return
+    {.ruleOff: "varDeclared".}
     let populationDiff: int = (if getRandom(min = 1, max = 100) < 20: getRandom(
         min = -10, max = -1) else: getRandom(min = 1, max = 10))
     var newPopulation: int = skyBases[baseIndex].population + populationDiff
+    {.ruleOn: "varDeclared".}
     if newPopulation < 0:
       newPopulation = 0
     skyBases[baseIndex].population = newPopulation
