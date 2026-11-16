@@ -100,7 +100,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
-    setLayoutRowDynamic(height = height - dialogButtonHeight - 60, cols = 1)
+    setLayoutRowDynamic(height = height - buttonHeight - 60, cols = 1)
     group(title = "RecipeGroup", flags = {windowNoFlags}):
       if recipe.recipeType == craftType:
         setLayoutRowDynamic(height = labelHeight, cols = 2, ratio = [0.3.cfloat, 0.7])
@@ -203,7 +203,7 @@ proc showRecipeInfo*(dialog: var GameDialog) {.raises: [], tags: [
             color = theme.colors[goldenColor])
       label(str = "Time needed:")
       colorLabel(str = $craft.time & " minutes", color = theme.colors[goldenColor])
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = (
+    setLayoutRowDynamic(height = buttonHeight, cols = (
         if recipe.craftable: 2 else: 1))
     if recipe.craftable:
       imageLabelButton(image = craftImage, label = $recipe.recipeType,
@@ -279,13 +279,13 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
 
   let
     windowName: string = recipe.name
-    height: float = (dialogButtonHeight * 2) + (editHeight * 6) + labelHeight + 60
+    height: float = (buttonHeight * 2) + (editHeight * 6) + labelHeight + 60
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     if recipe.recipeType == craftType:
       # Show amount setting
-      setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+      setLayoutRowDynamic(height = buttonHeight, cols = 2)
       label(str = "Amount:")
       labelButton(title = "max " & $maxAmount,
           tooltip = "Set maximum possible amount of how many times the crafting order should be done."):
@@ -365,7 +365,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
     worker = comboList(items = workers, selected = worker,
         itemHeight = labelHeight.int, x = 380, y = 150,
         tooltip = "Assign the crew member from the list. The sign + after name means that this crew member has needed skill, the sign ++ after name means that his/her needed skill is the best in the crew.")
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = setImage, label = $recipe.recipeType):
       dialog = none
