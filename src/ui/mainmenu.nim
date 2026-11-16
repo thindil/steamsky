@@ -85,12 +85,11 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   except OSError:
     dialog = setError(message = "Can't check savegames.")
   showHoFButton = fileExists(filename = saveDirectory.string & "halloffame.dat")
-  buttonHeight = gameSettings.interfaceFontSize.float + 26
+  buttonHeight = gameSettings.interfaceFontSize.float + 21
   labelHeight = gameSettings.interfaceFontSize.float + 11
   tableRowHeight = gameSettings.interfaceFontSize.float + 21
   editHeight = gameSettings.interfaceFontSize.float + 21
   tabHeight = gameSettings.interfaceFontSize.float + 16
-  dialogButtonHeight = gameSettings.interfaceFontSize.float + 21
   mapButtonHeight = gameSettings.interfaceFontSize.float + 6
   nuklearResizeWin(width = gameSettings.windowWidth,
       height = gameSettings.windowHeight)
@@ -125,28 +124,28 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = newGame
         dialog = none
         return
-    var y: float = buttonHeight;
+    var y: float = buttonHeight + 10;
     if showLoadButton:
       row(x = x, y = y, w = w, h = buttonHeight):
-        y += buttonHeight
+        y += buttonHeight + 10
         labelButton(title = "Load game",
             tooltip = "Load one of the previously saved games"):
           state = loadGame
           return
     if showHoFButton:
       row(x = x, y = y, w = w, h = buttonHeight):
-        y += buttonHeight
+        y += buttonHeight + 10
         labelButton(title = "Hall of Fame",
             tooltip = "Show your previous the bests scores in the game"):
           state = hallOfFame
           return
     row(x = x, y = y, w = w, h = buttonHeight):
-      y += buttonHeight
+      y += buttonHeight + 10
       labelButton(title = "News", tooltip = "The list of changes to the game"):
         state = news
         return
     row(x = x, y = y, w = w, h = buttonHeight):
-      y += buttonHeight
+      y += buttonHeight + 10
       labelButton(title = "About", tooltip = "General information about the game"):
         state = about
         return
