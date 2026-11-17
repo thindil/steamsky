@@ -957,11 +957,6 @@ type
     ## Internal Nuklear type
     address*: PNkUserFont
     old_value: nk_user_font
-  nk_config_stack_button_behavior_element * {.importc: "struct nk_config_stack_button_behavior_element",
-      completeStruct.} = object
-    ## Internal Nuklear type
-    address*: ptr ButtonBehavior
-    old_value: ButtonBehavior
   nk_draw_null_texture* {.importc: "struct nk_draw_null_texture".} = object
     ## Internal Nuklear type
   nk_convert_config* {.importc: "struct nk_convert_config".} = object
