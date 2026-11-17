@@ -621,10 +621,10 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
     var assigned: Natural = 0
-    setLayoutRowDynamic(height = height - dialogButtonHeight - labelHeight -
+    setLayoutRowDynamic(height = height - buttonHeight - labelHeight -
         60, cols = 1)
     group(title = "CrewGroup", flags = {windowNoFlags}):
-      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
       for index, member in playerShip.crew:
         var checked: bool = index in module.owner
         if checkbox(label = member.name, checked = checked):
@@ -654,7 +654,7 @@ proc showAssignCrewDialog*(dialog: var GameDialog) {.raises: [], tags: [
           assigned.inc
     setLayoutRowDynamic(height = labelHeight, cols = 1)
     label(str = "Available: " & $(module.owner.len - assigned))
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
     if dialog == none:
       dialog = moduleInfoDialog
@@ -683,9 +683,9 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
-    setLayoutRowDynamic(height = height - dialogButtonHeight - 60, cols = 1)
+    setLayoutRowDynamic(height = height - buttonHeight - 60, cols = 1)
     group(title = "AmmoGroup", flags = {windowNoFlags}):
-      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
       for index, item in playerShip.cargo:
         try:
           if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
@@ -699,7 +699,7 @@ proc showAssignAmmoDialog*(dialog: var GameDialog) {.raises: [], tags: [
         except:
           dialog = setError(message = "Can't add an ammo button.")
           return
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
     if dialog == none:
       dialog = moduleInfoDialog
@@ -754,7 +754,7 @@ proc showAssignSkillDialog*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
-    setLayoutRowDynamic(height = height - dialogButtonHeight - 60, cols = 1)
+    setLayoutRowDynamic(height = height - buttonHeight - 60, cols = 1)
     group(title = "SkillsGroup", flags = {windowNoFlags}):
       addHeader(headers = skillHeaders, ratio = skillRatio, tooltip = "",
           code = sortSkills, dialog = dialog)
@@ -894,7 +894,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = windowName, x = dialogX, y = dialogY, w = dialogWidth,
       h = height, flags = {windowBorder, windowTitle, windowMovable,
           windowNoScrollbar}):
-    setLayoutRowDynamic(height = height - dialogButtonHeight - 60, 1)
+    setLayoutRowDynamic(height = height - buttonHeight - 60, 1)
     group(title = "SkillsGroup", flags = {windowNoFlags}):
       setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
           col2b - 15, 115])
@@ -1200,7 +1200,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
       except:
         dialog = setError(message = "Can't show the description.")
         return
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = windowName)
