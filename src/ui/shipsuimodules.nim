@@ -200,7 +200,7 @@ proc setModuleInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   col1 = viewWidth * 0.3
   col2a = viewWidth - col1
   col2b = viewWidth - col1 - 100
-  col2c = viewWidth - col1 - 200
+  col2c = viewWidth - col1 - 205
   col3 = col2a / 3
   setDialog(x = 10, y = gameSettings.windowHeight.float / 10)
 
