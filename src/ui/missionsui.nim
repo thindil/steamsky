@@ -157,7 +157,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
     mission: MissionData = skyBases[setui.baseIndex].missions[missionIndex]
     windowName: string = "More info about " & getMissionType(
         mType = mission.mType)
-  var height: float = dialogButtonHeight + 70 + (labelHeight * 2)
+  var height: float = buttonHeight + 70 + (labelHeight * 2)
   case mission.mType
   of deliver, passenger:
     height += labelHeight * 3
@@ -249,7 +249,7 @@ proc showMissionInfo*(dialog: var GameDialog) {.raises: [], tags: [
       except:
         dialog = setError(message = "Can't get fuel name.")
         return
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = (
+    setLayoutRowDynamic(height = buttonHeight, cols = (
         if canAccept: 3 else: 2))
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[showColoredIcon], label = "Show",
@@ -283,7 +283,7 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
   let
     mission: MissionData = skyBases[setui.baseIndex].missions[missionIndex]
     windowName: string = "Accept " & getMissionType(mType = mission.mType)
-    height: float = (labelHeight * 2) + editHeight + dialogButtonHeight + 70
+    height: float = (labelHeight * 2) + editHeight + buttonHeight + 70
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
@@ -301,7 +301,7 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
     if newPercent != missionPercent:
       missionPercent = newPercent
     missionReward = ((mission.reward.float * missionPercent.float) / 100.0).Natural
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[negotiateColoredIcon], label = "Accept",
         tooltip = "Accept the mission"):
