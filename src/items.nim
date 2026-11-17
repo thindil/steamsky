@@ -423,8 +423,7 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
 
 proc getRandomItem*(itemsIndexes: seq[Positive]; equipIndex: EquipmentLocations;
     highestLevel, weaponSkillLevel: Positive;
-    factionIndex: string): Natural {.raises: [], tags: [],
-        contractual.} =
+    factionIndex: FactionIndex): Natural {.raises: [], tags: [], contractual.} =
   ## Get the random index of the item of the selected type
   ##
   ## * itemsIndexes     - the list of indexes of the items from which the index will be get
@@ -536,8 +535,8 @@ proc countItemBonus*(value: int; quality: ObjectQuality): int {.raises: [],
   of excellent:
     return (value.float * 0.2).floor.int
 
-proc countItemPrice*(price: Natural; quality: ObjectQuality): Natural {.raises: [],
-    tags: [], contractual.} =
+proc countItemPrice*(price: Natural; quality: ObjectQuality): Natural {.raises: [
+    ], tags: [], contractual.} =
   ## Count price for an item, based on its quality
   ##
   ## * price   - the base price of an item
