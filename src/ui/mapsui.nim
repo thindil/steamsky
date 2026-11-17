@@ -101,7 +101,7 @@ proc showMapInfo(theme: ThemeData; mapXInfo: MapXRange; mapYInfo: MapYRange)
   ## * mapYInfo - the Y coordinate of the map cell to show the info
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
-  tooltip(x = mapInfoX, y = dialogButtonHeight + 15, width = 250):
+  tooltip(x = mapInfoX, y = buttonHeight + 15, width = 250):
     if windowIsHovered():
       if mapInfoX == 10:
         mapInfoX = (gameSettings.windowWidth.float - 255.0)
@@ -706,16 +706,16 @@ proc showButtons(dialog: var GameDialog; state: var GameState) {.raises: [], tag
     if dialog != none:
       windowDisable()
     if playerShip.speed == docked or playerShip.destinationX == 0:
-      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
     else:
-      setLayoutRowDynamic(height = dialogButtonHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
+      setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
     labelButton(title = "Ship orders", tooltip = "Show available orders for your ship."):
       setDialog(y = gameSettings.windowHeight.float / 7)
       dialog = ordersDialog
     if playerShip.speed != docked and playerShip.destinationX > 0:
       imageButton(image = images[moveToIcon], tooltip = "Auto move your ship to its destination."):
         moveShipOnMap(direction = moveToDestination, dialog = dialog, state = state)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     if playerShip.speed == docked:
       imageButtonCentered(image = images[waitIcon], tooltip = if gameSettings.waitMinutes ==
           1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes."):
@@ -724,8 +724,8 @@ proc showButtons(dialog: var GameDialog; state: var GameState) {.raises: [], tag
       playerShip.speed = (comboList(items = shipSpeeds,
           selected = playerShip.speed.ord - 1, itemHeight = labelHeight.int, x = 200, y = 50,
           tooltip = "Set speed for your ship. The faster you move, the more fuel used. But faster movement has bigger chance to evade enemies.") + 1).ShipSpeed
-      setLayoutRowStatic(height = dialogButtonHeight, cols = 3, ratio =
-        [(dialogButtonHeight + 5).cfloat, (dialogButtonHeight + 5), (dialogButtonHeight + 5)])
+      setLayoutRowStatic(height = buttonHeight, cols = 3, ratio =
+        [(buttonHeight + 5).cfloat, (buttonHeight + 5), (buttonHeight + 5)])
       imageButton(image = images[arrowUpLeft],
           tooltip = "Move ship up and left"):
         moveShipOnMap(direction = northWest, dialog = dialog, state = state)
@@ -771,12 +771,12 @@ proc showDestinationMenu(dialog: var GameDialog; state: var GameState) {.raises:
     const width: float = 250
     var height: float = 0
     if playerShip.speed == docked:
-      height = (dialogButtonHeight * 3) + 20
+      height = (buttonHeight * 3) + 20
     else:
       if playerShip.destinationX > 0 and playerShip.destinationY > 0:
-        height = (dialogButtonHeight * 5) + 30
+        height = (buttonHeight * 5) + 30
       else:
-        height = (dialogButtonHeight * 4) + 25
+        height = (buttonHeight * 4) + 25
 
     proc closeDialog(dialog: var GameDialog) {.raises: [], tags: [],
         contractual.} =
@@ -804,7 +804,7 @@ proc showDestinationMenu(dialog: var GameDialog; state: var GameState) {.raises:
     popup(pType = staticPopup, title = "Set destination", x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
-      setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
       labelButton(title = "Set destination"):
         setDestination(dialog = dialog)
       if playerShip.speed != docked:
@@ -890,7 +890,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
   let height: Positive = gameSettings.mapFontSize + 10
-  rows = ((gameSettings.windowHeight.float - dialogButtonHeight -
+  rows = ((gameSettings.windowHeight.float - buttonHeight -
            gameSettings.messagesPosition.float) / height.float).ceil.Natural
   let colWidth: Positive = try:
       getTextWidth(text = theme.mapIcons[emptyMapIcon]).Positive + 6
