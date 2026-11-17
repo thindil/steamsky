@@ -311,7 +311,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
     label(str = spaceText[0])
     colorLabel(str = spaceText[1], color = theme.colors[goldenColor])
     ## Show select/unselect all items buttons
-    setLayoutRowStatic(height = dialogButtonHeight, cols = 2, width = 150)
+    setLayoutRowStatic(height = buttonHeight, cols = 2, width = 150)
     imageLabelButton(image = images[selectAllIcon],
         tooltip = "Select all items", label = "   Select all"):
       for data in inventoryDataList.mitems:
@@ -337,7 +337,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
             sortDesc: weightDesc)]
       ratio: array[6, cfloat] = [40.cfloat, 300, 100, 50, 200, 150]
 
-    let tableHeight: float = height - labelHeight - (dialogButtonHeight * 2) -
+    let tableHeight: float = height - labelHeight - (buttonHeight * 2) -
         80
     setLayoutRowDynamic(height = tableHeight, cols = 1)
     group(title = "InfoGroup", flags = {windowNoFlags}):
@@ -400,7 +400,7 @@ proc showMemberInventory*(dialog: var GameDialog) {.raises: [], tags: [
         if row == gameSettings.listsLimit + 1:
           break
       restoreButtonStyle()
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
     if showItemsMenu:
       showItemMenu(dialog = dialog)

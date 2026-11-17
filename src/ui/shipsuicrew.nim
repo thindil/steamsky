@@ -336,7 +336,7 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   const width: float = 450
-  let height: float = 70 + (editHeight * 2) + dialogButtonHeight
+  let height: float = 70 + (editHeight * 2) + buttonHeight
 
   let
     member: MemberData = playerShip.crew[crewIndex]
@@ -354,7 +354,7 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
     label(str = "New order:")
     currentOrder = comboList(items = availableOrdersText,
         selected = currentOrder, itemHeight = labelHeight.int, x = 285, y = 150)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     imageLabelButton(image = images[giveOrderColoredIcon], label = "Assign",
         tooltip = "Assing the selected new order"):
@@ -722,7 +722,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               return
       else:
         discard
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = (
+    setLayoutRowDynamic(height = buttonHeight, cols = (
         if playerShip.speed == docked and crewIndex > 0: 3 else: 2))
     imageLabelButton(image = images[inventoryIcon], label = "Inventory",
         tooltip = "Show the crew member inventory"):

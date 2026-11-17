@@ -35,7 +35,7 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   const width: float = 400
-  let height: float = labelHeight + editHeight + dialogButtonHeight + 60
+  let height: float = labelHeight + editHeight + buttonHeight + 60
 
   let windowName: string = "Rename the " & (case dialog
     of renameDialog:
@@ -61,7 +61,7 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
         "") & ":")
     setLayoutRowDynamic(height = editHeight, cols = 1)
     editString(text = newName, maxLen = 64)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
     if newName.len == 0:
       disabled:
@@ -149,11 +149,11 @@ proc showFactionInfo*(dialog: var GameDialog) {.raises: [], tags: [
   window(name = factionName, x = dialogX, y = dialogY, w = dialogWidth,
       h = height, flags = {windowBorder, windowTitle, windowMovable,
           windowNoScrollbar}):
-    setLayoutRowDynamic(height = height - dialogButtonHeight - 60, 1)
+    setLayoutRowDynamic(height = height - buttonHeight - 60, 1)
     group(title = "DescriptionGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = labelHeight * textLines, 1)
       wrapLabel(str = factionDescription)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     addCloseButton(dialog = dialog, isPopup = false)
 
   windowSetFocus(name = factionName)
