@@ -96,16 +96,16 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameters dialog if error happened or menu has closed.
 
   const windowName: string = "Wait in place"
-  var height: float = 9 * (dialogButtonHeight + 5)
+  var height: float = 9 * (buttonHeight + 5)
   if needRest:
-    height += dialogButtonHeight + 5
+    height += buttonHeight + 5
   if needHealing:
-    height += dialogButtonHeight + 5
+    height += buttonHeight + 5
   window(name = windowName, x = gameSettings.windowWidth.float / 4,
       y = gameSettings.windowHeight.float / 4, w = gameSettings.windowWidth / 2,
       h = height, flags = {windowBorder, windowTitle, windowNoScrollbar,
       windowMovable}):
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     labelButton(title = "Wait 1 minute",
         tooltip = "Wait in place for 1 minute"):
       dialog = wait(minutes = 1)
@@ -123,7 +123,7 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = wait(minutes = 30)
     labelButton(title = "Wait 1 hour", tooltip = "Wait in place for 1 hour"):
       dialog = wait(minutes = 60)
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 3)
+    setLayoutRowDynamic(height = buttonHeight, cols = 3)
     labelButton(title = "Wait",
         tooltip = "Wait in place for the selected amount of time"):
       case waitInterval
@@ -157,7 +157,7 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if newWaitInterval != waitInterval:
       waitInterval = newWaitInterval
       waitAmount = 1
-    setLayoutRowDynamic(height = dialogButtonHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     if needRest:
       labelButton(title = "Wait until crew is rested",
           tooltip = "Wait in place until the whole ship's crew is rested"):
