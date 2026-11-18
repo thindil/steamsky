@@ -138,7 +138,7 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
   var
     highestLevel: SkillRange = 0
     skills: seq[SkillInfo] = @[]
-    recruitFaction: string = ""
+    recruitFaction: FactionIndex = ""
     inventory: seq[RecruitItem] = @[]
     equipment: EquipmentArray = [weapon: -1, shield: -1, helmet: -1, torso: -1,
         arms: -1, legs: -1, tool: -1]
