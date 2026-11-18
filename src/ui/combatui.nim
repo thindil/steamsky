@@ -140,9 +140,9 @@ proc showPilotSettings(dialog: var GameDialog; faction: FactionData) {.raises: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   if pilotIndex == 0:
-    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.33.cfloat, 0.33])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.33.cfloat, 0.33])
   else:
-    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
   label(str = "Pilot:", alignment = left)
   let newPilot: Natural = comboList(items = pilotList,
       selected = pilotIndex, itemHeight = labelHeight.int, x = 200, y = 150,
@@ -212,9 +212,9 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
       showPilotSettings(dialog = dialog, faction = faction)
       # Show engineer settings
       if engineerIndex == 0:
-        setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.33.cfloat, 0.33])
+        setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.33.cfloat, 0.33])
       else:
-        setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
+        setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
       label(str = "Engineer:", alignment = left)
       let newEngineer: Natural = comboList(items = engineerList,
           selected = engineerIndex, itemHeight = labelHeight.int, x = 200, y = 150,
@@ -251,9 +251,9 @@ proc showPlayerCrewOrders(dialog: var GameDialog; faction: FactionData)
       for gunIndex, gun in combat.guns.mpairs:
         var hasGunner: bool = playerShip.modules[gun[1]].owner[0] > 0
         if hasGunner:
-          setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
+          setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
         else:
-          setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.33.cfloat, 0.33])
+          setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.33.cfloat, 0.33])
         var
           haveAmmo: bool = false
           ammoAmount: Natural = 0

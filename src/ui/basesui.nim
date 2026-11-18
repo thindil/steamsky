@@ -325,7 +325,7 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
   baseState = state
   # Show advanced options if needed
   if showOptions:
-    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.1.cfloat, 0.3])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.1.cfloat, 0.3])
     label(str = "Name:")
     editString(text = nameSearch, maxLen = 64,
         tooltip = "Search for the selected recipe.")
@@ -338,7 +338,7 @@ proc showRecipes*(state: var GameState; dialog: var GameDialog) {.raises: [],
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
   let tableHeight: float = gameSettings.windowHeight.float - gameSettings.messagesPosition.float -
-      20 - labelHeight - (if showOptions: editHeight else: 0)
+      20 - labelHeight - (if showOptions: buttonHeight else: 0)
   const headers: array[2, HeaderData[BaseSortOrders]] = [
       HeaderData[BaseSortOrders](label: "Action", sortAsc: nameAsc,
           sortDesc: nameDesc),
