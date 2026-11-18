@@ -341,28 +341,28 @@ proc showNegotiate*(dialog: var GameDialog) {.raises: [], tags: [
   let
     recruit: RecruitData = skyBases[setui.baseIndex].recruits[recruitIndex]
     windowName: string = "Negotiate with " & recruit.name
-    height: float = (editHeight * 6) + (labelHeight * 7) + buttonHeight
+    height: float = (buttonHeight * 6) + (labelHeight * 7) + buttonHeight
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = editHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     label(str = "Daily payment:")
     let newValue: int = property2(name = "#", min = 1, val = currentDaily,
         max = maxDaily, step = 1, incPerPixel = 1)
     if newValue != currentDaily:
       currentDaily = newValue
-    setLayoutRowDynamic(height = editHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     slider(min = 1, val = currentDaily, max = maxDaily, step = 1)
-    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
     label(str = "Percent of profit from trades:")
     let newProfit: int = property2(name = "#", min = 0, val = currentProfit,
         max = 10, step = 1, incPerPixel = 1)
     if newProfit != currentProfit:
       currentProfit = newProfit
-    setLayoutRowDynamic(height = editHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     slider(min = 0, val = currentProfit, max = 10, step = 1)
     label(str = "Contract time:", alignment = centered)
-    setLayoutRowDynamic(height = editHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     currentContract = comboList(items = contractLength,
         selected = currentContract, itemHeight = 25, x = 200, y = 150)
     var newCost: int = recruit.price - ((currentDaily - recruit.payment) * 50) -
