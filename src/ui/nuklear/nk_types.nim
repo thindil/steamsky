@@ -952,11 +952,6 @@ type
     ## Internal Nuklear type
     address*: ptr nk_color
     old_value: nk_color
-  nk_config_stack_user_font_element* {.importc: "struct nk_config_stack_user_font_element",
-      completeStruct.} = object
-    ## Internal Nuklear type
-    address*: PNkUserFont
-    old_value: nk_user_font
   nk_draw_null_texture* {.importc: "struct nk_draw_null_texture".} = object
     ## Internal Nuklear type
   nk_convert_config* {.importc: "struct nk_convert_config".} = object
