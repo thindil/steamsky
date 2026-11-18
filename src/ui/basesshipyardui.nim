@@ -827,8 +827,8 @@ proc showInstallInfo(dialog: var GameDialog) {.raises: [], tags: [
     if btnAmount == 1:
       groupHeight -= (labelHeight * 2)
     if compareList.len > 0:
-      groupHeight -= (editHeight + 5)
-      setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat,
+      groupHeight -= (buttonHeight + 5)
+      setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.4.cfloat,
           0.6])
       label(str = "Compare with:")
       compareIndex = comboList(items = compareList, selected = compareIndex,
@@ -1102,7 +1102,7 @@ proc showShipyard*(state: var GameState; dialog: var GameDialog) {.raises: [],
   label(str = modulesText[4])
   # Show advanced options if needed
   if showOptions and currentTab == 0:
-    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.3, 0.5])
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.2.cfloat, 0.3, 0.5])
     label(str = "Show modules:")
     let newType: Natural = comboList(items = typesList, selected = typeIndex,
         itemHeight = labelHeight.int, x = 200, y = 150,

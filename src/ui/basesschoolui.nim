@@ -86,7 +86,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if option(label = "Selected amount of times", selected = tType == times,
         tooltip = "Train the selected skill the selected amount of times"):
       tType = times
-    setLayoutRowDynamic(height = editHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     label(str = "Amount:", tooltip = "Enter amount of training sessions between 1 and 100")
     let newAmount: int = property2(name = "#", min = 1, val = trainAmount,
         max = 100, step = 1, incPerPixel = 1,
@@ -103,7 +103,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
         cost,
         tooltip = "Train the selected skill as long as you don't spend the selected amount of money"):
       tType = cost
-    setLayoutRowDynamic(height = editHeight, cols = 2)
+    setLayoutRowDynamic(height = buttonHeight, cols = 2)
     label(str = "Cost:")
     let newCost: int = property2(name = "#", min = oneTrainCost, val = minCost,
         max = maxCost, step = oneTrainCost, incPerPixel = 1,
