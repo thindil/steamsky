@@ -279,7 +279,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
 
   let
     windowName: string = recipe.name
-    height: float = (buttonHeight * 2) + (editHeight * 6) + labelHeight + 60
+    height: float = (buttonHeight * 2) + (buttonHeight * 6) + labelHeight + 60
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowMovable, windowNoScrollbar}):
@@ -290,14 +290,14 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       labelButton(title = "max " & $maxAmount,
           tooltip = "Set maximum possible amount of how many times the crafting order should be done."):
         craftAmount = maxAmount
-      setLayoutRowDynamic(height = editHeight, cols = 1)
+      setLayoutRowDynamic(height = buttonHeight, cols = 1)
       let newAmount: int = property2(name = "#", min = 1, val = craftAmount,
           max = maxAmount, step = 1, incPerPixel = 1,
           tooltip = "Set amount of how many times the crafting order should be done.")
       if craftAmount != newAmount:
         craftAmount = newAmount
       # Show quality setting
-      setLayoutRowDynamic(height = editHeight, cols = 2)
+      setLayoutRowDynamic(height = buttonHeight, cols = 2)
       label(str = "Quality:")
       const qualities: array[5, string] = ["Poor", "Low", "Normal", "Good", "Excellent"]
       craftQuality = comboList(items = qualities, selected = craftQuality,
@@ -306,7 +306,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
       # Show special properties setting
       setLayoutRowDynamic(height = labelHeight, cols = 1)
       label(str = "Special:", alignment = centered)
-      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.4.cfloat,
+      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.4.cfloat,
           0.2, 0.4])
       var newBonus: Natural = comboList(items = bonuses, selected = bonus,
           itemHeight = labelHeight.int, x = 200, y = 150,
@@ -347,7 +347,7 @@ proc showSetRecipe*(dialog: var GameDialog) {.raises: [], tags: [
           dialog = setError(message = "Can't set bonuses list2.")
         if malus == 0:
           setMaluses(dialog = dialog)
-    setLayoutRowDynamic(height = editHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     # Show workshop setting if needed
     if workshops.len > 1:
       label(str = "Workshop:")
@@ -632,7 +632,7 @@ proc showCrafting*(state: var GameState; dialog: var GameDialog) {.raises: [],
           dialog = setError(message = "Can't set the tabs buttons.")
   # Show advanced options if needed
   if showOptions and hasOptions:
-    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
     label(str = "Name:")
     editString(text = nameSearch, maxLen = 64,
         tooltip = "Search for the selected recipe.")
