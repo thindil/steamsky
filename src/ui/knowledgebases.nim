@@ -49,7 +49,7 @@ proc showBaseInfo*(dialog: var GameDialog) {.raises: [], tags: [
     width: float = gameSettings.windowWidth.float * 0.6
   var height: float = (labelHeight * 2) + buttonHeight + 80
   if base.visited.year > 0:
-    height += (labelHeight * 7) + editHeight
+    height += (labelHeight * 7) + buttonHeight
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
@@ -325,8 +325,8 @@ proc showBasesInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
   # Show options related to managing the list
   var tableHeight: float = height - 10
   if showOptions:
-    tableHeight -= ((editHeight * 2) + 17)
-    setLayoutRowStatic(height = editHeight, cols = 6, ratio = [50.cfloat, 150,
+    tableHeight -= ((buttonHeight * 2) + 17)
+    setLayoutRowStatic(height = buttonHeight, cols = 6, ratio = [50.cfloat, 150,
         75, 150, 75, 150])
     label(str = "Type:")
     basesType = comboList(items = basesTList, selected = basesType,
@@ -340,7 +340,7 @@ proc showBasesInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     basesOwner = comboList(items = basesOwners, selected = basesOwner,
         itemHeight = labelHeight.int, x = 150, y = 150,
         tooltip = "Show only the selected owner bases")
-    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.2.cfloat, 0.8])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.2.cfloat, 0.8])
     label(str = "Name:")
     editString(text = nameSearch, maxLen = 64,
         tooltip = "Search for a base with the selected name")

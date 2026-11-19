@@ -40,7 +40,7 @@ proc showStoriesInfo*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     setLayoutRowDynamic(height = labelHeight * 4, cols = 1)
     wrapLabel(str = "You didn't discover any story yet.")
     return
-  setLayoutRowStatic(height = editHeight, cols = 3, ratio = [200.cfloat, 150, 250])
+  setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [200.cfloat, 150, 250])
   let newStoryIndex = comboList(items = knownStoriesList,
       selected = storyIndex, itemHeight = labelHeight.int, x = 150, y = 200)
   if newStoryIndex != storyIndex or storyText.len == 0:
