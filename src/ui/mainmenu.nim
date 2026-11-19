@@ -88,7 +88,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   buttonHeight = gameSettings.interfaceFontSize.float + 21
   labelHeight = gameSettings.interfaceFontSize.float + 11
   tableRowHeight = gameSettings.interfaceFontSize.float + 21
-  editHeight = gameSettings.interfaceFontSize.float + 21
+  buttonHeight = gameSettings.interfaceFontSize.float + 21
   tabHeight = gameSettings.interfaceFontSize.float + 16
   mapButtonHeight = gameSettings.interfaceFontSize.float + 6
   nuklearResizeWin(width = gameSettings.windowWidth,
@@ -658,7 +658,7 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
     if fieldLen < 100:
       fieldLen = 100
     # Character's name
-    setLayoutRowStatic(height = editHeight, cols = 3, ratio = [textLen,
+    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [textLen,
         fieldLen, buttonHeight])
     label(str = "Character name:")
     if mouseClicked(id = left, rect = getWidgetBounds()):
@@ -671,7 +671,7 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
     restoreButtonStyle()
     if showGender:
       # Character's gender
-      setLayoutRowStatic(height = editHeight, cols = 3, ratio = [textLen,
+      setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [textLen,
           buttonHeight, buttonHeight])
       label(str = "Character gender:")
       const genders: array[2..3, string] = [2: "Male", 3: "Female"]
@@ -687,7 +687,7 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
             playerGender = i.cint
         restoreButtonStyle()
     # Player's ship's name
-    setLayoutRowStatic(height = editHeight, cols = 3, ratio = [textLen,
+    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [textLen,
         fieldLen, buttonHeight])
     label(str = "Ship name:")
     if mouseClicked(id = left, rect = getWidgetBounds()):
@@ -700,7 +700,7 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
     restoreButtonStyle()
     var fieldLen2: cfloat = fieldLen + buttonHeight + 5
     # Character's goal
-    setLayoutRowStatic(height = editHeight, cols = 2, ratio = [textLen,
+    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [textLen,
         fieldLen2])
     label(str = "Character goal:")
     if mouseClicked(id = left, rect = getWidgetBounds()):
@@ -709,7 +709,7 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
       dialog = newGoalDialog
       setSelectedGoal(state = state)
     # Character's faction
-    setLayoutRowStatic(height = editHeight, cols = 2, ratio = [textLen,
+    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [textLen,
         fieldLen2])
     label(str = "Character faction:")
     newFaction = comboList(items = playerFactions, selected = currentFaction,
@@ -807,7 +807,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     if fieldLen < 125:
       fieldLen = 125
     # Difficulty level
-    setLayoutRowStatic(height = editHeight, cols = 2, ratio = [textLen, fieldLen])
+    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [textLen, fieldLen])
     label(str = "Difficulty level:")
     var newLevel: Natural = comboList(items = ["Very Easy", "Easy", "Normal",
         "Hard", "Very Hard", "Custom"], selected = currentLevel,
