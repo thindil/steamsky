@@ -127,7 +127,7 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   const typesList: array[7, string] = ["All", "Combat", "Trade", "Orders",
       "Craft", "Others", "Missions"]
-  setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.2.cfloat, 0.55, 0.25])
+  setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.2.cfloat, 0.55, 0.25])
   messagesType = comboList(items = typesList, selected = messagesType,
       itemHeight = labelHeight.int, x = 150, y = 150,
       tooltip = "Show messages of the selected type")

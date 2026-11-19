@@ -283,7 +283,7 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
   let
     mission: MissionData = skyBases[setui.baseIndex].missions[missionIndex]
     windowName: string = "Accept " & getMissionType(mType = mission.mType)
-    height: float = (labelHeight * 2) + editHeight + buttonHeight + 70
+    height: float = (labelHeight * 2) + buttonHeight + buttonHeight + 70
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
@@ -292,7 +292,7 @@ proc showAcceptMission*(dialog: var GameDialog) {.raises: [], tags: [
     colorLabel(str = $(missionReward) & " " & moneyName, color = theme.colors[goldenColor])
     setLayoutRowDynamic(height = labelHeight, cols = 1)
     label(str = "Percent of " & moneyName & " as reward:")
-    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
     slider(min = 0, val = missionPercent, max = 200, step = 1,
         tooltip = "Move left - more reputation from mission but less money, move right - more money from mission but less reputation.")
     let newPercent: int = property2(name = "#", min = 0, val = missionPercent,
