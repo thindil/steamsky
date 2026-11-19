@@ -194,9 +194,11 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
   if maxRecruits > (skyBases[baseIndex].population / 10).int:
     maxRecruits = (skyBases[baseIndex].population / 10).int + 1
   let recruitsAmount: Positive = getRandom(min = 1, max = maxRecruits)
-  var
-    maxSkillAmount: int = (skillsList.len.float * (skyBases[
+  {.ruleOff: "varDeclared".}
+  var maxSkillAmount: int = (skillsList.len.float * (skyBases[
       baseIndex].reputation.level.float / 100.0)).int
+  {.ruleOn: "varDeclared".}
+  var
     baseRecruits: seq[RecruitData] = @[]
     gender: char = 'M'
   if maxSkillAmount < 5:
@@ -223,7 +225,9 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
     var localSkillAmount: Positive = getRandom(min = 1, max = skillsList.len)
     if localSkillAmount > maxSkillAmount:
       localSkillAmount = maxSkillAmount
+    {.ruleOff: "varDeclared".}
     var maxSkillLevel: int = skyBases[baseIndex].reputation.level
+    {.ruleOn: "varDeclared".}
     if maxSkillLevel < 20:
       maxSkillLevel = 20
     if getRandom(min = 1, max = 100) > 95:
@@ -236,7 +240,9 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
       if skillLevel > highestLevel:
         highestLevel = skillLevel
         highestSkill = skillNumber
+      {.ruleOff: "varDeclared".}
       var skillIndex: int = -1
+      {.ruleOn: "varDeclared".}
       for index, skill in skills:
         if skill.index == skillNumber:
           skillIndex = (if skills[index].level < skillLevel: index else: -2)
@@ -300,8 +306,10 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.raises: [ReputationError],
   # Don't gain reputation above the highest value
   if skyBases[baseIndex].reputation.level == 100 and points > 0:
     return
+  {.ruleOff: "varDeclared".}
   var newPoints: int = skyBases[baseIndex].reputation.experience + (
       points.float * newGameSettings.reputationBonus).int
+  {.ruleOn: "varDeclared".}
   if baseIndex == playerShip.homeBase:
     newPoints += points
   var repLevel: ReputationRange = skyBases[baseIndex].reputation.level
