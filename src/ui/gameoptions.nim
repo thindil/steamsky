@@ -190,7 +190,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
     case currentTab
     # General options
     of 0:
-      setLayoutRowDynamic(height = editHeight, cols = 2)
+      setLayoutRowDynamic(height = buttonHeight, cols = 2)
       const
         autoMoveList: array[4, string] = ["Never", "Any ship",
           "Friendly ship", "Enemy ship"]
@@ -395,7 +395,7 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
         setMapKeys()
     # Interface options
     of 4:
-      setLayoutRowDynamic(height = editHeight, cols = 2)
+      setLayoutRowDynamic(height = buttonHeight, cols = 2)
       addComboList(label = "Interace theme:", tooltip = "Select UI theme.",
           items = interfaceThemes, value = interfaceOptions[0])
       addCheckbox(label = "Use right mouse button:",
@@ -410,12 +410,12 @@ proc showOptions*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addCheckbox(label = "Full screen mode:",
           option = interfaceOptions[4],
           tooltip = "Run the game in full screen mode.")
-      setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.5.cfloat,
+      setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.5.cfloat,
           0.25, 0.05])
       addAccelerator(label = "Full screen shortcut:",
           tooltip = "Key used to switch full screen mode.",
           value = fullScreenAccel, index = 0, dialog = dialog)
-      setLayoutRowDynamic(height = editHeight, cols = 2)
+      setLayoutRowDynamic(height = buttonHeight, cols = 2)
       addProperty(label = "Close messages after:",
           tooltip = "Auto close game messages after that amount of seconds.",
           min = 1, max = 60, value = interfaceOptions[5])

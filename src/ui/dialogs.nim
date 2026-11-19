@@ -630,9 +630,9 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
   result = false
   try:
     let width: float = gameSettings.windowWidth.float / 1.5
-    var height: float = editHeight + (buttonHeight * 2) + labelHeight + 70
+    var height: float = buttonHeight + (buttonHeight * 2) + labelHeight + 70
     if dialog == giveDialog:
-      height += editHeight
+      height += buttonHeight
     elif dialog in buyDialog..dropDialog:
       height += labelHeight
     updateDialog(width = width, height = height)
@@ -662,7 +662,7 @@ proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
               quality = playerShip.cargo[cargoIndex].quality,
               craftBonus = playerShip.cargo[cargoIndex].craftBonus,
               craftMalus = playerShip.cargo[cargoIndex].craftMalus)
-      setLayoutRowDynamic(height = editHeight, cols = 2)
+      setLayoutRowDynamic(height = buttonHeight, cols = 2)
       # Set target (give dialog only)
       if dialog == giveDialog:
         label(str = "To:")
