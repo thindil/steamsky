@@ -478,7 +478,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     updateData = false
   # Show advanced options if needed
   if showOptions:
-    setLayoutRowDynamic(height = editHeight, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
     label(str = "Type:")
     typeIndex = comboList(items = typesList, selected = typeIndex,
         itemHeight = labelHeight.int, x = 200, y = 150,
