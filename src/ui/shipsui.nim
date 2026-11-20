@@ -35,7 +35,7 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   const width: float = 400
-  let height: float = labelHeight + editHeight + buttonHeight + 60
+  let height: float = labelHeight + buttonHeight + buttonHeight + 60
 
   let windowName: string = "Rename the " & (case dialog
     of renameDialog:
@@ -59,7 +59,7 @@ proc showRenameDialog*(dialog: var GameDialog) {.raises: [], tags: [
         " for " & playerShip.modules[moduleIndex].name
       else:
         "") & ":")
-    setLayoutRowDynamic(height = editHeight, cols = 1)
+    setLayoutRowDynamic(height = buttonHeight, cols = 1)
     editString(text = newName, maxLen = 64)
     setLayoutRowDynamic(height = buttonHeight, cols = 2)
     setButtonStyle(field = textNormal, color = theme.colors[greenColor])
