@@ -336,7 +336,7 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns the modified parameter dialog.
   const width: float = 450
-  let height: float = 70 + (editHeight * 2) + buttonHeight
+  let height: float = 70 + (buttonHeight * 2) + buttonHeight
 
   let
     member: MemberData = playerShip.crew[crewIndex]
@@ -344,7 +344,7 @@ proc showGiveOrder*(dialog: var GameDialog) {.raises: [], tags: [
   updateDialog(width = width, height = height)
   window(name = windowName, x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle, windowNoScrollbar, windowMovable}):
-    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.35.cfloat, 0.65])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.35.cfloat, 0.65])
     label(str = "Current order:")
     try:
       colorLabel(str = getCurrentOrder(memberIndex = crewIndex),
@@ -688,7 +688,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
               tooltip = "Experience need to reach the next level")
       # Order priorites of the selected crew member
       of 3:
-        setLayoutRowDynamic(height = editHeight, cols = 2)
+        setLayoutRowDynamic(height = buttonHeight, cols = 2)
         label(str = "PRIORITY", alignment = centered)
         label(str = "LEVEL", alignment = centered)
         const
@@ -755,7 +755,7 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
     var
       cols: Positive = 2
       ratio2: seq[cfloat] = @[(gameSettings.windowWidth.float * 0.4).cfloat, 150]
-    tableHeight -= (buttonHeight + editHeight + buttonHeight) + 17
+    tableHeight -= (buttonHeight + buttonHeight + buttonHeight) + 17
     if needClean:
       cols.inc
       ratio2.add(y = 150.cfloat)
@@ -776,7 +776,7 @@ proc showCrewInfo*(dialog: var GameDialog; height: float) {.raises: [], tags: [
       imageLabelButton(image = images[repairOrderIcon],
           tooltip = "Repair the ship everyone", label = "Repair"):
         ordersForAll(order = repair, dialog = dialog)
-    setLayoutRowDynamic(height = editHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Skill:", tooltip = "Show the level of the selected skill for the crew members.If selected option 'Highest', show the highest skill of the crew members.")
     skillIndex = comboList(items = crewSkillsList,
         selected = skillIndex, itemHeight = labelHeight.int, x = 200, y = 150,
