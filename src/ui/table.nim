@@ -52,7 +52,7 @@ proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  setLayoutRowStatic(height = tableRowHeight, cols = headers.len, ratio = ratio)
+  setLayoutRowStatic(height = buttonHeight, cols = headers.len, ratio = ratio)
   for header in headers:
     labelButton(title = header.label, tooltip = "Press mouse button to sort the " &
         tooltip & "."):
@@ -203,7 +203,7 @@ template table*(name: string; xScroll: Natural; headers: openArray[
   ## * tableCode    - the code executed to show the table's data
   # Show the table's header
   var yOffset: Natural = 0
-  setLayoutRowDynamic(height = tableRowHeight + 10, cols = 1)
+  setLayoutRowDynamic(height = buttonHeight + 10, cols = 1)
   groupScrolled(x = xOffset, y = yOffset, title = name & "Header", flags = {
       windowNoScrollbar}):
     if dialog != none:
@@ -211,11 +211,11 @@ template table*(name: string; xScroll: Natural; headers: openArray[
     addHeader(headers = headers, ratio = ratio, tooltip = tableTooltip,
         code = headerCode, dialog = dialog)
   # Show the table's rows
-  setLayoutRowDynamic(height = tableHeight - tableRowHeight, cols = 1)
+  setLayoutRowDynamic(height = tableHeight - buttonHeight, cols = 1)
   group(title = name & "Rows", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
-    setLayoutRowStatic(height = tableRowHeight, cols = headers.len, ratio = ratio)
+    setLayoutRowStatic(height = buttonHeight, cols = headers.len, ratio = ratio)
     currentRow = 1
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
