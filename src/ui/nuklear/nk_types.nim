@@ -942,11 +942,6 @@ type
     ## Internal Nuklear type
     address*: ptr nk_vec2
     old_value: nk_vec2
-  nk_config_stack_flags_element* {.importc: "struct nk_config_stack_flags_element",
-      completeStruct.} = object
-    ## Internal Nuklear type
-    address*: ptr nk_flags
-    old_value: nk_flags
   nk_draw_null_texture* {.importc: "struct nk_draw_null_texture".} = object
     ## Internal Nuklear type
   nk_convert_config* {.importc: "struct nk_convert_config".} = object
