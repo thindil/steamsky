@@ -85,10 +85,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   except OSError:
     dialog = setError(message = "Can't check savegames.")
   showHoFButton = fileExists(filename = saveDirectory.string & "halloffame.dat")
-  buttonHeight = gameSettings.interfaceFontSize.float + 21
   labelHeight = gameSettings.interfaceFontSize.float + 11
-  tableRowHeight = gameSettings.interfaceFontSize.float + 21
-  buttonHeight = gameSettings.interfaceFontSize.float + 21
   tabHeight = gameSettings.interfaceFontSize.float + 16
   mapButtonHeight = gameSettings.interfaceFontSize.float + 6
   nuklearResizeWin(width = gameSettings.windowWidth,
