@@ -20,7 +20,7 @@
 
 import std/[strutils, xmlparser, xmltree]
 import contracts, nimalyzer
-import game, statistics
+import game, statistics, types
 
 type
   HallOfFameData* = object
@@ -29,9 +29,9 @@ type
     ## * name        - The name of the player on the list
     ## * points      - The amount of points achived by the player
     ## * deathReason - The reason of the death of the player
-    name*: string
+    name*: MobName
     points*: Natural
-    deathReason*: string
+    deathReason*: MessageText
 
 {.push ruleOff: "varDeclared".}
 var hallOfFameArray*: array[1..10, HallOfFameData] ## The list of entries in the game's hall of fame
