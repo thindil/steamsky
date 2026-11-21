@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Default starting base for a new game to agricultural
 - Better looking the main menu of the game
 - Reduced height of the game's header
+- Updated appearance of advanced options in trade screen
 
 ### Fixed
 - Selecting the proper workshop from their list when showing crafting recipes
