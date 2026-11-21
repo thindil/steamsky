@@ -478,11 +478,12 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     updateData = false
   # Show advanced options if needed
   if showOptions:
-    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.1.cfloat, 0.5])
     label(str = "Type:")
     typeIndex = comboList(items = typesList, selected = typeIndex,
         itemHeight = labelHeight.int, x = 200, y = 150,
         tooltip = "Show only items of the selected type")
+    label(str = "Name:")
     editString(text = nameSearch, maxLen = 64,
         tooltip = "Enter a name of an item which you looking for")
   # Show information about money owned by the player and the base
@@ -503,7 +504,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       colorLabel(str = text, color = theme.colors[goldenColor])
   # Show the list of items for trade
   let tableHeight: float = gameSettings.windowHeight.float - 140 - (
-      if showOptions: 45 else: 0) - gameSettings.messagesPosition.float
+      if showOptions: 90 else: 0) - gameSettings.messagesPosition.float
   const
     headers: array[9, HeaderData[ItemsSortOrders]] = [
       HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
