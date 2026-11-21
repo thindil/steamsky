@@ -400,7 +400,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = (gameSettings.windowHeight.float - buttonHeight -
       10.0), cols = 1)
   group(title = "LoadGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = tableRowHeight, cols = 3)
+    setLayoutRowDynamic(height = buttonHeight, cols = 3)
     labelButton(title = "Player name", tooltip = "Press mouse button to sort the saved games."):
       if sortOrder == playerAsc:
         sortOrder = playerDesc
@@ -496,9 +496,9 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           " button to show available option"):
         saveClicked = save.path
   restoreButtonStyle()
-  let bounds: Rect = Rect(x: 0, y: tableRowHeight,
+  let bounds: Rect = Rect(x: 0, y: buttonHeight,
       w: gameSettings.windowWidth.float - 10, h: (saves.len.float * (
-      tableRowHeight + 5.0)))
+      buttonHeight + 5.0)))
   showLoadMenu(dialog = dialog, bounds = bounds)
   layoutSpaceStatic(height = buttonHeight + 10.0, widgetsCount = 1):
     row(x = (gameSettings.windowWidth - 150).float, y = 0, w = 140,
