@@ -123,20 +123,24 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  if showHeader(dialog = dialog, close = CloseDestination.map, state = state):
+  if showHeader(dialog = dialog, close = CloseDestination.map, state = state,
+      options = true):
     return
-  const typesList: array[7, string] = ["All", "Combat", "Trade", "Orders",
-      "Craft", "Others", "Missions"]
-  setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.2.cfloat, 0.55, 0.25])
-  messagesType = comboList(items = typesList, selected = messagesType,
-      itemHeight = labelHeight.int, x = 150, y = 150,
-      tooltip = "Show messages of the selected type")
-  editString(text = messageSearch, maxLen = 64,
-      tooltip = "Search for messages that contain selected text")
-  labelButton(title = "Delete all messages"):
-    dialog = setQuestion(question = "Are you sure you want to clear all messages?",
-        qType = deleteMessages)
-  setLayoutRowDynamic(height = gameSettings.windowHeight.float - 55, cols = 1)
+  # Show advanced options if needed
+  if showOptions:
+    const typesList: array[7, string] = ["All", "Combat", "Trade", "Orders",
+        "Craft", "Others", "Missions"]
+    setLayoutRowDynamic(height = buttonHeight, cols = 3, ratio = [0.2.cfloat,
+        0.55, 0.25])
+    messagesType = comboList(items = typesList, selected = messagesType,
+        itemHeight = labelHeight.int, x = 150, y = 150,
+        tooltip = "Show messages of the selected type")
+    editString(text = messageSearch, maxLen = 64,
+        tooltip = "Search for messages that contain selected text")
+    labelButton(title = "Delete all messages"):
+      dialog = setQuestion(question = "Are you sure you want to clear all messages?",
+          qType = deleteMessages)
+  setLayoutRowDynamic(height = gameSettings.windowHeight.float - (if showOptions: 45 else: 0), cols = 1)
   group(title = "MessagesGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
