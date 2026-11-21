@@ -33,6 +33,19 @@ type
     points*: Natural
     deathReason*: MessageText
 
+proc initHallOfFameData*(name: MobName = ""; points: Natural = 0;
+    deathReason: MessageText = ""): HallOfFameData {.raises: [], tags: [],
+    contractual.} =
+  ## Create a new data structure for the player's ship's module data
+  ##
+  ## * name        - The name of the player on the list
+  ## * points      - The amount of points achived by the player
+  ## * deathReason - The reason of the death of the player
+  ##
+  ## Returns the new structure with information about the selected hall of
+  ## fame entry
+  return HallOfFameData(name: name, points: points, deathReason: deathReason)
+
 {.push ruleOff: "varDeclared".}
 var hallOfFameArray*: array[1..10, HallOfFameData] ## The list of entries in the game's hall of fame
 {.push ruleOn: "varDeclared".}
