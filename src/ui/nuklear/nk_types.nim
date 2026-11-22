@@ -932,11 +932,6 @@ type
     ## Internal Nuklear type
     address*: ptr nk_style_item
     old_value: nk_style_item
-  nk_config_stack_float_element* {.importc: "struct nk_config_stack_float_element",
-      completeStruct.} = object
-    ## Internal Nuklear type
-    address*: ptr cfloat
-    old_value: cfloat
   nk_draw_null_texture* {.importc: "struct nk_draw_null_texture".} = object
     ## Internal Nuklear type
   nk_convert_config* {.importc: "struct nk_convert_config".} = object
