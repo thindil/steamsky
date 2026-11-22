@@ -481,8 +481,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.1.cfloat, 0.5])
     label(str = "Type:")
     typeIndex = comboList(items = typesList, selected = typeIndex,
-        itemHeight = labelHeight.int, x = 200, y = 150,
-        tooltip = "Show only items of the selected type")
+        itemHeight = labelHeight.int, x = (gameSettings.windowWidth.float *
+        0.5) - 5, y = 150, tooltip = "Show only items of the selected type")
     label(str = "Name:")
     editString(text = nameSearch, maxLen = 64,
         tooltip = "Enter a name of an item which you looking for")
