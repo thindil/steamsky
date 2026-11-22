@@ -134,16 +134,18 @@ proc showMessages*(state: var GameState; dialog: var GameDialog) {.raises: [],
         0.6])
     label(str = "Type:")
     messagesType = comboList(items = typesList, selected = messagesType,
-        itemHeight = labelHeight.int, x = 150, y = 150,
-        tooltip = "Show messages of the selected type")
+        itemHeight = labelHeight.int, x = (gameSettings.windowWidth.float *
+        0.6) - 5, y = 150, tooltip = "Show messages of the selected type")
     label(str = "Text:")
     editString(text = messageSearch, maxLen = 64,
         tooltip = "Search for messages that contain selected text")
-    setLayoutRowDynamic(height = buttonHeight, cols = 1, ratio = [0.2.cfloat])
+    setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.2.cfloat, 0.6])
+    label(str = "")
     labelButton(title = "Delete all messages"):
       dialog = setQuestion(question = "Are you sure you want to clear all messages?",
           qType = deleteMessages)
-  setLayoutRowDynamic(height = gameSettings.windowHeight.float - (if showOptions: 45 else: 0), cols = 1)
+  setLayoutRowDynamic(height = gameSettings.windowHeight.float - (
+      if showOptions: 135 else: 0), cols = 1)
   group(title = "MessagesGroup", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
