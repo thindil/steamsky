@@ -248,9 +248,10 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     of quitEvent:
       break
     of sizeChangedEvent:
-      let (windowWidth, windowHeight) = nuklearGetWindowSize()
-      gameSettings.windowWidth = windowWidth.int
-      gameSettings.windowHeight = windowHeight.int
+      if not gameSettings.fullScreen:
+        let (windowWidth, windowHeight) = nuklearGetWindowSize()
+        gameSettings.windowWidth = windowWidth.int
+        gameSettings.windowHeight = windowHeight.int
       redraw = true
     of noEvent:
       redraw = state == loadingGame
