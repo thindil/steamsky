@@ -23,7 +23,7 @@ import contracts, nimalyzer
 import game, statistics, types
 
 type
-  HallOfFameData* = object
+  HallOfFameData = object
     ## Used to store data about the hall of fame entry
     ##
     ## * name        - The name of the player on the list
@@ -33,7 +33,7 @@ type
     points*: Natural
     deathReason*: MessageText
 
-proc initHallOfFameData*(name: MobName = ""; points: Natural = 0;
+proc initHallOfFameData(name: MobName = ""; points: Natural = 0;
     deathReason: MessageText = ""): HallOfFameData {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for the player's ship's module data
@@ -56,7 +56,7 @@ proc loadHallOfFame*() {.raises: [DataLoadingError], tags: [
   if hallOfFameArray[1].name.len > 0:
     return
   for entry in hallOfFameArray.mitems:
-    entry = HallOfFameData(name: "", points: 0, deathReason: "")
+    entry = initHallOfFameData()
   let hofXml: XmlNode = try:
       loadXml(path = saveDirectory.string & "halloffame.dat")
     except XmlError, ValueError, IOError, OSError, Exception:
@@ -95,8 +95,8 @@ proc updateHallOfFame*(playerName, deathReason: string) {.raises: [
       return
     hallOfFameArray[newIndex + 1 .. hallOfFameArray.high] = hallOfFameArray[
         newIndex .. hallOfFameArray.high - 1]
-    hallOfFameArray[newIndex] = HallOfFameData(name: playerName,
-        points: getGamePoints(), deathReason: deathReason)
+    hallOfFameArray[newIndex] = initHallOfFameData(name = playerName,
+        points = getGamePoints(), deathReason = deathReason)
     var entries: seq[XmlNode] = @[]
     for entry in hallOfFameArray:
       if entry.points == 0:
