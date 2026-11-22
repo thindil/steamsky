@@ -918,6 +918,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if endY > 1_024:
       endY = 1_024
       startY = 1_024 - rows
+    if (endX - startX) < cols:
+      endX.inc
     if endX > 1_024:
       endX = 1_024
       startX = 1_025 - cols
