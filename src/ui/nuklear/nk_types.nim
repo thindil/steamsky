@@ -927,11 +927,6 @@ type
     userdata*: nk_handle
     copy*: nk_plugin_copy
     paste*: nk_plugin_paste
-  nk_config_stack_style_item_element* {.importc: "struct nk_config_stack_style_item_element",
-      completeStruct.} = object
-    ## Internal Nuklear type
-    address*: ptr nk_style_item
-    old_value: nk_style_item
   nk_draw_null_texture* {.importc: "struct nk_draw_null_texture".} = object
     ## Internal Nuklear type
   nk_convert_config* {.importc: "struct nk_convert_config".} = object
