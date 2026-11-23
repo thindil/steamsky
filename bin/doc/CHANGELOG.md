@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Reduced height of the game's header
 - Updated appearance of advanced options in trade screen
 - Better looking the list of last in-game messages
+- Made buttons to move the player's ship smaller
 
 ### Fixed
 - Selecting the proper workshop from their list when showing crafting recipes
