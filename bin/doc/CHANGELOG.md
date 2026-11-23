@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - The look of the dialog with information about a module in the player's ship
 - Don't change the setting of the game's window's size when the game is in
   full screen mode
+- Counting width of the game's map
 
 ## [12.9] - 2026-11-01
 
