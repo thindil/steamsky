@@ -129,7 +129,7 @@ proc initGameSettingsRecord*(autoRest: bool = true;
     interfaceTheme: ThemeName = "steamsky";
     messagesOrder: MessagesOrder = olderFirst; autoAskForBases: bool = false;
     autoAskForEvents: bool = false; showTooltips: bool = true;
-    showLastMessages: bool = true; messagesPosition: Natural = 256;
+    showLastMessages: bool = true; messagesPosition: Natural = 230;
     fullScreen: bool = false; autoCloseMessagesTime: Natural = 6;
     autoSave: AutoSaveTime = none; topicsPosition: Natural = 200;
     showNumbers: bool = false; rightButton: bool = false;
