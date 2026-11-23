@@ -29,9 +29,9 @@ type
     ## * name        - The name of the player on the list
     ## * points      - The amount of points achived by the player
     ## * deathReason - The reason of the death of the player
-    name*: MobName
-    points*: Natural
-    deathReason*: MessageText
+    name: MobName
+    points: Natural
+    deathReason: MessageText
 
 proc initHallOfFameData(name: MobName = ""; points: Natural = 0;
     deathReason: MessageText = ""): HallOfFameData {.raises: [], tags: [],
@@ -45,6 +45,11 @@ proc initHallOfFameData(name: MobName = ""; points: Natural = 0;
   ## Returns the new structure with information about the selected hall of
   ## fame entry
   return HallOfFameData(name: name, points: points, deathReason: deathReason)
+
+typeGetterSetter(baseType = HallOfFameData, varName = entry, name = name, typ = MobName)
+typeGetterSetter(baseType = HallOfFameData, varName = entry, name = points, typ = Natural)
+typeGetterSetter(baseType = HallOfFameData, varName = entry, name = deathReason,
+    typ = MessageText)
 
 {.push ruleOff: "varDeclared".}
 var hallOfFameArray*: array[1..10, HallOfFameData] ## The list of entries in the game's hall of fame
