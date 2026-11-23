@@ -706,16 +706,16 @@ proc showButtons(dialog: var GameDialog; state: var GameState) {.raises: [], tag
     if dialog != none:
       windowDisable()
     if playerShip.speed == docked or playerShip.destinationX == 0:
-      setLayoutRowDynamic(height = buttonHeight, cols = 1)
+      setLayoutRowDynamic(height = tabHeight, cols = 1)
     else:
-      setLayoutRowDynamic(height = buttonHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
+      setLayoutRowDynamic(height = tabHeight, cols = 2, ratio = [0.75.cfloat, 0.25])
     labelButton(title = "Ship orders", tooltip = "Show available orders for your ship."):
       setDialog(y = gameSettings.windowHeight.float / 7)
       dialog = ordersDialog
     if playerShip.speed != docked and playerShip.destinationX > 0:
       imageButton(image = images[moveToIcon], tooltip = "Auto move your ship to its destination."):
         moveShipOnMap(direction = moveToDestination, dialog = dialog, state = state)
-    setLayoutRowDynamic(height = buttonHeight, cols = 1)
+    setLayoutRowDynamic(height = tabHeight, cols = 1)
     if playerShip.speed == docked:
       imageButtonCentered(image = images[waitIcon], tooltip = if gameSettings.waitMinutes ==
           1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes."):
@@ -724,7 +724,7 @@ proc showButtons(dialog: var GameDialog; state: var GameState) {.raises: [], tag
       playerShip.speed = (comboList(items = shipSpeeds,
           selected = playerShip.speed.ord - 1, itemHeight = labelHeight.int, x = 200, y = 50,
           tooltip = "Set speed for your ship. The faster you move, the more fuel used. But faster movement has bigger chance to evade enemies.") + 1).ShipSpeed
-      setLayoutRowStatic(height = buttonHeight, cols = 3, ratio =
+      setLayoutRowStatic(height = tabHeight, cols = 3, ratio =
         [(buttonHeight + 5).cfloat, (buttonHeight + 5), (buttonHeight + 5)])
       imageButton(image = images[arrowUpLeft],
           tooltip = "Move ship up and left"):
