@@ -121,7 +121,7 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = newGame
         dialog = none
         return
-    var y: float = buttonHeight + 10;
+    var y: float = buttonHeight + 7;
     if showLoadButton:
       row(x = x, y = y, w = w, h = buttonHeight):
         y += buttonHeight + 10
@@ -131,18 +131,18 @@ proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
           return
     if showHoFButton:
       row(x = x, y = y, w = w, h = buttonHeight):
-        y += buttonHeight + 10
+        y += buttonHeight + 7
         labelButton(title = "Hall of Fame",
             tooltip = "Show your previous the bests scores in the game"):
           state = hallOfFame
           return
     row(x = x, y = y, w = w, h = buttonHeight):
-      y += buttonHeight + 10
+      y += buttonHeight + 7
       labelButton(title = "News", tooltip = "The list of changes to the game"):
         state = news
         return
     row(x = x, y = y, w = w, h = buttonHeight):
-      y += buttonHeight + 10
+      y += buttonHeight + 7
       labelButton(title = "About", tooltip = "General information about the game"):
         state = about
         return
