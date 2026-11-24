@@ -907,17 +907,8 @@ type
     ## Internal Nuklear type
     undo_rec*: pointer
     undo_point*, redo_point*, undo_char_point*, redo_char_point*: cshort
-  nk_text_edit* {.importc: "struct nk_text_edit", completeStruct.} = object
+  nk_text_edit* {.importc: "struct nk_text_edit".} = object
     ## Internal Nuklear type
-    clip*: nk_clipboard
-    string*: nk_str
-    filter*: nk_plugin_filter
-    scrollbar*: nk_vec2
-    cursor*, select_start*, select_end*: cint
-    mode*, cursor_at_end_of_line*, initialized*, has_preferred_x*, single_line*,
-      active*, padding1*: uint8
-    preferred_x*: cfloat
-    undo*: nk_text_undo_state
   nk_plugin_paste* = proc (handle: nk_handle; edit: ptr nk_text_edit) {.cdecl.}
     ## Internal Nuklear type
   nk_plugin_copy* = proc (handle: nk_handle; text: cstring; len: cint) {.cdecl.}
