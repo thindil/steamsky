@@ -171,7 +171,7 @@ proc addPagination(page: var Positive; row: Positive) {.raises: [], tags: [
     cols = 1
     ratio = @[150.cfloat]
   if cols > 0:
-    setLayoutRowStatic(height = buttonHeight, cols = cols, ratio = ratio)
+    setLayoutRowStatic2(height = buttonHeight.int, cols = cols, ratio = ratio)
     if page > 1:
       if row < gameSettings.listsLimit + 1:
         labelButton(title = "<< Previous", tooltip = "Previous page"):
