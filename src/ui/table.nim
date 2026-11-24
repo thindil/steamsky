@@ -52,7 +52,7 @@ proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  setLayoutRowStatic(height = buttonHeight, cols = headers.len, ratio = ratio)
+  setLayoutRowStatic2(height = buttonHeight.int, cols = headers.len, ratio = ratio)
   for header in headers:
     labelButton(title = header.label, tooltip = "Press mouse button to sort the " &
         tooltip & "."):
@@ -204,7 +204,7 @@ template table*(name: string; xScroll: Natural; headers: openArray[
   ## * tableCode    - the code executed to show the table's data
   # Show the table's header
   var yOffset: Natural = 0
-  setLayoutRowDynamic(height = buttonHeight + 10, cols = 1)
+  setLayoutRowDynamic(height = buttonHeight + 5, cols = 1)
   groupScrolled(x = xOffset, y = yOffset, title = name & "Header", flags = {
       windowNoScrollbar}):
     if dialog != none:
