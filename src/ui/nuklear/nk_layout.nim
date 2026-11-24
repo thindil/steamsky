@@ -47,6 +47,9 @@ proc nk_layout_row_push(ctx; cwidth: cfloat) {.importc, cdecl, raises: [],
 proc nk_layout_row(ctx; fmt: LayoutFormat; height: cfloat;
     cols: cint; ratio: pointer) {.importc, nodecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
+proc nk_layout_row2(ctx; fmt: LayoutFormat; height, cols: cint;
+    ratio: pointer) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_layout_space_begin(ctx; fmt: LayoutFormat;
     cheight: cfloat; widgetCount: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
@@ -126,6 +129,18 @@ proc setLayoutRowStatic*(height: float; cols: int; ratio: openArray[
   ## * cols   - the amount of columns in each row
   ## * ratio  - the array or sequence of cfloat with width of the colums
   nk_layout_row(ctx = ctx, fmt = static, height = height.cfloat,
+      cols = cols.cint, ratio = ratio.addr)
+
+proc setLayoutRowStatic2*(height, cols: int; ratio: openArray[
+    cfloat]) {.raises: [], tags: [], contractual.} =
+  ## Set the current widgets layout to divide it into selected amount of
+  ## columns with the selected height in rows but it will not grow in width
+  ## when the parent window resizes
+  ##
+  ## * height - the height in pixels of each row
+  ## * cols   - the amount of columns in each row
+  ## * ratio  - the array or sequence of cfloat with width of the colums
+  nk_layout_row2(ctx = ctx, fmt = static, height = height.cint,
       cols = cols.cint, ratio = ratio.addr)
 
 proc setLayoutRowDynamic*(height: float; cols: int; ratio: openArray[

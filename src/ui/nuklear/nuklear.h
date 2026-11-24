@@ -30928,6 +30928,11 @@ NK_API int nk_get_input_scroll(struct nk_context *ctx)
 {
   return ctx->input.mouse.scroll_delta.y;
 }
+NK_API void nk_layout_row2(struct nk_context *ctx, enum nk_layout_format fmt,
+                           int height, int cols, const float *ratio)
+{
+    nk_layout_row(ctx, fmt, height, cols, ratio);
+}
 #endif /* NK_IMPLEMENTATION */
 
 /*
