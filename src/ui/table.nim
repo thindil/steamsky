@@ -186,7 +186,8 @@ proc addPagination(page: var Positive; row: Positive) {.raises: [], tags: [
         page.inc
 
 template table*(name: string; xScroll: Natural; headers: openArray[
-    HeaderData]; ratio: openArray[cfloat]; tableTooltip: string; tableHeight: float;
+    HeaderData]; ratio: openArray[cfloat]; tableTooltip: string;
+        tableHeight: float;
     headerCode: HeaderCode; tableCode: untyped) =
   ## Show the table
   ##
@@ -215,7 +216,8 @@ template table*(name: string; xScroll: Natural; headers: openArray[
   group(title = name & "Rows", flags = {windowNoFlags}):
     if dialog != none:
       windowDisable()
-    setLayoutRowStatic(height = buttonHeight, cols = headers.len, ratio = ratio)
+    setLayoutRowStatic2(height = buttonHeight.Natural, cols = headers.len,
+      ratio = ratio)
     currentRow = 1
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
