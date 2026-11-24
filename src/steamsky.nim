@@ -19,7 +19,7 @@
 ## initialize graphic and start the game.
 
 import std/[os, parseopt, paths, strutils, tables, times]
-import contracts, ui/nuklear/nuklear_sdl_renderer
+import contracts, nimalyzer, ui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
 import ui/[baseslootui, basesschoolui, basesrecruitui, basesshipyardui,
     basesui, combatui, coreui, craftsui, debugui, dialogs, errordialog,
@@ -127,12 +127,14 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   except:
     dialog = setError(message = "Can't load the game's data.")
 
+  {.ruleOff: "hasPragma".}
   proc catchError(errorMsg: string) {.nimcall, gcsafe, tags: [TimeEffect,
       WriteIOEffect, RootEffect], contractual.} =
     ## Catch all unhandled exceptions, save error info to the file
     discard setError(message = errorMsg)
     when defined(debug):
       echo errorMsg
+  {.ruleOn: "hasPragma".}
 
   onUnhandledException = catchError
   if gameSettings.fullScreen:
