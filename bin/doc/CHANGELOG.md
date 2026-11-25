@@ -18,7 +18,8 @@ All notable changes to this project will be documented in this file.
 - Default starting base for a new game to agricultural
 - Better looking the main menu of the game
 - Reduced height of the game's header
-- Updated appearance of advanced options in trade screen
+- Updated appearance of advanced options in trade and the player's ship's crew
+  info screens
 - Better looking the list of last in-game messages
 - Made buttons to move the player's ship smaller
 - Made the game's map bigger in default settings
