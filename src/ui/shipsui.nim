@@ -298,7 +298,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
     centerX = skyBases[playerShip.homeBase].skyX
     centerY = skyBases[playerShip.homeBase].skyY
     state = map
-  setLayoutRowStatic2(height = labelHeight.int, cols = 2, ratio = [col1.cfloat, col2])
+  setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [col1.cfloat, col2])
   label(str = "Weight:", tooltip = "The ship weight. The more heavy is ship, the slower it fly and need stronger engines")
   try:
     colorLabel(str = $countShipWeight(ship = playerShip) & "kg",
@@ -308,7 +308,7 @@ proc showGeneralInfo(dialog: var GameDialog; state: var GameState) {.raises: [],
   except:
     dialog = setError(message = "Can't show the ship's weight")
     return
-  setLayoutRowDynamic(height = labelHeight, cols = 1)
+  setLayoutRowDynamic(height = buttonHeight, cols = 1)
   label(str = "Your reputation among factions", alignment = centered)
   setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [col1.cfloat, col2])
   for index, faction in factionsList:
