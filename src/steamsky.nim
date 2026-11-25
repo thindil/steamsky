@@ -33,7 +33,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   try:
     setCurrentDir(newDir = getAppDir())
-  except:
+  except OSError:
     echo "Can't set the current directory for the game."
     return
   saveDirectory = ("data" & DirSep & "saves" & DirSep).Path
@@ -65,7 +65,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     of "debug":
       try:
         debugMode = parseEnum[DebugLevels](s = val)
-      except:
+      except ValueError:
         echo "Invalid debug value: " & val
         return
   # Create the game directories
@@ -73,7 +73,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     createDir(dir = $saveDirectory)
     createDir(dir = $modsDirectory)
     createDir(dir = $themesDirectory)
-  except:
+  except OSError, IOError:
     echo "Can't create directories"
     return
 
@@ -86,7 +86,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   # Load the hall of fame
   try:
     loadHallOfFame()
-  except:
+  except DataLoadingError:
     quit "Can't load hall of fame"
 
   const windowName: string = "Steam Sky"
@@ -115,7 +115,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     fonts[FontsNames.helpItalicFont] = nuklearLoadFont(font = FontData(
         path: themesList[gameSettings.interfaceTheme].fonts[
         FontsNames.helpItalicFont], size: gameSettings.helpFontSize + 10))
-  except:
+  except KeyError:
     quit "Can't load the game's fonts."
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
@@ -124,7 +124,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     dialog: GameDialog = none
   try:
     discard loadGameData()
-  except:
+  except DataLoadingError, KeyError, OSError:
     dialog = setError(message = "Can't load the game's data.")
 
   {.ruleOff: "hasPragma".}
