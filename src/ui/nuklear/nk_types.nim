@@ -902,11 +902,6 @@ type
     ## Internal Nuklear type
     where*: cint
     insert_length*, delete_length*, char_storage*: cshort
-  nk_text_undo_state* {.importc: "struct nk_text_undo_state",
-      completeStruct.} = object
-    ## Internal Nuklear type
-    undo_rec*: pointer
-    undo_point*, redo_point*, undo_char_point*, redo_char_point*: cshort
   nk_text_edit* {.importc: "struct nk_text_edit".} = object
     ## Internal Nuklear type
   nk_plugin_paste* = proc (handle: nk_handle; edit: ptr nk_text_edit) {.cdecl.}
