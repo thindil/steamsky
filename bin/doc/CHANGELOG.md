@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Better looking the list of last in-game messages
 - Made buttons to move the player's ship smaller
 - Made the game's map bigger in default settings
+- Better looking geenral information about the player's ship
 
 ### Fixed
 - Selecting the proper workshop from their list when showing crafting recipes
