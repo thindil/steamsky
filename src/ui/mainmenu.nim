@@ -697,7 +697,7 @@ proc newGamePlayer(dialog: var GameDialog; state: GameState) {.raises: [],
     restoreButtonStyle()
     var fieldLen2: cfloat = fieldLen + buttonHeight + 5
     # Character's goal
-    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [textLen,
+    setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [textLen,
         fieldLen2])
     label(str = "Character goal:")
     if mouseClicked(id = left, rect = getWidgetBounds()):
@@ -947,7 +947,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             x += widgetWidth
           except:
             dialog = setError(message = "Can't set the tabs buttons.")
-  layoutSpaceStatic(height = (gameSettings.windowHeight - 90).float,
+  layoutSpaceStatic(height = (gameSettings.windowHeight - 80).float,
       widgetsCount = 2):
     row(x = 0, y = 0, w = (gameSettings.windowWidth.float * 0.65), h = (
         gameSettings.windowHeight - 90).float):
