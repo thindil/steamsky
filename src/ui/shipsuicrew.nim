@@ -500,7 +500,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       case currentTab
       # General information about the selected crew member
       of 0:
-        setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+        setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [
             col1.cfloat, col2 - 150, 150])
         label(str = "Name:")
         colorLabel(str = member.name, color = theme.colors[goldenColor])
@@ -510,7 +510,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
           dialog = renameMemberDialog
           setDialog(x = gameSettings.windowWidth.float / 4)
         if member.health < 100:
-          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
               col1.cfloat, col2])
           label(str = "Health:")
           if gameSettings.showNumbers:
@@ -526,7 +526,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if tiredPoints > 0:
-          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
               col1.cfloat, col2])
           label(str = "Tiredness:")
           if gameSettings.showNumbers:
@@ -544,7 +544,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.thirst > 0:
-          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
               col1.cfloat, col2])
           label(str = "Thirst:")
           if gameSettings.showNumbers:
@@ -562,7 +562,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.hunger > 0:
-          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
               col1.cfloat, col2])
           label(str = "Hunger:")
           if gameSettings.showNumbers:
@@ -580,7 +580,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.morale[1] != 50:
-          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
               col1.cfloat, col2])
           label(str = "Morale:")
           if gameSettings.showNumbers:
@@ -598,7 +598,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             else:
               discard
         if member.skills.len > 0:
-          setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [
               col1.cfloat, col2 - 150, 150])
           label(str = "Order:")
           try:
@@ -618,21 +618,21 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setError(message = "Can't get the crew member's faction.")
             return
         if "nogender" notin faction.flags:
-          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
               col1.cfloat, col2])
           label(str = "Gender:")
           colorLabel(str = (if member.gender == 'M': "Male" else: "Female"),
               color = theme.colors[goldenColor])
-        setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2])
+        setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [col1.cfloat, col2])
         label(str = "Faction:")
         colorLabel(str = faction.name, color = theme.colors[goldenColor])
         label(str = "Home base:")
         colorLabel(str = skyBases[member.homeBase].name, color = theme.colors[goldenColor])
         if member.skills.len == 0 or member.contractLength == 0:
-          setLayoutRowDynamic(height = labelHeight, cols = 1)
+          setLayoutRowDynamic(height = buttonHeight, cols = 1)
           label(str = "Passenger")
           if member.contractLength > 0:
-            setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+            setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
                 col1.cfloat, col2])
             label(str = "Time limit:")
             var memberInfo: string = ""
@@ -641,7 +641,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
             colorLabel(str = memberInfo, color = theme.colors[goldenColor])
         else:
           if crewIndex > 0:
-            setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+            setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
                 col1.cfloat, col2])
             label(str = "Contract length:")
             colorLabel(str = (if member.contractLength >
