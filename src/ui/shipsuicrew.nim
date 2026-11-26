@@ -435,7 +435,7 @@ proc showAttributes(member: MemberData; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter dialog.
   for index, attrib in member.attributes:
-    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [140.cfloat,
+    setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [140.cfloat,
         290, 130])
     label(str = attributesList[index].name & ":")
     colorLabel(str = getAttributeLevelName(attributeLevel = attrib.level),
@@ -659,7 +659,7 @@ proc showMemberInfo*(dialog: var GameDialog) {.raises: [], tags: [
       # Skills of the selected crew member
       of 2:
         for index, skill in member.skills:
-          setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [
               col1.cfloat, col2 - 130, 130])
           try:
             label(str = skillsList[skill.index].name & ":")
