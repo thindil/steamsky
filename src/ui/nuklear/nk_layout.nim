@@ -155,18 +155,6 @@ proc setLayoutRowDynamic*(height: float; cols: int; ratio: openArray[
   nk_layout_row(ctx = ctx, fmt = dynamic, height = height.cfloat,
       cols = cols.cint, ratio = ratio.addr)
 
-proc setLayoutRowDynamic2*(height, cols: int; ratio: openArray[
-    cfloat]) {.raises: [], tags: [], contractual.} =
-  ## Set the current widgets layout to divide it into selected amount of
-  ## columns with the selected height in rows but it will grow in width
-  ## when the parent window resizes
-  ##
-  ## * height - the height in pixels of each row
-  ## * cols   - the amount of columns in each row
-  ## * ratio  - the array or sequence of cfloat with width of the colums
-  nk_layout_row2(ctx = ctx, fmt = dynamic, height = height.cint,
-      cols = cols.cint, ratio = ratio.addr)
-
 template layoutSpaceStatic*(height: float; widgetsCount: int;
     content: untyped) =
   ## Start setting manualy each row of the current widgets layout. The layout
