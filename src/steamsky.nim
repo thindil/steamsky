@@ -89,7 +89,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   except DataLoadingError:
     quit "Can't load hall of fame"
 
+  {.ruleOff: "varDeclared".}
   const windowName: string = "Steam Sky"
+  {.ruleOn: "varDeclared".}
 
   # Initialize SDL and create the main window of the game
   nuklearInit(windowWidth = gameSettings.windowWidth,
