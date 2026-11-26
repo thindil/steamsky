@@ -266,10 +266,10 @@ proc showModuleDamage(module: ModuleData; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't count the module's max value.")
       return
   if module.maxDurability < moduleMaxValue:
-    setLayoutRowStatic(height = buttonHeight, cols = 4, ratio = [col1.cfloat,
+    setLayoutRowStatic2(height = buttonHeight.int, cols = 4, ratio = [col1.cfloat,
         col2c, 100, 100])
   else:
-    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+    setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [col1.cfloat,
         col2b, 100])
   label(str = "Status:")
   let damagePercent: float = (module.durability.float /
@@ -380,10 +380,10 @@ proc showModuleUpgrade(module: ModuleData; dialog: var GameDialog) {.raises: [],
   if maxUpgrade == 0:
     maxUpgrade = 1
   if playerShip.upgradeModule == moduleIndex:
-    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+    setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [col1.cfloat,
         col2b, 100])
   else:
-    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat,
+    setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [col1.cfloat,
         col2a])
   label(str = "Upgrade progress:")
   var upgradePercent: int = 100 - ((module.upgradeProgress.float /
