@@ -428,10 +428,10 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't count the module max value.")
       return
   if module.maxDurability < moduleMaxValue2:
-    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+    setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [col1.cfloat,
         col2b, 100])
   else:
-    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat,
+    setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [col1.cfloat,
         col2a])
   label(str = "Max power:")
   colorLabel(str = $module.power & (if module.power ==
@@ -504,7 +504,7 @@ proc addOwnersInfo(module: ModuleData; ownersName: string;
   if module.owner.len > 1:
     ownersText.add(y = "s")
   ownersText.add(y = " (max " & $module.owner.len & "):")
-  setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+  setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [col1.cfloat,
       col2b, 100])
   label(str = ownersText)
   ownersText = ""
