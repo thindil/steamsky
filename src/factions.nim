@@ -43,7 +43,7 @@ proc loadFactionData(factionNode: XmlNode; factionAction: DataAction;
       of "relation":
         let relationIndex: string = childNode.attr(name = "faction")
         var relation: RelationsData = RelationsData()
-        var attribute: string = childNode.attr(name = "reputation")
+        var attribute: XmlAttribute = childNode.attr(name = "reputation")
         if attribute.len() > 0:
           try:
             relation.reputation = initReputationRanges(min = attribute.parseInt(), max = 0)
