@@ -1008,7 +1008,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
               col1.cfloat, col2b, 100])
         else:
-          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
               col1.cfloat, col2a])
         label(str = "Strength:")
         colorLabel(str = $moduleStrength & (if moduleStrength ==
@@ -1026,7 +1026,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         addOwnersInfo(module = module, ownersName = "Gunner", addButton = true,
             dialog = dialog)
         # Show information about gun's ammunition
-        setLayoutRowStatic(height = labelHeight * 4, cols = 3, ratio = [
+        setLayoutRowStatic2(height = (labelHeight * 4).int, cols = 3, ratio = [
             col1.cfloat, col2b, 100])
         label(str = "Ammunition:")
         var haveAmmo: bool = false
@@ -1078,7 +1078,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             return
         # Show information about gun's fire rate
         if module.mType == ModuleType2.gun:
-          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
               col1.cfloat, col2a])
           label(str = "Max fire rate:")
           try:
@@ -1106,7 +1106,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setError(message = "Can't get the recipe name.")
             return
         if recipeName.len > 0:
-          setLayoutRowStatic(height = labelHeight * 4, cols = 3, ratio = [
+          setLayoutRowStatic2(height = (labelHeight.int * 4), cols = 3, ratio = [
               col1.cfloat, col2b, 100])
           label(str = "Order:")
           colorLabel(str = recipeName, color = theme.colors[goldenColor])
@@ -1124,12 +1124,12 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
               dialog = setError(message = "Can't cancel the order.")
               return
           restoreButtonStyle()
-          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
               col1.cfloat, col2a])
           label(str = "Finish order in:")
           colorLabel(str = $module.craftingTime & " mins", color = theme.colors[goldenColor])
         else:
-          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
               col1.cfloat, col2a])
           label(str = "Order:")
           colorLabel(str = "not set", color = theme.colors[goldenColor])
@@ -1161,7 +1161,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           except:
             dialog = setError(message = "Can't set trainText.")
             return
-        setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+        setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [
             col1.cfloat, col2b, 100])
         label(str = "Trained skill:")
         colorLabel(str = trainText, color = theme.colors[goldenColor])
@@ -1179,10 +1179,10 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setError(message = "Can't count the battering ram max value.")
             return
         if module.damage2 < moduleMaxValue2:
-          setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [
               col1.cfloat, col2b, 100])
         else:
-          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic2(height = labelHeight.int, cols = 2, ratio = [
               col1.cfloat, col2a])
         label(str = "Strength:")
         colorLabel(str = $module.damage2 & (if module.damage2 ==
