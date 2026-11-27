@@ -1026,9 +1026,6 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         addOwnersInfo(module = module, ownersName = "Gunner", addButton = true,
             dialog = dialog)
         # Show information about gun's ammunition
-        setLayoutRowStatic2(height = (labelHeight * 4).int, cols = 3, ratio = [
-            col1.cfloat, col2b, 100])
-        label(str = "Ammunition:")
         var haveAmmo: bool = false
         let ammoIndex: int = (if module.mType ==
             ModuleType2.gun: module.ammoIndex else: module.harpoonIndex)
@@ -1040,6 +1037,13 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         except:
           dialog = setError(message = "Can't check for the ammo.")
           return
+        if haveAmmo:
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [
+              col1.cfloat, col2b, 100])
+        else:
+          setLayoutRowStatic2(height = (labelHeight * 4).int, cols = 3, ratio = [
+              col1.cfloat, col2b, 100])
+        label(str = "Ammunition:")
         group(title = "ammoInfo", flags = (if haveAmmo: {
             windowNoScrollbar} else: {windowNoFlags})):
           setLayoutRowDynamic(height = labelHeight, cols = 1)
