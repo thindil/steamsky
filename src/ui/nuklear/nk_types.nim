@@ -891,12 +891,6 @@ type
     ## Internal Nuklear type
     data*: nk_page_data
     next*, prev*: pointer
-  nk_str* {.importc: "struct nk_str", completeStruct.} = object
-    ## Internal Nuklear type
-    buffer*: nk_buffer
-    len*: cint
-  nk_plugin_filter* = proc (text: nk_text_edit; unicode: nk_rune) {.cdecl.}
-    ## Internal Nuklear type
   nk_text_edit* {.importc: "struct nk_text_edit".} = object
     ## Internal Nuklear type
   nk_plugin_paste* = proc (handle: nk_handle; edit: ptr nk_text_edit) {.cdecl.}
