@@ -828,7 +828,7 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
   addOwnersInfo(module = module, ownersName = "Owner", addButton = true,
       dialog = dialog)
   # Show information about cabin's cleanliness
-  setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
+  setLayoutRowStatic2(height = labelHeight.int, cols = 2, ratio = [col1.cfloat, col2a])
   label(str = "Cleanliness:")
   var damagePercent2: Natural = ((module.cleanliness.float /
       module.quality.float) * 100.0).Natural
@@ -862,10 +862,10 @@ proc showCabinInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't count the cabin's max value.")
       return
   if module.quality < moduleMaxValue2:
-    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+    setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [col1.cfloat,
         col2b, 100])
   else:
-    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat,
+    setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [col1.cfloat,
         col2a])
   label(str = "Quality:")
   var quality: Natural = ((module.quality.float / 100.0) * 100.0).Natural
@@ -896,7 +896,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           windowNoScrollbar}):
     setLayoutRowDynamic(height = height - buttonHeight - 60, 1)
     group(title = "SkillsGroup", flags = {windowNoFlags}):
-      setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+      setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [col1.cfloat,
           col2b - 15, 115])
       # Show the module's name
       label(str = "Name:")
@@ -907,7 +907,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         setDialog(x = gameSettings.windowWidth.float / 4)
       # Show the module's status
       showModuleDamage(module = module, dialog = dialog)
-      setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
+      setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [col1.cfloat, col2a])
       # Show the module's weight
       label(str = "Weight:")
       colorLabel(str = $module.weight & " kg", color = theme.colors[goldenColor])
@@ -920,7 +920,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         dialog = setError(message = "Can't show the module's size")
         return
       # Show the module's repair material
-      setLayoutRowStatic(height = buttonHeight, cols = 4, ratio = [col1.cfloat,
+      setLayoutRowStatic2(height = buttonHeight.int, cols = 4, ratio = [col1.cfloat,
           col3, col3, col3])
       label(str = "Repair material:")
       var manyMaterials: bool = false
@@ -938,7 +938,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           dialog = setError(message = "Can't count repair material.")
           return
       # Show the module's upgrade skill
-      setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
+      setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [col1.cfloat, col2a])
       label(str = "Repair skill:")
       try:
         colorLabel(str = skillsList[modulesList[
@@ -957,7 +957,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
         showEngineInfo(module = module, dialog = dialog)
       # Show information about cargo room
       of cargoRoom:
-        setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [col1.cfloat, col2a])
+        setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [col1.cfloat, col2a])
         label(str = "Max cargo:")
         try:
           colorLabel(str = $modulesList[module.protoIndex].maxValue & " kg",
@@ -973,10 +973,10 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
             dialog = setError(message = "Can't count the module's max value (3).")
             return
         if module.maxModules < moduleMaxValue2:
-          setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [
               col1.cfloat, col2b, 100])
         else:
-          setLayoutRowStatic(height = labelHeight, cols = 2, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
               col1.cfloat, col2a])
         label(str = "Modules installed:")
         colorLabel(str = $module.installedModules & " / " & $module.maxModules &
