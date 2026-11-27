@@ -1068,18 +1068,20 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
               except:
                 dialog = setError(message = "Can't find ammo.")
                 return
-        for index, item in playerShip.cargo:
-          try:
-            if itemsList[item.protoIndex].itemType == itemsTypesList[
-                modulesList[module.protoIndex].value - 1] and index != ammoIndex:
-              imageLabelButton(image = images[assignAmmoIcon],
-                  label = "     Assign", tooltip = "Assing an ammo to the gun."):
-                setDialog(y = gameSettings.windowHeight.float / 10)
-                dialog = assignAmmoDialog
-              break
-          except:
-            dialog = setError(message = "Can't set gun's ammo button.")
-            return
+        group(title = "ammoButton", flags = {windowNoScrollbar}):
+          setLayoutRowDynamic(height = buttonHeight, cols = 1)
+          for index, item in playerShip.cargo:
+            try:
+              if itemsList[item.protoIndex].itemType == itemsTypesList[
+                  modulesList[module.protoIndex].value - 1] and index != ammoIndex:
+                imageLabelButton(image = images[assignAmmoIcon],
+                    label = "     Assign", tooltip = "Assing an ammo to the gun."):
+                  setDialog(y = gameSettings.windowHeight.float / 10)
+                  dialog = assignAmmoDialog
+                break
+            except:
+              dialog = setError(message = "Can't set gun's ammo button.")
+              return
         # Show information about gun's fire rate
         if module.mType == ModuleType2.gun:
           setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
