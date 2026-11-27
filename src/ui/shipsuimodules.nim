@@ -446,10 +446,10 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't count the module's max value (2).")
       return
   if module.maxDurability > moduleMaxValue2:
-    setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+    setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [col1.cfloat,
         col2b, 100])
   else:
-    setLayoutRowStatic(height = buttonHeight, cols = 2, ratio = [col1.cfloat, col2a])
+    setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [col1.cfloat, col2a])
   label(str = "Fuel usage:")
   colorLabel(str = $module.fuelUsage & (if moduleMaxValue2 ==
       module.fuelUsage: " (max upgrade)" else: ""), color = theme.colors[goldenColor])
@@ -457,7 +457,7 @@ proc showEngineInfo(module: ModuleData; dialog: var GameDialog) {.raises: [],
     addUpgradeButton(upgradeType = value, buttonTooltip = "engine's fuel usage.",
         module = module, dialog = dialog)
   # Show engine state
-  setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [col1.cfloat,
+  setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [col1.cfloat,
       col2b, 100])
   label(str = "State:")
   colorLabel(str = (if module.disabled: "Disabled" else: "Enabled"),
@@ -1005,7 +1005,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
               dialog = setError(message = "Can't count the gun's max value.")
               return
         if moduleStrength < moduleMaxValue2:
-          setLayoutRowStatic(height = buttonHeight, cols = 3, ratio = [
+          setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [
               col1.cfloat, col2b, 100])
         else:
           setLayoutRowStatic2(height = buttonHeight.int, cols = 2, ratio = [
