@@ -1199,7 +1199,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
               dialog = dialog)
       else:
         discard
-      setLayoutRowDynamic(height = labelHeight * 5, cols = 1)
+      setLayoutRowDynamic(height = labelHeight * 3, cols = 1)
       try:
         if modulesList[module.protoIndex].description.len > 0:
           wrapLabel(str = "\n" & modulesList[module.protoIndex].description)
