@@ -1039,10 +1039,10 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
           return
         if haveAmmo:
           setLayoutRowStatic2(height = buttonHeight.int, cols = 3, ratio = [
-              col1.cfloat, col2b, 100])
+              col1.cfloat - 5, col2b, 107])
         else:
           setLayoutRowStatic2(height = (labelHeight * 4).int, cols = 3, ratio = [
-              col1.cfloat, col2b, 100])
+              col1.cfloat - 5, col2b, 107])
         label(str = "Ammunition:")
         group(title = "ammoInfo", flags = (if haveAmmo: {
             windowNoScrollbar} else: {windowNoFlags})):
