@@ -41,7 +41,7 @@ proc loadFactionData(factionNode: XmlNode; factionAction: DataAction;
         continue
       case childNode.tag
       of "relation":
-        let relationIndex: string = childNode.attr(name = "faction")
+        let relationIndex: FactionIndex = childNode.attr(name = "faction")
         var relation: RelationsData = RelationsData()
         var attribute: XmlAttribute = childNode.attr(name = "reputation")
         if attribute.len() > 0:
@@ -74,7 +74,7 @@ proc loadFactionData(factionNode: XmlNode; factionAction: DataAction;
       of "description":
         faction.description = childNode.innerText()
       of "foodtype":
-        let foodType: string = childNode.attr(name = "name")
+        let foodType: XmlAttribute = childNode.attr(name = "name")
         if childNode.attr(name = "action") == "remove":
           for index, food in faction.foodTypes:
             if food == foodType:
@@ -88,7 +88,7 @@ proc loadFactionData(factionNode: XmlNode; factionAction: DataAction;
                 "', no items with type '" & foodType & "'.")
           faction.foodTypes.add(y = foodType)
       of "drinktype":
-        let drinkType: string = childNode.attr(name = "name")
+        let drinkType: XmlAttribute = childNode.attr(name = "name")
         if childNode.attr(name = "action") == "remove":
           for index, drink in faction.drinksTypes:
             if drink == drinkType:
@@ -102,7 +102,7 @@ proc loadFactionData(factionNode: XmlNode; factionAction: DataAction;
                 "', no items with type '" & drinkType & "'.")
           faction.drinksTypes.add(y = drinkType)
       of "career":
-        let careerIndex: string = childNode.attr(name = "index")
+        let careerIndex: XmlAttribute = childNode.attr(name = "index")
         if childNode.attr(name = "action") == "remove":
           {.warning[ProveInit]: off.}
           {.warning[UnsafeDefault]: off.}
@@ -111,7 +111,7 @@ proc loadFactionData(factionNode: XmlNode; factionAction: DataAction;
           {.warning[ProveInit]: on.}
         else:
           var career: CareerData = initCareerData(shipIndex = 1)
-          var attribute: string = childNode.attr(name = "shipindex")
+          var attribute: XmlAttribute = childNode.attr(name = "shipindex")
           if attribute.len() > 0:
             try:
               career.shipIndex = attribute.parseInt()
