@@ -886,11 +886,6 @@ type
     tbl*: nk_table
     pan*: nk_panel
     win*: nk_window
-  nk_page_element* {.importc: "struct nk_page_element",
-      completeStruct.} = object
-    ## Internal Nuklear type
-    data*: nk_page_data
-    next*, prev*: pointer
   nk_text_edit* {.importc: "struct nk_text_edit".} = object
     ## Internal Nuklear type
   nk_plugin_paste* = proc (handle: nk_handle; edit: ptr nk_text_edit) {.cdecl.}
