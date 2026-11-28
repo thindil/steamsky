@@ -907,7 +907,7 @@ type
     spawnChance: Natural
     population*: AttributesArray
     namesType: NamesTypes
-    relations*: Table[string, RelationsData]
+    relations*: Table[FactionIndex, RelationsData]
     description: Description
     foodTypes*: seq[string]
     drinksTypes*: seq[string]
@@ -916,7 +916,7 @@ type
     flags*: seq[string]
     careers*: Table[string, CareerData]
     baseIcon: Natural
-    basesTypes*: Table[string, Positive]
+    basesTypes*: Table[BaseType, Positive]
     weaponSkill: Natural
 {.pop ruleOn: "objects".}
 
@@ -924,12 +924,12 @@ proc initFactionData*(name: FactionName = "";
     memberName: FactionMemberName = "";
     pluralMemberName: FactionMemberName = ""; spawnChance: Natural = 0;
     population: AttributesArray = [0, 0]; namesType: NamesTypes = normal;
-    relations: Table[string, RelationsData] = initTable[string, RelationsData]();
+    relations: Table[FactionIndex, RelationsData] = initTable[string, RelationsData]();
     description: Description = ""; foodTypes: seq[string] = @[];
     drinksTypes: seq[string] = @[]; healingTools: SettingString = "";
     healingSkill: Natural = 0; flags: seq[string] = @[]; careers: Table[string,
     CareerData] = initTable[string, CareerData](); baseIcon: Natural = 0;
-    basesTypes: Table[string, Positive] = initTable[string, Positive]();
+    basesTypes: Table[BaseType, Positive] = initTable[string, Positive]();
     weaponSkill: Natural = 0): FactionData {.raises: [], tags: [],
     contractual.} =
   ## Create a new data structure for the in-game faction
