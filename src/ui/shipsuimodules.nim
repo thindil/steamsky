@@ -885,7 +885,7 @@ proc showModuleInfo*(dialog: var GameDialog) {.raises: [], tags: [
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  const height: float = 500
+  let height: float = gameSettings.windowHeight.float - 100
 
   let
     module: ModuleData = playerShip.modules[moduleIndex]
